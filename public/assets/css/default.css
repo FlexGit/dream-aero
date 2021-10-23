@@ -1,0 +1,102 @@
+
+.gl-current-select {
+    color: #FF8200;
+    cursor: pointer;
+    padding-top: 9px;
+    padding-right: 10px;
+    font-size: 15px;
+}
+
+.btn-yes {
+    height: 30px;
+    margin: 15px;
+    cursor: pointer;
+    color: #FF8200;
+}
+
+.btn-change {
+    height: 30px;
+    margin: 15px;
+    cursor: pointer;
+    color: #FF8200;
+    border-bottom: 1px dotted #005a99;
+}
+
+.gl-default {
+	width: 400px;
+    padding: 30px;
+    text-align: center;
+	display: block;
+}
+
+.gl-change-select {
+    width: 400px;
+    padding: 30px;
+    display: block;
+}
+
+.gl-change-list {
+	list-style: none;
+	padding: 0px;
+	overflow: hidden;
+	width: 100%;
+	margin: 25px 0 0 0;
+}
+
+.gl-change-list li {
+
+	
+	padding: 0px 0px 0 0;
+	margin: 0 0 0px;
+	line-height: 20px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.gl-change-list span {
+	color: #FF8200;
+	cursor: pointer;
+}
+
+.gl-default span.city, .gl-change-select span.city {
+	line-height: 24px;
+	font-size: 20px;
+	display: block;
+	font-weight: 700;
+	color: #636363;
+}
+
+/* fix select2 */
+.select2-dropdown.select2-dropdown--below {
+	z-index: 10001;
+}
+/*
+span.gl-select2-container span.select2-container.select2-container--default.select2-container--open {
+	top: inherit!important;
+	left: inherit!important;
+}*/
+
+.af-message-success { background-color: green !important; }
+.af-message-error { background-color: brown !important; }
+.af-message-info { background-color: black !important; }
+.ajax_form.af_example {
+	width: 100%;
+}
+.ajax_form.af_example .controls input,
+.ajax_form.af_example .controls textarea {
+	width: 100%;
+}
+.ajax_form .error {
+	color: brown;
+}
+@media screen and (min-width: 320px) {
+	.ajax_form.af_example .controls button[type="submit"] {
+		float: right;
+	}
+}
+@media screen and (max-width: 320px) {
+	.ajax_form.af_example .controls button {
+		width: 100%;
+		margin-top: 5px;
+	}
+}

@@ -1,0 +1,160 @@
+.content .about .simul{padding-left:17.7%;padding-right:0%;padding-bottom:80px;}
+.content .about .simul p{font-size:15px;padding-bottom:25px;}
+.content .about .simul p:last-of-type{padding-bottom:0px;}
+.content .about .simul p:after{display:none;}
+.content .about .simul p:last-of-type:after{content:'';width:75px;height:3px;display:block;background:#ffffff;margin-top:29px;}
+.about-simulator p, .about-simulator ul li{color:#515050;font-size:19px;margin:0 0 25px;}
+/*.about-simulator p:last-of-type{margin:0;}*/
+.about-simulator h2{font-weight:600;padding:90px 0 60px;}
+.about-simulator .bold{font-weight:600;margin-top:35px;color:black;}
+/*.about-simulator .offer p:last-of-type{font-size:15px;}*/
+.about-simulator h3{text-align:center;margin-top:100px;margin-bottom:0;background:#FF8200;color:white;padding:20px;text-transform:uppercase;font-size:20px;}
+.col-md-12.about-simulator ol{counter-reset:myCounter;}
+.col-md-12.about-simulator ol li{list-style:none;}
+.col-md-12.about-simulator ol li:before{counter-increment:myCounter;content:counter(myCounter);color:white;background:#FF8200;display:inline-block;text-align:center;font-size:14px;margin:10px 10px 0 0;line-height:15px;width:14px;height:14px;}
+.astabs {
+	/*min-width: 320px;
+	max-width: 800px;*/
+	padding: 0;
+	margin: 0 auto;
+}
+/* Стили секций с содержанием */
+.astabs>section {
+	display: none;
+	padding: 15px;
+	
+	
+}
+.astabs>section>p {
+	margin: 0 0 5px;
+	line-height: 1.5;
+	color: #383838;
+	/* прикрутим анимацию */
+	-webkit-animation-duration: 1s;
+	animation-duration: 1s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+	-webkit-animation-name: fadeIn;
+	animation-name: fadeIn;
+}
+/* Описываем анимацию свойства opacity */
+/* Прячем чекбоксы */
+.astabs>input {
+	display: none;
+	position: absolute;
+}
+/* Стили переключателей вкладок (табов) */
+.astabs>label {
+	display: inline-block !important;
+	margin: 0 0 -1px;
+	padding: 15px 25px;
+	font-weight: 600;
+	text-align: center;
+	color:  #FF8200;
+	border: 0px solid #ddd;
+	border-width: 1px 1px 1px 1px;
+	
+	border-radius: 3px 3px 0 0;
+}
+/* Шрифт-иконки от Font Awesome в формате Unicode */
+.astabs>label:before {
+	font-family: fontawesome;
+	font-weight: normal;
+	margin-right: 10px;
+}
+
+/* Изменения стиля переключателей вкладок при наведении */
+ 
+.astabs>label:hover {
+	color:white;
+	cursor: pointer;
+}
+/* Стили для активной вкладки */
+.astabs>input:checked+label {
+    
+	color: white;
+	border-top: 1px solid #FF8200;
+	border-bottom: 1px solid #FF8200;
+	background:  #FF8200;
+}
+/* Активация секций с помощью псевдокласса :checked */
+#astab1:checked~#content-astab1, #astab2:checked~#content-astab2, #astab3:checked~#content-astab3, #astab4:checked~#content-astab4 {
+	display: block;
+}
+/* Убираем текст с переключателей 
+* и оставляем иконки на малых экранах
+*/
+ 
+@media screen and (max-width: 680px) {
+	
+	.astabs>label:before {
+		margin: 0;
+		font-size: 18px;
+	}
+}
+/* Изменяем внутренние отступы 
+*  переключателей для малых экранов
+*/
+@media screen and (max-width: 400px) {
+	.astabs>label {
+		padding: 15px;
+	}
+}
+@media screen and (max-width: 465px) {
+	.astabs input[type="radio"]+label{
+    width:90% !important;
+}
+}
+.astabs input[type="radio"]+label{
+    width:96% !important;
+}
+   .astabs>input:checked+label:before{
+    content: "\25be";
+    font-size:25px;
+    color:white;
+}
+.astabs>input:checked+label:after{
+    content: "";
+    margin:0 0.5em;
+    display:inline-block;
+    border: 7px solid transparent;
+    border-top:8px solid gray;
+    border-bottom:0 none;
+}
+#airboeing{
+    width:98%;
+}
+@media screen and (max-width: 620px){
+    #airboeing td img {
+margin-right:50%;
+}
+
+}
+
+#airboeing td img {
+width:120px;
+}
+#airboeing td{
+width:50%;
+text-align: left;
+    
+}
+
+#airboeing .tdcity{
+    
+    
+    color:#FF8200;
+}
+
+#airboeing .simtype{
+    color:#FF8200;
+    font-weight:700;
+    font-size:16px;
+}
+
+td.halfnhalf {
+      background: linear-gradient(to bottom, #f0f0f0 0%, #f0f0f0 50%, white 50%, white 100%);
+}
+td.halfnhalf_white {
+      background: linear-gradient(to bottom, white 0%, white 50%, #f0f0f0 50%, #f0f0f0 100%);
+}

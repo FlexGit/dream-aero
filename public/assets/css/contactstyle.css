@@ -1,0 +1,34 @@
+@font-face{font-family:"GothamProBold";src:url("../fonts/GothamProBold/GothamProBold.eot");src:url("../fonts/GothamProBold/GothamProBold.eot?#iefix") format("embedded-opentype"), url("../fonts/GothamProBold/GothamProBold.woff") format("woff"), url("../fonts/GothamProBold/GothamProBold.ttf") format("truetype");font-style:normal;font-weight:normal;}
+.contacts{overflow:hidden;}
+.contacts .block-title{margin-bottom:58px;}
+.contacts-inner{background-color:#FF8200;padding-left:48px;min-height:600px;position:relative;display:table;width:46%;float:right;}
+.contacts-inner-inner{display:table-cell;vertical-align:middle;padding-right:15px;}
+.contacts-list{margin:0;padding:0;}
+.contacts-list li{display:block;list-style:none;color:#fff;font-size:18px;position:relative;padding-left:35px;margin-bottom:30px;}
+.contacts-list li:last-child{margin-bottom:0;}
+.contacts-list li.address:before{background-image:url(../img/address.png);width:14px;height:20px;}
+.contacts-list li.schedule:before{background-image:url(../img/schedule.png);width:17px;height:17px;}
+.contacts-list li.phone{font-family:"GothamProBold";}
+.contacts-list li.phone:before{background-image:url(../img/phone.png);width:12px;height:20px;}
+.contacts-list li.email:before{background-image:url(../img/email.png);width:21px;height:25px;}
+.contacts-list li.skype:before{background-image:url(../img/skype.png);width:19px;height:20px;}
+.contacts-list li:before{content:'';display:block;position:absolute;left:0;background-color:transparent;background-position:center center;background-size:contain;background-repeat:no-repeat;}
+.contacts-button{width:220px;color:#FF8200;display:block;font-family:"GothamProMedium";font-size:14px;letter-spacing:0.2px;padding:20px 0;text-decoration:none;text-transform:uppercase;transition:all 0.5s ease 0s;vertical-align:top;text-align:center;margin-top:38px;}
+.map{min-height:600px;float:left;width:54%;}
+#map{
+        position: relative;
+}
+.contacts h3{
+    margin-left:55px;
+}
+@media screen and (max-width:1240px){
+.contacts h3{
+margin-left: 25px;
+    margin-top: 50px;
+}
+}
+@media screen and (max-width:800px){
+    .contacts h3{
+        font-size: 18px;
+    }
+}
