@@ -10,10 +10,12 @@ use App\Models\File;
 use App\Models\TariffTypes;
 use App\Models\Tariffs;
 
-class MainController extends Controller {
+class MainController extends Controller
+{
 	private $cityId;
 
-	public function __construct() {
+	public function __construct()
+	{
 		// ToDo: брать из сессии
 		$this->cityId = 1;
 	}
@@ -23,7 +25,8 @@ class MainController extends Controller {
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function home() {
+	public function home()
+	{
 		$employees = Employee::where('is_active', true)
 			->whereHas('location', function ($q) {
 				return $q->where('city_id', $this->cityId);
@@ -47,7 +50,8 @@ class MainController extends Controller {
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function about() {
+	public function about()
+	{
 		$flightSimulatorTypes = FlightSimulatorType::get();
 
 		$locations = Location::where('is_active', true)
@@ -66,7 +70,8 @@ class MainController extends Controller {
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function virtualTour() {
+	public function virtualTour()
+	{
 		return view('virtual-tour');
 	}
 
@@ -75,7 +80,8 @@ class MainController extends Controller {
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function contacts() {
+	public function contacts()
+	{
 		$locations = Location::where('is_active', true)
 			->where('city_id', $this->cityId)
 			->orderBy('name')
@@ -87,7 +93,8 @@ class MainController extends Controller {
 		]);
 	}
 
-	public function price() {
+	public function price()
+	{
 		$tariffTypes = TariffTypes::where('is_active', true)
 			->orderBy('name')
 			->get();
