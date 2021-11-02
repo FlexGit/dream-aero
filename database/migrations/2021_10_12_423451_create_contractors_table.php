@@ -18,6 +18,9 @@ class CreateContractorsTable extends Migration
 			$table->string('name')->comment('имя');
 			$table->string('phone')->comment('основной номер телефона');
 			$table->string('email')->comment('основной e-mail');
+			$table->timestamp('email_verified_at')->nullable();
+			$table->string('password');
+			$table->rememberToken();
 			$table->integer('city_id')->default(0)->index()->comment('город, к которому привязан контрагент');
 			$table->text('data_json')->default('')->comment('дополнительная информация');
             $table->timestamps();

@@ -5,6 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Review
+ *
+ * @property int $id
+ * @property string $name имя пользователя
+ * @property string $comment текст отзыва
+ * @property int $location_id локация, о которой отзыв
+ * @property int $is_active признак активности
+ * @property \datetime|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Location|null $location
+ * @method static \Illuminate\Database\Eloquent\Builder|Review newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Review newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Review query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Review extends Model
 {
     use HasFactory;

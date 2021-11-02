@@ -1,10 +1,10 @@
-@extends('adminlte::page', ['iFrameEnabled' => false])
+@extends('admin/layouts.master')
 
-@section('title', 'Dashboard')
+{{--@section('title', 'Календарь')--}}
 
-@section('content_header')
+{{--@section('content_header')
 	<h1>Календарь</h1>
-@stop
+@stop--}}
 
 @section('content')
 	<div id="calendar"></div>
@@ -12,7 +12,7 @@
 @stop
 
 @section('css')
-	{{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
+	<link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
 @stop
 
 @section('plugins.Fullcalendar', true)
@@ -22,20 +22,29 @@
 	<script src='https://cdn.jsdelivr.net/npm/moment-timezone@0.5.31/builds/moment-timezone-with-data.min.js'></script>
 
 	<script>
-		var timeZone = $('#time_zone').val();
+		var timeZone = $('#time_zone').val(),
+			height = $(document).height(),
+			offsetTop = $('#calendar').offset().top;
+
+		//console.log(height);
+		//console.log($('#calendar').offset().top);
 
 		document.addEventListener('DOMContentLoaded', function() {
 			var calendarEl = document.getElementById('calendar');
 			var calendar = new FullCalendar.Calendar(calendarEl, {
+				//height: (height - offsetTop),
+				//aspectRatio: 0.5,
+				//expandRows: true,
+				stickyHeaderDates: true,
 				initialView: 'timeGridWeek',
 				locale: 'ru',
 				editable: true,
 				selectable: true,
-				selectHelper: true,
+				droppable: true,
 				headerToolbar: {
-					left  : 'prev,next today',
-					center: 'title',
-					right : 'dayGridMonth,timeGridWeek,timeGridDay'
+					left  : 'title',
+					center: '',
+					right : 'prev,next today timeGridDay,timeGridWeek,dayGridMonth',
 				},
 				themeSystem: 'standard',
 				slotMinTime: '09:00:00',
@@ -44,8 +53,15 @@
 				slotLabelInterval: '01:00',
 				nowIndicator: true,
 				timeZone: timeZone,
+				dayMaxEvents: true,
+				//contentHeight: '400px',
+				firstDay: 1,
 			});
 			calendar.render();
+
+			$(document).on('click', '[data-widget="pushmenu"]', function() {
+				$(window).trigger('resize');
+			});
 		});
 	</script>
 @stop

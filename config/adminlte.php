@@ -146,10 +146,10 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
-    'sidebar_collapse_auto_size' => 400,
+    'sidebar_collapse' => true,
+    'sidebar_collapse_auto_size' => 1090,
     'sidebar_collapse_remember' => true,
-    'sidebar_collapse_remember_no_transition' => false,
+    'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
     'sidebar_nav_accordion' => true,
@@ -249,7 +249,7 @@ return [
         [
             'text'        => 'Календарь',
             'url'         => '/',
-            'icon'        => 'far fa-fw fa-calendar',
+            'icon'        => 'far fa-fw fa-calendar-alt',
             'label'       => '',
             'label_color' => '',
         ],
@@ -263,7 +263,7 @@ return [
 		[
 			'text'        => 'Контрагенты',
 			'url'         => '/contractors',
-			'icon'        => 'far fa-fw fa-user',
+			'icon'        => 'far fa-fw fa-address-book',
 			'label'       => '',
 			'label_color' => '',
 		],
@@ -279,11 +279,27 @@ return [
             'icon' => 'fas fa-fw fa-lock',
 			'topnav_user' => true,
         ],*/
-        ['header' => 'АНАЛИТИКА'],
+		[
+			'text'    => 'Справочники',
+			'icon'    => 'far fa-fw fa-folder',
+			'icon_color' => '',
+			'submenu' => [
+				[
+					'text' => 'Города',
+					'url'  => '/city',
+					'icon'    => 'far fa-fw fa-building',
+				],
+				[
+					'text' => 'Локации',
+					'url'  => '/location',
+					'icon'    => 'far fa-fw fa-map',
+				],
+			],
+		],
         [
-            'text'    => 'Отчеты',
+            'text'    => 'Аналитика',
             'icon'    => 'far fa-fw fa-file-excel',
-			'icon_color' => 'green',
+			'icon_color' => '',
             'submenu' => [
                 [
                     'text' => 'Отчет 1',
@@ -418,11 +434,11 @@ return [
 		'Fullcalendar' => [
 			'active' => false,
 			'files' => [
-				[
+				/*[
 					'type' => 'js',
 					'asset' => true,
 					'location' => 'vendor/fullcalendar/locales-all.min.js',
-				],
+				],*/
 				[
 					'type' => 'js',
 					'asset' => true,
