@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulatorType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulatorType whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property bool $is_active признак активности
+ * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulatorType whereIsActive($value)
  */
 class FlightSimulatorType extends Model {
     use HasFactory;
@@ -32,6 +34,17 @@ class FlightSimulatorType extends Model {
 	 */
 	protected $fillable = [
 		'name',
+	];
+
+	/**
+	 * The attributes that should be cast.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'created_at' => 'datetime:Y-m-d H:i:s',
+		'updated_at' => 'datetime:Y-m-d H:i:s',
+		'is_active' => 'boolean',
 	];
 
 	public function simulator() {

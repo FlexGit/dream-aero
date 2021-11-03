@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Tariffs
+ * App\Models\Tariff
  *
  * @property int $id
  * @property string $name наименование тарифа
@@ -19,23 +19,23 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $is_hit является ли продукт хитом продаж
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs query()
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereCityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereDataJson($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereIsHit($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereTariffTypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tariffs whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereIsHit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereTariffTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Tariffs extends Model
+class Tariff extends Model
 {
     use HasFactory;
 

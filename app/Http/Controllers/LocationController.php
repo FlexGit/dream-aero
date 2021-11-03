@@ -10,7 +10,6 @@ use Validator;
 use App\Models\Location;
 use App\Models\City;
 use App\Models\LegalEntity;
-use DataTables;
 
 class LocationController extends Controller
 {
@@ -41,16 +40,12 @@ class LocationController extends Controller
 	 */
 	public function getListAjax()
 	{
-		$locations = Location::with('city');
+		$locations = Location::with(['city', 'legalEntity'])
+			->get();
 
-		return DataTables::eloquent($locations)
-			->addColumn('city', function (Location $location) {
-				return $location->city->name;
-			})
-			->addColumn('legalEntity', function (Location $location) {
-				return $location->legalEntity->name;
-			})
-			->toJson();
+		$VIEW = view('admin.location.list', ['locations' => $locations]);
+
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -117,8 +112,8 @@ class LocationController extends Controller
 	{
 		$rules = [
 			'name' => 'required|max:255',
-			'legal_entity_id' => 'required',
-			'city_id' => 'required',
+			'legal_entity_id' => 'required|integer',
+			'city_id' => 'required|integer',
 			'address' => 'required',
 			'working_hours' => 'required',
 			'phone' => 'required',
@@ -172,18 +167,15 @@ class LocationController extends Controller
 		$location = Location::find($id);
 		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		Log::debug($this->request->all());
-		Log::debug($this->request->file('scheme_file'));
-		
 		$rules = [
 			'name' => 'required|max:255',
-			'legal_entity_id' => 'required',
-			'city_id' => 'required',
+			'legal_entity_id' => 'required|integer',
+			'city_id' => 'required|integer',
 			'address' => 'required',
 			'working_hours' => 'required',
 			'phone' => 'required',
 			'email' => 'required|email',
-			'scheme_file' => 'file|max:512|mimes:webp',
+			'scheme_file' => 'sometimes|image|max:1024|mimes:webp',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -200,11 +192,11 @@ class LocationController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$isFileUploaded = false;
 		if($file = $this->request->file('scheme_file')) {
-			$file->move(public_path('upload/scheme'), $file->getClientOriginalName());
+			$isFileUploaded = $file->move(public_path('upload/scheme'), $file->getClientOriginalName());
 		}
-			
 			
 		$location->name = $this->request->name;
 		$location->is_active = $this->request->is_active;
@@ -218,7 +210,7 @@ class LocationController extends Controller
 			'map_link' => $this->request->map_link,
 			'skype' => $this->request->skype,
 			'whatsapp' => $this->request->whatsapp,
-			'scheme_file_path' => $this->request->scheme_file,
+			'scheme_file_path' => $isFileUploaded ? 'scheme/' . $file->getClientOriginalName() : '',
 		];
 		if (!$location->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

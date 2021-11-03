@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name наименование авиатренажера
  * @property int $flight_simulator_type_id тип авиатренажера
  * @property int $location_id локация, в которой находится авиатренажер
+ * @property int $is_active признак активности
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Location $location
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator whereIsActive($value)
  */
 class FlightSimulator extends Model {
     use HasFactory;
@@ -42,11 +44,22 @@ class FlightSimulator extends Model {
 		'is_active',
 	];
 
+	/**
+	 * The attributes that should be cast.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'created_at' => 'datetime:Y-m-d H:i:s',
+		'updated_at' => 'datetime:Y-m-d H:i:s',
+		'is_active' => 'boolean',
+	];
+
 	public function simulatorType() {
-		return $this->hasOne('App\Models\FlightSimulatorType', 'id', 'flight_simulator_type_id');
+		return $this->belongsTo('App\Models\FlightSimulatorType', 'flight_simulator_type_id', 'id');
 	}
 
 	public function location() {
-		return $this->belongsTo('App\Models\Location', 'id', 'location_id');
+		return $this->belongsTo('App\Models\Location', 'location_id', 'id');
 	}
 }

@@ -40,7 +40,9 @@ class CityController extends Controller
 	{
 		$cities = City::get();
 		
-		return response()->json(['data' => $cities]);
+		$VIEW = view('admin.city.list', ['cities' => $cities]);
+
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -112,6 +114,9 @@ class CityController extends Controller
 	 */
 	public function update($id)
 	{
+		$city = City::find($id);
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+
 		$rules = [
 			'name' => 'required|max:255'
 		];
@@ -123,13 +128,6 @@ class CityController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-
-		$city = City::find($id);
-		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
-		
-		$this->request->validate([
-			'name' => 'required|max:255',
-		]);
 
 		$city->name = $this->request->name;
 		$city->is_active = $this->request->is_active;

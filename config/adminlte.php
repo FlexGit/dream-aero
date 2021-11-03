@@ -282,7 +282,6 @@ return [
 		[
 			'text'    => 'Справочники',
 			'icon'    => 'far fa-fw fa-folder',
-			'icon_color' => '',
 			'submenu' => [
 				[
 					'text' => 'Города',
@@ -294,12 +293,38 @@ return [
 					'url'  => '/location',
 					'icon'    => 'far fa-fw fa-map',
 				],
+				[
+					'text' => 'Юр.лица',
+					'url'  => '/legal_entity',
+					'icon'    => 'far fa-id-card',
+				],
+				[
+					'text' => 'Типы авиатренажеров',
+					'url'  => '/flight_simulator_type',
+					'icon'    => 'fas fa-plane',
+				],
+				[
+					'text' => 'Авиатренажеры',
+					'url'  => '/flight_simulator',
+					'icon'    => 'fas fa-plane-departure',
+				],
+				[
+					'text' => 'Типы тарифов',
+					'url'  => '/tariff_type',
+					'icon'    => 'fas fa-hand-holding-usd',
+				],
 			],
+		],
+		[
+			'text'        => 'Права доступа',
+			'url'         => '/access_rights',
+			'icon'        => 'fas fa-fw fa-low-vision',
+			'label'       => '',
+			'label_color' => '',
 		],
         [
             'text'    => 'Аналитика',
             'icon'    => 'far fa-fw fa-file-excel',
-			'icon_color' => '',
             'submenu' => [
                 [
                     'text' => 'Отчет 1',

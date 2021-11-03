@@ -18,6 +18,7 @@ class CreateFlightSimulatorsTable extends Migration
             $table->string('name', 50)->comment('наименование авиатренажера');
 			$table->integer('flight_simulator_type_id')->default(0)->index()->comment('тип авиатренажера');
 			$table->integer('location_id')->default(0)->index()->comment('локация, в которой находится авиатренажер');
+			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@
 <div class="form-group">
 	<label for="legal_entity_id">Юридическое лицо</label>
 	<select id="legal_entity_id" name="legal_entity_id" class="form-control form-control-sm">
-		<option>---</option>
+		<option></option>
 		@foreach($legalEntities as $legalEntity)
 			<option value="{{ $legalEntity->id }}" @if($legalEntity->id == $location->legal_entity_id) selected @endif>{{ $legalEntity->name }}</option>
 		@endforeach
@@ -22,7 +22,7 @@
 <div class="form-group">
 	<label for="city_id">Город</label>
 	<select id="city_id" name="city_id" class="form-control form-control-sm">
-		<option>---</option>
+		<option></option>
 		@foreach($cities as $city)
 			<option value="{{ $city->id }}" @if($city->id == $location->city_id) selected @endif>{{ $city->name }}</option>
 		@endforeach

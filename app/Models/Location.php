@@ -30,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\LegalEntity $legalEntity
+ * @method static \Illuminate\Database\Eloquent\Builder|Location whereLegalEntityId($value)
  */
 class Location extends Model
 {

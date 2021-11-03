@@ -16,6 +16,7 @@ class CreateFlightSimulatorTypesTable extends Migration
         Schema::create('flight_simulator_types', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50)->comment('наименование типа авиатренажера');
+			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
         });
     }
