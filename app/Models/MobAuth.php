@@ -5,6 +5,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Contractor;
+
 /**
  * App\MobAuth
  *
@@ -44,7 +46,6 @@ class MobAuth extends Model {
 		MobAuth::saved(function (MobAuth $mobAuth) {
 			// принудительно сбрасываем загруженные relations, чтобы при необходимости подгрузились новые
 			$mobAuth->setRelations([]);
-
 			$mobAuth->deleteOldTokens();
 			return true;
 		});
@@ -52,24 +53,25 @@ class MobAuth extends Model {
 		MobAuth::created(function (MobAuth $mobAuth) {
 			$contractor = $mobAuth->contractor;
 			if ($contractor) {
-				$contractor->last_auth = new Carbon('now');
+				$contractor->last_auth_at = new Carbon('now');
 				$contractor->save();
 			}
 			return true;
 		});
 	}
-
-	public function setToken($contractor = null) {
-		if (!($contractor instanceof Contractor)) $contractor = $this->contractor ?: Contractor::makeEmpty();
-		$this->token = md5($contractor->phone.':'.$contractor->email.':'.$contractor->id.':'.time().rand(0, 99999));
-	}
-
+	
 	public function contractor() {
 		return $this->belongsTo('App\Models\Contractor', 'contractor_id', 'id');
 	}
+	
+	/**
+	 * @param $contractor
+	 */
+	public function setToken($contractor) {
+		$this->token = md5($contractor->email . ':' . $contractor->id . ':' . time() . rand(0, 99999));
+	}
 
 	/**
-	 * Remove old tokens, saving most recent
 	 * @throws \Exception
 	 */
 	public function deleteOldTokens() {
@@ -80,7 +82,7 @@ class MobAuth extends Model {
 			->last();
 		if ($lastValidCreated) {
 			self::where('contractor_id', $this->contractor_id)
-				->where('id', '!=', $this->id) // just in case of some collisions
+				->where('id', '!=', $this->id)
 				->where('created_at', '<', $lastValidCreated->created_at->format('Y-m-d H:i:s'))
 				->delete();
 		}

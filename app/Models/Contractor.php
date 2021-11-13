@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,6 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $remember_token
  * @property int $city_id город, к которому привязан контрагент
  * @property array $data_json дополнительная информация
+ * @property int $is_active признак активности
  * @property \datetime|null $last_auth_at дата последней по времени авторизации
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
@@ -43,11 +45,16 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\City|null $city
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsActive($value)
  */
 class Contractor extends Authenticatable
 {
 	use HasApiTokens, HasFactory, Notifiable;
-
+	
+	CONST RESEND_CODE_INTERVAL = 25;
+	CONST CODE_TTL = 5 * 60;
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -84,5 +91,10 @@ class Contractor extends Authenticatable
 		'email_verified_at' => 'datetime',
 		'data_json' => 'array',
 		'last_auth_at' => 'datetime:Y-m-d H:i:s',
+		'is_active' => 'boolean',
 	];
+	
+	public function city() {
+		return $this->hasOne('App\Models\City', 'id', 'city_id');
+	}
 }

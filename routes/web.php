@@ -10,6 +10,8 @@ use App\Http\Controllers\FlightSimulatorTypeController;
 use App\Http\Controllers\FlightSimulatorController;
 use App\Http\Controllers\TariffTypeController;
 
+use App\Http\Controllers\Api\ApiUserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,8 +24,8 @@ use App\Http\Controllers\TariffTypeController;
 */
 Auth::routes(['register' => false]);
 
-Route::group(['middleware' => ['auth']], function () {
-	Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
+Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
+	Route::group(['middleware' => ['auth']], function () {
 		// Календарь
 		Route::get('/', [HomeController::class, 'home']);
 		
@@ -100,18 +102,6 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('tariff_type/{id}/edit', [TariffTypeController::class, 'edit']);
 		Route::get('tariff_type/{id}/delete', [TariffTypeController::class, 'confirm']);
 	});
-});
-
-Route::group(['middleware' => ['log_queries', 'checkip'], 'prefix' => 'api'], function () {
-	/**
-	 * @SWG\Swagger(
-	 *   @SWG\Info(
-	 *     title="Внешний API для интеграции с ViewAPP",
-	 *     description="По вопросам использования можно писать на [kiryushkin@calcul.ru](mailto:kiryushkin@calcul.ru) или в телеграмм ```@c_a_t_c_h```",
-	 *     version="1"
-	 *   )
-	 * )
-	 */
 });
 
 Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {

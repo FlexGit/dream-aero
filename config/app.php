@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'UTC+3',
 
     /*
     |--------------------------------------------------------------------------
@@ -231,7 +231,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-		'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+		//'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
+	'api_key' => env('API_KEY'),
 ];

@@ -34,6 +34,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereTariffTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $employee_id пилот
+ * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\Employee|null $employee
+ * @property-read \App\Models\TariffType|null $tarifType
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereEmployeeId($value)
  */
 class Tariff extends Model
 {
@@ -61,6 +66,22 @@ class Tariff extends Model
 	 * @var array
 	 */
 	protected $casts = [
+		'created_at' => 'datetime:Y-m-d H:i:s',
+		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'data_json' => 'array',
+		'is_active' => 'boolean',
+		'is_hit' => 'boolean',
 	];
+	
+	public function tarifType() {
+		return $this->hasOne('App\Models\TariffType', 'id', 'tariff_type_id');
+	}
+	
+	public function employee() {
+		return $this->hasOne('App\Models\Employee', 'id', 'employee_id');
+	}
+
+	public function city() {
+		return $this->hasOne('App\Models\City', 'id', 'city_id');
+	}
 }

@@ -10,4 +10,17 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    
+    CONST API_VALIDATION_MESSAGES = [
+		'required_without' => 'Обязательно для заполнения',
+		'confirmed' => 'Пароли должны совпадать',
+		'same' => 'Пароли должны совпадать',
+		'email' => 'Некорректный формат',
+		'min' => 'Не менее :min символов',
+		'max' => 'Не более :max символов',
+		'date' => 'Некорректный формат',
+		'numeric' => 'Должно быть числом',
+		'digits' => 'Должно быть :digits цифры',
+		'valid_city' => 'Город не найден',
+	];
 }

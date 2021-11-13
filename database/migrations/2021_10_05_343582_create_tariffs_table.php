@@ -17,6 +17,7 @@ class CreateTariffsTable extends Migration
             $table->id();
             $table->string('name')->comment('наименование тарифа');
 			$table->integer('tariff_type_id')->default(0)->index()->comment('тип тарифа');
+			$table->integer('employee_id')->default(0)->index()->comment('пилот');
 			$table->integer('city_id')->default(0)->index()->comment('город, в котором действует продукт');
 			$table->integer('duration')->comment('длительность полёта, мин.');
 			$table->text('data_json')->default('')->comment('дополнительная информация');
