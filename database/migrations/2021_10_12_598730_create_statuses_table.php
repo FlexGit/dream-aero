@@ -17,7 +17,7 @@ class CreateStatusesTable extends Migration
             $table->id();
 			$table->string('name')->comment('наименование');
 			$table->string('alias')->comment('алиас');
-			$table->text('data_json')->default('')->comment('дополнительная информация');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
         });
     }

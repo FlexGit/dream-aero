@@ -23,7 +23,7 @@ class CreateBookingsTable extends Migration
 			$table->timestamp('invite_sent_at')->nullable()->comment('последняя дата отправки приглашения на e-mail');
 			$table->integer('created_by_user_id')->default(0)->index()->comment('пользователь, создавший бронирование');
 			$table->integer('updated_by_user_id')->default(0)->index()->comment('пользователь, изменивший последним бронирование');
-			$table->text('data_json')->default('')->comment('дополнительная информация: комментарий к бронированию');
+			$table->text('data_json')->nullable()->comment('дополнительная информация: комментарий к бронированию');
             $table->timestamps();
         });
     }

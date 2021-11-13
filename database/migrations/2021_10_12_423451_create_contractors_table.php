@@ -21,7 +21,7 @@ class CreateContractorsTable extends Migration
 			$table->string('password');
 			$table->rememberToken();
 			$table->integer('city_id')->default(0)->index()->comment('город, к которому привязан контрагент');
-			$table->text('data_json')->default('')->comment('дополнительная информация');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->timestamp('last_auth_at')->nullable()->comment('дата последней по времени авторизации');
             $table->timestamps();

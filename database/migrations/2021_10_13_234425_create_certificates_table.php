@@ -20,7 +20,7 @@ class CreateCertificatesTable extends Migration
 			$table->string('booking_for')->default('')->comment('имя получателя сертификата');
 			$table->timestamp('expire_at')->nullable()->comment('срок окончания действия сертификата');
 			$table->timestamp('sent_at')->nullable()->comment('последняя дата отправки сертификата на e-mail');
-			$table->text('data_json')->default('')->comment('дополнительная информация: адрес доставки сертификата, комментарий по доставке сертификата');
+			$table->text('data_json')->nullable()->comment('дополнительная информация: адрес доставки сертификата, комментарий по доставке сертификата');
             $table->timestamps();
         });
     }
