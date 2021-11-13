@@ -556,7 +556,7 @@ class ApiController extends Controller
 			->get();
 		
 		if ($legalEntities->isEmpty()) {
-			return $this->responseError('Локации не найдены', 400);
+			return $this->responseError('Юридический лица не найдены', 400);
 		}
 		
 		$legalEntitiesData = [];
