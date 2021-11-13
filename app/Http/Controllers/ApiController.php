@@ -74,7 +74,7 @@ class ApiController extends Controller
 		$mobAuth->setToken($contractor);
 		
 		if ($mobAuth->save()) {
-			return $this->responseSuccess('', [$mobAuth->toArray()]);
+			return $this->responseSuccess(null, [$mobAuth->toArray()]);
 		}
 		
 		return $this->responseError('В данный момент невозможно пройти авторизацию, попробуйте позже', 500);
@@ -285,7 +285,7 @@ class ApiController extends Controller
 			'auth' => $mobAuth ? $mobAuth->toArray() : [],
 		];
 
-		return $this->responseSuccess('', $data);
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
@@ -346,7 +346,7 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		return $this->responseSuccess('', [$contractor->toArray()]);
+		return $this->responseSuccess(null, [$contractor->toArray()]);
 	}
 	
 	/**
@@ -451,7 +451,7 @@ class ApiController extends Controller
 		$tariffTypes = TariffType::where('is_active', true)
 			->get();
 		
-		return $this->responseSuccess('', [$tariffTypes->toArray()]);
+		return $this->responseSuccess(null, [$tariffTypes->toArray()]);
 	}
 	
 	/**
@@ -472,7 +472,7 @@ class ApiController extends Controller
 			return $this->responseError('Тарифы не найдены', 400);
 		}
 		
-		return $this->responseSuccess('', [$tariffs->toArray()]);
+		return $this->responseSuccess(null, [$tariffs->toArray()]);
 	}
 	
 	/**
@@ -491,7 +491,7 @@ class ApiController extends Controller
 			return $this->responseError('Тариф не найден', 400);
 		}
 		
-		return $this->responseSuccess('', [$tariff->toArray()]);
+		return $this->responseSuccess(null, [$tariff->toArray()]);
 	}
 	
 	public function verifyCertificate() {
@@ -513,7 +513,7 @@ class ApiController extends Controller
 		$cities = City::where('is_active', true)
 			->get();
 		
-		return $this->responseSuccess('', [$cities->toArray()]);
+		return $this->responseSuccess(null, [$cities->toArray()]);
 	}
 	
 	/**
@@ -534,7 +534,7 @@ class ApiController extends Controller
 			return $this->responseError('Локации не найдены', 400);
 		}
 		
-		return $this->responseSuccess('', [$locations->toArray()]);
+		return $this->responseSuccess(null, [$locations->toArray()]);
 	}
 	
 	/**
@@ -570,7 +570,7 @@ class ApiController extends Controller
 			];
 		}
 		
-		return $this->responseSuccess('', [$legalEntitiesData]);
+		return $this->responseSuccess(null, [$legalEntitiesData]);
 	}
 	
 	/**
@@ -591,7 +591,7 @@ class ApiController extends Controller
 			return $this->responseError('Акции не найдены', 400);
 		}
 		
-		return $this->responseSuccess('', [$promos->toArray()]);
+		return $this->responseSuccess(null, [$promos->toArray()]);
 	}
 	
 	/**
@@ -610,6 +610,6 @@ class ApiController extends Controller
 			return $this->responseError('Акция не найдена', 400);
 		}
 		
-		return $this->responseSuccess('', [$promo->toArray()]);
+		return $this->responseSuccess(null, [$promo->toArray()]);
 	}
 }
