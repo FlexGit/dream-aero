@@ -20,7 +20,7 @@ class ApiKey
 	public function handle($request, Closure $next)
 	{
 		if (!$this->request->apikey || $this->request->apikey !== config('app.api_key')) {
-			return $this->responseError('Неверный Api-ключ');
+			return $this->responseError('Некорректный Api-ключ');
 		}
 		
 		return $next($request);
