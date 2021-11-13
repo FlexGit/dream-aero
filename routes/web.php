@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\ApiUserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes(['register' => false]);
+Auth::routes(['register' => true]);
 
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	Route::group(['middleware' => ['auth']], function () {
