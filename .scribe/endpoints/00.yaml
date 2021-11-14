@@ -1,0 +1,1321 @@
+name: Endpoints
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/login
+    metadata:
+      title: Authentification
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      email:
+        name: email
+        description: ''
+        required: true
+        example: null
+        type: string
+      password:
+        name: password
+        description: 'Password (md5).'
+        required: true
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		{
+          			"id": 1,
+          			"token": "328dda59f036efc26720937545efe01e",
+          	 		"contractor_id": 1,
+          	 		"created_at": "2021-11-12 18:36:05",
+          	 		"updated_at": "2021-11-12 18:36:05"
+          		}
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/profile/save
+    metadata:
+      title: 'Profile save'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters:
+      email:
+        name: email
+        description: ''
+        required: false
+        example: null
+        type: string
+      name:
+        name: name
+        description: ''
+        required: false
+        example: null
+        type: string
+      birthdate:
+        name: birthdate
+        description: ''
+        required: false
+        example: null
+        type: date
+      city_id:
+        name: city_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Профиль успешно сохранен",
+          	"data": {
+          		"id": 1,
+          		"name": "John",
+          		"phone": "",
+          		"email": "john.smith@gmail.com",
+          		"city_id": 1,
+          		"data_json": {
+          			"birthdate": "1990-01-01"
+          		},
+          		"is_active": true,
+          		"last_auth_at": "2021-01-01 12:00:00",
+          		"created_at": "2021-01-01 12:00:00",
+          		"updated_at": "2021-01-01 12:00:00"
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/code/verify
+    metadata:
+      title: 'Code verification'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      email:
+        name: email
+        description: ''
+        required: true
+        example: null
+        type: string
+      code:
+        name: code
+        description: ''
+        required: false
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Код подтвержден",
+          	"data": null
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/profile/delete
+    metadata:
+      title: 'Profile delete'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Профиль успешно удален",
+          	"data": null
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/code/send
+    metadata:
+      title: 'Verification code send'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      email:
+        name: email
+        description: ''
+        required: true
+        example: null
+        type: string
+      type:
+        name: type
+        description: 'Action type. For Registration - empty value, for Password Restore - "password_restore".'
+        required: false
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Код подтверждения отправлен на john.smith@gmail.com",
+          	"data": null
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/register
+    metadata:
+      title: Registration
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters:
+      password:
+        name: password
+        description: 'Password (md5).'
+        required: true
+        example: null
+        type: string
+      password_confirmation:
+        name: password_confirmation
+        description: 'Password confirmation (md5).'
+        required: true
+        example: null
+        type: string
+      email:
+        name: email
+        description: ''
+        required: false
+        example: null
+        type: string
+      name:
+        name: name
+        description: ''
+        required: false
+        example: null
+        type: string
+      birthdate:
+        name: birthdate
+        description: ''
+        required: false
+        example: null
+        type: date
+      city_id:
+        name: city_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": {
+          		"contractor": {
+          			"id": 1,
+          			"name": "John",
+          			"phone": "",
+          			"email": "john.smith@gmail.com",
+          			"city_id": 1,
+          			"data_json": {
+          				"birthdate": "1990-01-01"
+          			},
+          			"is_active": true,
+          			"last_auth_at": "2021-01-01 12:00:00",
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		},
+          		"mob_auth": {
+          			"id": 1,
+          			"contractor_id": 1,
+          			"token": "6136d60c36e6925bf98dea7e05d5f5c8",
+          			"created_at": "2021-11-12 18:36:05",
+          			"updated_at": "2021-11-12 18:36:05"
+          		}
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/logout
+    metadata:
+      title: Logout
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Токен успешно удален",
+          	"data": null
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/password/reset
+    metadata:
+      title: 'Password change'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters:
+      password:
+        name: password
+        description: 'Password (md5).'
+        required: true
+        example: null
+        type: string
+      password_confirmation:
+        name: password_confirmation
+        description: 'Password confirmation (md5).'
+        required: true
+        example: null
+        type: string
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Пароль успешно изменен",
+          	"data": {
+          		"id": 1,
+          		"name": "John",
+          		"phone": "",
+          		"email": "john.smith@gmail.com",
+          		"city_id": 1,
+          		"data_json": {
+          			"birthdate": "1990-01-01"
+          		},
+          		"is_active": true,
+          		"last_auth_at": "2021-01-01 12:00:00",
+          		"created_at": "2021-01-01 12:00:00",
+          		"updated_at": "2021-01-01 12:00:00"
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"password": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/profile
+    metadata:
+      title: Profile
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": {
+          		"id": 1,
+          		"name": "John",
+          		"phone": "",
+          		"email": "john.smith@gmail.com",
+          		"city_id": 1,
+          		"data_json": {
+          			"birthdate": "1990-01-01"
+          		},
+          		"is_active": true,
+          		"last_auth_at": "2021-01-01 12:00:00",
+          		"created_at": "2021-01-01 12:00:00",
+          		"updated_at": "2021-01-01 12:00:00"
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/tariff_types
+    metadata:
+      title: 'Tariff type list'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		[
+          			{
+          				"id": 1,
+          				"name": "Regular",
+          				"data_json": {
+          				},
+          				"is_active": true,
+          				"created_at": "2021-01-01 12:00:00",
+          				"updated_at": "2021-01-01 12:00:00"
+          			}
+          		]
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/tariffs
+    metadata:
+      title: 'Tariff list'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      tariff_type_id:
+        name: tariff_type_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		[
+          			{
+          				"id": 1,
+          				"name": "Regular",
+          				"tariff_type_id": 1,
+          				"employee_id": 10,
+          				"city_id": 5,
+          				"duration": 30,
+          				"price": 6300,
+          				"data_json": {
+          				},
+          				"is_active": true,
+          				"is_hit": false,
+          				"created_at": "2021-01-01 12:00:00",
+          				"updated_at": "2021-01-01 12:00:00",
+          				"tarif_type": {
+          				"id": 1,
+          				"name": "Regular",
+          				"data_json": {
+          					"hint": "только будни",
+          					"description": ""
+          				},
+          				"is_active": true,
+          				"created_at": "2021-01-01 12:00:00",
+          				"updated_at": "2021-01-01 12:00:00"
+          			},
+          			"employee": null,
+          			"city": {
+          				"id": 1,
+          				"name": "Москва",
+          				"is_active": true,
+          				"created_at": "2021-10-01 18:23:27",
+          				"updated_at": "2021-10-05 18:23:41"
+          			}
+          			}
+          		]
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/tariff
+    metadata:
+      title: 'Tariff detailed'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      tariff_id:
+        name: tariff_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		{
+          			"id": 1,
+          			"name": "Regular",
+          			"tariff_type_id": 1,
+          			"employee_id": 10,
+          			"city_id": 5,
+          			"duration": 30,
+          			"price": 6300,
+          			"data_json": {
+          			},
+          			"is_active": true,
+          			"is_hit": false,
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00",
+          			"tarif_type": {
+          			"id": 1,
+          			"name": "Regular",
+          			"data_json": {
+          				"hint": "только будни",
+          				"description": ""
+          			},
+          			"is_active": true,
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		},
+          		"employee": null,
+          		"city": {
+          			"id": 1,
+          			"name": "Москва",
+          			"is_active": true,
+          			"created_at": "2021-10-01 18:23:27",
+          			"updated_at": "2021-10-05 18:23:41"
+          		}
+          		}
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/cities
+    metadata:
+      title: 'City list'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		[
+          			{
+          				"id": 1,
+          				"name": "Москва",
+          				"is_active": true,
+          				"created_at": "2021-01-01 12:00:00",
+          				"updated_at": "2021-01-01 12:00:00",
+          			}
+          		]
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/locations
+    metadata:
+      title: 'Location list'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      city_id:
+        name: city_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		[
+          			{
+          				"id": 1,
+          				"name": "ТРК VEGAS Кунцево",
+          				"legal_entity_id": 1,
+          				"data_json": {
+          					"address": "",
+          					"working_hours": "",
+          					"phone": "",
+          					"email": "",
+          					"map_link": "",
+          					"skype": "",
+          					"whatsapp": "",
+          					"scheme_file_path": ""
+          				}
+          				"is_active": true,
+          				"created_at": "2021-01-01 12:00:00",
+          				"updated_at": "2021-01-01 12:00:00",
+          			}
+          		]
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/legal_entities
+    metadata:
+      title: 'Legal Entity list'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      city_id:
+        name: city_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		[
+          			{
+          				"id": 1,
+          				"name": "ООО Компания",
+          				"public_offer_file_path": "",
+          				"created_at": "2021-01-01 12:00:00",
+          				"updated_at": "2021-01-01 12:00:00",
+          			}
+          		]
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/promos
+    metadata:
+      title: 'Promo list'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      city_id:
+        name: city_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		[
+          			{
+          				"id": 1,
+          				"name": "Акция",
+          				"preview_text": "",
+          				"detail_text": "",
+          				"city_id": 1,
+          				"is_active": true,
+          				"created_at": "2021-01-01 12:00:00",
+          				"updated_at": "2021-01-01 12:00:00",
+          			}
+          		]
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/promo
+    metadata:
+      title: 'Promo detailed'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      promo_id:
+        name: promo_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          		{
+          			"id": 1,
+          			"name": "Акция",
+          			"preview_text": "",
+          			"detail_text": "",
+          			"city_id": 1,
+          			"is_active": true,
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00",
+          		}
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []

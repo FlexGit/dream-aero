@@ -26,19 +26,30 @@ trait ApiResponser
 	 */
 	protected function responseError($error = null, $code = 200, $debug = null)
 	{
+		if (!$error) {
+			switch ($code) {
+				case 500:
+					$error = 'Внутренняя ошибка';
+				break;
+				case 405:
+					$error = 'Метод не разрешен';
+				break;
+				case 404:
+					$error = 'Ресурс не найден';
+				break;
+				case 400:
+					$error = 'Некорректный запрос';
+				break;
+				default:
+					$error = 'Неизвестная ошибка';
+				break;
+			}
+		}
+		
 		return response()->json([
 			'success' => false,
 			'error' => $error,
 			'debug' => $debug,
 		], $code);
 	}
-	
-	/*protected function responseErrors($errors = [], $code = 200, $debug = null)
-	{
-		return response()->json([
-			'success' => false,
-			'error' => $errors,
-			'debug' => $debug,
-		], $code);
-	}*/
 }

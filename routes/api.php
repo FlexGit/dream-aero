@@ -22,22 +22,27 @@ use App\Http\Controllers\ApiController;
 
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	Route::group(['middleware' => ['apikey']], function () {
+		/**
+		 * Login
+		 *
+		 * @response 200
+		 */
 		Route::post('login', [ApiController::class, 'login']);
 		Route::post('logout', [ApiController::class, 'logout']);
 		Route::post('code/send', [ApiController::class, 'sendCode']);
 		Route::post('code/verify', [ApiController::class, 'verifyCode']);
 		Route::post('register', [ApiController::class, 'register']);
 		Route::post('password/reset', [ApiController::class, 'resetPassword']);
-		Route::post('profile', [ApiController::class, 'getProfile']);
+		Route::get('profile', [ApiController::class, 'getProfile']);
 		Route::post('profile/save', [ApiController::class, 'saveProfile']);
 		Route::post('profile/delete', [ApiController::class, 'deleteProfile']);
-		Route::post('tariff_types', [ApiController::class, 'getTariffTypes']);
-		Route::post('tariffs', [ApiController::class, 'getTariffs']);
-		Route::post('tariff', [ApiController::class, 'getTariff']);
-		Route::post('cities', [ApiController::class, 'getCities']);
-		Route::post('locations', [ApiController::class, 'getLocations']);
-		Route::post('legal_entities', [ApiController::class, 'getLegalEntities']);
-		Route::post('promos', [ApiController::class, 'getPromos']);
-		Route::post('promo', [ApiController::class, 'getPromo']);
+		Route::get('tariff_types', [ApiController::class, 'getTariffTypes']);
+		Route::get('tariffs', [ApiController::class, 'getTariffs']);
+		Route::get('tariff', [ApiController::class, 'getTariff']);
+		Route::get('cities', [ApiController::class, 'getCities']);
+		Route::get('locations', [ApiController::class, 'getLocations']);
+		Route::get('legal_entities', [ApiController::class, 'getLegalEntities']);
+		Route::get('promos', [ApiController::class, 'getPromos']);
+		Route::get('promo', [ApiController::class, 'getPromo']);
 	});
 });

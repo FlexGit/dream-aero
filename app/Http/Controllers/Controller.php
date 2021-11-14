@@ -12,6 +12,8 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
     CONST API_VALIDATION_MESSAGES = [
+		'required' => 'Обязательно для заполнения',
+		'required_with' => 'Обязательно для заполнения',
 		'required_without' => 'Обязательно для заполнения',
 		'confirmed' => 'Пароли должны совпадать',
 		'same' => 'Пароли должны совпадать',

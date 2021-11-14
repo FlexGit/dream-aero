@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC+3',
+    'timezone' => 'Europe/Moscow',
 
     /*
     |--------------------------------------------------------------------------
@@ -234,5 +234,5 @@ return [
 		//'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
-	'api_key' => env('API_KEY'),
+	'api_key' => env('SCRIBE_AUTH_KEY'),
 ];

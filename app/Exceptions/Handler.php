@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
 				{
 					Log::debug($e->getStatusCode() . ' - ' . $e->getMessage() . ' - ' . $request->url());
 					
-					return $this->responseError('Ошибка, страница не найдена', $e->getStatusCode(), $request->url());
+					return $this->responseError(null, $e->getStatusCode(), $request->url());
 				}
 				if ($e instanceof TokenMismatchException
 					|| $e instanceof MethodNotAllowedHttpException
@@ -64,7 +64,7 @@ class Handler extends ExceptionHandler
 				{
 					Log::debug($e->getStatusCode() . ' - ' . $e->getMessage());
 					
-					return $this->responseError('Ошибка, попробуйте позже', $e->getStatusCode(), $e->getMessage() . ' - ' . $request->url());
+					return $this->responseError(null, $e->getStatusCode(), $e->getMessage() . ' - ' . $request->url());
 				}
 			}
 			

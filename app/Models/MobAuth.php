@@ -39,12 +39,23 @@ class MobAuth extends Model {
 		'created_at',
 		'updated_at',
 	];
-
+	
+	/**
+	 * The attributes that should be cast.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'created_at' => 'datetime:Y-m-d H:i:s',
+		'updated_at' => 'datetime:Y-m-d H:i:s',
+	];
+	
 	public static function boot() {
 		parent::boot();
 
 		MobAuth::saved(function (MobAuth $mobAuth) {
-			// принудительно сбрасываем загруженные relations, чтобы при необходимости подгрузились новые
+			// принудительно сбрасываем загруженные relations,
+			// чтобы при необходимости подгрузились новые
 			$mobAuth->setRelations([]);
 			$mobAuth->deleteOldTokens();
 			return true;
