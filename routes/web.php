@@ -10,8 +10,6 @@ use App\Http\Controllers\FlightSimulatorTypeController;
 use App\Http\Controllers\FlightSimulatorController;
 use App\Http\Controllers\TariffTypeController;
 
-use App\Http\Controllers\Api\ApiUserController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +20,8 @@ use App\Http\Controllers\Api\ApiUserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes(['register' => true]);
+
+Auth::routes(['register' => false]);
 
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	Route::group(['middleware' => ['auth']], function () {

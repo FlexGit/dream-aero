@@ -10,8 +10,8 @@ use App\Models\Review;
 use App\Models\Location;
 use App\Models\FlightSimulatorType;
 use App\Models\File;
-use App\Models\TariffTypes;
-use App\Models\Tariffs;
+use App\Models\TariffType;
+use App\Models\Tariff;
 
 class HomeController extends Controller
 {

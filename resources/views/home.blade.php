@@ -221,7 +221,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="reviews-author wow">
-								<span class="reviews-name">{{ $review['name'] }} | {{ $review->location->city['name'] }}</span>
+								<span class="reviews-name">{{ $review['name'] }} | {{-- $review->location->city['name'] --}}</span>
 								<span class="reviews-sent">Отправлено: {{ $review['created_at'] }}</span>
 								<button type="button" class="reviews-prev"></button>
 								<button type="button" class="reviews-next"></button>
