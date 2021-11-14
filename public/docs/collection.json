@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "admin.dream-aero.loc"
+            "value": "dev.dream-aero.ru"
         }
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "92f4f76f-99d1-4a02-81d2-58aa25ee6e4d",
+        "_postman_id": "660e9ff6-0f59-4630-8dbd-97696513ba6f",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },

@@ -22,11 +22,6 @@ use App\Http\Controllers\ApiController;
 
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	Route::group(['middleware' => ['apikey']], function () {
-		/**
-		 * Login
-		 *
-		 * @response 200
-		 */
 		Route::post('login', [ApiController::class, 'login']);
 		Route::post('logout', [ApiController::class, 'logout']);
 		Route::post('code/send', [ApiController::class, 'sendCode']);
