@@ -668,6 +668,10 @@ class ApiController extends Controller
 		$tariffTypes = TariffType::where('is_active', true)
 			->get();
 		
+		if ($tariffTypes->isEmpty()) {
+			return $this->responseError('Типы тарифов не найдены', 400);
+		}
+		
 		return $this->responseSuccess(null, [$tariffTypes->toArray()]);
 	}
 	
@@ -843,6 +847,10 @@ class ApiController extends Controller
 	public function getCities() {
 		$cities = City::where('is_active', true)
 			->get();
+		
+		if ($cities->isEmpty()) {
+			return $this->responseError('Города не найдены', 400);
+		}
 		
 		return $this->responseSuccess(null, [$cities->toArray()]);
 	}
