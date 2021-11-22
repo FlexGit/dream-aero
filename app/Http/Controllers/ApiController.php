@@ -334,9 +334,7 @@ class ApiController extends Controller
 			return $this->responseError(null, 500);
 		}
 		
-		if ($code->contractor_id) {
-			$contractor = Contractor::find($code->contractor_id);
-		}
+		$contractor = $code->contractor_id ? Contractor::find($code->contractor_id) : null;
 		
 		$data = [
 			'contractor' => $contractor ? $contractor->toArray() : [],
