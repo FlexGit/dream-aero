@@ -19,7 +19,7 @@
 
     <script src="//cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
     <script>
-        var baseUrl = "http://admin.dream-aero.loc";
+        var baseUrl = "http://dev.dream-aero.ru";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -68,7 +68,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <blockquote>
 <p>Base URL</p>
 </blockquote>
-<pre><code class="language-yaml">http://admin.dream-aero.loc</code></pre>
+<pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
 <p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
@@ -91,12 +91,12 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/login?api_key=&amp;email=&amp;password=" \
+    "http://dev.dream-aero.ru/api/login?api_key=&amp;email=&amp;password=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/login"
+    "http://dev.dream-aero.ru/api/login"
 );
 
 const params = {
@@ -119,7 +119,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/login',
+    'http://dev.dream-aero.ru/api/login',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -299,13 +299,13 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/profile/save?api_key=" \
+    "http://dev.dream-aero.ru/api/profile/save?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
 </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/profile/save"
+    "http://dev.dream-aero.ru/api/profile/save"
 );
 
 const params = {
@@ -326,7 +326,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/profile/save',
+    'http://dev.dream-aero.ru/api/profile/save',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -540,12 +540,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/code/verify?api_key=&amp;email=" \
+    "http://dev.dream-aero.ru/api/code/verify?api_key=&amp;email=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/code/verify"
+    "http://dev.dream-aero.ru/api/code/verify"
 );
 
 const params = {
@@ -567,7 +567,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/code/verify',
+    'http://dev.dream-aero.ru/api/code/verify',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -762,12 +762,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/profile/delete?api_key=" \
+    "http://dev.dream-aero.ru/api/profile/delete?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/profile/delete"
+    "http://dev.dream-aero.ru/api/profile/delete"
 );
 
 const params = {
@@ -788,7 +788,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/profile/delete',
+    'http://dev.dream-aero.ru/api/profile/delete',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -935,12 +935,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/code/send?api_key=&amp;email=" \
+    "http://dev.dream-aero.ru/api/code/send?api_key=&amp;email=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/code/send"
+    "http://dev.dream-aero.ru/api/code/send"
 );
 
 const params = {
@@ -962,7 +962,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/code/send',
+    'http://dev.dream-aero.ru/api/code/send',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1157,7 +1157,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/register?api_key=" \
+    "http://dev.dream-aero.ru/api/register?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1167,7 +1167,7 @@ print_r(json_decode((string) $body));</code></pre>
 </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/register"
+    "http://dev.dream-aero.ru/api/register"
 );
 
 const params = {
@@ -1194,7 +1194,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/register',
+    'http://dev.dream-aero.ru/api/register',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1441,12 +1441,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/logout?api_key=&amp;contractor_id=&amp;token=" \
+    "http://dev.dream-aero.ru/api/logout?api_key=&amp;contractor_id=&amp;token=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/logout"
+    "http://dev.dream-aero.ru/api/logout"
 );
 
 const params = {
@@ -1469,7 +1469,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/logout',
+    'http://dev.dream-aero.ru/api/logout',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1628,7 +1628,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://admin.dream-aero.loc/api/password/reset?api_key=" \
+    "http://dev.dream-aero.ru/api/password/reset?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1638,7 +1638,7 @@ print_r(json_decode((string) $body));</code></pre>
 </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/password/reset"
+    "http://dev.dream-aero.ru/api/password/reset"
 );
 
 const params = {
@@ -1665,7 +1665,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://admin.dream-aero.loc/api/password/reset',
+    'http://dev.dream-aero.ru/api/password/reset',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1863,12 +1863,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/profile?api_key=" \
+    --get "http://dev.dream-aero.ru/api/profile?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/profile"
+    "http://dev.dream-aero.ru/api/profile"
 );
 
 const params = {
@@ -1889,7 +1889,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/profile',
+    'http://dev.dream-aero.ru/api/profile',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2049,12 +2049,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/tariff_types?api_key=" \
+    --get "http://dev.dream-aero.ru/api/tariff_types?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/tariff_types"
+    "http://dev.dream-aero.ru/api/tariff_types"
 );
 
 const params = {
@@ -2075,7 +2075,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/tariff_types',
+    'http://dev.dream-aero.ru/api/tariff_types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2223,12 +2223,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/tariffs?api_key=" \
+    --get "http://dev.dream-aero.ru/api/tariffs?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/tariffs"
+    "http://dev.dream-aero.ru/api/tariffs"
 );
 
 const params = {
@@ -2249,7 +2249,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/tariffs',
+    'http://dev.dream-aero.ru/api/tariffs',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2432,12 +2432,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/tariff?api_key=" \
+    --get "http://dev.dream-aero.ru/api/tariff?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/tariff"
+    "http://dev.dream-aero.ru/api/tariff"
 );
 
 const params = {
@@ -2458,7 +2458,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/tariff',
+    'http://dev.dream-aero.ru/api/tariff',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2639,12 +2639,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/cities?api_key=" \
+    --get "http://dev.dream-aero.ru/api/cities?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/cities"
+    "http://dev.dream-aero.ru/api/cities"
 );
 
 const params = {
@@ -2665,7 +2665,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/cities',
+    'http://dev.dream-aero.ru/api/cities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2812,12 +2812,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/locations?api_key=" \
+    --get "http://dev.dream-aero.ru/api/locations?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/locations"
+    "http://dev.dream-aero.ru/api/locations"
 );
 
 const params = {
@@ -2838,7 +2838,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/locations',
+    'http://dev.dream-aero.ru/api/locations',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3006,12 +3006,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/legal_entities?api_key=" \
+    --get "http://dev.dream-aero.ru/api/legal_entities?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/legal_entities"
+    "http://dev.dream-aero.ru/api/legal_entities"
 );
 
 const params = {
@@ -3032,7 +3032,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/legal_entities',
+    'http://dev.dream-aero.ru/api/legal_entities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3189,12 +3189,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/promos?api_key=" \
+    --get "http://dev.dream-aero.ru/api/promos?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/promos"
+    "http://dev.dream-aero.ru/api/promos"
 );
 
 const params = {
@@ -3215,7 +3215,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/promos',
+    'http://dev.dream-aero.ru/api/promos',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3375,12 +3375,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://admin.dream-aero.loc/api/promo?api_key=" \
+    --get "http://dev.dream-aero.ru/api/promo?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://admin.dream-aero.loc/api/promo"
+    "http://dev.dream-aero.ru/api/promo"
 );
 
 const params = {
@@ -3401,7 +3401,7 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://admin.dream-aero.loc/api/promo',
+    'http://dev.dream-aero.ru/api/promo',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
