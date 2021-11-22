@@ -151,7 +151,31 @@ class ApiController extends Controller
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Код подтверждения отправлен на john.smith@gmail.com",
-	 * 	"data": null
+	 * 	"data": {
+	 * 		"contractor": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"phone": "",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"city_id": 1,
+	 * 			"data_json": {
+	 * 				"birthdate": "1990-01-01"
+	 * 			},
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		},
+	 * 		"code": {
+	 * 			"id": 1,
+	 * 			"code": 1234,
+	 * 			"contractor_id": 1,
+	 * 			"is_reset": 0,
+	 * 			"reset_at": null
+	 * 			"created_at": "2021-11-12 18:36:05",
+	 * 			"updated_at": "2021-11-12 18:36:05"
+	 * 		}
+	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -222,7 +246,12 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		return $this->responseSuccess('Код подтверждения отправлен на ' . $email, [$contractor->toArray(), $code->toArray()]);
+		$data = [
+			'contractor' => $contractor ? $contractor->toArray() : [],
+			'code' => $code->toArray(),
+		];
+
+		return $this->responseSuccess('Код подтверждения отправлен на ' . $email, $data);
 	}
 	
 	/**
@@ -234,7 +263,31 @@ class ApiController extends Controller
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Код подтвержден",
-	 * 	"data": null
+	 * 	"data": {
+	 * 		"contractor": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"phone": "",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"city_id": 1,
+	 * 			"data_json": {
+	 * 				"birthdate": "1990-01-01"
+	 * 			},
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		},
+	 * 		"code": {
+	 * 			"id": 1,
+	 * 			"code": 1234,
+	 * 			"contractor_id": 1,
+	 * 			"is_reset": 0,
+	 * 			"reset_at": null
+	 * 			"created_at": "2021-11-12 18:36:05",
+	 * 			"updated_at": "2021-11-12 18:36:05"
+	 * 		}
+	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -277,9 +330,20 @@ class ApiController extends Controller
 		
 		$code->is_reset = true;
 		$code->reset_at = Carbon::now();
-		$code->save();
+		if (!$code->save()) {
+			return $this->responseError(null, 500);
+		}
 		
-		return $this->responseSuccess('Код подтвержден');
+		if ($code->contractor_id) {
+			$contractor = Contractor::find($code->contractor_id);
+		}
+		
+		$data = [
+			'contractor' => $contractor ? $contractor->toArray() : [],
+			'code' => $code->toArray(),
+		];
+		
+		return $this->responseSuccess('Код подтвержден', $data);
 	}
 	
 	/**
