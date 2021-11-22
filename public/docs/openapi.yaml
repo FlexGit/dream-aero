@@ -413,10 +413,63 @@ paths:
         200:
           description: success
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": \"Код подтвержден\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"phone\": \"\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"city_id\": 1,\n\t\t\t\"data_json\": {\n\t\t\t\t\"birthdate\": \"1990-01-01\"\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"last_auth_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t},\n\t\t\"code\": {\n\t\t\t\"id\": 1,\n\t\t\t\"code\": 1234,\n\t\t\t\"contractor_id\": 1,\n\t\t\t\"is_reset\": 0,\n\t\t\t\"reset_at\": null\n\t\t\t\"created_at\": \"2021-11-12 18:36:05\",\n\t\t\t\"updated_at\": \"2021-11-12 18:36:05\"\n\t\t}\n\t}\n}"
+                type: object
+                example:
+                  success: true
+                  message: 'Код подтвержден'
+                  data:
+                    contractor:
+                      id: 1
+                      name: John
+                      phone: ''
+                      email: john.smith@gmail.com
+                      city_id: 1
+                      data_json:
+                        birthdate: '1990-01-01'
+                      is_active: true
+                      last_auth_at: '2021-01-01 12:00:00'
+                      created_at: '2021-01-01 12:00:00'
+                      updated_at: '2021-01-01 12:00:00'
+                    code:
+                      id: 1
+                      code: 1234
+                      contractor_id: 1
+                      is_reset: 0
+                      reset_at: null
+                      created_at: '2021-11-12 18:36:05'
+                      updated_at: '2021-11-12 18:36:05'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Код подтвержден'
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        phone: ''
+                        email: john.smith@gmail.com
+                        city_id: 1
+                        data_json:
+                          birthdate: '1990-01-01'
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
+                      code:
+                        id: 1
+                        code: 1234
+                        contractor_id: 1
+                        is_reset: 0
+                        reset_at: null
+                        created_at: '2021-11-12 18:36:05'
+                        updated_at: '2021-11-12 18:36:05'
         400:
           description: 'Bad Request'
           content:
@@ -694,10 +747,63 @@ paths:
         200:
           description: success
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": \"Код подтверждения отправлен на john.smith@gmail.com\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"phone\": \"\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"city_id\": 1,\n\t\t\t\"data_json\": {\n\t\t\t\t\"birthdate\": \"1990-01-01\"\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"last_auth_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t},\n\t\t\"code\": {\n\t\t\t\"id\": 1,\n\t\t\t\"code\": 1234,\n\t\t\t\"contractor_id\": 1,\n\t\t\t\"is_reset\": 0,\n\t\t\t\"reset_at\": null\n\t\t\t\"created_at\": \"2021-11-12 18:36:05\",\n\t\t\t\"updated_at\": \"2021-11-12 18:36:05\"\n\t\t}\n\t}\n}"
+                type: object
+                example:
+                  success: true
+                  message: 'Код подтверждения отправлен на john.smith@gmail.com'
+                  data:
+                    contractor:
+                      id: 1
+                      name: John
+                      phone: ''
+                      email: john.smith@gmail.com
+                      city_id: 1
+                      data_json:
+                        birthdate: '1990-01-01'
+                      is_active: true
+                      last_auth_at: '2021-01-01 12:00:00'
+                      created_at: '2021-01-01 12:00:00'
+                      updated_at: '2021-01-01 12:00:00'
+                    code:
+                      id: 1
+                      code: 1234
+                      contractor_id: 1
+                      is_reset: 0
+                      reset_at: null
+                      created_at: '2021-11-12 18:36:05'
+                      updated_at: '2021-11-12 18:36:05'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Код подтверждения отправлен на john.smith@gmail.com'
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        phone: ''
+                        email: john.smith@gmail.com
+                        city_id: 1
+                        data_json:
+                          birthdate: '1990-01-01'
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
+                      code:
+                        id: 1
+                        code: 1234
+                        contractor_id: 1
+                        is_reset: 0
+                        reset_at: null
+                        created_at: '2021-11-12 18:36:05'
+                        updated_at: '2021-11-12 18:36:05'
         400:
           description: 'Bad Request'
           content:
