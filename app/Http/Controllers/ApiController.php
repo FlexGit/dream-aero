@@ -171,7 +171,7 @@ class ApiController extends Controller
 	 * 			"code": 1234,
 	 * 			"contractor_id": 1,
 	 * 			"is_reset": 0,
-	 * 			"reset_at": null
+	 * 			"reset_at": null,
 	 * 			"created_at": "2021-11-12 18:36:05",
 	 * 			"updated_at": "2021-11-12 18:36:05"
 	 * 		}
@@ -283,7 +283,7 @@ class ApiController extends Controller
 	 * 			"code": 1234,
 	 * 			"contractor_id": 1,
 	 * 			"is_reset": 0,
-	 * 			"reset_at": null
+	 * 			"reset_at": null,
 	 * 			"created_at": "2021-11-12 18:36:05",
 	 * 			"updated_at": "2021-11-12 18:36:05"
 	 * 		}
