@@ -222,7 +222,7 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		return $this->responseSuccess('Код подтверждения отправлен на ' . $email, $code->toArray());
+		return $this->responseSuccess('Код подтверждения отправлен на ' . $email, [$contractor->toArray(), $code->toArray()]);
 	}
 	
 	/**
@@ -364,6 +364,11 @@ class ApiController extends Controller
 				return $this->responseError('Контрагент не найден', 400);
 			}
 		} else {
+			$contractor = Contractor::where('email', $this->request->email)
+				->first();
+			if ($contractor) {
+				return $this->responseError('Контрагент с таким E-mail уже существует', 400);
+			}
 			$data = [
 				'birthdate' => Carbon::parse($this->request->birthdate)->format('Y-m-d'),
 			];
