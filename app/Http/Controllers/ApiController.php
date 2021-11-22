@@ -394,7 +394,7 @@ class ApiController extends Controller
 			'mob_auth' => $mobAuth ? $mobAuth->toArray() : [],
 		];
 
-		return $this->responseSuccess(null, $data);
+		return $this->responseSuccess('Регистрация успешно завершена', $data);
 	}
 	
 	/**
