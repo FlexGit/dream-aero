@@ -59,7 +59,7 @@
 				<form id="tariffType">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Заркыть</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 						<button type="submit" class="btn btn-primary">Подтвердить</button>
 					</div>
 				</form>
@@ -70,12 +70,12 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	<script src="{{ asset('js/common.js') }}"></script>
+	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
 			function getList(url) {
@@ -102,14 +102,9 @@
 				var url = $(this).data('url'),
 					action = $(this).data('action'),
 					method = $(this).data('method'),
-					id = $(this).data('id'),
 					title = $(this).data('title');
 
-				if (!url || !method) return;
-
-				if (id) {
-					title = title + ' #' + id;
-				}
+				if (!url) return;
 
 				$('.modal .modal-title, .modal .modal-body').empty();
 
@@ -143,7 +138,7 @@
 							return;
 						}
 
-						var msg = 'Запись #' + result.id + ' успешно ';
+						var msg = 'Запись успешно ';
 						if (method === 'POST') {
 							msg += 'добавлена';
 						} else if (method === 'PUT') {

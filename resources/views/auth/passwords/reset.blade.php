@@ -1,6 +1,3 @@
-@extends('adminlte::auth.passwords.reset')
-
-{{--
 @extends('layouts.auth')
 
 @section('content')
@@ -66,4 +63,3 @@
     </div>
 </div>
 @endsection
---}}

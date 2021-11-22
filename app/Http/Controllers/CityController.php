@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Validator;
 
 use App\Models\City;
+use App\Models\Employee;
 
 class CityController extends Controller
 {
@@ -152,5 +153,48 @@ class CityController extends Controller
 		}
 		
 		return response()->json(['status' => 'success', 'id' => $city->id]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function getEmployeeList()
+	{
+		$employeeData = [];
+
+		if ($this->request->cityId) {
+			$city = City::find($this->request->cityId);
+			if (!$city) {
+				return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+			}
+			
+			foreach ($city->location ?? [] as $location) {
+				$employees = $location->employee;
+				foreach ($employees as $employee) {
+					if (!$employee->is_active) continue;
+					
+					$employeeData[] = [
+						'id' => $employee->id,
+						'name' => $employee->name,
+					];
+				}
+			}
+		} else {
+			$employees = Employee::where('is_active', true)
+				->orderBy('name', 'asc')
+				->get();
+			foreach ($employees as $employee) {
+				$employeeData[] = [
+					'id' => $employee->id,
+					'name' => $employee->name,
+				];
+			}
+		}
+
+		usort($employeeData, function($a, $b) {
+			return $a['name'] <=> $b['name'];
+		});
+
+		return response()->json(['status' => 'success', 'employees' => $employeeData]);
 	}
 }

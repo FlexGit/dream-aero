@@ -833,7 +833,7 @@ endpoints:
           				"is_hit": false,
           				"created_at": "2021-01-01 12:00:00",
           				"updated_at": "2021-01-01 12:00:00",
-          				"tarif_type": {
+          				"tariff_type": {
           				"id": 1,
           				"name": "Regular",
           				"data_json": {
@@ -927,7 +927,7 @@ endpoints:
           			"is_hit": false,
           			"created_at": "2021-01-01 12:00:00",
           			"updated_at": "2021-01-01 12:00:00",
-          			"tarif_type": {
+          			"tariff_type": {
           			"id": 1,
           			"name": "Regular",
           			"data_json": {

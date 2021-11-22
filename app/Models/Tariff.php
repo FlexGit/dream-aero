@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Tariff
@@ -39,11 +40,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\Models\Employee|null $employee
  * @property-read \App\Models\TariffType|null $tarifType
  * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereEmployeeId($value)
+ * @property-read \App\Models\TariffType|null $tariffType
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @method static \Illuminate\Database\Query\Builder|Tariff onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Tariff withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Tariff withoutTrashed()
  */
 class Tariff extends Model
 {
-    use HasFactory;
-
+    use HasFactory, SoftDeletes;
+    
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -51,13 +58,14 @@ class Tariff extends Model
 	 */
 	protected $fillable = [
 		'name',
-		'tariff_id',
+		'tariff_type_id',
+		'employee_id',
 		'city_id',
 		'duration',
-		'data_json',
-		'is_active',
 		'price',
+		'is_active',
 		'is_hit',
+		'data_json',
 	];
 
 	/**
@@ -73,7 +81,7 @@ class Tariff extends Model
 		'is_hit' => 'boolean',
 	];
 	
-	public function tarifType() {
+	public function tariffType() {
 		return $this->hasOne('App\Models\TariffType', 'id', 'tariff_type_id');
 	}
 	

@@ -1,0 +1,81 @@
+input[readonly]{
+	background-color: transparent !important;
+}
+.autocomplete-suggestions {
+	border: 1px solid #999;
+	background: #FFF; overflow: auto;
+}
+.autocomplete-suggestion {
+	padding: 5px 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	cursor: pointer;
+}
+.autocomplete-selected {
+	background-color: #F0F0F0;
+}
+.autocomplete-suggestions strong {
+	font-weight: normal;
+	color: #3399FF;
+}
+.autocomplete-group {
+	padding: 5px 10px;
+}
+.autocomplete-group strong {
+	display: block;
+	border-bottom: 1px solid #000;
+}
+.autocomplete-no-suggestion {
+	padding: 5px 10px;
+}
+.custom-file-input ~ .custom-file-label::after {
+	content: "Выбрать";
+}
+.delete-coin {
+	color: #ccc;
+}
+.hiddden {
+	display: none;
+}
+.border-between > [class*='col-']:before {
+	background: #e3e3e3;
+	bottom: 0;
+	content: " ";
+	left: 0;
+	position: absolute;
+	width: 1px;
+	top: 0;
+}
+.border-between > [class*='col-']:first-child:before {
+	display: none;
+}
+.fc .fc-button {
+	font-size: 0.8em;
+}
+.fc .fc-toolbar.fc-header-toolbar {
+	margin-bottom: 0;
+}
+.fc-toolbar, .fc-toolbar.fc-header-toolbar {
+	padding: 0.2rem 0;
+}
+.fc .fc-toolbar-title {
+	font-size: 1.5em;
+}
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+	background-color: orange;
+}
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+	min-height: auto;
+}
+
+.fc-timegrid-slot {
+	height: 0.1em !important;
+	border-bottom: 0 !important;
+}
+.table thead,
+.table th {
+	text-align: center;
+}
+.container {
+	max-width: 100%;
+}

@@ -9,6 +9,11 @@ use App\Http\Controllers\LegalEntityController;
 use App\Http\Controllers\FlightSimulatorTypeController;
 use App\Http\Controllers\FlightSimulatorController;
 use App\Http\Controllers\TariffTypeController;
+use App\Http\Controllers\TariffController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ContractorController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +31,33 @@ Auth::routes(['register' => false]);
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	Route::group(['middleware' => ['auth']], function () {
 		// Календарь
-		Route::get('/', [HomeController::class, 'home']);
+		Route::get('/', [HomeController::class, 'home'])->name('home');
+		
+		// Заявки
+		Route::get('order', [OrderController::class, 'index'])->name('orderIndex');
+		Route::get('order/list/ajax', [OrderController::class, 'getListAjax'])->name('orderList');
+		Route::post('order', [OrderController::class, 'store']);
+		Route::put('order/{id}', [OrderController::class, 'update']);
+		
+		Route::get('order/add', [OrderController::class, 'add']);
+		Route::get('order/{id}/edit', [OrderController::class, 'edit']);
+		Route::get('order/{id}/show', [OrderController::class, 'show']);
+		
+		// Контрагенты
+		Route::get('contractor', [ContractorController::class, 'index'])->name('contractorIndex');
+		Route::get('contractor/list/ajax', [ContractorController::class, 'getListAjax'])->name('contractorList');
+		Route::post('contractor', [ContractorController::class, 'store']);
+		Route::put('contractor/{id}', [ContractorController::class, 'update']);
+		
+		Route::get('contractor/add', [ContractorController::class, 'add']);
+		Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
+		Route::get('contractor/{id}/show', [ContractorController::class, 'show']);
+		
+		// Скидки
+		Route::get('discount', [DiscountController::class, 'index'])->name('discountIndex');
 		
 		// Города
-		Route::get('city', [CityController::class, 'index']);
+		Route::get('city', [CityController::class, 'index'])->name('cityIndex');
 		Route::get('city/list/ajax', [CityController::class, 'getListAjax'])->name('cityList');
 		
 		Route::post('city', [CityController::class, 'store']);
@@ -41,8 +69,10 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('city/{id}/delete', [CityController::class, 'confirm']);
 		Route::get('city/{id}/show', [CityController::class, 'show']);
 		
+		Route::get('city/employee', [CityController::class, 'getEmployeeList'])->name('employeeListByCity');
+		
 		// Локации
-		Route::get('location', [LocationController::class, 'index']);
+		Route::get('location', [LocationController::class, 'index'])->name('locationIndex');
 		Route::get('location/list/ajax', [LocationController::class, 'getListAjax'])->name('locationList');
 		
 		Route::post('location', [LocationController::class, 'store']);
@@ -54,7 +84,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('location/{id}/delete', [LocationController::class, 'confirm']);
 
 		// Юр.лица
-		Route::get('legal_entity', [LegalEntityController::class, 'index']);
+		Route::get('legal_entity', [LegalEntityController::class, 'index'])->name('legalEntityIndex');
 		Route::get('legal_entity/list/ajax', [LegalEntityController::class, 'getListAjax'])->name('legalEntityList');
 
 		Route::post('legal_entity', [LegalEntityController::class, 'store']);
@@ -66,7 +96,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('legal_entity/{id}/delete', [LegalEntityController::class, 'confirm']);
 
 		// Типы авиатренажеров
-		Route::get('flight_simulator_type', [FlightSimulatorTypeController::class, 'index']);
+		Route::get('flight_simulator_type', [FlightSimulatorTypeController::class, 'index'])->name('flightSimulatorTypeIndex');
 		Route::get('flight_simulator_type/list/ajax', [FlightSimulatorTypeController::class, 'getListAjax'])->name('flightSimulatorTypeList');
 
 		Route::post('flight_simulator_type', [FlightSimulatorTypeController::class, 'store']);
@@ -78,7 +108,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('flight_simulator_type/{id}/delete', [FlightSimulatorTypeController::class, 'confirm']);
 
 		// Авиатренажеры
-		Route::get('flight_simulator', [FlightSimulatorController::class, 'index']);
+		Route::get('flight_simulator', [FlightSimulatorController::class, 'index'])->name('flightSimulatorIndex');
 		Route::get('flight_simulator/list/ajax', [FlightSimulatorController::class, 'getListAjax'])->name('flightSimulatorList');
 
 		Route::post('flight_simulator', [FlightSimulatorController::class, 'store']);
@@ -90,16 +120,42 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('flight_simulator/{id}/delete', [FlightSimulatorController::class, 'confirm']);
 
 		// Типы тарифов
-		Route::get('tariff_type', [TariffTypeController::class, 'index']);
+		Route::get('tariff_type', [TariffTypeController::class, 'index'])->name('tariffTypeIndex');
 		Route::get('tariff_type/list/ajax', [TariffTypeController::class, 'getListAjax'])->name('tariffTypeList');
 
 		Route::post('tariff_type', [TariffTypeController::class, 'store']);
 		Route::put('tariff_type/{id}', [TariffTypeController::class, 'update']);
 		Route::delete('tariff_type/{id}', [TariffTypeController::class, 'delete']);
 
-		Route::get('tariff_type/add', [TariffTypeController::class, 'add']);
+		Route::get('tariff_type/add', [TariffTypeController::class, 'add'])->name('tariffTypeAdd');
 		Route::get('tariff_type/{id}/edit', [TariffTypeController::class, 'edit']);
 		Route::get('tariff_type/{id}/delete', [TariffTypeController::class, 'confirm']);
+		
+		// Тарифы
+		Route::get('tariff', [TariffController::class, 'index'])->name('tariffIndex');
+		Route::get('tariff/list/ajax', [TariffController::class, 'getListAjax'])->name('tariffList');
+		
+		Route::post('tariff', [TariffController::class, 'store']);
+		Route::put('tariff/{id}', [TariffController::class, 'update']);
+		Route::delete('tariff/{id}', [TariffController::class, 'delete']);
+		
+		Route::get('tariff/add', [TariffController::class, 'add']);
+		Route::get('tariff/{id}/edit', [TariffController::class, 'edit']);
+		Route::get('tariff/{id}/delete', [TariffController::class, 'confirm']);
+		Route::get('tariff/{id}/show', [TariffController::class, 'show']);
+		
+		// Продукты
+		Route::get('product', [ProductController::class, 'index'])->name('productIndex');
+		Route::get('product/list/ajax', [ProductController::class, 'getListAjax'])->name('productList');
+		
+		Route::post('product', [ProductController::class, 'store']);
+		Route::put('product/{id}', [ProductController::class, 'update']);
+		Route::delete('product/{id}', [ProductController::class, 'delete']);
+		
+		Route::get('product/add', [ProductController::class, 'add']);
+		Route::get('product/{id}/edit', [ProductController::class, 'edit']);
+		Route::get('product/{id}/delete', [ProductController::class, 'confirm']);
+		Route::get('product/{id}/show', [ProductController::class, 'show']);
 	});
 });
 

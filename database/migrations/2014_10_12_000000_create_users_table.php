@@ -20,9 +20,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 			$table->string('role')->default('manager');
+			$table->integer('city_id')->index()->default(0)->comment('город');
+			$table->integer('location_id')->index()->default(0)->comment('локация');
 			$table->tinyInteger('enable')->index()->default(1);
             $table->rememberToken();
-            $table->integer('city_id')->index()->default(0)->comment('город');
             $table->timestamps();
         });
     }

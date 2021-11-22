@@ -254,15 +254,15 @@ return [
             'label_color' => '',
         ],
 		[
-			'text'        => 'Заказы',
-			'url'         => '/orders',
+			'text'        => 'Заявки',
+			'url'         => '/order',
 			'icon'        => 'far fa-fw fa-list-alt',
 			'label'       => 4,
 			'label_color' => 'success',
 		],
 		[
 			'text'        => 'Контрагенты',
-			'url'         => '/contractors',
+			'url'         => '/contractor',
 			'icon'        => 'far fa-fw fa-address-book',
 			'label'       => '',
 			'label_color' => '',
@@ -311,6 +311,16 @@ return [
 				[
 					'text' => 'Типы тарифов',
 					'url'  => '/tariff_type',
+					'icon'    => 'fas fa-hand-holding-usd',
+				],
+				[
+					'text' => 'Тарифы',
+					'url'  => '/tariff',
+					'icon'    => 'fas fa-hand-holding-usd',
+				],
+				[
+					'text' => 'Продукты',
+					'url'  => '/product',
 					'icon'    => 'fas fa-hand-holding-usd',
 				],
 			],

@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|City whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|City whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $location
+ * @property-read int|null $location_count
  */
 class City extends Model
 {
@@ -47,4 +49,8 @@ class City extends Model
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'is_active' => 'boolean',
 	];
+	
+	public function location() {
+		return $this->hasMany('App\Models\Location', 'city_id', 'id');
+	}
 }

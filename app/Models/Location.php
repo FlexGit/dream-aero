@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \App\Models\LegalEntity $legalEntity
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereLegalEntityId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employee[] $employee
+ * @property-read int|null $employee_count
  */
 class Location extends Model
 {
@@ -72,5 +74,9 @@ class Location extends Model
 
 	public function simulator() {
 		return $this->hasMany('App\Models\FlightSimulator', 'location_id', 'id');
+	}
+	
+	public function employee() {
+		return $this->hasMany('App\Models\Employee', 'location_id', 'id');
 	}
 }

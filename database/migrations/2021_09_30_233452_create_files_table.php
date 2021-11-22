@@ -15,7 +15,7 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('path')->comment('путь к файлу');
+            $table->string('path')->nullable()->comment('путь к файлу');
             $table->timestamps();
         });
     }

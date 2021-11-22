@@ -1,6 +1,3 @@
-@extends('adminlte::auth.login')
-
-{{--
 @extends('layouts.auth')
 
 @section('content')
@@ -74,4 +71,3 @@
     </div>
 </div>
 @endsection
---}}

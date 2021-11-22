@@ -20,11 +20,12 @@ class CreateTariffsTable extends Migration
 			$table->integer('employee_id')->default(0)->index()->comment('пилот');
 			$table->integer('city_id')->default(0)->index()->comment('город, в котором действует продукт');
 			$table->integer('duration')->comment('длительность полёта, мин.');
-			$table->text('data_json')->nullable()->comment('дополнительная информация');
-			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->integer('price')->default(0)->comment('базовая цена продукта');
 			$table->boolean('is_hit')->default(0)->comment('является ли продукт хитом продаж');
+			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
+			$table->text('data_json')->default('[]')->comment('дополнительная информация');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

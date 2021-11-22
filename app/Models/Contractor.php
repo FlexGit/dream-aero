@@ -47,6 +47,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @mixin \Eloquent
  * @property-read \App\Models\City|null $city
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsActive($value)
+ * @property int $discount скидка
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscount($value)
  */
 class Contractor extends Authenticatable
 {
@@ -66,7 +68,9 @@ class Contractor extends Authenticatable
 		'email',
 		'password',
 		'city_id',
+		'discount',
 		'data_json',
+		'is_active',
 		'last_auth_at',
 	];
 
@@ -89,9 +93,9 @@ class Contractor extends Authenticatable
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'email_verified_at' => 'datetime',
-		'data_json' => 'array',
 		'last_auth_at' => 'datetime:Y-m-d H:i:s',
 		'is_active' => 'boolean',
+		'data_json' => 'array',
 	];
 	
 	public function city() {

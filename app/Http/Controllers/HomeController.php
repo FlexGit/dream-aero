@@ -22,8 +22,6 @@ class HomeController extends Controller
 	 * @param Request $request
 	 */
 	public function __construct(Request $request) {
-		$this->middleware('auth');
-
 		$this->user = Auth::user();
 		$this->request = $request;
 	}
