@@ -1452,7 +1452,7 @@ paths:
           name: contractor_id
           description: ''
           example: null
-          required: false
+          required: true
           schema:
             type: integer
             description: ''

@@ -535,7 +535,7 @@ class ApiController extends Controller
 	 * Profile
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
+	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,

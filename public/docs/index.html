@@ -54,7 +54,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
             <ul class="toc-footer" id="last-updated">
-            <li>Last updated: November 22 2021</li>
+            <li>Last updated: November 26 2021</li>
         </ul>
 </div>
 <div class="page-wrapper">
@@ -1863,7 +1863,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/profile?api_key=" \
+    --get "http://dev.dream-aero.ru/api/profile?api_key=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -1873,6 +1873,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1897,6 +1898,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
     ]
 );
@@ -2025,7 +2027,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="contractor_id"
                data-endpoint="GETapi-profile"

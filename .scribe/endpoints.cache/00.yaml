@@ -719,7 +719,7 @@ endpoints:
       contractor_id:
         name: contractor_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters: []
