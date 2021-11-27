@@ -131,7 +131,7 @@ endpoints:
       phone:
         name: phone
         description: ''
-        required: true
+        required: false
         example: null
         type: string
       city_id:
