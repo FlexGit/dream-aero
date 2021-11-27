@@ -446,7 +446,6 @@ class ApiController extends Controller
 			];*/
 			$contractor = new Contractor();
 			$contractor->name = $this->request->name;
-			$contractor->lastname = $this->request->lastname;
 			$contractor->email = $this->request->email;
 			$contractor->city_id = $this->request->city_id;
 			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
@@ -600,7 +599,9 @@ class ApiController extends Controller
 	 * @queryParam contractor_id int No-example
 	 * @bodyParam email string No-example
 	 * @bodyParam name string No-example
+	 * @bodyParam lastname string No-example
 	 * @bodyParam birthdate date No-example
+	 * @bodyParam phone string No-example
 	 * @bodyParam city_id int No-example
 	 * @response scenario=success {
 	 * 	"success": true,

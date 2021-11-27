@@ -116,12 +116,24 @@ endpoints:
         required: false
         example: null
         type: string
+      lastname:
+        name: lastname
+        description: ''
+        required: false
+        example: null
+        type: string
       birthdate:
         name: birthdate
         description: ''
         required: false
         example: null
         type: date
+      phone:
+        name: phone
+        description: ''
+        required: false
+        example: null
+        type: string
       city_id:
         name: city_id
         description: ''
