@@ -108,17 +108,17 @@ class Contractor extends Authenticatable
 			'name' => $this->name,
 			'email' => $this->email,
 			'phone' => $this->phone,
+			'city_id' => $this->city_id,
 			'discount' => $this->discount,
-			'birth_date' => isset($this->data_json['birthdate']) ? $this->data_json['birthdate'] : null,
-			'avatar' => isset($this->data_json['avatar']) ? $this->data_json['avatar'] : null,
+			'birthdate' => $this->data_json['birthdate'] ?? null,
+			'avatar' => $this->data_json['avatar'] ?? null,
 			'flight_time' => null,
 			'score' => null,
 			'status' => null,
-			'city_id' => $this->city_id,
 			'is_active' => $this->is_active,
-			'last_auth_at' => $this->last_auth_at,
-			'created_at' => $this->created_at,
-			'updated_at' => $this->updated_at,
+			'last_auth_at' => $this->last_auth_at->format('Y-m-d H:i:s'),
+			'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+			'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
 		];
 	}
 }

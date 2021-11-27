@@ -224,7 +224,7 @@ paths:
                     phone: ''
                     email: john.smith@gmail.com
                     city_id: 1
-                    birth_date: '1990-01-01'
+                    birthdate: '1990-01-01'
                     discount: 5
                     flight_time: 100
                     score: 10000
@@ -249,7 +249,7 @@ paths:
                       phone: ''
                       email: john.smith@gmail.com
                       city_id: 1
-                      birth_date: '1990-01-01'
+                      birthdate: '1990-01-01'
                       discount: 5
                       flight_time: 100
                       score: 10000
@@ -430,7 +430,7 @@ paths:
                       phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      birth_date: '1990-01-01'
+                      birthdate: '1990-01-01'
                       discount: 5
                       flight_time: 100
                       score: 10000
@@ -464,7 +464,7 @@ paths:
                         phone: null
                         email: john.smith@gmail.com
                         city_id: 1
-                        birth_date: '1990-01-01'
+                        birthdate: '1990-01-01'
                         discount: 5
                         flight_time: 100
                         score: 10000
@@ -772,7 +772,7 @@ paths:
                       phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      birth_date: '1990-01-01'
+                      birthdate: '1990-01-01'
                       discount: 5
                       flight_time: 100
                       score: 10000
@@ -806,7 +806,7 @@ paths:
                         phone: null
                         email: john.smith@gmail.com
                         city_id: 1
-                        birth_date: '1990-01-01'
+                        birthdate: '1990-01-01'
                         discount: 5
                         flight_time: 100
                         score: 10000
@@ -962,7 +962,7 @@ paths:
                       phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      birth_date: '1990-01-01'
+                      birthdate: '1990-01-01'
                       discount: 5
                       flight_time: 100
                       score: 10000
@@ -994,7 +994,7 @@ paths:
                         phone: null
                         email: john.smith@gmail.com
                         city_id: 1
-                        birth_date: '1990-01-01'
+                        birthdate: '1990-01-01'
                         discount: 5
                         flight_time: 100
                         score: 10000
@@ -1333,7 +1333,7 @@ paths:
                     phone: null
                     email: john.smith@gmail.com
                     city_id: 1
-                    birth_date: '1990-01-01'
+                    birthdate: '1990-01-01'
                     discount: 5
                     flight_time: 100
                     score: 10000
@@ -1358,7 +1358,7 @@ paths:
                       phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      birth_date: '1990-01-01'
+                      birthdate: '1990-01-01'
                       discount: 5
                       flight_time: 100
                       score: 10000
@@ -1523,7 +1523,7 @@ paths:
                     phone: null
                     email: john.smith@gmail.com
                     city_id: 1
-                    birth_date: '1990-01-01'
+                    birthdate: '1990-01-01'
                     discount: 5
                     flight_time: 100
                     score: 10000
@@ -1548,7 +1548,7 @@ paths:
                       phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      birth_date: '1990-01-01'
+                      birthdate: '1990-01-01'
                       discount: 5
                       flight_time: 100
                       score: 10000
