@@ -103,6 +103,7 @@ class Contractor extends Authenticatable
 	}
 	
 	public function format() {
+		$data = json_decode($this->data_json, true);
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
@@ -110,8 +111,8 @@ class Contractor extends Authenticatable
 			'phone' => $this->phone,
 			'city_id' => $this->city_id,
 			'discount' => $this->discount,
-			'birthdate' => $this->data_json['birthdate'] ?? null,
-			'avatar' => $this->data_json['avatar'] ?? null,
+			'birthdate' => $data['birthdate'] ?? null,
+			'avatar' => $data['avatar'] ?? null,
 			'flight_time' => null,
 			'score' => null,
 			'status' => null,
