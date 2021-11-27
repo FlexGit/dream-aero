@@ -24,5 +24,6 @@ class Controller extends BaseController
 		'numeric' => 'Должно быть числом',
 		'digits' => 'Должно быть :digits цифры',
 		'valid_city' => 'Город не найден',
+		'valid_phone' => 'Некорректный формат',
 	];
 }

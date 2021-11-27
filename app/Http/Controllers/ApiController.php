@@ -151,15 +151,16 @@ class ApiController extends Controller
 	 * 		"contractor": {
 	 * 			"id": 1,
 	 * 			"name": "John",
-	 * 			"phone": null,
+	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
 	 * 			"city_id": 1,
-	 *			"birthdate": "1990-01-01",
 	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"avatar": null,
 	 * 			"is_active": true,
 	 * 			"last_auth_at": "2021-01-01 12:00:00",
 	 * 			"created_at": "2021-01-01 12:00:00",
@@ -266,15 +267,16 @@ class ApiController extends Controller
 	 * 		"contractor": {
 	 * 			"id": 1,
 	 * 			"name": "John",
-	 * 			"phone": null,
+	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
 	 * 			"city_id": 1,
-	 *			"birthdate": "1990-01-01",
 	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"avatar": null,
 	 * 			"is_active": true,
 	 * 			"last_auth_at": "2021-01-01 12:00:00",
 	 * 			"created_at": "2021-01-01 12:00:00",
@@ -364,15 +366,16 @@ class ApiController extends Controller
 	 * 		"contractor": {
 	 * 			"id": 1,
 	 * 			"name": "John",
-	 * 			"phone": null,
+	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
 	 * 			"city_id": 1,
-	 *			"birthdate": "1990-01-01",
 	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"avatar": null,
 	 * 			"is_active": true,
 	 * 			"last_auth_at": "2021-01-01 12:00:00",
 	 * 			"created_at": "2021-01-01 12:00:00",
@@ -400,6 +403,7 @@ class ApiController extends Controller
 			'password_confirmation' => ['required', 'same:password'],
 			'email' => ['required_without:contractor_id', 'email'],
 			'name' => ['required_without:contractor_id', 'min:3', 'max:50'],
+			'lastname' => ['required_without:contractor_id', 'min:3', 'max:50'],
 			'birthdate' => ['required_without:contractor_id', 'date'],
 			'city_id' => ['required_without:contractor_id', 'numeric', 'valid_city'],
 		];
@@ -409,6 +413,7 @@ class ApiController extends Controller
 				'password_confirmation' => 'Повторный пароль',
 				'email' => 'E-mail',
 				'name' => 'Имя',
+				'lastname' => 'Фамилия',
 				'birthdate' => 'Дата рождения',
 				'city_id' => 'Город'
 			]);
@@ -436,14 +441,16 @@ class ApiController extends Controller
 			if ($contractor) {
 				return $this->responseError('Контрагент с таким E-mail уже существует', 400);
 			}
-			$data = [
+			/*$data = [
 				'birthdate' => Carbon::parse($this->request->birthdate)->format('Y-m-d'),
-			];
+			];*/
 			$contractor = new Contractor();
 			$contractor->name = $this->request->name;
+			$contractor->lastname = $this->request->lastname;
 			$contractor->email = $this->request->email;
 			$contractor->city_id = $this->request->city_id;
-			$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
+			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+			/*$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);*/
 		}
 		
 		$contractor->password = $this->request->password;
@@ -477,15 +484,16 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"id": 1,
 	 * 		"name": "John",
-	 * 		"phone": null,
+	 * 		"lastname": "Smith",
 	 * 		"email": "john.smith@gmail.com",
+	 * 		"phone": null,
 	 * 		"city_id": 1,
-	 *		"birthdate": "1990-01-01",
 	 * 		"discount": 5,
+	 *		"birthdate": "1990-01-01",
+	 * 		"avatar": null,
 	 * 		"flight_time": 100,
 	 * 		"score": 10000,
 	 * 		"status": "Золотой",
-	 * 		"avatar": null,
 	 * 		"is_active": true,
 	 * 		"last_auth_at": "2021-01-01 12:00:00",
 	 * 		"created_at": "2021-01-01 12:00:00",
@@ -550,15 +558,16 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"id": 1,
 	 * 		"name": "John",
-	 * 		"phone": null,
+	 * 		"lastname": "Smith",
 	 * 		"email": "john.smith@gmail.com",
+	 * 		"phone": null,
 	 * 		"city_id": 1,
-	 *		"birthdate": "1990-01-01",
 	 * 		"discount": 5,
+	 *		"birthdate": "1990-01-01",
+	 * 		"avatar": null,
 	 * 		"flight_time": 100,
 	 * 		"score": 10000,
 	 * 		"status": "Золотой",
-	 * 		"avatar": null,
 	 * 		"is_active": true,
 	 * 		"last_auth_at": "2021-01-01 12:00:00",
 	 * 		"created_at": "2021-01-01 12:00:00",
@@ -599,15 +608,16 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"id": 1,
 	 * 		"name": "John",
-	 * 		"phone": "",
+	 * 		"lastname": "Smith",
 	 * 		"email": "john.smith@gmail.com",
+	 * 		"phone": null,
 	 * 		"city_id": 1,
-	 *		"birthdate": "1990-01-01",
 	 * 		"discount": 5,
+	 *		"birthdate": "1990-01-01",
+	 * 		"avatar": null,
 	 * 		"flight_time": 100,
 	 * 		"score": 10000,
 	 * 		"status": "Золотой",
-	 * 		"avatar": null,
 	 * 		"is_active": true,
 	 * 		"last_auth_at": "2021-01-01 12:00:00",
 	 * 		"created_at": "2021-01-01 12:00:00",
@@ -628,14 +638,18 @@ class ApiController extends Controller
 		
 		$rules = [
 			'name' => ['required', 'min:3', 'max:50'],
+			'lastname' => ['required', 'min:3', 'max:50'],
 			'email' => ['required', 'email'],
+			'phone' => ['sometimes', 'required', 'valid_phone'],
 			'birthdate' => ['required', 'date'],
 			'city_id' => ['required', 'numeric', 'valid_city'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
 				'name' => 'Имя',
+				'lastname' => 'Фамилия',
 				'email' => 'E-mail',
+				'phone' => 'Телефон',
 				'birthdate' => 'Дата рождения',
 				'city_id' => 'Город',
 			]);
@@ -655,14 +669,16 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$data = [
+		/*$data = [
 			'birthdate' => Carbon::parse($this->request->birthdate)->format('Y-m-d'),
-		];
+		];*/
 		$contractor->name = $this->request->name;
+		$contractor->lastname = $this->request->lastname;
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
-		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
+		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+		/*$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);*/
 		
 		if ($contractor->save()) {
 			return $this->responseSuccess('Профиль успешно сохранен', $contractor->format());
