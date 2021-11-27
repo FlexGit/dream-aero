@@ -403,7 +403,6 @@ class ApiController extends Controller
 			'password_confirmation' => ['required', 'same:password'],
 			'email' => ['required_without:contractor_id', 'email'],
 			'name' => ['required_without:contractor_id', 'min:3', 'max:50'],
-			'lastname' => ['required_without:contractor_id', 'min:3', 'max:50'],
 			'birthdate' => ['required_without:contractor_id', 'date'],
 			'city_id' => ['required_without:contractor_id', 'numeric', 'valid_city'],
 		];
@@ -413,7 +412,6 @@ class ApiController extends Controller
 				'password_confirmation' => 'Повторный пароль',
 				'email' => 'E-mail',
 				'name' => 'Имя',
-				'lastname' => 'Фамилия',
 				'birthdate' => 'Дата рождения',
 				'city_id' => 'Город'
 			]);
