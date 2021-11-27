@@ -458,7 +458,12 @@ class ApiController extends Controller
 		$mobAuth = new MobAuth();
 		$mobAuth->contractor_id = $contractor->id;
 		$mobAuth->setToken($contractor);
-		$mobAuth->save();
+		if (!$mobAuth->save()) {
+			return $this->responseError(null, 500);
+		}
+		
+		$contractor->last_auth_at = date('Y-m-d H:i:s');
+		$contractor->save();
 		
 		$data = [
 			'contractor' => $contractor->format(),
