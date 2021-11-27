@@ -128,7 +128,7 @@ endpoints:
         type: date
       phone:
         name: phone
-        description: ''
+        description: '+71234567890'
         required: false
         example: null
         type: string

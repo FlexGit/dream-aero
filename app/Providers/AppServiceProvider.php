@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
 		Validator::extend('valid_phone', function($attribute, $value, $parameters, $validator) {
 			$inputs = $validator->getData();
 		
-			if (preg_match('/(+7)[0-9]{10}/', $inputs['phone'])) {
+			if (!preg_match('/(\+7)[0-9]{10}/', $inputs['phone'])) {
 				return false;
 			}
 		

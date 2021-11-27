@@ -368,7 +368,7 @@ paths:
                   example: null
                 phone:
                   type: string
-                  description: ''
+                  description: '+71234567890'
                   example: null
                 city_id:
                   type: integer
