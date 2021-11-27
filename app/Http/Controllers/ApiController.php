@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Validator;
+use Mail;
+use Carbon\Carbon;
+use Illuminate\Validation\Rules\Password;
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\City;
 use App\Models\Contractor;
@@ -13,14 +19,6 @@ use App\Models\Promo;
 use App\Models\TariffType;
 use App\Models\Tariff;
 use App\Models\Location;
-
-use Illuminate\Http\Request;
-use Validator;
-use Mail;
-use Carbon\Carbon;
-use Illuminate\Validation\Rules\Password;
-use Throwable;
-use Illuminate\Support\Facades\Log;
 
 use App\Traits\ApiResponser;
 
@@ -44,15 +42,13 @@ class ApiController extends Controller
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
-	 * 	"data": [
-	 * 		{
-	 * 			"id": 1,
-	 * 			"token": "328dda59f036efc26720937545efe01e",
-	 * 	 		"contractor_id": 1,
-	 * 	 		"created_at": "2021-11-12 18:36:05",
-	 * 	 		"updated_at": "2021-11-12 18:36:05"
-	 * 		}
-	 * 	]
+	 * 	"data": {
+	 * 		"id": 1,
+	 * 		"token": "328dda59f036efc26720937545efe01e",
+	 * 	 	"contractor_id": 1,
+	 * 	 	"created_at": "2021-11-12 18:36:05",
+	 * 	 	"updated_at": "2021-11-12 18:36:05"
+	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -96,7 +92,7 @@ class ApiController extends Controller
 		$mobAuth->setToken($contractor);
 		
 		if ($mobAuth->save()) {
-			return $this->responseSuccess(null, [$mobAuth->toArray()]);
+			return $this->responseSuccess(null, $mobAuth->toArray());
 		}
 		
 		return $this->responseError(null, 500);
@@ -155,12 +151,15 @@ class ApiController extends Controller
 	 * 		"contractor": {
 	 * 			"id": 1,
 	 * 			"name": "John",
-	 * 			"phone": "",
+	 * 			"phone": null,
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"city_id": 1,
-	 * 			"data_json": {
-	 * 				"birthdate": "1990-01-01"
-	 * 			},
+	 *			"birth_date": "1990-01-01",
+	 * 			"discount": 5,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"avatar": null,
 	 * 			"is_active": true,
 	 * 			"last_auth_at": "2021-01-01 12:00:00",
 	 * 			"created_at": "2021-01-01 12:00:00",
@@ -247,7 +246,7 @@ class ApiController extends Controller
 		}
 		
 		$data = [
-			'contractor' => $contractor ? $contractor->toArray() : [],
+			'contractor' => $contractor ? $contractor->format() : [],
 			'code' => $code->toArray(),
 		];
 
@@ -267,12 +266,15 @@ class ApiController extends Controller
 	 * 		"contractor": {
 	 * 			"id": 1,
 	 * 			"name": "John",
-	 * 			"phone": "",
+	 * 			"phone": null,
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"city_id": 1,
-	 * 			"data_json": {
-	 * 				"birthdate": "1990-01-01"
-	 * 			},
+	 *			"birth_date": "1990-01-01",
+	 * 			"discount": 5,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"avatar": null,
 	 * 			"is_active": true,
 	 * 			"last_auth_at": "2021-01-01 12:00:00",
 	 * 			"created_at": "2021-01-01 12:00:00",
@@ -337,7 +339,7 @@ class ApiController extends Controller
 		$contractor = $code->contractor_id ? Contractor::find($code->contractor_id) : null;
 		
 		$data = [
-			'contractor' => $contractor ? $contractor->toArray() : [],
+			'contractor' => $contractor ? $contractor->format() : [],
 			'code' => $code->toArray(),
 		];
 		
@@ -362,12 +364,15 @@ class ApiController extends Controller
 	 * 		"contractor": {
 	 * 			"id": 1,
 	 * 			"name": "John",
-	 * 			"phone": "",
+	 * 			"phone": null,
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"city_id": 1,
-	 * 			"data_json": {
-	 * 				"birthdate": "1990-01-01"
-	 * 			},
+	 *			"birth_date": "1990-01-01",
+	 * 			"discount": 5,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"avatar": null,
 	 * 			"is_active": true,
 	 * 			"last_auth_at": "2021-01-01 12:00:00",
 	 * 			"created_at": "2021-01-01 12:00:00",
@@ -452,7 +457,7 @@ class ApiController extends Controller
 		$mobAuth->save();
 		
 		$data = [
-			'contractor' => $contractor->toArray(),
+			'contractor' => $contractor->format(),
 			'mob_auth' => $mobAuth ? $mobAuth->toArray() : [],
 		];
 
@@ -472,12 +477,15 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"id": 1,
 	 * 		"name": "John",
-	 * 		"phone": "",
+	 * 		"phone": null,
 	 * 		"email": "john.smith@gmail.com",
 	 * 		"city_id": 1,
-	 * 		"data_json": {
-	 * 			"birthdate": "1990-01-01"
-	 * 		},
+	 *		"birth_date": "1990-01-01",
+	 * 		"discount": 5,
+	 * 		"flight_time": 100,
+	 * 		"score": 10000,
+	 * 		"status": "Золотой",
+	 * 		"avatar": null,
 	 * 		"is_active": true,
 	 * 		"last_auth_at": "2021-01-01 12:00:00",
 	 * 		"created_at": "2021-01-01 12:00:00",
@@ -525,7 +533,7 @@ class ApiController extends Controller
 		
 		$contractor->password = $password;
 		if ($contractor->save()) {
-			return $this->responseSuccess('Пароль успешно изменен', [$contractor->toArray()]);
+			return $this->responseSuccess('Пароль успешно изменен', $contractor->format());
 		}
 		
 		return $this->responseError(null, 500);
@@ -542,12 +550,15 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"id": 1,
 	 * 		"name": "John",
-	 * 		"phone": "",
+	 * 		"phone": null,
 	 * 		"email": "john.smith@gmail.com",
 	 * 		"city_id": 1,
-	 * 		"data_json": {
-	 * 			"birthdate": "1990-01-01"
-	 * 		},
+	 *		"birth_date": "1990-01-01",
+	 * 		"discount": 5,
+	 * 		"flight_time": 100,
+	 * 		"score": 10000,
+	 * 		"status": "Золотой",
+	 * 		"avatar": null,
 	 * 		"is_active": true,
 	 * 		"last_auth_at": "2021-01-01 12:00:00",
 	 * 		"created_at": "2021-01-01 12:00:00",
@@ -570,7 +581,7 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		return $this->responseSuccess(null, [$contractor->toArray()]);
+		return $this->responseSuccess(null, $contractor->format());
 	}
 	
 	/**
@@ -591,9 +602,12 @@ class ApiController extends Controller
 	 * 		"phone": "",
 	 * 		"email": "john.smith@gmail.com",
 	 * 		"city_id": 1,
-	 * 		"data_json": {
-	 * 			"birthdate": "1990-01-01"
-	 * 		},
+	 *		"birth_date": "1990-01-01",
+	 * 		"discount": 5,
+	 * 		"flight_time": 100,
+	 * 		"score": 10000,
+	 * 		"status": "Золотой",
+	 * 		"avatar": null,
 	 * 		"is_active": true,
 	 * 		"last_auth_at": "2021-01-01 12:00:00",
 	 * 		"created_at": "2021-01-01 12:00:00",
@@ -651,7 +665,7 @@ class ApiController extends Controller
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
 		if ($contractor->save()) {
-			return $this->responseSuccess('Профиль успешно сохранен', [$contractor->toArray()]);
+			return $this->responseSuccess('Профиль успешно сохранен', $contractor->format());
 		}
 		
 		return $this->responseError(null, 500);
@@ -713,17 +727,15 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 * 		[
-	 * 			{
-	 * 				"id": 1,
-	 * 				"name": "Regular",
-	 * 				"data_json": {
-	 * 				},
-	 * 				"is_active": true,
-	 * 				"created_at": "2021-01-01 12:00:00",
-	 * 				"updated_at": "2021-01-01 12:00:00"
-	 * 			}
-	 * 		]
+	 * 		{
+	 * 			"id": 1,
+	 * 			"name": "Regular",
+	 * 			"data_json": {
+	 * 			},
+	 * 			"is_active": true,
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 *		}
 	 * 	]
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -739,7 +751,7 @@ class ApiController extends Controller
 			return $this->responseError('Типы тарифов не найдены', 400);
 		}
 		
-		return $this->responseSuccess(null, [$tariffTypes->toArray()]);
+		return $this->responseSuccess(null, $tariffTypes->toArray());
 	}
 	
 	/**
@@ -751,91 +763,21 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 * 		[
-	 * 			{
-	 * 				"id": 1,
-	 * 				"name": "Regular",
-	 * 				"tariff_type_id": 1,
-	 * 				"employee_id": 10,
-	 * 				"city_id": 5,
-	 * 				"duration": 30,
-	 * 				"price": 6300,
-	 * 				"data_json": {
-	 * 				},
-	 * 				"is_active": true,
-	 * 				"is_hit": false,
-	 * 				"created_at": "2021-01-01 12:00:00",
-	 * 				"updated_at": "2021-01-01 12:00:00",
-	 * 				"tariff_type": {
-	 *					"id": 1,
-	 *					"name": "Regular",
-	 *					"data_json": {
-	 *						"hint": "только будни",
-	 *						"description": ""
-	 *					},
-	 *					"is_active": true,
-	 *					"created_at": "2021-01-01 12:00:00",
-	 *					"updated_at": "2021-01-01 12:00:00"
-	 *				},
-	 *				"employee": null,
-	 *				"city": {
-	 *					"id": 1,
-	 *					"name": "Москва",
-	 *					"is_active": true,
-	 *					"created_at": "2021-10-01 18:23:27",
-	 *					"updated_at": "2021-10-05 18:23:41"
-	 *				}
-	 * 			}
-	 * 		]
-	 * 	]
-	 * }
-	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
-	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
-	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
-	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
-	 */
-	public function getTariffs() {
-		$tariffTypeId = $this->request->tariff_type_id;
-		if (!$tariffTypeId) {
-			return $this->responseError('Не передан ID типа тарифа', 400);
-		}
-		
-		$tariffs = Tariff::where('tariff_type_id', $tariffTypeId)
-			->where('is_active', true)
-			->with(['tarifType', 'employee', 'city'])
-			->get();
-		
-		if ($tariffs->isEmpty()) {
-			return $this->responseError('Тарифы не найдены', 400);
-		}
-		
-		return $this->responseSuccess(null, [$tariffs->toArray()]);
-	}
-	
-	/**
-	 * Tariff detailed
-	 *
-	 * @queryParam api_key string required No-example
-	 * @queryParam tariff_id int No-example
-	 * @response scenario=success {
-	 * 	"success": true,
-	 * 	"message": null,
-	 * 	"data": [
-	 * 		{
-	 * 			"id": 1,
-	 * 			"name": "Regular",
-	 * 			"tariff_type_id": 1,
-	 * 			"employee_id": 10,
-	 * 			"city_id": 5,
-	 * 			"duration": 30,
-	 * 			"price": 6300,
-	 * 			"data_json": {
-	 * 			},
-	 * 			"is_active": true,
-	 * 			"is_hit": false,
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00",
-	 * 			"tariff_type": {
+	 *		{
+	 *			"id": 1,
+	 *			"name": "Regular",
+	 *			"tariff_type_id": 1,
+	 *			"employee_id": 10,
+	 *			"city_id": 5,
+	 *			"duration": 30,
+	 *			"price": 6300,
+	 *			"data_json": {
+	 *			},
+	 *			"is_active": true,
+	 *			"is_hit": false,
+	 *			"created_at": "2021-01-01 12:00:00",
+	 *			"updated_at": "2021-01-01 12:00:00",
+	 *			"tariff_type": {
 	 *				"id": 1,
 	 *				"name": "Regular",
 	 *				"data_json": {
@@ -862,6 +804,72 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
+	public function getTariffs() {
+		$tariffTypeId = $this->request->tariff_type_id;
+		if (!$tariffTypeId) {
+			return $this->responseError('Не передан ID типа тарифа', 400);
+		}
+		
+		$tariffs = Tariff::where('tariff_type_id', $tariffTypeId)
+			->where('is_active', true)
+			->with(['tariffType', 'employee', 'city'])
+			->get();
+		
+		if ($tariffs->isEmpty()) {
+			return $this->responseError('Тарифы не найдены', 400);
+		}
+		
+		return $this->responseSuccess(null, $tariffs->toArray());
+	}
+	
+	/**
+	 * Tariff detailed
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam tariff_id int No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": {
+	 *		"id": 1,
+	 *		"name": "Regular",
+	 *		"tariff_type_id": 1,
+	 *		"employee_id": 10,
+	 *		"city_id": 5,
+	 *		"duration": 30,
+	 *		"price": 6300,
+	 *		"data_json": {
+	 *		},
+	 *		"is_active": true,
+	 *		"is_hit": false,
+	 *		"created_at": "2021-01-01 12:00:00",
+	 *		"updated_at": "2021-01-01 12:00:00",
+	 *		"tariff_type": {
+	 *			"id": 1,
+	 *			"name": "Regular",
+	 *			"data_json": {
+	 *				"hint": "только будни",
+	 *				"description": ""
+	 *			},
+	 *			"is_active": true,
+	 *			"created_at": "2021-01-01 12:00:00",
+	 *			"updated_at": "2021-01-01 12:00:00"
+	 *		},
+	 *		"employee": null,
+	 *		"city": {
+	 *			"id": 1,
+	 *			"name": "Москва",
+	 *			"is_active": true,
+	 *			"created_at": "2021-10-01 18:23:27",
+	 *			"updated_at": "2021-10-05 18:23:41"
+	 *		}
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
 	public function getTariff() {
 		$tariffId = $this->request->tariff_id;
 		if (!$tariffId) {
@@ -869,13 +877,13 @@ class ApiController extends Controller
 		}
 		
 		$tariff = Tariff::where('is_active', true)
-			->with(['tarifType', 'employee', 'city'])
+			->with(['tariffType', 'employee', 'city'])
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
 		}
 		
-		return $this->responseSuccess(null, [$tariff->toArray()]);
+		return $this->responseSuccess(null, $tariff->toArray());
 	}
 	
 	public function verifyCertificate() {
@@ -895,15 +903,13 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 * 		[
-	 * 			{
-	 * 				"id": 1,
-	 * 				"name": "Москва",
-	 * 				"is_active": true,
-	 * 				"created_at": "2021-01-01 12:00:00",
-	 * 				"updated_at": "2021-01-01 12:00:00",
-	 * 			}
-	 * 		]
+	 *		{
+	 *			"id": 1,
+	 *			"name": "Москва",
+	 *			"is_active": true,
+	 *			"created_at": "2021-01-01 12:00:00",
+	 *			"updated_at": "2021-01-01 12:00:00",
+	 *		}
 	 * 	]
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -919,7 +925,7 @@ class ApiController extends Controller
 			return $this->responseError('Города не найдены', 400);
 		}
 		
-		return $this->responseSuccess(null, [$cities->toArray()]);
+		return $this->responseSuccess(null, $cities->toArray());
 	}
 	
 	/**
@@ -931,26 +937,24 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 * 		[
-	 * 			{
-	 * 				"id": 1,
-	 * 				"name": "ТРК VEGAS Кунцево",
-	 * 				"legal_entity_id": 1,
-	 * 				"data_json": {
-	 * 					"address": "",
-	 * 					"working_hours": "",
-	 * 					"phone": "",
-	 * 					"email": "",
-	 * 					"map_link": "",
-	 * 					"skype": "",
-	 * 					"whatsapp": "",
-	 * 					"scheme_file_path": ""
-	 * 				}
-	 * 				"is_active": true,
-	 * 				"created_at": "2021-01-01 12:00:00",
-	 * 				"updated_at": "2021-01-01 12:00:00",
-	 * 			}
-	 * 		]
+	 *		{
+	 *			"id": 1,
+	 *			"name": "ТРК VEGAS Кунцево",
+	 *			"legal_entity_id": 1,
+	 *			"data_json": {
+	 *				"address": "",
+	 *				"working_hours": "",
+	 *				"phone": "",
+	 *				"email": "",
+	 *				"map_link": "",
+	 *				"skype": "",
+	 *				"whatsapp": "",
+	 *				"scheme_file_path": ""
+	 *			}
+	 *			"is_active": true,
+	 *			"created_at": "2021-01-01 12:00:00",
+	 *			"updated_at": "2021-01-01 12:00:00",
+	 *		}
 	 * 	]
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -973,7 +977,7 @@ class ApiController extends Controller
 			return $this->responseError('Локации не найдены', 400);
 		}
 		
-		return $this->responseSuccess(null, [$locations->toArray()]);
+		return $this->responseSuccess(null, $locations->toArray());
 	}
 	
 	/**
@@ -985,15 +989,13 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 * 		[
-	 * 			{
-	 * 				"id": 1,
-	 * 				"name": "ООО Компания",
-	 * 				"public_offer_file_path": "",
-	 * 				"created_at": "2021-01-01 12:00:00",
-	 * 				"updated_at": "2021-01-01 12:00:00",
-	 * 			}
-	 * 		]
+	 *		{
+	 *			"id": 1,
+	 *			"name": "ООО Компания",
+	 *			"public_offer_file_path": "",
+	 *			"created_at": "2021-01-01 12:00:00",
+	 *			"updated_at": "2021-01-01 12:00:00",
+	 *		}
 	 * 	]
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -1031,7 +1033,7 @@ class ApiController extends Controller
 			];
 		}
 		
-		return $this->responseSuccess(null, [$legalEntitiesData]);
+		return $this->responseSuccess(null, $legalEntitiesData);
 	}
 	
 	/**
@@ -1043,18 +1045,16 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 * 		[
-	 * 			{
-	 * 				"id": 1,
-	 * 				"name": "Акция",
-	 * 				"preview_text": "",
-	 * 				"detail_text": "",
-	 * 				"city_id": 1,
-	 * 				"is_active": true,
-	 * 				"created_at": "2021-01-01 12:00:00",
-	 * 				"updated_at": "2021-01-01 12:00:00",
-	 * 			}
-	 * 		]
+	 *		{
+	 *			"id": 1,
+	 *			"name": "Акция",
+	 *			"preview_text": "",
+	 *			"detail_text": "",
+	 *			"city_id": 1,
+	 *			"is_active": true,
+	 *			"created_at": "2021-01-01 12:00:00",
+	 *			"updated_at": "2021-01-01 12:00:00",
+	 *		}
 	 * 	]
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -1077,7 +1077,7 @@ class ApiController extends Controller
 			return $this->responseError('Акции не найдены', 400);
 		}
 		
-		return $this->responseSuccess(null, [$promos->toArray()]);
+		return $this->responseSuccess(null, $promos->toArray());
 	}
 	
 	/**
@@ -1088,18 +1088,16 @@ class ApiController extends Controller
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
-	 * 	"data": [
-	 * 		{
-	 * 			"id": 1,
-	 * 			"name": "Акция",
-	 * 			"preview_text": "",
-	 * 			"detail_text": "",
-	 * 			"city_id": 1,
-	 * 			"is_active": true,
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00",
-	 * 		}
-	 * 	]
+	 * 	"data": {
+	 *		"id": 1,
+	 *		"name": "Акция",
+	 *		"preview_text": "",
+	 *		"detail_text": "",
+	 *		"city_id": 1,
+	 *		"is_active": true,
+	 *		"created_at": "2021-01-01 12:00:00",
+	 *		"updated_at": "2021-01-01 12:00:00",
+	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
 	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
@@ -1119,6 +1117,6 @@ class ApiController extends Controller
 			return $this->responseError('Акция не найдена', 400);
 		}
 		
-		return $this->responseSuccess(null, [$promo->toArray()]);
+		return $this->responseSuccess(null, $promo->toArray());
 	}
 }

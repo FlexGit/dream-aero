@@ -67,12 +67,11 @@ paths:
                   success: true
                   message: null
                   data:
-                    -
-                      id: 1
-                      token: 328dda59f036efc26720937545efe01e
-                      contractor_id: 1
-                      created_at: '2021-11-12 18:36:05'
-                      updated_at: '2021-11-12 18:36:05'
+                    id: 1
+                    token: 328dda59f036efc26720937545efe01e
+                    contractor_id: 1
+                    created_at: '2021-11-12 18:36:05'
+                    updated_at: '2021-11-12 18:36:05'
                 properties:
                   success:
                     type: boolean
@@ -81,16 +80,13 @@ paths:
                     type: string
                     example: null
                   data:
-                    type: array
+                    type: object
                     example:
-                      -
-                        id: 1
-                        token: 328dda59f036efc26720937545efe01e
-                        contractor_id: 1
-                        created_at: '2021-11-12 18:36:05'
-                        updated_at: '2021-11-12 18:36:05'
-                    items:
-                      type: object
+                      id: 1
+                      token: 328dda59f036efc26720937545efe01e
+                      contractor_id: 1
+                      created_at: '2021-11-12 18:36:05'
+                      updated_at: '2021-11-12 18:36:05'
         400:
           description: 'Bad Request'
           content:
@@ -228,8 +224,12 @@ paths:
                     phone: ''
                     email: john.smith@gmail.com
                     city_id: 1
-                    data_json:
-                      birthdate: '1990-01-01'
+                    birth_date: '1990-01-01'
+                    discount: 5
+                    flight_time: 100
+                    score: 10000
+                    status: Золотой
+                    avatar: null
                     is_active: true
                     last_auth_at: '2021-01-01 12:00:00'
                     created_at: '2021-01-01 12:00:00'
@@ -249,8 +249,12 @@ paths:
                       phone: ''
                       email: john.smith@gmail.com
                       city_id: 1
-                      data_json:
-                        birthdate: '1990-01-01'
+                      birth_date: '1990-01-01'
+                      discount: 5
+                      flight_time: 100
+                      score: 10000
+                      status: Золотой
+                      avatar: null
                       is_active: true
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
@@ -423,11 +427,15 @@ paths:
                     contractor:
                       id: 1
                       name: John
-                      phone: ''
+                      phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      data_json:
-                        birthdate: '1990-01-01'
+                      birth_date: '1990-01-01'
+                      discount: 5
+                      flight_time: 100
+                      score: 10000
+                      status: Золотой
+                      avatar: null
                       is_active: true
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
@@ -453,11 +461,15 @@ paths:
                       contractor:
                         id: 1
                         name: John
-                        phone: ''
+                        phone: null
                         email: john.smith@gmail.com
                         city_id: 1
-                        data_json:
-                          birthdate: '1990-01-01'
+                        birth_date: '1990-01-01'
+                        discount: 5
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        avatar: null
                         is_active: true
                         last_auth_at: '2021-01-01 12:00:00'
                         created_at: '2021-01-01 12:00:00'
@@ -757,11 +769,15 @@ paths:
                     contractor:
                       id: 1
                       name: John
-                      phone: ''
+                      phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      data_json:
-                        birthdate: '1990-01-01'
+                      birth_date: '1990-01-01'
+                      discount: 5
+                      flight_time: 100
+                      score: 10000
+                      status: Золотой
+                      avatar: null
                       is_active: true
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
@@ -787,11 +803,15 @@ paths:
                       contractor:
                         id: 1
                         name: John
-                        phone: ''
+                        phone: null
                         email: john.smith@gmail.com
                         city_id: 1
-                        data_json:
-                          birthdate: '1990-01-01'
+                        birth_date: '1990-01-01'
+                        discount: 5
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        avatar: null
                         is_active: true
                         last_auth_at: '2021-01-01 12:00:00'
                         created_at: '2021-01-01 12:00:00'
@@ -939,11 +959,15 @@ paths:
                     contractor:
                       id: 1
                       name: John
-                      phone: ''
+                      phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      data_json:
-                        birthdate: '1990-01-01'
+                      birth_date: '1990-01-01'
+                      discount: 5
+                      flight_time: 100
+                      score: 10000
+                      status: Золотой
+                      avatar: null
                       is_active: true
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
@@ -967,11 +991,15 @@ paths:
                       contractor:
                         id: 1
                         name: John
-                        phone: ''
+                        phone: null
                         email: john.smith@gmail.com
                         city_id: 1
-                        data_json:
-                          birthdate: '1990-01-01'
+                        birth_date: '1990-01-01'
+                        discount: 5
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        avatar: null
                         is_active: true
                         last_auth_at: '2021-01-01 12:00:00'
                         created_at: '2021-01-01 12:00:00'
@@ -1302,11 +1330,15 @@ paths:
                   data:
                     id: 1
                     name: John
-                    phone: ''
+                    phone: null
                     email: john.smith@gmail.com
                     city_id: 1
-                    data_json:
-                      birthdate: '1990-01-01'
+                    birth_date: '1990-01-01'
+                    discount: 5
+                    flight_time: 100
+                    score: 10000
+                    status: Золотой
+                    avatar: null
                     is_active: true
                     last_auth_at: '2021-01-01 12:00:00'
                     created_at: '2021-01-01 12:00:00'
@@ -1323,11 +1355,15 @@ paths:
                     example:
                       id: 1
                       name: John
-                      phone: ''
+                      phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      data_json:
-                        birthdate: '1990-01-01'
+                      birth_date: '1990-01-01'
+                      discount: 5
+                      flight_time: 100
+                      score: 10000
+                      status: Золотой
+                      avatar: null
                       is_active: true
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
@@ -1484,11 +1520,15 @@ paths:
                   data:
                     id: 1
                     name: John
-                    phone: ''
+                    phone: null
                     email: john.smith@gmail.com
                     city_id: 1
-                    data_json:
-                      birthdate: '1990-01-01'
+                    birth_date: '1990-01-01'
+                    discount: 5
+                    flight_time: 100
+                    score: 10000
+                    status: Золотой
+                    avatar: null
                     is_active: true
                     last_auth_at: '2021-01-01 12:00:00'
                     created_at: '2021-01-01 12:00:00'
@@ -1505,11 +1545,15 @@ paths:
                     example:
                       id: 1
                       name: John
-                      phone: ''
+                      phone: null
                       email: john.smith@gmail.com
                       city_id: 1
-                      data_json:
-                        birthdate: '1990-01-01'
+                      birth_date: '1990-01-01'
+                      discount: 5
+                      flight_time: 100
+                      score: 10000
+                      status: Золотой
+                      avatar: null
                       is_active: true
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
@@ -1637,13 +1681,12 @@ paths:
                   message: null
                   data:
                     -
-                      -
-                        id: 1
-                        name: Regular
-                        data_json: {  }
-                        is_active: true
-                        created_at: '2021-01-01 12:00:00'
-                        updated_at: '2021-01-01 12:00:00'
+                      id: 1
+                      name: Regular
+                      data_json: {  }
+                      is_active: true
+                      created_at: '2021-01-01 12:00:00'
+                      updated_at: '2021-01-01 12:00:00'
                 properties:
                   success:
                     type: boolean
@@ -1655,15 +1698,14 @@ paths:
                     type: array
                     example:
                       -
-                        -
-                          id: 1
-                          name: Regular
-                          data_json: {  }
-                          is_active: true
-                          created_at: '2021-01-01 12:00:00'
-                          updated_at: '2021-01-01 12:00:00'
+                        id: 1
+                        name: Regular
+                        data_json: {  }
+                        is_active: true
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
                     items:
-                      type: array
+                      type: object
         400:
           description: 'Bad Request'
           content:
@@ -1764,210 +1806,6 @@ paths:
         -
           in: query
           name: tariff_type_id
-          description: ''
-          example: null
-          required: false
-          schema:
-            type: integer
-            description: ''
-            example: null
-        -
-          in: header
-          name: Content-Type
-          description: ''
-          example: application/json
-          schema:
-            type: string
-        -
-          in: header
-          name: Accept
-          description: ''
-          example: application/json
-          schema:
-            type: string
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: true
-                  message: null
-                  data:
-                    -
-                      -
-                        id: 1
-                        name: Regular
-                        tariff_type_id: 1
-                        employee_id: 10
-                        city_id: 5
-                        duration: 30
-                        price: 6300
-                        data_json: {  }
-                        is_active: true
-                        is_hit: false
-                        created_at: '2021-01-01 12:00:00'
-                        updated_at: '2021-01-01 12:00:00'
-                        tariff_type:
-                          id: 1
-                          name: Regular
-                          data_json:
-                            hint: 'только будни'
-                            description: ''
-                          is_active: true
-                          created_at: '2021-01-01 12:00:00'
-                          updated_at: '2021-01-01 12:00:00'
-                        employee: null
-                        city:
-                          id: 1
-                          name: Москва
-                          is_active: true
-                          created_at: '2021-10-01 18:23:27'
-                          updated_at: '2021-10-05 18:23:41'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: null
-                  data:
-                    type: array
-                    example:
-                      -
-                        -
-                          id: 1
-                          name: Regular
-                          tariff_type_id: 1
-                          employee_id: 10
-                          city_id: 5
-                          duration: 30
-                          price: 6300
-                          data_json: {  }
-                          is_active: true
-                          is_hit: false
-                          created_at: '2021-01-01 12:00:00'
-                          updated_at: '2021-01-01 12:00:00'
-                          tariff_type:
-                            id: 1
-                            name: Regular
-                            data_json:
-                              hint: 'только будни'
-                              description: ''
-                            is_active: true
-                            created_at: '2021-01-01 12:00:00'
-                            updated_at: '2021-01-01 12:00:00'
-                          employee: null
-                          city:
-                            id: 1
-                            name: Москва
-                            is_active: true
-                            created_at: '2021-10-01 18:23:27'
-                            updated_at: '2021-10-05 18:23:41'
-                    items:
-                      type: array
-        400:
-          description: 'Bad Request'
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: false
-                  error: 'Некорректный Api-ключ'
-                  debug: null
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  error:
-                    type: string
-                    example: 'Некорректный Api-ключ'
-                  debug:
-                    type: string
-                    example: null
-        404:
-          description: 'Resource Not Found'
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: false
-                  error: 'Ресурс не найден'
-                  debug: '<app_url>/api/<method>'
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  error:
-                    type: string
-                    example: 'Ресурс не найден'
-                  debug:
-                    type: string
-                    example: '<app_url>/api/<method>'
-        405:
-          description: 'Method Not Allowed'
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: false
-                  error: 'Метод не разрешен'
-                  debug: '<app_url>/api/<method>'
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  error:
-                    type: string
-                    example: 'Метод не разрешен'
-                  debug:
-                    type: string
-                    example: '<app_url>/api/<method>'
-        500:
-          description: 'Internal Server Error'
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: false
-                  error: 'Внутренняя ошибка'
-                  debug: '<app_url>/api/<method>'
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  error:
-                    type: string
-                    example: 'Внутренняя ошибка'
-                  debug:
-                    type: string
-                    example: '<app_url>/api/<method>'
-      tags:
-        - Endpoints
-  /api/tariff:
-    get:
-      summary: 'Tariff detailed'
-      description: ''
-      parameters:
-        -
-          in: query
-          name: api_key
-          description: ''
-          example: null
-          required: true
-          schema:
-            type: string
-            description: ''
-            example: null
-        -
-          in: query
-          name: tariff_id
           description: ''
           example: null
           required: false
@@ -2152,6 +1990,204 @@ paths:
                     example: '<app_url>/api/<method>'
       tags:
         - Endpoints
+  /api/tariff:
+    get:
+      summary: 'Tariff detailed'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: tariff_id
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  message: null
+                  data:
+                    id: 1
+                    name: Regular
+                    tariff_type_id: 1
+                    employee_id: 10
+                    city_id: 5
+                    duration: 30
+                    price: 6300
+                    data_json: {  }
+                    is_active: true
+                    is_hit: false
+                    created_at: '2021-01-01 12:00:00'
+                    updated_at: '2021-01-01 12:00:00'
+                    tariff_type:
+                      id: 1
+                      name: Regular
+                      data_json:
+                        hint: 'только будни'
+                        description: ''
+                      is_active: true
+                      created_at: '2021-01-01 12:00:00'
+                      updated_at: '2021-01-01 12:00:00'
+                    employee: null
+                    city:
+                      id: 1
+                      name: Москва
+                      is_active: true
+                      created_at: '2021-10-01 18:23:27'
+                      updated_at: '2021-10-05 18:23:41'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: null
+                  data:
+                    type: object
+                    example:
+                      id: 1
+                      name: Regular
+                      tariff_type_id: 1
+                      employee_id: 10
+                      city_id: 5
+                      duration: 30
+                      price: 6300
+                      data_json: {  }
+                      is_active: true
+                      is_hit: false
+                      created_at: '2021-01-01 12:00:00'
+                      updated_at: '2021-01-01 12:00:00'
+                      tariff_type:
+                        id: 1
+                        name: Regular
+                        data_json:
+                          hint: 'только будни'
+                          description: ''
+                        is_active: true
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
+                      employee: null
+                      city:
+                        id: 1
+                        name: Москва
+                        is_active: true
+                        created_at: '2021-10-01 18:23:27'
+                        updated_at: '2021-10-05 18:23:41'
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+      tags:
+        - Endpoints
   /api/cities:
     get:
       summary: 'City list'
@@ -2188,7 +2224,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t\t[\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Москва\",\n\t\t\t\t\"is_active\": true,\n\t\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t\t\t}\n\t\t]\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"Москва\",\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -2317,7 +2353,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t\t[\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"ТРК VEGAS Кунцево\",\n\t\t\t\t\"legal_entity_id\": 1,\n\t\t\t\t\"data_json\": {\n\t\t\t\t\t\"address\": \"\",\n\t\t\t\t\t\"working_hours\": \"\",\n\t\t\t\t\t\"phone\": \"\",\n\t\t\t\t\t\"email\": \"\",\n\t\t\t\t\t\"map_link\": \"\",\n\t\t\t\t\t\"skype\": \"\",\n\t\t\t\t\t\"whatsapp\": \"\",\n\t\t\t\t\t\"scheme_file_path\": \"\"\n\t\t\t\t}\n\t\t\t\t\"is_active\": true,\n\t\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t\t\t}\n\t\t]\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"ТРК VEGAS Кунцево\",\n\t\t\"legal_entity_id\": 1,\n\t\t\"data_json\": {\n\t\t\t\"address\": \"\",\n\t\t\t\"working_hours\": \"\",\n\t\t\t\"phone\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"map_link\": \"\",\n\t\t\t\"skype\": \"\",\n\t\t\t\"whatsapp\": \"\",\n\t\t\t\"scheme_file_path\": \"\"\n\t\t}\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -2446,7 +2482,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t\t[\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"ООО Компания\",\n\t\t\t\t\"public_offer_file_path\": \"\",\n\t\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t\t\t}\n\t\t]\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"ООО Компания\",\n\t\t\"public_offer_file_path\": \"\",\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -2575,7 +2611,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t\t[\n\t\t\t{\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Акция\",\n\t\t\t\t\"preview_text\": \"\",\n\t\t\t\t\"detail_text\": \"\",\n\t\t\t\t\"city_id\": 1,\n\t\t\t\t\"is_active\": true,\n\t\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t\t\t}\n\t\t]\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"Акция\",\n\t\t\"preview_text\": \"\",\n\t\t\"detail_text\": \"\",\n\t\t\"city_id\": 1,\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -2704,7 +2740,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Акция\",\n\t\t\t\"preview_text\": \"\",\n\t\t\t\"detail_text\": \"\",\n\t\t\t\"city_id\": 1,\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t\t}\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"id\": 1,\n\t\"name\": \"Акция\",\n\t\"preview_text\": \"\",\n\t\"detail_text\": \"\",\n\t\"city_id\": 1,\n\t\"is_active\": true,\n\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n}"
         400:
           description: 'Bad Request'
           content:

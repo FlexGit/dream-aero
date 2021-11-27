@@ -101,4 +101,24 @@ class Contractor extends Authenticatable
 	public function city() {
 		return $this->hasOne('App\Models\City', 'id', 'city_id');
 	}
+	
+	public function format() {
+		return [
+			'id' => $this->id,
+			'name' => $this->name,
+			'email' => $this->email,
+			'phone' => $this->phone,
+			'discount' => $this->discount,
+			'birth_date' => array_key_exists('birthdate', $this->data_json) ? $this->data_json['birthdate'] : null,
+			'avatar' => array_key_exists('avatar', $this->data_json) ? $this->data_json['avatar'] : null,
+			'flight_time' => null,
+			'score' => null,
+			'status' => null,
+			'city_id' => $this->city_id,
+			'is_active' => $this->is_active,
+			'last_auth_at' => $this->last_auth_at,
+			'created_at' => $this->created_at,
+			'updated_at' => $this->updated_at,
+		];
+	}
 }
