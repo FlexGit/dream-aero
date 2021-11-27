@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @property int $id
  * @property string $name имя
+ * @property string $lastname имя
  * @property string $phone основной номер телефона
  * @property string $email основной e-mail
  * @property \Illuminate\Support\Carbon|null $email_verified_at
@@ -49,6 +50,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsActive($value)
  * @property int $discount скидка
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastname($value)
  */
 class Contractor extends Authenticatable
 {
@@ -64,6 +66,7 @@ class Contractor extends Authenticatable
 	 */
 	protected $fillable = [
 		'name',
+		'lastname',
 		'phone',
 		'email',
 		'password',
@@ -104,9 +107,11 @@ class Contractor extends Authenticatable
 	
 	public function format() {
 		$data = json_decode($this->data_json, true);
+		
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
+			'lastname' => $this->lastname,
 			'email' => $this->email,
 			'phone' => $this->phone,
 			'city_id' => $this->city_id,
