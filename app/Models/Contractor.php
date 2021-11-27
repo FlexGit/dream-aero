@@ -122,9 +122,9 @@ class Contractor extends Authenticatable
 			'score' => null,
 			'status' => null,
 			'is_active' => $this->is_active,
-			'last_auth_at' => $this->last_auth_at->format('Y-m-d H:i:s'),
-			'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-			'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+			'last_auth_at' => $this->last_auth_at ? $this->last_auth_at->format('Y-m-d H:i:s') : null,
+			'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
+			'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
 		];
 	}
 }
