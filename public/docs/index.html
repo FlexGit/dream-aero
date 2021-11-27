@@ -297,9 +297,17 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/profile/save?api_key=" \
+    "http://dev.dream-aero.ru/api/profile/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
+    --data "{
+    \"email\": null,
+    \"name\": null,
+    \"lastname\": null,
+    \"birthdate\": null,
+    \"phone\": null,
+    \"city_id\": null
+}"
 </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
@@ -308,6 +316,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -317,9 +326,19 @@ const headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "email": null,
+    "name": null,
+    "lastname": null,
+    "birthdate": null,
+    "phone": null,
+    "city_id": null
+};
+
 fetch(url, {
     method: "POST",
     headers,
+    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre>
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
@@ -332,6 +351,15 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'contractor_id'=&gt; '',
+        ],
+        'json' =&gt; [
+            'email' =&gt; null,
+            'name' =&gt; null,
+            'lastname' =&gt; null,
+            'birthdate' =&gt; null,
+            'phone' =&gt; null,
+            'city_id' =&gt; null,
         ],
     ]
 );
@@ -477,7 +505,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="contractor_id"
                data-endpoint="POSTapi-profile-save"
@@ -488,7 +516,7 @@ print_r(json_decode((string) $body));</code></pre>
             </p>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <p>
-            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="email"
                data-endpoint="POSTapi-profile-save"
@@ -498,7 +526,7 @@ print_r(json_decode((string) $body));</code></pre>
 
         </p>
                 <p>
-            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="name"
                data-endpoint="POSTapi-profile-save"
@@ -508,7 +536,7 @@ print_r(json_decode((string) $body));</code></pre>
 
         </p>
                 <p>
-            <b><code>lastname</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+            <b><code>lastname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="lastname"
                data-endpoint="POSTapi-profile-save"
@@ -518,7 +546,7 @@ print_r(json_decode((string) $body));</code></pre>
 
         </p>
                 <p>
-            <b><code>birthdate</code></b>&nbsp;&nbsp;<small>date</small>     <i>optional</i> &nbsp;
+            <b><code>birthdate</code></b>&nbsp;&nbsp;<small>date</small>  &nbsp;
                 <input type="text"
                name="birthdate"
                data-endpoint="POSTapi-profile-save"
@@ -528,7 +556,7 @@ print_r(json_decode((string) $body));</code></pre>
 
         </p>
                 <p>
-            <b><code>phone</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+            <b><code>phone</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="phone"
                data-endpoint="POSTapi-profile-save"
@@ -538,7 +566,7 @@ print_r(json_decode((string) $body));</code></pre>
 
         </p>
                 <p>
-            <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+            <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="city_id"
                data-endpoint="POSTapi-profile-save"

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "087a266f-db51-4879-95c5-52399822bc45",
+        "_postman_id": "e7531ba4-6102-48aa-9b85-f8ad66421b0a",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -107,7 +107,7 @@
                                     "key": "contractor_id",
                                     "value": "",
                                     "description": "",
-                                    "disabled": true
+                                    "disabled": false
                                 }
                             ],
                             "raw": "http:\/\/{{baseUrl}}\/api\/profile\/save?contractor_id="
@@ -125,7 +125,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "[]"
+                            "raw": "{\"email\":null,\"name\":null,\"lastname\":null,\"birthdate\":null,\"phone\":null,\"city_id\":null}"
                         },
                         "description": ""
                     },

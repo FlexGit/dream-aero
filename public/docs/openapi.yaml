@@ -189,7 +189,7 @@ paths:
           name: contractor_id
           description: ''
           example: null
-          required: false
+          required: true
           schema:
             type: integer
             description: ''
@@ -344,7 +344,7 @@ paths:
       tags:
         - Endpoints
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
@@ -374,6 +374,13 @@ paths:
                   type: integer
                   description: ''
                   example: null
+              required:
+                - email
+                - name
+                - lastname
+                - birthdate
+                - phone
+                - city_id
   /api/code/verify:
     post:
       summary: 'Code verification'

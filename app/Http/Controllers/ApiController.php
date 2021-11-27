@@ -599,13 +599,13 @@ class ApiController extends Controller
 	 * Profile save
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
-	 * @bodyParam email string No-example
-	 * @bodyParam name string No-example
-	 * @bodyParam lastname string No-example
-	 * @bodyParam birthdate date No-example
-	 * @bodyParam phone string No-example
-	 * @bodyParam city_id int No-example
+	 * @queryParam contractor_id int required No-example
+	 * @bodyParam email string required No-example
+	 * @bodyParam name string required No-example
+	 * @bodyParam lastname string required No-example
+	 * @bodyParam birthdate date required No-example
+	 * @bodyParam phone string required No-example
+	 * @bodyParam city_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Профиль успешно сохранен",

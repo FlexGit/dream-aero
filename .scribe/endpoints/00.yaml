@@ -98,44 +98,44 @@ endpoints:
       contractor_id:
         name: contractor_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters:
       email:
         name: email
         description: ''
-        required: false
+        required: true
         example: null
         type: string
       name:
         name: name
         description: ''
-        required: false
+        required: true
         example: null
         type: string
       lastname:
         name: lastname
         description: ''
-        required: false
+        required: true
         example: null
         type: string
       birthdate:
         name: birthdate
         description: ''
-        required: false
+        required: true
         example: null
         type: date
       phone:
         name: phone
         description: ''
-        required: false
+        required: true
         example: null
         type: string
       city_id:
         name: city_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     responses:
