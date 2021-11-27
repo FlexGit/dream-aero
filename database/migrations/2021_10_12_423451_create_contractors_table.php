@@ -17,6 +17,7 @@ class CreateContractorsTable extends Migration
             $table->id();
 			$table->string('name')->comment('имя');
 			$table->string('lastname')->nullable()->comment('фамилия');
+			$table->datetime('birthdate')->nullable()->comment('дата рождения');
 			$table->string('phone')->nullable()->comment('основной номер телефона');
 			$table->string('email')->comment('основной e-mail');
 			$table->string('password');

@@ -21,6 +21,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string|null $remember_token
  * @property int $city_id город, к которому привязан контрагент
+ * @property int $discount скидка
+ * @property \datetime|null $birthdate дата рождения
  * @property array $data_json дополнительная информация
  * @property int $is_active признак активности
  * @property \datetime|null $last_auth_at дата последней по времени авторизации
@@ -48,9 +50,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @mixin \Eloquent
  * @property-read \App\Models\City|null $city
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsActive($value)
- * @property int $discount скидка
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereBirthdate($value)
  */
 class Contractor extends Authenticatable
 {
@@ -67,6 +69,7 @@ class Contractor extends Authenticatable
 	protected $fillable = [
 		'name',
 		'lastname',
+		'birthdate',
 		'phone',
 		'email',
 		'password',
@@ -97,6 +100,7 @@ class Contractor extends Authenticatable
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'email_verified_at' => 'datetime',
 		'last_auth_at' => 'datetime:Y-m-d H:i:s',
+		'birthdate' => 'datetime:Y-m-d',
 		'is_active' => 'boolean',
 		'data_json' => 'array',
 	];
@@ -116,7 +120,7 @@ class Contractor extends Authenticatable
 			'phone' => $this->phone,
 			'city_id' => $this->city_id,
 			'discount' => $this->discount,
-			'birthdate' => $data['birthdate'] ?? null,
+			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
 			'avatar' => $data['avatar'] ?? null,
 			'flight_time' => null,
 			'score' => null,
