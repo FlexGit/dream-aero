@@ -1834,7 +1834,7 @@ paths:
           name: tariff_type_id
           description: ''
           example: null
-          required: false
+          required: true
           schema:
             type: integer
             description: ''

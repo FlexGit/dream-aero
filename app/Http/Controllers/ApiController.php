@@ -778,7 +778,7 @@ class ApiController extends Controller
 	 * Tariff list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam tariff_type_id int No-example
+	 * @queryParam tariff_type_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,

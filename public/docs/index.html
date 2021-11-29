@@ -54,7 +54,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
             <ul class="toc-footer" id="last-updated">
-            <li>Last updated: November 28 2021</li>
+            <li>Last updated: November 29 2021</li>
         </ul>
 </div>
 <div class="page-wrapper">
@@ -2290,7 +2290,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariffs?api_key=" \
+    --get "http://dev.dream-aero.ru/api/tariffs?api_key=&amp;tariff_type_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -2300,6 +2300,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "tariff_type_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2324,6 +2325,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'tariff_type_id'=&gt; '',
         ],
     ]
 );
@@ -2473,7 +2475,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>tariff_type_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>tariff_type_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="tariff_type_id"
                data-endpoint="GETapi-tariffs"

@@ -886,7 +886,7 @@ endpoints:
       tariff_type_id:
         name: tariff_type_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters: []
