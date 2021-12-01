@@ -4,13 +4,13 @@
 	<div class="row mb-2">
 		<div class="col-sm-6">
 			<h1 class="m-0 text-dark">
-				Контрагенты
+				Заявки
 			</h1>
 		</div>
 		<div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
 				<li class="breadcrumb-item"><a href="/">Главная</a></li>
-				<li class="breadcrumb-item active">Контрагенты</li>
+				<li class="breadcrumb-item active">Заявки</li>
 			</ol>
 		</div>
 	</div>
@@ -21,9 +21,20 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-flex justify-content-between mb-2">
-						<div class="d-flex">
-							<div class="form-group">
+					<div class="d-sm-flex mb-2">
+						<div class="form-group">
+							<label for="filter_status_id">Статус</label>
+							<select class="form-control" id="filter_status_id" name="filter_status_id">
+								<option value="0">Все</option>
+								@foreach($statuses ?? [] as $status)
+									@if(!$status->is_active)
+										@continue
+									@endif
+									<option value="{{ $status->id }}">{{ $status->name }}</option>
+								@endforeach
+							</select>
+						</div>
+							<div class="form-group pl-2">
 								<label for="filter_city_id">Город</label>
 								<select class="form-control" id="filter_city_id" name="filter_city_id">
 									<option value="0">Все</option>
@@ -35,28 +46,37 @@
 									@endforeach
 								</select>
 							</div>
-							<div class="form-group ml-4">
-								<label for="search">Поиск</label>
-								<input type="search" class="form-control" id="search" name="search">
+							<div class="form-group pl-2">
+								<label for="filter_location_id">Локация</label>
+								<select class="form-control" id="filter_location_id" name="filter_location_id">
+									<option value="0">Все</option>
+									@foreach($locations ?? [] as $location)
+										@if(!$location->is_active)
+											@continue
+										@endif
+										<option value="{{ $location->id }}">{{ $location->name }}</option>
+									@endforeach
+								</select>
 							</div>
-						</div>
-						<div class="form-group">
-							<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/add" data-action="/contractor" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
-						</div>
+							<div class="form-group pl-2">
+								<label for="search_contractor">Контрагент</label>
+								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
+							</div>
+							<div class="form-group align-self-end text-right ml-auto pl-2">
+								<a href="javascript:void(0)" data-toggle="modal" data-url="/order/add" data-action="/order" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+							</div>
 					</div>
-					<table id="contractorTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="orderTable" class="table table-hover table-sm table-bordered table-striped">
 						<thead>
 						<tr>
 							<th class="text-center">#</th>
-							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Активность</th>
-							<th class="text-center d-none d-md-table-cell">E-mail</th>
-							<th class="text-center text-nowrap d-none d-md-table-cell">Телефон</th>
+							<th class="text-center">Номер</th>
+							<th class="text-center d-none d-sm-table-cell">Статус</th>
+							<th class="text-center d-none d-md-table-cell">Контрагент</th>
+							<th class="text-center text-nowrap d-none d-md-table-cell">Тариф</th>
 							<th class="text-center d-none d-lg-table-cell">Город</th>
-							<th class="text-center text-nowrap d-none d-xl-table-cell">Скидка, %</th>
-							<th class="text-center d-none d-xl-table-cell">Последний вход</th>
-							{{--<th class="text-center d-none d-xl-table-cell">Создано</th>
-							<th class="text-center d-none d-xl-table-cell">Изменено</th>--}}
+							<th class="text-center text-nowrap d-none d-xl-table-cell">Локация</th>
+							<th class="text-center d-none d-xl-table-cell">Дата полета</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>
@@ -77,7 +97,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="contractor">
+				<form id="order">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -91,28 +111,28 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
+	{{--<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">--}}
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>
-	<script src="{{ asset('js/admin/common.js') }}"></script>
+	{{--<script src="{{ asset('js/admin/common.js') }}"></script>--}}
 	<script>
 		$(function() {
 			function getList() {
-				var $selector = $('#contractorTable tbody');
+				var $selector = $('#orderTable tbody');
 
 				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
 
 				$.ajax({
-					url: '{{ route('contractorList') }}',
+					url: '{{ route('orderList') }}',
 					type: 'GET',
 					dataType: 'json',
 					data: {
+						"filter_status_id": $('#filter_status_id').val(),
 						"filter_city_id": $('#filter_city_id').val(),
-						"search": $('#search').val(),
+						"filter_location_id": $('#filter_location_id').val(),
+						"filter_contractor_id": $('#filter_contractor_id').val(),
 					},
 					success: function(result) {
 						if (result.status !== 'success') {
@@ -169,7 +189,7 @@
 				});
 			});
 
-			$(document).on('submit', '#contractor', function(e) {
+			$(document).on('submit', '#order', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -186,7 +206,7 @@
 							return;
 						}
 
-						var msg = 'Запись успешно ';
+						var msg = 'Заявка успешно ';
 						if (method === 'POST') {
 							msg += 'добавлена';
 						} else if (method === 'PUT') {
@@ -196,7 +216,7 @@
 						}
 
 						$('#modal').modal('hide');
-						getList('{{ route('contractorList') }}');
+						getList('{{ route('orderList') }}');
 						toastr.success(msg);
 					}
 				});
@@ -205,7 +225,11 @@
 			$(document).on('shown.bs.modal', '#modal', function(e) {
 			});
 
-			$(document).on('change', '#filter_city_id', function(e) {
+			$(document).on('change', '#filter_city_id, #filter_city_id, #filter_location_id', function(e) {
+				getList();
+			});
+
+			$(document).on('keyup', '#search_contractor', function(e) {
 				getList();
 			});
 		});

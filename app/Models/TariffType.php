@@ -50,4 +50,8 @@ class TariffType extends Model {
 		'is_active' => 'boolean',
 		'data_json' => 'array',
 	];
+	
+	public function tariffs() {
+		return $this->hasMany('App\Models\Tariff', 'tariff_type_id', 'id');
+	}
 }

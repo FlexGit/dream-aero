@@ -2,11 +2,11 @@
 <tr class="odd">
 	<td class="text-center">{{ $flightSimulator->id }}</td>
 	<td>{{ $flightSimulator->name }}</td>
-	<td class="text-center">{{ $flightSimulator->is_active ? 'Да' : 'Нет' }}</td>
-	<td class="text-center">{{ $flightSimulator->simulatorType->name }}</td>
-	<td class="text-center">{{ $flightSimulator->location->name }}</td>
-	<td class="text-center">{{ $flightSimulator->created_at }}</td>
-	<td class="text-center">{{ $flightSimulator->updated_at }}</td>
+	<td class="text-center d-none d-sm-table-cell">{{ $flightSimulator->is_active ? 'Да' : 'Нет' }}</td>
+	<td class="text-center d-none d-md-table-cell">{{ $flightSimulator->simulatorType->name }}</td>
+	<td class="text-center d-none d-md-table-cell">{{ $flightSimulator->location->name }}</td>
+	<td class="text-center d-none d-xl-table-cell">{{ $flightSimulator->created_at }}</td>
+	<td class="text-center d-none d-xl-table-cell">{{ $flightSimulator->updated_at }}</td>
 	<td class="text-center">
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/flight_simulator/{{ $flightSimulator->id }}/edit" data-action="/flight_simulator/{{ $flightSimulator->id }}" data-id="{{ $flightSimulator->id }}" data-method="PUT" data-title="Редактирование">
 			<i class="fa fa-edit" aria-hidden="true"></i>

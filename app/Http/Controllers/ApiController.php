@@ -259,7 +259,7 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam email string required No-example
-	 * @queryParam code string No-example
+	 * @queryParam code string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Код подтвержден",

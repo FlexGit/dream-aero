@@ -28,11 +28,11 @@
 					<table id="cityTable" class="table table-hover table-sm table-bordered table-striped">
 						<thead>
 							<tr>
-								<th class="text-center">ID</th>
+								<th class="text-center">#</th>
 								<th class="text-center">Наименование</th>
-								<th class="text-center">Активность</th>
-								<th class="text-center">Создано</th>
-								<th class="text-center">Изменено</th>
+								<th class="text-center d-none d-sm-table-cell">Активность</th>
+								<th class="text-center d-none d-xl-table-cell">Создано</th>
+								<th class="text-center d-none d-xl-table-cell">Изменено</th>
 								<th class="text-center">Действие</th>
 							</tr>
 						</thead>
@@ -70,12 +70,12 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
+	{{--<link rel="stylesheet" href="{{ asset('css/admin/admin_custom.css') }}">--}}
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	<script src="{{ asset('js/common.js') }}"></script>
+	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
 			function getList(url) {
@@ -143,13 +143,13 @@
 							return;
 						}
 
-						var msg = 'Запись #' + result.id + ' успешно ';
+						var msg = 'Город успешно ';
 						if (method === 'POST') {
-							msg += 'добавлена';
+							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменена';
+							msg += 'изменен';
 						} else if (method === 'DELETE') {
-							msg += 'удалена';
+							msg += 'удален';
 						}
 
 						$('#modal').modal('hide');

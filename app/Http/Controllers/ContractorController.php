@@ -26,8 +26,7 @@ class ContractorController extends Controller
 	 */
 	public function index()
 	{
-		$cities = City::where('is_active', true)
-			->orderBy('name')
+		$cities = City::orderBy('name')
 			->get();
 
 		return view('admin.contractor.index', [

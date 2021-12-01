@@ -410,7 +410,7 @@ paths:
           name: code
           description: ''
           example: null
-          required: false
+          required: true
           schema:
             type: string
             description: ''

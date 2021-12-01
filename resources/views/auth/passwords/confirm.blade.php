@@ -1,3 +1,6 @@
+@extends('adminlte::auth.passwords.confirm')
+
+{{--
 @extends('layouts.auth')
 
 @section('content')
@@ -47,3 +50,4 @@
     </div>
 </div>
 @endsection
+--}}

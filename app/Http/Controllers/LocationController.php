@@ -14,15 +14,11 @@ use App\Models\LegalEntity;
 class LocationController extends Controller
 {
 	private $request;
-	private $user;
 	
 	/**
 	 * @param Request $request
 	 */
 	public function __construct(Request $request) {
-		$this->middleware('auth');
-		
-		$this->user = Auth::user();
 		$this->request = $request;
 	}
 	
@@ -31,7 +27,7 @@ class LocationController extends Controller
 	 */
 	public function index()
 	{
-		return view('admin/location/index', [
+		return view('admin.location.index', [
 		]);
 	}
 	

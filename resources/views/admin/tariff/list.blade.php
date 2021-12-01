@@ -2,12 +2,12 @@
 <tr class="odd">
 	<td class="text-center align-middle">{{ $loop->iteration }}</td>
 	<td class="align-middle"><a href="javascript:void(0)" data-toggle="modal" data-url="/tariff/{{ $tariff->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $tariff->name }}</a></td>
-	<td class="align-middle">{{ optional($tariff->city)->name ?? 'Все' }}</td>
-	<td class="align-middle">{{ $tariff->tariffType->name }}</td>
-	<td class="text-right align-middle">{{ $tariff->duration }}</td>
-	<td class="text-right align-middle">{{ number_format($tariff->price, 0, '.', ' ') }}</td>
-	<td class="text-center align-middle">{{ $tariff->is_active ? 'Да' : 'Нет' }}</td>
-	<td class="text-center align-middle">{{ $tariff->is_hit ? 'Да' : 'Нет' }}</td>
+	<td class="text-center align-middle d-none d-sm-table-cell">{{ $tariff->is_active ? 'Да' : 'Нет' }}</td>
+	<td class="align-middle d-none d-sm-table-cell">{{ optional($tariff->city)->name ?? 'Все' }}</td>
+	<td class="align-middle d-none d-md-table-cell">{{ $tariff->tariffType->name }}</td>
+	<td class="text-right align-middle d-none d-lg-table-cell">{{ $tariff->duration }}</td>
+	<td class="text-right align-middle d-none d-xl-table-cell">{{ number_format($tariff->price, 0, '.', ' ') }}</td>
+	<td class="text-center align-middle d-none d-xl-table-cell">{{ $tariff->is_hit ? 'Да' : 'Нет' }}</td>
 	{{--<td class="text-center align-middle">{{ $tariff->created_at }}</td>
 	<td class="text-center align-middle">{{ $tariff->updated_at }}</td>--}}
 	<td class="text-center align-middle">

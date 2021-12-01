@@ -85,7 +85,7 @@ class Order extends Model
 	protected $casts = [
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
-		'flight_at' => 'datetime:Y-m-d H:i:s',
+		'flight_at' => 'datetime:Y-m-d H:i',
 		'invite_sent_at' => 'datetime:Y-m-d H:i:s',
 		'certificate_expire_at' => 'datetime:Y-m-d H:i:s',
 		'certificate_sent_at' => 'datetime:Y-m-d H:i:s',

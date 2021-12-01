@@ -220,7 +220,7 @@ endpoints:
       code:
         name: code
         description: ''
-        required: false
+        required: true
         example: null
         type: string
     bodyParameters: []

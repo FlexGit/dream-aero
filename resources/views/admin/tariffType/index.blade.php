@@ -30,9 +30,9 @@
 						<tr>
 							<th class="text-center">ID</th>
 							<th class="text-center">Наименование</th>
-							<th class="text-center">Активность</th>
-							<th class="text-center">Создано</th>
-							<th class="text-center">Изменено</th>
+							<th class="text-center d-none d-sm-table-cell">Активность</th>
+							<th class="text-center d-none d-xl-table-cell">Создано</th>
+							<th class="text-center d-none d-xl-table-cell">Изменено</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>

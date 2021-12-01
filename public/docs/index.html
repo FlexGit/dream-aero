@@ -54,7 +54,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
             <ul class="toc-footer" id="last-updated">
-            <li>Last updated: November 29 2021</li>
+            <li>Last updated: December 1 2021</li>
         </ul>
 </div>
 <div class="page-wrapper">
@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -587,7 +587,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/code/verify?api_key=&amp;email=" \
+    "http://dev.dream-aero.ru/api/code/verify?api_key=&amp;email=&amp;code=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -598,6 +598,7 @@ print_r(json_decode((string) $body));</code></pre>
 const params = {
     "api_key": "",
     "email": "",
+    "code": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -623,6 +624,7 @@ $response = $client-&gt;post(
         'query' =&gt; [
             'api_key'=&gt; '',
             'email'=&gt; '',
+            'code'=&gt; '',
         ],
     ]
 );
@@ -789,7 +791,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>code</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <b><code>code</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="code"
                data-endpoint="POSTapi-code-verify"
