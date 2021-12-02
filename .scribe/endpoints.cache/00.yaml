@@ -313,7 +313,7 @@ endpoints:
       contractor_id:
         name: contractor_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters: []
@@ -657,7 +657,7 @@ endpoints:
       contractor_id:
         name: contractor_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters:
@@ -979,7 +979,7 @@ endpoints:
       tariff_id:
         name: tariff_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters: []
@@ -1130,7 +1130,7 @@ endpoints:
       city_id:
         name: city_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters: []
@@ -1342,7 +1342,7 @@ endpoints:
       promo_id:
         name: promo_id
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
     bodyParameters: []

@@ -477,7 +477,7 @@ class ApiController extends Controller
 	 * Password change
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
+	 * @queryParam contractor_id int required No-example
 	 * @bodyParam password string required Password (md5). No-example
 	 * @bodyParam password_confirmation string required Password confirmation (md5). No-example
 	 * @response scenario=success {
@@ -695,7 +695,7 @@ class ApiController extends Controller
 	 * Profile delete
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
+	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Профиль успешно удален",
@@ -846,7 +846,7 @@ class ApiController extends Controller
 	 * Tariff detailed
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam tariff_id int No-example
+	 * @queryParam tariff_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -952,7 +952,7 @@ class ApiController extends Controller
 	 * Location list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam city_id int No-example
+	 * @queryParam city_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1104,7 +1104,7 @@ class ApiController extends Controller
 	 * Promo detailed
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam promo_id int No-example
+	 * @queryParam promo_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,

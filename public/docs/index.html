@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
     <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
-    <script src="../docs/js/theme-default-3.15.0.js"></script>
+    <script src="../docs/js/theme-default-3.16.0.js"></script>
 
     <link rel="stylesheet"
           href="//unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/obsidian.min.css">
@@ -23,7 +23,7 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-3.15.0.js"></script>
+    <script src="../docs/js/tryitout-3.16.0.js"></script>
 
 </head>
 
@@ -54,7 +54,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
             <ul class="toc-footer" id="last-updated">
-            <li>Last updated: December 1 2021</li>
+            <li>Last updated: December 2 2021</li>
         </ul>
 </div>
 <div class="page-wrapper">
@@ -815,7 +815,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/profile/delete?api_key=" \
+    "http://dev.dream-aero.ru/api/profile/delete?api_key=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -825,6 +825,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -849,6 +850,7 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
     ]
 );
@@ -964,7 +966,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="contractor_id"
                data-endpoint="POSTapi-profile-delete"
@@ -1689,7 +1691,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/password/reset?api_key=" \
+    "http://dev.dream-aero.ru/api/password/reset?api_key=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1704,6 +1706,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1734,6 +1737,7 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
         'json' =&gt; [
             'password' =&gt; null,
@@ -1883,7 +1887,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="contractor_id"
                data-endpoint="POSTapi-password-reset"
@@ -2501,7 +2505,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff?api_key=" \
+    --get "http://dev.dream-aero.ru/api/tariff?api_key=&amp;tariff_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -2511,6 +2515,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "tariff_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2535,6 +2540,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'tariff_id'=&gt; '',
         ],
     ]
 );
@@ -2682,7 +2688,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>tariff_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>tariff_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="tariff_id"
                data-endpoint="GETapi-tariff"
@@ -2877,7 +2883,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/locations?api_key=" \
+    --get "http://dev.dream-aero.ru/api/locations?api_key=&amp;city_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -2887,6 +2893,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "city_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2911,6 +2918,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'city_id'=&gt; '',
         ],
     ]
 );
@@ -3045,7 +3053,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="city_id"
                data-endpoint="GETapi-locations"
@@ -3434,7 +3442,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/promo?api_key=" \
+    --get "http://dev.dream-aero.ru/api/promo?api_key=&amp;promo_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -3444,6 +3452,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "promo_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3468,6 +3477,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'promo_id'=&gt; '',
         ],
     ]
 );
@@ -3592,7 +3602,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>promo_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>promo_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="promo_id"
                data-endpoint="GETapi-promo"
