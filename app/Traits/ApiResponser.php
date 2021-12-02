@@ -15,7 +15,7 @@ trait ApiResponser
 			'success' => true,
 			'message' => $message,
 			'data' => $data,
-		], 200);
+		], 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
 	}
 	
 	/**
@@ -50,6 +50,6 @@ trait ApiResponser
 			'success' => false,
 			'error' => $error,
 			'debug' => $debug,
-		], $code);
+		], $code, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
 	}
 }
