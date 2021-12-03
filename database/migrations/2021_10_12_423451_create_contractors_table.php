@@ -20,7 +20,7 @@ class CreateContractorsTable extends Migration
 			$table->datetime('birthdate')->nullable()->comment('дата рождения');
 			$table->string('phone')->nullable()->comment('основной номер телефона');
 			$table->string('email')->comment('основной e-mail');
-			$table->string('password');
+			$table->string('password')->nullable()->comment('пароль в md5');
 			$table->rememberToken();
 			$table->integer('city_id')->default(0)->index()->comment('город, к которому привязан контрагент');
 			$table->integer('discount')->default(0)->comment('скидка');

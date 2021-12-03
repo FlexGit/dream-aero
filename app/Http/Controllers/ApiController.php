@@ -591,7 +591,7 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-		
+
 		return $this->responseSuccess(null, $contractor->format());
 	}
 	
@@ -1138,5 +1138,63 @@ class ApiController extends Controller
 		}
 		
 		return $this->responseSuccess(null, $promo->toArray());
+	}
+
+	/**
+	 * Reset Profile
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam contractor_id int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "Аккаунт контрагента успешно очищен",
+	 * 	"data": {
+	 *		"id": 1,
+	 * 		"name": "John",
+	 * 		"lastname": "Smith",
+	 * 		"email": "john.smith@gmail.com",
+	 * 		"phone": null,
+	 * 		"city_id": 1,
+	 * 		"discount": 5,
+	 *		"birthdate": "1990-01-01",
+	 * 		"avatar": null,
+	 * 		"flight_time": 100,
+	 * 		"score": 10000,
+	 * 		"status": "Золотой",
+	 * 		"is_active": true,
+	 * 		"last_auth_at": "2021-01-01 12:00:00",
+	 * 		"created_at": "2021-01-01 12:00:00",
+	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function resetProfile() {
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
+		}
+
+		$contractor = Contractor::find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		$contractor->password = null;
+		$contractor->lastname = null;
+		$contractor->birthdate = null;
+		$contractor->city_id = 0;
+		$contractor->discount = 0;
+		$contractor->is_active = 1;
+		$contractor->data_json = null;
+		$contractor->last_auth_at = null;
+		if ($contractor->save()) {
+			return $this->responseSuccess('Аккаунт контрагента успешно очищен', $contractor->format());
+		}
+
+		return $this->responseError(null, 500);
 	}
 }
