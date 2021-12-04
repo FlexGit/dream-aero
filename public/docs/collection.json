@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "e1531ac1-fe30-4991-9fc3-0aeecbb3578f",
+        "_postman_id": "d4604ae3-927c-4a5f-a15b-ac57b6c359fb",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -756,7 +756,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"tariff_type_id\": 1,\n\t\t\"employee_id\": 10,\n\t\t\"city_id\": 5,\n\t\t\"duration\": 30,\n\t\t\"price\": 6300,\n\t\t\"data_json\": {\n\t\t},\n\t\t\"is_active\": true,\n\t\t\"is_hit\": false,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t\t\"tariff_type\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"data_json\": {\n\t\t\t\t\"hint\": \"\u0442\u043e\u043b\u044c\u043a\u043e \u0431\u0443\u0434\u043d\u0438\",\n\t\t\t\t\"description\": \"\"\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t},\n\t\t\"employee\": null,\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-10-01 18:23:27\",\n\t\t\t\"updated_at\": \"2021-10-05 18:23:41\"\n\t\t}\n\t\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"tariff_type_id\": 1,\n\t\t\t\"employee_id\": 10,\n\t\t\t\"city_id\": 5,\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"data_json\": {\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"is_hit\": false,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t\t}\n\t\t\"tariff_type\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"data_json\": {\n\t\t\t\t\"hint\": \"\u0442\u043e\u043b\u044c\u043a\u043e \u0431\u0443\u0434\u043d\u0438\",\n\t\t\t\t\"description\": \"\"\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t},\n\t\t\"employee\": null,\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-10-01 18:23:27\",\n\t\t\t\"updated_at\": \"2021-10-05 18:23:41\"\n\t\t}\n\t\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -820,7 +820,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"id\": 1,\n\t\"name\": \"Regular\",\n\t\"tariff_type_id\": 1,\n\t\"employee_id\": 10,\n\t\"city_id\": 5,\n\t\"duration\": 30,\n\t\"price\": 6300,\n\t\"data_json\": {\n\t},\n\t\"is_active\": true,\n\t\"is_hit\": false,\n\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t\"tariff_type\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"data_json\": {\n\t\t\t\"hint\": \"\u0442\u043e\u043b\u044c\u043a\u043e \u0431\u0443\u0434\u043d\u0438\",\n\t\t\t\"description\": \"\"\n\t\t},\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t},\n\t\"employee\": null,\n\t\"city\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-10-01 18:23:27\",\n\t\t\"updated_at\": \"2021-10-05 18:23:41\"\n\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"tariff\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"tariff_type_id\": 1,\n\t\t\"employee_id\": 10,\n\t\t\"city_id\": 5,\n\t\t\"duration\": 30,\n\t\t\"price\": 6300,\n\t\t\"data_json\": {\n\t\t},\n\t\t\"is_active\": true,\n\t\t\"is_hit\": false,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t},\n\t\"tariff_type\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"data_json\": {\n\t\t\t\"hint\": \"\u0442\u043e\u043b\u044c\u043a\u043e \u0431\u0443\u0434\u043d\u0438\",\n\t\t\t\"description\": \"\"\n\t\t},\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t},\n\t\"employee\": null,\n\t\"city\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-10-01 18:23:27\",\n\t\t\"updated_at\": \"2021-10-05 18:23:41\"\n\t}\n\t}\n}",
                             "name": "success"
                         },
                         {

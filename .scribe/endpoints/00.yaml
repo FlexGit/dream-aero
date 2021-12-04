@@ -897,19 +897,21 @@ endpoints:
           	"message": null,
           	"data": [
           	{
-          		"id": 1,
-          		"name": "Regular",
-          		"tariff_type_id": 1,
-          		"employee_id": 10,
-          		"city_id": 5,
-          		"duration": 30,
-          		"price": 6300,
-          		"data_json": {
-          		},
-          		"is_active": true,
-          		"is_hit": false,
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00",
+          			"tariff": {
+          			"id": 1,
+          			"name": "Regular",
+          			"tariff_type_id": 1,
+          			"employee_id": 10,
+          			"city_id": 5,
+          			"duration": 30,
+          			"price": 6300,
+          			"data_json": {
+          			},
+          			"is_active": true,
+          			"is_hit": false,
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          			}
           		"tariff_type": {
           			"id": 1,
           			"name": "Regular",
@@ -989,19 +991,21 @@ endpoints:
           	"success": true,
           	"message": null,
           	"data": {
-          	"id": 1,
-          	"name": "Regular",
-          	"tariff_type_id": 1,
-          	"employee_id": 10,
-          	"city_id": 5,
-          	"duration": 30,
-          	"price": 6300,
-          	"data_json": {
-          	},
-          	"is_active": true,
-          	"is_hit": false,
-          	"created_at": "2021-01-01 12:00:00",
-          	"updated_at": "2021-01-01 12:00:00",
+          		"tariff": {
+          		"id": 1,
+          		"name": "Regular",
+          		"tariff_type_id": 1,
+          		"employee_id": 10,
+          		"city_id": 5,
+          		"duration": 30,
+          		"price": 6300,
+          		"data_json": {
+          		},
+          		"is_active": true,
+          		"is_hit": false,
+          		"created_at": "2021-01-01 12:00:00",
+          		"updated_at": "2021-01-01 12:00:00"
+          		},
           	"tariff_type": {
           		"id": 1,
           		"name": "Regular",

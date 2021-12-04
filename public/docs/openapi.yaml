@@ -1857,83 +1857,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: null
-                  data:
-                    -
-                      id: 1
-                      name: Regular
-                      tariff_type_id: 1
-                      employee_id: 10
-                      city_id: 5
-                      duration: 30
-                      price: 6300
-                      data_json: {  }
-                      is_active: true
-                      is_hit: false
-                      created_at: '2021-01-01 12:00:00'
-                      updated_at: '2021-01-01 12:00:00'
-                      tariff_type:
-                        id: 1
-                        name: Regular
-                        data_json:
-                          hint: 'только будни'
-                          description: ''
-                        is_active: true
-                        created_at: '2021-01-01 12:00:00'
-                        updated_at: '2021-01-01 12:00:00'
-                      employee: null
-                      city:
-                        id: 1
-                        name: Москва
-                        is_active: true
-                        created_at: '2021-10-01 18:23:27'
-                        updated_at: '2021-10-05 18:23:41'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: null
-                  data:
-                    type: array
-                    example:
-                      -
-                        id: 1
-                        name: Regular
-                        tariff_type_id: 1
-                        employee_id: 10
-                        city_id: 5
-                        duration: 30
-                        price: 6300
-                        data_json: {  }
-                        is_active: true
-                        is_hit: false
-                        created_at: '2021-01-01 12:00:00'
-                        updated_at: '2021-01-01 12:00:00'
-                        tariff_type:
-                          id: 1
-                          name: Regular
-                          data_json:
-                            hint: 'только будни'
-                            description: ''
-                          is_active: true
-                          created_at: '2021-01-01 12:00:00'
-                          updated_at: '2021-01-01 12:00:00'
-                        employee: null
-                        city:
-                          id: 1
-                          name: Москва
-                          is_active: true
-                          created_at: '2021-10-01 18:23:27'
-                          updated_at: '2021-10-05 18:23:41'
-                    items:
-                      type: object
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"tariff_type_id\": 1,\n\t\t\t\"employee_id\": 10,\n\t\t\t\"city_id\": 5,\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"data_json\": {\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"is_hit\": false,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t\t}\n\t\t\"tariff_type\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"data_json\": {\n\t\t\t\t\"hint\": \"только будни\",\n\t\t\t\t\"description\": \"\"\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t},\n\t\t\"employee\": null,\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\",\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-10-01 18:23:27\",\n\t\t\t\"updated_at\": \"2021-10-05 18:23:41\"\n\t\t}\n\t\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -2066,18 +1993,19 @@ paths:
                   success: true
                   message: null
                   data:
-                    id: 1
-                    name: Regular
-                    tariff_type_id: 1
-                    employee_id: 10
-                    city_id: 5
-                    duration: 30
-                    price: 6300
-                    data_json: {  }
-                    is_active: true
-                    is_hit: false
-                    created_at: '2021-01-01 12:00:00'
-                    updated_at: '2021-01-01 12:00:00'
+                    tariff:
+                      id: 1
+                      name: Regular
+                      tariff_type_id: 1
+                      employee_id: 10
+                      city_id: 5
+                      duration: 30
+                      price: 6300
+                      data_json: {  }
+                      is_active: true
+                      is_hit: false
+                      created_at: '2021-01-01 12:00:00'
+                      updated_at: '2021-01-01 12:00:00'
                     tariff_type:
                       id: 1
                       name: Regular
@@ -2104,18 +2032,19 @@ paths:
                   data:
                     type: object
                     example:
-                      id: 1
-                      name: Regular
-                      tariff_type_id: 1
-                      employee_id: 10
-                      city_id: 5
-                      duration: 30
-                      price: 6300
-                      data_json: {  }
-                      is_active: true
-                      is_hit: false
-                      created_at: '2021-01-01 12:00:00'
-                      updated_at: '2021-01-01 12:00:00'
+                      tariff:
+                        id: 1
+                        name: Regular
+                        tariff_type_id: 1
+                        employee_id: 10
+                        city_id: 5
+                        duration: 30
+                        price: 6300
+                        data_json: {  }
+                        is_active: true
+                        is_hit: false
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
                       tariff_type:
                         id: 1
                         name: Regular

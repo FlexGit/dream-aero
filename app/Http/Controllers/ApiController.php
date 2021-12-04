@@ -413,7 +413,7 @@ class ApiController extends Controller
 				'email' => 'E-mail',
 				'name' => 'Имя',
 				'birthdate' => 'Дата рождения',
-				'city_id' => 'Город'
+				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
 			$errors = [];
@@ -784,19 +784,21 @@ class ApiController extends Controller
 	 * 	"message": null,
 	 * 	"data": [
 	 *		{
-	 *			"id": 1,
-	 *			"name": "Regular",
-	 *			"tariff_type_id": 1,
-	 *			"employee_id": 10,
-	 *			"city_id": 5,
-	 *			"duration": 30,
-	 *			"price": 6300,
-	 *			"data_json": {
-	 *			},
-	 *			"is_active": true,
-	 *			"is_hit": false,
-	 *			"created_at": "2021-01-01 12:00:00",
-	 *			"updated_at": "2021-01-01 12:00:00",
+	 * 			"tariff": {
+	 *				"id": 1,
+	 *				"name": "Regular",
+	 *				"tariff_type_id": 1,
+	 *				"employee_id": 10,
+	 *				"city_id": 5,
+	 *				"duration": 30,
+	 *				"price": 6300,
+	 *				"data_json": {
+	 *				},
+	 *				"is_active": true,
+	 *				"is_hit": false,
+	 *				"created_at": "2021-01-01 12:00:00",
+	 *				"updated_at": "2021-01-01 12:00:00"
+	 * 			}
 	 *			"tariff_type": {
 	 *				"id": 1,
 	 *				"name": "Regular",
@@ -832,14 +834,25 @@ class ApiController extends Controller
 		
 		$tariffs = Tariff::where('tariff_type_id', $tariffTypeId)
 			->where('is_active', true)
-			->with(['tariffType', 'employee', 'city'])
+			/*->with(['tariffType', 'employee', 'city'])*/
 			->get();
+		
+		$data = [];
+		foreach ($tariffs ?? [] as $tariff) {
+			/** @var Tariff $tariff */
+			$data[] = [
+				'tariff' =>  $tariff->toArray(),
+				'tariff_type' =>  $tariff->tariffType->toArray(),
+				'employee' => $tariff->employee->format(),
+				'city' => $tariff->city->toArray(),
+			];
+		}
 		
 		if ($tariffs->isEmpty()) {
 			return $this->responseError('Тарифы не найдены', 400);
 		}
 		
-		return $this->responseSuccess(null, $tariffs->toArray());
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
@@ -851,19 +864,21 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": {
-	 *		"id": 1,
-	 *		"name": "Regular",
-	 *		"tariff_type_id": 1,
-	 *		"employee_id": 10,
-	 *		"city_id": 5,
-	 *		"duration": 30,
-	 *		"price": 6300,
-	 *		"data_json": {
-	 *		},
-	 *		"is_active": true,
-	 *		"is_hit": false,
-	 *		"created_at": "2021-01-01 12:00:00",
-	 *		"updated_at": "2021-01-01 12:00:00",
+	 * 		"tariff": {
+	 *			"id": 1,
+	 *			"name": "Regular",
+	 *			"tariff_type_id": 1,
+	 *			"employee_id": 10,
+	 *			"city_id": 5,
+	 *			"duration": 30,
+	 *			"price": 6300,
+	 *			"data_json": {
+	 *			},
+	 *			"is_active": true,
+	 *			"is_hit": false,
+	 *			"created_at": "2021-01-01 12:00:00",
+	 *			"updated_at": "2021-01-01 12:00:00"
+	 * 		},
 	 *		"tariff_type": {
 	 *			"id": 1,
 	 *			"name": "Regular",
