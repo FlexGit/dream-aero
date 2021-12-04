@@ -114,11 +114,14 @@ class Contractor extends Authenticatable
 		$data = json_decode($this->data_json, true);
 		
 		$avatar = array_key_exists('avatar', $data) ? $data['avatar'] : null;
+		\Log::debug($avatar);
 		if ($avatar) {
 			$avatarFileName = array_key_exists('name', $avatar) ? $avatar['name'] : null;
 			$avatarFileExt = array_key_exists('ext', $avatar) ? $avatar['name'] : null;
 		}
-		
+		\Log::debug($avatarFileName);
+		\Log::debug($avatarFileExt);
+		\Log::debug(Storage::disk('private')->exists('contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt));
 		$base64 = '';
 		if ($avatarFileName && $avatarFileExt && Storage::disk('private')->exists('contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt)) {
 			$file = storage_path('app/private/contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt);
@@ -136,7 +139,7 @@ class Contractor extends Authenticatable
 			'city_id' => $this->city_id,
 			'discount' => $this->discount,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
-			'avatar_file' => $base64 ?: null,
+			'avatar_file_base64' => $base64 ?: null,
 			'flight_time' => null,
 			'score' => null,
 			'status' => null,

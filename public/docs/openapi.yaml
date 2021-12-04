@@ -227,7 +227,7 @@ paths:
                     city_id: 1
                     discount: 5
                     birthdate: '1990-01-01'
-                    avatar: null
+                    avatar_file_base64: null
                     flight_time: 100
                     score: 10000
                     status: Золотой
@@ -253,7 +253,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
@@ -449,7 +449,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
@@ -484,7 +484,7 @@ paths:
                         city_id: 1
                         discount: 5
                         birthdate: '1990-01-01'
-                        avatar: null
+                        avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
@@ -793,7 +793,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
@@ -828,7 +828,7 @@ paths:
                         city_id: 1
                         discount: 5
                         birthdate: '1990-01-01'
-                        avatar: null
+                        avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
@@ -985,7 +985,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
@@ -1018,7 +1018,7 @@ paths:
                         city_id: 1
                         discount: 5
                         birthdate: '1990-01-01'
-                        avatar: null
+                        avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
@@ -1358,7 +1358,7 @@ paths:
                     city_id: 1
                     discount: 5
                     birthdate: '1990-01-01'
-                    avatar: null
+                    avatar_file_base64: null
                     flight_time: 100
                     score: 10000
                     status: Золотой
@@ -1384,7 +1384,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
@@ -1550,7 +1550,7 @@ paths:
                     city_id: 1
                     discount: 5
                     birthdate: '1990-01-01'
-                    avatar: null
+                    avatar_file_base64: null
                     flight_time: 100
                     score: 10000
                     status: Золотой
@@ -1576,7 +1576,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
@@ -2846,7 +2846,7 @@ paths:
                     city_id: 1
                     discount: 5
                     birthdate: '1990-01-01'
-                    avatar: null
+                    avatar_file_base64: null
                     flight_time: 100
                     score: 10000
                     status: Золотой
@@ -2872,7 +2872,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
@@ -3020,7 +3020,7 @@ paths:
                     city_id: 1
                     discount: 5
                     birthdate: '1990-01-01'
-                    avatar: null
+                    avatar_file_base64: null
                     flight_time: 100
                     score: 10000
                     status: Золотой
@@ -3046,7 +3046,7 @@ paths:
                       city_id: 1
                       discount: 5
                       birthdate: '1990-01-01'
-                      avatar: null
+                      avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
