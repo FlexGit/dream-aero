@@ -1578,32 +1578,32 @@ endpoints:
         name: path
         description: ''
         required: true
-        example: 9
+        example: 13
         type: integer
       ext:
         name: ext
         description: ''
         required: true
-        example: fugiat
+        example: id
         type: string
       name:
         name: name
         description: ''
         required: true
-        example: alias
+        example: et
         type: string
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: 4V66cvEhd3e5aaP8Dgb1Zfk
+        example: 356Ze1ahPvcVD4adg68kfEb
         type: string
     bodyParameters: []
     responses:
       -
         status: 404
-        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/file\/9\/fugiat\/alias"}'
+        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/file\/13\/id\/et"}'
         headers:
           content-type: application/json;charset=UTF-8
           charset: utf-8

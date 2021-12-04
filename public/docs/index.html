@@ -3838,7 +3838,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\php9DD6.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\php1A35.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3880,7 +3880,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php9DD6.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php1A35.tmp', 'r')
             ],
         ],
     ]
@@ -4062,16 +4062,16 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/file/9/fugiat/alias?api_key=4V66cvEhd3e5aaP8Dgb1Zfk" \
+    --get "http://dev.dream-aero.ru/api/file/13/id/et?api_key=356Ze1ahPvcVD4adg68kfEb" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/file/9/fugiat/alias"
+    "http://dev.dream-aero.ru/api/file/13/id/et"
 );
 
 const params = {
-    "api_key": "4V66cvEhd3e5aaP8Dgb1Zfk",
+    "api_key": "356Ze1ahPvcVD4adg68kfEb",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4088,14 +4088,14 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/file/9/fugiat/alias',
+    'http://dev.dream-aero.ru/api/file/13/id/et',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
-            'api_key'=&gt; '4V66cvEhd3e5aaP8Dgb1Zfk',
+            'api_key'=&gt; '356Ze1ahPvcVD4adg68kfEb',
         ],
     ]
 );
@@ -4123,7 +4123,7 @@ access-control-allow-origin: *
 <code class="language-json">{
     &quot;success&quot;: false,
     &quot;error&quot;: &quot;Ресурс не найден&quot;,
-    &quot;debug&quot;: &quot;http://admin.dream-aero.loc/api/file/9/fugiat/alias&quot;
+    &quot;debug&quot;: &quot;http://admin.dream-aero.loc/api/file/13/id/et&quot;
 }</code>
  </pre>
     </span>
@@ -4172,7 +4172,7 @@ access-control-allow-origin: *
                 <input type="number"
                name="path"
                data-endpoint="GETapi-file--path---ext---name-"
-               value="9"
+               value="13"
                data-component="url" hidden>
     <br>
 
@@ -4182,7 +4182,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="ext"
                data-endpoint="GETapi-file--path---ext---name-"
-               value="fugiat"
+               value="id"
                data-component="url" hidden>
     <br>
 
@@ -4192,7 +4192,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="name"
                data-endpoint="GETapi-file--path---ext---name-"
-               value="alias"
+               value="et"
                data-component="url" hidden>
     <br>
 
@@ -4203,7 +4203,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="api_key"
                data-endpoint="GETapi-file--path---ext---name-"
-               value="4V66cvEhd3e5aaP8Dgb1Zfk"
+               value="356Ze1ahPvcVD4adg68kfEb"
                data-component="query" hidden>
     <br>
 <p>Authentication key.</p>
