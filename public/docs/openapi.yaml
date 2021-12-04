@@ -3158,12 +3158,12 @@ paths:
           in: query
           name: api_key
           description: 'Authentication key.'
-          example: aDd3gvhfcEaeb48Z6kV516P
+          example: vZcfPEh3846ed56aDVb1kag
           required: true
           schema:
             type: string
             description: 'Authentication key.'
-            example: aDd3gvhfcEaeb48Z6kV516P
+            example: vZcfPEh3846ed56aDVb1kag
         -
           in: header
           name: Content-Type
@@ -3188,7 +3188,7 @@ paths:
                 example:
                   success: false
                   error: 'Ресурс не найден'
-                  debug: 'http://admin.dream-aero.loc/api/est/facilis/harum'
+                  debug: 'http://admin.dream-aero.loc/api/qui/eum/officiis'
                 properties:
                   success:
                     type: boolean
@@ -3198,7 +3198,7 @@ paths:
                     example: 'Ресурс не найден'
                   debug:
                     type: string
-                    example: 'http://admin.dream-aero.loc/api/est/facilis/harum'
+                    example: 'http://admin.dream-aero.loc/api/qui/eum/officiis'
       tags:
         - Endpoints
     parameters:
@@ -3206,7 +3206,7 @@ paths:
         in: path
         name: path
         description: ''
-        example: est
+        example: qui
         required: true
         schema:
           type: string
@@ -3214,7 +3214,7 @@ paths:
         in: path
         name: ext
         description: ''
-        example: facilis
+        example: eum
         required: true
         schema:
           type: string
@@ -3222,7 +3222,7 @@ paths:
         in: path
         name: name
         description: ''
-        example: harum
+        example: officiis
         required: true
         schema:
           type: string

@@ -1578,32 +1578,32 @@ endpoints:
         name: path
         description: ''
         required: true
-        example: est
+        example: qui
         type: string
       ext:
         name: ext
         description: ''
         required: true
-        example: facilis
+        example: eum
         type: string
       name:
         name: name
         description: ''
         required: true
-        example: harum
+        example: officiis
         type: string
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: aDd3gvhfcEaeb48Z6kV516P
+        example: vZcfPEh3846ed56aDVb1kag
         type: string
     bodyParameters: []
     responses:
       -
         status: 404
-        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/est\/facilis\/harum"}'
+        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/qui\/eum\/officiis"}'
         headers:
           content-type: application/json;charset=UTF-8
           charset: utf-8
