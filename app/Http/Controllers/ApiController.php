@@ -797,7 +797,7 @@ class ApiController extends Controller
 			return $this->responseError(null, 500);
 		}
 
-		$data = $contractor->data_json;
+		$data = json_decode($contractor->data_json, true);
 		$data['avatar'] = [
 			'name' => $file1Name,
 			'ext' => $file1Ext,
