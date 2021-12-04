@@ -119,6 +119,7 @@ class Contractor extends Authenticatable
 			$avatarFileExt = array_key_exists('ext', $avatar) ? $avatar['name'] : null;
 		}
 		
+		$base64 = '';
 		if ($avatarFileName && $avatarFileExt && Storage::disk('private')->exists('contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt)) {
 			$file = storage_path('app/private/contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt);
 			$type = pathinfo($file, PATHINFO_EXTENSION);
