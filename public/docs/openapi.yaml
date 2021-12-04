@@ -3323,6 +3323,145 @@ paths:
                     example: '<app_url>/api/<method>'
       tags:
         - Endpoints
+  /api/tariff/price:
+    get:
+      summary: 'Tariff Price'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: contractor_id
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: query
+          name: tariff_id
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"\",\n\t\"data\": {\n\t\t\"price\": 5500,\n\t}\n}"
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+      tags:
+        - Endpoints
 tags:
   -
     name: Endpoints

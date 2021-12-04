@@ -1644,3 +1644,74 @@ endpoints:
         headers: []
         description: '500, Internal Server Error'
     responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/tariff/price
+    metadata:
+      title: 'Tariff Price'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+      tariff_id:
+        name: tariff_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "",
+          	"data": {
+          		"price": 5500,
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []

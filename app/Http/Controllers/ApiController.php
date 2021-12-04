@@ -1138,13 +1138,59 @@ class ApiController extends Controller
 		return $this->responseSuccess(null, $data);
 	}
 	
+	/**
+	 * Tariff Price
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam contractor_id int required No-example
+	 * @queryParam tariff_id int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "",
+	 * 	"data": {
+	 * 		"price": 5500,
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function getTariffPrice() {
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
+		}
+		
+		$tariffId = $this->request->tariff_id;
+		if (!$tariffId) {
+			return $this->responseError('Не передан ID тарифа', 400);
+		}
+
+		$contractor = Contractor::find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$tariff = Tariff::find($tariffId);
+		if (!$tariff) {
+			return $this->responseError('Тариф не найден', 400);
+		}
+		
+		$price = $tariff->price ?: 0;
+		
+		if ($price && $contractor->discount) {
+			$price = round($price - $price * $contractor->discount / 100);
+		}
+		
+		return $this->responseSuccess(null, $price);
+	}
+
 	public function verifyCertificate() {
 	}
 	
 	public function verifyPromocode() {
-	}
-	
-	public function getPrice() {
 	}
 	
 	/**

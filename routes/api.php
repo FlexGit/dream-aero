@@ -37,6 +37,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('tariff_types', [ApiController::class, 'getTariffTypes']);
 		Route::get('tariffs', [ApiController::class, 'getTariffs']);
 		Route::get('tariff', [ApiController::class, 'getTariff']);
+		Route::get('tariff/price', [ApiController::class, 'getTariffPrice']);
 		Route::get('cities', [ApiController::class, 'getCities']);
 		Route::get('locations', [ApiController::class, 'getLocations']);
 		Route::get('legal_entities', [ApiController::class, 'getLegalEntities']);

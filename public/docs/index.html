@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3838,7 +3838,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\phpDA98.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\php9135.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3880,7 +3880,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\phpDA98.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php9135.tmp', 'r')
             ],
         ],
     ]
@@ -4247,6 +4247,208 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="number"
                name="contractor_id"
                data-endpoint="POSTapi-profile-avatar-delete"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                </form>
+
+            <h2 id="endpoints-GETapi-tariff-price">Tariff Price</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-tariff-price">
+<blockquote>Example request:</blockquote>
+
+
+<pre><code class="language-bash">curl --request GET \
+    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre>
+
+<pre><code class="language-javascript">const url = new URL(
+    "http://dev.dream-aero.ru/api/tariff/price"
+);
+
+const params = {
+    "api_key": "",
+    "contractor_id": "",
+    "tariff_id": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre>
+
+<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://dev.dream-aero.ru/api/tariff/price',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'contractor_id'=&gt; '',
+            'tariff_id'=&gt; '',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+</span>
+
+<span id="example-responses-GETapi-tariff-price">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;&quot;,
+	&quot;data&quot;: {
+		&quot;price&quot;: 5500,
+	}
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-tariff-price" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-tariff-price"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-tariff-price"></code></pre>
+</span>
+<span id="execution-error-GETapi-tariff-price" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-tariff-price"></code></pre>
+</span>
+<form id="form-GETapi-tariff-price" data-method="GET"
+      data-path="api/tariff/price"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-tariff-price', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-tariff-price"
+                    onclick="tryItOut('GETapi-tariff-price');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-tariff-price"
+                    onclick="cancelTryOut('GETapi-tariff-price');" hidden>Cancel
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-tariff-price" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/tariff/price</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="GETapi-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="contractor_id"
+               data-endpoint="GETapi-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>tariff_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="tariff_id"
+               data-endpoint="GETapi-tariff-price"
                value=""
                data-component="query" hidden>
     <br>
