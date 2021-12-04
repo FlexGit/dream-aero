@@ -3149,7 +3149,7 @@ paths:
                   description: ''
               required:
                 - file
-  '/api/avatar/{ext}/{name}':
+  '/api/profile/avatar/{ext}/{name}':
     get:
       summary: ''
       description: ''
@@ -3158,12 +3158,12 @@ paths:
           in: query
           name: api_key
           description: 'Authentication key.'
-          example: 5bfa3gka66hvePV4ZcED8d1
+          example: 36gVdDk5aec4Zh6P8fbaE1v
           required: true
           schema:
             type: string
             description: 'Authentication key.'
-            example: 5bfa3gka66hvePV4ZcED8d1
+            example: 36gVdDk5aec4Zh6P8fbaE1v
         -
           in: header
           name: Content-Type
@@ -3179,26 +3179,13 @@ paths:
           schema:
             type: string
       responses:
-        404:
+        200:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: false
-                  error: 'Ресурс не найден'
-                  debug: 'http://admin.dream-aero.loc/api/avatar/vitae/quibusdam'
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  error:
-                    type: string
-                    example: 'Ресурс не найден'
-                  debug:
-                    type: string
-                    example: 'http://admin.dream-aero.loc/api/avatar/vitae/quibusdam'
+                type: string
+                example: ''
       tags:
         - Endpoints
     parameters:
@@ -3206,7 +3193,7 @@ paths:
         in: path
         name: ext
         description: ''
-        example: vitae
+        example: ut
         required: true
         schema:
           type: string
@@ -3214,7 +3201,7 @@ paths:
         in: path
         name: name
         description: ''
-        example: quibusdam
+        example: corrupti
         required: true
         schema:
           type: string

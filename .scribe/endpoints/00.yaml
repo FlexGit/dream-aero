@@ -1565,7 +1565,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/avatar/{ext}/{name}'
+    uri: 'api/profile/avatar/{ext}/{name}'
     metadata:
       title: ''
       description: ''
@@ -1578,29 +1578,28 @@ endpoints:
         name: ext
         description: ''
         required: true
-        example: vitae
+        example: ut
         type: string
       name:
         name: name
         description: ''
         required: true
-        example: quibusdam
+        example: corrupti
         type: string
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: 5bfa3gka66hvePV4ZcED8d1
+        example: 36gVdDk5aec4Zh6P8fbaE1v
         type: string
     bodyParameters: []
     responses:
       -
-        status: 404
-        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/avatar\/vitae\/quibusdam"}'
+        status: 200
+        content: ''
         headers:
-          content-type: application/json;charset=UTF-8
-          charset: utf-8
+          content-type: 'text/html; charset=UTF-8'
           cache-control: 'no-cache, private'
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'

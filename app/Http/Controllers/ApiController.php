@@ -1322,8 +1322,8 @@ class ApiController extends Controller
 	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
 	 */
 	public function getAvatar($ext, $name) {
-		Log::debug($ext . ' - ' . $name);
-		if (!Storage::disk('private')->exists('contractor/avatar/' . $name . '.' . $ext)) {
+		Log::debug($name);
+		/*if (!Storage::disk('private')->exists('contractor/avatar/' . $name . '.' . $ext)) {
 			return abort(404);
 		}
 		
@@ -1331,6 +1331,6 @@ class ApiController extends Controller
 			'Cache-Control' => 'no-cache, no-store, must-revalidate',
 			'Pragma' => 'no-cache',
 			'Expires' => '0',
-		], null);
+		], null);*/
 	}
 }
