@@ -1184,7 +1184,11 @@ class ApiController extends Controller
 			$price = round($price - $price * $contractor->discount / 100);
 		}
 		
-		return $this->responseSuccess(null, $price);
+		$data = [
+			'price' => $price,
+		];
+		
+		return $this->responseSuccess(null, $data);
 	}
 
 	public function verifyCertificate() {
