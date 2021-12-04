@@ -1317,12 +1317,10 @@ class ApiController extends Controller
 	}
 	
 	/**
-	 * @param $ext
-	 * @param $name
 	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
 	 */
-	public function getAvatar($ext, $name) {
-		Log::debug($name);
+	public function getAvatar() {
+		Log::debug(1111111);
 		/*if (!Storage::disk('private')->exists('contractor/avatar/' . $name . '.' . $ext)) {
 			return abort(404);
 		}

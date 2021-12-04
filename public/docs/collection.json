@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "6ac8e550-912b-490a-a933-a553e8da0f03",
+        "_postman_id": "a59688a1-968b-4aaf-928f-d1de28e925a9",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1306,28 +1306,14 @@
                     ]
                 },
                 {
-                    "name": "api\/profile\/avatar\/{ext}\/{name}",
+                    "name": "api\/profile\/avatar",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "host": "{{baseUrl}}",
-                            "path": "api\/profile\/avatar\/:ext\/:name",
+                            "path": "api\/profile\/avatar",
                             "query": [],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/avatar\/:ext\/:name",
-                            "variable": [
-                                {
-                                    "id": "ext",
-                                    "key": "ext",
-                                    "value": "ut",
-                                    "description": ""
-                                },
-                                {
-                                    "id": "name",
-                                    "key": "name",
-                                    "value": "corrupti",
-                                    "description": ""
-                                }
-                            ]
+                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/avatar"
                         },
                         "method": "GET",
                         "header": [

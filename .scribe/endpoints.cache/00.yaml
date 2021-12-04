@@ -1567,7 +1567,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/profile/avatar/{ext}/{name}'
+    uri: api/profile/avatar
     metadata:
       title: ''
       description: ''
@@ -1575,25 +1575,13 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      ext:
-        name: ext
-        description: ''
-        required: true
-        example: ut
-        type: string
-      name:
-        name: name
-        description: ''
-        required: true
-        example: corrupti
-        type: string
+    urlParameters: []
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: 36gVdDk5aec4Zh6P8fbaE1v
+        example: hgV6b143PvfaDe6k8d5ZaEc
         type: string
     bodyParameters: []
     responses:

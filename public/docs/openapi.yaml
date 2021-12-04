@@ -3149,7 +3149,7 @@ paths:
                   description: ''
               required:
                 - file
-  '/api/profile/avatar/{ext}/{name}':
+  /api/profile/avatar:
     get:
       summary: ''
       description: ''
@@ -3158,12 +3158,12 @@ paths:
           in: query
           name: api_key
           description: 'Authentication key.'
-          example: 36gVdDk5aec4Zh6P8fbaE1v
+          example: hgV6b143PvfaDe6k8d5ZaEc
           required: true
           schema:
             type: string
             description: 'Authentication key.'
-            example: 36gVdDk5aec4Zh6P8fbaE1v
+            example: hgV6b143PvfaDe6k8d5ZaEc
         -
           in: header
           name: Content-Type
@@ -3188,23 +3188,6 @@ paths:
                 example: ''
       tags:
         - Endpoints
-    parameters:
-      -
-        in: path
-        name: ext
-        description: ''
-        example: ut
-        required: true
-        schema:
-          type: string
-      -
-        in: path
-        name: name
-        description: ''
-        example: corrupti
-        required: true
-        schema:
-          type: string
 tags:
   -
     name: Endpoints

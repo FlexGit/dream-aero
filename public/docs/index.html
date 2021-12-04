@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3838,7 +3838,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\php592B.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\php9B31.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3880,7 +3880,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php592B.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php9B31.tmp', 'r')
             ],
         ],
     ]
@@ -4049,7 +4049,7 @@ print_r(json_decode((string) $body));</code></pre>
         </p>
         </form>
 
-            <h2 id="endpoints-GETapi-profile-avatar--ext---name-">GET api/profile/avatar/{ext}/{name}</h2>
+            <h2 id="endpoints-GETapi-profile-avatar">GET api/profile/avatar</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -4057,21 +4057,21 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 
-<span id="example-requests-GETapi-profile-avatar--ext---name-">
+<span id="example-requests-GETapi-profile-avatar">
 <blockquote>Example request:</blockquote>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/profile/avatar/ut/corrupti?api_key=36gVdDk5aec4Zh6P8fbaE1v" \
+    --get "http://dev.dream-aero.ru/api/profile/avatar?api_key=hgV6b143PvfaDe6k8d5ZaEc" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/profile/avatar/ut/corrupti"
+    "http://dev.dream-aero.ru/api/profile/avatar"
 );
 
 const params = {
-    "api_key": "36gVdDk5aec4Zh6P8fbaE1v",
+    "api_key": "hgV6b143PvfaDe6k8d5ZaEc",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4088,14 +4088,14 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/profile/avatar/ut/corrupti',
+    'http://dev.dream-aero.ru/api/profile/avatar',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
-            'api_key'=&gt; '36gVdDk5aec4Zh6P8fbaE1v',
+            'api_key'=&gt; 'hgV6b143PvfaDe6k8d5ZaEc',
         ],
     ]
 );
@@ -4103,7 +4103,7 @@ $body = $response-&gt;getBody();
 print_r(json_decode((string) $body));</code></pre>
 </span>
 
-<span id="example-responses-GETapi-profile-avatar--ext---name-">
+<span id="example-responses-GETapi-profile-avatar">
             <blockquote>
             <p>Example response (200):</p>
         </blockquote>
@@ -4122,73 +4122,52 @@ access-control-allow-origin: *
 <code class="language-json"></code>
  </pre>
     </span>
-<span id="execution-results-GETapi-profile-avatar--ext---name-" hidden>
+<span id="execution-results-GETapi-profile-avatar" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-profile-avatar--ext---name-"></span>:
+                id="execution-response-status-GETapi-profile-avatar"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-profile-avatar--ext---name-"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-profile-avatar"></code></pre>
 </span>
-<span id="execution-error-GETapi-profile-avatar--ext---name-" hidden>
+<span id="execution-error-GETapi-profile-avatar" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-profile-avatar--ext---name-"></code></pre>
+    <pre><code id="execution-error-message-GETapi-profile-avatar"></code></pre>
 </span>
-<form id="form-GETapi-profile-avatar--ext---name-" data-method="GET"
-      data-path="api/profile/avatar/{ext}/{name}"
+<form id="form-GETapi-profile-avatar" data-method="GET"
+      data-path="api/profile/avatar"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-profile-avatar--ext---name-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-profile-avatar', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-profile-avatar--ext---name-"
-                    onclick="tryItOut('GETapi-profile-avatar--ext---name-');">Try it out ⚡
+                    id="btn-tryout-GETapi-profile-avatar"
+                    onclick="tryItOut('GETapi-profile-avatar');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-profile-avatar--ext---name-"
-                    onclick="cancelTryOut('GETapi-profile-avatar--ext---name-');" hidden>Cancel
+                    id="btn-canceltryout-GETapi-profile-avatar"
+                    onclick="cancelTryOut('GETapi-profile-avatar');" hidden>Cancel
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-profile-avatar--ext---name-" hidden>Send Request 💥
+                    id="btn-executetryout-GETapi-profile-avatar" hidden>Send Request 💥
             </button>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/profile/avatar/{ext}/{name}</code></b>
+            <b><code>api/profile/avatar</code></b>
         </p>
-                    <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <p>
-                <b><code>ext</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="ext"
-               data-endpoint="GETapi-profile-avatar--ext---name-"
-               value="ut"
-               data-component="url" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="name"
-               data-endpoint="GETapi-profile-avatar--ext---name-"
-               value="corrupti"
-               data-component="url" hidden>
-    <br>
-
-            </p>
                         <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                     <p>
                 <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="api_key"
-               data-endpoint="GETapi-profile-avatar--ext---name-"
-               value="36gVdDk5aec4Zh6P8fbaE1v"
+               data-endpoint="GETapi-profile-avatar"
+               value="hgV6b143PvfaDe6k8d5ZaEc"
                data-component="query" hidden>
     <br>
 <p>Authentication key.</p>
