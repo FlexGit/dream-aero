@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
 			$table->integer('city_id')->default(0)->index()->comment('город, в котором действует продукт');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->integer('price')->default(0)->comment('базовая цена продукта');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
         });
     }

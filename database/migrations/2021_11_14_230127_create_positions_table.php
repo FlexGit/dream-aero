@@ -17,7 +17,7 @@ class CreatePositionsTable extends Migration
             $table->id();
 			$table->integer('order_id')->default(0)->index()->comment('заказ');
 			$table->integer('product_id')->default(0)->index()->comment('продукт');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
         });
     }

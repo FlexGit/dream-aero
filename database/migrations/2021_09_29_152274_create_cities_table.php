@@ -17,7 +17,7 @@ class CreateCitiesTable extends Migration
             $table->id();
             $table->string('name', 50)->comment('наименование города');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация: часовой пояс');
+			$table->text('data_json')->nullable()->comment('дополнительная информация: часовой пояс');
             $table->timestamps();
         });
     }

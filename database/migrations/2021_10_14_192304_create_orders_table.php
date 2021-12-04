@@ -29,7 +29,7 @@ class CreateOrdersTable extends Migration
 			$table->timestamp('certificate_sent_at')->nullable()->comment('последняя дата отправки сертификата на e-mail');
 			$table->integer('created_by_user_id')->default(0)->index()->comment('пользователь, создавший заказ');
 			$table->integer('updated_by_user_id')->default(0)->index()->comment('пользователь, изменивший последним заказ');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация: комментарий к бронированию, имя получателя сертификата, адрес доставки сертификата, комментарий по доставке сертификата');
+			$table->text('data_json')->nullable()->comment('дополнительная информация: комментарий к бронированию, имя получателя сертификата, адрес доставки сертификата, комментарий по доставке сертификата');
             $table->timestamps();
         });
     }

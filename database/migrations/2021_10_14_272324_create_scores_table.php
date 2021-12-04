@@ -18,7 +18,7 @@ class CreateScoresTable extends Migration
 			$table->integer('contractor_id')->default(0)->index()->comment('контрагент, которому начислены баллы');
 			$table->integer('score')->default(0)->comment('сумма баллов');
 			$table->integer('created_by_user_id')->default(0)->index()->comment('пользователь, начисливший баллы');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация: комментарий');
+			$table->text('data_json')->nullable()->comment('дополнительная информация: комментарий');
             $table->timestamps();
         });
     }

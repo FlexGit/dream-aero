@@ -19,7 +19,7 @@ class CreatePaymentsTable extends Migration
 			$table->integer('sum')->default(0)->comment('сумма платежа');
 			$table->timestamp('performed_at')->nullable()->comment('дата проведения платежа шлюзом или ОФД');
 			$table->integer('order_id')->default(0)->index()->comment('заказ, к которому привязан платеж');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация: ОФД - номер смены, состав позиций, номер ФД, №пп, оператор. Шлюз - ');
+			$table->text('data_json')->nullable()->comment('дополнительная информация: ОФД - номер смены, состав позиций, номер ФД, №пп, оператор. Шлюз - ');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
         });

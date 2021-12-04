@@ -23,7 +23,7 @@ class CreateTariffsTable extends Migration
 			$table->integer('price')->default(0)->comment('базовая цена продукта');
 			$table->boolean('is_hit')->default(0)->comment('является ли продукт хитом продаж');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();
         });

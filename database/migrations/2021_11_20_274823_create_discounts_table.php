@@ -20,7 +20,7 @@ class CreateDiscountsTable extends Migration
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->timestamp('active_from_at')->nullable()->comment('дата начала активнсти');
 			$table->timestamp('active_to_at')->nullable()->comment('дата окончания активнсти');
-			$table->text('data_json')->default('[]')->comment('дополнительная информация');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
         });
     }
