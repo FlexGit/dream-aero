@@ -1567,7 +1567,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/file/{path}/{ext}/{name}'
+    uri: 'api/avatar/{ext}/{name}'
     metadata:
       title: ''
       description: ''
@@ -1576,36 +1576,30 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      path:
-        name: path
-        description: ''
-        required: true
-        example: 13
-        type: integer
       ext:
         name: ext
         description: ''
         required: true
-        example: id
+        example: vitae
         type: string
       name:
         name: name
         description: ''
         required: true
-        example: et
+        example: quibusdam
         type: string
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: 356Ze1ahPvcVD4adg68kfEb
+        example: 5bfa3gka66hvePV4ZcED8d1
         type: string
     bodyParameters: []
     responses:
       -
         status: 404
-        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/file\/13\/id\/et"}'
+        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/avatar\/vitae\/quibusdam"}'
         headers:
           content-type: application/json;charset=UTF-8
           charset: utf-8

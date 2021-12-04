@@ -3149,7 +3149,7 @@ paths:
                   description: ''
               required:
                 - file
-  '/api/file/{path}/{ext}/{name}':
+  '/api/avatar/{ext}/{name}':
     get:
       summary: ''
       description: ''
@@ -3158,12 +3158,12 @@ paths:
           in: query
           name: api_key
           description: 'Authentication key.'
-          example: 356Ze1ahPvcVD4adg68kfEb
+          example: 5bfa3gka66hvePV4ZcED8d1
           required: true
           schema:
             type: string
             description: 'Authentication key.'
-            example: 356Ze1ahPvcVD4adg68kfEb
+            example: 5bfa3gka66hvePV4ZcED8d1
         -
           in: header
           name: Content-Type
@@ -3188,7 +3188,7 @@ paths:
                 example:
                   success: false
                   error: 'Ресурс не найден'
-                  debug: 'http://admin.dream-aero.loc/api/file/13/id/et'
+                  debug: 'http://admin.dream-aero.loc/api/avatar/vitae/quibusdam'
                 properties:
                   success:
                     type: boolean
@@ -3198,23 +3198,15 @@ paths:
                     example: 'Ресурс не найден'
                   debug:
                     type: string
-                    example: 'http://admin.dream-aero.loc/api/file/13/id/et'
+                    example: 'http://admin.dream-aero.loc/api/avatar/vitae/quibusdam'
       tags:
         - Endpoints
     parameters:
       -
         in: path
-        name: path
-        description: ''
-        example: 13
-        required: true
-        schema:
-          type: integer
-      -
-        in: path
         name: ext
         description: ''
-        example: id
+        example: vitae
         required: true
         schema:
           type: string
@@ -3222,7 +3214,7 @@ paths:
         in: path
         name: name
         description: ''
-        example: et
+        example: quibusdam
         required: true
         schema:
           type: string

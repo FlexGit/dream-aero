@@ -1317,18 +1317,17 @@ class ApiController extends Controller
 	}
 	
 	/**
-	 * @param $path
 	 * @param $ext
 	 * @param $name
 	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
 	 */
-	public function getContractorFile($path, $ext, $name) {
-		Log::debug($path . ' - ' . $ext . ' - ' . $name);
-		if (!Storage::disk('private')->exists('contractor/' . $path . '/' . $name . '.' . $ext)) {
+	public function getAvatar($ext, $name) {
+		Log::debug($ext . ' - ' . $name);
+		if (!Storage::disk('private')->exists('contractor/avatar/' . $name . '.' . $ext)) {
 			return abort(404);
 		}
 		
-		return response()->download(storage_path('app/private/contractor/' . $path . '/' . $name . '.' . $ext), null, [
+		return response()->download(storage_path('app/private/contractor/avatar/' . $name . '.' . $ext), null, [
 			'Cache-Control' => 'no-cache, no-store, must-revalidate',
 			'Pragma' => 'no-cache',
 			'Expires' => '0',
