@@ -33,6 +33,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::post('profile/delete', [ApiController::class, 'deleteProfile']);
 		Route::get('profile/reset', [ApiController::class, 'resetProfile']);
 		Route::post('profile/avatar/save', [ApiController::class, 'saveAvatar']);
+		Route::post('profile/avatar/delete', [ApiController::class, 'deleteAvatar']);
 		Route::get('tariff_types', [ApiController::class, 'getTariffTypes']);
 		Route::get('tariffs', [ApiController::class, 'getTariffs']);
 		Route::get('tariff', [ApiController::class, 'getTariff']);

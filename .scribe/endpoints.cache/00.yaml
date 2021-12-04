@@ -1564,3 +1564,83 @@ endpoints:
         headers: []
         description: '500, Internal Server Error'
     responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/profile/avatar/delete
+    metadata:
+      title: 'Avatar delete'
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      contractor_id:
+        name: contractor_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Файл успешно удален",
+          	"data": {
+          		"id": 1,
+          		"name": "John",
+          		"lastname": "Smith",
+          		"email": "john.smith@gmail.com",
+          		"phone": null,
+          		"city_id": 1,
+          		"discount": 5,
+          	"birthdate": "1990-01-01",
+          		"avatar_file_base64": null,
+          		"flight_time": 100,
+          		"score": 10000,
+          		"status": "Золотой",
+          		"is_active": true,
+          		"last_auth_at": "2021-01-01 12:00:00",
+          		"created_at": "2021-01-01 12:00:00",
+          		"updated_at": "2021-01-01 12:00:00"
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
