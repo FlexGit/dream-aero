@@ -913,6 +913,11 @@ class ApiController extends Controller
 		}
 		
 		$data = json_decode($contractor->data_json, true);
+		
+		if (!array_key_exists('avatar', $data)) {
+			return $this->responseError('Файл не найден', 400);
+		}
+		
 		unset($data['avatar']);
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
