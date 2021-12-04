@@ -3149,21 +3149,31 @@ paths:
                   description: ''
               required:
                 - file
-  /api/profile/avatar:
+  '/api/profile/avatar/{ext}/{name}':
     get:
-      summary: ''
+      summary: Avatar
       description: ''
       parameters:
         -
           in: query
           name: api_key
-          description: 'Authentication key.'
-          example: hgV6b143PvfaDe6k8d5ZaEc
+          description: ''
+          example: null
           required: true
           schema:
             type: string
-            description: 'Authentication key.'
-            example: hgV6b143PvfaDe6k8d5ZaEc
+            description: ''
+            example: null
+        -
+          in: query
+          name: contractor_id
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: integer
+            description: ''
+            example: null
         -
           in: header
           name: Content-Type
@@ -3180,14 +3190,126 @@ paths:
             type: string
       responses:
         200:
-          description: ''
+          description: success
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: ''
+                type: object
+                example:
+                  success: true
+                  message: null
+                  data:
+                    file_base64: null
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: null
+                  data:
+                    type: object
+                    example:
+                      file_base64: null
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
       tags:
         - Endpoints
+    parameters:
+      -
+        in: path
+        name: ext
+        description: ''
+        example: qui
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: name
+        description: ''
+        example: aut
+        required: true
+        schema:
+          type: string
 tags:
   -
     name: Endpoints

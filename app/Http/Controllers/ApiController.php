@@ -1317,18 +1317,36 @@ class ApiController extends Controller
 	}
 	
 	/**
-	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+	 * Avatar
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam contractor_id int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": {
+	 *		"file_base64": null
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getAvatar() {
-		Log::debug(1111111);
-		/*if (!Storage::disk('private')->exists('contractor/avatar/' . $name . '.' . $ext)) {
-			return abort(404);
+	public function getAvatar($ext, $name) {
+		if (!Storage::disk('private')->exists('contractor/avatar/' . $name . '.' . $ext)) {
+			return $this->responseError(null, 404);
 		}
 		
-		return response()->download(storage_path('app/private/contractor/avatar/' . $name . '.' . $ext), null, [
-			'Cache-Control' => 'no-cache, no-store, must-revalidate',
-			'Pragma' => 'no-cache',
-			'Expires' => '0',
-		], null);*/
+		$file = storage_path('app/private/contractor/avatar/' . $name . '.' . $ext);
+		$type = pathinfo($file, PATHINFO_EXTENSION);
+		$fileData = file_get_contents($file);
+		$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);
+		
+		$data = [
+			'file_base64' => $base64,
+		];
+		
+		return $this->responseSuccess(null, $data);
 	}
 }
