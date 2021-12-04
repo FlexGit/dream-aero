@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3838,7 +3838,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\php96DB.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\php6B7.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3880,7 +3880,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php96DB.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php6B7.tmp', 'r')
             ],
         ],
     ]

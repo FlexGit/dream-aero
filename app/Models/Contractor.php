@@ -114,10 +114,8 @@ class Contractor extends Authenticatable
 		$data = json_decode($this->data_json, true);
 		
 		$avatar = array_key_exists('avatar', $data) ? $data['avatar'] : null;
-		if ($avatar) {
-			$avatarFileName = array_key_exists('name', $avatar) ? $avatar['name'] : null;
-			$avatarFileExt = array_key_exists('ext', $avatar) ? $avatar['ext'] : null;
-		}
+		$avatarFileName = ($avatar && array_key_exists('name', $avatar)) ? $avatar['name'] : null;
+		$avatarFileExt = ($avatar && array_key_exists('ext', $avatar)) ? $avatar['ext'] : null;
 
 		$base64 = '';
 		if ($avatarFileName && $avatarFileExt && Storage::disk('private')->exists('contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt)) {
