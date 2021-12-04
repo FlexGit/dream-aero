@@ -3149,7 +3149,7 @@ paths:
                   description: ''
               required:
                 - file
-  '/api/{path}/{ext}/{name}':
+  '/api/file/{path}/{ext}/{name}':
     get:
       summary: ''
       description: ''
@@ -3158,12 +3158,12 @@ paths:
           in: query
           name: api_key
           description: 'Authentication key.'
-          example: 6185bcPaZehDkg4a36EvVfd
+          example: 4V66cvEhd3e5aaP8Dgb1Zfk
           required: true
           schema:
             type: string
             description: 'Authentication key.'
-            example: 6185bcPaZehDkg4a36EvVfd
+            example: 4V66cvEhd3e5aaP8Dgb1Zfk
         -
           in: header
           name: Content-Type
@@ -3188,7 +3188,7 @@ paths:
                 example:
                   success: false
                   error: 'Ресурс не найден'
-                  debug: 'http://admin.dream-aero.loc/api/quo/non/est'
+                  debug: 'http://admin.dream-aero.loc/api/file/9/fugiat/alias'
                 properties:
                   success:
                     type: boolean
@@ -3198,7 +3198,7 @@ paths:
                     example: 'Ресурс не найден'
                   debug:
                     type: string
-                    example: 'http://admin.dream-aero.loc/api/quo/non/est'
+                    example: 'http://admin.dream-aero.loc/api/file/9/fugiat/alias'
       tags:
         - Endpoints
     parameters:
@@ -3206,15 +3206,15 @@ paths:
         in: path
         name: path
         description: ''
-        example: quo
+        example: 9
         required: true
         schema:
-          type: string
+          type: integer
       -
         in: path
         name: ext
         description: ''
-        example: non
+        example: fugiat
         required: true
         schema:
           type: string
@@ -3222,7 +3222,7 @@ paths:
         in: path
         name: name
         description: ''
-        example: est
+        example: alias
         required: true
         schema:
           type: string

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "0d553216-cc7a-4302-8fd2-e170da7f9198",
+        "_postman_id": "40093589-7293-4fbb-b78f-b3c5e4146b20",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1306,31 +1306,31 @@
                     ]
                 },
                 {
-                    "name": "api\/{path}\/{ext}\/{name}",
+                    "name": "api\/file\/{path}\/{ext}\/{name}",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "host": "{{baseUrl}}",
-                            "path": "api\/:path\/:ext\/:name",
+                            "path": "api\/file\/:path\/:ext\/:name",
                             "query": [],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/:path\/:ext\/:name",
+                            "raw": "http:\/\/{{baseUrl}}\/api\/file\/:path\/:ext\/:name",
                             "variable": [
                                 {
                                     "id": "path",
                                     "key": "path",
-                                    "value": "quo",
+                                    "value": "9",
                                     "description": ""
                                 },
                                 {
                                     "id": "ext",
                                     "key": "ext",
-                                    "value": "non",
+                                    "value": "fugiat",
                                     "description": ""
                                 },
                                 {
                                     "id": "name",
                                     "key": "name",
-                                    "value": "est",
+                                    "value": "alias",
                                     "description": ""
                                 }
                             ]
@@ -1378,7 +1378,7 @@
                                 }
                             ],
                             "code": 404,
-                            "body": "{\"success\":false,\"error\":\"\u0420\u0435\u0441\u0443\u0440\u0441 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\",\"debug\":\"http:\\\/\\\/admin.dream-aero.loc\\\/api\\\/quo\\\/non\\\/est\"}",
+                            "body": "{\"success\":false,\"error\":\"\u0420\u0435\u0441\u0443\u0440\u0441 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\",\"debug\":\"http:\\\/\\\/admin.dream-aero.loc\\\/api\\\/file\\\/9\\\/fugiat\\\/alias\"}",
                             "name": ""
                         }
                     ]

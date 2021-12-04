@@ -1565,7 +1565,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/{path}/{ext}/{name}'
+    uri: 'api/file/{path}/{ext}/{name}'
     metadata:
       title: ''
       description: ''
@@ -1578,32 +1578,32 @@ endpoints:
         name: path
         description: ''
         required: true
-        example: quo
-        type: string
+        example: 9
+        type: integer
       ext:
         name: ext
         description: ''
         required: true
-        example: non
+        example: fugiat
         type: string
       name:
         name: name
         description: ''
         required: true
-        example: est
+        example: alias
         type: string
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: 6185bcPaZehDkg4a36EvVfd
+        example: 4V66cvEhd3e5aaP8Dgb1Zfk
         type: string
     bodyParameters: []
     responses:
       -
         status: 404
-        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/quo\/non\/est"}'
+        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/file\/9\/fugiat\/alias"}'
         headers:
           content-type: application/json;charset=UTF-8
           charset: utf-8
