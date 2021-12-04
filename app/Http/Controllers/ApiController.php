@@ -810,7 +810,13 @@ class ApiController extends Controller
 	 *				"created_at": "2021-01-01 12:00:00",
 	 *				"updated_at": "2021-01-01 12:00:00"
 	 *			},
-	 *			"employee": null,
+	 *			"employee": {
+	 *				"id": 1,
+	 * 				"name": "John Smith",
+	 * 				"photo_path": null,
+	 * 				"icon_path": null,
+	 * 				"instagram": null
+	 * 			},
 	 *			"city": {
 	 *				"id": 1,
 	 *				"name": "Москва",
@@ -890,7 +896,13 @@ class ApiController extends Controller
 	 *			"created_at": "2021-01-01 12:00:00",
 	 *			"updated_at": "2021-01-01 12:00:00"
 	 *		},
-	 *		"employee": null,
+	 *		"employee": {
+	 *			"id": 1,
+	 * 			"name": "John Smith",
+	 * 			"photo_path": null,
+	 * 			"icon_path": null,
+	 * 			"instagram": null
+	 * 		},
 	 *		"city": {
 	 *			"id": 1,
 	 *			"name": "Москва",
