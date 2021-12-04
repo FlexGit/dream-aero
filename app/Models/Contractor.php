@@ -113,6 +113,19 @@ class Contractor extends Authenticatable
 	public function format() {
 		$data = json_decode($this->data_json, true);
 		
+		$avatar = array_key_exists('avatar', $data) ? $data['avatar'] : null;
+		if ($avatar) {
+			$avatarFileName = array_key_exists('name', $avatar) ? $avatar['name'] : null;
+			$avatarFileExt = array_key_exists('ext', $avatar) ? $avatar['name'] : null;
+		}
+		
+		if ($avatarFileName && $avatarFileExt && Storage::disk('private')->exists('contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt)) {
+			$file = storage_path('app/private/contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt);
+			$type = pathinfo($file, PATHINFO_EXTENSION);
+			$fileData = file_get_contents($file);
+			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);
+		}
+		
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
@@ -122,10 +135,7 @@ class Contractor extends Authenticatable
 			'city_id' => $this->city_id,
 			'discount' => $this->discount,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
-			'avatar' => [
-				'ext' => (array_key_exists('avatar', $data) && $data['avatar'] && $data['avatar']['ext']) ? $data['avatar']['ext'] : null,
-				'name' => (array_key_exists('avatar', $data) && $data['avatar'] && $data['avatar']['name']) ? $data['avatar']['name'] : null,
-			],
+			'avatar_file' => $base64 ?: null,
 			'flight_time' => null,
 			'score' => null,
 			'status' => null,

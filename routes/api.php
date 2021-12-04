@@ -31,6 +31,8 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('profile', [ApiController::class, 'getProfile']);
 		Route::post('profile/save', [ApiController::class, 'saveProfile']);
 		Route::post('profile/delete', [ApiController::class, 'deleteProfile']);
+		Route::get('profile/reset', [ApiController::class, 'resetProfile']);
+		Route::post('profile/avatar/save', [ApiController::class, 'saveAvatar']);
 		Route::get('tariff_types', [ApiController::class, 'getTariffTypes']);
 		Route::get('tariffs', [ApiController::class, 'getTariffs']);
 		Route::get('tariff', [ApiController::class, 'getTariff']);
@@ -39,8 +41,5 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('legal_entities', [ApiController::class, 'getLegalEntities']);
 		Route::get('promos', [ApiController::class, 'getPromos']);
 		Route::get('promo', [ApiController::class, 'getPromo']);
-		Route::get('profile/reset', [ApiController::class, 'resetProfile']);
-		Route::post('profile/avatar/save', [ApiController::class, 'saveAvatar']);
-		Route::get('profile/avatar', [ApiController::class, 'getAvatar']);
 	});
 });
