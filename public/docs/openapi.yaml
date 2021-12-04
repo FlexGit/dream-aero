@@ -3158,12 +3158,12 @@ paths:
           in: query
           name: api_key
           description: 'Authentication key.'
-          example: gvf83ck1adZ54ahV6E6PbeD
+          example: 6185bcPaZehDkg4a36EvVfd
           required: true
           schema:
             type: string
             description: 'Authentication key.'
-            example: gvf83ck1adZ54ahV6E6PbeD
+            example: 6185bcPaZehDkg4a36EvVfd
         -
           in: header
           name: Content-Type
@@ -3188,7 +3188,7 @@ paths:
                 example:
                   success: false
                   error: 'Ресурс не найден'
-                  debug: 'http://admin.dream-aero.loc/api/qui/incidunt/repellat'
+                  debug: 'http://admin.dream-aero.loc/api/quo/non/est'
                 properties:
                   success:
                     type: boolean
@@ -3198,7 +3198,7 @@ paths:
                     example: 'Ресурс не найден'
                   debug:
                     type: string
-                    example: 'http://admin.dream-aero.loc/api/qui/incidunt/repellat'
+                    example: 'http://admin.dream-aero.loc/api/quo/non/est'
       tags:
         - Endpoints
     parameters:
@@ -3206,7 +3206,7 @@ paths:
         in: path
         name: path
         description: ''
-        example: qui
+        example: quo
         required: true
         schema:
           type: string
@@ -3214,7 +3214,7 @@ paths:
         in: path
         name: ext
         description: ''
-        example: incidunt
+        example: non
         required: true
         schema:
           type: string
@@ -3222,7 +3222,7 @@ paths:
         in: path
         name: name
         description: ''
-        example: repellat
+        example: est
         required: true
         schema:
           type: string

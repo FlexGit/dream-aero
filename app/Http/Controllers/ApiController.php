@@ -1323,6 +1323,7 @@ class ApiController extends Controller
 	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
 	 */
 	public function getContractorFile($path, $ext, $name) {
+		Log::debug($path . ' - ' . $ext . ' - ' . $name);
 		if (!Storage::disk('private')->exists('contractor/' . $path . '/' . $name . '.' . $ext)) {
 			return abort(404);
 		}

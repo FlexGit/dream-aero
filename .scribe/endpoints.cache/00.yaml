@@ -1580,32 +1580,32 @@ endpoints:
         name: path
         description: ''
         required: true
-        example: qui
+        example: quo
         type: string
       ext:
         name: ext
         description: ''
         required: true
-        example: incidunt
+        example: non
         type: string
       name:
         name: name
         description: ''
         required: true
-        example: repellat
+        example: est
         type: string
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: gvf83ck1adZ54ahV6E6PbeD
+        example: 6185bcPaZehDkg4a36EvVfd
         type: string
     bodyParameters: []
     responses:
       -
         status: 404
-        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/qui\/incidunt\/repellat"}'
+        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/quo\/non\/est"}'
         headers:
           content-type: application/json;charset=UTF-8
           charset: utf-8

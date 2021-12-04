@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3838,7 +3838,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\php25A4.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\phpC41E.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3880,7 +3880,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php25A4.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\phpC41E.tmp', 'r')
             ],
         ],
     ]
@@ -4062,16 +4062,16 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/qui/incidunt/repellat?api_key=gvf83ck1adZ54ahV6E6PbeD" \
+    --get "http://dev.dream-aero.ru/api/quo/non/est?api_key=6185bcPaZehDkg4a36EvVfd" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/qui/incidunt/repellat"
+    "http://dev.dream-aero.ru/api/quo/non/est"
 );
 
 const params = {
-    "api_key": "gvf83ck1adZ54ahV6E6PbeD",
+    "api_key": "6185bcPaZehDkg4a36EvVfd",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4088,14 +4088,14 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/qui/incidunt/repellat',
+    'http://dev.dream-aero.ru/api/quo/non/est',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
-            'api_key'=&gt; 'gvf83ck1adZ54ahV6E6PbeD',
+            'api_key'=&gt; '6185bcPaZehDkg4a36EvVfd',
         ],
     ]
 );
@@ -4123,7 +4123,7 @@ access-control-allow-origin: *
 <code class="language-json">{
     &quot;success&quot;: false,
     &quot;error&quot;: &quot;Ресурс не найден&quot;,
-    &quot;debug&quot;: &quot;http://admin.dream-aero.loc/api/qui/incidunt/repellat&quot;
+    &quot;debug&quot;: &quot;http://admin.dream-aero.loc/api/quo/non/est&quot;
 }</code>
  </pre>
     </span>
@@ -4172,7 +4172,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="path"
                data-endpoint="GETapi--path---ext---name-"
-               value="qui"
+               value="quo"
                data-component="url" hidden>
     <br>
 
@@ -4182,7 +4182,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="ext"
                data-endpoint="GETapi--path---ext---name-"
-               value="incidunt"
+               value="non"
                data-component="url" hidden>
     <br>
 
@@ -4192,7 +4192,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="name"
                data-endpoint="GETapi--path---ext---name-"
-               value="repellat"
+               value="est"
                data-component="url" hidden>
     <br>
 
@@ -4203,7 +4203,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="api_key"
                data-endpoint="GETapi--path---ext---name-"
-               value="gvf83ck1adZ54ahV6E6PbeD"
+               value="6185bcPaZehDkg4a36EvVfd"
                data-component="query" hidden>
     <br>
 <p>Authentication key.</p>
