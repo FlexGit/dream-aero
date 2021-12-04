@@ -1322,12 +1322,12 @@ class ApiController extends Controller
 	 * @param $name
 	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
 	 */
-	public function getFile($path, $ext, $name) {
-		if (!Storage::disk('private')->exists( $path . '/' . $name . '.' . $ext)) {
+	public function getContractorFile($path, $ext, $name) {
+		if (!Storage::disk('private')->exists('contractor/' . $path . '/' . $name . '.' . $ext)) {
 			return abort(404);
 		}
 		
-		return response()->download(storage_path('app/private/' . $path . '/' . $name . '.' . $ext), null, [
+		return response()->download(storage_path('app/private/contractor/' . $path . '/' . $name . '.' . $ext), null, [
 			'Cache-Control' => 'no-cache, no-store, must-revalidate',
 			'Pragma' => 'no-cache',
 			'Expires' => '0',

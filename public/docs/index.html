@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3838,7 +3838,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\phpFA0C.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\php25A4.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3880,7 +3880,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\phpFA0C.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php25A4.tmp', 'r')
             ],
         ],
     ]
@@ -4062,16 +4062,16 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/qui/eum/officiis?api_key=vZcfPEh3846ed56aDVb1kag" \
+    --get "http://dev.dream-aero.ru/api/qui/incidunt/repellat?api_key=gvf83ck1adZ54ahV6E6PbeD" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/qui/eum/officiis"
+    "http://dev.dream-aero.ru/api/qui/incidunt/repellat"
 );
 
 const params = {
-    "api_key": "vZcfPEh3846ed56aDVb1kag",
+    "api_key": "gvf83ck1adZ54ahV6E6PbeD",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4088,14 +4088,14 @@ fetch(url, {
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/qui/eum/officiis',
+    'http://dev.dream-aero.ru/api/qui/incidunt/repellat',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
-            'api_key'=&gt; 'vZcfPEh3846ed56aDVb1kag',
+            'api_key'=&gt; 'gvf83ck1adZ54ahV6E6PbeD',
         ],
     ]
 );
@@ -4123,7 +4123,7 @@ access-control-allow-origin: *
 <code class="language-json">{
     &quot;success&quot;: false,
     &quot;error&quot;: &quot;Ресурс не найден&quot;,
-    &quot;debug&quot;: &quot;http://admin.dream-aero.loc/api/qui/eum/officiis&quot;
+    &quot;debug&quot;: &quot;http://admin.dream-aero.loc/api/qui/incidunt/repellat&quot;
 }</code>
  </pre>
     </span>
@@ -4182,7 +4182,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="ext"
                data-endpoint="GETapi--path---ext---name-"
-               value="eum"
+               value="incidunt"
                data-component="url" hidden>
     <br>
 
@@ -4192,7 +4192,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="name"
                data-endpoint="GETapi--path---ext---name-"
-               value="officiis"
+               value="repellat"
                data-component="url" hidden>
     <br>
 
@@ -4203,7 +4203,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="api_key"
                data-endpoint="GETapi--path---ext---name-"
-               value="vZcfPEh3846ed56aDVb1kag"
+               value="gvf83ck1adZ54ahV6E6PbeD"
                data-component="query" hidden>
     <br>
 <p>Authentication key.</p>

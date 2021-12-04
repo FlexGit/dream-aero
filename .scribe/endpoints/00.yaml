@@ -1584,26 +1584,26 @@ endpoints:
         name: ext
         description: ''
         required: true
-        example: eum
+        example: incidunt
         type: string
       name:
         name: name
         description: ''
         required: true
-        example: officiis
+        example: repellat
         type: string
     queryParameters:
       api_key:
         name: api_key
         description: 'Authentication key.'
         required: true
-        example: vZcfPEh3846ed56aDVb1kag
+        example: gvf83ck1adZ54ahV6E6PbeD
         type: string
     bodyParameters: []
     responses:
       -
         status: 404
-        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/qui\/eum\/officiis"}'
+        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/qui\/incidunt\/repellat"}'
         headers:
           content-type: application/json;charset=UTF-8
           charset: utf-8
