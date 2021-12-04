@@ -72,9 +72,9 @@ class Employee extends Model
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
-			'photo_path' => isset($this->data_json['photo_file_path']) ? \URL::to('/upload/' . $this->data_json['photo_file_path']) : null,
-			'icon_path' => $this->data_json['icon_file_path'] ? \URL::to('/upload/' . $this->data_json['icon_file_path']) : null,
-			'instagram' => isset($this->data_json['instagram']) ? $this->data_json['instagram'] : null,
+			'photo_path' => (array_key_exists('photo_file_path', $this->data_json) && $this->data_json['photo_file_path']) ? \URL::to('/upload/' . $this->data_json['photo_file_path']) : null,
+			'icon_path' => (array_key_exists('icon_file_path', $this->data_json) && $this->data_json['icon_file_path']) ? \URL::to('/upload/' . $this->data_json['icon_file_path']) : null,
+			'instagram' => array_key_exists('instagram', $this->data_json) ? $this->data_json['instagram'] : null,
 		];
 	}
 }
