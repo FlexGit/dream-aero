@@ -15,9 +15,9 @@ class CreateDiscountsCitiesTable extends Migration
     {
         Schema::create('discounts_cities', function (Blueprint $table) {
             $table->id();
-			$table->integer('discount_id')->default(0)->index();
+			$table->unsignedBigInteger('discount_id')->nullable(false)->index();
 			$table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
-			$table->integer('city_id')->default(0)->index();
+			$table->unsignedBigInteger('city_id')->nullable(false)->index();
 			$table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
         });
     }
