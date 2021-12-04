@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Contractor
@@ -110,8 +111,6 @@ class Contractor extends Authenticatable
 	}
 	
 	public function format() {
-		$data = json_decode($this->data_json, true);
-		
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
@@ -121,7 +120,7 @@ class Contractor extends Authenticatable
 			'city_id' => $this->city_id,
 			'discount' => $this->discount,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
-			'avatar' => $data['avatar'] ?? null,
+			'avatar_path' => (array_key_exists('avatar', $this->data_json) && $this->data_json['avatar'] && !Storage::disk('private')->exists( 'contractor/avatar/' . $this->data_json['avatar']['name'] . '.' . $this->data_json['avatar']['ext'])) ? \URL::to('/avatar/' . $this->data_json['avatar']['ext'] . '/' . $this->data_json['avatar']['name']) : null,
 			'flight_time' => null,
 			'score' => null,
 			'status' => null,

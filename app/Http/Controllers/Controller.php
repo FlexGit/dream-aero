@@ -25,5 +25,6 @@ class Controller extends BaseController
 		'digits' => 'Должно быть :digits цифры',
 		'valid_city' => 'Город не найден',
 		'valid_phone' => 'Некорректный формат',
+		'image' => 'Некорректный тип файла',
 	];
 }

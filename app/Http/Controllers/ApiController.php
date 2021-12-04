@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Validation\Rules\Password;
 use Throwable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\City;
 use App\Models\Contractor;
@@ -725,6 +727,53 @@ class ApiController extends Controller
 	}
 	
 	public function saveAvatar() {
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
+		}
+
+		$rules = [
+			'file' => ['required', 'image', 'max:2048'],
+		];
+		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
+			->setAttributeNames([
+				'file' => 'Файл',
+			]);
+		if (!$validator->passes()) {
+			$errors = [];
+			$validatorErrors = $validator->errors();
+			foreach ($rules as $key => $rule) {
+				foreach ($validatorErrors->get($key) ?? [] as $error) {
+					$errors[$key][] = $error;
+				}
+			}
+			return $this->responseError($errors, 400);
+		}
+		
+		$contractor = Contractor::find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$file1Name =  Str::uuid()->toString();
+		$file1Ext =  $this->request->file('file')->extension();
+		
+		if (!$this->request->file('file')->storeAs('contractor/avatar', $file1Name . '.' . $file1Ext)) {
+			return $this->responseError(null, 500);
+		}
+
+		$data = $contractor->data_json;
+		$data['avatar'] = [
+			'name' => '',
+			'ext' => '',
+		];
+		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
+		
+		if ($contractor->save()) {
+			return $this->responseSuccess('Аватар успешно сохранен', $contractor->format());
+		}
+		
+		return $this->responseError(null, 500);
 	}
 	
 	public function deleteAvatar() {
