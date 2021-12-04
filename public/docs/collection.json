@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "53330c54-f25a-456e-be2d-b2be177d1f2d",
+        "_postman_id": "ed09f7e7-eac7-4457-a1fc-005b37c6e815",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1311,30 +1311,22 @@
                         "url": {
                             "protocol": "http",
                             "host": "{{baseUrl}}",
-                            "path": "api\/profile\/avatar\/:ext\/:name",
+                            "path": "api\/profile\/avatar",
                             "query": [
                                 {
-                                    "key": "contractor_id",
+                                    "key": "ext",
+                                    "value": "",
+                                    "description": "",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "name",
                                     "value": "",
                                     "description": "",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/avatar\/:ext\/:name?contractor_id=",
-                            "variable": [
-                                {
-                                    "id": "ext",
-                                    "key": "ext",
-                                    "value": "qui",
-                                    "description": ""
-                                },
-                                {
-                                    "id": "name",
-                                    "key": "name",
-                                    "value": "aut",
-                                    "description": ""
-                                }
-                            ]
+                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/avatar?ext=&name="
                         },
                         "method": "GET",
                         "header": [

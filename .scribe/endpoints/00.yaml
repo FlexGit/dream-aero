@@ -1565,7 +1565,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/profile/avatar/{ext}/{name}'
+    uri: api/profile/avatar
     metadata:
       title: Avatar
       description: ''
@@ -1573,19 +1573,7 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      ext:
-        name: ext
-        description: ''
-        required: true
-        example: qui
-        type: string
-      name:
-        name: name
-        description: ''
-        required: true
-        example: aut
-        type: string
+    urlParameters: []
     queryParameters:
       api_key:
         name: api_key
@@ -1593,12 +1581,18 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      ext:
+        name: ext
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
+      name:
+        name: name
+        description: ''
+        required: true
+        example: null
+        type: string
     bodyParameters: []
     responses:
       -

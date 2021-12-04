@@ -122,7 +122,10 @@ class Contractor extends Authenticatable
 			'city_id' => $this->city_id,
 			'discount' => $this->discount,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
-			'avatar_path' => (array_key_exists('avatar', $data) && $data['avatar'] && Storage::disk('private')->exists( 'contractor/avatar/' . $data['avatar']['name'] . '.' . $data['avatar']['ext'])) ? \URL::to('/profile/avatar/' . $data['avatar']['ext'] . '/' . $data['avatar']['name']) : null,
+			'avatar' => [
+				'ext' => (array_key_exists('avatar', $data) && $data['avatar'] && $data['avatar']['ext']) ? $data['avatar']['ext'] : null,
+				'name' => (array_key_exists('avatar', $data) && $data['avatar'] && $data['avatar']['name']) ? $data['avatar']['name'] : null,
+			],
 			'flight_time' => null,
 			'score' => null,
 			'status' => null,

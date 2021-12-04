@@ -1320,7 +1320,8 @@ class ApiController extends Controller
 	 * Avatar
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam ext string required No-example
+	 * @queryParam name string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1333,7 +1334,17 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getAvatar($ext, $name) {
+	public function getAvatar() {
+		$ext = $this->request->ext;
+		if (!$ext) {
+			return $this->responseError('Не передано расширение', 400);
+		}
+		
+		$name = $this->request->name;
+		if (!$name) {
+			return $this->responseError('Не передано наименование', 400);
+		}
+		
 		if (!Storage::disk('private')->exists('contractor/avatar/' . $name . '.' . $ext)) {
 			return $this->responseError(null, 404);
 		}

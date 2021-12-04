@@ -3149,7 +3149,7 @@ paths:
                   description: ''
               required:
                 - file
-  '/api/profile/avatar/{ext}/{name}':
+  /api/profile/avatar:
     get:
       summary: Avatar
       description: ''
@@ -3166,12 +3166,22 @@ paths:
             example: null
         -
           in: query
-          name: contractor_id
+          name: ext
           description: ''
           example: null
           required: true
           schema:
-            type: integer
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: name
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
             description: ''
             example: null
         -
@@ -3293,23 +3303,6 @@ paths:
                     example: '<app_url>/api/<method>'
       tags:
         - Endpoints
-    parameters:
-      -
-        in: path
-        name: ext
-        description: ''
-        example: qui
-        required: true
-        schema:
-          type: string
-      -
-        in: path
-        name: name
-        description: ''
-        example: aut
-        required: true
-        schema:
-          type: string
 tags:
   -
     name: Endpoints
