@@ -726,6 +726,41 @@ class ApiController extends Controller
 		return $this->responseError(null, 500);
 	}
 	
+	
+	/**
+	 * Avatar save
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam contractor_id int required No-example
+	 * @bodyParam file file required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "Файл успешно сохранен",
+	 * 	"data": {
+	 * 		"id": 1,
+	 * 		"name": "John",
+	 * 		"lastname": "Smith",
+	 * 		"email": "john.smith@gmail.com",
+	 * 		"phone": null,
+	 * 		"city_id": 1,
+	 * 		"discount": 5,
+	 *		"birthdate": "1990-01-01",
+	 * 		"avatar": null,
+	 * 		"flight_time": 100,
+	 * 		"score": 10000,
+	 * 		"status": "Золотой",
+	 * 		"is_active": true,
+	 * 		"last_auth_at": "2021-01-01 12:00:00",
+	 * 		"created_at": "2021-01-01 12:00:00",
+	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
 	public function saveAvatar() {
 		$contractorId = $this->request->contractor_id;
 		if (!$contractorId) {
@@ -764,13 +799,13 @@ class ApiController extends Controller
 
 		$data = $contractor->data_json;
 		$data['avatar'] = [
-			'name' => '',
-			'ext' => '',
+			'name' => $file1Name,
+			'ext' => $file1Ext,
 		];
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
 		if ($contractor->save()) {
-			return $this->responseSuccess('Аватар успешно сохранен', $contractor->format());
+			return $this->responseSuccess('Файл успешно сохранен', $contractor->format());
 		}
 		
 		return $this->responseError(null, 500);

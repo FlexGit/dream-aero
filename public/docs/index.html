@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3821,6 +3821,233 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                 </form>
+
+            <h2 id="endpoints-POSTapi-profile-avatar-save">Avatar save</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-profile-avatar-save">
+<blockquote>Example request:</blockquote>
+
+
+<pre><code class="language-bash">curl --request POST \
+    "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
+    --header "Content-Type: multipart/form-data" \
+    --header "Accept: application/json" \
+    --form "file=@C:\OpenServer\userdata\temp\php15DD.tmp" </code></pre>
+
+<pre><code class="language-javascript">const url = new URL(
+    "http://dev.dream-aero.ru/api/profile/avatar/save"
+);
+
+const params = {
+    "api_key": "",
+    "contractor_id": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "multipart/form-data",
+    "Accept": "application/json",
+};
+
+const body = new FormData();
+body.append('file', document.querySelector('input[name="file"]').files[0]);
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body,
+}).then(response =&gt; response.json());</code></pre>
+
+<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://dev.dream-aero.ru/api/profile/avatar/save',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'multipart/form-data',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'contractor_id'=&gt; '',
+        ],
+        'multipart' =&gt; [
+            [
+                'name' =&gt; 'file',
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php15DD.tmp', 'r')
+            ],
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+</span>
+
+<span id="example-responses-POSTapi-profile-avatar-save">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Файл успешно сохранен&quot;,
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;name&quot;: &quot;John&quot;,
+        &quot;lastname&quot;: &quot;Smith&quot;,
+        &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+        &quot;phone&quot;: null,
+        &quot;city_id&quot;: 1,
+        &quot;discount&quot;: 5,
+        &quot;birthdate&quot;: &quot;1990-01-01&quot;,
+        &quot;avatar&quot;: null,
+        &quot;flight_time&quot;: 100,
+        &quot;score&quot;: 10000,
+        &quot;status&quot;: &quot;Золотой&quot;,
+        &quot;is_active&quot;: true,
+        &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
+        &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
+        &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-profile-avatar-save" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-profile-avatar-save"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-profile-avatar-save"></code></pre>
+</span>
+<span id="execution-error-POSTapi-profile-avatar-save" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-profile-avatar-save"></code></pre>
+</span>
+<form id="form-POSTapi-profile-avatar-save" data-method="POST"
+      data-path="api/profile/avatar/save"
+      data-authed="1"
+      data-hasfiles="1"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"multipart\/form-data","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-profile-avatar-save', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-profile-avatar-save"
+                    onclick="tryItOut('POSTapi-profile-avatar-save');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-profile-avatar-save"
+                    onclick="cancelTryOut('POSTapi-profile-avatar-save');" hidden>Cancel
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-profile-avatar-save" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/profile/avatar/save</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="POSTapi-profile-avatar-save"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="contractor_id"
+               data-endpoint="POSTapi-profile-avatar-save"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>file</code></b>&nbsp;&nbsp;<small>file</small>  &nbsp;
+                <input type="file"
+               name="file"
+               data-endpoint="POSTapi-profile-avatar-save"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
 
     
 

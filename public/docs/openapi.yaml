@@ -2962,6 +2962,193 @@ paths:
                     example: '<app_url>/api/<method>'
       tags:
         - Endpoints
+  /api/profile/avatar/save:
+    post:
+      summary: 'Avatar save'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: contractor_id
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: multipart/form-data
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  message: 'Файл успешно сохранен'
+                  data:
+                    id: 1
+                    name: John
+                    lastname: Smith
+                    email: john.smith@gmail.com
+                    phone: null
+                    city_id: 1
+                    discount: 5
+                    birthdate: '1990-01-01'
+                    avatar: null
+                    flight_time: 100
+                    score: 10000
+                    status: Золотой
+                    is_active: true
+                    last_auth_at: '2021-01-01 12:00:00'
+                    created_at: '2021-01-01 12:00:00'
+                    updated_at: '2021-01-01 12:00:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Файл успешно сохранен'
+                  data:
+                    type: object
+                    example:
+                      id: 1
+                      name: John
+                      lastname: Smith
+                      email: john.smith@gmail.com
+                      phone: null
+                      city_id: 1
+                      discount: 5
+                      birthdate: '1990-01-01'
+                      avatar: null
+                      flight_time: 100
+                      score: 10000
+                      status: Золотой
+                      is_active: true
+                      last_auth_at: '2021-01-01 12:00:00'
+                      created_at: '2021-01-01 12:00:00'
+                      updated_at: '2021-01-01 12:00:00'
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: ''
+              required:
+                - file
 tags:
   -
     name: Endpoints
