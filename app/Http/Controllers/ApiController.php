@@ -767,8 +767,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID контрагента', 400);
 		}
 
-		dump($this->request->all());
-		dump($this->request->file('file'));
+		//dump($this->request->all());
+		//dump($this->request->file('file'));
 		
 		$rules = [
 			'file' => ['required', 'image', 'max:2048'],
