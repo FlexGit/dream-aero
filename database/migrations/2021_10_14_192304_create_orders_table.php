@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-			$table->string('number')->comment('номер заказа (бронирования/сертификата)');
+			$table->string('number')->comment('номер заказа');
 			$table->integer('status_id')->default(0)->index()->comment('статус заказа');
 			$table->integer('contractor_id')->default(0)->index()->comment('контрагент, совершивший заказ');
 			$table->integer('tariff_id')->default(0)->index()->comment('тариф');
@@ -23,6 +23,8 @@ class CreateOrdersTable extends Migration
 			$table->integer('location_id')->default(0)->index()->comment('локация, на которой будет осуществлен полет');
 			$table->timestamp('flight_at')->nullable()->comment('дата и время полета');
 			$table->timestamp('invite_sent_at')->nullable()->comment('последняя дата отправки приглашения на e-mail');
+			$table->boolean('is_certificate_order')->default(false)->index()->comment('заказ сертификата');
+			$table->string('certificate_number')->comment('номер сертификата');
 			$table->timestamp('certificate_expire_at')->nullable()->comment('срок окончания действия сертификата');
 			$table->timestamp('certificate_sent_at')->nullable()->comment('последняя дата отправки сертификата на e-mail');
 			$table->integer('created_by_user_id')->default(0)->index()->comment('пользователь, создавший заказ');
