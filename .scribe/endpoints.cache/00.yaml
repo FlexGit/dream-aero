@@ -1564,3 +1564,54 @@ endpoints:
         headers: []
         description: '500, Internal Server Error'
     responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/{path}/{ext}/{name}'
+    metadata:
+      title: ''
+      description: ''
+      authenticated: true
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      path:
+        name: path
+        description: ''
+        required: true
+        example: est
+        type: string
+      ext:
+        name: ext
+        description: ''
+        required: true
+        example: facilis
+        type: string
+      name:
+        name: name
+        description: ''
+        required: true
+        example: harum
+        type: string
+    queryParameters:
+      api_key:
+        name: api_key
+        description: 'Authentication key.'
+        required: true
+        example: aDd3gvhfcEaeb48Z6kV516P
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 404
+        content: '{"success":false,"error":"Ресурс не найден","debug":"http:\/\/admin.dream-aero.loc\/api\/est\/facilis\/harum"}'
+        headers:
+          content-type: application/json;charset=UTF-8
+          charset: utf-8
+          cache-control: 'no-cache, private'
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []

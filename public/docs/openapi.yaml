@@ -3149,6 +3149,83 @@ paths:
                   description: ''
               required:
                 - file
+  '/api/{path}/{ext}/{name}':
+    get:
+      summary: ''
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: 'Authentication key.'
+          example: aDd3gvhfcEaeb48Z6kV516P
+          required: true
+          schema:
+            type: string
+            description: 'Authentication key.'
+            example: aDd3gvhfcEaeb48Z6kV516P
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: 'http://admin.dream-aero.loc/api/est/facilis/harum'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: 'http://admin.dream-aero.loc/api/est/facilis/harum'
+      tags:
+        - Endpoints
+    parameters:
+      -
+        in: path
+        name: path
+        description: ''
+        example: est
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: ext
+        description: ''
+        example: facilis
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: name
+        description: ''
+        example: harum
+        required: true
+        schema:
+          type: string
 tags:
   -
     name: Endpoints

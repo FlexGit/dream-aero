@@ -41,5 +41,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('promo', [ApiController::class, 'getPromo']);
 		Route::get('profile/reset', [ApiController::class, 'resetProfile']);
 		Route::post('profile/avatar/save', [ApiController::class, 'saveAvatar']);
+		Route::get('{path}/{ext}/{name}', [ApiController::class, 'getFile']);
 	});
 });
