@@ -902,8 +902,15 @@ class ApiController extends Controller
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
 		}
+
+		$data = [
+			'tariff' =>  $tariff->toArray(),
+			'tariff_type' =>  $tariff->tariffType->toArray(),
+			'employee' => $tariff->employee->format(),
+			'city' => $tariff->city->toArray(),
+		];
 		
-		return $this->responseSuccess(null, $tariff->toArray());
+		return $this->responseSuccess(null, $data);
 	}
 	
 	public function verifyCertificate() {

@@ -67,4 +67,13 @@ class Employee extends Model
 	public function location() {
 		return $this->hasOne('App\Models\Location', 'id', 'location_id');
 	}
+	
+	public function format() {
+		return [
+			'id' => $this->id,
+			'name' => $this->name,
+			'photo_path' => \URL::to('/upload/' . $this->data_json['photo_file_path']),
+			'instagram' => $this->data_json['instagram'],
+		];
+	}
 }
