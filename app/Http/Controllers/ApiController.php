@@ -897,7 +897,7 @@ class ApiController extends Controller
 		}
 		
 		$tariff = Tariff::where('is_active', true)
-			->with(['tariffType', 'employee', 'city'])
+			/*->with(['tariffType', 'employee', 'city'])*/
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
