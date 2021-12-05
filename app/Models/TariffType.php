@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|TariffType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TariffType whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tariff[] $tariffs
+ * @property-read int|null $tariffs_count
  */
 class TariffType extends Model {
     use HasFactory;

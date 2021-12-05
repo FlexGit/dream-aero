@@ -51,6 +51,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedByUserId($value)
  * @mixin \Eloquent
+ * @property \datetime|null $flight_at дата и время полета
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereFlightAt($value)
+ * @property int $promocode_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePromocodeId($value)
  */
 class Order extends Model
 {

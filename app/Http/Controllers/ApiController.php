@@ -21,6 +21,7 @@ use App\Models\Promo;
 use App\Models\TariffType;
 use App\Models\Tariff;
 use App\Models\Location;
+use App\Models\Promocode;
 
 use App\Traits\ApiResponser;
 
@@ -928,15 +929,6 @@ class ApiController extends Controller
 		return $this->responseError(null, 500);
 	}
 	
-	public function getNotifications() {
-	}
-	
-	public function getNotification() {
-	}
-	
-	public function getFlights() {
-	}
-	
 	/**
 	 * Tariff type list
 	 *
@@ -1190,12 +1182,6 @@ class ApiController extends Controller
 		
 		return $this->responseSuccess(null, $data);
 	}
-
-	public function verifyCertificate() {
-	}
-	
-	public function verifyPromocode() {
-	}
 	
 	/**
 	 * City list
@@ -1420,5 +1406,71 @@ class ApiController extends Controller
 		}
 		
 		return $this->responseSuccess(null, $promo->toArray());
+	}
+
+	public function verifyCertificate() {
+	}
+	
+	/**
+	 * Promocode Verify
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam promocode string required No-example
+	 * @queryParam city_id int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": {
+	 *		"is_active": true,
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function verifyPromocode() {
+		$number = $this->request->promocode;
+		if (!$number) {
+			return $this->responseError('Не передан промокод', 400);
+		}
+		
+		$cityId = $this->request->city_id;
+		if (!$cityId) {
+			return $this->responseError('Не передан ID города', 400);
+		}
+		
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if (!$city) {
+			return $this->responseError('Город не найден', 400);
+		}
+		
+		$date = date('Y-m-d');
+		
+		$promocode = Promocode::where('number', $number)
+			->where('city_id', $cityId)
+			->where('is_active', true)
+			->where('active_from_at', '<=', $date)
+			->where('active_to_at', '>=', $date)
+			->first();
+		if (!$promocode) {
+			return $this->responseError('Промокод не найден', 400);
+		}
+		
+		$data = [
+			'is_active' => $promocode->is_active,
+		];
+		
+		return $this->responseSuccess(null, $data);
+	}
+	
+	public function getNotifications() {
+	}
+	
+	public function getNotification() {
+	}
+	
+	public function getFlights() {
 	}
 }

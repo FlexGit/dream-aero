@@ -12,6 +12,22 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Status newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Status query()
  * @mixin \Eloquent
+ * @property int $id
+ * @property string $name наименование
+ * @property string $alias алиас
+ * @property int $sort
+ * @property int $is_active
+ * @property array $data_json дополнительная информация
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereAlias($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereSort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereUpdatedAt($value)
  */
 class Status extends Model
 {
