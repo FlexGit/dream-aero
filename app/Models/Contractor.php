@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
 
+use \Venturecraft\Revisionable\RevisionableTrait;
+
 /**
  * App\Models\Contractor
  *
@@ -57,7 +59,10 @@ use Illuminate\Support\Facades\Storage;
  */
 class Contractor extends Authenticatable
 {
-	use HasApiTokens, HasFactory, Notifiable;
+	use HasApiTokens, HasFactory, Notifiable, RevisionableTrait;
+	
+	protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;
 	
 	CONST RESEND_CODE_INTERVAL = 25;
 	CONST CODE_TTL = 5 * 60;

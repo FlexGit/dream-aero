@@ -31,8 +31,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class City extends Model
 {
-    use HasFactory;
-	use RevisionableTrait;
+    use HasFactory, RevisionableTrait;
 	
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;

@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use \Venturecraft\Revisionable\RevisionableTrait;
+
 /**
  * App\Models\User
  *
@@ -47,9 +49,12 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    /**
+    use HasApiTokens, HasFactory, Notifiable, RevisionableTrait;
+	
+	protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;
+	
+	/**
      * The attributes that are mass assignable.
      *
      * @var string[]

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use \Venturecraft\Revisionable\RevisionableTrait;
+
 /**
  * App\Models\Location
  *
@@ -37,8 +39,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Location extends Model
 {
-    use HasFactory;
-
+    use HasFactory, RevisionableTrait;
+	
+	protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *
