@@ -476,7 +476,7 @@ class ApiController extends Controller
 		
 		$data = [
 			'contractor' => $contractor->format(),
-			'mob_auth' => $mobAuth ? $mobAuth->toArray() : [],
+			'mob_auth' => $mobAuth ? $mobAuth->toArray() : null,
 		];
 
 		return $this->responseSuccess('Регистрация успешно завершена', $data);
@@ -1069,9 +1069,9 @@ class ApiController extends Controller
 			/** @var Tariff $tariff */
 			$data[] = [
 				'tariff' =>  $tariff->toArray(),
-				'tariff_type' =>  $tariff->tariffType->toArray(),
-				'employee' => $tariff->employee->format(),
-				'city' => $tariff->city->toArray(),
+				'tariff_type' =>  $tariff->tariffType ? $tariff->tariffType->toArray() : null,
+				'employee' => $tariff->employee ? $tariff->employee->format() : null,
+				'city' => $tariff->city ? $tariff->city->toArray() : null,
 			];
 		}
 		
@@ -1152,9 +1152,9 @@ class ApiController extends Controller
 
 		$data = [
 			'tariff' =>  $tariff->toArray(),
-			'tariff_type' =>  $tariff->tariffType->toArray(),
-			'employee' => $tariff->employee->format(),
-			'city' => $tariff->city->toArray(),
+			'tariff_type' =>  $tariff->tariffType ? $tariff->tariffType->toArray() : null,
+			'employee' => $tariff->employee ? $tariff->employee->format() : null,
+			'city' => $tariff->city ? $tariff->city->toArray() : null,
 		];
 		
 		return $this->responseSuccess(null, $data);
@@ -1275,7 +1275,7 @@ class ApiController extends Controller
 			/** @var Product $product */
 			$data[] = [
 				'product' =>  $product->toArray(),
-				'city' =>  $product->city->toArray(),
+				'city' =>  $product->city ? $product->city->toArray() : null,
 			];
 		}
 		
