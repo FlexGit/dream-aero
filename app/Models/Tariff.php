@@ -12,12 +12,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $name наименование тарифа
  * @property int $tariff_type_id тип тарифа
- * @property int $city_id город, в котором действует продукт
+ * @property int $city_id город, в котором действует тариф
  * @property int $duration длительность полёта, мин.
  * @property array $data_json дополнительная информация
  * @property int $is_active признак активности
- * @property int $price базовая цена продукта
- * @property int $is_hit является ли продукт хитом продаж
+ * @property int $price базовая цена тарифа
+ * @property int $is_hit является ли тариф хитом продаж
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Tariff newModelQuery()

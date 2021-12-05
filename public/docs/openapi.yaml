@@ -1840,6 +1840,16 @@ paths:
             description: ''
             example: null
         -
+          in: query
+          name: city_id
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
           in: header
           name: Content-Type
           description: ''
@@ -2421,7 +2431,7 @@ paths:
           name: city_id
           description: ''
           example: null
-          required: false
+          required: true
           schema:
             type: integer
             description: ''
@@ -3359,6 +3369,16 @@ paths:
             description: ''
             example: null
         -
+          in: query
+          name: flight_at
+          description: 'timestamp Y-m-d H:i'
+          example: cum
+          required: false
+          schema:
+            type: string
+            description: 'timestamp Y-m-d H:i'
+            example: cum
+        -
           in: header
           name: Content-Type
           description: ''
@@ -3519,6 +3539,135 @@ paths:
               schema:
                 type: string
                 example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"is_active\": true,\n\t}\n}"
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+      tags:
+        - Endpoints
+  /api/products:
+    get:
+      summary: 'Product list'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: city_id
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"product\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Видеозапись\",\n\t\t\t\"city_id\": 1,\n\t\t\t\"price\": 500,\n\t\t\t\"data_json\": {\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t\t}\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\",\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-10-01 18:23:27\",\n\t\t\t\"updated_at\": \"2021-10-05 18:23:41\"\n\t\t}\n\t\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:

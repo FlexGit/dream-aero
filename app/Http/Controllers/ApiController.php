@@ -22,6 +22,9 @@ use App\Models\TariffType;
 use App\Models\Tariff;
 use App\Models\Location;
 use App\Models\Promocode;
+use App\Models\Product;
+use App\Models\Order;
+use App\Models\Deal;
 
 use App\Traits\ApiResponser;
 
@@ -80,7 +83,8 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
-		$contractor = Contractor::where('email', $this->request->email)
+		$contractor = Contractor::where('is_active', true)
+			->where('email', $this->request->email)
 			->first();
 		if (!$contractor) {
 			return $this->responseError(['email' => 'Указанный E-mail не найден. Проверьте введенные данные.'], 400);
@@ -208,7 +212,8 @@ class ApiController extends Controller
 		$email = $this->request->email;
 		$type = $this->request->type ?? '';
 		
-		$contractor = Contractor::where('email', $email)
+		$contractor = Contractor::where('is_active', true)
+			->where('email', $email)
 			->first();
 		
 		if ($type && in_array($type, ['password_restore']) && !$contractor) {
@@ -432,7 +437,8 @@ class ApiController extends Controller
 		$contractorId = $this->request->contractor_id;
 		
 		if ($contractorId) {
-			$contractor = Contractor::find($contractorId);
+			$contractor = Contractor::where('is_active', true)
+				->find($contractorId);
 			if (!$contractor) {
 				return $this->responseError('Контрагент не найден', 400);
 			}
@@ -539,7 +545,8 @@ class ApiController extends Controller
 		
 		$password = $this->request->password;
 		
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -590,7 +597,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID контрагента', 400);
 		}
 		
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -671,7 +679,8 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -715,7 +724,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID контрагента', 400);
 		}
 		
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -765,7 +775,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID контрагента', 400);
 		}
 		
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -843,7 +854,8 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -908,7 +920,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID контрагента', 400);
 		}
 		
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -969,6 +982,7 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam tariff_type_id int required No-example
+	 * @queryParam city_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1028,9 +1042,26 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID типа тарифа', 400);
 		}
 		
+		$cityId = $this->request->city_id;
+		if (!$cityId) {
+			return $this->responseError('Не передан ID города', 400);
+		}
+		
+		$tariffType = TariffType::where('is_active', true)
+			->find($tariffTypeId);
+		if (!$tariffType) {
+			return $this->responseError('Тип тарифа не найден', 400);
+		}
+
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if (!$city) {
+			return $this->responseError('Город не найден', 400);
+		}
+
 		$tariffs = Tariff::where('tariff_type_id', $tariffTypeId)
+			->whereIn('city_id', [$cityId, 0])
 			->where('is_active', true)
-			/*->with(['tariffType', 'employee', 'city'])*/
 			->get();
 		
 		$data = [];
@@ -1114,7 +1145,6 @@ class ApiController extends Controller
 		}
 		
 		$tariff = Tariff::where('is_active', true)
-			/*->with(['tariffType', 'employee', 'city'])*/
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
@@ -1136,6 +1166,7 @@ class ApiController extends Controller
 	 * @queryParam api_key string required No-example
 	 * @queryParam contractor_id int required No-example
 	 * @queryParam tariff_id int required No-example
+	 * @queryParam flight_at timestamp Y-m-d H:i
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "",
@@ -1160,15 +1191,19 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID тарифа', 400);
 		}
 
-		$contractor = Contractor::find($contractorId);
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$tariff = Tariff::find($tariffId);
+		$tariff = Tariff::where('is_active', true)
+			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
 		}
+		
+		$flightAt = $this->request->flight_at;
 		
 		$price = $tariff->price ?: 0;
 		
@@ -1183,6 +1218,74 @@ class ApiController extends Controller
 		return $this->responseSuccess(null, $data);
 	}
 	
+	/**
+	 * Product list
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam city_id int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": [
+	 *		{
+	 * 			"product": {
+	 *				"id": 1,
+	 *				"name": "Видеозапись",
+	 *				"city_id": 1,
+	 *				"price": 500,
+	 *				"data_json": {
+	 *				},
+	 *				"is_active": true,
+	 *				"created_at": "2021-01-01 12:00:00",
+	 *				"updated_at": "2021-01-01 12:00:00"
+	 * 			}
+	 *			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва",
+	 *				"is_active": true,
+	 *				"created_at": "2021-10-01 18:23:27",
+	 *				"updated_at": "2021-10-05 18:23:41"
+	 *			}
+	 * 		}
+	 * 	]
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function getProducts() {
+		$cityId = $this->request->city_id;
+		if (!$cityId) {
+			return $this->responseError('Не передан ID города', 400);
+		}
+		
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if (!$city) {
+			return $this->responseError('Город не найден', 400);
+		}
+
+		$products = Product::whereIn('city_id', [$cityId, 0])
+			->where('is_active', true)
+			->get();
+		
+		$data = [];
+		foreach ($products ?? [] as $product) {
+			/** @var Product $product */
+			$data[] = [
+				'product' =>  $product->toArray(),
+				'city' =>  $product->city->toArray(),
+			];
+		}
+		
+		if ($products->isEmpty()) {
+			return $this->responseError('Продукты не найдены', 400);
+		}
+		
+		return $this->responseSuccess(null, $data);
+	}
+
 	/**
 	 * City list
 	 *
@@ -1256,9 +1359,14 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID города', 400);
 		}
 		
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if (!$city) {
+			return $this->responseError('Город не найден', 400);
+		}
+
 		$locations = Location::where('city_id', $cityId)
 			->where('is_active', true)
-			/*->with(['city', 'legalEntity', 'simulator'])*/
 			->get();
 		
 		if ($locations->isEmpty()) {
@@ -1272,7 +1380,7 @@ class ApiController extends Controller
 	 * Legal Entity list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam city_id int No-example
+	 * @queryParam city_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1297,10 +1405,18 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID города', 400);
 		}
 		
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if (!$city) {
+			return $this->responseError('Город не найден', 400);
+		}
+		
 		$legalEntityIds = Location::where('city_id', $cityId)
 			->where('is_active', true)
 			->pluck('legal_entity_id')
 			->all();
+		
+		$legalEntityIds = array_unique($legalEntityIds);
 		
 		$legalEntities = LegalEntity::whereIn('id', $legalEntityIds)
 			->where('is_active', true)
@@ -1315,7 +1431,7 @@ class ApiController extends Controller
 			$legalEntitiesData[] = [
 				'id' => $legalEntity->id,
 				'name' => $legalEntity->name,
-				'public_offer_file_path' => $this->request->getSchemeAndHttpHost() . '/upload/' . $legalEntity->data_json['public_offer_file_path'],
+				'public_offer_file_path' => array_key_exists('public_offer_file_path', $legalEntity->data_json) ? $this->request->getSchemeAndHttpHost() . '/upload/' . $legalEntity->data_json['public_offer_file_path'] : null,
 				'created_at' => $legalEntity->created_at ? Carbon::parse($legalEntity->created_at)->format('Y-m-d H:i:s') : null,
 				'updated_at' => $legalEntity->updated_at ? Carbon::parse($legalEntity->updated_at)->format('Y-m-d H:i:s') : null,
 			];
@@ -1356,9 +1472,14 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID города', 400);
 		}
 		
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if (!$city) {
+			return $this->responseError('Город не найден', 400);
+		}
+		
 		$promos = Promo::where('city_id', $cityId)
 			->where('is_active', true)
-			/*->with(['city'])*/
 			->get();
 		
 		if ($promos->isEmpty()) {
@@ -1399,7 +1520,6 @@ class ApiController extends Controller
 		}
 		
 		$promo = Promo::where('is_active', true)
-			/*->with(['city'])*/
 			->find($promoId);
 		if (!$promo) {
 			return $this->responseError('Акция не найдена', 400);
@@ -1408,9 +1528,6 @@ class ApiController extends Controller
 		return $this->responseSuccess(null, $promo->toArray());
 	}
 
-	public function verifyCertificate() {
-	}
-	
 	/**
 	 * Promocode Verify
 	 *
@@ -1465,12 +1582,60 @@ class ApiController extends Controller
 		return $this->responseSuccess(null, $data);
 	}
 	
+	public function verifyCertificate() {
+	}
+	
 	public function getNotifications() {
 	}
 	
 	public function getNotification() {
 	}
 	
+	/**
+	 * Flight list
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam contractor_id int No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": [
+	 *		{
+	 *			"flight_at": "2021-01-01 12:00:00",
+	 *			"duration": "30",
+	 *			"scores": "300",
+	 *		}
+	 * 	]
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
 	public function getFlights() {
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$flights = Deal::where('contractor_id', $contractorId)
+			->get();
+		
+		$data = [];
+		foreach ($flights ?? [] as $flight) {
+			$data[] = [
+				'type' => $flight['flight_at'],
+				'flight_at' => $flight['flight_at'],
+				'duration' => $flight['duration'],
+			];
+		}
+		
+		return $this->responseSuccess(null, $data);
 	}
 }

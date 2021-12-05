@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use \Venturecraft\Revisionable\RevisionableTrait;
+
 /**
  * App\Models\City
  *
@@ -24,11 +26,17 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $location
  * @property-read int|null $location_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class City extends Model
 {
     use HasFactory;
-
+	use RevisionableTrait;
+	
+	protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *

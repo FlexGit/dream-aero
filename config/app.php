@@ -176,7 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
 		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-		Yajra\DataTables\DataTablesServiceProvider::class,
+		// Yajra\DataTables\DataTablesServiceProvider::class,
+		Venturecraft\Revisionable\RevisionableServiceProvider::class,
     ],
 
     /*

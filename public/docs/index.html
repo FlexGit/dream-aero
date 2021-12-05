@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
     <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
-    <script src="../docs/js/theme-default-3.15.0.js"></script>
+    <script src="../docs/js/theme-default-3.16.0.js"></script>
 
     <link rel="stylesheet"
           href="//unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/obsidian.min.css">
@@ -23,7 +23,7 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-3.15.0.js"></script>
+    <script src="../docs/js/tryitout-3.16.0.js"></script>
 
 </head>
 
@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -2296,7 +2296,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariffs?api_key=&amp;tariff_type_id=" \
+    --get "http://dev.dream-aero.ru/api/tariffs?api_key=&amp;tariff_type_id=&amp;city_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -2307,6 +2307,7 @@ print_r(json_decode((string) $body));</code></pre>
 const params = {
     "api_key": "",
     "tariff_type_id": "",
+    "city_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2332,6 +2333,7 @@ $response = $client-&gt;get(
         'query' =&gt; [
             'api_key'=&gt; '',
             'tariff_type_id'=&gt; '',
+            'city_id'=&gt; '',
         ],
     ]
 );
@@ -2493,6 +2495,16 @@ print_r(json_decode((string) $body));</code></pre>
                 <b><code>tariff_type_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="tariff_type_id"
+               data-endpoint="GETapi-tariffs"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="city_id"
                data-endpoint="GETapi-tariffs"
                value=""
                data-component="query" hidden>
@@ -3094,7 +3106,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/legal_entities?api_key=" \
+    --get "http://dev.dream-aero.ru/api/legal_entities?api_key=&amp;city_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -3104,6 +3116,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
+    "city_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3128,6 +3141,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'city_id'=&gt; '',
         ],
     ]
 );
@@ -3251,7 +3265,7 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="city_id"
                data-endpoint="GETapi-legal_entities"
@@ -3838,7 +3852,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\phpD3B.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\php4040.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3880,7 +3894,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\phpD3B.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php4040.tmp', 'r')
             ],
         ],
     ]
@@ -4267,7 +4281,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=" \
+    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=&amp;flight_at=cum" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -4279,6 +4293,7 @@ const params = {
     "api_key": "",
     "contractor_id": "",
     "tariff_id": "",
+    "flight_at": "cum",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4305,6 +4320,7 @@ $response = $client-&gt;get(
             'api_key'=&gt; '',
             'contractor_id'=&gt; '',
             'tariff_id'=&gt; '',
+            'flight_at'=&gt; 'cum',
         ],
     ]
 );
@@ -4453,6 +4469,16 @@ print_r(json_decode((string) $body));</code></pre>
                data-component="query" hidden>
     <br>
 
+            </p>
+                    <p>
+                <b><code>flight_at</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="flight_at"
+               data-endpoint="GETapi-tariff-price"
+               value="cum"
+               data-component="query" hidden>
+    <br>
+<p>timestamp Y-m-d H:i</p>
             </p>
                 </form>
 
@@ -4638,6 +4664,202 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="number"
                name="city_id"
                data-endpoint="GETapi-promocode-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                </form>
+
+            <h2 id="endpoints-GETapi-products">Product list</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-products">
+<blockquote>Example request:</blockquote>
+
+
+<pre><code class="language-bash">curl --request GET \
+    --get "http://dev.dream-aero.ru/api/products?api_key=&amp;city_id=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre>
+
+<pre><code class="language-javascript">const url = new URL(
+    "http://dev.dream-aero.ru/api/products"
+);
+
+const params = {
+    "api_key": "",
+    "city_id": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre>
+
+<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://dev.dream-aero.ru/api/products',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'city_id'=&gt; '',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+</span>
+
+<span id="example-responses-GETapi-products">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+	&quot;success&quot;: true,
+	&quot;message&quot;: null,
+	&quot;data&quot;: [
+	{
+			&quot;product&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Видеозапись&quot;,
+			&quot;city_id&quot;: 1,
+			&quot;price&quot;: 500,
+			&quot;data_json&quot;: {
+			},
+			&quot;is_active&quot;: true,
+			&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
+			&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+			}
+		&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;,
+			&quot;is_active&quot;: true,
+			&quot;created_at&quot;: &quot;2021-10-01 18:23:27&quot;,
+			&quot;updated_at&quot;: &quot;2021-10-05 18:23:41&quot;
+		}
+		}
+	]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-products" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-products"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-products"></code></pre>
+</span>
+<span id="execution-error-GETapi-products" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-products"></code></pre>
+</span>
+<form id="form-GETapi-products" data-method="GET"
+      data-path="api/products"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-products', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-products"
+                    onclick="tryItOut('GETapi-products');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-products"
+                    onclick="cancelTryOut('GETapi-products');" hidden>Cancel
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-products" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/products</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="GETapi-products"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="city_id"
+               data-endpoint="GETapi-products"
                value=""
                data-component="query" hidden>
     <br>
