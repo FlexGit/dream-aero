@@ -6,7 +6,7 @@
 @stop
 @push('page-level-styles')
 	<link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @endpush
 
 {{--@section('plugins.Fullcalendar', true)--}}

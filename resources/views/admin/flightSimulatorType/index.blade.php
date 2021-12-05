@@ -70,12 +70,12 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	<script src="{{ asset('js/common.js') }}"></script>
+	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
 			function getList(url) {
