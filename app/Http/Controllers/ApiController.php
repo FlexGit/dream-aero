@@ -1450,6 +1450,7 @@ class ApiController extends Controller
 		
 		$promocode = Promocode::where('number', $number)
 			->where('city_id', $cityId)
+			->orWhere('city_id', 0)
 			->where('is_active', true)
 			->where('active_from_at', '<=', $date)
 			->where('active_to_at', '>=', $date)
