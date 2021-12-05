@@ -2457,7 +2457,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"ООО Компания\",\n\t\t\"public_offer_file_path\": \"\",\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"ООО Компания\",\n\t\t\"public_offer\": null,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -3372,12 +3372,12 @@ paths:
           in: query
           name: flight_at
           description: 'timestamp Y-m-d H:i'
-          example: cum
+          example: quas
           required: false
           schema:
             type: string
             description: 'timestamp Y-m-d H:i'
-            example: cum
+            example: quas
         -
           in: header
           name: Content-Type

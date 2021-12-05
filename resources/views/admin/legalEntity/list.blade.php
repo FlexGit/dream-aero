@@ -3,6 +3,7 @@
 	<td class="text-center">{{ $legalEntity->id }}</td>
 	<td>{{ $legalEntity->name }}</td>
 	<td class="text-center d-none d-sm-table-cell">{{ $legalEntity->is_active ? 'Да' : 'Нет' }}</td>
+	<td class="text-center d-none d-md-table-cell">{!! ($legalEntity->data_json && array_key_exists('public_offer_file_path', $legalEntity->data_json)) ? '<a href="' . \URL::to('/upload/' . $legalEntity->data_json['public_offer_file_path']) . '" target="_blank">ссылка</a>' : '' !!}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $legalEntity->created_at }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $legalEntity->updated_at }}</td>
 	<td class="text-center">

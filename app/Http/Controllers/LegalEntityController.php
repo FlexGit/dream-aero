@@ -38,6 +38,10 @@ class LegalEntityController extends Controller
 	 */
 	public function getListAjax()
 	{
+		if (!$this->request->ajax()) {
+			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+		}
+
 		$legalEntities = LegalEntity::get();
 
 		$VIEW = view('admin.legalEntity.list', ['legalEntities' => $legalEntities]);
@@ -64,6 +68,10 @@ class LegalEntityController extends Controller
 	 */
 	public function add()
 	{
+		if (!$this->request->ajax()) {
+			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+		}
+
 		return view('admin/legalEntity/modal/add');
 	}
 	
@@ -73,6 +81,10 @@ class LegalEntityController extends Controller
 	 */
 	public function confirm($id)
 	{
+		if (!$this->request->ajax()) {
+			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+		}
+
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
@@ -86,21 +98,41 @@ class LegalEntityController extends Controller
 	 */
 	public function store()
 	{
+		if (!$this->request->ajax()) {
+			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+		}
+
 		$rules = [
-			'name' => 'required|max:255'
+			'name' => ['required', 'max:255'],
+			'public_offer' => ['required', 'mimes:pdf', 'max:5120'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
-				'name' => 'Наименование'
+				'name' => 'Наименование',
+				'public_offer' => 'Публичная оферта',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-
+		
+		$fileName =  $this->request->file('public_offer')->getFilename();
+		$fileExt =  $this->request->file('public_offer')->extension();
+		
+		if (!$this->request->file('file')->storeAs('upload/public_offer', $fileName . '.' . $fileExt, 'public')) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
 		$legalEntity = new LegalEntity();
 		$legalEntity->name = $this->request->name;
 		$legalEntity->is_active = $this->request->is_active;
+		$data = json_decode($legalEntity->data_json, true);
+		$data['public_offer_file_path'] = [
+			'name' => $fileName,
+			'ext' => $fileExt,
+		];
+		$legalEntity->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
+		
 		if (!$legalEntity->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -114,6 +146,10 @@ class LegalEntityController extends Controller
 	 */
 	public function update($id)
 	{
+		if (!$this->request->ajax()) {
+			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+		}
+
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 
@@ -144,6 +180,10 @@ class LegalEntityController extends Controller
 	 */
 	public function delete($id)
 	{
+		if (!$this->request->ajax()) {
+			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+		}
+
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		

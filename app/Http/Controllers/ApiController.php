@@ -860,17 +860,17 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$file1Name =  Str::uuid()->toString();
-		$file1Ext =  $this->request->file('file')->extension();
+		$fileName =  Str::uuid()->toString();
+		$fileExt =  $this->request->file('file')->extension();
 		
-		if (!$this->request->file('file')->storeAs('contractor/avatar', $file1Name . '.' . $file1Ext)) {
+		if (!$this->request->file('file')->storeAs('contractor/avatar', $fileName . '.' . $fileExt)) {
 			return $this->responseError(null, 500);
 		}
 
 		$data = json_decode($contractor->data_json, true);
 		$data['avatar'] = [
-			'name' => $file1Name,
-			'ext' => $file1Ext,
+			'name' => $fileName,
+			'ext' => $fileExt,
 		];
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
@@ -1388,7 +1388,7 @@ class ApiController extends Controller
 	 *		{
 	 *			"id": 1,
 	 *			"name": "ООО Компания",
-	 *			"public_offer_file_path": "",
+	 *			"public_offer": null,
 	 *			"created_at": "2021-01-01 12:00:00",
 	 *			"updated_at": "2021-01-01 12:00:00",
 	 *		}
@@ -1431,7 +1431,7 @@ class ApiController extends Controller
 			$legalEntitiesData[] = [
 				'id' => $legalEntity->id,
 				'name' => $legalEntity->name,
-				'public_offer_file_path' => array_key_exists('public_offer_file_path', $legalEntity->data_json) ? $this->request->getSchemeAndHttpHost() . '/upload/' . $legalEntity->data_json['public_offer_file_path'] : null,
+				'public_offer' => ($legalEntity->data_json && array_key_exists('public_offer', $legalEntity->data_json)) ? \URL::to('/upload/public_offer/' . $legalEntity->data_json['public_offer']['name'] . '.' . $legalEntity->data_json['public_offer']['ext']) : null,
 				'created_at' => $legalEntity->created_at ? Carbon::parse($legalEntity->created_at)->format('Y-m-d H:i:s') : null,
 				'updated_at' => $legalEntity->updated_at ? Carbon::parse($legalEntity->updated_at)->format('Y-m-d H:i:s') : null,
 			];

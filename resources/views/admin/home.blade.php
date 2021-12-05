@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @endpush
 
-{{--@section('plugins.Fullcalendar', true)--}}
+@section('plugins.Fullcalendar', true)
 
 @push('page-level-plugins')
 	<script src="{{ asset('vendor/fullcalendar/main.min.js') }}"></script>

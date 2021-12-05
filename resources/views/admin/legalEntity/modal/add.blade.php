@@ -10,3 +10,7 @@
 		<option value="0">Нет</option>
 	</select>
 </div>
+<div class="form-group">
+	<label for="name">Публичная оферта</label>
+	<input type="file" class="form-control" id="public_offer" name="public_offer">
+</div>

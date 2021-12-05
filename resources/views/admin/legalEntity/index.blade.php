@@ -31,6 +31,7 @@
 								<th class="text-center">ID</th>
 								<th class="text-center">Наименование</th>
 								<th class="text-center d-none d-sm-table-cell">Активность</th>
+								<th class="text-center d-none d-md-table-cell">Публичная оферта</th>
 								<th class="text-center d-none d-xl-table-cell">Создано</th>
 								<th class="text-center d-none d-xl-table-cell">Изменено</th>
 								<th class="text-center">Действие</th>
@@ -107,10 +108,6 @@
 
 				if (!url || !method) return;
 
-				if (id) {
-					title = title + ' #' + id;
-				}
-
 				$('.modal .modal-title, .modal .modal-body').empty();
 
 				$.ajax({
@@ -131,7 +128,7 @@
 
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
-					data = $(this).serializeArray();
+					data = /*$(this).serializeArray()*/new FormData(this);
 
 				$.ajax({
 					url: action,

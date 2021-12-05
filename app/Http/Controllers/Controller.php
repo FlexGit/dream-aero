@@ -26,5 +26,6 @@ class Controller extends BaseController
 		'valid_city' => 'Город не найден',
 		'valid_phone' => 'Некорректный формат',
 		'image' => 'Некорректный тип файла',
+		'mimes' => 'Некорректный тип файла',
 	];
 }

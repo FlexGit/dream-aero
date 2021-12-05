@@ -54,7 +54,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
             <ul class="toc-footer" id="last-updated">
-            <li>Last updated: December 5 2021</li>
+            <li>Last updated: December 6 2021</li>
         </ul>
 </div>
 <div class="page-wrapper">
@@ -3162,7 +3162,7 @@ print_r(json_decode((string) $body));</code></pre>
 	{
 		&quot;id&quot;: 1,
 		&quot;name&quot;: &quot;ООО Компания&quot;,
-		&quot;public_offer_file_path&quot;: &quot;&quot;,
+		&quot;public_offer&quot;: null,
 		&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
 		&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;,
 	}
@@ -3852,7 +3852,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\php4040.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\php1070.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3894,7 +3894,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php4040.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php1070.tmp', 'r')
             ],
         ],
     ]
@@ -4281,7 +4281,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=&amp;flight_at=cum" \
+    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=&amp;flight_at=quas" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -4293,7 +4293,7 @@ const params = {
     "api_key": "",
     "contractor_id": "",
     "tariff_id": "",
-    "flight_at": "cum",
+    "flight_at": "quas",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4320,7 +4320,7 @@ $response = $client-&gt;get(
             'api_key'=&gt; '',
             'contractor_id'=&gt; '',
             'tariff_id'=&gt; '',
-            'flight_at'=&gt; 'cum',
+            'flight_at'=&gt; 'quas',
         ],
     ]
 );
@@ -4475,7 +4475,7 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="text"
                name="flight_at"
                data-endpoint="GETapi-tariff-price"
-               value="cum"
+               value="quas"
                data-component="query" hidden>
     <br>
 <p>timestamp Y-m-d H:i</p>

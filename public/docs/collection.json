@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "81ce4942-0339-47bd-8262-2d47f1d5e77f",
+        "_postman_id": "0cb4384e-e6d3-4673-b1fa-a12db8b67ccd",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1011,7 +1011,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"\u041e\u041e\u041e \u041a\u043e\u043c\u043f\u0430\u043d\u0438\u044f\",\n\t\t\"public_offer_file_path\": \"\",\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"\u041e\u041e\u041e \u041a\u043e\u043c\u043f\u0430\u043d\u0438\u044f\",\n\t\t\"public_offer\": null,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -1403,12 +1403,12 @@
                                 },
                                 {
                                     "key": "flight_at",
-                                    "value": "cum",
+                                    "value": "quas",
                                     "description": "timestamp Y-m-d H:i",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/tariff\/price?contractor_id=&tariff_id=&flight_at=cum"
+                            "raw": "http:\/\/{{baseUrl}}\/api\/tariff\/price?contractor_id=&tariff_id=&flight_at=quas"
                         },
                         "method": "GET",
                         "header": [
