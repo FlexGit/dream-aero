@@ -1166,7 +1166,7 @@ class ApiController extends Controller
 	 * @queryParam api_key string required No-example
 	 * @queryParam contractor_id int required No-example
 	 * @queryParam tariff_id int required No-example
-	 * @queryParam flight_at timestamp Y-m-d H:i
+	 * @queryParam flight_at string Y-m-d H:i
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "",
@@ -1630,7 +1630,6 @@ class ApiController extends Controller
 		$data = [];
 		foreach ($flights ?? [] as $flight) {
 			$data[] = [
-				'type' => $flight['flight_at'],
 				'flight_at' => $flight['flight_at'],
 				'duration' => $flight['duration'],
 			];

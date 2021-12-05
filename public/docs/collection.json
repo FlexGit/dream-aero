@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "0cb4384e-e6d3-4673-b1fa-a12db8b67ccd",
+        "_postman_id": "47947430-522a-4771-a204-34c4b11090c9",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1403,12 +1403,12 @@
                                 },
                                 {
                                     "key": "flight_at",
-                                    "value": "quas",
-                                    "description": "timestamp Y-m-d H:i",
+                                    "value": "libero",
+                                    "description": "Y-m-d H:i",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/tariff\/price?contractor_id=&tariff_id=&flight_at=quas"
+                            "raw": "http:\/\/{{baseUrl}}\/api\/tariff\/price?contractor_id=&tariff_id=&flight_at=libero"
                         },
                         "method": "GET",
                         "header": [

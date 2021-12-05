@@ -1683,9 +1683,9 @@ endpoints:
         type: integer
       flight_at:
         name: flight_at
-        description: 'timestamp Y-m-d H:i'
+        description: 'Y-m-d H:i'
         required: false
-        example: quas
+        example: libero
         type: string
     bodyParameters: []
     responses:

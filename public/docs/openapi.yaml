@@ -3371,13 +3371,13 @@ paths:
         -
           in: query
           name: flight_at
-          description: 'timestamp Y-m-d H:i'
-          example: quas
+          description: 'Y-m-d H:i'
+          example: libero
           required: false
           schema:
             type: string
-            description: 'timestamp Y-m-d H:i'
-            example: quas
+            description: 'Y-m-d H:i'
+            example: libero
         -
           in: header
           name: Content-Type

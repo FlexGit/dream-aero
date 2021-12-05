@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3852,7 +3852,7 @@ print_r(json_decode((string) $body));</code></pre>
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\php1070.tmp" </code></pre>
+    --form "file=@C:\OpenServer\userdata\temp\phpB934.tmp" </code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3894,7 +3894,7 @@ $response = $client-&gt;post(
         'multipart' =&gt; [
             [
                 'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php1070.tmp', 'r')
+                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\phpB934.tmp', 'r')
             ],
         ],
     ]
@@ -4281,7 +4281,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=&amp;flight_at=quas" \
+    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=&amp;flight_at=libero" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -4293,7 +4293,7 @@ const params = {
     "api_key": "",
     "contractor_id": "",
     "tariff_id": "",
-    "flight_at": "quas",
+    "flight_at": "libero",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4320,7 +4320,7 @@ $response = $client-&gt;get(
             'api_key'=&gt; '',
             'contractor_id'=&gt; '',
             'tariff_id'=&gt; '',
-            'flight_at'=&gt; 'quas',
+            'flight_at'=&gt; 'libero',
         ],
     ]
 );
@@ -4475,10 +4475,10 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="text"
                name="flight_at"
                data-endpoint="GETapi-tariff-price"
-               value="quas"
+               value="libero"
                data-component="query" hidden>
     <br>
-<p>timestamp Y-m-d H:i</p>
+<p>Y-m-d H:i</p>
             </p>
                 </form>
 
