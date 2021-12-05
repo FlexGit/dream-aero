@@ -3371,13 +3371,13 @@ paths:
         -
           in: query
           name: flight_at
-          description: 'Y-m-d H:i'
-          example: libero
+          description: ''
+          example: null
           required: false
           schema:
             type: string
-            description: 'Y-m-d H:i'
-            example: libero
+            description: ''
+            example: null
         -
           in: header
           name: Content-Type

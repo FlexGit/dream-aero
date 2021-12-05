@@ -1166,7 +1166,7 @@ class ApiController extends Controller
 	 * @queryParam api_key string required No-example
 	 * @queryParam contractor_id int required No-example
 	 * @queryParam tariff_id int required No-example
-	 * @queryParam flight_at string Y-m-d H:i
+	 * @queryParam flight_at string No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "",
