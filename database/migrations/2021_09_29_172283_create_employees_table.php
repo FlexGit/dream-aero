@@ -18,7 +18,7 @@ class CreateEmployeesTable extends Migration
             $table->string('name', 50)->comment('имя сотрудника');
 			$table->integer('employee_position_id')->default(0)->index()->comment('должность сотрудника');
 			$table->integer('location_id')->default(0)->index()->comment('локация сотрудника');
-			$table->text('data_json')->nullable()->comment('фото сотрудника');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
         });
