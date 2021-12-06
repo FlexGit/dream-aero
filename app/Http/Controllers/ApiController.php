@@ -864,9 +864,9 @@ class ApiController extends Controller
 		$image = str_replace($replace, '', $this->request->file_base64);
 		$image = str_replace(' ', '+', $image);
 		
-		if (getimagesize($image) > 1024 * 1024) {
+		/*if (getimagesize($image) > 1024 * 1024) {
 			return $this->responseError('Размер файла не должен превышать 1 Мб', 400);
-		}
+		}*/
 		
 		$fileName =  Str::uuid()->toString();
 		$fileExt = explode('/', explode(':', substr($this->request->file_base64, 0, strpos($this->request->file_base64, ';')))[1])[1];
