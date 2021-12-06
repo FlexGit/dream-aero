@@ -3155,8 +3155,8 @@ paths:
               properties:
                 file_base64:
                   type: string
-                  description: ''
-                  example: null
+                  description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
+                  example: delectus
               required:
                 - file_base64
   /api/profile/avatar/delete:

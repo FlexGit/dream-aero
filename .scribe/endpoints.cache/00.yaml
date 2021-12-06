@@ -1512,9 +1512,9 @@ endpoints:
     bodyParameters:
       file_base64:
         name: file_base64
-        description: ''
+        description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: null
+        example: delectus
         type: string
     responses:
       -

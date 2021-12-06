@@ -801,7 +801,7 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam contractor_id int required No-example
-	 * @bodyParam file_base64 string required No-example
+	 * @bodyParam file_base64 string required data:image/jpeg;base64,/9j/7gAhQWR...
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Файл успешно сохранен",
