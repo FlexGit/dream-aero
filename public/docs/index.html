@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3850,9 +3850,12 @@ print_r(json_decode((string) $body));</code></pre>
 
 <pre><code class="language-bash">curl --request POST \
     "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
-    --header "Content-Type: multipart/form-data" \
+    --header "Content-Type: application/json" \
     --header "Accept: application/json" \
-    --form "file=@C:\OpenServer\userdata\temp\php995F.tmp" </code></pre>
+    --data "{
+    \"file\": \"qui\"
+}"
+</code></pre>
 
 <pre><code class="language-javascript">const url = new URL(
     "http://dev.dream-aero.ru/api/profile/avatar/save"
@@ -3866,17 +3869,18 @@ Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 const headers = {
-    "Content-Type": "multipart/form-data",
+    "Content-Type": "application/json",
     "Accept": "application/json",
 };
 
-const body = new FormData();
-body.append('file', document.querySelector('input[name="file"]').files[0]);
+let body = {
+    "file": "qui"
+};
 
 fetch(url, {
     method: "POST",
     headers,
-    body,
+    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre>
 
 <pre><code class="language-php">$client = new \GuzzleHttp\Client();
@@ -3884,18 +3888,15 @@ $response = $client-&gt;post(
     'http://dev.dream-aero.ru/api/profile/avatar/save',
     [
         'headers' =&gt; [
-            'Content-Type' =&gt; 'multipart/form-data',
+            'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
             'contractor_id'=&gt; '',
         ],
-        'multipart' =&gt; [
-            [
-                'name' =&gt; 'file',
-                'contents' =&gt; fopen('C:\OpenServer\userdata\temp\php995F.tmp', 'r')
-            ],
+        'json' =&gt; [
+            'file' =&gt; 'qui',
         ],
     ]
 );
@@ -4003,9 +4004,9 @@ print_r(json_decode((string) $body));</code></pre>
 <form id="form-POSTapi-profile-avatar-save" data-method="POST"
       data-path="api/profile/avatar/save"
       data-authed="1"
-      data-hasfiles="1"
+      data-hasfiles="0"
       data-isarraybody="0"
-      data-headers='{"Content-Type":"multipart\/form-data","Accept":"application\/json"}'
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-profile-avatar-save', this);">
     <h3>
@@ -4052,14 +4053,14 @@ print_r(json_decode((string) $body));</code></pre>
             </p>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <p>
-            <b><code>file</code></b>&nbsp;&nbsp;<small>file</small>  &nbsp;
-                <input type="file"
+            <b><code>file</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
                name="file"
                data-endpoint="POSTapi-profile-avatar-save"
-               value=""
+               value="qui"
                data-component="body" hidden>
     <br>
-
+<p>Base64</p>
         </p>
         </form>
 

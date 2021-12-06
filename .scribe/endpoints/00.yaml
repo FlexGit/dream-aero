@@ -1491,7 +1491,7 @@ endpoints:
       description: ''
       authenticated: true
     headers:
-      Content-Type: multipart/form-data
+      Content-Type: application/json
       Accept: application/json
     urlParameters: []
     queryParameters:
@@ -1510,10 +1510,10 @@ endpoints:
     bodyParameters:
       file:
         name: file
-        description: ''
+        description: Base64
         required: true
-        example: null
-        type: file
+        example: qui
+        type: string
     responses:
       -
         status: 200

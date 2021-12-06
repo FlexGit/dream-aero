@@ -3001,7 +3001,7 @@ paths:
           in: header
           name: Content-Type
           description: ''
-          example: multipart/form-data
+          example: application/json
           schema:
             type: string
         -
@@ -3149,14 +3149,14 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
                 file:
                   type: string
-                  format: binary
-                  description: ''
+                  description: Base64
+                  example: qui
               required:
                 - file
   /api/profile/avatar/delete:
