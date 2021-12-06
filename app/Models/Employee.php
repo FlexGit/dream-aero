@@ -74,12 +74,14 @@ class Employee extends Model
 	}
 	
 	public function format() {
+		$data = json_decode($this->data_json, true) ?? [];
+		
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
-			'photo_path' => (array_key_exists('photo_file_path', $this->data_json) && $this->data_json['photo_file_path']) ? \URL::to('/upload/' . $this->data_json['photo_file_path']) : null,
-			'icon_path' => (array_key_exists('icon_file_path', $this->data_json) && $this->data_json['icon_file_path']) ? \URL::to('/upload/' . $this->data_json['icon_file_path']) : null,
-			'instagram' => array_key_exists('instagram', $this->data_json) ? $this->data_json['instagram'] : null,
+			'photo_path' => (array_key_exists('photo_file_path', $data) && $data['photo_file_path']) ? \URL::to('/upload/' . $data['photo_file_path']) : null,
+			'icon_path' => (array_key_exists('icon_file_path', $data) && $data['icon_file_path']) ? \URL::to('/upload/' . $data['icon_file_path']) : null,
+			'instagram' => array_key_exists('instagram', $data) ? $data['instagram'] : null,
 		];
 	}
 }

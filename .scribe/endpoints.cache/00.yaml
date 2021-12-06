@@ -1514,7 +1514,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: sint
+        example: possimus
         type: string
     responses:
       -

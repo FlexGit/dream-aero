@@ -953,7 +953,7 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$data = json_decode($contractor->data_json, true);
+		$data = json_decode($contractor->data_json, true) ?? [];
 		
 		if (!array_key_exists('avatar', $data)) {
 			return $this->responseError('Файл не найден', 400);
