@@ -801,7 +801,7 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam contractor_id int required No-example
-	 * @bodyParam file string required Base64
+	 * @bodyParam file_base64 string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Файл успешно сохранен",
@@ -837,11 +837,11 @@ class ApiController extends Controller
 		}
 
 		$rules = [
-			'file' => ['required'],
+			'file_base64' => ['required'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
-				'file' => 'Файл',
+				'file_base64' => 'Файл',
 			]);
 		if (!$validator->passes()) {
 			$errors = [];
@@ -860,8 +860,8 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$replace = substr($this->request->file, 0, strpos($this->request->file, ',') + 1);
-		$image = str_replace($replace, '', $this->request->file);
+		$replace = substr($this->request->file_base64, 0, strpos($this->request->file_base64, ',') + 1);
+		$image = str_replace($replace, '', $this->request->file_base64);
 		$image = str_replace(' ', '+', $image);
 		
 		if (getimagesize($image) > 1024 * 1024) {
@@ -869,7 +869,7 @@ class ApiController extends Controller
 		}
 		
 		$fileName =  Str::uuid()->toString();
-		$fileExt = explode('/', explode(':', substr($this->request->file, 0, strpos($this->request->file, ';')))[1])[1];
+		$fileExt = explode('/', explode(':', substr($this->request->file_base64, 0, strpos($this->request->file_base64, ';')))[1])[1];
 		
 		if (!Storage::put('contractor/avatar/' . $fileName . '.' . $fileExt, base64_decode($image))) {
 		//if (!$this->request->file('file')->storeAs('contractor/avatar', $fileName . '.' . $fileExt)) {

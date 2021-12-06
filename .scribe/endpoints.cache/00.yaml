@@ -1510,11 +1510,11 @@ endpoints:
         example: null
         type: integer
     bodyParameters:
-      file:
-        name: file
-        description: Base64
+      file_base64:
+        name: file_base64
+        description: ''
         required: true
-        example: qui
+        example: null
         type: string
     responses:
       -

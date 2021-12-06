@@ -3153,12 +3153,12 @@ paths:
             schema:
               type: object
               properties:
-                file:
+                file_base64:
                   type: string
-                  description: Base64
-                  example: qui
+                  description: ''
+                  example: null
               required:
-                - file
+                - file_base64
   /api/profile/avatar/delete:
     post:
       summary: 'Avatar delete'

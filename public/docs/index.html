@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3853,7 +3853,7 @@ print_r(json_decode((string) $body));</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file\": \"qui\"
+    \"file_base64\": null
 }"
 </code></pre>
 
@@ -3874,7 +3874,7 @@ const headers = {
 };
 
 let body = {
-    "file": "qui"
+    "file_base64": null
 };
 
 fetch(url, {
@@ -3896,7 +3896,7 @@ $response = $client-&gt;post(
             'contractor_id'=&gt; '',
         ],
         'json' =&gt; [
-            'file' =&gt; 'qui',
+            'file_base64' =&gt; null,
         ],
     ]
 );
@@ -4053,14 +4053,14 @@ print_r(json_decode((string) $body));</code></pre>
             </p>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <p>
-            <b><code>file</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+            <b><code>file_base64</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
-               name="file"
+               name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="qui"
+               value=""
                data-component="body" hidden>
     <br>
-<p>Base64</p>
+
         </p>
         </form>
 
