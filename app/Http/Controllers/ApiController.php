@@ -870,10 +870,12 @@ class ApiController extends Controller
 		$image = str_replace($replace, '', $this->request->file_base64);
 		$image = str_replace(' ', '+', $image);
 		$decodedImage = base64_decode($image);
+		$strlen = mb_strlen($image);
+		$y = ($strlen - 2 == '=') ? 2 : 1;
 		
-		Log::debug(mb_strlen($decodedImage));
+		Log::debug($strlen . ' - ' . $y);
 		
-		if (mb_strlen($decodedImage) > 1024 * 1024) {
+		if ($strlen * 3 / 4 - $y > 1024 * 1024) {
 			return $this->responseError('Размер файла не должен превышать 1 Мб', 400);
 		}
 		
