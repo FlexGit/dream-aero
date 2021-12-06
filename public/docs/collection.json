@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "53011f75-cd8c-41f9-90ec-505a86bc007e",
+        "_postman_id": "a64508aa-29ef-4b72-8005-f23778252f9f",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -736,13 +736,13 @@
                                     "disabled": false
                                 },
                                 {
-                                    "key": "city_id",
+                                    "key": "contractor_id",
                                     "value": "",
                                     "description": "",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/tariffs?tariff_type_id=&city_id="
+                            "raw": "http:\/\/{{baseUrl}}\/api\/tariffs?tariff_type_id=&contractor_id="
                         },
                         "method": "GET",
                         "header": [
@@ -921,13 +921,13 @@
                             "path": "api\/locations",
                             "query": [
                                 {
-                                    "key": "city_id",
+                                    "key": "contractor_id",
                                     "value": "",
                                     "description": "",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/locations?city_id="
+                            "raw": "http:\/\/{{baseUrl}}\/api\/locations?contractor_id="
                         },
                         "method": "GET",
                         "header": [
@@ -985,13 +985,13 @@
                             "path": "api\/legal_entities",
                             "query": [
                                 {
-                                    "key": "city_id",
+                                    "key": "contractor_id",
                                     "value": "",
                                     "description": "",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/legal_entities?city_id="
+                            "raw": "http:\/\/{{baseUrl}}\/api\/legal_entities?contractor_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1049,13 +1049,13 @@
                             "path": "api\/promos",
                             "query": [
                                 {
-                                    "key": "city_id",
+                                    "key": "contractor_id",
                                     "value": "",
                                     "description": "",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/promos?city_id="
+                            "raw": "http:\/\/{{baseUrl}}\/api\/promos?contractor_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1262,7 +1262,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"delectus\"}"
+                            "raw": "{\"file_base64\":\"sint\"}"
                         },
                         "description": ""
                     },
@@ -1472,13 +1472,13 @@
                                     "disabled": false
                                 },
                                 {
-                                    "key": "city_id",
+                                    "key": "contractor_id",
                                     "value": "",
                                     "description": "",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/promocode\/verify?promocode=&city_id="
+                            "raw": "http:\/\/{{baseUrl}}\/api\/promocode\/verify?promocode=&contractor_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1536,13 +1536,13 @@
                             "path": "api\/products",
                             "query": [
                                 {
-                                    "key": "city_id",
+                                    "key": "contractor_id",
                                     "value": "",
                                     "description": "",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/products?city_id="
+                            "raw": "http:\/\/{{baseUrl}}\/api\/products?contractor_id="
                         },
                         "method": "GET",
                         "header": [

@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -2296,7 +2296,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariffs?api_key=&amp;tariff_type_id=&amp;city_id=" \
+    --get "http://dev.dream-aero.ru/api/tariffs?api_key=&amp;tariff_type_id=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -2307,7 +2307,7 @@ print_r(json_decode((string) $body));</code></pre>
 const params = {
     "api_key": "",
     "tariff_type_id": "",
-    "city_id": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2333,7 +2333,7 @@ $response = $client-&gt;get(
         'query' =&gt; [
             'api_key'=&gt; '',
             'tariff_type_id'=&gt; '',
-            'city_id'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
     ]
 );
@@ -2502,9 +2502,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
-               name="city_id"
+               name="contractor_id"
                data-endpoint="GETapi-tariffs"
                value=""
                data-component="query" hidden>
@@ -2912,7 +2912,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/locations?api_key=&amp;city_id=" \
+    --get "http://dev.dream-aero.ru/api/locations?api_key=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -2922,7 +2922,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
-    "city_id": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2947,7 +2947,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'city_id'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
     ]
 );
@@ -3082,9 +3082,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
-               name="city_id"
+               name="contractor_id"
                data-endpoint="GETapi-locations"
                value=""
                data-component="query" hidden>
@@ -3106,7 +3106,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/legal_entities?api_key=&amp;city_id=" \
+    --get "http://dev.dream-aero.ru/api/legal_entities?api_key=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -3116,7 +3116,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
-    "city_id": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3141,7 +3141,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'city_id'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
     ]
 );
@@ -3265,9 +3265,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
-               name="city_id"
+               name="contractor_id"
                data-endpoint="GETapi-legal_entities"
                value=""
                data-component="query" hidden>
@@ -3449,9 +3449,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
                 <input type="number"
-               name="city_id"
+               name="contractor_id"
                data-endpoint="GETapi-promos"
                value=""
                data-component="query" hidden>
@@ -3853,7 +3853,7 @@ print_r(json_decode((string) $body));</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"delectus\"
+    \"file_base64\": \"sint\"
 }"
 </code></pre>
 
@@ -3874,7 +3874,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "delectus"
+    "file_base64": "sint"
 };
 
 fetch(url, {
@@ -3896,7 +3896,7 @@ $response = $client-&gt;post(
             'contractor_id'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'delectus',
+            'file_base64' =&gt; 'sint',
         ],
     ]
 );
@@ -4057,7 +4057,7 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="delectus"
+               value="sint"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4494,7 +4494,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/promocode/verify?api_key=&amp;promocode=&amp;city_id=" \
+    --get "http://dev.dream-aero.ru/api/promocode/verify?api_key=&amp;promocode=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -4505,7 +4505,7 @@ print_r(json_decode((string) $body));</code></pre>
 const params = {
     "api_key": "",
     "promocode": "",
-    "city_id": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4531,7 +4531,7 @@ $response = $client-&gt;get(
         'query' =&gt; [
             'api_key'=&gt; '',
             'promocode'=&gt; '',
-            'city_id'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
     ]
 );
@@ -4659,9 +4659,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
-               name="city_id"
+               name="contractor_id"
                data-endpoint="GETapi-promocode-verify"
                value=""
                data-component="query" hidden>
@@ -4683,7 +4683,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 
 <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/products?api_key=&amp;city_id=" \
+    --get "http://dev.dream-aero.ru/api/products?api_key=&amp;contractor_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
 
@@ -4693,7 +4693,7 @@ print_r(json_decode((string) $body));</code></pre>
 
 const params = {
     "api_key": "",
-    "city_id": "",
+    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4718,7 +4718,7 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'city_id'=&gt; '',
+            'contractor_id'=&gt; '',
         ],
     ]
 );
@@ -4855,9 +4855,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>city_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
-               name="city_id"
+               name="contractor_id"
                data-endpoint="GETapi-products"
                value=""
                data-component="query" hidden>

@@ -887,8 +887,8 @@ endpoints:
         required: true
         example: null
         type: integer
-      city_id:
-        name: city_id
+      contractor_id:
+        name: contractor_id
         description: ''
         required: true
         example: null
@@ -1147,8 +1147,8 @@ endpoints:
         required: true
         example: null
         type: string
-      city_id:
-        name: city_id
+      contractor_id:
+        name: contractor_id
         description: ''
         required: true
         example: null
@@ -1224,8 +1224,8 @@ endpoints:
         required: true
         example: null
         type: string
-      city_id:
-        name: city_id
+      contractor_id:
+        name: contractor_id
         description: ''
         required: true
         example: null
@@ -1290,8 +1290,8 @@ endpoints:
         required: true
         example: null
         type: string
-      city_id:
-        name: city_id
+      contractor_id:
+        name: contractor_id
         description: ''
         required: false
         example: null
@@ -1512,7 +1512,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: delectus
+        example: sint
         type: string
     responses:
       -
@@ -1750,8 +1750,8 @@ endpoints:
         required: true
         example: null
         type: string
-      city_id:
-        name: city_id
+      contractor_id:
+        name: contractor_id
         description: ''
         required: true
         example: null
@@ -1810,8 +1810,8 @@ endpoints:
         required: true
         example: null
         type: string
-      city_id:
-        name: city_id
+      contractor_id:
+        name: contractor_id
         description: ''
         required: true
         example: null

@@ -1009,7 +1009,7 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam tariff_type_id int required No-example
-	 * @queryParam city_id int required No-example
+	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1069,9 +1069,9 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID типа тарифа', 400);
 		}
 		
-		$cityId = $this->request->city_id;
-		if (!$cityId) {
-			return $this->responseError('Не передан ID города', 400);
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
 		}
 		
 		$tariffType = TariffType::where('is_active', true)
@@ -1079,7 +1079,15 @@ class ApiController extends Controller
 		if (!$tariffType) {
 			return $this->responseError('Тип тарифа не найден', 400);
 		}
-
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?: 1;
+		
 		$city = City::where('is_active', true)
 			->find($cityId);
 		if (!$city) {
@@ -1249,7 +1257,7 @@ class ApiController extends Controller
 	 * Product list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam city_id int required No-example
+	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1282,10 +1290,18 @@ class ApiController extends Controller
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
 	public function getProducts() {
-		$cityId = $this->request->city_id;
-		if (!$cityId) {
-			return $this->responseError('Не передан ID города', 400);
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
 		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?: 1;
 		
 		$city = City::where('is_active', true)
 			->find($cityId);
@@ -1350,7 +1366,7 @@ class ApiController extends Controller
 	 * Location list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam city_id int required No-example
+	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1381,11 +1397,19 @@ class ApiController extends Controller
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
 	public function getLocations() {
-		$cityId = $this->request->city_id;
-		if (!$cityId) {
-			return $this->responseError('Не передан ID города', 400);
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
 		}
 		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?: 1;
+
 		$city = City::where('is_active', true)
 			->find($cityId);
 		if (!$city) {
@@ -1407,7 +1431,7 @@ class ApiController extends Controller
 	 * Legal Entity list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam city_id int required No-example
+	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1427,10 +1451,18 @@ class ApiController extends Controller
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
 	public function getLegalEntities() {
-		$cityId = $this->request->city_id;
-		if (!$cityId) {
-			return $this->responseError('Не передан ID города', 400);
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
 		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?: 1;
 		
 		$city = City::where('is_active', true)
 			->find($cityId);
@@ -1471,7 +1503,7 @@ class ApiController extends Controller
 	 * Promo list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam city_id int No-example
+	 * @queryParam contractor_id int No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1494,10 +1526,18 @@ class ApiController extends Controller
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
 	public function getPromos() {
-		$cityId = $this->request->city_id;
-		if (!$cityId) {
-			return $this->responseError('Не передан ID города', 400);
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
 		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?: 1;
 		
 		$city = City::where('is_active', true)
 			->find($cityId);
@@ -1560,7 +1600,7 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam promocode string required No-example
-	 * @queryParam city_id int required No-example
+	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1579,10 +1619,18 @@ class ApiController extends Controller
 			return $this->responseError('Не передан промокод', 400);
 		}
 		
-		$cityId = $this->request->city_id;
-		if (!$cityId) {
-			return $this->responseError('Не передан ID города', 400);
+		$contractorId = $this->request->contractor_id;
+		if (!$contractorId) {
+			return $this->responseError('Не передан ID контрагента', 400);
 		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?: 1;
 		
 		$city = City::where('is_active', true)
 			->find($cityId);
