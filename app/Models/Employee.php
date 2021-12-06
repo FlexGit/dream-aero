@@ -74,7 +74,7 @@ class Employee extends Model
 	}
 	
 	public function format() {
-		$data = json_decode($this->data_json, true) ?? [];
+		$data = $this->data_json ?? [];
 		
 		return [
 			'id' => $this->id,
