@@ -869,12 +869,16 @@ class ApiController extends Controller
 		$replace = substr($this->request->file_base64, 0, strpos($this->request->file_base64, ',') + 1);
 		$image = str_replace($replace, '', $this->request->file_base64);
 		$image = str_replace(' ', '+', $image);
-		$decodedImage = base64_decode($image);
+		$decodedImage = base64_decode($image, true);
+		
+		if (!base64_encode($decodedImage) === $image) {
+			return $this->responseError('Файл не является Base64', 400);
+		}
+
 		$strlen = mb_strlen($image);
+
+		// https://en.wikipedia.org/wiki/Base64#Padding
 		$y = ($strlen - 2 == '=') ? 2 : 1;
-		
-		Log::debug($strlen . ' - ' . $y);
-		
 		if ($strlen * 3 / 4 - $y > 1024 * 1024) {
 			return $this->responseError('Размер файла не должен превышать 1 Мб', 400);
 		}
