@@ -14,7 +14,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property string $name имя сотрудника
  * @property int $employee_position_id должность сотрудника
  * @property int $location_id локация сотрудника
- * @property array $data_json фото сотрудника
+ * @property array $data_json дополнительная информация
  * @property int $is_active признак активности
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
