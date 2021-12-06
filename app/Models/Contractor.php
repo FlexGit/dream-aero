@@ -116,7 +116,7 @@ class Contractor extends Authenticatable
 	}
 	
 	public function format() {
-		$data = json_decode($this->data_json, true) ?? [];
+		$data = $this->data_json ? json_decode($this->data_json, true) : [];
 		
 		$avatar = array_key_exists('avatar', $data) ? $data['avatar'] : null;
 		$avatarFileName = ($avatar && array_key_exists('name', $avatar)) ? $avatar['name'] : null;
