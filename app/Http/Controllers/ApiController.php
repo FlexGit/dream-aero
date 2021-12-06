@@ -860,23 +860,29 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
+		$data = json_decode($contractor->data_json, true);
+		
+		if (array_key_exists('avatar', $data)) {
+			return $this->responseError('Файл уже существует', 400);
+		}
+		
 		$replace = substr($this->request->file_base64, 0, strpos($this->request->file_base64, ',') + 1);
 		$image = str_replace($replace, '', $this->request->file_base64);
 		$image = str_replace(' ', '+', $image);
+		$decodedImage = base64_decode($image);
 		
-		/*if (getimagesize($image) > 1024 * 1024) {
+		if (mb_strlen($decodedImage) > 1024 * 1024) {
 			return $this->responseError('Размер файла не должен превышать 1 Мб', 400);
-		}*/
+		}
 		
 		$fileName =  Str::uuid()->toString();
 		$fileExt = explode('/', explode(':', substr($this->request->file_base64, 0, strpos($this->request->file_base64, ';')))[1])[1];
 		
-		if (!Storage::put('contractor/avatar/' . $fileName . '.' . $fileExt, base64_decode($image))) {
+		if (!Storage::put('contractor/avatar/' . $fileName . '.' . $fileExt, $decodedImage)) {
 		//if (!$this->request->file('file')->storeAs('contractor/avatar', $fileName . '.' . $fileExt)) {
 			return $this->responseError(null, 500);
 		}
 
-		$data = json_decode($contractor->data_json, true);
 		$data['avatar'] = [
 			'name' => $fileName,
 			'ext' => $fileExt,
