@@ -884,7 +884,11 @@ class ApiController extends Controller
 		}
 		
 		$fileName =  Str::uuid()->toString();
-		$fileExt = explode('/', explode(':', substr($this->request->file_base64, 0, strpos($this->request->file_base64, ';')))[1])[1];
+		try {
+			$fileExt = explode('/', explode(':', substr($this->request->file_base64, 0, strpos($this->request->file_base64, ';')))[1])[1];
+		} catch (Throwable $e) {
+			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
+		}
 		
 		if (!Storage::put('contractor/avatar/' . $fileName . '.' . $fileExt, $decodedImage)) {
 		//if (!$this->request->file('file')->storeAs('contractor/avatar', $fileName . '.' . $fileExt)) {
