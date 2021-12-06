@@ -887,7 +887,7 @@ class ApiController extends Controller
 		try {
 			$fileExt = explode('/', explode(':', substr($this->request->file_base64, 0, strpos($this->request->file_base64, ';')))[1])[1];
 		} catch (Throwable $e) {
-			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
+			return $this->responseError('Строка Base64 не содержит расширения файла', '400');
 		}
 		
 		if (!Storage::put('contractor/avatar/' . $fileName . '.' . $fileExt, $decodedImage)) {
