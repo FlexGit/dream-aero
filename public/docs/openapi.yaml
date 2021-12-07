@@ -219,32 +219,7 @@ paths:
                   success: true
                   message: 'Профиль успешно сохранен'
                   data:
-                    id: 1
-                    name: John
-                    lastname: Smith
-                    email: john.smith@gmail.com
-                    phone: null
-                    city_id: 1
-                    discount: 5
-                    birthdate: '1990-01-01'
-                    avatar_file_base64: null
-                    flight_time: 100
-                    score: 10000
-                    status: Золотой
-                    is_active: true
-                    last_auth_at: '2021-01-01 12:00:00'
-                    created_at: '2021-01-01 12:00:00'
-                    updated_at: '2021-01-01 12:00:00'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Профиль успешно сохранен'
-                  data:
-                    type: object
-                    example:
+                    contractor:
                       id: 1
                       name: John
                       lastname: Smith
@@ -261,6 +236,33 @@ paths:
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
                       updated_at: '2021-01-01 12:00:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Профиль успешно сохранен'
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        lastname: Smith
+                        email: john.smith@gmail.com
+                        phone: null
+                        city_id: 1
+                        discount: 5
+                        birthdate: '1990-01-01'
+                        avatar_file_base64: null
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
         400:
           description: 'Bad Request'
           content:
@@ -1350,32 +1352,7 @@ paths:
                   success: true
                   message: 'Пароль успешно изменен'
                   data:
-                    id: 1
-                    name: John
-                    lastname: Smith
-                    email: john.smith@gmail.com
-                    phone: null
-                    city_id: 1
-                    discount: 5
-                    birthdate: '1990-01-01'
-                    avatar_file_base64: null
-                    flight_time: 100
-                    score: 10000
-                    status: Золотой
-                    is_active: true
-                    last_auth_at: '2021-01-01 12:00:00'
-                    created_at: '2021-01-01 12:00:00'
-                    updated_at: '2021-01-01 12:00:00'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Пароль успешно изменен'
-                  data:
-                    type: object
-                    example:
+                    contractor:
                       id: 1
                       name: John
                       lastname: Smith
@@ -1392,6 +1369,33 @@ paths:
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
                       updated_at: '2021-01-01 12:00:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Пароль успешно изменен'
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        lastname: Smith
+                        email: john.smith@gmail.com
+                        phone: null
+                        city_id: 1
+                        discount: 5
+                        birthdate: '1990-01-01'
+                        avatar_file_base64: null
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
         400:
           description: 'Bad Request'
           content:
@@ -1542,32 +1546,7 @@ paths:
                   success: true
                   message: null
                   data:
-                    id: 1
-                    name: John
-                    lastname: Smith
-                    email: john.smith@gmail.com
-                    phone: null
-                    city_id: 1
-                    discount: 5
-                    birthdate: '1990-01-01'
-                    avatar_file_base64: null
-                    flight_time: 100
-                    score: 10000
-                    status: Золотой
-                    is_active: true
-                    last_auth_at: '2021-01-01 12:00:00'
-                    created_at: '2021-01-01 12:00:00'
-                    updated_at: '2021-01-01 12:00:00'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: null
-                  data:
-                    type: object
-                    example:
+                    contractor:
                       id: 1
                       name: John
                       lastname: Smith
@@ -1584,6 +1563,33 @@ paths:
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
                       updated_at: '2021-01-01 12:00:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: null
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        lastname: Smith
+                        email: john.smith@gmail.com
+                        phone: null
+                        city_id: 1
+                        discount: 5
+                        birthdate: '1990-01-01'
+                        avatar_file_base64: null
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
         400:
           description: 'Bad Request'
           content:
@@ -2848,32 +2854,7 @@ paths:
                   success: true
                   message: 'Аккаунт контрагента успешно очищен'
                   data:
-                    id: 1
-                    name: John
-                    lastname: Smith
-                    email: john.smith@gmail.com
-                    phone: null
-                    city_id: 1
-                    discount: 5
-                    birthdate: '1990-01-01'
-                    avatar_file_base64: null
-                    flight_time: 100
-                    score: 10000
-                    status: Золотой
-                    is_active: true
-                    last_auth_at: '2021-01-01 12:00:00'
-                    created_at: '2021-01-01 12:00:00'
-                    updated_at: '2021-01-01 12:00:00'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Аккаунт контрагента успешно очищен'
-                  data:
-                    type: object
-                    example:
+                    contractor:
                       id: 1
                       name: John
                       lastname: Smith
@@ -2890,6 +2871,33 @@ paths:
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
                       updated_at: '2021-01-01 12:00:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Аккаунт контрагента успешно очищен'
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        lastname: Smith
+                        email: john.smith@gmail.com
+                        phone: null
+                        city_id: 1
+                        discount: 5
+                        birthdate: '1990-01-01'
+                        avatar_file_base64: null
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
         400:
           description: 'Bad Request'
           content:
@@ -3022,32 +3030,7 @@ paths:
                   success: true
                   message: 'Файл успешно сохранен'
                   data:
-                    id: 1
-                    name: John
-                    lastname: Smith
-                    email: john.smith@gmail.com
-                    phone: null
-                    city_id: 1
-                    discount: 5
-                    birthdate: '1990-01-01'
-                    avatar_file_base64: null
-                    flight_time: 100
-                    score: 10000
-                    status: Золотой
-                    is_active: true
-                    last_auth_at: '2021-01-01 12:00:00'
-                    created_at: '2021-01-01 12:00:00'
-                    updated_at: '2021-01-01 12:00:00'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Файл успешно сохранен'
-                  data:
-                    type: object
-                    example:
+                    contractor:
                       id: 1
                       name: John
                       lastname: Smith
@@ -3064,6 +3047,33 @@ paths:
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
                       updated_at: '2021-01-01 12:00:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Файл успешно сохранен'
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        lastname: Smith
+                        email: john.smith@gmail.com
+                        phone: null
+                        city_id: 1
+                        discount: 5
+                        birthdate: '1990-01-01'
+                        avatar_file_base64: null
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
         400:
           description: 'Bad Request'
           content:
@@ -3156,7 +3166,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: alias
+                  example: rerum
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3209,32 +3219,7 @@ paths:
                   success: true
                   message: 'Файл успешно удален'
                   data:
-                    id: 1
-                    name: John
-                    lastname: Smith
-                    email: john.smith@gmail.com
-                    phone: null
-                    city_id: 1
-                    discount: 5
-                    birthdate: '1990-01-01'
-                    avatar_file_base64: null
-                    flight_time: 100
-                    score: 10000
-                    status: Золотой
-                    is_active: true
-                    last_auth_at: '2021-01-01 12:00:00'
-                    created_at: '2021-01-01 12:00:00'
-                    updated_at: '2021-01-01 12:00:00'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Файл успешно удален'
-                  data:
-                    type: object
-                    example:
+                    contractor:
                       id: 1
                       name: John
                       lastname: Smith
@@ -3251,6 +3236,33 @@ paths:
                       last_auth_at: '2021-01-01 12:00:00'
                       created_at: '2021-01-01 12:00:00'
                       updated_at: '2021-01-01 12:00:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Файл успешно удален'
+                  data:
+                    type: object
+                    example:
+                      contractor:
+                        id: 1
+                        name: John
+                        lastname: Smith
+                        email: john.smith@gmail.com
+                        phone: null
+                        city_id: 1
+                        discount: 5
+                        birthdate: '1990-01-01'
+                        avatar_file_base64: null
+                        flight_time: 100
+                        score: 10000
+                        status: Золотой
+                        is_active: true
+                        last_auth_at: '2021-01-01 12:00:00'
+                        created_at: '2021-01-01 12:00:00'
+                        updated_at: '2021-01-01 12:00:00'
         400:
           description: 'Bad Request'
           content:

@@ -148,22 +148,24 @@ endpoints:
           	"success": true,
           	"message": "Профиль успешно сохранен",
           	"data": {
-          		"id": 1,
-          		"name": "John",
-          		"lastname": "Smith",
-          		"email": "john.smith@gmail.com",
-          		"phone": null,
-          		"city_id": 1,
-          		"discount": 5,
-          	"birthdate": "1990-01-01",
-          		"avatar_file_base64": null,
-          		"flight_time": 100,
-          		"score": 10000,
-          		"status": "Золотой",
-          		"is_active": true,
-          		"last_auth_at": "2021-01-01 12:00:00",
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
+          		"contractor": {
+          			"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city_id": 1,
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой",
+          			"is_active": true,
+          			"last_auth_at": "2021-01-01 12:00:00",
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		}
           	}
           }
         headers: []
@@ -681,22 +683,24 @@ endpoints:
           	"success": true,
           	"message": "Пароль успешно изменен",
           	"data": {
-          		"id": 1,
-          		"name": "John",
-          		"lastname": "Smith",
-          		"email": "john.smith@gmail.com",
-          		"phone": null,
-          		"city_id": 1,
-          		"discount": 5,
-          	"birthdate": "1990-01-01",
-          		"avatar_file_base64": null,
-          		"flight_time": 100,
-          		"score": 10000,
-          		"status": "Золотой",
-          		"is_active": true,
-          		"last_auth_at": "2021-01-01 12:00:00",
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
+          		"contractor": {
+          			"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city_id": 1,
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой",
+          			"is_active": true,
+          			"last_auth_at": "2021-01-01 12:00:00",
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		}
           	}
           }
         headers: []
@@ -761,22 +765,24 @@ endpoints:
           	"success": true,
           	"message": null,
           	"data": {
-          		"id": 1,
-          		"name": "John",
-          		"lastname": "Smith",
-          		"email": "john.smith@gmail.com",
-          		"phone": null,
-          		"city_id": 1,
-          		"discount": 5,
-          	"birthdate": "1990-01-01",
-          		"avatar_file_base64": null,
-          		"flight_time": 100,
-          		"score": 10000,
-          		"status": "Золотой",
-          		"is_active": true,
-          		"last_auth_at": "2021-01-01 12:00:00",
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
+          		"contractor": {
+          			"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city_id": 1,
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой",
+          			"is_active": true,
+          			"last_auth_at": "2021-01-01 12:00:00",
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		}
           	}
           }
         headers: []
@@ -1443,22 +1449,24 @@ endpoints:
           	"success": true,
           	"message": "Аккаунт контрагента успешно очищен",
           	"data": {
-          	"id": 1,
-          		"name": "John",
-          		"lastname": "Smith",
-          		"email": "john.smith@gmail.com",
-          		"phone": null,
-          		"city_id": 1,
-          		"discount": 5,
-          	"birthdate": "1990-01-01",
-          		"avatar_file_base64": null,
-          		"flight_time": 100,
-          		"score": 10000,
-          		"status": "Золотой",
-          		"is_active": true,
-          		"last_auth_at": "2021-01-01 12:00:00",
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
+          		"contractor": {
+          		"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city_id": 1,
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой",
+          			"is_active": true,
+          			"last_auth_at": "2021-01-01 12:00:00",
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		}
           	}
           }
         headers: []
@@ -1514,7 +1522,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: alias
+        example: rerum
         type: string
     responses:
       -
@@ -1524,22 +1532,24 @@ endpoints:
           	"success": true,
           	"message": "Файл успешно сохранен",
           	"data": {
-          		"id": 1,
-          		"name": "John",
-          		"lastname": "Smith",
-          		"email": "john.smith@gmail.com",
-          		"phone": null,
-          		"city_id": 1,
-          		"discount": 5,
-          	"birthdate": "1990-01-01",
-          		"avatar_file_base64": null,
-          		"flight_time": 100,
-          		"score": 10000,
-          		"status": "Золотой",
-          		"is_active": true,
-          		"last_auth_at": "2021-01-01 12:00:00",
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
+          		"contractor": {
+          			"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city_id": 1,
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой",
+          			"is_active": true,
+          			"last_auth_at": "2021-01-01 12:00:00",
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		}
           	}
           }
         headers: []
@@ -1604,22 +1614,24 @@ endpoints:
           	"success": true,
           	"message": "Файл успешно удален",
           	"data": {
-          		"id": 1,
-          		"name": "John",
-          		"lastname": "Smith",
-          		"email": "john.smith@gmail.com",
-          		"phone": null,
-          		"city_id": 1,
-          		"discount": 5,
-          	"birthdate": "1990-01-01",
-          		"avatar_file_base64": null,
-          		"flight_time": 100,
-          		"score": 10000,
-          		"status": "Золотой",
-          		"is_active": true,
-          		"last_auth_at": "2021-01-01 12:00:00",
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
+          		"contractor": {
+          			"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city_id": 1,
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой",
+          			"is_active": true,
+          			"last_auth_at": "2021-01-01 12:00:00",
+          			"created_at": "2021-01-01 12:00:00",
+          			"updated_at": "2021-01-01 12:00:00"
+          		}
           	}
           }
         headers: []

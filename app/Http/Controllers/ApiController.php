@@ -493,22 +493,24 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": "Пароль успешно изменен",
 	 * 	"data": {
-	 * 		"id": 1,
-	 * 		"name": "John",
-	 * 		"lastname": "Smith",
-	 * 		"email": "john.smith@gmail.com",
-	 * 		"phone": null,
-	 * 		"city_id": 1,
-	 * 		"discount": 5,
-	 *		"birthdate": "1990-01-01",
-	 * 		"avatar_file_base64": null,
-	 * 		"flight_time": 100,
-	 * 		"score": 10000,
-	 * 		"status": "Золотой",
-	 * 		"is_active": true,
-	 * 		"last_auth_at": "2021-01-01 12:00:00",
-	 * 		"created_at": "2021-01-01 12:00:00",
-	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 		"contractor": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"lastname": "Smith",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
+	 * 			"city_id": 1,
+	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar_file_base64": null,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"password": "Обязательно для заполнения"}, "debug": null}
@@ -553,7 +555,10 @@ class ApiController extends Controller
 		
 		$contractor->password = $password;
 		if ($contractor->save()) {
-			return $this->responseSuccess('Пароль успешно изменен', $contractor->format());
+			$data = [
+				'contractor' => $contractor->format(),
+			];
+			return $this->responseSuccess('Пароль успешно изменен', $data);
 		}
 		
 		return $this->responseError(null, 500);
@@ -568,22 +573,24 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": {
-	 * 		"id": 1,
-	 * 		"name": "John",
-	 * 		"lastname": "Smith",
-	 * 		"email": "john.smith@gmail.com",
-	 * 		"phone": null,
-	 * 		"city_id": 1,
-	 * 		"discount": 5,
-	 *		"birthdate": "1990-01-01",
-	 * 		"avatar_file_base64": null,
-	 * 		"flight_time": 100,
-	 * 		"score": 10000,
-	 * 		"status": "Золотой",
-	 * 		"is_active": true,
-	 * 		"last_auth_at": "2021-01-01 12:00:00",
-	 * 		"created_at": "2021-01-01 12:00:00",
-	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 		"contractor": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"lastname": "Smith",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
+	 * 			"city_id": 1,
+	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar_file_base64": null,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -603,7 +610,12 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 
-		return $this->responseSuccess(null, $contractor->format());
+		$data = [
+			'contractor' => $contractor->format(),
+			'city' => $contractor->city ? $contractor->city->toArray() : null,
+		];
+
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
@@ -621,22 +633,24 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": "Профиль успешно сохранен",
 	 * 	"data": {
-	 * 		"id": 1,
-	 * 		"name": "John",
-	 * 		"lastname": "Smith",
-	 * 		"email": "john.smith@gmail.com",
-	 * 		"phone": null,
-	 * 		"city_id": 1,
-	 * 		"discount": 5,
-	 *		"birthdate": "1990-01-01",
-	 * 		"avatar_file_base64": null,
-	 * 		"flight_time": 100,
-	 * 		"score": 10000,
-	 * 		"status": "Золотой",
-	 * 		"is_active": true,
-	 * 		"last_auth_at": "2021-01-01 12:00:00",
-	 * 		"created_at": "2021-01-01 12:00:00",
-	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 		"contractor": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"lastname": "Smith",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
+	 * 			"city_id": 1,
+	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar_file_base64": null,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
@@ -697,7 +711,11 @@ class ApiController extends Controller
 		/*$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);*/
 		
 		if ($contractor->save()) {
-			return $this->responseSuccess('Профиль успешно сохранен', $contractor->format());
+			$data = [
+				'contractor' => $contractor->format(),
+			];
+
+			return $this->responseSuccess('Профиль успешно сохранен', $data);
 		}
 		
 		return $this->responseError(null, 500);
@@ -746,22 +764,24 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": "Аккаунт контрагента успешно очищен",
 	 * 	"data": {
-	 *		"id": 1,
-	 * 		"name": "John",
-	 * 		"lastname": "Smith",
-	 * 		"email": "john.smith@gmail.com",
-	 * 		"phone": null,
-	 * 		"city_id": 1,
-	 * 		"discount": 5,
-	 *		"birthdate": "1990-01-01",
-	 * 		"avatar_file_base64": null,
-	 * 		"flight_time": 100,
-	 * 		"score": 10000,
-	 * 		"status": "Золотой",
-	 * 		"is_active": true,
-	 * 		"last_auth_at": "2021-01-01 12:00:00",
-	 * 		"created_at": "2021-01-01 12:00:00",
-	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 		"contractor": {
+	 *			"id": 1,
+	 * 			"name": "John",
+	 * 			"lastname": "Smith",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
+	 * 			"city_id": 1,
+	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar_file_base64": null,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -790,7 +810,11 @@ class ApiController extends Controller
 		$contractor->data_json = null;
 		$contractor->last_auth_at = null;
 		if ($contractor->save()) {
-			return $this->responseSuccess('Аккаунт контрагента успешно очищен', $contractor->format());
+			$data = [
+				'contractor' => $contractor->format(),
+			];
+
+			return $this->responseSuccess('Аккаунт контрагента успешно очищен', $data);
 		}
 		
 		return $this->responseError(null, 500);
@@ -806,22 +830,24 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": "Файл успешно сохранен",
 	 * 	"data": {
-	 * 		"id": 1,
-	 * 		"name": "John",
-	 * 		"lastname": "Smith",
-	 * 		"email": "john.smith@gmail.com",
-	 * 		"phone": null,
-	 * 		"city_id": 1,
-	 * 		"discount": 5,
-	 *		"birthdate": "1990-01-01",
-	 * 		"avatar_file_base64": null,
-	 * 		"flight_time": 100,
-	 * 		"score": 10000,
-	 * 		"status": "Золотой",
-	 * 		"is_active": true,
-	 * 		"last_auth_at": "2021-01-01 12:00:00",
-	 * 		"created_at": "2021-01-01 12:00:00",
-	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 		"contractor": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"lastname": "Smith",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
+	 * 			"city_id": 1,
+	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar_file_base64": null,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
@@ -902,7 +928,11 @@ class ApiController extends Controller
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
 		if ($contractor->save()) {
-			return $this->responseSuccess('Файл успешно сохранен', $contractor->format());
+			$data = [
+				'contractor' => $contractor->format(),
+			];
+
+			return $this->responseSuccess('Файл успешно сохранен', $data);
 		}
 		
 		return $this->responseError(null, 500);
@@ -917,22 +947,24 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": "Файл успешно удален",
 	 * 	"data": {
-	 * 		"id": 1,
-	 * 		"name": "John",
-	 * 		"lastname": "Smith",
-	 * 		"email": "john.smith@gmail.com",
-	 * 		"phone": null,
-	 * 		"city_id": 1,
-	 * 		"discount": 5,
-	 *		"birthdate": "1990-01-01",
-	 * 		"avatar_file_base64": null,
-	 * 		"flight_time": 100,
-	 * 		"score": 10000,
-	 * 		"status": "Золотой",
-	 * 		"is_active": true,
-	 * 		"last_auth_at": "2021-01-01 12:00:00",
-	 * 		"created_at": "2021-01-01 12:00:00",
-	 * 		"updated_at": "2021-01-01 12:00:00"
+	 * 		"contractor": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"lastname": "Smith",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
+	 * 			"city_id": 1,
+	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar_file_base64": null,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой",
+	 * 			"is_active": true,
+	 * 			"last_auth_at": "2021-01-01 12:00:00",
+	 * 			"created_at": "2021-01-01 12:00:00",
+	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
@@ -963,7 +995,11 @@ class ApiController extends Controller
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
 		if ($contractor->save()) {
-			return $this->responseSuccess('Файл успешно удален', $contractor->format());
+			$data = [
+				'contractor' => $contractor->format(),
+			];
+
+			return $this->responseSuccess('Файл успешно удален', $data);
 		}
 		
 		return $this->responseError(null, 500);
