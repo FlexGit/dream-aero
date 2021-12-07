@@ -703,9 +703,9 @@ class ApiController extends Controller
 			'birthdate' => Carbon::parse($this->request->birthdate)->format('Y-m-d'),
 		];*/
 		$contractor->name = $this->request->name;
-		$contractor->lastname = $this->request->lastname ?? '';
+		$contractor->lastname = $this->request->lastname ?? null;
 		$contractor->email = $this->request->email;
-		$contractor->phone = $this->request->phone ?? '';
+		$contractor->phone = $this->request->phone ?? null;
 		$contractor->city_id = $this->request->city_id;
 		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
 		/*$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);*/
