@@ -303,7 +303,6 @@ print_r(json_decode((string) $body));</code></pre>
     --data "{
     \"email\": null,
     \"name\": null,
-    \"lastname\": null,
     \"birthdate\": null,
     \"city_id\": null
 }"
@@ -328,7 +327,6 @@ const headers = {
 let body = {
     "email": null,
     "name": null,
-    "lastname": null,
     "birthdate": null,
     "city_id": null
 };
@@ -354,7 +352,6 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'email' =&gt; null,
             'name' =&gt; null,
-            'lastname' =&gt; null,
             'birthdate' =&gt; null,
             'city_id' =&gt; null,
         ],
@@ -535,7 +532,7 @@ print_r(json_decode((string) $body));</code></pre>
 
         </p>
                 <p>
-            <b><code>lastname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+            <b><code>lastname</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
                 <input type="text"
                name="lastname"
                data-endpoint="POSTapi-profile-save"
@@ -3861,7 +3858,7 @@ print_r(json_decode((string) $body));</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"rerum\"
+    \"file_base64\": \"necessitatibus\"
 }"
 </code></pre>
 
@@ -3882,7 +3879,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "rerum"
+    "file_base64": "necessitatibus"
 };
 
 fetch(url, {
@@ -3904,7 +3901,7 @@ $response = $client-&gt;post(
             'contractor_id'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'rerum',
+            'file_base64' =&gt; 'necessitatibus',
         ],
     ]
 );
@@ -4067,7 +4064,7 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="rerum"
+               value="necessitatibus"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>

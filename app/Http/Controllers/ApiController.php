@@ -625,7 +625,7 @@ class ApiController extends Controller
 	 * @queryParam contractor_id int required No-example
 	 * @bodyParam email string required No-example
 	 * @bodyParam name string required No-example
-	 * @bodyParam lastname string required No-example
+	 * @bodyParam lastname string No-example
 	 * @bodyParam birthdate date required No-example
 	 * @bodyParam phone string +71234567890 No-example
 	 * @bodyParam city_id int required No-example
@@ -667,7 +667,7 @@ class ApiController extends Controller
 		
 		$rules = [
 			'name' => ['required', 'min:3', 'max:50'],
-			'lastname' => ['required', 'min:3', 'max:50'],
+			'lastname' => ['sometimes', 'required', 'min:3', 'max:50'],
 			'email' => ['required', 'email'],
 			'phone' => ['sometimes', 'required', 'valid_phone'],
 			'birthdate' => ['required', 'date'],
@@ -703,9 +703,9 @@ class ApiController extends Controller
 			'birthdate' => Carbon::parse($this->request->birthdate)->format('Y-m-d'),
 		];*/
 		$contractor->name = $this->request->name;
-		$contractor->lastname = $this->request->lastname;
+		$contractor->lastname = $this->request->lastname ?? '';
 		$contractor->email = $this->request->email;
-		$contractor->phone = $this->request->phone;
+		$contractor->phone = $this->request->phone ?? '';
 		$contractor->city_id = $this->request->city_id;
 		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
 		/*$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);*/
