@@ -28,6 +28,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Position whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \App\Models\Order|null $order
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class Position extends Model
 {

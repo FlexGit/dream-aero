@@ -46,6 +46,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property int $location_id
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLocationId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class User extends Authenticatable
 {

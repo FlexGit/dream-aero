@@ -45,5 +45,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('promos', [ApiController::class, 'getPromos']);
 		Route::get('promo', [ApiController::class, 'getPromo']);
 		Route::get('promocode/verify', [ApiController::class, 'verifyPromocode']);
+		Route::get('flights', [ApiController::class, 'getFlights']);
 	});
 });

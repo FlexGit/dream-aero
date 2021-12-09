@@ -22,6 +22,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeePosition whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmployeePosition whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class EmployeePosition extends Model
 {

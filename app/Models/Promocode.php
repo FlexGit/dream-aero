@@ -33,6 +33,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class Promocode extends Model
 {

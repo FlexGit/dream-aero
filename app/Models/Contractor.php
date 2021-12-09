@@ -56,6 +56,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereBirthdate($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class Contractor extends Authenticatable
 {
@@ -140,8 +142,8 @@ class Contractor extends Authenticatable
 			'discount' => $this->discount,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
 			'avatar_file_base64' => $base64 ?: null,
-			'flight_time' => null,
-			'score' => null,
+			'flight_time' => 0,
+			'score' => 0,
 			'status' => null,
 			'is_active' => $this->is_active,
 			'is_new' => !$this->password ? true : false,

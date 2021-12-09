@@ -36,6 +36,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereLegalEntityId($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employee[] $employee
  * @property-read int|null $employee_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class Location extends Model
 {

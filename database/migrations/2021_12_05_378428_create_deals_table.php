@@ -18,6 +18,7 @@ class CreateDealsTable extends Migration
 			$table->string('number')->comment('номер сделки');
 			$table->integer('status_id')->default(0)->index()->comment('статус сделки');
 			$table->integer('contractor_id')->default(0)->index()->comment('контрагент, с которым заключена сделка');
+			$table->integer('tariff_id')->default(0)->index()->comment('тариф');
 			$table->integer('duration')->default(0)->comment('продолжительность полета');
 			$table->integer('order_id')->default(0)->index()->comment('ссылка на заказ');
 			$table->integer('certificate_id')->default(0)->index()->comment('ссылка на сертификат');

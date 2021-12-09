@@ -28,6 +28,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tariff[] $tariffs
  * @property-read int|null $tariffs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class TariffType extends Model {
     use HasFactory, RevisionableTrait;

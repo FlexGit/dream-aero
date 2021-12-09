@@ -28,6 +28,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read int|null $location_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
+ * @property string|null $data_json
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereDataJson($value)
  */
 class City extends Model
 {

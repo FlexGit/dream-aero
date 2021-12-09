@@ -3214,7 +3214,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: sunt
+                  example: id
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3728,6 +3728,160 @@ paths:
               schema:
                 type: string
                 example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"product\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Видеозапись\",\n\t\t\t\"city_id\": 1,\n\t\t\t\"price\": 500,\n\t\t\t\"data_json\": {\n\t\t\t},\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t\t}\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\",\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-10-01 18:23:27\",\n\t\t\t\"updated_at\": \"2021-10-05 18:23:41\"\n\t\t}\n\t\t}\n\t]\n}"
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+      tags:
+        - Endpoints
+  /api/flights:
+    get:
+      summary: 'Flight list'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: contractor_id
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  message: null
+                  data:
+                    -
+                      flight:
+                        flight_at: '2021-01-01 12:00:00'
+                        duration: '30'
+                        scores: '300'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: null
+                  data:
+                    type: array
+                    example:
+                      -
+                        flight:
+                          flight_at: '2021-01-01 12:00:00'
+                          duration: '30'
+                          scores: '300'
+                    items:
+                      type: object
         400:
           description: 'Bad Request'
           content:

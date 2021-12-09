@@ -57,6 +57,12 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereFlightAt($value)
  * @property int $promocode_id
  * @method static \Illuminate\Database\Eloquent\Builder|Order wherePromocodeId($value)
+ * @property int $is_certificate_order заказ сертификата
+ * @property string $certificate_number номер сертификата
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCertificateNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereIsCertificateOrder($value)
  */
 class Order extends Model
 {

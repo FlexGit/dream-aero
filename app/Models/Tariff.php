@@ -48,6 +48,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Tariff whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Tariff withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Tariff withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class Tariff extends Model
 {

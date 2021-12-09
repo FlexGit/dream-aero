@@ -31,6 +31,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promo wherePreviewText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class Promo extends Model
 {

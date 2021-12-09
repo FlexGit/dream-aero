@@ -25,6 +25,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @mixin \Eloquent
  * @property bool $is_active признак активности
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulatorType whereIsActive($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  */
 class FlightSimulatorType extends Model {
     use HasFactory, RevisionableTrait;

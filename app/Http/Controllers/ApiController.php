@@ -1721,9 +1721,11 @@ class ApiController extends Controller
 	 * 	"message": null,
 	 * 	"data": [
 	 *		{
-	 *			"flight_at": "2021-01-01 12:00:00",
-	 *			"duration": "30",
-	 *			"scores": "300",
+	 * 			"flight": {
+	 *				"flight_at": "2021-01-01 12:00:00",
+	 *				"duration": "30",
+	 *				"scores": "300"
+	 * 			}
 	 *		}
 	 * 	]
 	 * }
@@ -1744,14 +1746,19 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$flights = Deal::where('contractor_id', $contractorId)
+		$deals = Deal::where('contractor_id', $contractorId)
 			->get();
 		
 		$data = [];
-		foreach ($flights ?? [] as $flight) {
+		foreach ($deals ?? [] as $deal) {
 			$data[] = [
-				'flight_at' => $flight['flight_at'],
-				'duration' => $flight['duration'],
+				'flight' => [
+					'date' => Carbon::parse($deal['flight_at'])->format('Y-m-d'),
+					'time' => Carbon::parse($deal['flight_at'])->format('H:i'),
+				],
+				'tariff' =>  $deal->tariff ? $deal->tariff->toArray() : null,
+				'location' =>  $deal->location ? $deal->location->format() : null,
+				'score' =>  $deal->score ? $deal->score->toArray() : null,
 			];
 		}
 		

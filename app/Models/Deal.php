@@ -50,6 +50,10 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereUpdatedByUserId($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
+ * @property-read \App\Models\Score|null $score
+ * @property-read \App\Models\Tariff|null $tariff
  */
 class Deal extends Model
 {
@@ -67,6 +71,7 @@ class Deal extends Model
 		'number',
 		'status_id',
 		'contractor_id',
+		'tariff_id',
 		'duration',
 		'order_id',
 		'certificate_id',
@@ -106,7 +111,15 @@ class Deal extends Model
 	public function location() {
 		return $this->hasOne('App\Models\Location', 'id', 'location_id');
 	}
-	
+
+	public function tariff() {
+		return $this->hasOne('App\Models\Tariff', 'id', 'tariff_id');
+	}
+
+	public function score() {
+		return $this->hasOne('App\Models\Score', 'id', 'deal_id');
+	}
+
 	public function createdByUser() {
 		return $this->hasOne('App\Models\User', 'id', 'created_by_user_id');
 	}
