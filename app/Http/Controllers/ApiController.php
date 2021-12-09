@@ -1753,8 +1753,8 @@ class ApiController extends Controller
 		foreach ($deals ?? [] as $deal) {
 			$data[] = [
 				'flight' => [
-					'date' => Carbon::parse($deal['flight_at'])->format('Y-m-d'),
-					'time' => Carbon::parse($deal['flight_at'])->format('H:i'),
+					'date' => Carbon::parse($deal->flight_at)->format('Y-m-d'),
+					'time' => Carbon::parse($deal->flight_at)->format('H:i'),
 				],
 				'tariff' =>  $deal->tariff ? $deal->tariff->toArray() : null,
 				'location' =>  $deal->location ? $deal->location->format() : null,
