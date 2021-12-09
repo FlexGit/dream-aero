@@ -116,10 +116,6 @@ class Deal extends Model
 		return $this->hasOne('App\Models\Tariff', 'id', 'tariff_id');
 	}
 
-	public function score() {
-		return $this->hasOne('App\Models\Score', 'id', 'deal_id');
-	}
-
 	public function createdByUser() {
 		return $this->hasOne('App\Models\User', 'id', 'created_by_user_id');
 	}
