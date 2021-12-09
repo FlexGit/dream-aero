@@ -84,4 +84,24 @@ class Location extends Model
 	public function employee() {
 		return $this->hasMany('App\Models\Employee', 'location_id', 'id');
 	}
+
+	public function format() {
+		$data = $this->data_json ? json_decode($this->data_json, true) : [];
+
+		return [
+			'id' => $this->id,
+			'name' => $this->name,
+			'address' => array_key_exists('address', $data) ? $data['address'] : null,
+			'working_hours' => array_key_exists('working_hours', $data) ? $data['working_hours'] : null,
+			'phone' => array_key_exists('phone', $data) ? $data['phone'] : null,
+			'email' => array_key_exists('email', $data) ? $data['email'] : null,
+			'skype' => array_key_exists('skype', $data) ? $data['skype'] : null,
+			'whatsapp' => array_key_exists('whatsapp', $data) ? $data['whatsapp'] : null,
+			'map_link' => array_key_exists('map_link', $data) ? $data['map_link'] : null,
+			'scheme_file_path' => array_key_exists('scheme_file_path', $data) ? \URL::to('/upload/' . $data['scheme_file_path']) : null,
+			'is_active' => $this->is_active,
+			'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
+			'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
+		];
+	}
 }

@@ -54,7 +54,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
             <ul class="toc-footer" id="last-updated">
-            <li>Last updated: December 7 2021</li>
+            <li>Last updated: December 9 2021</li>
         </ul>
 </div>
 <div class="page-wrapper">
@@ -2965,28 +2965,29 @@ print_r(json_decode((string) $body));</code></pre>
                 <pre>
 
 <code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: [
-	{
-		&quot;id&quot;: 1,
-		&quot;name&quot;: &quot;ТРК VEGAS Кунцево&quot;,
-		&quot;legal_entity_id&quot;: 1,
-		&quot;data_json&quot;: {
-			&quot;address&quot;: &quot;&quot;,
-			&quot;working_hours&quot;: &quot;&quot;,
-			&quot;phone&quot;: &quot;&quot;,
-			&quot;email&quot;: &quot;&quot;,
-			&quot;map_link&quot;: &quot;&quot;,
-			&quot;skype&quot;: &quot;&quot;,
-			&quot;whatsapp&quot;: &quot;&quot;,
-			&quot;scheme_file_path&quot;: &quot;&quot;
-		}
-		&quot;is_active&quot;: true,
-		&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-		&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-	}
-	]
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: [
+        {
+            &quot;location&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;ТРК VEGAS Кунцево&quot;,
+                &quot;legal_entity_id&quot;: 1,
+                &quot;city_id&quot;: 1,
+                &quot;address&quot;: null,
+                &quot;working_hours&quot;: null,
+                &quot;phone&quot;: null,
+                &quot;email&quot;: null,
+                &quot;map_link&quot;: null,
+                &quot;skype&quot;: null,
+                &quot;whatsapp&quot;: null,
+                &quot;scheme_file_path&quot;: null,
+                &quot;is_active&quot;: true,
+                &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
+                &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            }
+        }
+    ]
 }</code>
  </pre>
             <blockquote>
@@ -3858,7 +3859,7 @@ print_r(json_decode((string) $body));</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"corrupti\"
+    \"file_base64\": \"ex\"
 }"
 </code></pre>
 
@@ -3879,7 +3880,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "corrupti"
+    "file_base64": "ex"
 };
 
 fetch(url, {
@@ -3901,7 +3902,7 @@ $response = $client-&gt;post(
             'contractor_id'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'corrupti',
+            'file_base64' =&gt; 'ex',
         ],
     ]
 );
@@ -4064,7 +4065,7 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="corrupti"
+               value="ex"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>

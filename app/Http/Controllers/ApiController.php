@@ -1408,22 +1408,23 @@ class ApiController extends Controller
 	 * 	"message": null,
 	 * 	"data": [
 	 *		{
-	 *			"id": 1,
-	 *			"name": "ТРК VEGAS Кунцево",
-	 *			"legal_entity_id": 1,
-	 *			"data_json": {
-	 *				"address": "",
-	 *				"working_hours": "",
-	 *				"phone": "",
-	 *				"email": "",
-	 *				"map_link": "",
-	 *				"skype": "",
-	 *				"whatsapp": "",
-	 *				"scheme_file_path": ""
-	 *			}
-	 *			"is_active": true,
-	 *			"created_at": "2021-01-01 12:00:00",
-	 *			"updated_at": "2021-01-01 12:00:00",
+	 * 			"location": {
+	 *				"id": 1,
+	 *				"name": "ТРК VEGAS Кунцево",
+	 *				"legal_entity_id": 1,
+	 *				"city_id": 1,
+	 *				"address": null,
+	 *				"working_hours": null,
+	 *				"phone": null,
+	 *				"email": null,
+	 *				"map_link": null,
+	 *				"skype": null,
+	 *				"whatsapp": null,
+	 *				"scheme_file_path": null,
+	 *				"is_active": true,
+	 *				"created_at": "2021-01-01 12:00:00",
+	 *				"updated_at": "2021-01-01 12:00:00"
+	 * 			}
 	 *		}
 	 * 	]
 	 * }
@@ -1459,8 +1460,16 @@ class ApiController extends Controller
 		if ($locations->isEmpty()) {
 			return $this->responseError('Локации не найдены', 400);
 		}
+
+		$data = [];
+
+		foreach ($locations as $location) {
+			$data[] = [
+				'location' => $location->format(),
+			];
+		}
 		
-		return $this->responseSuccess(null, $locations->toArray());
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**

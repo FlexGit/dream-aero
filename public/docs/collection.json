@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "c308eb8e-6cd6-4bf6-b7dc-3bc25a1de762",
+        "_postman_id": "1ae2140c-75ac-4fc9-88a7-d8e1296e015b",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -947,7 +947,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\"id\": 1,\n\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\"legal_entity_id\": 1,\n\t\t\"data_json\": {\n\t\t\t\"address\": \"\",\n\t\t\t\"working_hours\": \"\",\n\t\t\t\"phone\": \"\",\n\t\t\t\"email\": \"\",\n\t\t\t\"map_link\": \"\",\n\t\t\t\"skype\": \"\",\n\t\t\t\"whatsapp\": \"\",\n\t\t\t\"scheme_file_path\": \"\"\n\t\t}\n\t\t\"is_active\": true,\n\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\"updated_at\": \"2021-01-01 12:00:00\",\n\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"location\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\t\"legal_entity_id\": 1,\n\t\t\t\"city_id\": 1,\n\t\t\t\"address\": null,\n\t\t\t\"working_hours\": null,\n\t\t\t\"phone\": null,\n\t\t\t\"email\": null,\n\t\t\t\"map_link\": null,\n\t\t\t\"skype\": null,\n\t\t\t\"whatsapp\": null,\n\t\t\t\"scheme_file_path\": null,\n\t\t\t\"is_active\": true,\n\t\t\t\"created_at\": \"2021-01-01 12:00:00\",\n\t\t\t\"updated_at\": \"2021-01-01 12:00:00\"\n\t\t\t}\n\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -1262,7 +1262,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"corrupti\"}"
+                            "raw": "{\"file_base64\":\"ex\"}"
                         },
                         "description": ""
                     },
