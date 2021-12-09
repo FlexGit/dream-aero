@@ -132,12 +132,11 @@ class Contractor extends Authenticatable
 			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);
 		}
 
-		$flightTime = Deal::where('is_active', true)
+		$flightTime = Deal::where('status_id', '>', 0)
 			->sum('duration');
-		\Log::debug($flightTime);
 
 		$score = Score::where('contractor_id', $this->id)
-			/*->whereRelation('deal', 'is_active', '=', true)*/
+			->whereRelation('deal', 'status_id', '>', 0)
 			->sum('score');
 
 		return [
