@@ -135,9 +135,9 @@ class Contractor extends Authenticatable
 		/*$flightTime = Deal::where('is_active', true)
 			->sum('duration');*/
 
-		/*$score = Score::where('contractor_id', $this->id)
+		$score = Score::where('contractor_id', $this->id)
 			->whereRelation('deals', 'is_active', '=', true)
-			->sum('score');*/
+			->sum('score');
 
 		return [
 			'id' => $this->id,
