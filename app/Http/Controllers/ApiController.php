@@ -1757,7 +1757,7 @@ class ApiController extends Controller
 
 		$scoreData = [];
 		foreach ($scores ?? [] as $score) {
-			$scoreData[$score->deal_id] = $scoreData['score'];
+			$scoreData[$score->deal_id] = $score->score;
 		}
 		
 		$data = [];
