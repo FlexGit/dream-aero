@@ -131,7 +131,14 @@ class Contractor extends Authenticatable
 			$fileData = file_get_contents($file);
 			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);
 		}
-		
+
+		$flightTime = Deal::where('is_active', true)
+			->sum('duration');
+
+		$score = Score::where('contractor_id', $this->id)
+			->whereRelation('deals', 'is_active', '=', true)
+			->sum('score');
+
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
@@ -142,8 +149,8 @@ class Contractor extends Authenticatable
 			'discount' => $this->discount,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
 			'avatar_file_base64' => $base64 ?: null,
-			'flight_time' => rand(1000, 9999),
-			'score' => 0,
+			'flight_time' => $flightTime ?? 0,
+			'score' => $score ?? 0,
 			'status' => null,
 			'is_active' => $this->is_active,
 			'is_new' => !$this->password ? true : false,
