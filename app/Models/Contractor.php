@@ -142,7 +142,7 @@ class Contractor extends Authenticatable
 			'discount' => $this->discount,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
 			'avatar_file_base64' => $base64 ?: null,
-			'flight_time' => 0,
+			'flight_time' => rand(1000, 9999),
 			'score' => 0,
 			'status' => null,
 			'is_active' => $this->is_active,
