@@ -25,6 +25,7 @@ use App\Models\Promocode;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Deal;
+use App\Models\Score;
 
 use App\Traits\ApiResponser;
 
@@ -1746,8 +1747,18 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$deals = Deal::where('contractor_id', $contractorId)
+		$deals = Deal::where('contractor_id', $contractorId);
+		$dealIds = $deals->pluck('id');
+		$deals = $deals->get();
+
+		$scores = Score::where('contractor_id', $contractorId)
+			->whereIn('deal_id', $dealIds)
 			->get();
+
+		$scoreData = [];
+		foreach ($scores ?? [] as $score) {
+			$scoreData[$score->deal_id] = $scoreData['score'];
+		}
 		
 		$data = [];
 		foreach ($deals ?? [] as $deal) {
@@ -1758,7 +1769,7 @@ class ApiController extends Controller
 				],
 				'tariff' =>  $deal->tariff ? $deal->tariff->toArray() : null,
 				'location' =>  $deal->location ? $deal->location->format() : null,
-				'score' =>  $deal->score ? $deal->score->toArray() : null,
+				'score' =>  $scoreData[$deal->id] ?? null,
 			];
 		}
 		
