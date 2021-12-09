@@ -86,7 +86,7 @@ class Location extends Model
 	}
 
 	public function format() {
-		$data = $this->data_json ? json_decode($this->data_json, true) : [];
+		$data = $this->data_json;
 
 		return [
 			'id' => $this->id,
