@@ -327,7 +327,14 @@ return [
 		],
 		[
 			'text'        => 'Права доступа',
-			'url'         => '/access_rights',
+			'url'         => '/access_right',
+			'icon'        => 'fas fa-fw fa-low-vision',
+			'label'       => '',
+			'label_color' => '',
+		],
+		[
+			'text'        => 'Лог операций',
+			'url'         => '/log',
 			'icon'        => 'fas fa-fw fa-low-vision',
 			'label'       => '',
 			'label_color' => '',
@@ -469,20 +476,20 @@ return [
 		'Fullcalendar' => [
 			'active' => false,
 			'files' => [
-				/*[
-					'type' => 'js',
-					'asset' => true,
-					'location' => 'vendor/fullcalendar/locales-all.min.js',
-				],*/
-				[
-					'type' => 'js',
-					'asset' => true,
-					'location' => 'vendor/fullcalendar/locales/ru.js',
-				],
 				[
 					'type' => 'js',
 					'asset' => true,
 					'location' => 'vendor/fullcalendar/main.min.js',
+				],
+				[
+					'type' => 'js',
+					'asset' => true,
+					'location' => 'vendor/fullcalendar/locales-all.min.js',
+				],
+				[
+					'type' => 'js',
+					'asset' => true,
+					'location' => 'vendor/fullcalendar/locales/ru.js',
 				],
 				[
 					'type' => 'css',

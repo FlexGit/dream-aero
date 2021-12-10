@@ -14,6 +14,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\AccessRightController;
+use App\Http\Controllers\RevisionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,6 +158,13 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('product/{id}/edit', [ProductController::class, 'edit']);
 		Route::get('product/{id}/delete', [ProductController::class, 'confirm']);
 		Route::get('product/{id}/show', [ProductController::class, 'show']);
+		
+		// Права доступа
+		/*Route::get('access_right', [AccessRightController::class, 'index'])->name('accessRightIndex');*/
+		
+		// Лог операций
+		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
+		Route::get('log/{entity?}/{object_id?}', [RevisionController::class, 'index'])->name('revisionIndex');
 	});
 });
 

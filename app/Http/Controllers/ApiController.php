@@ -1769,7 +1769,7 @@ class ApiController extends Controller
 				],
 				'tariff' =>  $deal->tariff ? $deal->tariff->toArray() : null,
 				'location' =>  $deal->location ? $deal->location->format() : null,
-				'score' =>  $scoreData[$deal->id] ?? null,
+				'score' =>  $scoreData[$deal->id] ?? 0,
 			];
 		}
 		
