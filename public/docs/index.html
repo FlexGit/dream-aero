@@ -71,7 +71,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1>Authenticating requests</h1>
-<p>Authenticate requests to this API's endpoints by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3859,7 +3859,7 @@ print_r(json_decode((string) $body));</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"id\"
+    \"file_base64\": \"perferendis\"
 }"
 </code></pre>
 
@@ -3880,7 +3880,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "id"
+    "file_base64": "perferendis"
 };
 
 fetch(url, {
@@ -3902,7 +3902,7 @@ $response = $client-&gt;post(
             'contractor_id'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'id',
+            'file_base64' =&gt; 'perferendis',
         ],
     ]
 );
@@ -4065,7 +4065,7 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="id"
+               value="perferendis"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
