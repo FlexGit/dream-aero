@@ -7,8 +7,8 @@ use App\Models\Review;
 use App\Models\Location;
 use App\Models\FlightSimulatorType;
 use App\Models\File;
-use App\Models\TariffType;
-use App\Models\Tariff;
+use App\Models\ProductType;
+use App\Models\Product;
 
 class MainController extends Controller
 {
@@ -95,18 +95,18 @@ class MainController extends Controller
 
 	public function price()
 	{
-		$tariffTypes = TariffTypes::where('is_active', true)
+		$productTypes = ProductType::where('is_active', true)
 			->orderBy('name')
 			->get();
 
-		$tariffs = Tariffs::where('is_active', true)
+		$products = Product::where('is_active', true)
 			->where('city_id', $this->cityId)
 			->orderBy('name')
 			->get();
 
 		return view('price', [
-			'tariffTypes' => $tariffTypes,
-			'tariffs' => $tariffs,
+			'productTypes' => $productTypes,
+			'products' => $products,
 		]);
 	}
 }

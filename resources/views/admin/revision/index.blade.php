@@ -36,24 +36,24 @@
 							<input type="text" class="form-control" id="search_object" name="search_object" @if($objectId) value="{{ $objectId }}" @endif placeholder="ID объекта">
 						</div>
 					</div>
-					<table id="revisionTable" class="table table-hover table-sm table-bordered table-striped">
-						<thead>
-						<tr>
-							<th class="text-center">#</th>
-							<th class="text-center">Тип операции</th>
-							<th class="text-center">Сущность</th>
-							<th class="text-center d-none d-sm-table-cell">ID объекта</th>
-							<th class="text-center d-none d-sm-table-cell">Атрибут</th>
-							<th class="text-center d-none d-md-table-cell">Старое значение</th>
-							<th class="text-center d-none d-md-table-cell">Новое значение</th>
-							<th class="text-center d-none d-md-table-cell">Пользователь</th>
-							<th class="text-center d-none d-xl-table-cell">Создано</th>
-							<th class="text-center d-none d-xl-table-cell">Изменено</th>
-						</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
+					<div class="table-responsive">
+						<table id="revisionTable" class="table table-hover table-sm table-bordered table-striped">
+							<thead style="position: sticky;top: 0">
+							<tr class="text-center">
+								{{--<th class="align-middle">#</th>--}}
+								<th class="align-middle">Сущность</th>
+								<th class="align-middle text-nowrap d-none d-sm-table-cell">Объект</th>
+								<th class="align-middle d-none d-sm-table-cell">Атрибут</th>
+								<th class="align-middle d-none d-md-table-cell">Было</th>
+								<th class="align-middle d-none d-md-table-cell">Стало</th>
+								<th class="align-middle d-none d-md-table-cell">Пользователь</th>
+								<th class="align-middle d-none d-xl-table-cell">Когда</th>
+							</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -70,10 +70,11 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList() {
+			function getList(loadMore) {
 				var $selector = $('#revisionTable tbody');
 
-				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+				var $tr = $('tr.odd[data-id]:last'),
+					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
 
 				$.ajax({
 					url: '{{ route('revisionList') }}',
@@ -82,6 +83,7 @@
 					data: {
 						"filter_entity_alias": $('#filter_entity_alias').val(),
 						"search_object": $('#search_object').val(),
+						"id": id
 					},
 					success: function(result) {
 						if (result.status !== 'success') {
@@ -90,22 +92,55 @@
 						}
 
 						if (result.html) {
-							$selector.html(result.html);
+							if (loadMore) {
+								$selector.append(result.html);
+							} else {
+								$selector.html(result.html);
+							}
+							$(window).data('ajaxready', true);
 						} else {
-							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							if (!id) {
+								$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							}
 						}
 					}
 				})
 			}
 
-			getList('{{ route('revisionList') }}');
+			getList(false);
 
 			$(document).on('change', '#filter_entity_alias', function(e) {
-				getList();
+				if (!$('#search_object').val().length) return;
+
+				getList(false);
 			});
 
 			$(document).on('keyup', '#search_object', function(e) {
-				getList();
+				if ($.inArray(e.keyCode, [33, 34]) !== -1) return;
+
+				getList(false);
+			});
+
+			$.fn.isInViewport = function () {
+				let elementTop = $(this).offset().top;
+				let elementBottom = elementTop + $(this).outerHeight();
+
+				let viewportTop = $(window).scrollTop();
+				let viewportBottom = viewportTop + $(window).height();
+
+				return elementBottom > viewportTop && elementTop < viewportBottom;
+			};
+
+			$(window).on('scroll', function() {
+				if ($(window).data('ajaxready') === false) return;
+
+				var $tr = $('tr.odd[data-id]:last');
+				if (!$tr.length) return;
+
+				if ($tr.isInViewport()) {
+					$(window).data('ajaxready', false);
+					getList(true);
+				}
 			});
 		});
 	</script>

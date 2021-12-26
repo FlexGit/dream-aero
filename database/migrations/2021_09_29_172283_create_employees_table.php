@@ -21,6 +21,7 @@ class CreateEmployeesTable extends Migration
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

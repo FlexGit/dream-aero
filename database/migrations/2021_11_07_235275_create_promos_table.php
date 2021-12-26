@@ -16,11 +16,14 @@ class CreatePromosTable extends Migration
         Schema::create('promos', function (Blueprint $table) {
 			$table->id();
             $table->string('name')->comment('наименование');
+			$table->integer('discount_id')->default(0)->index()->comment('скидка');
             $table->text('preview_text')->nullable()->comment('анонс');
             $table->text('detail_text')->nullable()->comment('описание');
 			$table->integer('city_id')->default(0)->index()->comment('город, к которому относится акция');
+			$table->boolean('is_published')->default(false)->index()->comment('для публикации');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

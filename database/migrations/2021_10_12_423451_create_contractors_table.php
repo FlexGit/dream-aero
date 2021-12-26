@@ -28,6 +28,7 @@ class CreateContractorsTable extends Migration
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->timestamp('last_auth_at')->nullable()->comment('дата последней по времени авторизации');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

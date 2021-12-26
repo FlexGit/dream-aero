@@ -176,7 +176,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
 		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-		// Yajra\DataTables\DataTablesServiceProvider::class,
 		Venturecraft\Revisionable\RevisionableServiceProvider::class,
     ],
 
@@ -220,7 +219,7 @@ return [
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'RateLimiter' => Illuminate\Support\Facades\RateLimiter::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
-        // 'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
         'Request' => Illuminate\Support\Facades\Request::class,
         'Response' => Illuminate\Support\Facades\Response::class,
         'Route' => Illuminate\Support\Facades\Route::class,
@@ -231,8 +230,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
-		//'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
 	'api_key' => env('SCRIBE_AUTH_KEY'),

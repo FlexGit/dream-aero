@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use \Venturecraft\Revisionable\RevisionableTrait;
 
@@ -12,30 +13,47 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  *
  * @property int $id
  * @property string $name имя пользователя
- * @property string $comment текст отзыва
+ * @property string|null $comment текст отзыва
  * @property int $location_id локация, о которой отзыв
- * @property int $is_active признак активности
+ * @property bool $is_active признак активности
  * @property \datetime|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
  * @property-read \App\Models\Location|null $location
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
  * @method static \Illuminate\Database\Eloquent\Builder|Review newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Review newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Review onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Review query()
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereLocationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Review withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Review withoutTrashed()
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
- * @property-read int|null $revision_history_count
  */
 class Review extends Model
 {
-    use HasFactory, RevisionableTrait;
+	use HasFactory, SoftDeletes, RevisionableTrait;
 	
+	const ATTRIBUTES = [
+		'name' => 'Наименование',
+		'comment' => 'Комментарий',
+		'location_id' => 'Локация',
+		'active_to_at' => 'Окончание активности',
+		'is_active' => 'Активность',
+		'data_json' => 'Дополнительная информация',
+		'created_at' => 'Создано',
+		'updated_at' => 'Изменено',
+		'deleted_at' => 'Удалено',
+	];
+
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
 	
@@ -57,10 +75,15 @@ class Review extends Model
 	 * @var array
 	 */
 	protected $casts = [
-		'created_at' => 'datetime:d.m.Y',
+		'created_at' => 'datetime:Y-m-d H:i:s',
+		'updated_at' => 'datetime:Y-m-d H:i:s',
+		'deleted_at' => 'datetime:Y-m-d H:i:s',
+		'data_json' => 'array',
+		'is_active' => 'boolean',
 	];
 
-	public function location() {
+	public function location()
+	{
 		return $this->hasOne('App\Models\Location', 'id', 'location_id');
 	}
 }

@@ -156,4 +156,32 @@ class ContractorController extends Controller
 		
 		return response()->json(['status' => 'success', 'id' => $contractor->id]);
 	}
+	
+	public function search() {
+		$q = $this->request->post('query');
+		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		
+		$contractors = Contractor::where('is_active', true)
+			->where(function($query) use ($q) {
+				$query->where("name", "LIKE", "%{$q}%")
+					->orWhere("lastname", "LIKE", "%{$q}%")
+					->orWhere("email", "LIKE", "%{$q}%")
+					->orWhere("phone", "LIKE", "%{$q}%");
+			})
+			->orderBy("name")
+			->orderBy("lastname")
+			->get();
+		
+		$suggestions = [];
+		foreach ($contractors as $contractor) {
+			$data_json = $contractor->data_json;
+			$suggestions[] = [
+				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . ']',
+				'id' => $contractor->id,
+				'data' => $data_json,
+			];
+		}
+		
+		return response()->json(['suggestions' => $suggestions]);
+	}
 }

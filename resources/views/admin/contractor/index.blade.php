@@ -202,7 +202,7 @@
 				});
 			});
 
-			$(document).on('shown.bs.modal', '#modal', function(e) {
+			$(document).on('show.bs.modal', '#modal', function(e) {
 			});
 
 			$(document).on('change', '#filter_city_id', function(e) {

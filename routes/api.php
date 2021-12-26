@@ -25,7 +25,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::post('login', [ApiController::class, 'login']);
 		Route::post('logout', [ApiController::class, 'logout']);
 		Route::post('code/send', [ApiController::class, 'sendCode']);
-		Route::post('code/verify', [ApiController::class, 'verifyCode']);
+		Route::get('code/verify', [ApiController::class, 'verifyCode']);
 		Route::post('register', [ApiController::class, 'register']);
 		Route::post('password/reset', [ApiController::class, 'resetPassword']);
 		Route::get('profile', [ApiController::class, 'getProfile']);
@@ -38,7 +38,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('tariffs', [ApiController::class, 'getTariffs']);
 		Route::get('tariff', [ApiController::class, 'getTariff']);
 		Route::get('tariff/price', [ApiController::class, 'getTariffPrice']);
-		Route::get('products', [ApiController::class, 'getProducts']);
 		Route::get('cities', [ApiController::class, 'getCities']);
 		Route::get('locations', [ApiController::class, 'getLocations']);
 		Route::get('legal_entities', [ApiController::class, 'getLegalEntities']);
@@ -46,5 +45,9 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('promo', [ApiController::class, 'getPromo']);
 		Route::get('promocode/verify', [ApiController::class, 'verifyPromocode']);
 		Route::get('flights', [ApiController::class, 'getFlights']);
+		Route::post('order/create', [ApiController::class, 'createorder']);
+		Route::get('certificate/verify', [ApiController::class, 'verifyCertificate']);
+		Route::get('notifications', [ApiController::class, 'getNotifications']);
+		Route::get('notification', [ApiController::class, 'getNotification']);
 	});
 });

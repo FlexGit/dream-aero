@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DealPosition;
+use App\Models\Notification;
+use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
 use Mail;
@@ -15,17 +18,20 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\City;
 use App\Models\Contractor;
 use App\Models\LegalEntity;
-use App\Models\MobAuth;
+use App\Models\Token;
 use App\Models\Code;
 use App\Models\Promo;
-use App\Models\TariffType;
-use App\Models\Tariff;
+use App\Models\ProductType;
+use App\Models\Product;
 use App\Models\Location;
 use App\Models\Promocode;
-use App\Models\Product;
 use App\Models\Order;
 use App\Models\Deal;
 use App\Models\Score;
+use App\Models\Bill;
+use App\Models\Payment;
+use App\Models\Certificate;
+use App\Models\Status;
 
 use App\Traits\ApiResponser;
 
@@ -50,11 +56,10 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": {
-	 * 		"id": 1,
-	 * 		"token": "328dda59f036efc26720937545efe01e",
-	 * 	 	"contractor_id": 1,
-	 * 	 	"created_at": "2021-11-12 18:36:05",
-	 * 	 	"updated_at": "2021-11-12 18:36:05"
+	 * 		"token": {
+	 * 			"token": "328dda59f036efc26720937545efe01e",
+	 * 			"expire_at": null
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
@@ -63,7 +68,8 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function login() {
+	public function login()
+	{
 		$rules = [
 			'email' => ['required', 'email'],
 			'password' => ['required', 'string'],
@@ -95,22 +101,25 @@ class ApiController extends Controller
 			return $this->responseError(['password' => 'Пароль указан неверно'], 400);
 		}
 		
-		$mobAuth = new MobAuth();
-		$mobAuth->contractor_id = $contractor->id;
-		$mobAuth->setToken($contractor);
-		
-		if ($mobAuth->save()) {
-			return $this->responseSuccess(null, $mobAuth->toArray());
+		$token = new Token();
+		$token->contractor_id = $contractor->id;
+		$token->setToken($contractor);
+
+		if (!$token->save()) {
+			return $this->responseError(null, 500);
 		}
 		
-		return $this->responseError(null, 500);
+		$data = [
+			'token' => $token->token,
+		];
+		
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
 	 * Logout
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
 	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
@@ -122,28 +131,23 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function logout() {
-		$contractorId = $this->request->contractor_id;
-		$token = $this->request->token;
-		
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+	public function logout()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
+		
+		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Не передан токен', 400);
-		}
-		
-		$mobAuth = MobAuth::where('token', $token)
-			->where('contractor_id', $contractorId)
-			->first();
-		
-		if (!$mobAuth) {
 			return $this->responseError('Токен не найден', 400);
 		}
 		
-		$mobAuth->delete();
+		if ($token->delete()) {
+			return $this->responseSuccess('Токен успешно удален');
+		}
 		
-		return $this->responseSuccess('Токен успешно удален');
+		return $this->responseError(null, 500);
 	}
 	
 	/**
@@ -155,35 +159,7 @@ class ApiController extends Controller
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Код подтверждения отправлен на john.smith@gmail.com",
-	 * 	"data": {
-	 * 		"contractor": {
-	 * 			"id": 1,
-	 * 			"name": "John",
-	 * 			"lastname": "Smith",
-	 * 			"email": "john.smith@gmail.com",
-	 * 			"phone": null,
-	 * 			"city_id": 1,
-	 * 			"discount": 5,
-	 *			"birthdate": "1990-01-01",
-	 * 			"avatar_file_base64": null,
-	 * 			"flight_time": 100,
-	 * 			"score": 10000,
-	 * 			"status": "Золотой",
-	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
-	 * 		},
-	 * 		"code": {
-	 * 			"id": 1,
-	 * 			"code": 1234,
-	 * 			"contractor_id": 1,
-	 * 			"is_reset": 0,
-	 * 			"reset_at": null,
-	 * 			"created_at": "2021-11-12 18:36:05",
-	 * 			"updated_at": "2021-11-12 18:36:05"
-	 * 		}
-	 * 	}
+	 * 	"data": null
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -191,7 +167,8 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function sendCode() {
+	public function sendCode()
+	{
 		$rules = [
 			'email' => ['required', 'email'],
 		];
@@ -255,16 +232,11 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		$data = [
-			'contractor' => $contractor ? $contractor->format() : [],
-			'code' => $code->toArray(),
-		];
-
-		return $this->responseSuccess('Код подтверждения отправлен на ' . $email, $data);
+		return $this->responseSuccess('Код подтверждения отправлен на ' . $email);
 	}
 	
 	/**
-	 * Code verification
+	 * Code verify
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam email string required No-example
@@ -279,7 +251,7 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -287,18 +259,7 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
-	 * 		},
-	 * 		"code": {
-	 * 			"id": 1,
-	 * 			"code": 1234,
-	 * 			"contractor_id": 1,
-	 * 			"is_reset": 0,
-	 * 			"reset_at": null,
-	 * 			"created_at": "2021-11-12 18:36:05",
-	 * 			"updated_at": "2021-11-12 18:36:05"
+	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -308,7 +269,8 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function verifyCode() {
+	public function verifyCode()
+	{
 		$rules = [
 			'email' => ['required', 'email'],
 			'code' => ['required', 'digits:4'],
@@ -347,16 +309,9 @@ class ApiController extends Controller
 			return $this->responseError(null, 500);
 		}
 		
-		$contractor = $code->contractor_id ? Contractor::find($code->contractor_id) : null;
-		
-		$data = [
-			'contractor' => $contractor ? $contractor->format() : [],
-			'code' => $code->toArray(),
-		];
-		
-		return $this->responseSuccess('Код подтвержден', $data);
+		return $this->responseSuccess('Код подтвержден');
 	}
-	
+
 	/**
 	 * Registration
 	 *
@@ -378,7 +333,7 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -386,16 +341,11 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
-	 * 		},
-	 * 		"mob_auth": {
-	 * 			"id": 1,
-	 * 			"contractor_id": 1,
+	 * 			"is_new": false
+	 * 		}
+	 * 		"token": {
 	 * 			"token": "6136d60c36e6925bf98dea7e05d5f5c8",
-	 * 			"created_at": "2021-11-12 18:36:05",
-	 * 			"updated_at": "2021-11-12 18:36:05"
+	 * 			"expire_at": null
 	 * 		}
 	 * 	}
 	 * }
@@ -405,7 +355,8 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function register() {
+	public function register()
+	{
 		$rules = [
 			'contractor_id' => ['nullable', 'numeric'],
 			'password' => ['required', 'confirmed'/*, Password::defaults()*/],
@@ -449,35 +400,40 @@ class ApiController extends Controller
 			if ($contractor) {
 				return $this->responseError('Контрагент с таким E-mail уже существует', 400);
 			}
-			/*$data = [
-				'birthdate' => Carbon::parse($this->request->birthdate)->format('Y-m-d'),
-			];*/
 			$contractor = new Contractor();
 			$contractor->name = $this->request->name;
 			$contractor->email = $this->request->email;
 			$contractor->city_id = $this->request->city_id;
 			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
-			/*$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);*/
 		}
 		
 		$contractor->password = $this->request->password;
-		if (!$contractor->save()) {
-			return $this->responseError(null, 500);
+		
+		try {
+			\DB::beginTransaction();
+			
+			$contractor->save();
+			
+			$token = new Token();
+			$token->contractor_id = $contractor->id;
+			$token->setToken($contractor);
+			$token->save();
+
+			$contractor->last_auth_at = date('Y-m-d H:i:s');
+			$contractor->save();
+			
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			Log::debug('500 - ' . $e->getMessage());
+			
+			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
-		
-		$mobAuth = new MobAuth();
-		$mobAuth->contractor_id = $contractor->id;
-		$mobAuth->setToken($contractor);
-		if (!$mobAuth->save()) {
-			return $this->responseError(null, 500);
-		}
-		
-		$contractor->last_auth_at = date('Y-m-d H:i:s');
-		$contractor->save();
-		
+
 		$data = [
 			'contractor' => $contractor->format(),
-			'mob_auth' => $mobAuth ? $mobAuth->toArray() : null,
+			'token' => $token->format(),
 		];
 
 		return $this->responseSuccess('Регистрация успешно завершена', $data);
@@ -487,7 +443,7 @@ class ApiController extends Controller
 	 * Password change
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @bodyParam password string required Password (md5). No-example
 	 * @bodyParam password_confirmation string required Password confirmation (md5). No-example
 	 * @response scenario=success {
@@ -500,7 +456,7 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -508,9 +464,7 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -520,10 +474,11 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function resetPassword() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+	public function resetPassword()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
 		$rules = [
@@ -548,6 +503,16 @@ class ApiController extends Controller
 		
 		$password = $this->request->password;
 		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
@@ -555,21 +520,22 @@ class ApiController extends Controller
 		}
 		
 		$contractor->password = $password;
-		if ($contractor->save()) {
-			$data = [
-				'contractor' => $contractor->format(),
-			];
-			return $this->responseSuccess('Пароль успешно изменен', $data);
+		if (!$contractor->save()) {
+			return $this->responseError(null, 500);
 		}
 		
-		return $this->responseError(null, 500);
+		$data = [
+			'contractor' => $contractor->format(),
+		];
+
+		return $this->responseSuccess('Пароль успешно изменен', $data);
 	}
 	
 	/**
 	 * Profile
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -580,7 +546,7 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -588,9 +554,7 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -599,10 +563,21 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getProfile() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
+	public function getProfile()
+	{
+		$authToken = $this->request->token;
+		if (!$authToken) {
 			return $this->responseError('Не передан ID контрагента', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$contractor = Contractor::where('is_active', true)
@@ -613,7 +588,7 @@ class ApiController extends Controller
 
 		$data = [
 			'contractor' => $contractor->format(),
-			'city' => $contractor->city ? $contractor->city->toArray() : null,
+			'city' => $contractor->city ? $contractor->city->format() : null,
 		];
 
 		return $this->responseSuccess(null, $data);
@@ -623,7 +598,7 @@ class ApiController extends Controller
 	 * Profile save
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @bodyParam email string required No-example
 	 * @bodyParam name string required No-example
 	 * @bodyParam lastname string No-example
@@ -640,7 +615,7 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -648,9 +623,7 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -660,10 +633,11 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function saveProfile() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+	public function saveProfile()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
 		$rules = [
@@ -694,39 +668,45 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		/*$data = [
-			'birthdate' => Carbon::parse($this->request->birthdate)->format('Y-m-d'),
-		];*/
 		$contractor->name = $this->request->name;
 		$contractor->lastname = $this->request->lastname ?? null;
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone ?? null;
 		$contractor->city_id = $this->request->city_id;
 		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
-		/*$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);*/
 		
-		if ($contractor->save()) {
-			$data = [
-				'contractor' => $contractor->format(),
-			];
-
-			return $this->responseSuccess('Профиль успешно сохранен', $data);
+		if (!$contractor->save()) {
+			return $this->responseError(null, 500);
 		}
 		
-		return $this->responseError(null, 500);
+		$data = [
+			'contractor' => $contractor->format(),
+		];
+		
+		return $this->responseSuccess('Профиль успешно сохранен', $data);
 	}
 	
 	/**
 	 * Profile delete
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Профиль успешно удален",
@@ -737,10 +717,21 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function deleteProfile() {
-		$contractorId = $this->request->contractor_id;
+	public function deleteProfile()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
 		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$contractor = Contractor::where('is_active', true)
@@ -749,29 +740,39 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		if ($contractor->delete()) {
-			return $this->responseSuccess('Профиль успешно удален');
+		try {
+			\DB::beginTransaction();
+			
+			$contractor->delete();
+			
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			Log::debug('500 - ' . $e->getMessage());
+			
+			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		return $this->responseError(null, 500);
+		return $this->responseSuccess('Профиль успешно удален');
 	}
 	
 	/**
-	 * Reset Profile
+	 * Profile Reset
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Аккаунт контрагента успешно очищен",
 	 * 	"data": {
 	 * 		"contractor": {
-	 *			"id": 1,
+	 * 			"id": 1,
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -779,9 +780,7 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -790,12 +789,23 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function resetProfile() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+	public function resetProfile()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
@@ -806,26 +816,26 @@ class ApiController extends Controller
 		$contractor->lastname = null;
 		$contractor->birthdate = null;
 		$contractor->city_id = 0;
-		$contractor->discount = 0;
+		$contractor->discount_id = 0;
 		$contractor->is_active = 1;
 		$contractor->data_json = null;
 		$contractor->last_auth_at = null;
-		if ($contractor->save()) {
-			$data = [
-				'contractor' => $contractor->format(),
-			];
-
-			return $this->responseSuccess('Аккаунт контрагента успешно очищен', $data);
+		if (!$contractor->save()) {
+			return $this->responseError(null, 500);
 		}
 		
-		return $this->responseError(null, 500);
+		$data = [
+			'contractor' => $contractor->format(),
+		];
+		
+		return $this->responseSuccess('Аккаунт контрагента успешно очищен', $data);
 	}
 
 	/**
 	 * Avatar save
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @bodyParam file_base64 string required data:image/jpeg;base64,/9j/7gAhQWR...
 	 * @response scenario=success {
 	 * 	"success": true,
@@ -837,7 +847,7 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -845,9 +855,7 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -857,12 +865,13 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function saveAvatar() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+	public function saveAvatar()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
-
+		
 		$rules = [
 			'file_base64' => ['required'],
 		];
@@ -881,6 +890,16 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
@@ -928,22 +947,22 @@ class ApiController extends Controller
 		];
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
-		if ($contractor->save()) {
-			$data = [
-				'contractor' => $contractor->format(),
-			];
-
-			return $this->responseSuccess('Файл успешно сохранен', $data);
+		if (!$contractor->save()) {
+			return $this->responseError(null, 500);
 		}
 		
-		return $this->responseError(null, 500);
+		$data = [
+			'contractor' => $contractor->format(),
+		];
+		
+		return $this->responseSuccess('Файл успешно сохранен', $data);
 	}
 	
 	/**
 	 * Avatar delete
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Файл успешно удален",
@@ -954,7 +973,7 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city_id": 1,
+	 * 			"city": "Москва",
 	 * 			"discount": 5,
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
@@ -962,9 +981,7 @@ class ApiController extends Controller
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
 	 * 			"is_active": true,
-	 * 			"last_auth_at": "2021-01-01 12:00:00",
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -974,12 +991,23 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function deleteAvatar() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+	public function deleteAvatar()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
@@ -995,15 +1023,15 @@ class ApiController extends Controller
 		unset($data['avatar']);
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
-		if ($contractor->save()) {
-			$data = [
-				'contractor' => $contractor->format(),
-			];
-
-			return $this->responseSuccess('Файл успешно удален', $data);
+		if (!$contractor->save()) {
+			return $this->responseError(null, 500);
 		}
 		
-		return $this->responseError(null, 500);
+		$data = [
+			'contractor' => $contractor->format(),
+		];
+		
+		return $this->responseSuccess('Файл успешно удален', $data);
 	}
 	
 	/**
@@ -1015,13 +1043,12 @@ class ApiController extends Controller
 	 * 	"message": null,
 	 * 	"data": [
 	 * 		{
-	 * 			"id": 1,
-	 * 			"name": "Regular",
-	 * 			"data_json": {
-	 * 			},
-	 * 			"is_active": true,
-	 * 			"created_at": "2021-01-01 12:00:00",
-	 * 			"updated_at": "2021-01-01 12:00:00"
+	 * 			"tariff_type": {
+	 * 				"id": 1,
+	 * 				"name": "Regular",
+	 * 				"alias": "regular",
+	 * 				"description": null
+	 * 			}
 	 *		}
 	 * 	]
 	 * }
@@ -1030,23 +1057,32 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getTariffTypes() {
-		$tariffTypes = TariffType::where('is_active', true)
+	public function getTariffTypes()
+	{
+		$tariffTypes = ProductType::where('is_tariff', true)
+			->where('is_active', true)
 			->get();
 		
 		if ($tariffTypes->isEmpty()) {
 			return $this->responseError('Типы тарифов не найдены', 400);
 		}
 		
-		return $this->responseSuccess(null, $tariffTypes->toArray());
+		$data = [];
+		foreach ($tariffTypes ?? [] as $tariffType) {
+			$data[] = [
+				'tariff_type' =>  $tariffType->format(),
+			];
+		}
+		
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
 	 * Tariff list
 	 *
 	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
 	 * @queryParam tariff_type_id int required No-example
-	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1055,43 +1091,30 @@ class ApiController extends Controller
 	 * 			"tariff": {
 	 *				"id": 1,
 	 *				"name": "Regular",
-	 *				"tariff_type_id": 1,
-	 *				"employee_id": 10,
-	 *				"city_id": 5,
 	 *				"duration": 30,
 	 *				"price": 6300,
-	 *				"data_json": {
-	 *				},
-	 *				"is_active": true,
 	 *				"is_hit": false,
-	 *				"created_at": "2021-01-01 12:00:00",
-	 *				"updated_at": "2021-01-01 12:00:00"
-	 * 			}
-	 *			"tariff_type": {
-	 *				"id": 1,
-	 *				"name": "Regular",
-	 *				"data_json": {
-	 *					"hint": "только будни",
-	 *					"description": ""
+	 * 				"is_unified": false,
+	 *				"is_order_allow": true,
+	 *				"is_certificate_allow": true,
+	 *				"tariff_type": {
+	 *					"id": 1,
+	 *					"name": "Regular",
+	 *					"alias": "regular",
+	 *					"description": null
 	 *				},
-	 *				"is_active": true,
-	 *				"created_at": "2021-01-01 12:00:00",
-	 *				"updated_at": "2021-01-01 12:00:00"
-	 *			},
-	 *			"employee": {
-	 *				"id": 1,
-	 * 				"name": "John Smith",
-	 * 				"photo_path": null,
-	 * 				"icon_path": null,
-	 * 				"instagram": null
-	 * 			},
-	 *			"city": {
-	 *				"id": 1,
-	 *				"name": "Москва",
-	 *				"is_active": true,
-	 *				"created_at": "2021-10-01 18:23:27",
-	 *				"updated_at": "2021-10-05 18:23:41"
-	 *			}
+	 *				"employee": {
+	 *					"id": 1,
+	 * 					"name": "John Smith",
+	 * 					"photo_file_path": null,
+	 * 					"icon_file_path": null,
+	 * 					"instagram": null
+	 * 				},
+	 *				"city": {
+	 *					"id": 1,
+	 *					"name": "Москва",
+	 *				}
+	 * 			}
 	 * 		}
 	 * 	]
 	 * }
@@ -1100,50 +1123,60 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getTariffs() {
+	public function getTariffs()
+	{
 		$tariffTypeId = $this->request->tariff_type_id;
 		if (!$tariffTypeId) {
 			return $this->responseError('Не передан ID типа тарифа', 400);
 		}
 		
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
-		$tariffType = TariffType::where('is_active', true)
+		$tariffType = ProductType::where('is_tariff', true)
+			->where('is_active', true)
 			->find($tariffTypeId);
 		if (!$tariffType) {
 			return $this->responseError('Тип тарифа не найден', 400);
 		}
 		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$cityId = $contractor->city_id ?: 1;
-		
-		$city = City::where('is_active', true)
-			->find($cityId);
-		if (!$city) {
-			return $this->responseError('Город не найден', 400);
+		$cityId = $contractor->city_id ?? 0;
+
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
 		}
 
-		$tariffs = Tariff::where('tariff_type_id', $tariffTypeId)
-			->whereIn('city_id', [$cityId, 0])
+		$tariffs = Product::where('product_type_id', $tariffTypeId)
+			->whereIn('city_id', [$city->id, 0])
 			->where('is_active', true)
 			->get();
 		
 		$data = [];
 		foreach ($tariffs ?? [] as $tariff) {
-			/** @var Tariff $tariff */
 			$data[] = [
-				'tariff' =>  $tariff->toArray(),
-				'tariff_type' =>  $tariff->tariffType ? $tariff->tariffType->toArray() : null,
-				'employee' => $tariff->employee ? $tariff->employee->format() : null,
-				'city' => $tariff->city ? $tariff->city->toArray() : null,
+				'tariff' =>  $tariff->format(),
 			];
 		}
 		
@@ -1158,50 +1191,38 @@ class ApiController extends Controller
 	 * Tariff detailed
 	 *
 	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
 	 * @queryParam tariff_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": {
-	 * 		"tariff": {
+	 *		"tariff": {
 	 *			"id": 1,
 	 *			"name": "Regular",
-	 *			"tariff_type_id": 1,
-	 *			"employee_id": 10,
-	 *			"city_id": 5,
 	 *			"duration": 30,
 	 *			"price": 6300,
-	 *			"data_json": {
-	 *			},
-	 *			"is_active": true,
 	 *			"is_hit": false,
-	 *			"created_at": "2021-01-01 12:00:00",
-	 *			"updated_at": "2021-01-01 12:00:00"
-	 * 		},
-	 *		"tariff_type": {
-	 *			"id": 1,
-	 *			"name": "Regular",
-	 *			"data_json": {
-	 *				"hint": "только будни",
-	 *				"description": ""
+	 *			"is_unified": false,
+	 *			"is_order_allow": true,
+	 *			"is_certificate_allow": true,
+	 *			"tariff_type": {
+	 *				"id": 1,
+	 *				"name": "Regular",
+	 *				"alias": "regular",
+	 *				"description": null
 	 *			},
-	 *			"is_active": true,
-	 *			"created_at": "2021-01-01 12:00:00",
-	 *			"updated_at": "2021-01-01 12:00:00"
-	 *		},
-	 *		"employee": {
-	 *			"id": 1,
-	 * 			"name": "John Smith",
-	 * 			"photo_path": null,
-	 * 			"icon_path": null,
-	 * 			"instagram": null
-	 * 		},
-	 *		"city": {
-	 *			"id": 1,
-	 *			"name": "Москва",
-	 *			"is_active": true,
-	 *			"created_at": "2021-10-01 18:23:27",
-	 *			"updated_at": "2021-10-05 18:23:41"
+	 *			"employee": {
+	 *				"id": 1,
+	 *				"name": "John Smith",
+	 *				"photo_file_path": null,
+	 *				"icon_file_path": null,
+	 *				"instagram": null
+	 *			},
+	 *			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			}
 	 *		}
 	 * 	}
 	 * }
@@ -1210,40 +1231,71 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getTariff() {
+	public function getTariff()
+	{
 		$tariffId = $this->request->tariff_id;
 		if (!$tariffId) {
 			return $this->responseError('Не передан ID тарифа', 400);
 		}
 		
-		$tariff = Tariff::where('is_active', true)
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?? 0;
+		
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+
+		$tariff = Product::where('is_active', true)
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
 		}
 
 		$data = [
-			'tariff' =>  $tariff->toArray(),
-			'tariff_type' =>  $tariff->tariffType ? $tariff->tariffType->toArray() : null,
-			'employee' => $tariff->employee ? $tariff->employee->format() : null,
-			'city' => $tariff->city ? $tariff->city->toArray() : null,
+			'tariff' =>  $tariff->format(),
 		];
 		
 		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
-	 * Tariff Price
+	 * Tariff Amount
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @queryParam tariff_id int required No-example
 	 * @queryParam flight_at string No-example
+	 * @queryParam is_unified bool Unified certificate. No-example
+	 * @queryParam promocode_id int No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "",
 	 * 	"data": {
-	 * 		"price": 5500,
+	 * 		"amount": 5500,
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
@@ -1252,120 +1304,91 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getTariffPrice() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+	public function getTariffPrice()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
 		$tariffId = $this->request->tariff_id;
 		if (!$tariffId) {
 			return $this->responseError('Не передан ID тарифа', 400);
 		}
-
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$tariff = Tariff::where('is_active', true)
+		$cityId = $contractor->city ?? 0;
+		
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
+		$tariff = Product::where('is_active', true)
+			->whereIn('city_id', [])
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
 		}
 		
-		$flightAt = $this->request->flight_at;
+		if (!$tariff->productType) {
+			return $this->responseError('Некорректный тип тарифа', 400);
+		}
 		
-		$price = $tariff->price ?: 0;
+		if ($tariff->price <= 0) {
+			return $this->responseError('Некорректная стоимость тарифа', 400);
+		}
 		
-		if ($price && $contractor->discount) {
-			$price = round($price - $price * $contractor->discount / 100);
+		$date = date('Y-m-d');
+		
+		if ($this->request->promocode_id) {
+			$promocode = Promocode::whereIn('city_id', [$city->id, 0])
+				->where('is_active', true)
+				->where('active_from_at', '<=', $date)
+				->where('active_to_at', '>=', $date)
+				->find($this->request->promocode_id);
+			if (!$promocode) {
+				return $this->responseError('Промокод не найден', 400);
+			}
+		}
+
+		$flightAt = $this->request->flight_at ?? date('d.m.Y');
+		$isUnified = $this->request->is_unified ?? false;
+		
+		if (!$tariff->validateFlightDate($flightAt)) {
+			return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+		}
+
+		$price = $tariff->calculateProductPrice($contractor, $flightAt, $isUnified, $promocode ?? null);
+		if ($price <= 0) {
+			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
 		
 		$data = [
-			'price' => $price,
+			'amount' => $price,
 		];
 		
 		return $this->responseSuccess(null, $data);
 	}
 	
-	/**
-	 * Product list
-	 *
-	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
-	 * @response scenario=success {
-	 * 	"success": true,
-	 * 	"message": null,
-	 * 	"data": [
-	 *		{
-	 * 			"product": {
-	 *				"id": 1,
-	 *				"name": "Видеозапись",
-	 *				"city_id": 1,
-	 *				"price": 500,
-	 *				"data_json": {
-	 *				},
-	 *				"is_active": true,
-	 *				"created_at": "2021-01-01 12:00:00",
-	 *				"updated_at": "2021-01-01 12:00:00"
-	 * 			}
-	 *			"city": {
-	 *				"id": 1,
-	 *				"name": "Москва",
-	 *				"is_active": true,
-	 *				"created_at": "2021-10-01 18:23:27",
-	 *				"updated_at": "2021-10-05 18:23:41"
-	 *			}
-	 * 		}
-	 * 	]
-	 * }
-	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
-	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
-	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
-	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
-	 */
-	public function getProducts() {
-		$contractorId = $this->request->contractor_id;
-		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
-		}
-		
-		$contractor = Contractor::where('is_active', true)
-			->find($contractorId);
-		if (!$contractor) {
-			return $this->responseError('Контрагент не найден', 400);
-		}
-		
-		$cityId = $contractor->city_id ?: 1;
-		
-		$city = City::where('is_active', true)
-			->find($cityId);
-		if (!$city) {
-			return $this->responseError('Город не найден', 400);
-		}
-
-		$products = Product::whereIn('city_id', [$cityId, 0])
-			->where('is_active', true)
-			->get();
-		
-		$data = [];
-		foreach ($products ?? [] as $product) {
-			/** @var Product $product */
-			$data[] = [
-				'product' =>  $product->toArray(),
-				'city' =>  $product->city ? $product->city->toArray() : null,
-			];
-		}
-		
-		if ($products->isEmpty()) {
-			return $this->responseError('Продукты не найдены', 400);
-		}
-		
-		return $this->responseSuccess(null, $data);
-	}
-
 	/**
 	 * City list
 	 *
@@ -1375,56 +1398,9 @@ class ApiController extends Controller
 	 * 	"message": null,
 	 * 	"data": [
 	 *		{
-	 *			"id": 1,
-	 *			"name": "Москва",
-	 *			"is_active": true,
-	 *			"created_at": "2021-01-01 12:00:00",
-	 *			"updated_at": "2021-01-01 12:00:00",
-	 *		}
-	 * 	]
-	 * }
-	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
-	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
-	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
-	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
-	 */
-	public function getCities() {
-		$cities = City::where('is_active', true)
-			->get();
-		
-		if ($cities->isEmpty()) {
-			return $this->responseError('Города не найдены', 400);
-		}
-		
-		return $this->responseSuccess(null, $cities->toArray());
-	}
-	
-	/**
-	 * Location list
-	 *
-	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
-	 * @response scenario=success {
-	 * 	"success": true,
-	 * 	"message": null,
-	 * 	"data": [
-	 *		{
-	 * 			"location": {
+	 * 			"city": {
 	 *				"id": 1,
-	 *				"name": "ТРК VEGAS Кунцево",
-	 *				"legal_entity_id": 1,
-	 *				"city_id": 1,
-	 *				"address": null,
-	 *				"working_hours": null,
-	 *				"phone": null,
-	 *				"email": null,
-	 *				"map_link": null,
-	 *				"skype": null,
-	 *				"whatsapp": null,
-	 *				"scheme_file_path": null,
-	 *				"is_active": true,
-	 *				"created_at": "2021-01-01 12:00:00",
-	 *				"updated_at": "2021-01-01 12:00:00"
+	 *				"name": "Москва"
 	 * 			}
 	 *		}
 	 * 	]
@@ -1434,10 +1410,70 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getLocations() {
-		$contractorId = $this->request->contractor_id;
+	public function getCities()
+	{
+		$cities = City::where('is_active', true)
+			->get();
+		
+		if ($cities->isEmpty()) {
+			return $this->responseError('Города не найдены', 400);
+		}
+		
+		$data = [];
+		foreach ($cities as $city) {
+			$data[] = [
+				'city' => $city->format(),
+			];
+		}
+
+		return $this->responseSuccess(null, $data);
+	}
+	
+	/**
+	 * Location list
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": [
+	 *		{
+	 * 			"location": {
+	 *				"id": 1,
+	 *				"name": "ТРК VEGAS Кунцево",
+	 *				"address": null,
+	 *				"working_hours": null,
+	 *				"phone": null,
+	 *				"email": null,
+	 *				"map_link": null,
+	 *				"skype": null,
+	 *				"whatsapp": null,
+	 *				"scheme_file_path": null
+	 * 			}
+	 *		}
+	 * 	]
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function getLocations()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
 		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$contractor = Contractor::where('is_active', true)
@@ -1446,7 +1482,10 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$cityId = $contractor->city_id ?: 1;
+		$cityId = $contractor->city ?? 0;
+		if (!$cityId) {
+			return $this->responseError('Город не найден', 400);
+		}
 
 		$city = City::where('is_active', true)
 			->find($cityId);
@@ -1454,7 +1493,7 @@ class ApiController extends Controller
 			return $this->responseError('Город не найден', 400);
 		}
 
-		$locations = Location::where('city_id', $cityId)
+		$locations = Location::where('city_id', $city->id)
 			->where('is_active', true)
 			->get();
 		
@@ -1463,7 +1502,6 @@ class ApiController extends Controller
 		}
 
 		$data = [];
-
 		foreach ($locations as $location) {
 			$data[] = [
 				'location' => $location->format(),
@@ -1477,17 +1515,17 @@ class ApiController extends Controller
 	 * Legal Entity list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int required No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
 	 *		{
-	 *			"id": 1,
-	 *			"name": "ООО Компания",
-	 *			"public_offer": null,
-	 *			"created_at": "2021-01-01 12:00:00",
-	 *			"updated_at": "2021-01-01 12:00:00",
+	 * 			"legal_entity": {
+	 *				"id": 1,
+	 *				"name": "ООО Компания",
+	 *				"public_offer_file_path": null
+	 * 			}
 	 *		}
 	 * 	]
 	 * }
@@ -1496,10 +1534,21 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getLegalEntities() {
-		$contractorId = $this->request->contractor_id;
+	public function getLegalEntities()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
 		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$contractor = Contractor::where('is_active', true)
@@ -1508,15 +1557,18 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$cityId = $contractor->city_id ?: 1;
+		$cityId = $contractor->city ?? 0;
+		if (!$cityId) {
+			return $this->responseError('Город не найден', 400);
+		}
 		
 		$city = City::where('is_active', true)
 			->find($cityId);
 		if (!$city) {
 			return $this->responseError('Город не найден', 400);
 		}
-		
-		$legalEntityIds = Location::where('city_id', $cityId)
+
+		$legalEntityIds = Location::where('city_id', $city->id)
 			->where('is_active', true)
 			->pluck('legal_entity_id')
 			->all();
@@ -1528,41 +1580,39 @@ class ApiController extends Controller
 			->get();
 		
 		if ($legalEntities->isEmpty()) {
-			return $this->responseError('Юридический лица не найдены', 400);
+			return $this->responseError('Юридические лица не найдены', 400);
 		}
 		
-		$legalEntitiesData = [];
+		$data = [];
 		foreach ($legalEntities as $legalEntity) {
-			$legalEntitiesData[] = [
-				'id' => $legalEntity->id,
-				'name' => $legalEntity->name,
-				'public_offer' => ($legalEntity->data_json && array_key_exists('public_offer', $legalEntity->data_json)) ? \URL::to('/upload/public_offer/' . $legalEntity->data_json['public_offer']['name'] . '.' . $legalEntity->data_json['public_offer']['ext']) : null,
-				'created_at' => $legalEntity->created_at ? Carbon::parse($legalEntity->created_at)->format('Y-m-d H:i:s') : null,
-				'updated_at' => $legalEntity->updated_at ? Carbon::parse($legalEntity->updated_at)->format('Y-m-d H:i:s') : null,
+			$data[] = [
+				'legal_entity' => $legalEntity->format(),
 			];
 		}
 		
-		return $this->responseSuccess(null, $legalEntitiesData);
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
 	 * Promo list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
+	 * @queryParam token string No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
 	 *		{
-	 *			"id": 1,
-	 *			"name": "Акция",
-	 *			"preview_text": "",
-	 *			"detail_text": "",
-	 *			"city_id": 1,
-	 *			"is_active": true,
-	 *			"created_at": "2021-01-01 12:00:00",
-	 *			"updated_at": "2021-01-01 12:00:00",
+	 * 			"promo": {
+	 *				"id": 1,
+	 *				"name": "Акция",
+	 *				"preview_text": null,
+	 *				"detail_text": null,
+	 * 				"discount": {
+						"value": 5,
+	 * 					"is_fixed": false
+	 * 				}
+	 * 			}
 	 *		}
 	 * 	]
 	 * }
@@ -1571,10 +1621,21 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getPromos() {
-		$contractorId = $this->request->contractor_id;
+	public function getPromos()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
 		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$contractor = Contractor::where('is_active', true)
@@ -1583,23 +1644,32 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$cityId = $contractor->city_id ?: 1;
-		
-		$city = City::where('is_active', true)
-			->find($cityId);
-		if (!$city) {
-			return $this->responseError('Город не найден', 400);
+		$cityId = $contractor->city ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
 		}
 		
-		$promos = Promo::where('city_id', $cityId)
-			->where('is_active', true)
+		$promos = Promo::where('is_active', true)
+			->whereIn('city_id', [$city->id, 0])
 			->get();
 		
 		if ($promos->isEmpty()) {
 			return $this->responseError('Акции не найдены', 400);
 		}
 		
-		return $this->responseSuccess(null, $promos->toArray());
+		$data = [];
+		/** @var Promo[] $promo */
+		foreach ($promos as $promo) {
+			$data[] = [
+				'promo' => $promo->format(),
+			];
+		}
+		
+		return $this->responseSuccess(null, $data);
 	}
 	
 	/**
@@ -1611,14 +1681,16 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": {
-	 *		"id": 1,
-	 *		"name": "Акция",
-	 *		"preview_text": "",
-	 *		"detail_text": "",
-	 *		"city_id": 1,
-	 *		"is_active": true,
-	 *		"created_at": "2021-01-01 12:00:00",
-	 *		"updated_at": "2021-01-01 12:00:00",
+	 * 		"promo": {
+	 *			"id": 1,
+	 *			"name": "Акция",
+	 *			"preview_text": null,
+	 *			"detail_text": null,
+	 *			"discount": {
+	 *				"value": 5,
+	 *				"is_fixed": false
+	 *			}
+	 * 		}
 	 * 	}
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -1626,7 +1698,8 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getPromo() {
+	public function getPromo()
+	{
 		$promoId = $this->request->promo_id;
 		if (!$promoId) {
 			return $this->responseError('Не передан ID акции', 400);
@@ -1638,19 +1711,24 @@ class ApiController extends Controller
 			return $this->responseError('Акция не найдена', 400);
 		}
 		
-		return $this->responseSuccess(null, $promo->toArray());
+		$data = [
+			'promo' => $promo->format(),
+		];
+
+		return $this->responseSuccess(null, $data);
 	}
 
 	/**
 	 * Promocode Verify
 	 *
 	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
 	 * @queryParam promocode string required No-example
-	 * @queryParam contractor_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": {
+	 * 		"id": 23,
 	 *		"is_active": true,
 	 * 	}
 	 * }
@@ -1659,15 +1737,26 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function verifyPromocode() {
+	public function verifyPromocode()
+	{
 		$number = $this->request->promocode;
 		if (!$number) {
 			return $this->responseError('Не передан промокод', 400);
 		}
 		
-		$contractorId = $this->request->contractor_id;
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
 		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$contractor = Contractor::where('is_active', true)
@@ -1676,18 +1765,19 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$cityId = $contractor->city_id ?: 1;
-		
-		$city = City::where('is_active', true)
-			->find($cityId);
-		if (!$city) {
-			return $this->responseError('Город не найден', 400);
+		$cityId = $contractor->city ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
 		}
-		
+
 		$date = date('Y-m-d');
 		
 		$promocode = Promocode::where('number', $number)
-			->whereIn('city_id', [$cityId, 0])
+			->whereIn('city_id', [$city->id, 0])
 			->where('is_active', true)
 			->where('active_from_at', '<=', $date)
 			->where('active_to_at', '>=', $date)
@@ -1697,35 +1787,68 @@ class ApiController extends Controller
 		}
 		
 		$data = [
+			'id' => $promocode->id,
 			'is_active' => $promocode->is_active,
 		];
 		
 		return $this->responseSuccess(null, $data);
 	}
 	
-	public function verifyCertificate() {
-	}
-	
-	public function getNotifications() {
-	}
-	
-	public function getNotification() {
-	}
-	
 	/**
 	 * Flight list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
+	 * @queryParam token string No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
 	 *		{
 	 * 			"flight": {
-	 *				"flight_at": "2021-01-01 12:00:00",
-	 *				"duration": "30",
-	 *				"scores": "300"
+	 *				"flight": {
+	 * 					"date": "2021-01-01",
+	 * 					"time": "12:00:00"
+	 *					"tariff": {
+	 *						"id": 1,
+	 *						"name": "Regular",
+	 *						"duration": 30,
+	 *						"price": 6300,
+	 *						"is_hit": false,
+	 * 						"is_unified": false,
+	 *						"is_order_allow": true,
+	 *						"is_certificate_allow": true,
+	 *						"tariff_type": {
+	 *							"id": 1,
+	 *							"name": "Regular",
+	 *							"alias": "regular",
+	 *							"description": null
+	 *						},
+	 *						"employee": {
+	 *							"id": 1,
+	 * 							"name": "John Smith",
+	 * 							"photo_file_path": null,
+	 * 							"icon_file_path": null,
+	 * 							"instagram": null
+	 * 						},
+	 *						"city": {
+	 *							"id": 1,
+	 *							"name": "Москва"
+	 *						}
+	 * 					},
+	 *					"location": {
+	 *						"id": 1,
+	 *						"name": "ТРК VEGAS Кунцево",
+	 *						"address": null,
+	 *						"working_hours": null,
+	 *						"phone": null,
+	 *						"email": null,
+	 *						"map_link": null,
+	 *						"skype": null,
+	 *						"whatsapp": null,
+	 *						"scheme_file_path": null
+	 * 					},
+	 *					"score": "300"
+	 * 				}
 	 * 			}
 	 *		}
 	 * 	]
@@ -1735,10 +1858,21 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function getFlights() {
-		$contractorId = $this->request->contractor_id;
+	public function getFlights()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
 		if (!$contractorId) {
-			return $this->responseError('Не передан ID контрагента', 400);
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$contractor = Contractor::where('is_active', true)
@@ -1747,12 +1881,15 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$deals = Deal::where('contractor_id', $contractorId);
-		$dealIds = $deals->pluck('id');
-		$deals = $deals->get();
+		/*$dealIds = Deal::where('contractor_id', $contractorId)
+			->pluck('id');*/
+		$dealPositions = DealPosition::whereRelation('deal', 'contractor_id', $contractorId)
+				->whereRelation('status', 'alias', '=', 'calendar');
+		$dealPositionIds = $dealPositions->pluck('id');
+		$dealPositions = $dealPositions->get();
 
 		$scores = Score::where('contractor_id', $contractorId)
-			->whereIn('deal_id', $dealIds)
+			->whereIn('deal_position_id', $dealPositionIds)
 			->get();
 
 		$scoreData = [];
@@ -1761,16 +1898,565 @@ class ApiController extends Controller
 		}
 		
 		$data = [];
-		foreach ($deals ?? [] as $deal) {
+		foreach ($dealPositions as $dealPosition) {
 			$data[] = [
 				'flight' => [
-					'date' => Carbon::parse($deal->flight_at)->format('Y-m-d'),
-					'time' => Carbon::parse($deal->flight_at)->format('H:i'),
+					'date' => Carbon::parse($dealPosition->flight_at)->format('Y-m-d'),
+					'time' => Carbon::parse($dealPosition->flight_at)->format('H:i'),
+					'tariff' =>  $dealPosition->product ? $dealPosition->product->format() : null,
+					'location' =>  $dealPosition->location ? $dealPosition->location->format() : null,
+					'score' =>  $scoreData[$dealPosition->id] ?? 0,
 				],
-				'tariff' =>  $deal->tariff ? $deal->tariff->toArray() : null,
-				'location' =>  $deal->location ? $deal->location->format() : null,
-				'score' =>  $scoreData[$deal->id] ?? 0,
 			];
+		}
+		
+		return $this->responseSuccess(null, $data);
+	}
+	
+	/**
+	 * Order create
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @bodyParam name string required No-example
+	 * @bodyParam phone string required +71234567890 No-example
+	 * @bodyParam email string required No-example
+	 * @bodyParam product_id int required No-example
+	 * @bodyParam product_amount int required No-example
+	 * @bodyParam is_certificate_order bool required No-example
+	 * @bodyParam flight_date date No-example
+	 * @bodyParam flight_time time No-example
+	 * @bodyParam is_unified bool No-example
+	 * @bodyParam location_id int No-example
+	 * @bodyParam promocode_id string No-example
+	 * @bodyParam certificate_id string No-example
+	 * @bodyParam certificate_whom string For whom certificate. No-example
+	 * @bodyParam comment string No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "Профиль успешно сохранен",
+	 * 	"data": {
+	 * 		"order": {
+	 * 			"id": 1,
+	 * 			"name": "John",
+	 * 			"lastname": "Smith",
+	 * 			"email": "john.smith@gmail.com",
+	 * 			"phone": null,
+	 * 			"city_id": 1,
+	 * 			"discount": 5,
+	 *			"birthdate": "1990-01-01",
+	 * 			"avatar_file_base64": null,
+	 * 			"flight_time": 100,
+	 * 			"score": 10000,
+	 * 			"status": "Золотой"
+	 * 		}
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function createorder()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$rules = [
+			'is_certificate_order' => ['required', 'boolean'],
+			'name' => ['required', 'min:3', 'max:50'],
+			'phone' => ['required', 'valid_phone'],
+			'email' => ['required', 'email'],
+			'product_id' => ['required', 'numeric'],
+			'product_amount' => ['required', 'numeric'],
+			'flight_date' => ['required_if:is_certificate_order,false', 'date', 'after_or_equal:' . date('Y-m-d')],
+			'flight_time' => ['required_if:is_certificate_order,false', 'date_format:H:i'],
+			'is_unified' => ['required_if:is_certificate_order,true', 'boolean'],
+			'location_id' => ['required_if:is_certificate_order,false', 'numeric'],
+			'promocode_id' => ['sometimes', 'required', 'numeric'],
+			'certificate_id' => ['sometimes', 'required_if:is_certificate_order,false', 'numeric'],
+			'certificate_whom' => ['required_if:is_certificate_order,true', 'min:3', 'max:50'],
+		];
+		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
+			->setAttributeNames([
+				'is_certificate_order' => 'Тип заявки',
+				'name' => 'Имя',
+				'phone' => 'Номер телефона',
+				'email' => 'E-mail',
+				'product_id' => 'Позиция',
+				'product_amount' => 'Стоимость',
+				'flight_date' => 'Дата полета',
+				'flight_time' => 'Время полета',
+				'is_unified' => 'Единый сертификат',
+				'location_id' => 'Локация',
+				'promocode_id' => 'Промокод',
+				'certificate_id' => 'Сертификат',
+				'certificate_whom' => 'Для кого сертификат',
+			]);
+		if (!$validator->passes()) {
+			$errors = [];
+			$validatorErrors = $validator->errors();
+			foreach ($rules as $key => $rule) {
+				foreach ($validatorErrors->get($key) ?? [] as $error) {
+					$errors[$key][] = $error;
+				}
+			}
+			return $this->responseError($errors, 400);
+		}
+		
+		if ($this->request->flight_date && $this->request->flight_time) {
+			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
+			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
+				return $this->responseError('Некорректная дата и время полета', 400);
+			}
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$productId = $this->request->product_id ?? 0;
+		if (!$productId) {
+			return $this->responseError('Не передан ID позиции', 400);
+		}
+		
+		$productAmount = $this->request->product_amount ?? 0;
+		if (!$productAmount) {
+			return $this->responseError('Не передана стоимость позиции', 400);
+		}
+		
+		$product = Product::where('is_active', true)
+				->find($productId);
+		if (!$product) {
+			return $this->responseError('Позиция не найдена', 400);
+		}
+			
+		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
+		// ToDO: сообщение об ошибке, если цена не совпадет с полученной
+		
+		if ($this->request->location_id) {
+			$location = Location::where('is_active', true)
+				->find($this->request->location_id);
+			if (!$location) {
+				return $this->responseError('Локация не найдена', 400);
+			}
+		}
+		
+		$cityId = $contractor->city_id ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
+		$date = date('Y-m-d');
+		
+		$statusesData = HelpFunctions::getStatusesByType();
+		
+		if (!array_key_exists(Order::RECEIVED_STATUS, $statusesData['order'])) {
+			return $this->responseError('Статус заявки не найден', 400);
+		}
+		
+		if ($this->request->certificate_id && !$this->request->is_certificate_order) {
+			if (!array_key_exists(Certificate::CREATED_STATUS, $statusesData['certificate'])) {
+				return $this->responseError('Статус сертификата не найден', 400);
+			}
+
+			$certificate = Certificate::whereIn('city_id', [$city->id, 0])
+				->where('status_id', $statusesData['certificate'][Certificate::CREATED_STATUS]['id'])
+				->where('product_id', $product->id)
+				->where(function ($query) use ($date) {
+					$query->where('expire_at', '>=', $date)
+						->orWhereNull('expire_at');
+				})
+				->find($this->request->certificate_id);
+			if (!$certificate) {
+				return $this->responseError('Сертификат не найден', 400);
+			}
+		}
+		
+		if ($this->request->promocode_id) {
+			$promocode = Promocode::whereIn('city_id', [$city->id, 0])
+				->where('is_active', true)
+				->where('active_from_at', '<=', $date)
+				->where(function ($query) use ($date) {
+					$query->where('active_to_at', '>=', $date)
+						->orWhereNull('active_to_at');
+				})
+				->find($this->request->promocode_id);
+			if (!$promocode) {
+				return $this->responseError('Промокод не найден', 400);
+			}
+		}
+		
+		try {
+			\DB::beginTransaction();
+			
+			// создание сертификата
+			if ($this->request->is_certificate_order) {
+				$certificate = new Certificate();
+				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
+				$certificate->contractor_id = $contractor->id;
+				$certificate->city_id = $city->id;
+				$certificate->product_id = $product->id;
+				$certificate->expire_at = Carbon::now()->addYear();
+				$certificate->is_unified = $this->request->is_certificate_order ? $this->request->is_unified : 0;
+				$certificate->save();
+			}
+			
+			// создание заявки
+			$order = new Order();
+			$order->status_id = $statusesData['order'][Order::RECEIVED_STATUS]['id'];
+			$order->contractor_id = $contractor->id;
+			$order->name = $this->request->name;
+			$order->phone = $this->request->phone;
+			$order->email = $this->request->email;
+			$order->city_id = $city->id;
+			$order->product_id = $product->id;
+			$order->amount = $productAmount ?? 0;
+			$order->duration = $product->duration ?? 0;
+			$order->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
+			$order->is_certificate_order = $this->request->is_certificate_order ?? 0;
+			$order->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
+			
+			$orderData = [];
+			if (!$this->request->is_certificate_order) {
+				$order->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
+				$order->flight_at = $flightDateCarbon->format('Y-m-d H:i');
+			} else {
+				$order->is_unified = $this->request->is_unified ?? 0;
+				$orderData['certificate_whom'] = $this->request->certificate_whom;
+			}
+			$orderData['comment'] = $this->request->comment;
+			$order->source = 'api';
+			$order->data_json = $orderData;
+			$order->save();
+
+			// регистрация сертификата
+			if ($this->request->certificate_id && !$this->request->is_certificate_order) {
+				$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
+				$certificate->save();
+			}
+			
+			$dealData = [];
+			
+			// создание сделки
+			$deal = new Deal();
+			$deal->contractor_id = $contractor->id;
+			$deal->data_json = $dealData;
+			$deal->save();
+			
+			// создание позиции сделки
+			$dealPosition = new DealPosition();
+			$dealPosition->deal_id = $deal->id;
+			$dealPosition->status_id = $statusesData['deal'][DealPosition::CREATED_STATUS]['id'];
+			$dealPosition->order_id = $order->id;
+			$dealPosition->product_id = $product->id;
+			$dealPosition->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
+			$dealPosition->duration = $product->duration ?? 0;
+			$dealPosition->amount = $productAmount ?? 0;
+			$dealPosition->city_id = $city->id;
+			$dealPositionData = [];
+			if (!$this->request->is_certificate_order) {
+				$dealPosition->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
+				$dealPosition->flight_at = $flightDateCarbon->format('Y-m-d H:i');
+			}
+			$dealPositionData['comment'] = $this->request->comment;
+			$dealPosition->data_json = $dealPositionData;
+			$dealPosition->save();
+			
+			// создание счета
+			$bill = new Bill();
+			$bill->deal_id = $deal->id;
+			$bill->deal_position_id = $dealPosition->id;
+			$bill->status_id = $statusesData['bill'][Bill::NOT_PAYED_STATUS]['id'];
+			$bill->amount = $productAmount ?? 0;
+			$bill->save();
+			
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+
+			Log::debug($e);
+			
+			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
+		}
+		
+		//dispatch(new \App\Jobs\SendOrderEmail($order));
+		$job = new \App\Jobs\SendOrderEmail($order);
+		$job->handle();
+		
+		$data = [
+			'order' => $order->format(),
+		];
+		
+		return $this->responseSuccess('Заявка успешно создана', $data);
+	}
+	
+	/**
+	 * Certificate Verify
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @queryParam number string required No-example
+	 * @queryParam product_id int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": {
+	 * 		"id": 15,
+	 *		"number": "C123456",
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function verifyCertificate()
+	{
+		$number = $this->request->number;
+		if (!$number) {
+			return $this->responseError('Не передан номер сертификата', 400);
+		}
+		
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
+		$productId = $this->request->product_id ?? 0;
+		if (!$productId) {
+			return $this->responseError('Не передан ID позиции', 400);
+		}
+		
+		$product = Product::where('is_active', true)
+			->find($productId);
+		if (!$product) {
+			return $this->responseError('Позиция не найдена', 400);
+		}
+		
+		$statusesData = HelpFunctions::getStatusesByType();
+		if (!array_key_exists(Certificate::CREATED_STATUS, $statusesData['certificate'])) {
+			return $this->responseError('Статус сертификата не найден', 400);
+		}
+		
+		$date = date('Y-m-d');
+		
+		$certificate = Certificate::where('number', $number)
+			->whereIn('city_id', [$city->id, 0])
+			->where('status_id', $statusesData['certificate'][Certificate::CREATED_STATUS]['id'])
+			->where('product_id', $product->id)
+			->where(function ($query) use ($date) {
+				$query->where('expire_at', '>=', $date)
+					->orWhereNull('expire_at');
+			})
+			->first();
+		if (!$certificate) {
+			return $this->responseError('Сертификат не найден', 400);
+		}
+		
+		$data = [
+			'id' => $certificate->id,
+			'number' => $certificate->number,
+		];
+		
+		return $this->responseSuccess(null, $data);
+	}
+	
+	/**
+	 * Notification list
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": [
+	 *		{
+	 * 			"notification": {
+	 *				"id": 1,
+	 *				"title": "Заголовок уведомления",
+	 *				"description": "Описание уведомления",
+	 *				"is_new": true,
+	 * 				"created_at": "Y-m-d H:i:s",
+	 * 				"updated_at": "Y-m-d H:i:s"
+	 * 			}
+	 * 		}
+	 * 	]
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function getNotifications()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
+		$notifications = Notification::where('is_active', true)
+			->whereIn('contractor_id', [$contractor->id, 0])
+			->whereIn('city_id', [$city->id, 0])
+			->get();
+		
+		$data = [];
+		foreach ($notifications ?? [] as $notification) {
+			$data[] = [
+				'notification' =>  $notification->format(),
+			];
+		}
+		
+		return $this->responseSuccess(null, $data);
+	}
+	
+	/**
+	 * Notification detailed
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @queryParam notification_id int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": null,
+	 * 	"data": {
+	 *		"notification": {
+	 *			"id": 1,
+	 *			"title": "Заголовок уведомления",
+	 *			"description": "Описание уведомления",
+	 *			"is_new": true,
+	 * 			"created_at": "Y-m-d H:i:s",
+	 * 			"updated_at": "Y-m-d H:i:s"
+	 * 		}
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function getNotification()
+	{
+		$notificationId = $this->request->notification_id ?? 0;
+		if (!$notificationId) {
+			return $this->responseError('Не передан ID уведомления', 400);
+		}
+		
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
+		$notification = Notification::where('is_active', true)
+			->whereIn('contractor_id', [$contractor->id, 0])
+			->whereIn('city_id', [$city->id, 0])
+			->find($notificationId);
+		if (!$notification) {
+			return $this->responseError('Уведомление не найдено', 400);
+		}
+		
+		$data = [
+			'notification' =>  $notification->format(),
+		];
+		
+		// после прочтения уведомления снимаем признак того, что оно новое
+		if ($notification->is_new) {
+			$notification->is_new = false;
+			$notification->save();
 		}
 		
 		return $this->responseSuccess(null, $data);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
@@ -8,13 +9,15 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LegalEntityController;
 use App\Http\Controllers\FlightSimulatorTypeController;
 use App\Http\Controllers\FlightSimulatorController;
-use App\Http\Controllers\TariffTypeController;
-use App\Http\Controllers\TariffController;
+use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ContractorController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\DealController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\AccessRightController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\PayController;
 use App\Http\Controllers\RevisionController;
 
 /*
@@ -32,9 +35,22 @@ Auth::routes(['register' => false]);
 
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	Route::group(['middleware' => ['auth']], function () {
+		// Очистка тестовых данных
+		Route::get('/clear', [HomeController::class, 'clear'])->name('clear');
+		
 		// Календарь
 		Route::get('/', [HomeController::class, 'home'])->name('home');
 		
+		// Сделки
+		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
+		Route::get('deal/list/ajax', [DealController::class, 'getListAjax'])->name('dealList');
+		Route::post('deal', [DealController::class, 'store']);
+		Route::put('deal/{id}', [DealController::class, 'update']);
+		
+		Route::get('deal/add', [DealController::class, 'add']);
+		Route::get('deal/{id}/edit', [DealController::class, 'edit']);
+		Route::get('deal/{id}/show', [DealController::class, 'show']);
+
 		// Заявки
 		Route::get('order', [OrderController::class, 'index'])->name('orderIndex');
 		Route::get('order/list/ajax', [OrderController::class, 'getListAjax'])->name('orderList');
@@ -45,10 +61,21 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('order/{id}/edit', [OrderController::class, 'edit']);
 		Route::get('order/{id}/show', [OrderController::class, 'show']);
 		
+		// Сертификаты
+		Route::get('certificate', [CertificateController::class, 'index'])->name('certificateIndex');
+		Route::get('certificate/list/ajax', [CertificateController::class, 'getListAjax'])->name('certificateList');
+		Route::post('certificate', [CertificateController::class, 'store']);
+		Route::put('certificate/{id}', [CertificateController::class, 'update']);
+		
+		Route::get('certificate/add', [CertificateController::class, 'add']);
+		Route::get('certificate/{id}/edit', [CertificateController::class, 'edit']);
+		Route::get('certificate/{id}/show', [CertificateController::class, 'show']);
+		
 		// Контрагенты
 		Route::get('contractor', [ContractorController::class, 'index'])->name('contractorIndex');
 		Route::get('contractor/list/ajax', [ContractorController::class, 'getListAjax'])->name('contractorList');
 		Route::post('contractor', [ContractorController::class, 'store']);
+		Route::post('contractor/search', [ContractorController::class, 'search'])->name('contractorSearch');
 		Route::put('contractor/{id}', [ContractorController::class, 'update']);
 		
 		Route::get('contractor/add', [ContractorController::class, 'add']);
@@ -121,30 +148,17 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('flight_simulator/{id}/edit', [FlightSimulatorController::class, 'edit']);
 		Route::get('flight_simulator/{id}/delete', [FlightSimulatorController::class, 'confirm']);
 
-		// Типы тарифов
-		Route::get('tariff_type', [TariffTypeController::class, 'index'])->name('tariffTypeIndex');
-		Route::get('tariff_type/list/ajax', [TariffTypeController::class, 'getListAjax'])->name('tariffTypeList');
+		// Типы продуктов
+		Route::get('product_type', [ProductTypeController::class, 'index'])->name('productTypeIndex');
+		Route::get('product_type/list/ajax', [ProductTypeController::class, 'getListAjax'])->name('productTypeList');
 
-		Route::post('tariff_type', [TariffTypeController::class, 'store']);
-		Route::put('tariff_type/{id}', [TariffTypeController::class, 'update']);
-		Route::delete('tariff_type/{id}', [TariffTypeController::class, 'delete']);
+		Route::post('product_type', [ProductTypeController::class, 'store']);
+		Route::put('product_type/{id}', [ProductTypeController::class, 'update']);
+		Route::delete('product_type/{id}', [ProductTypeController::class, 'delete']);
 
-		Route::get('tariff_type/add', [TariffTypeController::class, 'add'])->name('tariffTypeAdd');
-		Route::get('tariff_type/{id}/edit', [TariffTypeController::class, 'edit']);
-		Route::get('tariff_type/{id}/delete', [TariffTypeController::class, 'confirm']);
-		
-		// Тарифы
-		Route::get('tariff', [TariffController::class, 'index'])->name('tariffIndex');
-		Route::get('tariff/list/ajax', [TariffController::class, 'getListAjax'])->name('tariffList');
-		
-		Route::post('tariff', [TariffController::class, 'store']);
-		Route::put('tariff/{id}', [TariffController::class, 'update']);
-		Route::delete('tariff/{id}', [TariffController::class, 'delete']);
-		
-		Route::get('tariff/add', [TariffController::class, 'add']);
-		Route::get('tariff/{id}/edit', [TariffController::class, 'edit']);
-		Route::get('tariff/{id}/delete', [TariffController::class, 'confirm']);
-		Route::get('tariff/{id}/show', [TariffController::class, 'show']);
+		Route::get('product_type/add', [ProductTypeController::class, 'add'])->name('productTypeAdd');
+		Route::get('product_type/{id}/edit', [ProductTypeController::class, 'edit']);
+		Route::get('product_type/{id}/delete', [ProductTypeController::class, 'confirm']);
 		
 		// Продукты
 		Route::get('product', [ProductController::class, 'index'])->name('productIndex');
@@ -159,12 +173,23 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('product/{id}/delete', [ProductController::class, 'confirm']);
 		Route::get('product/{id}/show', [ProductController::class, 'show']);
 		
+		// Статусы
+		Route::get('status', [StatusController::class, 'index'])->name('statusIndex');
+		Route::get('status/list/ajax', [StatusController::class, 'getListAjax'])->name('statusList');
+		
 		// Права доступа
 		/*Route::get('access_right', [AccessRightController::class, 'index'])->name('accessRightIndex');*/
 		
 		// Лог операций
 		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
 		Route::get('log/{entity?}/{object_id?}', [RevisionController::class, 'index'])->name('revisionIndex');
+		
+		// Payments
+		Route::get('pay/request/{id}/{city_id}', [PayController::class, 'sendPayRequest'])->name('sendPayRequest');
+		Route::get('pay/success', [PayController::class, 'paySuccess'])->name('successPay');
+		Route::get('pay/fail', [PayController::class, 'payFail'])->name('failPay');
+		Route::get('pay/return', [PayController::class, 'payReturn'])->name('returnPay');
+		Route::get('pay/callback', [PayController::class, 'payCallback'])->name('callbackPay');
 	});
 });
 

@@ -21,6 +21,7 @@ class CreateCodesTable extends Migration
 			$table->boolean('is_reset')->default(false)->index()->comment('признак использования');
 			$table->timestamp('reset_at')->nullable()->comment('дата использования кода подтверждения');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

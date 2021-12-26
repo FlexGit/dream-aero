@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Log;
 use Validator;
 
 use App\Models\Order;
+use App\Models\OrderPosition;
 use App\Models\City;
 use App\Models\Location;
-use App\Models\Tariff;
-use App\Models\TariffType;
+use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\Status;
 use App\Models\Contractor;
 
@@ -37,16 +38,21 @@ class OrderController extends Controller
 		$locations = Location::orderBy('name')
 			->get();
 		
-		$tariffs = Tariff::orderBy('name')
+		/*$products = Product::orderBy('name')
+			->get();*/
+		
+		$productTypes = ProductType::orderBy('name')
 			->get();
 		
-		$statuses = Status::orderBy('sort')
+		$statuses = Status::where('type', Status::STATUS_TYPE_ORDER)
+			->orderBy('sort')
 			->get();
-
+		
 		return view('admin.order.index', [
 			'cities' => $cities,
 			'locations' => $locations,
-			'tariffs' => $tariffs,
+			/*'products' => $products,*/
+			'productTypes' => $productTypes,
 			'statuses' => $statuses,
 		]);
 	}
@@ -60,8 +66,13 @@ class OrderController extends Controller
 			abort(404);
 		}
 		
-		$orders = Order::with(['city', 'location', 'tariff', 'contractor', 'status'])
+		$id = $this->request->id ?? 0;
+		
+		$orders = Order::with(['city', 'location', 'product', 'contractor', 'status'])
 			->orderBy('id', 'desc');
+		if ($id) {
+			$orders = $orders->where('id', '<', $id);
+		}
 		if ($this->request->filter_status_id) {
 			$orders = $orders->where('status_id', $this->request->filter_status_id);
 		}
@@ -71,10 +82,36 @@ class OrderController extends Controller
 		if ($this->request->filter_location_id) {
 			$orders = $orders->where('location_id', $this->request->filter_location_id);
 		}
-		if ($this->request->filter_contractor_id) {
-			$orders = $orders->where('contractor_id', $this->request->filter_contractor_id);
+		if ($this->request->filter_product_type_id) {
+			$orders = $orders->where(function ($query) {
+				$query->whereHas('product', function ($q) {
+					return $q->where('product_type_id', '=', $this->request->filter_product_type_id);
+				});
+			});
 		}
-		$orders = $orders->get();
+		if ($this->request->search_doc) {
+			$orders = $orders->where(function ($query) {
+				$query->where('number', 'like', '%' . $this->request->search_doc . '%')
+					->orWhereHas('certificate', function ($q) {
+						return $q->where('number', 'like', '%' . $this->request->search_doc . '%');
+					})
+					->orWhereHas('dealPosition', function ($q) {
+						return $q->where('number', 'like', '%' . $this->request->search_doc . '%');
+					})
+					->orWhereHas('bill', function ($q) {
+						return $q->where('number', 'like', '%' . $this->request->search_doc . '%');
+					});
+			});
+		}
+		if ($this->request->search_contractor) {
+			$orders = $orders->whereHas('contractor', function ($query) {
+				return $query->where('name', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('lastname', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%');
+			});
+		}
+		$orders = $orders->limit(10)->get();
 		
 		$VIEW = view('admin.order.list', ['orders' => $orders]);
 
@@ -100,7 +137,7 @@ class OrderController extends Controller
 		$locations = Location::orderBy('name')
 			->get();
 		
-		$tariffTypes = TariffType::with(['tariffs'])
+		$productTypes = ProductType::with(['products'])
 			->orderBy('name')
 			->get();
 		
@@ -111,7 +148,7 @@ class OrderController extends Controller
 			'order' => $order,
 			'cities' => $cities,
 			'locations' => $locations,
-			'tariffTypes' => $tariffTypes,
+			'productTypes' => $productTypes,
 			'statuses' => $statuses,
 		]);
 		
@@ -133,7 +170,7 @@ class OrderController extends Controller
 		$locations = Location::orderBy('name')
 			->get();
 		
-		$tariffs = Tariff::orderBy('name')
+		$products = Product::orderBy('name')
 			->get();
 		
 		$statuses = Status::orderBy('sort')
@@ -143,7 +180,7 @@ class OrderController extends Controller
 			'order' => $order,
 			'cities' => $cities,
 			'locations' => $locations,
-			'tariffs' => $tariffs,
+			'products' => $products,
 			'statuses' => $statuses,
 		]);
 		
@@ -167,15 +204,15 @@ class OrderController extends Controller
 			->orderBy('name')
 			->get();
 		
-		$tariffTypes = TariffType::where('is_active', true)
-			->with(['tariffs'])
+		$productTypes = ProductType::where('is_active', true)
+			->with(['products'])
 			->orderBy('name')
 			->get();
 		
 		$VIEW = view('admin.order.modal.add', [
 			'cities' => $cities,
 			'locations' => $locations,
-			'tariffTypes' => $tariffTypes,
+			'productTypes' => $productTypes,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -192,14 +229,14 @@ class OrderController extends Controller
 
 		$rules = [
 			'status_id' => 'required|numeric',
-			'tariff_id' => 'required|numeric',
+			'product_id' => 'required|numeric',
 			'city_id' => 'required|numeric',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'status_id' => 'Статус',
-				'tariff_id' => 'Тариф',
+				'product_id' => 'Продукт',
 				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
@@ -209,7 +246,7 @@ class OrderController extends Controller
 		$order = new Order();
 		$order->number = $this->request->number;
 		$order->status_id = $this->request->status_id;
-		$order->tariff_id = $this->request->tariff_id;
+		$order->product_id = $this->request->product_id;
 		$order->city_id = $this->request->city_id;
 		if (!$order->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -233,14 +270,14 @@ class OrderController extends Controller
 		
 		$rules = [
 			'status_id' => 'required|numeric',
-			'tariff_id' => 'required|numeric',
+			'product_id' => 'required|numeric',
 			'city_id' => 'required|numeric',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'status_id' => 'Статус',
-				'tariff_id' => 'Тариф',
+				'product_id' => 'Продукт',
 				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
@@ -249,7 +286,7 @@ class OrderController extends Controller
 		
 		$order->number = $this->request->number;
 		$order->status_id = $this->request->status_id;
-		$order->tariff_id = $this->request->tariff_id;
+		$order->product_id = $this->request->product_id;
 		$order->city_id = $this->request->city_id;
 
 		if (!$order->save()) {

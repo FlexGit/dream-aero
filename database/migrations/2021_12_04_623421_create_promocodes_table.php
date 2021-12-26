@@ -17,11 +17,13 @@ class CreatePromocodesTable extends Migration
             $table->id();
             $table->string('number')->comment('промокод');
 			$table->integer('city_id')->default(0)->index()->comment('город, в котором действует промокод');
+			$table->integer('discount_id')->default(0)->index()->comment('скидка');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->timestamp('active_from_at')->nullable()->comment('дата начала активности');
 			$table->timestamp('active_to_at')->nullable()->comment('дата окончания активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

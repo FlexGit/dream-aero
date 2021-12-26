@@ -10,57 +10,173 @@
 
     <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
     <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
-    <script src="../docs/js/theme-default-3.16.0.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 
     <link rel="stylesheet"
-          href="//unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/obsidian.min.css">
-    <script src="//unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+          href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/obsidian.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
 
-    <script src="//cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
+
+    <style id="language-style">
+        /* starts out as display none and is replaced with js later  */
+                    body .content .bash-example code { display: none; }
+                    body .content .javascript-example code { display: none; }
+                    body .content .php-example code { display: none; }
+            </style>
+
     <script>
-        var baseUrl = "http://dev.dream-aero.ru";
+        var baseUrl = "http://admin.dream-aero.loc";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-3.16.0.js"></script>
+    <script src="../docs/js/tryitout-3.19.1.js"></script>
+
+    <script src="../docs/js/theme-default-3.19.1.js"></script>
 
 </head>
 
 <body data-languages="[&quot;bash&quot;,&quot;javascript&quot;,&quot;php&quot;]">
+
 <a href="#" id="nav-button">
-      <span>
+    <span>
         MENU
         <img src="../docs/images/navbar.png" alt="navbar-image" />
-      </span>
+    </span>
 </a>
 <div class="tocify-wrapper">
-                <div class="lang-selector">
-                            <a href="#" data-language-name="bash">bash</a>
-                            <a href="#" data-language-name="javascript">javascript</a>
-                            <a href="#" data-language-name="php">php</a>
+    
+            <div class="lang-selector">
+                                            <button type="button" class="lang-button" data-language-name="bash">bash</button>
+                                            <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+                                            <button type="button" class="lang-button" data-language-name="php">php</button>
                     </div>
-        <div class="search">
+    
+    <div class="search">
         <input type="text" class="search" id="input-search" placeholder="Search">
     </div>
-    <ul class="search-results"></ul>
 
-    <ul id="toc">
-    </ul>
+    <div id="toc">
+                                                                            <ul id="tocify-header-0" class="tocify-header">
+                    <li class="tocify-item level-1" data-unique="introduction">
+                        <a href="#introduction">Introduction</a>
+                    </li>
+                                            
+                                                                    </ul>
+                                                <ul id="tocify-header-1" class="tocify-header">
+                    <li class="tocify-item level-1" data-unique="authenticating-requests">
+                        <a href="#authenticating-requests">Authenticating requests</a>
+                    </li>
+                                            
+                                                </ul>
+                    
+                    <ul id="tocify-header-2" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="endpoints">
+                    <a href="#endpoints">Endpoints</a>
+                </li>
+                                    <ul id="tocify-subheader-endpoints" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-login">
+                        <a href="#endpoints-POSTapi-login">Authentification</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-profile-save">
+                        <a href="#endpoints-POSTapi-profile-save">Profile save</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-profile-delete">
+                        <a href="#endpoints-POSTapi-profile-delete">Profile delete</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-code-send">
+                        <a href="#endpoints-POSTapi-code-send">Verification code send</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-register">
+                        <a href="#endpoints-POSTapi-register">Registration</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-logout">
+                        <a href="#endpoints-POSTapi-logout">Logout</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-password-reset">
+                        <a href="#endpoints-POSTapi-password-reset">Password change</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-profile">
+                        <a href="#endpoints-GETapi-profile">Profile</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-tariff_types">
+                        <a href="#endpoints-GETapi-tariff_types">Tariff type list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-tariffs">
+                        <a href="#endpoints-GETapi-tariffs">Tariff list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-tariff">
+                        <a href="#endpoints-GETapi-tariff">Tariff detailed</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-cities">
+                        <a href="#endpoints-GETapi-cities">City list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-locations">
+                        <a href="#endpoints-GETapi-locations">Location list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-legal_entities">
+                        <a href="#endpoints-GETapi-legal_entities">Legal Entity list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-promos">
+                        <a href="#endpoints-GETapi-promos">Promo list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-promo">
+                        <a href="#endpoints-GETapi-promo">Promo detailed</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-profile-reset">
+                        <a href="#endpoints-GETapi-profile-reset">Profile Reset</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-profile-avatar-save">
+                        <a href="#endpoints-POSTapi-profile-avatar-save">Avatar save</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-profile-avatar-delete">
+                        <a href="#endpoints-POSTapi-profile-avatar-delete">Avatar delete</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-tariff-price">
+                        <a href="#endpoints-GETapi-tariff-price">Tariff Amount</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-promocode-verify">
+                        <a href="#endpoints-GETapi-promocode-verify">Promocode Verify</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-flights">
+                        <a href="#endpoints-GETapi-flights">Flight list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-order-create">
+                        <a href="#endpoints-POSTapi-order-create">Order create</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-code-verify">
+                        <a href="#endpoints-GETapi-code-verify">Code verify</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-certificate-verify">
+                        <a href="#endpoints-GETapi-certificate-verify">Certificate Verify</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-notifications">
+                        <a href="#endpoints-GETapi-notifications">Notification list</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-notification">
+                        <a href="#endpoints-GETapi-notification">Notification detailed</a>
+                    </li>
+                                                    </ul>
+                            </ul>
+        
+                        
+            </div>
 
             <ul class="toc-footer" id="toc-footer">
                             <li><a href="../docs/collection.json">View Postman collection</a></li>
                             <li><a href="../docs/openapi.yaml">View OpenAPI spec</a></li>
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
-            <ul class="toc-footer" id="last-updated">
-            <li>Last updated: December 10 2021</li>
-        </ul>
+        <ul class="toc-footer" id="last-updated">
+        <li>Last updated: December 27 2021</li>
+    </ul>
 </div>
+
 <div class="page-wrapper">
     <div class="dark-box"></div>
     <div class="content">
-        <h1>Introduction</h1>
+        <h1 id="introduction">Introduction</h1>
 <p>Dream Aero API</p>
 <p>This documentation aims to provide all the information you need to work with our API.</p>
 <aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
@@ -68,10 +184,10 @@ You can switch the language used with the tabs at the top right (or from the nav
 <blockquote>
 <p>Base URL</p>
 </blockquote>
-<pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
+<pre><code class="language-yaml">http://admin.dream-aero.loc</code></pre>
 
-        <h1>Authenticating requests</h1>
-<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
+        <h1 id="authenticating-requests">Authenticating requests</h1>
+<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -90,13 +206,16 @@ You can switch the language used with the tabs at the top right (or from the nav
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/login?api_key=&amp;email=&amp;password=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/login?api_key=&amp;email=&amp;password=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/login"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/login"
 );
 
 const params = {
@@ -115,11 +234,13 @@ const headers = {
 fetch(url, {
     method: "POST",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/login',
+    'http://admin.dream-aero.loc/api/login',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -133,7 +254,8 @@ $response = $client-&gt;post(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-login">
@@ -146,11 +268,10 @@ print_r(json_decode((string) $body));</code></pre>
     &quot;success&quot;: true,
     &quot;message&quot;: null,
     &quot;data&quot;: {
-        &quot;id&quot;: 1,
-        &quot;token&quot;: &quot;328dda59f036efc26720937545efe01e&quot;,
-        &quot;contractor_id&quot;: 1,
-        &quot;created_at&quot;: &quot;2021-11-12 18:36:05&quot;,
-        &quot;updated_at&quot;: &quot;2021-11-12 18:36:05&quot;
+        &quot;token&quot;: {
+            &quot;token&quot;: &quot;328dda59f036efc26720937545efe01e&quot;,
+            &quot;expire_at&quot;: null
+        }
     }
 }</code>
  </pre>
@@ -240,7 +361,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-login"
-                    onclick="cancelTryOut('POSTapi-login');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-login');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -296,8 +417,9 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/profile/save?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/profile/save?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -306,15 +428,17 @@ print_r(json_decode((string) $body));</code></pre>
     \"birthdate\": null,
     \"city_id\": null
 }"
-</code></pre>
+</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/profile/save"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/profile/save"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -335,11 +459,13 @@ fetch(url, {
     method: "POST",
     headers,
     body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/profile/save',
+    'http://admin.dream-aero.loc/api/profile/save',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -347,7 +473,7 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
         'json' =&gt; [
             'email' =&gt; null,
@@ -358,7 +484,8 @@ $response = $client-&gt;post(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-profile-save">
@@ -377,7 +504,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;lastname&quot;: &quot;Smith&quot;,
             &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
             &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
+            &quot;city&quot;: &quot;Москва&quot;,
             &quot;discount&quot;: 5,
             &quot;birthdate&quot;: &quot;1990-01-01&quot;,
             &quot;avatar_file_base64&quot;: null,
@@ -385,9 +512,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;score&quot;: 10000,
             &quot;status&quot;: &quot;Золотой&quot;,
             &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            &quot;is_new&quot;: false
         }
     }
 }</code>
@@ -478,7 +603,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-profile-save"
-                    onclick="cancelTryOut('POSTapi-profile-save');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-profile-save');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -501,9 +626,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="POSTapi-profile-save"
                value=""
                data-component="query" hidden>
@@ -573,234 +698,6 @@ print_r(json_decode((string) $body));</code></pre>
         </p>
         </form>
 
-            <h2 id="endpoints-POSTapi-code-verify">Code verification</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-POSTapi-code-verify">
-<blockquote>Example request:</blockquote>
-
-
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/code/verify?api_key=&amp;email=&amp;code=" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
-
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/code/verify"
-);
-
-const params = {
-    "api_key": "",
-    "email": "",
-    "code": "",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-}).then(response =&gt; response.json());</code></pre>
-
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/code/verify',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-        'query' =&gt; [
-            'api_key'=&gt; '',
-            'email'=&gt; '',
-            'code'=&gt; '',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
-</span>
-
-<span id="example-responses-POSTapi-code-verify">
-            <blockquote>
-            <p>Example response (200, success):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Код подтвержден&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
-            &quot;discount&quot;: 5,
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
-        },
-        &quot;code&quot;: {
-            &quot;id&quot;: 1,
-            &quot;code&quot;: 1234,
-            &quot;contractor_id&quot;: 1,
-            &quot;is_reset&quot;: 0,
-            &quot;reset_at&quot;: null,
-            &quot;created_at&quot;: &quot;2021-11-12 18:36:05&quot;,
-            &quot;updated_at&quot;: &quot;2021-11-12 18:36:05&quot;
-        }
-    }
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (400, Bad Request):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: {
-        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
-    },
-    &quot;debug&quot;: null
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (400, Bad Request):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
-    &quot;debug&quot;: null
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (404, Resource Not Found):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Ресурс не найден&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (405, Method Not Allowed):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Метод не разрешен&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (500, Internal Server Error):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-POSTapi-code-verify" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-code-verify"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-code-verify"></code></pre>
-</span>
-<span id="execution-error-POSTapi-code-verify" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-code-verify"></code></pre>
-</span>
-<form id="form-POSTapi-code-verify" data-method="POST"
-      data-path="api/code/verify"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-code-verify', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-code-verify"
-                    onclick="tryItOut('POSTapi-code-verify');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-code-verify"
-                    onclick="cancelTryOut('POSTapi-code-verify');" hidden>Cancel
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-code-verify" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/code/verify</code></b>
-        </p>
-                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
-                    <p>
-                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="api_key"
-               data-endpoint="POSTapi-code-verify"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="email"
-               data-endpoint="POSTapi-code-verify"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>code</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="code"
-               data-endpoint="POSTapi-code-verify"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                </form>
-
             <h2 id="endpoints-POSTapi-profile-delete">Profile delete</h2>
 
 <p>
@@ -813,18 +710,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/profile/delete?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/profile/delete?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/profile/delete"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/profile/delete"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -837,11 +737,13 @@ const headers = {
 fetch(url, {
     method: "POST",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/profile/delete',
+    'http://admin.dream-aero.loc/api/profile/delete',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -849,12 +751,13 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-profile-delete">
@@ -942,7 +845,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-profile-delete"
-                    onclick="cancelTryOut('POSTapi-profile-delete');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-profile-delete');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -965,9 +868,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="POSTapi-profile-delete"
                value=""
                data-component="query" hidden>
@@ -988,13 +891,16 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/code/send?api_key=&amp;email=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/code/send?api_key=&amp;email=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/code/send"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/code/send"
 );
 
 const params = {
@@ -1012,11 +918,13 @@ const headers = {
 fetch(url, {
     method: "POST",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/code/send',
+    'http://admin.dream-aero.loc/api/code/send',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1029,7 +937,8 @@ $response = $client-&gt;post(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-code-send">
@@ -1041,35 +950,7 @@ print_r(json_decode((string) $body));</code></pre>
 <code class="language-json">{
     &quot;success&quot;: true,
     &quot;message&quot;: &quot;Код подтверждения отправлен на john.smith@gmail.com&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
-            &quot;discount&quot;: 5,
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
-        },
-        &quot;code&quot;: {
-            &quot;id&quot;: 1,
-            &quot;code&quot;: 1234,
-            &quot;contractor_id&quot;: 1,
-            &quot;is_reset&quot;: 0,
-            &quot;reset_at&quot;: null,
-            &quot;created_at&quot;: &quot;2021-11-12 18:36:05&quot;,
-            &quot;updated_at&quot;: &quot;2021-11-12 18:36:05&quot;
-        }
-    }
+    &quot;data&quot;: null
 }</code>
  </pre>
             <blockquote>
@@ -1158,7 +1039,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-code-send"
-                    onclick="cancelTryOut('POSTapi-code-send');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-code-send');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -1214,18 +1095,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/register?api_key=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/register?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"password\": null,
     \"password_confirmation\": null
 }"
-</code></pre>
+</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/register"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/register"
 );
 
 const params = {
@@ -1248,11 +1132,13 @@ fetch(url, {
     method: "POST",
     headers,
     body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/register',
+    'http://admin.dream-aero.loc/api/register',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1268,7 +1154,8 @@ $response = $client-&gt;post(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-register">
@@ -1278,35 +1165,30 @@ print_r(json_decode((string) $body));</code></pre>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: null,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
-            &quot;discount&quot;: 5,
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
-        },
-        &quot;mob_auth&quot;: {
-            &quot;id&quot;: 1,
-            &quot;contractor_id&quot;: 1,
-            &quot;token&quot;: &quot;6136d60c36e6925bf98dea7e05d5f5c8&quot;,
-            &quot;created_at&quot;: &quot;2021-11-12 18:36:05&quot;,
-            &quot;updated_at&quot;: &quot;2021-11-12 18:36:05&quot;
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: null,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: &quot;Москва&quot;,
+			&quot;discount&quot;: 5,
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+			&quot;is_active&quot;: true,
+			&quot;is_new&quot;: false
+		}
+		&quot;token&quot;: {
+			&quot;token&quot;: &quot;6136d60c36e6925bf98dea7e05d5f5c8&quot;,
+			&quot;expire_at&quot;: null
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -1395,7 +1277,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-register"
-                    onclick="cancelTryOut('POSTapi-register');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-register');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -1502,18 +1384,20 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/logout?api_key=&amp;contractor_id=&amp;token=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/logout?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/logout"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/logout"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
     "token": "",
 };
 Object.keys(params)
@@ -1527,11 +1411,13 @@ const headers = {
 fetch(url, {
     method: "POST",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/logout',
+    'http://admin.dream-aero.loc/api/logout',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1539,13 +1425,13 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
             'token'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-logout">
@@ -1633,7 +1519,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-logout"
-                    onclick="cancelTryOut('POSTapi-logout');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-logout');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -1649,16 +1535,6 @@ print_r(json_decode((string) $body));</code></pre>
                 <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="api_key"
-               data-endpoint="POSTapi-logout"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
                data-endpoint="POSTapi-logout"
                value=""
                data-component="query" hidden>
@@ -1689,23 +1565,26 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/password/reset?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/password/reset?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
     \"password\": null,
     \"password_confirmation\": null
 }"
-</code></pre>
+</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/password/reset"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/password/reset"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1724,11 +1603,13 @@ fetch(url, {
     method: "POST",
     headers,
     body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/password/reset',
+    'http://admin.dream-aero.loc/api/password/reset',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1736,7 +1617,7 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
         'json' =&gt; [
             'password' =&gt; null,
@@ -1745,7 +1626,8 @@ $response = $client-&gt;post(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-password-reset">
@@ -1764,7 +1646,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;lastname&quot;: &quot;Smith&quot;,
             &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
             &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
+            &quot;city&quot;: &quot;Москва&quot;,
             &quot;discount&quot;: 5,
             &quot;birthdate&quot;: &quot;1990-01-01&quot;,
             &quot;avatar_file_base64&quot;: null,
@@ -1772,9 +1654,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;score&quot;: 10000,
             &quot;status&quot;: &quot;Золотой&quot;,
             &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            &quot;is_new&quot;: false
         }
     }
 }</code>
@@ -1865,7 +1745,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-password-reset"
-                    onclick="cancelTryOut('POSTapi-password-reset');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-password-reset');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -1888,9 +1768,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="POSTapi-password-reset"
                value=""
                data-component="query" hidden>
@@ -1932,18 +1812,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/profile?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/profile?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/profile"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/profile"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1956,11 +1839,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/profile',
+    'http://admin.dream-aero.loc/api/profile',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1968,12 +1853,13 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-profile">
@@ -1992,7 +1878,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;lastname&quot;: &quot;Smith&quot;,
             &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
             &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
+            &quot;city&quot;: &quot;Москва&quot;,
             &quot;discount&quot;: 5,
             &quot;birthdate&quot;: &quot;1990-01-01&quot;,
             &quot;avatar_file_base64&quot;: null,
@@ -2000,9 +1886,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;score&quot;: 10000,
             &quot;status&quot;: &quot;Золотой&quot;,
             &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            &quot;is_new&quot;: false
         }
     }
 }</code>
@@ -2080,7 +1964,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-profile"
-                    onclick="cancelTryOut('GETapi-profile');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-profile');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -2103,9 +1987,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-profile"
                value=""
                data-component="query" hidden>
@@ -2126,13 +2010,16 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff_types?api_key=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/tariff_types?api_key=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/tariff_types"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/tariff_types"
 );
 
 const params = {
@@ -2149,11 +2036,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/tariff_types',
+    'http://admin.dream-aero.loc/api/tariff_types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2165,7 +2054,8 @@ $response = $client-&gt;get(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-tariff_types">
@@ -2179,12 +2069,12 @@ print_r(json_decode((string) $body));</code></pre>
     &quot;message&quot;: null,
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Regular&quot;,
-            &quot;data_json&quot;: {},
-            &quot;is_active&quot;: true,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            &quot;tariff_type&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Regular&quot;,
+                &quot;alias&quot;: &quot;regular&quot;,
+                &quot;description&quot;: null
+            }
         }
     ]
 }</code>
@@ -2262,7 +2152,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-tariff_types"
-                    onclick="cancelTryOut('GETapi-tariff_types');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-tariff_types');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -2298,19 +2188,22 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariffs?api_key=&amp;tariff_type_id=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/tariffs?api_key=&amp;token=&amp;tariff_type_id=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/tariffs"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/tariffs"
 );
 
 const params = {
     "api_key": "",
+    "token": "",
     "tariff_type_id": "",
-    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2323,11 +2216,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/tariffs',
+    'http://admin.dream-aero.loc/api/tariffs',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2335,13 +2230,14 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'token'=&gt; '',
             'tariff_type_id'=&gt; '',
-            'contractor_id'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-tariffs">
@@ -2358,43 +2254,30 @@ print_r(json_decode((string) $body));</code></pre>
 			&quot;tariff&quot;: {
 			&quot;id&quot;: 1,
 			&quot;name&quot;: &quot;Regular&quot;,
-			&quot;tariff_type_id&quot;: 1,
-			&quot;employee_id&quot;: 10,
-			&quot;city_id&quot;: 5,
 			&quot;duration&quot;: 30,
 			&quot;price&quot;: 6300,
-			&quot;data_json&quot;: {
-			},
-			&quot;is_active&quot;: true,
 			&quot;is_hit&quot;: false,
-			&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-			&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+				&quot;is_unified&quot;: false,
+			&quot;is_order_allow&quot;: true,
+			&quot;is_certificate_allow&quot;: true,
+			&quot;tariff_type&quot;: {
+				&quot;id&quot;: 1,
+				&quot;name&quot;: &quot;Regular&quot;,
+				&quot;alias&quot;: &quot;regular&quot;,
+				&quot;description&quot;: null
+			},
+			&quot;employee&quot;: {
+				&quot;id&quot;: 1,
+					&quot;name&quot;: &quot;John Smith&quot;,
+					&quot;photo_file_path&quot;: null,
+					&quot;icon_file_path&quot;: null,
+					&quot;instagram&quot;: null
+				},
+			&quot;city&quot;: {
+				&quot;id&quot;: 1,
+				&quot;name&quot;: &quot;Москва&quot;,
 			}
-		&quot;tariff_type&quot;: {
-			&quot;id&quot;: 1,
-			&quot;name&quot;: &quot;Regular&quot;,
-			&quot;data_json&quot;: {
-				&quot;hint&quot;: &quot;только будни&quot;,
-				&quot;description&quot;: &quot;&quot;
-			},
-			&quot;is_active&quot;: true,
-			&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-			&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
-		},
-		&quot;employee&quot;: {
-			&quot;id&quot;: 1,
-				&quot;name&quot;: &quot;John Smith&quot;,
-				&quot;photo_path&quot;: null,
-				&quot;icon_path&quot;: null,
-				&quot;instagram&quot;: null
-			},
-		&quot;city&quot;: {
-			&quot;id&quot;: 1,
-			&quot;name&quot;: &quot;Москва&quot;,
-			&quot;is_active&quot;: true,
-			&quot;created_at&quot;: &quot;2021-10-01 18:23:27&quot;,
-			&quot;updated_at&quot;: &quot;2021-10-05 18:23:41&quot;
-		}
+			}
 		}
 	]
 }</code>
@@ -2472,7 +2355,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-tariffs"
-                    onclick="cancelTryOut('GETapi-tariffs');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-tariffs');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -2495,9 +2378,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>tariff_type_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="tariff_type_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-tariffs"
                value=""
                data-component="query" hidden>
@@ -2505,9 +2388,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <b><code>tariff_type_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
-               name="contractor_id"
+               name="tariff_type_id"
                data-endpoint="GETapi-tariffs"
                value=""
                data-component="query" hidden>
@@ -2528,17 +2411,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff?api_key=&amp;tariff_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/tariff?api_key=&amp;token=&amp;tariff_id=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/tariff"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/tariff"
 );
 
 const params = {
     "api_key": "",
+    "token": "",
     "tariff_id": "",
 };
 Object.keys(params)
@@ -2552,11 +2439,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/tariff',
+    'http://admin.dream-aero.loc/api/tariff',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2564,12 +2453,14 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'token'=&gt; '',
             'tariff_id'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-tariff">
@@ -2585,41 +2476,29 @@ print_r(json_decode((string) $body));</code></pre>
         &quot;tariff&quot;: {
             &quot;id&quot;: 1,
             &quot;name&quot;: &quot;Regular&quot;,
-            &quot;tariff_type_id&quot;: 1,
-            &quot;employee_id&quot;: 10,
-            &quot;city_id&quot;: 5,
             &quot;duration&quot;: 30,
             &quot;price&quot;: 6300,
-            &quot;data_json&quot;: {},
-            &quot;is_active&quot;: true,
             &quot;is_hit&quot;: false,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
-        },
-        &quot;tariff_type&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Regular&quot;,
-            &quot;data_json&quot;: {
-                &quot;hint&quot;: &quot;только будни&quot;,
-                &quot;description&quot;: &quot;&quot;
+            &quot;is_unified&quot;: false,
+            &quot;is_order_allow&quot;: true,
+            &quot;is_certificate_allow&quot;: true,
+            &quot;tariff_type&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Regular&quot;,
+                &quot;alias&quot;: &quot;regular&quot;,
+                &quot;description&quot;: null
             },
-            &quot;is_active&quot;: true,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
-        },
-        &quot;employee&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;John Smith&quot;,
-            &quot;photo_path&quot;: null,
-            &quot;icon_path&quot;: null,
-            &quot;instagram&quot;: null
-        },
-        &quot;city&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Москва&quot;,
-            &quot;is_active&quot;: true,
-            &quot;created_at&quot;: &quot;2021-10-01 18:23:27&quot;,
-            &quot;updated_at&quot;: &quot;2021-10-05 18:23:41&quot;
+            &quot;employee&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;John Smith&quot;,
+                &quot;photo_file_path&quot;: null,
+                &quot;icon_file_path&quot;: null,
+                &quot;instagram&quot;: null
+            },
+            &quot;city&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Москва&quot;
+            }
         }
     }
 }</code>
@@ -2697,7 +2576,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-tariff"
-                    onclick="cancelTryOut('GETapi-tariff');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-tariff');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -2713,6 +2592,16 @@ print_r(json_decode((string) $body));</code></pre>
                 <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="api_key"
+               data-endpoint="GETapi-tariff"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-tariff"
                value=""
                data-component="query" hidden>
@@ -2743,13 +2632,16 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/cities?api_key=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/cities?api_key=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/cities"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/cities"
 );
 
 const params = {
@@ -2766,11 +2658,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/cities',
+    'http://admin.dream-aero.loc/api/cities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2782,7 +2676,8 @@ $response = $client-&gt;get(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-cities">
@@ -2792,17 +2687,16 @@ print_r(json_decode((string) $body));</code></pre>
                 <pre>
 
 <code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: [
-	{
-		&quot;id&quot;: 1,
-		&quot;name&quot;: &quot;Москва&quot;,
-		&quot;is_active&quot;: true,
-		&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-		&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-	}
-	]
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: [
+        {
+            &quot;city&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Москва&quot;
+            }
+        }
+    ]
 }</code>
  </pre>
             <blockquote>
@@ -2878,7 +2772,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-cities"
-                    onclick="cancelTryOut('GETapi-cities');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-cities');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -2914,18 +2808,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/locations?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/locations?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/locations"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/locations"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2938,11 +2835,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/locations',
+    'http://admin.dream-aero.loc/api/locations',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2950,12 +2849,13 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-locations">
@@ -2972,8 +2872,6 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;location&quot;: {
                 &quot;id&quot;: 1,
                 &quot;name&quot;: &quot;ТРК VEGAS Кунцево&quot;,
-                &quot;legal_entity_id&quot;: 1,
-                &quot;city_id&quot;: 1,
                 &quot;address&quot;: null,
                 &quot;working_hours&quot;: null,
                 &quot;phone&quot;: null,
@@ -2981,10 +2879,7 @@ print_r(json_decode((string) $body));</code></pre>
                 &quot;map_link&quot;: null,
                 &quot;skype&quot;: null,
                 &quot;whatsapp&quot;: null,
-                &quot;scheme_file_path&quot;: null,
-                &quot;is_active&quot;: true,
-                &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-                &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+                &quot;scheme_file_path&quot;: null
             }
         }
     ]
@@ -3063,7 +2958,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-locations"
-                    onclick="cancelTryOut('GETapi-locations');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-locations');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -3086,9 +2981,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-locations"
                value=""
                data-component="query" hidden>
@@ -3109,18 +3004,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/legal_entities?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/legal_entities?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/legal_entities"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/legal_entities"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3133,11 +3031,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/legal_entities',
+    'http://admin.dream-aero.loc/api/legal_entities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3145,12 +3045,13 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-legal_entities">
@@ -3160,17 +3061,17 @@ print_r(json_decode((string) $body));</code></pre>
                 <pre>
 
 <code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: [
-	{
-		&quot;id&quot;: 1,
-		&quot;name&quot;: &quot;ООО Компания&quot;,
-		&quot;public_offer&quot;: null,
-		&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-		&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-	}
-	]
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: [
+        {
+            &quot;legal_entity&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;ООО Компания&quot;,
+                &quot;public_offer_file_path&quot;: null
+            }
+        }
+    ]
 }</code>
  </pre>
             <blockquote>
@@ -3246,7 +3147,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-legal_entities"
-                    onclick="cancelTryOut('GETapi-legal_entities');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-legal_entities');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -3269,9 +3170,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-legal_entities"
                value=""
                data-component="query" hidden>
@@ -3292,13 +3193,16 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/promos?api_key=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/promos?api_key=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/promos"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/promos"
 );
 
 const params = {
@@ -3315,11 +3219,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/promos',
+    'http://admin.dream-aero.loc/api/promos',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3331,7 +3237,8 @@ $response = $client-&gt;get(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-promos">
@@ -3341,20 +3248,22 @@ print_r(json_decode((string) $body));</code></pre>
                 <pre>
 
 <code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: [
-	{
-		&quot;id&quot;: 1,
-		&quot;name&quot;: &quot;Акция&quot;,
-		&quot;preview_text&quot;: &quot;&quot;,
-		&quot;detail_text&quot;: &quot;&quot;,
-		&quot;city_id&quot;: 1,
-		&quot;is_active&quot;: true,
-		&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-		&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-	}
-	]
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: [
+        {
+            &quot;promo&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Акция&quot;,
+                &quot;preview_text&quot;: null,
+                &quot;detail_text&quot;: null,
+                &quot;discount&quot;: {
+                    &quot;value&quot;: 5,
+                    &quot;is_fixed&quot;: false
+                }
+            }
+        }
+    ]
 }</code>
  </pre>
             <blockquote>
@@ -3430,7 +3339,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-promos"
-                    onclick="cancelTryOut('GETapi-promos');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-promos');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -3453,9 +3362,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-promos"
                value=""
                data-component="query" hidden>
@@ -3476,13 +3385,16 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/promo?api_key=&amp;promo_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/promo?api_key=&amp;promo_id=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/promo"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/promo"
 );
 
 const params = {
@@ -3500,11 +3412,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/promo',
+    'http://admin.dream-aero.loc/api/promo',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3517,7 +3431,8 @@ $response = $client-&gt;get(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-promo">
@@ -3527,18 +3442,20 @@ print_r(json_decode((string) $body));</code></pre>
                 <pre>
 
 <code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: {
-	&quot;id&quot;: 1,
-	&quot;name&quot;: &quot;Акция&quot;,
-	&quot;preview_text&quot;: &quot;&quot;,
-	&quot;detail_text&quot;: &quot;&quot;,
-	&quot;city_id&quot;: 1,
-	&quot;is_active&quot;: true,
-	&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-	&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-	}
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: {
+        &quot;promo&quot;: {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Акция&quot;,
+            &quot;preview_text&quot;: null,
+            &quot;detail_text&quot;: null,
+            &quot;discount&quot;: {
+                &quot;value&quot;: 5,
+                &quot;is_fixed&quot;: false
+            }
+        }
+    }
 }</code>
  </pre>
             <blockquote>
@@ -3614,7 +3531,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-promo"
-                    onclick="cancelTryOut('GETapi-promo');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-promo');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -3648,7 +3565,7 @@ print_r(json_decode((string) $body));</code></pre>
             </p>
                 </form>
 
-            <h2 id="endpoints-GETapi-profile-reset">Reset Profile</h2>
+            <h2 id="endpoints-GETapi-profile-reset">Profile Reset</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -3660,18 +3577,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/profile/reset?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/profile/reset?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/profile/reset"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/profile/reset"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3684,11 +3604,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/profile/reset',
+    'http://admin.dream-aero.loc/api/profile/reset',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3696,12 +3618,13 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-profile-reset">
@@ -3720,7 +3643,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;lastname&quot;: &quot;Smith&quot;,
             &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
             &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
+            &quot;city&quot;: &quot;Москва&quot;,
             &quot;discount&quot;: 5,
             &quot;birthdate&quot;: &quot;1990-01-01&quot;,
             &quot;avatar_file_base64&quot;: null,
@@ -3728,9 +3651,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;score&quot;: 10000,
             &quot;status&quot;: &quot;Золотой&quot;,
             &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            &quot;is_new&quot;: false
         }
     }
 }</code>
@@ -3808,7 +3729,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-profile-reset"
-                    onclick="cancelTryOut('GETapi-profile-reset');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-profile-reset');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -3831,9 +3752,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-profile-reset"
                value=""
                data-component="query" hidden>
@@ -3854,22 +3775,25 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/profile/avatar/save?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/profile/avatar/save?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"perferendis\"
+    \"file_base64\": \"sit\"
 }"
-</code></pre>
+</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/profile/avatar/save"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/profile/avatar/save"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -3880,18 +3804,20 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "perferendis"
+    "file_base64": "sit"
 };
 
 fetch(url, {
     method: "POST",
     headers,
     body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/profile/avatar/save',
+    'http://admin.dream-aero.loc/api/profile/avatar/save',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3899,15 +3825,16 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'perferendis',
+            'file_base64' =&gt; 'sit',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-profile-avatar-save">
@@ -3926,7 +3853,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;lastname&quot;: &quot;Smith&quot;,
             &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
             &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
+            &quot;city&quot;: &quot;Москва&quot;,
             &quot;discount&quot;: 5,
             &quot;birthdate&quot;: &quot;1990-01-01&quot;,
             &quot;avatar_file_base64&quot;: null,
@@ -3934,9 +3861,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;score&quot;: 10000,
             &quot;status&quot;: &quot;Золотой&quot;,
             &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            &quot;is_new&quot;: false
         }
     }
 }</code>
@@ -4027,7 +3952,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-profile-avatar-save"
-                    onclick="cancelTryOut('POSTapi-profile-avatar-save');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-profile-avatar-save');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -4050,9 +3975,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="POSTapi-profile-avatar-save"
                value=""
                data-component="query" hidden>
@@ -4065,7 +3990,7 @@ print_r(json_decode((string) $body));</code></pre>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="perferendis"
+               value="sit"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4084,18 +4009,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/profile/avatar/delete?api_key=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/profile/avatar/delete?api_key=&amp;token=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/profile/avatar/delete"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/profile/avatar/delete"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4108,11 +4036,13 @@ const headers = {
 fetch(url, {
     method: "POST",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/profile/avatar/delete',
+    'http://admin.dream-aero.loc/api/profile/avatar/delete',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4120,12 +4050,13 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-POSTapi-profile-avatar-delete">
@@ -4144,7 +4075,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;lastname&quot;: &quot;Smith&quot;,
             &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
             &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
+            &quot;city&quot;: &quot;Москва&quot;,
             &quot;discount&quot;: 5,
             &quot;birthdate&quot;: &quot;1990-01-01&quot;,
             &quot;avatar_file_base64&quot;: null,
@@ -4152,9 +4083,7 @@ print_r(json_decode((string) $body));</code></pre>
             &quot;score&quot;: 10000,
             &quot;status&quot;: &quot;Золотой&quot;,
             &quot;is_active&quot;: true,
-            &quot;last_auth_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-            &quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
+            &quot;is_new&quot;: false
         }
     }
 }</code>
@@ -4245,7 +4174,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-POSTapi-profile-avatar-delete"
-                    onclick="cancelTryOut('POSTapi-profile-avatar-delete');" hidden>Cancel
+                    onclick="cancelTryOut('POSTapi-profile-avatar-delete');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -4268,9 +4197,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="POSTapi-profile-avatar-delete"
                value=""
                data-component="query" hidden>
@@ -4279,7 +4208,7 @@ print_r(json_decode((string) $body));</code></pre>
             </p>
                 </form>
 
-            <h2 id="endpoints-GETapi-tariff-price">Tariff Price</h2>
+            <h2 id="endpoints-GETapi-tariff-price">Tariff Amount</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -4291,18 +4220,21 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;contractor_id=&amp;tariff_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/tariff/price?api_key=&amp;token=&amp;tariff_id=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/tariff/price"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/tariff/price"
 );
 
 const params = {
     "api_key": "",
-    "contractor_id": "",
+    "token": "",
     "tariff_id": "",
 };
 Object.keys(params)
@@ -4316,11 +4248,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/tariff/price',
+    'http://admin.dream-aero.loc/api/tariff/price',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4328,13 +4262,14 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
+            'token'=&gt; '',
             'tariff_id'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-tariff-price">
@@ -4347,7 +4282,7 @@ print_r(json_decode((string) $body));</code></pre>
 	&quot;success&quot;: true,
 	&quot;message&quot;: &quot;&quot;,
 	&quot;data&quot;: {
-		&quot;price&quot;: 5500,
+		&quot;amount&quot;: 5500,
 	}
 }</code>
  </pre>
@@ -4437,7 +4372,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-tariff-price"
-                    onclick="cancelTryOut('GETapi-tariff-price');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-tariff-price');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -4460,9 +4395,9 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-tariff-price"
                value=""
                data-component="query" hidden>
@@ -4489,6 +4424,37 @@ print_r(json_decode((string) $body));</code></pre>
     <br>
 
             </p>
+                    <p>
+                <b><code>is_unified</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
+                <label data-endpoint="GETapi-tariff-price" hidden>
+            <input type="radio" name="is_unified"
+                   value="1"
+                   data-endpoint="GETapi-tariff-price"
+                   data-component="query"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="GETapi-tariff-price" hidden>
+            <input type="radio" name="is_unified"
+                   value="0"
+                   data-endpoint="GETapi-tariff-price"
+                   data-component="query"
+            >
+            <code>false</code>
+        </label>
+    <br>
+<p>Unified certificate.</p>
+            </p>
+                    <p>
+                <b><code>promocode_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="promocode_id"
+               data-endpoint="GETapi-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
                 </form>
 
             <h2 id="endpoints-GETapi-promocode-verify">Promocode Verify</h2>
@@ -4503,19 +4469,22 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/promocode/verify?api_key=&amp;promocode=&amp;contractor_id=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/promocode/verify?api_key=&amp;token=&amp;promocode=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/promocode/verify"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/promocode/verify"
 );
 
 const params = {
     "api_key": "",
+    "token": "",
     "promocode": "",
-    "contractor_id": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4528,11 +4497,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/promocode/verify',
+    'http://admin.dream-aero.loc/api/promocode/verify',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4540,13 +4511,14 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'token'=&gt; '',
             'promocode'=&gt; '',
-            'contractor_id'=&gt; '',
         ],
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-promocode-verify">
@@ -4559,6 +4531,7 @@ print_r(json_decode((string) $body));</code></pre>
 	&quot;success&quot;: true,
 	&quot;message&quot;: null,
 	&quot;data&quot;: {
+		&quot;id&quot;: 23,
 	&quot;is_active&quot;: true,
 	}
 }</code>
@@ -4636,7 +4609,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-promocode-verify"
-                    onclick="cancelTryOut('GETapi-promocode-verify');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-promocode-verify');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -4659,216 +4632,20 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="GETapi-promocode-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
                 <b><code>promocode</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="promocode"
                data-endpoint="GETapi-promocode-verify"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
-               data-endpoint="GETapi-promocode-verify"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                </form>
-
-            <h2 id="endpoints-GETapi-products">Product list</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-GETapi-products">
-<blockquote>Example request:</blockquote>
-
-
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/products?api_key=&amp;contractor_id=" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
-
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/products"
-);
-
-const params = {
-    "api_key": "",
-    "contractor_id": "",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre>
-
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/products',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-        'query' =&gt; [
-            'api_key'=&gt; '',
-            'contractor_id'=&gt; '',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
-</span>
-
-<span id="example-responses-GETapi-products">
-            <blockquote>
-            <p>Example response (200, success):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: [
-	{
-			&quot;product&quot;: {
-			&quot;id&quot;: 1,
-			&quot;name&quot;: &quot;Видеозапись&quot;,
-			&quot;city_id&quot;: 1,
-			&quot;price&quot;: 500,
-			&quot;data_json&quot;: {
-			},
-			&quot;is_active&quot;: true,
-			&quot;created_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-			&quot;updated_at&quot;: &quot;2021-01-01 12:00:00&quot;
-			}
-		&quot;city&quot;: {
-			&quot;id&quot;: 1,
-			&quot;name&quot;: &quot;Москва&quot;,
-			&quot;is_active&quot;: true,
-			&quot;created_at&quot;: &quot;2021-10-01 18:23:27&quot;,
-			&quot;updated_at&quot;: &quot;2021-10-05 18:23:41&quot;
-		}
-		}
-	]
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (400, Bad Request):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
-    &quot;debug&quot;: null
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (404, Resource Not Found):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Ресурс не найден&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (405, Method Not Allowed):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Метод не разрешен&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (500, Internal Server Error):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-products" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-products"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-products"></code></pre>
-</span>
-<span id="execution-error-GETapi-products" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-products"></code></pre>
-</span>
-<form id="form-GETapi-products" data-method="GET"
-      data-path="api/products"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-products', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-products"
-                    onclick="tryItOut('GETapi-products');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-products"
-                    onclick="cancelTryOut('GETapi-products');" hidden>Cancel
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-products" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/products</code></b>
-        </p>
-                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
-                    <p>
-                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="api_key"
-               data-endpoint="GETapi-products"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="contractor_id"
-               data-endpoint="GETapi-products"
                value=""
                data-component="query" hidden>
     <br>
@@ -4888,13 +4665,16 @@ print_r(json_decode((string) $body));</code></pre>
 <blockquote>Example request:</blockquote>
 
 
-<pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/flights?api_key=" \
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/flights?api_key=" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre>
+    --header "Accept: application/json"</code></pre></div>
 
-<pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/flights"
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/flights"
 );
 
 const params = {
@@ -4911,11 +4691,13 @@ const headers = {
 fetch(url, {
     method: "GET",
     headers,
-}).then(response =&gt; response.json());</code></pre>
+}).then(response =&gt; response.json());</code></pre></div>
 
-<pre><code class="language-php">$client = new \GuzzleHttp\Client();
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://dev.dream-aero.ru/api/flights',
+    'http://admin.dream-aero.loc/api/flights',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4927,7 +4709,8 @@ $response = $client-&gt;get(
     ]
 );
 $body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
+print_r(json_decode((string) $body));</code></pre></div>
+
 </span>
 
 <span id="example-responses-GETapi-flights">
@@ -4937,17 +4720,58 @@ print_r(json_decode((string) $body));</code></pre>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: null,
-    &quot;data&quot;: [
-        {
-            &quot;flight&quot;: {
-                &quot;flight_at&quot;: &quot;2021-01-01 12:00:00&quot;,
-                &quot;duration&quot;: &quot;30&quot;,
-                &quot;scores&quot;: &quot;300&quot;
-            }
-        }
-    ]
+	&quot;success&quot;: true,
+	&quot;message&quot;: null,
+	&quot;data&quot;: [
+	{
+			&quot;flight&quot;: {
+			&quot;flight&quot;: {
+					&quot;date&quot;: &quot;2021-01-01&quot;,
+					&quot;time&quot;: &quot;12:00:00&quot;
+				&quot;tariff&quot;: {
+					&quot;id&quot;: 1,
+					&quot;name&quot;: &quot;Regular&quot;,
+					&quot;duration&quot;: 30,
+					&quot;price&quot;: 6300,
+					&quot;is_hit&quot;: false,
+						&quot;is_unified&quot;: false,
+					&quot;is_order_allow&quot;: true,
+					&quot;is_certificate_allow&quot;: true,
+					&quot;tariff_type&quot;: {
+						&quot;id&quot;: 1,
+						&quot;name&quot;: &quot;Regular&quot;,
+						&quot;alias&quot;: &quot;regular&quot;,
+						&quot;description&quot;: null
+					},
+					&quot;employee&quot;: {
+						&quot;id&quot;: 1,
+							&quot;name&quot;: &quot;John Smith&quot;,
+							&quot;photo_file_path&quot;: null,
+							&quot;icon_file_path&quot;: null,
+							&quot;instagram&quot;: null
+						},
+					&quot;city&quot;: {
+						&quot;id&quot;: 1,
+						&quot;name&quot;: &quot;Москва&quot;
+					}
+					},
+				&quot;location&quot;: {
+					&quot;id&quot;: 1,
+					&quot;name&quot;: &quot;ТРК VEGAS Кунцево&quot;,
+					&quot;address&quot;: null,
+					&quot;working_hours&quot;: null,
+					&quot;phone&quot;: null,
+					&quot;email&quot;: null,
+					&quot;map_link&quot;: null,
+					&quot;skype&quot;: null,
+					&quot;whatsapp&quot;: null,
+					&quot;scheme_file_path&quot;: null
+					},
+				&quot;score&quot;: &quot;300&quot;
+				}
+			}
+	}
+	]
 }</code>
  </pre>
             <blockquote>
@@ -5023,7 +4847,7 @@ print_r(json_decode((string) $body));</code></pre>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
                     id="btn-canceltryout-GETapi-flights"
-                    onclick="cancelTryOut('GETapi-flights');" hidden>Cancel
+                    onclick="cancelTryOut('GETapi-flights');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
@@ -5046,10 +4870,1234 @@ print_r(json_decode((string) $body));</code></pre>
 
             </p>
                     <p>
-                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
-                <input type="number"
-               name="contractor_id"
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="token"
                data-endpoint="GETapi-flights"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                </form>
+
+            <h2 id="endpoints-POSTapi-order-create">Order create</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-order-create">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://admin.dream-aero.loc/api/order/create?api_key=&amp;token=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": null,
+    \"phone\": null,
+    \"email\": null,
+    \"product_id\": null,
+    \"product_amount\": null,
+    \"is_certificate_order\": null
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/order/create"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": null,
+    "phone": null,
+    "email": null,
+    "product_id": null,
+    "product_amount": null,
+    "is_certificate_order": null
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://admin.dream-aero.loc/api/order/create',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+        ],
+        'json' =&gt; [
+            'name' =&gt; null,
+            'phone' =&gt; null,
+            'email' =&gt; null,
+            'product_id' =&gt; null,
+            'product_amount' =&gt; null,
+            'is_certificate_order' =&gt; null,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-order-create">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Профиль успешно сохранен&quot;,
+    &quot;data&quot;: {
+        &quot;order&quot;: {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;John&quot;,
+            &quot;lastname&quot;: &quot;Smith&quot;,
+            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+            &quot;phone&quot;: null,
+            &quot;city_id&quot;: 1,
+            &quot;discount&quot;: 5,
+            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
+            &quot;avatar_file_base64&quot;: null,
+            &quot;flight_time&quot;: 100,
+            &quot;score&quot;: 10000,
+            &quot;status&quot;: &quot;Золотой&quot;
+        }
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-order-create" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-order-create"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-order-create"></code></pre>
+</span>
+<span id="execution-error-POSTapi-order-create" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-order-create"></code></pre>
+</span>
+<form id="form-POSTapi-order-create" data-method="POST"
+      data-path="api/order/create"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-order-create', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-order-create"
+                    onclick="tryItOut('POSTapi-order-create');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-order-create"
+                    onclick="cancelTryOut('POSTapi-order-create');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-order-create" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/order/create</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="name"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>phone</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="phone"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>+71234567890</p>
+        </p>
+                <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_id"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_amount</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_amount"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>is_certificate_order</code></b>&nbsp;&nbsp;<small>boolean</small>  &nbsp;
+                <label data-endpoint="POSTapi-order-create" hidden>
+            <input type="radio" name="is_certificate_order"
+                   value="true"
+                   data-endpoint="POSTapi-order-create"
+                   data-component="body"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-order-create" hidden>
+            <input type="radio" name="is_certificate_order"
+                   value="false"
+                   data-endpoint="POSTapi-order-create"
+                   data-component="body"
+            >
+            <code>false</code>
+        </label>
+    <br>
+
+        </p>
+                <p>
+            <b><code>flight_date</code></b>&nbsp;&nbsp;<small>date</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="flight_date"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>flight_time</code></b>&nbsp;&nbsp;<small>time</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="flight_time"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>is_unified</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
+                <label data-endpoint="POSTapi-order-create" hidden>
+            <input type="radio" name="is_unified"
+                   value="true"
+                   data-endpoint="POSTapi-order-create"
+                   data-component="body"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-order-create" hidden>
+            <input type="radio" name="is_unified"
+                   value="false"
+                   data-endpoint="POSTapi-order-create"
+                   data-component="body"
+            >
+            <code>false</code>
+        </label>
+    <br>
+
+        </p>
+                <p>
+            <b><code>location_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="location_id"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>promocode_id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="promocode_id"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>certificate_id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="certificate_id"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>certificate_whom</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="certificate_whom"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>For whom certificate.</p>
+        </p>
+                <p>
+            <b><code>comment</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="comment"
+               data-endpoint="POSTapi-order-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
+
+            <h2 id="endpoints-GETapi-code-verify">Code verify</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-code-verify">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/code/verify?api_key=&amp;email=&amp;code=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/code/verify"
+);
+
+const params = {
+    "api_key": "",
+    "email": "",
+    "code": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://admin.dream-aero.loc/api/code/verify',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'email'=&gt; '',
+            'code'=&gt; '',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-code-verify">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Код подтвержден&quot;,
+    &quot;data&quot;: {
+        &quot;contractor&quot;: {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;John&quot;,
+            &quot;lastname&quot;: &quot;Smith&quot;,
+            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+            &quot;phone&quot;: null,
+            &quot;city&quot;: &quot;Москва&quot;,
+            &quot;discount&quot;: 5,
+            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
+            &quot;avatar_file_base64&quot;: null,
+            &quot;flight_time&quot;: 100,
+            &quot;score&quot;: 10000,
+            &quot;status&quot;: &quot;Золотой&quot;,
+            &quot;is_active&quot;: true,
+            &quot;is_new&quot;: false
+        }
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-code-verify" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-code-verify"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-code-verify"></code></pre>
+</span>
+<span id="execution-error-GETapi-code-verify" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-code-verify"></code></pre>
+</span>
+<form id="form-GETapi-code-verify" data-method="GET"
+      data-path="api/code/verify"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-code-verify', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-code-verify"
+                    onclick="tryItOut('GETapi-code-verify');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-code-verify"
+                    onclick="cancelTryOut('GETapi-code-verify');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-code-verify" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/code/verify</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="GETapi-code-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="GETapi-code-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>code</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="code"
+               data-endpoint="GETapi-code-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                </form>
+
+            <h2 id="endpoints-GETapi-certificate-verify">Certificate Verify</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-certificate-verify">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/certificate/verify?api_key=&amp;token=&amp;number=&amp;product_id=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/certificate/verify"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+    "number": "",
+    "product_id": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://admin.dream-aero.loc/api/certificate/verify',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+            'number'=&gt; '',
+            'product_id'=&gt; '',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-certificate-verify">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+	&quot;success&quot;: true,
+	&quot;message&quot;: null,
+	&quot;data&quot;: {
+		&quot;id&quot;: 15,
+	&quot;number&quot;: &quot;C123456&quot;,
+	}
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-certificate-verify" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-certificate-verify"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-certificate-verify"></code></pre>
+</span>
+<span id="execution-error-GETapi-certificate-verify" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-certificate-verify"></code></pre>
+</span>
+<form id="form-GETapi-certificate-verify" data-method="GET"
+      data-path="api/certificate/verify"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-certificate-verify', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-certificate-verify"
+                    onclick="tryItOut('GETapi-certificate-verify');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-certificate-verify"
+                    onclick="cancelTryOut('GETapi-certificate-verify');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-certificate-verify" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/certificate/verify</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="GETapi-certificate-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="GETapi-certificate-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>number</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="number"
+               data-endpoint="GETapi-certificate-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>product_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_id"
+               data-endpoint="GETapi-certificate-verify"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                </form>
+
+            <h2 id="endpoints-GETapi-notifications">Notification list</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-notifications">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/notifications?api_key=&amp;token=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/notifications"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://admin.dream-aero.loc/api/notifications',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-notifications">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: [
+        {
+            &quot;notification&quot;: {
+                &quot;id&quot;: 1,
+                &quot;title&quot;: &quot;Заголовок уведомления&quot;,
+                &quot;description&quot;: &quot;Описание уведомления&quot;,
+                &quot;is_new&quot;: true,
+                &quot;created_at&quot;: &quot;Y-m-d H:i:s&quot;,
+                &quot;updated_at&quot;: &quot;Y-m-d H:i:s&quot;
+            }
+        }
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-notifications" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-notifications"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-notifications"></code></pre>
+</span>
+<span id="execution-error-GETapi-notifications" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-notifications"></code></pre>
+</span>
+<form id="form-GETapi-notifications" data-method="GET"
+      data-path="api/notifications"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-notifications', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-notifications"
+                    onclick="tryItOut('GETapi-notifications');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-notifications"
+                    onclick="cancelTryOut('GETapi-notifications');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-notifications" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/notifications</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="GETapi-notifications"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="GETapi-notifications"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                </form>
+
+            <h2 id="endpoints-GETapi-notification">Notification detailed</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-notification">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://admin.dream-aero.loc/api/notification?api_key=&amp;token=&amp;notification_id=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://admin.dream-aero.loc/api/notification"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+    "notification_id": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://admin.dream-aero.loc/api/notification',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+            'notification_id'=&gt; '',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-notification">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: {
+        &quot;notification&quot;: {
+            &quot;id&quot;: 1,
+            &quot;title&quot;: &quot;Заголовок уведомления&quot;,
+            &quot;description&quot;: &quot;Описание уведомления&quot;,
+            &quot;is_new&quot;: true,
+            &quot;created_at&quot;: &quot;Y-m-d H:i:s&quot;,
+            &quot;updated_at&quot;: &quot;Y-m-d H:i:s&quot;
+        }
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-notification" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-notification"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-notification"></code></pre>
+</span>
+<span id="execution-error-GETapi-notification" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-notification"></code></pre>
+</span>
+<form id="form-GETapi-notification" data-method="GET"
+      data-path="api/notification"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-notification', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-notification"
+                    onclick="tryItOut('GETapi-notification');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-notification"
+                    onclick="cancelTryOut('GETapi-notification');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-notification" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/notification</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="GETapi-notification"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="GETapi-notification"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>notification_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="notification_id"
+               data-endpoint="GETapi-notification"
                value=""
                data-component="query" hidden>
     <br>
@@ -5063,17 +6111,11 @@ print_r(json_decode((string) $body));</code></pre>
     </div>
     <div class="dark-box">
                     <div class="lang-selector">
-                                    <a href="#" data-language-name="bash">bash</a>
-                                    <a href="#" data-language-name="javascript">javascript</a>
-                                    <a href="#" data-language-name="php">php</a>
+                                                        <button type="button" class="lang-button" data-language-name="bash">bash</button>
+                                                        <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+                                                        <button type="button" class="lang-button" data-language-name="php">php</button>
                             </div>
             </div>
 </div>
-<script>
-    $(function () {
-        var exampleLanguages = ["bash","javascript","php"];
-        setupLanguages(exampleLanguages);
-    });
-</script>
 </body>
 </html>

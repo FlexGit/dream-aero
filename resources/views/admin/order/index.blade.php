@@ -23,61 +23,66 @@
 				<div class="card-body">
 					<div class="d-sm-flex mb-2">
 						<div class="form-group">
+							<label for="search_doc">Документ</label>
+							<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Номер заявки, сделки">
+						</div>
+						<div class="form-group pl-2">
+							<label for="search_contractor">Контрагент</label>
+							<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
+						</div>
+						<div class="form-group pl-2">
 							<label for="filter_status_id">Статус</label>
 							<select class="form-control" id="filter_status_id" name="filter_status_id">
 								<option value="0">Все</option>
 								@foreach($statuses ?? [] as $status)
-									@if(!$status->is_active)
-										@continue
-									@endif
 									<option value="{{ $status->id }}">{{ $status->name }}</option>
 								@endforeach
 							</select>
 						</div>
-							<div class="form-group pl-2">
-								<label for="filter_city_id">Город</label>
-								<select class="form-control" id="filter_city_id" name="filter_city_id">
-									<option value="0">Все</option>
-									@foreach($cities ?? [] as $city)
-										@if(!$city->is_active)
-											@continue
-										@endif
-										<option value="{{ $city->id }}">{{ $city->name }}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group pl-2">
-								<label for="filter_location_id">Локация</label>
-								<select class="form-control" id="filter_location_id" name="filter_location_id">
-									<option value="0">Все</option>
-									@foreach($locations ?? [] as $location)
-										@if(!$location->is_active)
-											@continue
-										@endif
-										<option value="{{ $location->id }}">{{ $location->name }}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group pl-2">
-								<label for="search_contractor">Контрагент</label>
-								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
-							</div>
-							<div class="form-group align-self-end text-right ml-auto pl-2">
-								<a href="javascript:void(0)" data-toggle="modal" data-url="/order/add" data-action="/order" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
-							</div>
+						<div class="form-group pl-2">
+							<label for="filter_city_id">Город</label>
+							<select class="form-control" id="filter_city_id" name="filter_city_id">
+								<option value="0">Все</option>
+								@foreach($cities ?? [] as $city)
+									<option value="{{ $city->id }}">{{ $city->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="form-group pl-2">
+							<label for="filter_location_id">Локация</label>
+							<select class="form-control" id="filter_location_id" name="filter_location_id">
+								<option value="0">Все</option>
+								@foreach($locations ?? [] as $location)
+									<option value="{{ $location->id }}" data-city_id="{{ $location->city_id }}">{{ $location->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="form-group pl-2">
+							<label for="filter_product_type_id">Тип тарифа</label>
+							<select class="form-control" id="filter_product_type_id" name="filter_product_type_id">
+								<option value="0">Все</option>
+								@foreach($productTypes ?? [] as $productType)
+									@if($productType->alias == App\Models\ProductType::SERVICES_ALIAS)
+										@continue
+									@endif
+									<option value="{{ $productType->id }}">{{ $productType->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="form-group align-self-end text-right ml-auto pl-2">
+							{{--<a href="javascript:void(0)" data-toggle="modal" data-url="/order/add" data-action="/order" data-method="POST" data-title="Создание" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>--}}
+						</div>
 					</div>
 					<table id="orderTable" class="table table-hover table-sm table-bordered table-striped">
 						<thead>
 						<tr>
-							<th class="text-center">#</th>
-							<th class="text-center">Номер</th>
-							<th class="text-center d-none d-sm-table-cell">Статус</th>
-							<th class="text-center d-none d-md-table-cell">Контрагент</th>
-							<th class="text-center text-nowrap d-none d-md-table-cell">Тариф</th>
-							<th class="text-center d-none d-lg-table-cell">Город</th>
-							<th class="text-center text-nowrap d-none d-xl-table-cell">Локация</th>
-							<th class="text-center d-none d-xl-table-cell">Дата полета</th>
-							<th class="text-center">Действие</th>
+							{{--<th class="text-center">#</th>--}}
+							<th class="text-center d-none d-xl-table-cell">Контрагент</th>
+							<th class="text-center d-none d-xl-table-cell">Тариф</th>
+							<th class="text-center text-nowrap d-none d-xl-table-cell">Место и время</th>
+							<th class="text-center">Заявка</th>
+							<th class="text-center">Сделка</th>
+							<th class="text-center"></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -87,6 +92,8 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="load_more"></div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -116,13 +123,15 @@
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
+	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList() {
+			function getList(loadMore) {
 				var $selector = $('#orderTable tbody');
 
-				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+				var $tr = $('tr.odd[data-id]:last'),
+					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
 
 				$.ajax({
 					url: '{{ route('orderList') }}',
@@ -132,7 +141,10 @@
 						"filter_status_id": $('#filter_status_id').val(),
 						"filter_city_id": $('#filter_city_id').val(),
 						"filter_location_id": $('#filter_location_id').val(),
-						"filter_contractor_id": $('#filter_contractor_id').val(),
+						"filter_product_type_id": $('#filter_product_type_id').val(),
+						"search_contractor": $('#search_contractor').val(),
+						"search_doc": $('#search_doc').val(),
+						"id": id
 					},
 					success: function(result) {
 						if (result.status !== 'success') {
@@ -141,15 +153,22 @@
 						}
 
 						if (result.html) {
-							$selector.html(result.html);
+							if (loadMore) {
+								$selector.append(result.html);
+							} else {
+								$selector.html(result.html);
+							}
+							$(window).data('ajaxready', true);
 						} else {
-							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							if (!id) {
+								$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							}
 						}
 					}
 				})
 			}
 
-			getList();
+			getList(false);
 
 			$(document).on('click', '[data-url]', function(e) {
 				e.preventDefault();
@@ -206,31 +225,135 @@
 							return;
 						}
 
-						var msg = 'Заявка успешно ';
+						var msg = 'Заказ успешно ';
 						if (method === 'POST') {
-							msg += 'добавлена';
+							msg += 'создан';
 						} else if (method === 'PUT') {
-							msg += 'изменена';
+							msg += 'изменен';
 						} else if (method === 'DELETE') {
-							msg += 'удалена';
+							msg += 'удален';
 						}
 
 						$('#modal').modal('hide');
-						getList('{{ route('orderList') }}');
+						getList(false);
 						toastr.success(msg);
 					}
 				});
 			});
 
+			$(document).on('show.bs.modal', '#modal', function(e) {
+				$('#contractor').autocomplete({
+					serviceUrl: '{{ route('contractorSearch') }}',
+					minChars: 3,
+					showNoSuggestionNotice: true,
+					noSuggestionNotice: 'Ничего не найдено',
+					type: 'POST',
+					dataType: 'json',
+					onSelect: function (suggestion) {
+						//getContractorList(1, suggestion.value);
+					}
+				}).keyup(function() {
+					if (!$(this).val().length) {
+						//getContractorList(1,null);
+					}
+				});
+			});
+
 			$(document).on('shown.bs.modal', '#modal', function(e) {
+				$('#contractor').focus();
 			});
 
-			$(document).on('change', '#filter_city_id, #filter_city_id, #filter_location_id', function(e) {
-				getList();
+			$(document).on('change', '#filter_status_id, #filter_city_id, #filter_location_id, #filter_product_type_id', function(e) {
+				getList(false);
 			});
 
-			$(document).on('keyup', '#search_contractor', function(e) {
-				getList();
+			$(document).on('change', '#filter_city_id', function(e) {
+				if($(this).val().length) {
+					$('#filter_location_id').val(0);
+					$('#filter_location_id option[data-city_id]').hide();
+					$('#filter_location_id option[data-city_id="' + $(this).val() + '"]').show();
+				}
+				getList(false);
+			});
+
+			$(document).on('keyup', '#search_contractor, #search_doc', function(e) {
+				if ($.inArray(e.keyCode, [33, 34]) !== -1) return;
+
+				getList(false);
+			});
+
+			$(document).on('change', '#city_id', function() {
+				$('#location_id option').hide();
+				$('#location_id option[data-city_id="' + $(this).val() + '"]').show();
+			});
+
+			$(document).on('click', '.js-add-order-position', function(e) {
+				var $orderPositionsContainer = $('.js-order-positions-container'),
+					$lastOrderPositionContainer = $('.js-order-position-container').last(),
+					number = parseInt($lastOrderPositionContainer.find('.js-order-position-title span').text()),
+					orderLimit = 10;
+
+				if (number >= orderLimit) {
+					toastr.error('Достигнуто максимальное ограничение на количество позиций в заказе');
+					return;
+				}
+
+				var newNumber = ++ number;
+
+				$lastOrderPositionContainer = $lastOrderPositionContainer.clone();
+				$lastOrderPositionContainer.appendTo($orderPositionsContainer);
+				$lastOrderPositionContainer.find('.js-order-position-title span').text(newNumber);
+
+				var $isTariff = $lastOrderPositionContainer.find('.js-is_tariff');
+				if (!$isTariff.is(':checked')) {
+					$isTariff.prop('checked', true).trigger('change');
+				}
+
+				$('#modal').stop().animate({scrollTop: $('#modal .modal-dialog').height()}, 500);
+			});
+
+			$(document).on('change', '.js-is_tariff', function(e) {
+				var $orderPositionContainer = $(this).closest('.js-order-position-container');
+
+				if ($(this).is(':checked')) {
+					$orderPositionContainer.find('.is-tariff-container').show();
+				} else {
+					$orderPositionContainer.find('.is-tariff-container').hide();
+				}
+			});
+
+			$(document).on('click', '.js-order-position-delete', function(e) {
+				var $orderPositionContainer = $(this).closest('.js-order-position-container'),
+					$orderPositionContainerCount = $('.js-order-position-container').length;
+
+				if ($orderPositionContainerCount === 1) {
+					toastr.error('Достигнуто минимальное ограничение на количество позиций в заказе');
+					return;
+				}
+
+				$orderPositionContainer.remove();
+			});
+
+			$.fn.isInViewport = function () {
+				let elementTop = $(this).offset().top;
+				let elementBottom = elementTop + $(this).outerHeight();
+
+				let viewportTop = $(window).scrollTop();
+				let viewportBottom = viewportTop + $(window).height();
+
+				return elementBottom > viewportTop && elementTop < viewportBottom;
+			};
+
+			$(window).on('scroll', function() {
+				if ($(window).data('ajaxready') === false) return;
+
+				var $tr = $('tr.odd[data-id]:last');
+				if (!$tr.length) return;
+
+				if ($tr.isInViewport()) {
+					$(window).data('ajaxready', false);
+					getList(true);
+				}
 			});
 		});
 	</script>

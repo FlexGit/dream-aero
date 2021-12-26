@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\HelpFunctions;
+
 return [
 
     /*
@@ -237,16 +239,8 @@ return [
         ],
 
         // Sidebar items:
-       /* [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],*/
-        [
+        	'key'		  => 'calendar',
             'text'        => 'Календарь',
             'url'         => '/',
             'icon'        => 'far fa-fw fa-calendar-alt',
@@ -254,13 +248,15 @@ return [
             'label_color' => '',
         ],
 		[
-			'text'        => 'Заявки',
-			'url'         => '/order',
-			'icon'        => 'far fa-fw fa-list-alt',
-			'label'       => 4,
-			'label_color' => 'success',
+			'key'         => 'certificate',
+			'text'        => 'Сертификаты',
+			'url'         => '/certificate',
+			'icon'        => 'far fa-file-alt',
+			'label'       => '',
+			'label_color' => '',
 		],
 		[
+			'key'         => 'contractor',
 			'text'        => 'Контрагенты',
 			'url'         => '/contractor',
 			'icon'        => 'far fa-fw fa-address-book',
@@ -279,6 +275,17 @@ return [
             'icon' => 'fas fa-fw fa-lock',
 			'topnav_user' => true,
         ],*/
+		[
+			'text'    => 'Ценообразование',
+			'icon'    => 'far fa-fw fa-folder',
+			'submenu' => [
+				[
+					'text' => 'Промокоды',
+					'url'  => '/pricing/promocode',
+					'icon'    => 'far fa-fw fa-building',
+				],
+			],
+		],
 		[
 			'text'    => 'Справочники',
 			'icon'    => 'far fa-fw fa-folder',
@@ -309,18 +316,18 @@ return [
 					'icon'    => 'fas fa-plane-departure',
 				],
 				[
-					'text' => 'Типы тарифов',
-					'url'  => '/tariff_type',
-					'icon'    => 'fas fa-hand-holding-usd',
-				],
-				[
-					'text' => 'Тарифы',
-					'url'  => '/tariff',
+					'text' => 'Типы продуктов',
+					'url'  => '/product_type',
 					'icon'    => 'fas fa-hand-holding-usd',
 				],
 				[
 					'text' => 'Продукты',
 					'url'  => '/product',
+					'icon'    => 'fas fa-hand-holding-usd',
+				],
+				[
+					'text' => 'Статусы',
+					'url'  => '/status',
 					'icon'    => 'fas fa-hand-holding-usd',
 				],
 			],

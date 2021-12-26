@@ -9,6 +9,7 @@ endpoints:
       title: Authentification
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -41,11 +42,10 @@ endpoints:
           	"success": true,
           	"message": null,
           	"data": {
-          		"id": 1,
-          		"token": "328dda59f036efc26720937545efe01e",
-          	 	"contractor_id": 1,
-          	 	"created_at": "2021-11-12 18:36:05",
-          	 	"updated_at": "2021-11-12 18:36:05"
+          		"token": {
+          			"token": "328dda59f036efc26720937545efe01e",
+          			"expire_at": null
+          		}
           	}
           }
         headers: []
@@ -84,6 +84,7 @@ endpoints:
       title: 'Profile save'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -95,12 +96,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters:
       email:
         name: email
@@ -152,7 +153,7 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city_id": 1,
+          			"city": "Москва",
           			"discount": 5,
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
@@ -160,106 +161,7 @@ endpoints:
           			"score": 10000,
           			"status": "Золотой",
           			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
-          		}
-          	}
-          }
-        headers: []
-        description: '200, success'
-      -
-        status: 400
-        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
-        headers: []
-        description: '400, Bad Request'
-      -
-        status: 400
-        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
-        headers: []
-        description: '400, Bad Request'
-      -
-        status: 404
-        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '404, Resource Not Found'
-      -
-        status: 405
-        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '405, Method Not Allowed'
-      -
-        status: 500
-        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '500, Internal Server Error'
-    responseFields: []
-  -
-    httpMethods:
-      - POST
-    uri: api/code/verify
-    metadata:
-      title: 'Code verification'
-      description: ''
-      authenticated: true
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters:
-      api_key:
-        name: api_key
-        description: ''
-        required: true
-        example: null
-        type: string
-      email:
-        name: email
-        description: ''
-        required: true
-        example: null
-        type: string
-      code:
-        name: code
-        description: ''
-        required: true
-        example: null
-        type: string
-    bodyParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-          	"success": true,
-          	"message": "Код подтвержден",
-          	"data": {
-          		"contractor": {
-          			"id": 1,
-          			"name": "John",
-          			"lastname": "Smith",
-          			"email": "john.smith@gmail.com",
-          			"phone": null,
-          			"city_id": 1,
-          			"discount": 5,
-          		"birthdate": "1990-01-01",
-          			"avatar_file_base64": null,
-          			"flight_time": 100,
-          			"score": 10000,
-          			"status": "Золотой",
-          			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
-          		},
-          		"code": {
-          			"id": 1,
-          			"code": 1234,
-          			"contractor_id": 1,
-          			"is_reset": 0,
-          			"reset_at": null,
-          			"created_at": "2021-11-12 18:36:05",
-          			"updated_at": "2021-11-12 18:36:05"
+          			"is_new": false
           		}
           	}
           }
@@ -299,6 +201,7 @@ endpoints:
       title: 'Profile delete'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -310,12 +213,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -357,6 +260,7 @@ endpoints:
       title: 'Verification code send'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -388,35 +292,7 @@ endpoints:
           {
           	"success": true,
           	"message": "Код подтверждения отправлен на john.smith@gmail.com",
-          	"data": {
-          		"contractor": {
-          			"id": 1,
-          			"name": "John",
-          			"lastname": "Smith",
-          			"email": "john.smith@gmail.com",
-          			"phone": null,
-          			"city_id": 1,
-          			"discount": 5,
-          		"birthdate": "1990-01-01",
-          			"avatar_file_base64": null,
-          			"flight_time": 100,
-          			"score": 10000,
-          			"status": "Золотой",
-          			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
-          		},
-          		"code": {
-          			"id": 1,
-          			"code": 1234,
-          			"contractor_id": 1,
-          			"is_reset": 0,
-          			"reset_at": null,
-          			"created_at": "2021-11-12 18:36:05",
-          			"updated_at": "2021-11-12 18:36:05"
-          		}
-          	}
+          	"data": null
           }
         headers: []
         description: '200, success'
@@ -454,6 +330,7 @@ endpoints:
       title: Registration
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -522,7 +399,7 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city_id": 1,
+          			"city": "Москва",
           			"discount": 5,
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
@@ -530,16 +407,11 @@ endpoints:
           			"score": 10000,
           			"status": "Золотой",
           			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
-          		},
-          		"mob_auth": {
-          			"id": 1,
-          			"contractor_id": 1,
+          			"is_new": false
+          		}
+          		"token": {
           			"token": "6136d60c36e6925bf98dea7e05d5f5c8",
-          			"created_at": "2021-11-12 18:36:05",
-          			"updated_at": "2021-11-12 18:36:05"
+          			"expire_at": null
           		}
           	}
           }
@@ -579,6 +451,7 @@ endpoints:
       title: Logout
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -590,12 +463,6 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
-        description: ''
-        required: true
-        example: null
-        type: integer
       token:
         name: token
         description: ''
@@ -643,6 +510,7 @@ endpoints:
       title: 'Password change'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -654,12 +522,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters:
       password:
         name: password
@@ -687,7 +555,7 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city_id": 1,
+          			"city": "Москва",
           			"discount": 5,
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
@@ -695,9 +563,7 @@ endpoints:
           			"score": 10000,
           			"status": "Золотой",
           			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          			"is_new": false
           		}
           	}
           }
@@ -737,6 +603,7 @@ endpoints:
       title: Profile
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -748,12 +615,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -769,7 +636,7 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city_id": 1,
+          			"city": "Москва",
           			"discount": 5,
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
@@ -777,9 +644,7 @@ endpoints:
           			"score": 10000,
           			"status": "Золотой",
           			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          			"is_new": false
           		}
           	}
           }
@@ -814,6 +679,7 @@ endpoints:
       title: 'Tariff type list'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -835,13 +701,12 @@ endpoints:
           	"message": null,
           	"data": [
           		{
-          			"id": 1,
-          			"name": "Regular",
-          			"data_json": {
-          			},
-          			"is_active": true,
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          			"tariff_type": {
+          				"id": 1,
+          				"name": "Regular",
+          				"alias": "regular",
+          				"description": null
+          			}
           	}
           	]
           }
@@ -876,6 +741,7 @@ endpoints:
       title: 'Tariff list'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -887,14 +753,14 @@ endpoints:
         required: true
         example: null
         type: string
-      tariff_type_id:
-        name: tariff_type_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
-      contractor_id:
-        name: contractor_id
+        type: string
+      tariff_type_id:
+        name: tariff_type_id
         description: ''
         required: true
         example: null
@@ -912,43 +778,30 @@ endpoints:
           			"tariff": {
           			"id": 1,
           			"name": "Regular",
-          			"tariff_type_id": 1,
-          			"employee_id": 10,
-          			"city_id": 5,
           			"duration": 30,
           			"price": 6300,
-          			"data_json": {
-          			},
-          			"is_active": true,
           			"is_hit": false,
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          				"is_unified": false,
+          			"is_order_allow": true,
+          			"is_certificate_allow": true,
+          			"tariff_type": {
+          				"id": 1,
+          				"name": "Regular",
+          				"alias": "regular",
+          				"description": null
+          			},
+          			"employee": {
+          				"id": 1,
+          					"name": "John Smith",
+          					"photo_file_path": null,
+          					"icon_file_path": null,
+          					"instagram": null
+          				},
+          			"city": {
+          				"id": 1,
+          				"name": "Москва",
           			}
-          		"tariff_type": {
-          			"id": 1,
-          			"name": "Regular",
-          			"data_json": {
-          				"hint": "только будни",
-          				"description": ""
-          			},
-          			"is_active": true,
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
-          		},
-          		"employee": {
-          			"id": 1,
-          				"name": "John Smith",
-          				"photo_path": null,
-          				"icon_path": null,
-          				"instagram": null
-          			},
-          		"city": {
-          			"id": 1,
-          			"name": "Москва",
-          			"is_active": true,
-          			"created_at": "2021-10-01 18:23:27",
-          			"updated_at": "2021-10-05 18:23:41"
-          		}
+          			}
           		}
           	]
           }
@@ -983,6 +836,7 @@ endpoints:
       title: 'Tariff detailed'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -990,6 +844,12 @@ endpoints:
     queryParameters:
       api_key:
         name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      token:
+        name: token
         description: ''
         required: true
         example: null
@@ -1009,45 +869,32 @@ endpoints:
           	"success": true,
           	"message": null,
           	"data": {
-          		"tariff": {
+          	"tariff": {
           		"id": 1,
           		"name": "Regular",
-          		"tariff_type_id": 1,
-          		"employee_id": 10,
-          		"city_id": 5,
           		"duration": 30,
           		"price": 6300,
-          		"data_json": {
-          		},
-          		"is_active": true,
           		"is_hit": false,
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
+          		"is_unified": false,
+          		"is_order_allow": true,
+          		"is_certificate_allow": true,
+          		"tariff_type": {
+          			"id": 1,
+          			"name": "Regular",
+          			"alias": "regular",
+          			"description": null
           		},
-          	"tariff_type": {
-          		"id": 1,
-          		"name": "Regular",
-          		"data_json": {
-          			"hint": "только будни",
-          			"description": ""
-          		},
-          		"is_active": true,
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00"
-          	},
-          	"employee": {
-          		"id": 1,
+          		"employee": {
+          			"id": 1,
           			"name": "John Smith",
-          			"photo_path": null,
-          			"icon_path": null,
+          			"photo_file_path": null,
+          			"icon_file_path": null,
           			"instagram": null
           		},
-          	"city": {
-          		"id": 1,
-          		"name": "Москва",
-          		"is_active": true,
-          		"created_at": "2021-10-01 18:23:27",
-          		"updated_at": "2021-10-05 18:23:41"
+          		"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		}
           	}
           	}
           }
@@ -1082,6 +929,7 @@ endpoints:
       title: 'City list'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1103,11 +951,10 @@ endpoints:
           	"message": null,
           	"data": [
           	{
-          		"id": 1,
-          		"name": "Москва",
-          		"is_active": true,
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00",
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          			}
           	}
           	]
           }
@@ -1142,6 +989,7 @@ endpoints:
       title: 'Location list'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1153,12 +1001,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -1172,8 +1020,6 @@ endpoints:
           			"location": {
           			"id": 1,
           			"name": "ТРК VEGAS Кунцево",
-          			"legal_entity_id": 1,
-          			"city_id": 1,
           			"address": null,
           			"working_hours": null,
           			"phone": null,
@@ -1181,10 +1027,7 @@ endpoints:
           			"map_link": null,
           			"skype": null,
           			"whatsapp": null,
-          			"scheme_file_path": null,
-          			"is_active": true,
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          			"scheme_file_path": null
           			}
           	}
           	]
@@ -1220,6 +1063,7 @@ endpoints:
       title: 'Legal Entity list'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1231,12 +1075,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -1247,11 +1091,11 @@ endpoints:
           	"message": null,
           	"data": [
           	{
-          		"id": 1,
-          		"name": "ООО Компания",
-          		"public_offer": null,
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00",
+          			"legal_entity": {
+          			"id": 1,
+          			"name": "ООО Компания",
+          			"public_offer_file_path": null
+          			}
           	}
           	]
           }
@@ -1286,6 +1130,7 @@ endpoints:
       title: 'Promo list'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1297,12 +1142,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: false
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -1313,14 +1158,16 @@ endpoints:
           	"message": null,
           	"data": [
           	{
-          		"id": 1,
-          		"name": "Акция",
-          		"preview_text": "",
-          		"detail_text": "",
-          		"city_id": 1,
-          		"is_active": true,
-          		"created_at": "2021-01-01 12:00:00",
-          		"updated_at": "2021-01-01 12:00:00",
+          			"promo": {
+          			"id": 1,
+          			"name": "Акция",
+          			"preview_text": null,
+          			"detail_text": null,
+          				"discount": {
+          "value": 5,
+          					"is_fixed": false
+          				}
+          			}
           	}
           	]
           }
@@ -1355,6 +1202,7 @@ endpoints:
       title: 'Promo detailed'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1381,14 +1229,16 @@ endpoints:
           	"success": true,
           	"message": null,
           	"data": {
-          	"id": 1,
-          	"name": "Акция",
-          	"preview_text": "",
-          	"detail_text": "",
-          	"city_id": 1,
-          	"is_active": true,
-          	"created_at": "2021-01-01 12:00:00",
-          	"updated_at": "2021-01-01 12:00:00",
+          		"promo": {
+          		"id": 1,
+          		"name": "Акция",
+          		"preview_text": null,
+          		"detail_text": null,
+          		"discount": {
+          			"value": 5,
+          			"is_fixed": false
+          		}
+          		}
           	}
           }
         headers: []
@@ -1419,9 +1269,10 @@ endpoints:
       - GET
     uri: api/profile/reset
     metadata:
-      title: 'Reset Profile'
+      title: 'Profile Reset'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1433,12 +1284,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -1449,12 +1300,12 @@ endpoints:
           	"message": "Аккаунт контрагента успешно очищен",
           	"data": {
           		"contractor": {
-          		"id": 1,
+          			"id": 1,
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city_id": 1,
+          			"city": "Москва",
           			"discount": 5,
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
@@ -1462,9 +1313,7 @@ endpoints:
           			"score": 10000,
           			"status": "Золотой",
           			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          			"is_new": false
           		}
           	}
           }
@@ -1499,6 +1348,7 @@ endpoints:
       title: 'Avatar save'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1510,18 +1360,18 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters:
       file_base64:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: perferendis
+        example: sit
         type: string
     responses:
       -
@@ -1537,7 +1387,7 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city_id": 1,
+          			"city": "Москва",
           			"discount": 5,
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
@@ -1545,9 +1395,7 @@ endpoints:
           			"score": 10000,
           			"status": "Золотой",
           			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          			"is_new": false
           		}
           	}
           }
@@ -1587,6 +1435,7 @@ endpoints:
       title: 'Avatar delete'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1598,12 +1447,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -1619,7 +1468,7 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city_id": 1,
+          			"city": "Москва",
           			"discount": 5,
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
@@ -1627,9 +1476,7 @@ endpoints:
           			"score": 10000,
           			"status": "Золотой",
           			"is_active": true,
-          			"last_auth_at": "2021-01-01 12:00:00",
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
+          			"is_new": false
           		}
           	}
           }
@@ -1666,9 +1513,10 @@ endpoints:
       - GET
     uri: api/tariff/price
     metadata:
-      title: 'Tariff Price'
+      title: 'Tariff Amount'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1680,12 +1528,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
       tariff_id:
         name: tariff_id
         description: ''
@@ -1698,6 +1546,18 @@ endpoints:
         required: false
         example: null
         type: string
+      is_unified:
+        name: is_unified
+        description: 'Unified certificate.'
+        required: false
+        example: null
+        type: boolean
+      promocode_id:
+        name: promocode_id
+        description: ''
+        required: false
+        example: null
+        type: integer
     bodyParameters: []
     responses:
       -
@@ -1707,7 +1567,7 @@ endpoints:
           	"success": true,
           	"message": "",
           	"data": {
-          		"price": 5500,
+          		"amount": 5500,
           	}
           }
         headers: []
@@ -1746,6 +1606,7 @@ endpoints:
       title: 'Promocode Verify'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1753,6 +1614,12 @@ endpoints:
     queryParameters:
       api_key:
         name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      token:
+        name: token
         description: ''
         required: true
         example: null
@@ -1763,12 +1630,6 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
-        description: ''
-        required: true
-        example: null
-        type: integer
     bodyParameters: []
     responses:
       -
@@ -1778,87 +1639,9 @@ endpoints:
           	"success": true,
           	"message": null,
           	"data": {
+          		"id": 23,
           	"is_active": true,
           	}
-          }
-        headers: []
-        description: '200, success'
-      -
-        status: 400
-        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
-        headers: []
-        description: '400, Bad Request'
-      -
-        status: 404
-        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '404, Resource Not Found'
-      -
-        status: 405
-        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '405, Method Not Allowed'
-      -
-        status: 500
-        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '500, Internal Server Error'
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: api/products
-    metadata:
-      title: 'Product list'
-      description: ''
-      authenticated: true
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters:
-      api_key:
-        name: api_key
-        description: ''
-        required: true
-        example: null
-        type: string
-      contractor_id:
-        name: contractor_id
-        description: ''
-        required: true
-        example: null
-        type: integer
-    bodyParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-          	"success": true,
-          	"message": null,
-          	"data": [
-          	{
-          			"product": {
-          			"id": 1,
-          			"name": "Видеозапись",
-          			"city_id": 1,
-          			"price": 500,
-          			"data_json": {
-          			},
-          			"is_active": true,
-          			"created_at": "2021-01-01 12:00:00",
-          			"updated_at": "2021-01-01 12:00:00"
-          			}
-          		"city": {
-          			"id": 1,
-          			"name": "Москва",
-          			"is_active": true,
-          			"created_at": "2021-10-01 18:23:27",
-          			"updated_at": "2021-10-05 18:23:41"
-          		}
-          		}
-          	]
           }
         headers: []
         description: '200, success'
@@ -1891,6 +1674,7 @@ endpoints:
       title: 'Flight list'
       description: ''
       authenticated: true
+      custom: []
     headers:
       Content-Type: application/json
       Accept: application/json
@@ -1902,12 +1686,12 @@ endpoints:
         required: true
         example: null
         type: string
-      contractor_id:
-        name: contractor_id
+      token:
+        name: token
         description: ''
         required: false
         example: null
-        type: integer
+        type: string
     bodyParameters: []
     responses:
       -
@@ -1919,12 +1703,521 @@ endpoints:
           	"data": [
           	{
           			"flight": {
-          			"flight_at": "2021-01-01 12:00:00",
-          			"duration": "30",
-          			"scores": "300"
+          			"flight": {
+          					"date": "2021-01-01",
+          					"time": "12:00:00"
+          				"tariff": {
+          					"id": 1,
+          					"name": "Regular",
+          					"duration": 30,
+          					"price": 6300,
+          					"is_hit": false,
+          						"is_unified": false,
+          					"is_order_allow": true,
+          					"is_certificate_allow": true,
+          					"tariff_type": {
+          						"id": 1,
+          						"name": "Regular",
+          						"alias": "regular",
+          						"description": null
+          					},
+          					"employee": {
+          						"id": 1,
+          							"name": "John Smith",
+          							"photo_file_path": null,
+          							"icon_file_path": null,
+          							"instagram": null
+          						},
+          					"city": {
+          						"id": 1,
+          						"name": "Москва"
+          					}
+          					},
+          				"location": {
+          					"id": 1,
+          					"name": "ТРК VEGAS Кунцево",
+          					"address": null,
+          					"working_hours": null,
+          					"phone": null,
+          					"email": null,
+          					"map_link": null,
+          					"skype": null,
+          					"whatsapp": null,
+          					"scheme_file_path": null
+          					},
+          				"score": "300"
+          				}
           			}
           	}
           	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/order/create
+    metadata:
+      title: 'Order create'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: null
+        type: string
+      phone:
+        name: phone
+        description: '+71234567890'
+        required: true
+        example: null
+        type: string
+      email:
+        name: email
+        description: ''
+        required: true
+        example: null
+        type: string
+      product_id:
+        name: product_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+      product_amount:
+        name: product_amount
+        description: ''
+        required: true
+        example: null
+        type: integer
+      is_certificate_order:
+        name: is_certificate_order
+        description: ''
+        required: true
+        example: null
+        type: boolean
+      flight_date:
+        name: flight_date
+        description: ''
+        required: false
+        example: null
+        type: date
+      flight_time:
+        name: flight_time
+        description: ''
+        required: false
+        example: null
+        type: time
+      is_unified:
+        name: is_unified
+        description: ''
+        required: false
+        example: null
+        type: boolean
+      location_id:
+        name: location_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+      promocode_id:
+        name: promocode_id
+        description: ''
+        required: false
+        example: null
+        type: string
+      certificate_id:
+        name: certificate_id
+        description: ''
+        required: false
+        example: null
+        type: string
+      certificate_whom:
+        name: certificate_whom
+        description: 'For whom certificate.'
+        required: false
+        example: null
+        type: string
+      comment:
+        name: comment
+        description: ''
+        required: false
+        example: null
+        type: string
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Профиль успешно сохранен",
+          	"data": {
+          		"order": {
+          			"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city_id": 1,
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой"
+          		}
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/code/verify
+    metadata:
+      title: 'Code verify'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      email:
+        name: email
+        description: ''
+        required: true
+        example: null
+        type: string
+      code:
+        name: code
+        description: ''
+        required: true
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Код подтвержден",
+          	"data": {
+          		"contractor": {
+          			"id": 1,
+          			"name": "John",
+          			"lastname": "Smith",
+          			"email": "john.smith@gmail.com",
+          			"phone": null,
+          			"city": "Москва",
+          			"discount": 5,
+          		"birthdate": "1990-01-01",
+          			"avatar_file_base64": null,
+          			"flight_time": 100,
+          			"score": 10000,
+          			"status": "Золотой",
+          			"is_active": true,
+          			"is_new": false
+          		}
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/certificate/verify
+    metadata:
+      title: 'Certificate Verify'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+      number:
+        name: number
+        description: ''
+        required: true
+        example: null
+        type: string
+      product_id:
+        name: product_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": {
+          		"id": 15,
+          	"number": "C123456",
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/notifications
+    metadata:
+      title: 'Notification list'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": [
+          	{
+          			"notification": {
+          			"id": 1,
+          			"title": "Заголовок уведомления",
+          			"description": "Описание уведомления",
+          			"is_new": true,
+          				"created_at": "Y-m-d H:i:s",
+          				"updated_at": "Y-m-d H:i:s"
+          			}
+          		}
+          	]
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/notification
+    metadata:
+      title: 'Notification detailed'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+      notification_id:
+        name: notification_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": null,
+          	"data": {
+          	"notification": {
+          		"id": 1,
+          		"title": "Заголовок уведомления",
+          		"description": "Описание уведомления",
+          		"is_new": true,
+          			"created_at": "Y-m-d H:i:s",
+          			"updated_at": "Y-m-d H:i:s"
+          		}
+          	}
           }
         headers: []
         description: '200, success'

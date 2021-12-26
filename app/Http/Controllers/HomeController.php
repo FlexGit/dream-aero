@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
+use App\Models\Deal;
+use App\Models\Order;
 use App\Models\Employee;
 use App\Models\Review;
 use App\Models\Location;
 use App\Models\FlightSimulatorType;
-use App\Models\File;
-use App\Models\TariffType;
-use App\Models\Tariff;
+use App\Models\ProductType;
+use App\Models\Product;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -35,5 +36,13 @@ class HomeController extends Controller
 	{
 		return view('admin/home', [
 		]);
+	}
+	
+	public function clear()
+	{
+		Order::where('user_id', 0)
+			->delete();
+		Deal::where('user_id', 0)
+			->delete();
 	}
 }

@@ -20,6 +20,7 @@ class CreateReviewsTable extends Migration
 			$table->integer('location_id')->default(0)->index()->comment('локация, о которой отзыв');
 			$table->boolean('is_active')->default(false)->index()->comment('признак активности');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

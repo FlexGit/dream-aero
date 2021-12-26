@@ -15,13 +15,15 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+			$table->string('number')->nullable()->comment('номер платежа');
+			$table->integer('bill_id')->default(0)->index()->comment('счет, по которому совершен платеж');
+			$table->integer('status_id')->default(0)->index()->comment('статус');
 			$table->integer('payment_method_id')->default(0)->index()->comment('способ платежа');
-			$table->integer('sum')->default(0)->comment('сумма платежа');
+			$table->integer('amount')->default(0)->comment('сумма платежа');
 			$table->timestamp('performed_at')->nullable()->comment('дата проведения платежа шлюзом или ОФД');
-			$table->integer('order_id')->default(0)->index()->comment('заказ, к которому привязан платеж');
 			$table->text('data_json')->nullable()->comment('дополнительная информация: ОФД - номер смены, состав позиций, номер ФД, №пп, оператор. Шлюз - ');
-			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 
