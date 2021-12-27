@@ -21,7 +21,7 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-sm-flex mb-2">
+					<div class="table-filter d-sm-flex mb-2">
 						<div class="form-group">
 							<label for="search_doc">Документ</label>
 							<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Номер заявки, сделки">
@@ -57,7 +57,7 @@
 								@endforeach
 							</select>
 						</div>
-						<div class="form-group pl-2">
+						<div class="form-group pl-2 text-nowrap">
 							<label for="filter_product_type_id">Тип тарифа</label>
 							<select class="form-control" id="filter_product_type_id" name="filter_product_type_id">
 								<option value="0">Все</option>

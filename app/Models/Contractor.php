@@ -207,7 +207,7 @@ class Contractor extends Authenticatable
 			'avatar_file_base64' => $base64 ?: null,
 			'score' => $score ?? 0,
 			'status' => $status->name ?? null,
-			'flight_time' => $flightTime,
+			'flight_time' => (int)$flightTime,
 			'discount' => $discount ?? null,
 			'is_new' => $this->password ? true : false,
 		];

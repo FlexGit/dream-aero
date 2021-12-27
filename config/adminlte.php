@@ -251,7 +251,7 @@ return [
 			'key'         => 'certificate',
 			'text'        => 'Сертификаты',
 			'url'         => '/certificate',
-			'icon'        => 'far fa-file-alt',
+			'icon'        => 'far fa-fw fa-file-alt',
 			'label'       => '',
 			'label_color' => '',
 		],
@@ -277,18 +277,28 @@ return [
         ],*/
 		[
 			'text'    => 'Ценообразование',
-			'icon'    => 'far fa-fw fa-folder',
+			'icon'    => 'fas fa-fw fa-dollar-sign',
 			'submenu' => [
 				[
 					'text' => 'Промокоды',
 					'url'  => '/pricing/promocode',
-					'icon'    => 'far fa-fw fa-building',
+					'icon'    => 'fas fa-fw fa-tag',
+				],
+				[
+					'text' => 'Акции',
+					'url'  => '/pricing/promo',
+					'icon'    => 'fas fa-fw fa-exclamation',
+				],
+				[
+					'text' => 'Типы скидок',
+					'url'  => '/pricing/discount',
+					'icon'    => 'fas fa-fw fa-percentage',
 				],
 			],
 		],
 		[
 			'text'    => 'Справочники',
-			'icon'    => 'far fa-fw fa-folder',
+			'icon'    => 'fas fa-fw fa-book',
 			'submenu' => [
 				[
 					'text' => 'Города',
@@ -298,37 +308,52 @@ return [
 				[
 					'text' => 'Локации',
 					'url'  => '/location',
-					'icon'    => 'far fa-fw fa-map',
+					'icon'    => 'fas fa-fw fa-map-marker-alt',
 				],
 				[
 					'text' => 'Юр.лица',
 					'url'  => '/legal_entity',
-					'icon'    => 'far fa-id-card',
-				],
-				[
-					'text' => 'Типы авиатренажеров',
-					'url'  => '/flight_simulator_type',
-					'icon'    => 'fas fa-plane',
+					'icon'    => 'far fa-fw fa-id-card',
 				],
 				[
 					'text' => 'Авиатренажеры',
 					'url'  => '/flight_simulator',
-					'icon'    => 'fas fa-plane-departure',
+					'icon'    => 'fas fa-fw fa-plane',
 				],
 				[
 					'text' => 'Типы продуктов',
 					'url'  => '/product_type',
-					'icon'    => 'fas fa-hand-holding-usd',
+					'icon'    => 'fas fa-fw fa-list',
 				],
 				[
 					'text' => 'Продукты',
 					'url'  => '/product',
-					'icon'    => 'fas fa-hand-holding-usd',
+					'icon'    => 'fas fa-fw fa-grip-horizontal',
 				],
 				[
 					'text' => 'Статусы',
 					'url'  => '/status',
-					'icon'    => 'fas fa-hand-holding-usd',
+					'icon'    => 'fas fa-fw fa-project-diagram',
+				],
+				[
+					'text' => 'Способы оплаты',
+					'url'  => '/payment_method',
+					'icon'    => 'fab fa-fw fa-cc-visa',
+				],
+				[
+					'text' => 'Пользователи',
+					'url'  => '/user',
+					'icon'    => 'fas fa-fw fa-users',
+				],
+				[
+					'text' => 'Сотрудники',
+					'url'  => '/employee',
+					'icon'    => 'fas fa-fw fa-user-tie',
+				],
+				[
+					'text' => 'Позиции сотрудников',
+					'url'  => '/employee_type',
+					'icon'    => 'fas fa-fw fa-briefcase',
 				],
 			],
 		],
@@ -342,7 +367,7 @@ return [
 		[
 			'text'        => 'Лог операций',
 			'url'         => '/log',
-			'icon'        => 'fas fa-fw fa-low-vision',
+			'icon'        => 'fas fa-fw fa-history',
 			'label'       => '',
 			'label_color' => '',
 		],
@@ -350,13 +375,20 @@ return [
             'text'    => 'Аналитика',
             'icon'    => 'far fa-fw fa-file-excel',
             'submenu' => [
-                [
+                /*[
                     'text' => 'Отчет 1',
                     'url'  => '#',
 					'icon' => '',
-                ],
+                ],*/
             ],
         ],
+		[
+			'text'        => 'Wiki',
+			'url'         => '/wiki',
+			'icon'        => 'fas fa-fw fa-info',
+			'label'       => '',
+			'label_color' => '',
+		],
         /*['header' => 'labels'],
         [
             'text'       => 'important',

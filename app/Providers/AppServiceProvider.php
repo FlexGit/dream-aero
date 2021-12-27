@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
 			$orderCount = HelpFunctions::getNewOrderCount();
 			$event->menu->addAfter('calendar', [
 				'key'		  => 'order',
-				'text'        => 'Заказы',
+				'text'        => 'Заявки',
 				'url'         => '/order',
 				'icon'        => 'fas fa-chalkboard',
 				'label'       => $orderCount ?: '',
@@ -65,7 +65,7 @@ class AppServiceProvider extends ServiceProvider
 				'key'		  => 'bill',
 				'text'        => 'Счета',
 				'url'         => '/bill',
-				'icon'        => 'far fa-fw fa-list-alt',
+				'icon'        => 'fas fa-fw fa-file-invoice-dollar',
 				'label'       => $billCount ?: '',
 				'label_color' => $billCount ? 'success' : '',
 			]);
@@ -75,7 +75,7 @@ class AppServiceProvider extends ServiceProvider
 				'key'		  => 'payment',
 				'text'        => 'Платежи',
 				'url'         => '/payment',
-				'icon'        => 'far fa-fw fa-list-alt',
+				'icon'        => 'fas fa-fw fa-coins',
 				'label'       => $paymentCount ?: '',
 				'label_color' => $paymentCount ? 'success' : '',
 			]);

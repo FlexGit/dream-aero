@@ -40,6 +40,10 @@ class HomeController extends Controller
 	
 	public function clear()
 	{
+		if (!$this->request->user()->isSuperAdmin()) {
+			redirect(route('home'));
+		}
+
 		Order::where('user_id', 0)
 			->delete();
 		Deal::where('user_id', 0)

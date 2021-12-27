@@ -206,7 +206,7 @@ class Product extends Model
 			->where('active_from_at', '<=', $date)
 			->where('active_to_at', '>=', $date)
 			->first();
-		if ($promo->discount) {
+		if ($promo && $promo->discount) {
 			if ($promo->discount->is_fixed) {
 				$price = round($price - $promo->discount->value);
 			} else {

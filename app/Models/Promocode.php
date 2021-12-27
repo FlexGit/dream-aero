@@ -96,6 +96,14 @@ class Promocode extends Model
 		'data_json' => 'array',
 	];
 
+	public static function boot() {
+		parent::boot();
+
+		Promocode::created(function (Promocode $promocode) {
+			$promocode->number = $promocode->generateNumber();
+		});
+	}
+
 	public function city()
 	{
 		return $this->belongsTo('App\Models\City', 'city_id', 'id');
@@ -105,7 +113,18 @@ class Promocode extends Model
 	{
 		return $this->hasOne('App\Models\Discount', 'id', 'discount_id');
 	}
-	
+
+	/**
+	 * @return string
+	 */
+	public function generateNumber()
+	{
+		$cityAlias = $this->city ? $this->city->alias : 'uni';
+		$alias = mb_strtolower($cityAlias);
+
+		return 'PC' . date('y') . $alias . sprintf('%05d', $this->id);
+	}
+
 	public function format() {
 		$data = $this->data_json ?? [];
 		

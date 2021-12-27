@@ -21,11 +21,11 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-sm-flex mb-2">
+					<div class="table-filter d-sm-flex mb-2">
 						<div class="form-group">
 							<label for="filter_status_id">Сущность</label>
 							<select class="form-control" id="filter_entity_alias" name="filter_entity_alias">
-								<option value="0">Все</option>
+								<option value="0">Выберите</option>
 								@foreach($entities ?? [] as $entityAlias => $entityName)
 									<option value="{{ $entityAlias }}" @if($entity && $entity == $entityAlias) selected @endif>{{ $entityName }}</option>
 								@endforeach
@@ -36,24 +36,22 @@
 							<input type="text" class="form-control" id="search_object" name="search_object" @if($objectId) value="{{ $objectId }}" @endif placeholder="ID объекта">
 						</div>
 					</div>
-					<div class="table-responsive">
-						<table id="revisionTable" class="table table-hover table-sm table-bordered table-striped">
-							<thead style="position: sticky;top: 0">
-							<tr class="text-center">
-								{{--<th class="align-middle">#</th>--}}
-								<th class="align-middle">Сущность</th>
-								<th class="align-middle text-nowrap d-none d-sm-table-cell">Объект</th>
-								<th class="align-middle d-none d-sm-table-cell">Атрибут</th>
-								<th class="align-middle d-none d-md-table-cell">Было</th>
-								<th class="align-middle d-none d-md-table-cell">Стало</th>
-								<th class="align-middle d-none d-md-table-cell">Пользователь</th>
-								<th class="align-middle d-none d-xl-table-cell">Когда</th>
-							</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div>
+					<table id="revisionTable" class="table table-hover table-sm table-bordered table-striped">
+						<thead>
+						<tr class="text-center">
+							{{--<th class="align-middle">#</th>--}}
+							<th class="align-middle">Сущность</th>
+							<th class="align-middle text-nowrap d-none d-sm-table-cell">Объект</th>
+							<th class="align-middle d-none d-sm-table-cell">Атрибут</th>
+							<th class="align-middle d-none d-md-table-cell">Было</th>
+							<th class="align-middle d-none d-md-table-cell">Стало</th>
+							<th class="align-middle d-none d-md-table-cell">Пользователь</th>
+							<th class="align-middle d-none d-xl-table-cell">Когда</th>
+						</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -110,7 +108,7 @@
 			getList(false);
 
 			$(document).on('change', '#filter_entity_alias', function(e) {
-				if (!$('#search_object').val().length) return;
+				//if (!$('#search_object').val().length) return;
 
 				getList(false);
 			});

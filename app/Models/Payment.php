@@ -146,11 +146,6 @@ class Payment extends Model
 	 */
 	public function generateNumber()
 	{
-		$locationCount = $this->city ? $this->city->locations->count() : 0;
-		$cityAlias = $this->city ? $this->city->alias : '';
-		$locationAlias = $this->location ? $this->location->alias : '';
-		$alias = ($locationCount > 1) ? mb_strtolower($locationAlias) : mb_strtolower($cityAlias);
-		
-		return 'P' . date('y') . $alias . sprintf('%05d', $this->id);
+		return 'P' . date('y') . sprintf('%05d', $this->id);
 	}
 }

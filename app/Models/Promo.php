@@ -19,6 +19,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property int $city_id город, к которому относится акция
  * @property bool $is_published для публикации
  * @property bool $is_active признак активности
+ * @property \datetime|null $active_from_at дата начала активности
+ * @property \datetime|null $active_to_at дата окончания активности
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
@@ -30,6 +32,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Promo newQuery()
  * @method static \Illuminate\Database\Query\Builder|Promo onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Promo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Promo whereActiveFromAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promo whereActiveToAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereDeletedAt($value)
@@ -56,6 +60,8 @@ class Promo extends Model
 		'detail_text' => 'Детальное описание',
 		'city_id' => 'Город',
 		'is_active' => 'Активность',
+		'active_from_at' => 'Дата начала активности',
+		'active_to_at' => 'Дата окончания активности',
 		'is_published' => 'Для публикации',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
@@ -76,6 +82,8 @@ class Promo extends Model
 		'detail_text',
 		'city_id',
 		'is_active',
+		'active_from_at',
+		'active_to_at',
 		'is_published',
 	];
 
@@ -89,6 +97,8 @@ class Promo extends Model
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
 		'is_active' => 'boolean',
+		'active_from_at' => 'datetime:Y-m-d H:i:s',
+		'active_to_at' => 'datetime:Y-m-d H:i:s',
 		'is_published' => 'boolean',
 	];
 

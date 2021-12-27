@@ -30,6 +30,7 @@ class RevisionController extends Controller
 		'Bill' => 'Счет',
 		'Payment' => 'Платеж',
 		'Certificate' => 'Сертификат',
+		'Discount' => 'Скидка',
 	];
 	
 	/**
@@ -90,10 +91,11 @@ class RevisionController extends Controller
 			default:
 				$field = 'name';
 		}
-		
+
+		//DB::connection()->enableQueryLog();
 		$revisions = DB::table('revisions')
-			->leftJoin('users', 'revisions.user_id', '=', 'users.id')
-			->select('revisions.*', 'users.name as user')
+			->leftJoin('users as u', 'revisions.user_id', '=', 'u.id')
+			->select('revisions.*', 'u.name as user')
 			->orderBy('revisions.id', 'desc');
 		if ($id) {
 			$revisions = $revisions->where('revisions.id', '<', $id);
@@ -103,11 +105,10 @@ class RevisionController extends Controller
 			$revisions = $revisions->where('revisions.revisionable_type', 'App\\Models\\' . $this->request->filter_entity_alias);
 			$revisions = $revisions->where($table . '.' . $field, 'like', '%' . $this->request->search_object . '%');
 		}
-		/*if ($this->request->search_object) {
-			$revisions = $revisions->where('revisions.revisionable_id', $this->request->search_object);
-		}*/
 		$revisions = $revisions->limit(20)->get();
-		
+		//$queries = DB::getQueryLog();
+		//\Log::debug($queries);
+
 		$revisionData = [];
 		foreach ($revisions as $revision) {
 			$model = $revision->revisionable_type::find($revision->revisionable_id);
