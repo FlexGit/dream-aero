@@ -24,20 +24,18 @@
 					<table id="statusTable" class="table table-hover table-sm table-bordered table-striped">
 						<thead>
 						<tr>
-							<th class="text-center">#</th>
+							{{--<th class="text-center">#</th>--}}
 							<th class="text-center">Сущность</th>
 							<th class="text-center">Наименование</th>
 							{{--<th class="text-center d-none d-sm-table-cell">Алиас</th>--}}
-							<th class="text-center d-none d-md-table-cell">Дополнительно</th>
-							<th class="text-center d-none d-xl-table-cell">Активность</th>
-							{{--<th class="text-center d-none d-xl-table-cell">Создано</th>
+							<th class="text-center d-none d-md-table-cell">Дополнительная информация</th>
+							{{--<th class="text-center d-none d-xl-table-cell">Активность</th>
+							<th class="text-center d-none d-xl-table-cell">Создано</th>
 							<th class="text-center d-none d-xl-table-cell">Изменено</th>--}}
+							<th class="text-center"></th>
 						</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<td colspan="30" class="text-center">Загрузка данных...</td>
-						</tr>
 						</tbody>
 					</table>
 				</div>
@@ -56,9 +54,9 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList(url) {
+			function getList() {
 				$.ajax({
-					url: url,
+					url: '{{ route('statusList') }}',
 					type: 'GET',
 					dataType: 'json',
 					success: function(result) {
@@ -72,7 +70,7 @@
 				})
 			}
 
-			getList('{{ route('statusList') }}');
+			getList();
 		});
 	</script>
 @stop

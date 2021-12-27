@@ -79,3 +79,21 @@ input[readonly]{
 .container {
 	max-width: 100%;
 }
+
+.table-filter {
+	position: sticky;
+	top: 57px;
+	z-index: 1037;
+	background-color: #fff;
+}
+.table {
+	position: sticky;
+	z-index: 1036;
+	background-color: #fff;
+}
+.table thead {
+	position: sticky;
+	top: 142px;
+	z-index: 1038;
+	background-color: #fff;
+}

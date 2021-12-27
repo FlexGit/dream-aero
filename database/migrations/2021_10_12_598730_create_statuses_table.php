@@ -71,7 +71,7 @@ class CreateStatusesTable extends Migration
 					],
 				],
 				'on_phone' => [
-					'name' => 'Не дозвонились',
+					'name' => 'Недозвон',
 					'sort' => 20,
 					'data' => [
 						'color' => '#fed5a5',
