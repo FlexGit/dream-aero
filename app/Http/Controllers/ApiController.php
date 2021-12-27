@@ -313,8 +313,14 @@ class ApiController extends Controller
 		if (!$code->save()) {
 			return $this->responseError(null, 500);
 		}
-		
-		return $this->responseSuccess('Код подтвержден');
+
+		$contractor = Contractor::where('is_active', true)
+			->where('email', $email);
+
+		$data = [
+			'contractor' => $contractor ? $contractor->format() : null,
+		];
+		return $this->responseSuccess('Код подтвержден', $data);
 	}
 
 	/**
