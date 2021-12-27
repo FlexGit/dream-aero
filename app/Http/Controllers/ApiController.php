@@ -315,7 +315,8 @@ class ApiController extends Controller
 		}
 
 		$contractor = Contractor::where('is_active', true)
-			->where('email', $email);
+			->where('email', $email)
+			->first();
 
 		$data = [
 			'contractor' => $contractor ? $contractor->format() : null,
