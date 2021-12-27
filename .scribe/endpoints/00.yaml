@@ -1455,7 +1455,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: cupiditate
+        example: ut
         type: string
         custom: []
     responses:
