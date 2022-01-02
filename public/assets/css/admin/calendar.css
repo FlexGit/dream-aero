@@ -1,0 +1,49 @@
+.event-close-btn {
+	position: absolute;
+	top: -3px;
+	right: -2px;
+	padding: 0 5px;
+	z-index: 9999;
+	color: #000;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.datepicker.datepicker-inline {
+	background-color: #fff;
+	width: auto;
+	padding: 7px;
+	margin: 10px;
+	font-size: 14px;
+	color: #000;
+}
+.datepicker.datepicker-inline .table-condensed {
+	width: 100%;
+}
+.datepicker.datepicker-inline .table-condensed tbody td {
+	width: 20px;
+	height: 20px;
+}
+
+table.fc-scrollgrid tbody {
+	line-height: 0.8em;
+}
+.fc .fc-button {
+	font-size: 0.8em;
+}
+.fc .fc-toolbar.fc-header-toolbar {
+	margin-bottom: 0;
+}
+.fc-toolbar, .fc-toolbar.fc-header-toolbar {
+	padding: 0.2rem 0;
+}
+.fc .fc-toolbar-title {
+	font-size: 1.0em;
+}
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+	min-height: auto;
+}
+.fc-timegrid-slot {
+	height: 0.1em !important;
+	border-bottom: 0 !important;
+}

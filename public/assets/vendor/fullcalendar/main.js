@@ -9121,7 +9121,7 @@ var FullCalendar = (function (exports) {
                 ].join(' '),
                 style: {
                     minWidth: arg.tableMinWidth,
-                    width: arg.clientWidth,
+                    width: /*arg.clientWidth*/'100%',
                     height: expandRows ? arg.clientHeight : '', // css `height` on a <table> serves as a min-height
                 },
             }, arg.tableColGroupNode, createElement(isHeader ? 'thead' : 'tbody', {
@@ -12822,12 +12822,12 @@ var FullCalendar = (function (exports) {
             return (createElement("div", { className: classNames.join(' '), ref: this.handleRootEl, style: {
                     // these props are important to give this wrapper correct dimensions for interactions
                     // TODO: if we set it here, can we avoid giving to inner tables?
-                    width: props.clientWidth,
+                    width: /*props.clientWidth*/'100%',
                     minWidth: props.tableMinWidth,
                 } },
                 createElement(NowTimer, { unit: "day" }, function (nowDate, todayRange) { return (createElement(Fragment, null,
                     createElement("table", { role: "presentation", className: "fc-scrollgrid-sync-table", style: {
-                            width: props.clientWidth,
+                            width: /*props.clientWidth*/'100%',
                             minWidth: props.tableMinWidth,
                             height: expandRows ? props.clientHeight : '',
                         } },
@@ -13406,7 +13406,7 @@ var FullCalendar = (function (exports) {
             return (createElement("div", { ref: this.rootElRef, className: "fc-timegrid-slots" },
                 createElement("table", { "aria-hidden": true, className: context.theme.getClass('table'), style: {
                         minWidth: props.tableMinWidth,
-                        width: props.clientWidth,
+                        width: /*props.clientWidth*/'100%',
                         height: props.minHeight,
                     } },
                     props.tableColGroupNode /* relies on there only being a single <col> for the axis */,
@@ -13908,7 +13908,7 @@ var FullCalendar = (function (exports) {
             return (createElement("div", { className: "fc-timegrid-cols", ref: this.rootElRef },
                 createElement("table", { role: "presentation", style: {
                         minWidth: props.tableMinWidth,
-                        width: props.clientWidth,
+                        width: /*props.clientWidth*/'100%',
                     } },
                     props.tableColGroupNode,
                     createElement("tbody", { role: "presentation" },
@@ -13992,7 +13992,7 @@ var FullCalendar = (function (exports) {
             return (createElement("div", { className: "fc-timegrid-body", ref: this.handleRootEl, style: {
                     // these props are important to give this wrapper correct dimensions for interactions
                     // TODO: if we set it here, can we avoid giving to inner tables?
-                    width: props.clientWidth,
+                    width: /*props.clientWidth*/'100%',
                     minWidth: props.tableMinWidth,
                 } },
                 createElement(TimeColsSlats, { axis: props.axis, dateProfile: props.dateProfile, slatMetas: props.slatMetas, clientWidth: props.clientWidth, minHeight: props.expandRows ? props.clientHeight : '', tableMinWidth: props.tableMinWidth, tableColGroupNode: props.axis ? props.tableColGroupNode : null /* axis depends on the colgroup's shrinking */, onCoords: this.handleSlatCoords }),

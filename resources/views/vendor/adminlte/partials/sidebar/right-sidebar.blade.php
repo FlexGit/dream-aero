@@ -1,3 +1,5 @@
 <aside class="control-sidebar control-sidebar-{{ config('adminlte.right_sidebar_theme') }}">
-    @yield('right-sidebar')
+	<div data-date="{{ date('d.m.Y') }}"></div>
+
+	@yield('right-sidebar')
 </aside>

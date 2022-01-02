@@ -518,7 +518,7 @@ return [
 				[
 					'type' => 'js',
 					'asset' => true,
-					'location' => 'vendor/fullcalendar/main.min.js',
+					'location' => 'vendor/fullcalendar/main.js',
 				],
 				[
 					'type' => 'js',
