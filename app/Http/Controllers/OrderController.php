@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Validator;
 
 use App\Models\Order;
-use App\Models\OrderPosition;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\Product;
@@ -131,7 +128,7 @@ class OrderController extends Controller
 		$order = Order::find($id);
 		if (!$order) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		$cities = City::orderBy('name')
+		/*$cities = City::orderBy('name')
 			->get();
 		
 		$locations = Location::orderBy('name')
@@ -139,16 +136,17 @@ class OrderController extends Controller
 		
 		$productTypes = ProductType::with(['products'])
 			->orderBy('name')
-			->get();
-		
-		$statuses = Status::orderBy('sort')
+			->get();*/
+
+		$statuses = Status::where('type', Status::STATUS_TYPE_ORDER)
+			->orderBy('sort')
 			->get();
 
 		$VIEW = view('admin.order.modal.edit', [
 			'order' => $order,
-			'cities' => $cities,
+			/*'cities' => $cities,
 			'locations' => $locations,
-			'productTypes' => $productTypes,
+			'productTypes' => $productTypes,*/
 			'statuses' => $statuses,
 		]);
 		
@@ -159,7 +157,7 @@ class OrderController extends Controller
 	 * @param $id
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function show($id)
+	/*public function show($id)
 	{
 		$order = Order::find($id);
 		if (!$order) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
@@ -185,12 +183,12 @@ class OrderController extends Controller
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}
+	}*/
 	
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function add()
+	/*public function add()
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -216,12 +214,12 @@ class OrderController extends Controller
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}
+	}*/
 	
 	/**
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function store()
+	/*public function store()
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -253,7 +251,7 @@ class OrderController extends Controller
 		}
 		
 		return response()->json(['status' => 'success', 'id' => $order->id]);
-	}
+	}*/
 	
 	/**
 	 * @param $id
@@ -270,24 +268,24 @@ class OrderController extends Controller
 		
 		$rules = [
 			'status_id' => 'required|numeric',
-			'product_id' => 'required|numeric',
-			'city_id' => 'required|numeric',
+			/*'product_id' => 'required|numeric',
+			'city_id' => 'required|numeric',*/
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'status_id' => 'Статус',
-				'product_id' => 'Продукт',
-				'city_id' => 'Город',
+				/*'product_id' => 'Продукт',
+				'city_id' => 'Город',*/
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$order->number = $this->request->number;
+		/*$order->number = $this->request->number;*/
 		$order->status_id = $this->request->status_id;
-		$order->product_id = $this->request->product_id;
-		$order->city_id = $this->request->city_id;
+		/*$order->product_id = $this->request->product_id;
+		$order->city_id = $this->request->city_id;*/
 
 		if (!$order->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

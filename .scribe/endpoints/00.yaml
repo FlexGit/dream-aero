@@ -21,18 +21,21 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       email:
         name: email
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       password:
         name: password
         description: 'Password (md5).'
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -96,12 +99,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters:
       email:
         name: email
@@ -109,36 +114,42 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       name:
         name: name
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       lastname:
         name: lastname
         description: ''
         required: false
         example: null
         type: string
+        custom: []
       birthdate:
         name: birthdate
         description: ''
         required: true
         example: null
         type: date
+        custom: []
       phone:
         name: phone
         description: '+71234567890'
         required: false
         example: null
         type: string
+        custom: []
       city_id:
         name: city_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
     responses:
       -
         status: 200
@@ -153,14 +164,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           	}
@@ -213,12 +229,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -272,18 +290,21 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       email:
         name: email
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       type:
         name: type
         description: 'Action type. For Registration - empty value, for Password Restore - "password_restore".'
         required: false
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -342,12 +363,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       contractor_id:
         name: contractor_id
         description: ''
         required: false
         example: null
         type: integer
+        custom: []
     bodyParameters:
       password:
         name: password
@@ -355,36 +378,42 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       password_confirmation:
         name: password_confirmation
         description: 'Password confirmation (md5).'
         required: true
         example: null
         type: string
+        custom: []
       email:
         name: email
         description: ''
         required: false
         example: null
         type: string
+        custom: []
       name:
         name: name
         description: ''
         required: false
         example: null
         type: string
+        custom: []
       birthdate:
         name: birthdate
         description: ''
         required: false
         example: null
         type: date
+        custom: []
       city_id:
         name: city_id
         description: ''
         required: false
         example: null
         type: integer
+        custom: []
     responses:
       -
         status: 200
@@ -399,14 +428,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           		"token": {
@@ -463,12 +497,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -476,7 +512,7 @@ endpoints:
         content: |-
           {
           	"success": true,
-          	"message": "Токен успешно удален",
+          	"message": "Токен авторизации успешно удален",
           	"data": null
           }
         headers: []
@@ -522,12 +558,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters:
       password:
         name: password
@@ -535,12 +573,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       password_confirmation:
         name: password_confirmation
         description: 'Password confirmation (md5).'
         required: true
         example: null
         type: string
+        custom: []
     responses:
       -
         status: 200
@@ -555,14 +595,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           	}
@@ -615,12 +660,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -636,14 +683,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           	}
@@ -691,6 +743,7 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -753,18 +806,21 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       tariff_type_id:
         name: tariff_type_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -848,18 +904,21 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       tariff_id:
         name: tariff_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -941,6 +1000,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1001,12 +1068,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1075,12 +1144,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1142,12 +1213,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: false
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1214,12 +1287,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       promo_id:
         name: promo_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1284,12 +1359,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1305,14 +1382,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           	}
@@ -1360,19 +1442,22 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters:
       file_base64:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: sit
+        example: laborum
         type: string
+        custom: []
     responses:
       -
         status: 200
@@ -1387,14 +1472,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           	}
@@ -1447,12 +1537,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1468,14 +1560,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           	}
@@ -1528,36 +1625,42 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       tariff_id:
         name: tariff_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
       flight_at:
         name: flight_at
         description: ''
         required: false
         example: null
         type: string
+        custom: []
       is_unified:
         name: is_unified
         description: 'Unified certificate.'
         required: false
         example: null
         type: boolean
+        custom: []
       promocode_id:
         name: promocode_id
         description: ''
         required: false
         example: null
         type: integer
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1618,18 +1721,21 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       promocode:
         name: promocode
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1686,12 +1792,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: false
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1794,12 +1902,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters:
       name:
         name: name
@@ -1807,84 +1917,98 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       phone:
         name: phone
         description: '+71234567890'
         required: true
         example: null
         type: string
+        custom: []
       email:
         name: email
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       product_id:
         name: product_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
       product_amount:
         name: product_amount
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
       is_certificate_order:
         name: is_certificate_order
         description: ''
         required: true
         example: null
         type: boolean
+        custom: []
       flight_date:
         name: flight_date
         description: ''
         required: false
         example: null
         type: date
+        custom: []
       flight_time:
         name: flight_time
         description: ''
         required: false
         example: null
         type: time
+        custom: []
       is_unified:
         name: is_unified
         description: ''
         required: false
         example: null
         type: boolean
+        custom: []
       location_id:
         name: location_id
         description: ''
         required: false
         example: null
         type: integer
+        custom: []
       promocode_id:
         name: promocode_id
         description: ''
         required: false
         example: null
         type: string
+        custom: []
       certificate_id:
         name: certificate_id
         description: ''
         required: false
         example: null
         type: string
+        custom: []
       certificate_whom:
         name: certificate_whom
         description: 'For whom certificate.'
         required: false
         example: null
         type: string
+        custom: []
       comment:
         name: comment
         description: ''
         required: false
         example: null
         type: string
+        custom: []
     responses:
       -
         status: 200
@@ -1900,7 +2024,10 @@ endpoints:
           			"email": "john.smith@gmail.com",
           			"phone": null,
           			"city_id": 1,
-          			"discount": 5,
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
@@ -1957,18 +2084,21 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       email:
         name: email
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       code:
         name: code
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -1984,14 +2114,19 @@ endpoints:
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
           			"phone": null,
-          			"city": "Москва",
-          			"discount": 5,
+          			"city": {
+          			"id": 1,
+          			"name": "Москва"
+          		},
+          		"discount": {
+          			"value": 5,
+          				"is_fixed": false
+          		},
           		"birthdate": "1990-01-01",
           			"avatar_file_base64": null,
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_active": true,
           			"is_new": false
           		}
           	}
@@ -2044,24 +2179,28 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       number:
         name: number
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       product_id:
         name: product_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -2118,12 +2257,14 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
     bodyParameters: []
     responses:
       -
@@ -2188,18 +2329,21 @@ endpoints:
         required: true
         example: null
         type: string
+        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
+        custom: []
       notification_id:
         name: notification_id
         description: ''
         required: true
         example: null
         type: integer
+        custom: []
     bodyParameters: []
     responses:
       -

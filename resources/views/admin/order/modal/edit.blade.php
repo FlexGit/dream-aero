@@ -1,8 +1,8 @@
 <input type="hidden" id="id" name="id">
-<div class="form-group">
+{{--<div class="form-group">
 	<label for="number">Номер</label>
 	<input type="text" class="form-control" id="number" name="number" value="{{ $order->number }}" placeholder="Номер" readonly>
-</div>
+</div>--}}
 <div class="form-group">
 	<label for="status_id">Статус</label>
 	<select class="form-control" id="status_id" name="status_id">
@@ -11,6 +11,7 @@
 		@endforeach
 	</select>
 </div>
+{{--
 <div class="form-group">
 	<label for="phone">Контрагент</label>
 	<input type="text" class="form-control" id="contractor" name="contractor" value="{{ $order->contractor->name }}" placeholder="Контрагент" readonly>
@@ -53,3 +54,4 @@
 		<input type="time" class="form-control ml-2" id="flight_at_time" name="flight_at_time" value="{{ $order->flight_at->format('H:i') }}" placeholder="Время полета">
 	</div>
 </div>
+--}}

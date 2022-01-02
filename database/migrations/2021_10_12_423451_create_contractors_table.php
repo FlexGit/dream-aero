@@ -24,9 +24,10 @@ class CreateContractorsTable extends Migration
 			$table->rememberToken();
 			$table->integer('city_id')->default(0)->index()->comment('город, к которому привязан контрагент');
 			$table->integer('discount')->default(0)->comment('скидка');
-			$table->text('data_json')->nullable()->comment('дополнительная информация');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->timestamp('last_auth_at')->nullable()->comment('дата последней по времени авторизации');
+			$table->string('source')->nullable()->comment('источник');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();
         });

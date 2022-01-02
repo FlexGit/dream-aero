@@ -25,7 +25,7 @@
 						<div class="form-group">
 							<label for="filter_status_id">Сущность</label>
 							<select class="form-control" id="filter_entity_alias" name="filter_entity_alias">
-								<option value="0">Все</option>
+								<option value="0">Выберите</option>
 								@foreach($entities ?? [] as $entityAlias => $entityName)
 									<option value="{{ $entityAlias }}" @if($entity && $entity == $entityAlias) selected @endif>{{ $entityName }}</option>
 								@endforeach
@@ -108,7 +108,7 @@
 			getList(false);
 
 			$(document).on('change', '#filter_entity_alias', function(e) {
-				if (!$('#search_object').val().length) return;
+				//if (!$('#search_object').val().length) return;
 
 				getList(false);
 			});

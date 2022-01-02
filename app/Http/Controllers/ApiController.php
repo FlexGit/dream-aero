@@ -123,7 +123,7 @@ class ApiController extends Controller
 	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
-	 * 	"message": "Токен успешно удален",
+	 * 	"message": "Токен авторизации успешно удален",
 	 * 	"data": null
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -140,11 +140,11 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		if ($token->delete()) {
-			return $this->responseSuccess('Токен успешно удален');
+			return $this->responseSuccess('Токен авторизации успешно удален');
 		}
 		
 		return $this->responseError(null, 500);
@@ -251,14 +251,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 	}
@@ -293,7 +298,7 @@ class ApiController extends Controller
 		
 		$email = $this->request->email;
 		$codeValue = $this->request->code;
-		
+
 		$code = Code::where('code', $codeValue)
 			->where('email', $email)
 			->where('is_reset', false)
@@ -308,8 +313,15 @@ class ApiController extends Controller
 		if (!$code->save()) {
 			return $this->responseError(null, 500);
 		}
-		
-		return $this->responseSuccess('Код подтвержден');
+
+		$contractor = Contractor::where('is_active', true)
+			->where('email', $email)
+			->first();
+
+		$data = [
+			'contractor' => $contractor ? $contractor->format() : null,
+		];
+		return $this->responseSuccess('Код подтвержден', $data);
 	}
 
 	/**
@@ -333,14 +345,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 		"token": {
@@ -456,14 +473,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 	}
@@ -505,7 +527,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -546,14 +568,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 	}
@@ -567,12 +594,12 @@ class ApiController extends Controller
 	{
 		$authToken = $this->request->token;
 		if (!$authToken) {
-			return $this->responseError('Не передан ID контрагента', 400);
+			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -615,14 +642,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 	}
@@ -670,7 +702,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -726,7 +758,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -772,14 +804,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 	}
@@ -798,7 +835,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -847,14 +884,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 	}
@@ -892,7 +934,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -973,14 +1015,19 @@ class ApiController extends Controller
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
-	 * 			"city": "Москва",
-	 * 			"discount": 5,
+	 * 			"city": {
+	 *				"id": 1,
+	 *				"name": "Москва"
+	 *			},
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_active": true,
 	 * 			"is_new": false
 	 * 		}
 	 * 	}
@@ -1000,7 +1047,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1144,7 +1191,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1245,7 +1292,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1318,7 +1365,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1331,8 +1378,8 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-		
-		$cityId = $contractor->city ?? 0;
+
+		$cityId = $contractor->city_id ?? 0;
 		
 		if ($cityId) {
 			$city = City::where('is_active', true)
@@ -1343,7 +1390,7 @@ class ApiController extends Controller
 		}
 		
 		$tariff = Product::where('is_active', true)
-			->whereIn('city_id', [])
+			->whereIn('city_id', [$city->id, 0])
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
@@ -1377,7 +1424,7 @@ class ApiController extends Controller
 			return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
 		}
 
-		$price = $tariff->calculateProductPrice($contractor, $flightAt, $isUnified, $promocode ?? null);
+		$price = $tariff->calculateProductPrice($contractor, $promocode ?? null, $flightAt, $isUnified);
 		if ($price <= 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
@@ -1393,6 +1440,7 @@ class ApiController extends Controller
 	 * City list
 	 *
 	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1412,6 +1460,27 @@ class ApiController extends Controller
 	 */
 	public function getCities()
 	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
 		$cities = City::where('is_active', true)
 			->get();
 		
@@ -1468,7 +1537,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1481,8 +1550,8 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-		
-		$cityId = $contractor->city ?? 0;
+
+		$cityId = $contractor->city_id ?? 0;
 		if (!$cityId) {
 			return $this->responseError('Город не найден', 400);
 		}
@@ -1543,7 +1612,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1556,8 +1625,8 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-		
-		$cityId = $contractor->city ?? 0;
+
+		$cityId = $contractor->city_id ?? 0;
 		if (!$cityId) {
 			return $this->responseError('Город не найден', 400);
 		}
@@ -1630,7 +1699,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1643,8 +1712,8 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-		
-		$cityId = $contractor->city ?? 0;
+
+		$cityId = $contractor->city_id ?? 0;
 		if ($cityId) {
 			$city = City::where('is_active', true)
 				->find($cityId);
@@ -1751,7 +1820,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1764,8 +1833,8 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-		
-		$cityId = $contractor->city ?? 0;
+
+		$cityId = $contractor->city_id ?? 0;
 		if ($cityId) {
 			$city = City::where('is_active', true)
 				->find($cityId);
@@ -1779,8 +1848,14 @@ class ApiController extends Controller
 		$promocode = Promocode::where('number', $number)
 			->whereIn('city_id', [$city->id, 0])
 			->where('is_active', true)
-			->where('active_from_at', '<=', $date)
-			->where('active_to_at', '>=', $date)
+			->where(function ($query) use ($date) {
+				$query->where('active_from_at', '<=', $date)
+					->orWhereNull('active_from_at');
+			})
+			->where(function ($query) use ($date) {
+				$query->where('active_to_at', '>=', $date)
+					->orWhereNull('active_to_at');
+			})
 			->first();
 		if (!$promocode) {
 			return $this->responseError('Промокод не найден', 400);
@@ -1867,7 +1942,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -1943,7 +2018,10 @@ class ApiController extends Controller
 	 * 			"email": "john.smith@gmail.com",
 	 * 			"phone": null,
 	 * 			"city_id": 1,
-	 * 			"discount": 5,
+	 *			"discount": {
+	 *				"value": 5,
+	 * 				"is_fixed": false
+	 *			},
 	 *			"birthdate": "1990-01-01",
 	 * 			"avatar_file_base64": null,
 	 * 			"flight_time": 100,
@@ -2016,7 +2094,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -2244,7 +2322,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -2286,7 +2364,10 @@ class ApiController extends Controller
 		$date = date('Y-m-d');
 		
 		$certificate = Certificate::where('number', $number)
-			->whereIn('city_id', [$city->id, 0])
+			->where(function ($query) use ($city) {
+				$query->whereIn('city_id', [$city->id, 0])
+					->orWhere('is_unified', true);
+			})
 			->where('status_id', $statusesData['certificate'][Certificate::CREATED_STATUS]['id'])
 			->where('product_id', $product->id)
 			->where(function ($query) use ($date) {
@@ -2341,7 +2422,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;
@@ -2418,7 +2499,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			return $this->responseError('Токен не найден', 400);
+			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
 		$contractorId = $token->contractor_id ?? 0;

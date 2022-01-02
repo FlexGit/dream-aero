@@ -49,28 +49,8 @@ input[readonly]{
 .border-between > [class*='col-']:first-child:before {
 	display: none;
 }
-.fc .fc-button {
-	font-size: 0.8em;
-}
-.fc .fc-toolbar.fc-header-toolbar {
-	margin-bottom: 0;
-}
-.fc-toolbar, .fc-toolbar.fc-header-toolbar {
-	padding: 0.2rem 0;
-}
-.fc .fc-toolbar-title {
-	font-size: 1.5em;
-}
 .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
 	background-color: orange;
-}
-.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
-	min-height: auto;
-}
-
-.fc-timegrid-slot {
-	height: 0.1em !important;
-	border-bottom: 0 !important;
 }
 .table thead,
 .table th {

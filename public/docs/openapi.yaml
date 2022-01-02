@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 servers:
   -
-    url: 'http://admin.dream-aero.loc'
+    url: 'http://dev.dream-aero.ru'
 paths:
   /api/login:
     post:
@@ -221,14 +221,17 @@ paths:
                       lastname: Smith
                       email: john.smith@gmail.com
                       phone: null
-                      city: Москва
-                      discount: 5
+                      city:
+                        id: 1
+                        name: Москва
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
-                      is_active: true
                       is_new: false
                 properties:
                   success:
@@ -246,14 +249,17 @@ paths:
                         lastname: Smith
                         email: john.smith@gmail.com
                         phone: null
-                        city: Москва
-                        discount: 5
+                        city:
+                          id: 1
+                          name: Москва
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
-                        is_active: true
                         is_new: false
         400:
           description: 'Bad Request'
@@ -713,7 +719,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": \"Москва\",\n\t\t\t\"discount\": 5,\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t\t\"is_active\": true,\n\t\t\t\"is_new\": false\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t\t\"is_new\": false\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -878,7 +884,7 @@ paths:
                 type: object
                 example:
                   success: true
-                  message: 'Токен успешно удален'
+                  message: 'Токен авторизации успешно удален'
                   data: null
                 properties:
                   success:
@@ -886,7 +892,7 @@ paths:
                     example: true
                   message:
                     type: string
-                    example: 'Токен успешно удален'
+                    example: 'Токен авторизации успешно удален'
                   data:
                     type: string
                     example: null
@@ -1028,14 +1034,17 @@ paths:
                       lastname: Smith
                       email: john.smith@gmail.com
                       phone: null
-                      city: Москва
-                      discount: 5
+                      city:
+                        id: 1
+                        name: Москва
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
-                      is_active: true
                       is_new: false
                 properties:
                   success:
@@ -1053,14 +1062,17 @@ paths:
                         lastname: Smith
                         email: john.smith@gmail.com
                         phone: null
-                        city: Москва
-                        discount: 5
+                        city:
+                          id: 1
+                          name: Москва
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
-                        is_active: true
                         is_new: false
         400:
           description: 'Bad Request'
@@ -1218,14 +1230,17 @@ paths:
                       lastname: Smith
                       email: john.smith@gmail.com
                       phone: null
-                      city: Москва
-                      discount: 5
+                      city:
+                        id: 1
+                        name: Москва
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
-                      is_active: true
                       is_new: false
                 properties:
                   success:
@@ -1243,14 +1258,17 @@ paths:
                         lastname: Smith
                         email: john.smith@gmail.com
                         phone: null
-                        city: Москва
-                        discount: 5
+                        city:
+                          id: 1
+                          name: Москва
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
-                        is_active: true
                         is_new: false
         400:
           description: 'Bad Request'
@@ -1825,6 +1843,16 @@ paths:
         -
           in: query
           name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: token
           description: ''
           example: null
           required: true
@@ -2657,14 +2685,17 @@ paths:
                       lastname: Smith
                       email: john.smith@gmail.com
                       phone: null
-                      city: Москва
-                      discount: 5
+                      city:
+                        id: 1
+                        name: Москва
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
-                      is_active: true
                       is_new: false
                 properties:
                   success:
@@ -2682,14 +2713,17 @@ paths:
                         lastname: Smith
                         email: john.smith@gmail.com
                         phone: null
-                        city: Москва
-                        discount: 5
+                        city:
+                          id: 1
+                          name: Москва
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
-                        is_active: true
                         is_new: false
         400:
           description: 'Bad Request'
@@ -2829,14 +2863,17 @@ paths:
                       lastname: Smith
                       email: john.smith@gmail.com
                       phone: null
-                      city: Москва
-                      discount: 5
+                      city:
+                        id: 1
+                        name: Москва
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
-                      is_active: true
                       is_new: false
                 properties:
                   success:
@@ -2854,14 +2891,17 @@ paths:
                         lastname: Smith
                         email: john.smith@gmail.com
                         phone: null
-                        city: Москва
-                        discount: 5
+                        city:
+                          id: 1
+                          name: Москва
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
-                        is_active: true
                         is_new: false
         400:
           description: 'Bad Request'
@@ -2955,7 +2995,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: sit
+                  example: laborum
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3014,14 +3054,17 @@ paths:
                       lastname: Smith
                       email: john.smith@gmail.com
                       phone: null
-                      city: Москва
-                      discount: 5
+                      city:
+                        id: 1
+                        name: Москва
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
-                      is_active: true
                       is_new: false
                 properties:
                   success:
@@ -3039,14 +3082,17 @@ paths:
                         lastname: Smith
                         email: john.smith@gmail.com
                         phone: null
-                        city: Москва
-                        discount: 5
+                        city:
+                          id: 1
+                          name: Москва
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
-                        is_active: true
                         is_new: false
         400:
           description: 'Bad Request'
@@ -3624,7 +3670,9 @@ paths:
                       email: john.smith@gmail.com
                       phone: null
                       city_id: 1
-                      discount: 5
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
@@ -3647,7 +3695,9 @@ paths:
                         email: john.smith@gmail.com
                         phone: null
                         city_id: 1
-                        discount: 5
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
@@ -3871,14 +3921,17 @@ paths:
                       lastname: Smith
                       email: john.smith@gmail.com
                       phone: null
-                      city: Москва
-                      discount: 5
+                      city:
+                        id: 1
+                        name: Москва
+                      discount:
+                        value: 5
+                        is_fixed: false
                       birthdate: '1990-01-01'
                       avatar_file_base64: null
                       flight_time: 100
                       score: 10000
                       status: Золотой
-                      is_active: true
                       is_new: false
                 properties:
                   success:
@@ -3896,14 +3949,17 @@ paths:
                         lastname: Smith
                         email: john.smith@gmail.com
                         phone: null
-                        city: Москва
-                        discount: 5
+                        city:
+                          id: 1
+                          name: Москва
+                        discount:
+                          value: 5
+                          is_fixed: false
                         birthdate: '1990-01-01'
                         avatar_file_base64: null
                         flight_time: 100
                         score: 10000
                         status: Золотой
-                        is_active: true
                         is_new: false
         400:
           description: 'Bad Request'

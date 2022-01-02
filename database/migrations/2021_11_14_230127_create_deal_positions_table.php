@@ -29,6 +29,8 @@ class CreateDealPositionsTable extends Migration
 			$table->timestamp('flight_at')->nullable()->comment('дата и время полета');
 			$table->timestamp('invite_sent_at')->nullable()->comment('последняя дата отправки приглашения на e-mail');
 			$table->timestamp('certificate_sent_at')->nullable()->comment('последняя дата отправки сертификата на e-mail');
+			$table->integer('responsible_user_id')->default(0)->index()->comment('ответственный пользователь');
+			$table->string('source')->nullable()->comment('источник');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();
