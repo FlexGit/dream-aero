@@ -13,8 +13,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  *
  * @property int $id
  * @property string $number промокод
- * @property int $city_id город, в котором действует промокод
- * @property \App\Models\Discount|null $discount_id скидка
+ * @property int $discount_id скидка
  * @property bool $is_active признак активности
  * @property \datetime|null $active_from_at дата начала активности
  * @property \datetime|null $active_to_at дата окончания активности
@@ -22,7 +21,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \App\Models\City $city
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\City[] $cities
+ * @property-read int|null $cities_count
+ * @property-read \App\Models\Discount|null $discount
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode newModelQuery()
@@ -31,11 +32,10 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode query()
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereActiveFromAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereActiveToAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDiscountId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereNumber($value)
@@ -43,8 +43,6 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Promocode withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Promocode withoutTrashed()
  * @mixin \Eloquent
- * @property-read \App\Models\Discount|null $discount
- * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDiscountId($value)
  */
 class Promocode extends Model
 {
@@ -52,7 +50,6 @@ class Promocode extends Model
 	
     const ATTRIBUTES = [
 		'number' => 'Номер',
-		'city_id' => 'Город',
 		'discount_id' => 'Скидка',
 		'active_from_at' => 'Начало активности',
 		'active_to_at' => 'Окончание активности',
@@ -73,7 +70,6 @@ class Promocode extends Model
 	 */
 	protected $fillable = [
 		'number',
-		'city_id',
 		'discount_id',
 		'is_active',
 		'active_from_at',
@@ -96,33 +92,16 @@ class Promocode extends Model
 		'data_json' => 'array',
 	];
 
-	public static function boot() {
-		parent::boot();
-
-		Promocode::created(function (Promocode $promocode) {
-			$promocode->number = $promocode->generateNumber();
-		});
-	}
-
-	public function city()
-	{
-		return $this->belongsTo('App\Models\City', 'city_id', 'id');
-	}
-	
 	public function discount()
 	{
-		return $this->hasOne('App\Models\Discount', 'id', 'discount_id');
+		return $this->hasOne(Discount::class, 'id', 'discount_id');
 	}
-
-	/**
-	 * @return string
-	 */
-	public function generateNumber()
+	
+	public function cities()
 	{
-		$cityAlias = $this->city ? $this->city->alias : 'uni';
-		$alias = mb_strtolower($cityAlias);
-
-		return 'PC' . date('y') . $alias . sprintf('%05d', $this->id);
+		return $this->belongsToMany(City::class, 'cities_promocodes', 'promocode_id', 'city_id')
+			->using(CityPromocode::class)
+			->withTimestamps();
 	}
 
 	public function format() {

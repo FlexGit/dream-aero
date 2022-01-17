@@ -1,14 +1,3 @@
-.event-close-btn {
-	position: absolute;
-	top: -3px;
-	right: -2px;
-	padding: 0 5px;
-	z-index: 9999;
-	color: #000;
-	font-weight: bold;
-	font-size: 16px;
-}
-
 .datepicker.datepicker-inline {
 	background-color: #fff;
 	width: auto;
@@ -43,7 +32,66 @@ table.fc-scrollgrid tbody {
 .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
 	min-height: auto;
 }
+.fc-timegrid-slots {
+	position: absolute !important;
+	height: 100%;
+}
+.fc-timegrid-slots table {
+	min-height: 100%;
+}
 .fc-timegrid-slot {
-	height: 0.1em !important;
+	height: 0.3em !important;
 	border-bottom: 0 !important;
+}
+.fc-scroller.fc-scroller-liquid-absolute {
+	overflow: hidden !important;
+}
+.fc-event-time {
+	color: #fff;
+}
+.fc-event-title {
+	color: #000;
+}
+.event-close-btn {
+	position: absolute;
+	top: 0;
+	right: -2px;
+	padding: 0 5px;
+	z-index: 9999;
+	color: #000;
+	font-weight: bold;
+	font-size: 20px;
+}
+.fc-icons {
+	float: left;
+}
+.material-icons {
+	font-size: 14px !important;
+	margin-right: 5px;
+	cursor: default;
+	color: lightgreen;
+}
+.material-icons:hover {
+	color: darkorange;
+}
+.tooltip > .tooltip-inner {
+	text-align: left;
+	line-height: 1.0em;
+	font-size: 13px;
+	max-width: 350px;
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #777;
+	padding: 8px 10px 0;
+	box-shadow: 2px 2px 4px 0 rgba(161, 161, 161, 1);
+}
+.tooltip .tooltip-inner .comment {
+	padding-bottom: 4px;
+}
+.tooltip .tooltip-inner .comment-sign {
+	border-top: 1px solid #777;
+	padding-top: 2px;
+	padding-bottom: 10px;
+	font-size: 11px;
+	text-align: right;
 }

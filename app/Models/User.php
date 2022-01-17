@@ -54,6 +54,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\City $city
+ * @property-read \App\Models\Location $location
  */
 class User extends Authenticatable
 {
@@ -61,11 +63,11 @@ class User extends Authenticatable
 
     const ROLE_SUPERADMIN = 'superadmin';
     const ROLE_ADMIN = 'admin';
-	const ROLE_MANAGER = 'manager';
+	/*const ROLE_MANAGER = 'manager';*/
     const ROLES = [
-    	self::ROLE_SUPERADMIN,
-		self::ROLE_ADMIN,
-		self::ROLE_MANAGER
+    	self::ROLE_SUPERADMIN => 'Суперадмин',
+		self::ROLE_ADMIN => 'Админ',
+		/*self::ROLE_MANAGER => 'Менеджер',*/
 	];
  
 	const ATTRIBUTES = [
@@ -134,5 +136,15 @@ class User extends Authenticatable
 	public function isSuperAdmin()
 	{
 		return $this->role == 'superadmin';
+	}
+	
+	public function city()
+	{
+		return $this->belongsTo(City::class, 'city_id', 'id');
+	}
+	
+	public function location()
+	{
+		return $this->belongsTo(Location::class, 'location_id', 'id');
 	}
 }

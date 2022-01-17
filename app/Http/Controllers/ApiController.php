@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DealPosition;
+use App\Models\Deal;
 use App\Models\Notification;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
@@ -25,8 +25,6 @@ use App\Models\ProductType;
 use App\Models\Product;
 use App\Models\Location;
 use App\Models\Promocode;
-use App\Models\Order;
-use App\Models\Deal;
 use App\Models\Score;
 use App\Models\Bill;
 use App\Models\Payment;
@@ -1142,8 +1140,8 @@ class ApiController extends Controller
 	 *				"price": 6300,
 	 *				"is_hit": false,
 	 * 				"is_unified": false,
-	 *				"is_order_allow": true,
-	 *				"is_certificate_allow": true,
+	 *				"is_booking_allow": true,
+	 *				"is_certificate_purchase_allow": true,
 	 *				"tariff_type": {
 	 *					"id": 1,
 	 *					"name": "Regular",
@@ -1251,8 +1249,8 @@ class ApiController extends Controller
 	 *			"price": 6300,
 	 *			"is_hit": false,
 	 *			"is_unified": false,
-	 *			"is_order_allow": true,
-	 *			"is_certificate_allow": true,
+	 *			"is_booking_allow": true,
+	 *			"is_certificate_purchase_allow": true,
 	 *			"tariff_type": {
 	 *				"id": 1,
 	 *				"name": "Regular",
@@ -1890,8 +1888,8 @@ class ApiController extends Controller
 	 *						"price": 6300,
 	 *						"is_hit": false,
 	 * 						"is_unified": false,
-	 *						"is_order_allow": true,
-	 *						"is_certificate_allow": true,
+	 *						"is_booking_allow": true,
+	 *						"is_certificate_purchase_allow": true,
 	 *						"tariff_type": {
 	 *							"id": 1,
 	 *							"name": "Regular",
@@ -1958,13 +1956,14 @@ class ApiController extends Controller
 		
 		/*$dealIds = Deal::where('contractor_id', $contractorId)
 			->pluck('id');*/
-		$dealPositions = DealPosition::whereRelation('deal', 'contractor_id', $contractorId)
-				->whereRelation('status', 'alias', '=', 'calendar');
-		$dealPositionIds = $dealPositions->pluck('id');
-		$dealPositions = $dealPositions->get();
+		$deals = Deal::where('contractor_id', $contractorId)
+				->whereRelation('event', 'event_type', '=', 'deal')
+				->whereRelation('event', 'stop_at', '<', Carbon::now());
+		$dealIds = $deals->pluck('id');
+		$deals = $deals->get();
 
 		$scores = Score::where('contractor_id', $contractorId)
-			->whereIn('deal_position_id', $dealPositionIds)
+			->whereIn('deal_id', $dealIds)
 			->get();
 
 		$scoreData = [];
@@ -1973,14 +1972,14 @@ class ApiController extends Controller
 		}
 		
 		$data = [];
-		foreach ($dealPositions as $dealPosition) {
+		foreach ($deals as $deal) {
 			$data[] = [
 				'flight' => [
-					'date' => Carbon::parse($dealPosition->flight_at)->format('Y-m-d'),
-					'time' => Carbon::parse($dealPosition->flight_at)->format('H:i'),
-					'tariff' =>  $dealPosition->product ? $dealPosition->product->format() : null,
-					'location' =>  $dealPosition->location ? $dealPosition->location->format() : null,
-					'score' =>  $scoreData[$dealPosition->id] ?? 0,
+					'date' => Carbon::parse($deal->flight_at)->format('Y-m-d'),
+					'time' => Carbon::parse($deal->flight_at)->format('H:i'),
+					'tariff' =>  $deal->product ? $deal->product->format() : null,
+					'location' =>  $deal->location ? $deal->location->format() : null,
+					'score' =>  $scoreData[$deal->id] ?? 0,
 				],
 			];
 		}
@@ -1989,7 +1988,7 @@ class ApiController extends Controller
 	}
 	
 	/**
-	 * Order create
+	 * Deal create
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam token string required No-example
@@ -1998,7 +1997,7 @@ class ApiController extends Controller
 	 * @bodyParam email string required No-example
 	 * @bodyParam product_id int required No-example
 	 * @bodyParam product_amount int required No-example
-	 * @bodyParam is_certificate_order bool required No-example
+	 * @bodyParam is_certificate_purchase bool required No-example
 	 * @bodyParam flight_date date No-example
 	 * @bodyParam flight_time time No-example
 	 * @bodyParam is_unified bool No-example
@@ -2009,24 +2008,12 @@ class ApiController extends Controller
 	 * @bodyParam comment string No-example
 	 * @response scenario=success {
 	 * 	"success": true,
-	 * 	"message": "Профиль успешно сохранен",
+	 * 	"message": "Заявка успешно создана",
 	 * 	"data": {
-	 * 		"order": {
+	 * 		"deal": {
 	 * 			"id": 1,
-	 * 			"name": "John",
-	 * 			"lastname": "Smith",
-	 * 			"email": "john.smith@gmail.com",
-	 * 			"phone": null,
-	 * 			"city_id": 1,
-	 *			"discount": {
-	 *				"value": 5,
-	 * 				"is_fixed": false
-	 *			},
-	 *			"birthdate": "1990-01-01",
-	 * 			"avatar_file_base64": null,
-	 * 			"flight_time": 100,
-	 * 			"score": 10000,
-	 * 			"status": "Золотой"
+	 * 			"number": "12345",
+	 * 			"status": "Создана",
 	 * 		}
 	 * 	}
 	 * }
@@ -2036,7 +2023,7 @@ class ApiController extends Controller
 	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
 	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
 	 */
-	public function createorder()
+	public function createDeal()
 	{
 		$authToken = $this->request->token ?? '';
 		if (!$authToken) {
@@ -2044,23 +2031,23 @@ class ApiController extends Controller
 		}
 		
 		$rules = [
-			'is_certificate_order' => ['required', 'boolean'],
+			'is_certificate_purchase' => ['required', 'boolean'],
 			'name' => ['required', 'min:3', 'max:50'],
 			'phone' => ['required', 'valid_phone'],
 			'email' => ['required', 'email'],
 			'product_id' => ['required', 'numeric'],
 			'product_amount' => ['required', 'numeric'],
-			'flight_date' => ['required_if:is_certificate_order,false', 'date', 'after_or_equal:' . date('Y-m-d')],
-			'flight_time' => ['required_if:is_certificate_order,false', 'date_format:H:i'],
-			'is_unified' => ['required_if:is_certificate_order,true', 'boolean'],
-			'location_id' => ['required_if:is_certificate_order,false', 'numeric'],
+			'flight_date' => ['required_if:is_certificate_purchase,false', 'date', 'after_or_equal:' . date('Y-m-d')],
+			'flight_time' => ['required_if:is_certificate_purchase,false', 'date_format:H:i'],
+			'is_unified' => ['required_if:is_certificate_purchase,true', 'boolean'],
+			'location_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
 			'promocode_id' => ['sometimes', 'required', 'numeric'],
-			'certificate_id' => ['sometimes', 'required_if:is_certificate_order,false', 'numeric'],
-			'certificate_whom' => ['required_if:is_certificate_order,true', 'min:3', 'max:50'],
+			'certificate_id' => ['sometimes', 'required_if:is_certificate_purchase,false', 'numeric'],
+			'certificate_whom' => ['required_if:is_certificate_purchase,true', 'min:3', 'max:50'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
-				'is_certificate_order' => 'Тип заявки',
+				'is_certificate_purchase' => 'Покупка сертификата',
 				'name' => 'Имя',
 				'phone' => 'Номер телефона',
 				'email' => 'E-mail',
@@ -2148,11 +2135,11 @@ class ApiController extends Controller
 		
 		$statusesData = HelpFunctions::getStatusesByType();
 		
-		if (!array_key_exists(Order::RECEIVED_STATUS, $statusesData['order'])) {
+		if (!array_key_exists(Deal::CREATED_STATUS, $statusesData['deal'])) {
 			return $this->responseError('Статус заявки не найден', 400);
 		}
 		
-		if ($this->request->certificate_id && !$this->request->is_certificate_order) {
+		if ($this->request->certificate_id && !$this->request->is_certificate_purchase) {
 			if (!array_key_exists(Certificate::CREATED_STATUS, $statusesData['certificate'])) {
 				return $this->responseError('Статус сертификата не найден', 400);
 			}
@@ -2188,85 +2175,54 @@ class ApiController extends Controller
 			\DB::beginTransaction();
 			
 			// создание сертификата
-			if ($this->request->is_certificate_order) {
+			if ($this->request->is_certificate_purchase) {
 				$certificate = new Certificate();
 				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
-				$certificate->contractor_id = $contractor->id;
-				$certificate->city_id = $city->id;
-				$certificate->product_id = $product->id;
 				$certificate->expire_at = Carbon::now()->addYear();
-				$certificate->is_unified = $this->request->is_certificate_order ? $this->request->is_unified : 0;
 				$certificate->save();
 			}
 			
-			// создание заявки
-			$order = new Order();
-			$order->status_id = $statusesData['order'][Order::RECEIVED_STATUS]['id'];
-			$order->contractor_id = $contractor->id;
-			$order->name = $this->request->name;
-			$order->phone = $this->request->phone;
-			$order->email = $this->request->email;
-			$order->city_id = $city->id;
-			$order->product_id = $product->id;
-			$order->amount = $productAmount ?? 0;
-			$order->duration = $product->duration ?? 0;
-			$order->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
-			$order->is_certificate_order = $this->request->is_certificate_order ?? 0;
-			$order->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
-			
-			$orderData = [];
-			if (!$this->request->is_certificate_order) {
-				$order->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
-				$order->flight_at = $flightDateCarbon->format('Y-m-d H:i');
-			} else {
-				$order->is_unified = $this->request->is_unified ?? 0;
-				$orderData['certificate_whom'] = $this->request->certificate_whom;
-			}
-			$orderData['comment'] = $this->request->comment;
-			$order->source = 'api';
-			$order->data_json = $orderData;
-			$order->save();
-
-			// регистрация сертификата
-			if ($this->request->certificate_id && !$this->request->is_certificate_order) {
+			// если это бронирование по ранее купленному сертификату, то регистрируем сертификат
+			if ($this->request->certificate_id && !$this->request->is_certificate_purchase) {
 				$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
 				$certificate->save();
 			}
 			
-			$dealData = [];
-			
 			// создание сделки
 			$deal = new Deal();
+			$deal->status_id = $statusesData['deal'][Deal::CREATED_STATUS]['id'];
 			$deal->contractor_id = $contractor->id;
+			$deal->name = $this->request->name;
+			$deal->phone = $this->request->phone;
+			$deal->email = $this->request->email;
+			$deal->product_id = $product->id;
+			$deal->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
+			$deal->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
+			$deal->is_certificate_purchase = $this->request->is_certificate_purchase ?? 0;
+			$deal->duration = $product->duration ?? 0;
+			$deal->amount = $productAmount ?? 0;
+			$deal->city_id = $city->id;
+			$deal->source = 'api';
+			$dealData['comment'] = $this->request->comment;
+			$dealData = [];
+			if (!$this->request->is_certificate_purchase) {
+				$deal->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
+				$deal->flight_at = $flightDateCarbon->format('Y-m-d H:i');
+			} else {
+				$deal->is_unified = $this->request->is_unified ?? 0;
+				$dealData['certificate_whom'] = $this->request->certificate_whom;
+			}
 			$deal->data_json = $dealData;
 			$deal->save();
 			
-			// создание позиции сделки
-			$dealPosition = new DealPosition();
-			$dealPosition->deal_id = $deal->id;
-			$dealPosition->status_id = $statusesData['deal'][DealPosition::CREATED_STATUS]['id'];
-			$dealPosition->order_id = $order->id;
-			$dealPosition->product_id = $product->id;
-			$dealPosition->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
-			$dealPosition->duration = $product->duration ?? 0;
-			$dealPosition->amount = $productAmount ?? 0;
-			$dealPosition->city_id = $city->id;
-			$dealPositionData = [];
-			if (!$this->request->is_certificate_order) {
-				$dealPosition->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
-				$dealPosition->flight_at = $flightDateCarbon->format('Y-m-d H:i');
-			}
-			$dealPositionData['comment'] = $this->request->comment;
-			$dealPosition->data_json = $dealPositionData;
-			$dealPosition->save();
-			
 			// создание счета
 			$bill = new Bill();
-			$bill->deal_id = $deal->id;
-			$bill->deal_position_id = $dealPosition->id;
 			$bill->status_id = $statusesData['bill'][Bill::NOT_PAYED_STATUS]['id'];
 			$bill->amount = $productAmount ?? 0;
 			$bill->save();
+			
+			// заполняем pivot
+			$deal->bills()->attach($bill->id);
 			
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -2277,12 +2233,12 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		//dispatch(new \App\Jobs\SendOrderEmail($order));
-		$job = new \App\Jobs\SendOrderEmail($order);
+		//dispatch(new \App\Jobs\SendDealEmail($deal));
+		$job = new \App\Jobs\SendDealEmail($deal);
 		$job->handle();
 		
 		$data = [
-			'order' => $order->format(),
+			'deal' => $deal->format(),
 		];
 		
 		return $this->responseSuccess('Заявка успешно создана', $data);

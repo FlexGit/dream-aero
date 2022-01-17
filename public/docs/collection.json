@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "b8f66e64-7766-4328-b7cd-561960290a4d",
+        "_postman_id": "59413f88-170e-4be4-994c-fc0cea506c03",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1193,7 +1193,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"laborum\"}"
+                            "raw": "{\"file_base64\":\"ratione\"}"
                         },
                         "description": ""
                     },
@@ -1535,79 +1535,6 @@
                     ]
                 },
                 {
-                    "name": "Order create",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "{{baseUrl}}",
-                            "path": "api\/order\/create",
-                            "query": [
-                                {
-                                    "key": "token",
-                                    "value": "",
-                                    "description": "",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/order\/create?token="
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_order\":null}"
-                        },
-                        "description": ""
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u041f\u0440\u043e\u0444\u0438\u043b\u044c \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\",\n\t\"data\": {\n\t\t\"order\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city_id\": 1,\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\"\n\t\t}\n\t}\n}",
-                            "name": "success"
-                        },
-                        {
-                            "header": [],
-                            "code": 400,
-                            "body": "{\"success\": false, \"error\": {\"email\": \"\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e \u0434\u043b\u044f \u0437\u0430\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f\"}, \"debug\": null}",
-                            "name": "Bad Request"
-                        },
-                        {
-                            "header": [],
-                            "code": 400,
-                            "body": "{\"success\": false, \"error\": \"\u041d\u0435\u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u0439 Api-\u043a\u043b\u044e\u0447\", \"debug\": null}",
-                            "name": "Bad Request"
-                        },
-                        {
-                            "header": [],
-                            "code": 404,
-                            "body": "{\"success\": false, \"error\": \"\u0420\u0435\u0441\u0443\u0440\u0441 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\", \"debug\": \"<app_url>\/api\/<method>\"}",
-                            "name": "Resource Not Found"
-                        },
-                        {
-                            "header": [],
-                            "code": 405,
-                            "body": "{\"success\": false, \"error\": \"\u041c\u0435\u0442\u043e\u0434 \u043d\u0435 \u0440\u0430\u0437\u0440\u0435\u0448\u0435\u043d\", \"debug\": \"<app_url>\/api\/<method>\"}",
-                            "name": "Method Not Allowed"
-                        },
-                        {
-                            "header": [],
-                            "code": 500,
-                            "body": "{\"success\": false, \"error\": \"\u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u044f\u044f \u043e\u0448\u0438\u0431\u043a\u0430\", \"debug\": \"<app_url>\/api\/<method>\"}",
-                            "name": "Internal Server Error"
-                        }
-                    ]
-                },
-                {
                     "name": "Code verify",
                     "request": {
                         "url": {
@@ -1866,6 +1793,79 @@
                             "code": 200,
                             "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"notification\": {\n\t\t\"id\": 1,\n\t\t\"title\": \"\u0417\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a \u0443\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u044f\",\n\t\t\"description\": \"\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0443\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u044f\",\n\t\t\"is_new\": true,\n\t\t\t\"created_at\": \"Y-m-d H:i:s\",\n\t\t\t\"updated_at\": \"Y-m-d H:i:s\"\n\t\t}\n\t}\n}",
                             "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\"success\": false, \"error\": \"\u041d\u0435\u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u0439 Api-\u043a\u043b\u044e\u0447\", \"debug\": null}",
+                            "name": "Bad Request"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"success\": false, \"error\": \"\u0420\u0435\u0441\u0443\u0440\u0441 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\", \"debug\": \"<app_url>\/api\/<method>\"}",
+                            "name": "Resource Not Found"
+                        },
+                        {
+                            "header": [],
+                            "code": 405,
+                            "body": "{\"success\": false, \"error\": \"\u041c\u0435\u0442\u043e\u0434 \u043d\u0435 \u0440\u0430\u0437\u0440\u0435\u0448\u0435\u043d\", \"debug\": \"<app_url>\/api\/<method>\"}",
+                            "name": "Method Not Allowed"
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\"success\": false, \"error\": \"\u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u044f\u044f \u043e\u0448\u0438\u0431\u043a\u0430\", \"debug\": \"<app_url>\/api\/<method>\"}",
+                            "name": "Internal Server Error"
+                        }
+                    ]
+                },
+                {
+                    "name": "Deal create",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "{{baseUrl}}",
+                            "path": "api\/deal\/create",
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "",
+                                    "description": "",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "http:\/\/{{baseUrl}}\/api\/deal\/create?token="
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0417\u0430\u044f\u0432\u043a\u0430 \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0437\u0434\u0430\u043d\u0430\",\n\t\"data\": {\n\t\t\"deal\": {\n\t\t\t\"id\": 1,\n\t\t\t\"number\": \"12345\",\n\t\t\t\"status\": \"\u0421\u043e\u0437\u0434\u0430\u043d\u0430\",\n\t\t}\n\t}\n}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\"success\": false, \"error\": {\"email\": \"\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e \u0434\u043b\u044f \u0437\u0430\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f\"}, \"debug\": null}",
+                            "name": "Bad Request"
                         },
                         {
                             "header": [],

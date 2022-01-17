@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Promo;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,6 +28,30 @@ class CreatePromosTable extends Migration
             $table->timestamps();
 			$table->softDeletes();
         });
+		
+		$items = [];
+		
+		$items[] = [
+			'name' => 'День рождения',
+		];
+		$items[] = [
+			'name' => 'От руководителя',
+		];
+		$items[] = [
+			'name' => 'Сотрудник',
+		];
+		$items[] = [
+			'name' => 'Инвалид',
+		];
+		$items[] = [
+			'name' => 'Черная пятница',
+		];
+
+		foreach ($items as $item) {
+			$promo = new Promo();
+			$promo->name = $item['name'];
+			$promo->save();
+		}
     }
 
     /**

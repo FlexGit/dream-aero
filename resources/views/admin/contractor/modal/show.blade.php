@@ -24,11 +24,11 @@
 		</tr>
 		<tr class="odd">
 			<td>Город</td>
-			<td>{{ $contractor->city->name }}</td>
+			<td>{{ $contractor->city ? $contractor->city->name : '' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Скидка</td>
-			<td>{{ $contractor->discount }}</td>
+			<td>{{ $contractor->discount ? $contractor->discount->valueFormatted() : '' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Активность</td>

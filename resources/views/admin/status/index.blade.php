@@ -21,17 +21,24 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<table id="statusTable" class="table table-hover table-sm table-bordered table-striped">
+					<div class="table-filter d-sm-flex mb-2">
+						<div class="form-group">
+							<label for="filter_status_type_id">Сущность</label>
+							<select class="form-control" id="filter_status_type_id" name="filter_status_type_id">
+								<option value="0">Все</option>
+								@foreach($statusTypes ?? [] as $statusTypeAlias => $statusTypeName)
+									<option value="{{ $statusTypeAlias }}">{{ $statusTypeName }}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+					<table id="statusTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							{{--<th class="text-center">#</th>--}}
-							<th class="text-center">Сущность</th>
 							<th class="text-center">Наименование</th>
-							{{--<th class="text-center d-none d-sm-table-cell">Алиас</th>--}}
+							<th class="text-center">Сущность</th>
+							<th class="text-center d-none d-sm-table-cell">Алиас</th>
 							<th class="text-center d-none d-md-table-cell">Дополнительная информация</th>
-							{{--<th class="text-center d-none d-xl-table-cell">Активность</th>
-							<th class="text-center d-none d-xl-table-cell">Создано</th>
-							<th class="text-center d-none d-xl-table-cell">Изменено</th>--}}
 							<th class="text-center"></th>
 						</tr>
 						</thead>
@@ -39,6 +46,26 @@
 						</tbody>
 					</table>
 				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalLabel">Редактирование</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="status">
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+						<button type="submit" class="btn btn-primary">Подтвердить</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -55,22 +82,109 @@
 	<script>
 		$(function() {
 			function getList() {
+				var $selector = $('#statusTable tbody');
+
+				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+
 				$.ajax({
 					url: '{{ route('statusList') }}',
 					type: 'GET',
 					dataType: 'json',
+					data: {
+						"filter_status_type_id": $('#filter_status_type_id').val(),
+					},
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
 						}
 
-						$('#statusTable tbody').html(result.html);
+						if (result.html) {
+							$selector.html(result.html);
+						} else {
+							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+						}
 					}
 				})
 			}
 
 			getList();
+
+			$(document).on('click', '[data-url]', function(e) {
+				e.preventDefault();
+
+				var url = $(this).data('url'),
+					action = $(this).data('action'),
+					method = $(this).data('method'),
+					title = $(this).data('title');
+
+				if (!url) {
+					toastr.error('Некорректные параметры');
+					return null;
+				}
+
+				$('.modal .modal-title, .modal .modal-body').empty();
+
+				$.ajax({
+					url: url,
+					type: 'GET',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						if (action && method) {
+							$('#modal form').attr('action', action).attr('method', method);
+							$('button[type="submit"]').show();
+						} else {
+							$('button[type="submit"]').hide();
+						}
+						$('#modal .modal-title').text(title);
+						$('#modal .modal-body').html(result.html);
+						$('#modal').modal('show');
+					}
+				});
+			});
+
+			$(document).on('submit', '#status', function(e) {
+				e.preventDefault();
+
+				var action = $(this).attr('action'),
+					method = $(this).attr('method'),
+					data = $(this).serializeArray();
+
+				$.ajax({
+					url: action,
+					type: method,
+					data: data,
+					success: function(result) {
+						console.log(result);
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						var msg = 'Статус успешно ';
+						if (method === 'POST') {
+							msg += 'добавлен';
+						} else if (method === 'PUT') {
+							msg += 'изменен';
+						} else if (method === 'DELETE') {
+							msg += 'удален';
+						}
+
+						$('#modal').modal('hide');
+						getList();
+						toastr.success(msg);
+					}
+				});
+			});
+
+			$(document).on('change', '#filter_status_type_id', function(e) {
+				getList();
+			});
 		});
 	</script>
 @stop

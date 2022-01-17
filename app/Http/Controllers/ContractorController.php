@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Status;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Validator;
 
@@ -26,7 +26,10 @@ class ContractorController extends Controller
 	 */
 	public function index()
 	{
-		$cities = City::orderBy('name')
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
 			->get();
 
 		return view('admin.contractor.index', [
@@ -39,16 +42,34 @@ class ContractorController extends Controller
 	 */
 	public function getListAjax()
 	{
-		$contractors = Contractor::with(['city'])
-		->orderBy('city_id', 'asc')
-		->orderBy('name', 'asc');
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$id = $this->request->id ?? 0;
+		
+		$contractors = Contractor::orderBy('created_at', 'desc');
 		if ($this->request->filter_city_id) {
 			$contractors = $contractors->where('city_id', $this->request->filter_city_id);
 		}
-		$contractors = $contractors->get();
+		if ($this->request->search_contractor) {
+			$contractors = $contractors->where(function ($query) {
+				$query->where('name', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%');
+			});
+		}
+		if ($id) {
+			$contractors = $contractors->where('id', '<', $id);
+		}
+		$contractors = $contractors->limit(20)->get();
 		
+		$statuses = Status::where('is_active', true)
+			->get();
+
 		$VIEW = view('admin.contractor.list', [
-			'contractors' => $contractors
+			'contractors' => $contractors,
+			'statuses' => $statuses,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -60,12 +81,25 @@ class ContractorController extends Controller
 	 */
 	public function edit($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
 		$contractor = Contractor::find($id);
-		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
-
-		return view('admin.contractor.modal.edit', [
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрганет не найден']);
+		
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->get();
+		
+		$VIEW = view('admin.contractor.modal.edit', [
 			'contractor' => $contractor,
+			'cities' => $cities,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -73,7 +107,21 @@ class ContractorController extends Controller
 	 */
 	public function add()
 	{
-		return view('admin.contractor.modal.add');
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->get();
+		
+		$VIEW = view('admin.contractor.modal.add', [
+			'cities' => $cities,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -81,19 +129,23 @@ class ContractorController extends Controller
 	 */
 	public function store()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
 		$rules = [
 			'name' => 'required|min:3|max:50',
-			'email' => 'required|email',
+			'email' => 'required|email|unique_email',
+			'phone' => 'required|valid_phone',
 			'city_id' => 'required|numeric',
-			'discount' => 'required|numeric',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Имя',
 				'email' => 'E-mail',
+				'phone' => 'Телефон',
 				'city_id' => 'Город',
-				'discount' => 'Скидка',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -103,16 +155,24 @@ class ContractorController extends Controller
 		
 		$contractor = new Contractor();
 		$contractor->name = $this->request->name;
+		if ($this->request->lastname) {
+			$contractor->lastname = $this->request->lastname;
+		}
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
-		$contractor->discount = $this->request->discount;
+		if ($this->request->birthdate) {
+			$contractor->birthdate = $this->request->birthdate;
+		}
+		$contractor->source = Contractor::ADMIN_SOURCE;
+		$contractor->is_active = (bool)$this->request->is_active;
+		$contractor->is_subscribed = (bool)$this->request->is_subscribed;
 		$contractor->data_json = $data;
 		if (!$contractor->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $contractor->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -121,22 +181,26 @@ class ContractorController extends Controller
 	 */
 	public function update($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
 		$contractor = Contractor::find($id);
-		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 		
 		$rules = [
 			'name' => 'required|min:3|max:50',
-			'email' => 'required|email',
+			'email' => 'required|email|unique_email',
+			'phone' => 'required|valid_phone',
 			'city_id' => 'required|numeric',
-			'discount' => 'required|numeric',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Имя',
 				'email' => 'E-mail',
+				'phone' => 'Телефон',
 				'city_id' => 'Город',
-				'discount' => 'Скидка',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -145,16 +209,23 @@ class ContractorController extends Controller
 		$data = [];
 		
 		$contractor->name = $this->request->name;
+		if ($this->request->lastname) {
+			$contractor->lastname = $this->request->lastname;
+		}
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
-		$contractor->discount = $this->request->discount;
+		if ($this->request->birthdate) {
+			$contractor->birthdate = $this->request->birthdate;
+		}
+		$contractor->is_active = (bool)$this->request->is_active;
+		$contractor->is_subscribed = (bool)$this->request->is_subscribed;
 		$contractor->data_json = $data;
 		if (!$contractor->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $contractor->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	public function search() {
@@ -174,11 +245,14 @@ class ContractorController extends Controller
 		
 		$suggestions = [];
 		foreach ($contractors as $contractor) {
-			$data_json = $contractor->data_json;
 			$suggestions[] = [
 				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . ']',
 				'id' => $contractor->id,
-				'data' => $data_json,
+				'data' => [
+					'name' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : ''),
+					'email' => $contractor->email ?? '',
+					'phone' => $contractor->phone ?? '',
+				],
 			];
 		}
 		

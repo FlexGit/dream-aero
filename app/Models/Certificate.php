@@ -12,19 +12,15 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * App\Models\Certificate
  *
  * @property int $id
- * @property string $number номер сертификата
+ * @property string|null $number номер
  * @property int $status_id статус
- * @property int $contractor_id контрагент
- * @property int $product_id продукт
- * @property int $city_id город
  * @property \datetime|null $expire_at срок окончания действия сертификата
  * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \App\Models\City|null $city
- * @property-read \App\Models\Contractor|null $contractor
- * @property-read \App\Models\Product|null $product
+ * @property string|null $uuid
+ * @property-read \App\Models\Deal $deal
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @property-read \App\Models\Status|null $status
@@ -32,22 +28,18 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate newQuery()
  * @method static \Illuminate\Database\Query\Builder|Certificate onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate query()
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereCityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereContractorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereExpireAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereUuid($value)
  * @method static \Illuminate\Database\Query\Builder|Certificate withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Certificate withoutTrashed()
  * @mixin \Eloquent
- * @property bool $is_unified сертификат действует во всех городах
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereIsUnified($value)
  */
 class Certificate extends Model
 {
@@ -56,21 +48,18 @@ class Certificate extends Model
 	const ATTRIBUTES = [
 		'number' => 'Номер',
 		'status_id' => 'Статус',
-		'contractor_id' => 'Контрагент',
-		'product_id' => 'Продукт',
-		'city_id' => 'Город',
+		'uuid' => 'Uuid',
 		'expire_at' => 'Срок окончания действия',
-		'is_unified' => 'Единый сертификат',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
 	];
 	
-	const CREATED_STATUS = 'created';
-	const REGISTERED_STATUS = 'registered';
-	const RETURNED_STATUS = 'returned';
-	const CANCELED_STATUS = 'canceled';
+	const CREATED_STATUS = 'certificate_created';
+	const REGISTERED_STATUS = 'certificate_registered';
+	const RETURNED_STATUS = 'certificate_returned';
+	const CANCELED_STATUS = 'certificate_canceled';
 	const STATUSES = [
 		self::CREATED_STATUS,
 		self::REGISTERED_STATUS,
@@ -89,11 +78,8 @@ class Certificate extends Model
 	protected $fillable = [
 		'number',
 		'status_id',
-		'contractor_id',
-		'product_id',
-		'city_id',
+		'uuid',
 		'expire_at',
-		'is_unified',
 		'data_json',
 	];
 	
@@ -108,7 +94,6 @@ class Certificate extends Model
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
 		'expire_at' => 'datetime:Y-m-d H:i:s',
 		'data_json' => 'array',
-		'is_unified' => 'boolean',
 	];
 	
 	public static function boot() {
@@ -116,28 +101,19 @@ class Certificate extends Model
 		
 		Certificate::created(function (Certificate $certificate) {
 			$certificate->number = $certificate->generateNumber();
+			$certificate->uuid = $certificate->generateUuid();
 			$certificate->save();
 		});
 	}
 	
 	public function status()
 	{
-		return $this->hasOne('App\Models\Status', 'id', 'status_id');
+		return $this->hasOne(Status::class, 'id', 'status_id');
 	}
 	
-	public function contractor()
+	public function deal()
 	{
-		return $this->hasOne('App\Models\Contractor', 'id', 'contractor_id');
-	}
-	
-	public function product()
-	{
-		return $this->hasOne('App\Models\Product', 'id', 'product_id');
-	}
-	
-	public function city()
-	{
-		return $this->hasOne('App\Models\City', 'id', 'city_id');
+		return $this->belongsTo(Deal::class, 'certificate_id', 'id');
 	}
 	
 	/**
@@ -145,10 +121,19 @@ class Certificate extends Model
 	 */
 	public function generateNumber()
 	{
-		$alias = $this->is_unified ? 'uni' : ($this->city ? mb_strtolower($this->city->alias) : '');
-		$productTypeAlias = ($this->product && $this->product->productType) ? mb_strtoupper(substr($this->product->productType->alias, 0, 1)) : '';
-		$productDuration = $this->product ? $this->product->duration : '';
+		$alias = $this->deal->is_unified ? 'uni' : ($this->deal->city ? mb_strtolower($this->deal->city->alias) : '');
+		$productTypeAlias = ($this->deal->product && $this->deal->product->productType) ? mb_strtoupper(substr($this->deal->product->productType->alias, 0, 1)) : '';
+		$productDuration = $this->deal->product ? $this->deal->product->duration : '';
 		
 		return 'C' . date('y') . $alias . $productTypeAlias . $productDuration  . sprintf('%05d', $this->id);
+	}
+	
+	/**
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function generateUuid()
+	{
+		return (string)\Webpatser\Uuid\Uuid::generate();
 	}
 }

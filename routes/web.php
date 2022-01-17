@@ -1,24 +1,36 @@
 <?php
 
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PricingController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LegalEntityController;
-use App\Http\Controllers\FlightSimulatorTypeController;
 use App\Http\Controllers\FlightSimulatorController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ContractorController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DealController;
 use App\Http\Controllers\DiscountController;
-use App\Http\Controllers\AccessRightController;
+use App\Http\Controllers\PromocodeController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\PayController;
+use App\Http\Controllers\WikiController;
 use App\Http\Controllers\RevisionController;
+
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,15 +43,76 @@ use App\Http\Controllers\RevisionController;
 |
 */
 
-Auth::routes(['register' => false]);
+//Auth::routes(['register' => false]);
 
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
+	// Авторизация
+	/*Route::get('/register', [RegisteredUserController::class, 'create'])
+		->middleware('guest')
+		->name('register');
+	
+	Route::post('/register', [RegisteredUserController::class, 'store'])
+		->middleware('guest');*/
+	
+	Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+		->middleware('guest')
+		->name('login');
+	
+	Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+		->middleware('guest');
+	
+	Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+		->middleware('guest')
+		->name('password.request');
+	
+	Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+		->middleware('guest')
+		->name('password.email');
+	
+	Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+		->middleware('guest')
+		->name('password.reset');
+	
+	Route::post('/reset-password', [NewPasswordController::class, 'store'])
+		->middleware('guest')
+		->name('password.update');
+	
+	Route::get('/verify-email', [EmailVerificationPromptController::class, '__invoke'])
+		->middleware('auth')
+		->name('verification.notice');
+	
+	Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+		->middleware(['auth', 'signed', 'throttle:6,1'])
+		->name('verification.verify');
+	
+	Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+		->middleware(['auth', 'throttle:6,1'])
+		->name('verification.send');
+	
+	Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])
+		->middleware('auth')
+		->name('password.confirm');
+	
+	Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store'])
+		->middleware('auth');
+	
+	Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+		->middleware('auth')
+		->name('logout');
+
 	Route::group(['middleware' => ['auth']], function () {
 		// Очистка тестовых данных
-		Route::get('/clear', [HomeController::class, 'clear'])->name('clear');
+		Route::get('/clear', [EventController::class, 'clear'])->name('clear');
 		
-		// Календарь
-		Route::get('/', [HomeController::class, 'home'])->name('home');
+		// События
+		Route::get('/', [EventController::class, 'index'])->name('eventIndex');
+		Route::get('event/list/ajax', [EventController::class, 'getListAjax'])->name('eventList');
+		Route::post('event', [EventController::class, 'store'])->name('store-event');
+		Route::put('event/{id}', [EventController::class, 'update'])->name('update-event');
+
+		Route::get('event/add', [EventController::class, 'add'])->name('add-event');
+		Route::get('event/{id}/edit', [EventController::class, 'edit'])->name('edit-event');
+		Route::get('event/{id}/show', [EventController::class, 'show'])->name('show-event');
 		
 		// Сделки
 		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
@@ -50,40 +123,73 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('deal/add', [DealController::class, 'add']);
 		Route::get('deal/{id}/edit', [DealController::class, 'edit']);
 		Route::get('deal/{id}/show', [DealController::class, 'show']);
+		
+		Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
 
 		// Заявки
-		Route::get('order', [OrderController::class, 'index'])->name('orderIndex');
+		/*Route::get('order', [OrderController::class, 'index'])->name('orderIndex');
 		Route::get('order/list/ajax', [OrderController::class, 'getListAjax'])->name('orderList');
 		Route::post('order', [OrderController::class, 'store']);
 		Route::put('order/{id}', [OrderController::class, 'update']);
 		
 		Route::get('order/add', [OrderController::class, 'add']);
 		Route::get('order/{id}/edit', [OrderController::class, 'edit']);
-		Route::get('order/{id}/show', [OrderController::class, 'show']);
+		Route::get('order/{id}/show', [OrderController::class, 'show']);*/
 		
 		// Сертификаты
-		Route::get('certificate', [CertificateController::class, 'index'])->name('certificateIndex');
-		Route::get('certificate/list/ajax', [CertificateController::class, 'getListAjax'])->name('certificateList');
 		Route::post('certificate', [CertificateController::class, 'store']);
 		Route::put('certificate/{id}', [CertificateController::class, 'update']);
 		
-		Route::get('certificate/add', [CertificateController::class, 'add']);
+		Route::get('certificate/{deal_id}/add', [CertificateController::class, 'add']);
 		Route::get('certificate/{id}/edit', [CertificateController::class, 'edit']);
-		Route::get('certificate/{id}/show', [CertificateController::class, 'show']);
 		
 		// Контрагенты
+		Route::get('contractor/add', [ContractorController::class, 'add']);
+		Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
+		/*Route::get('contractor/{id}/show', [ContractorController::class, 'show']);*/
+
 		Route::get('contractor', [ContractorController::class, 'index'])->name('contractorIndex');
 		Route::get('contractor/list/ajax', [ContractorController::class, 'getListAjax'])->name('contractorList');
 		Route::post('contractor', [ContractorController::class, 'store']);
 		Route::post('contractor/search', [ContractorController::class, 'search'])->name('contractorSearch');
 		Route::put('contractor/{id}', [ContractorController::class, 'update']);
 		
-		Route::get('contractor/add', [ContractorController::class, 'add']);
-		Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
-		Route::get('contractor/{id}/show', [ContractorController::class, 'show']);
-		
 		// Скидки
 		Route::get('discount', [DiscountController::class, 'index'])->name('discountIndex');
+		Route::get('discount/list/ajax', [DiscountController::class, 'getListAjax'])->name('discountList');
+		
+		Route::post('discount', [DiscountController::class, 'store']);
+		Route::put('discount/{id}', [DiscountController::class, 'update']);
+		Route::delete('discount/{id}', [DiscountController::class, 'delete']);
+		
+		Route::get('discount/add', [DiscountController::class, 'add']);
+		Route::get('discount/{id}/edit', [DiscountController::class, 'edit']);
+		Route::get('discount/{id}/delete', [DiscountController::class, 'confirm']);
+		Route::get('discount/{id}/show', [DiscountController::class, 'show']);
+		
+		// Промокоды
+		Route::get('promocode', [PromocodeController::class, 'index'])->name('promocodeIndex');
+		Route::get('promocode/list/ajax', [PromocodeController::class, 'getListAjax'])->name('promocodeList');
+		
+		Route::post('promocode', [PromocodeController::class, 'store']);
+		Route::put('promocode/{id}', [PromocodeController::class, 'update']);
+		Route::delete('promocode/{id}', [PromocodeController::class, 'delete']);
+		
+		Route::get('promocode/add', [PromocodeController::class, 'add']);
+		Route::get('promocode/{id}/edit', [PromocodeController::class, 'edit']);
+		Route::get('promocode/{id}/delete', [PromocodeController::class, 'confirm']);
+		Route::get('promocode/{id}/show', [PromocodeController::class, 'show']);
+
+		// Цены
+		Route::get('pricing', [PricingController::class, 'index'])->name('pricingIndex');
+		Route::get('pricing/list/ajax', [PricingController::class, 'getListAjax'])->name('pricingList');
+		
+		Route::put('pricing/{city_id}/{product_id}', [PricingController::class, 'update']);
+		Route::delete('pricing/{city_id}/{product_id}', [PricingController::class, 'delete']);
+		
+		Route::get('pricing/{city_id}/{product_id}/edit', [PricingController::class, 'edit']);
+		Route::get('pricing/{city_id}/{product_id}/delete', [PricingController::class, 'confirm']);
+		Route::get('pricing/{city_id}/{product_id}/show', [PricingController::class, 'show']);
 		
 		// Города
 		Route::get('city', [CityController::class, 'index'])->name('cityIndex');
@@ -111,6 +217,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('location/add', [LocationController::class, 'add']);
 		Route::get('location/{id}/edit', [LocationController::class, 'edit']);
 		Route::get('location/{id}/delete', [LocationController::class, 'confirm']);
+		Route::get('location/{id}/show', [LocationController::class, 'show']);
 
 		// Юр.лица
 		Route::get('legal_entity', [LegalEntityController::class, 'index'])->name('legalEntityIndex');
@@ -123,20 +230,9 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('legal_entity/add', [LegalEntityController::class, 'add']);
 		Route::get('legal_entity/{id}/edit', [LegalEntityController::class, 'edit']);
 		Route::get('legal_entity/{id}/delete', [LegalEntityController::class, 'confirm']);
+		Route::get('legal_entity/{id}/show', [LegalEntityController::class, 'show']);
 
 		// Типы авиатренажеров
-		Route::get('flight_simulator_type', [FlightSimulatorTypeController::class, 'index'])->name('flightSimulatorTypeIndex');
-		Route::get('flight_simulator_type/list/ajax', [FlightSimulatorTypeController::class, 'getListAjax'])->name('flightSimulatorTypeList');
-
-		Route::post('flight_simulator_type', [FlightSimulatorTypeController::class, 'store']);
-		Route::put('flight_simulator_type/{id}', [FlightSimulatorTypeController::class, 'update']);
-		Route::delete('flight_simulator_type/{id}', [FlightSimulatorTypeController::class, 'delete']);
-
-		Route::get('flight_simulator_type/add', [FlightSimulatorTypeController::class, 'add']);
-		Route::get('flight_simulator_type/{id}/edit', [FlightSimulatorTypeController::class, 'edit']);
-		Route::get('flight_simulator_type/{id}/delete', [FlightSimulatorTypeController::class, 'confirm']);
-
-		// Авиатренажеры
 		Route::get('flight_simulator', [FlightSimulatorController::class, 'index'])->name('flightSimulatorIndex');
 		Route::get('flight_simulator/list/ajax', [FlightSimulatorController::class, 'getListAjax'])->name('flightSimulatorList');
 
@@ -147,6 +243,19 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('flight_simulator/add', [FlightSimulatorController::class, 'add']);
 		Route::get('flight_simulator/{id}/edit', [FlightSimulatorController::class, 'edit']);
 		Route::get('flight_simulator/{id}/delete', [FlightSimulatorController::class, 'confirm']);
+		Route::get('flight_simulator/{id}/show', [FlightSimulatorController::class, 'show']);
+
+		// Авиатренажеры
+		/*Route::get('flight_simulator', [FlightSimulatorController::class, 'index'])->name('flightSimulatorIndex');
+		Route::get('flight_simulator/list/ajax', [FlightSimulatorController::class, 'getListAjax'])->name('flightSimulatorList');
+
+		Route::post('flight_simulator', [FlightSimulatorController::class, 'store']);
+		Route::put('flight_simulator/{id}', [FlightSimulatorController::class, 'update']);
+		Route::delete('flight_simulator/{id}', [FlightSimulatorController::class, 'delete']);
+
+		Route::get('flight_simulator/add', [FlightSimulatorController::class, 'add']);
+		Route::get('flight_simulator/{id}/edit', [FlightSimulatorController::class, 'edit']);
+		Route::get('flight_simulator/{id}/delete', [FlightSimulatorController::class, 'confirm']);*/
 
 		// Типы продуктов
 		Route::get('product_type', [ProductTypeController::class, 'index'])->name('productTypeIndex');
@@ -159,6 +268,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('product_type/add', [ProductTypeController::class, 'add'])->name('productTypeAdd');
 		Route::get('product_type/{id}/edit', [ProductTypeController::class, 'edit']);
 		Route::get('product_type/{id}/delete', [ProductTypeController::class, 'confirm']);
+		Route::get('product_type/{id}/show', [ProductTypeController::class, 'show']);
 		
 		// Продукты
 		Route::get('product', [ProductController::class, 'index'])->name('productIndex');
@@ -177,19 +287,61 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('status', [StatusController::class, 'index'])->name('statusIndex');
 		Route::get('status/list/ajax', [StatusController::class, 'getListAjax'])->name('statusList');
 		
-		// Права доступа
-		/*Route::get('access_right', [AccessRightController::class, 'index'])->name('accessRightIndex');*/
+		Route::put('status/{id}', [StatusController::class, 'update']);
 		
+		Route::get('status/{id}/edit', [StatusController::class, 'edit']);
+		Route::get('status/{id}/show', [StatusController::class, 'show']);
+		
+		// Способы оплаты
+		Route::get('payment_method', [PaymentMethodController::class, 'index'])->name('paymentMethodIndex');
+		Route::get('payment_method/list/ajax', [PaymentMethodController::class, 'getListAjax'])->name('paymentMethodList');
+		
+		Route::post('payment_method', [PaymentMethodController::class, 'store']);
+		Route::put('payment_method/{id}', [PaymentMethodController::class, 'update']);
+		Route::delete('payment_method/{id}', [PaymentMethodController::class, 'delete']);
+		
+		Route::get('payment_method/add', [PaymentMethodController::class, 'add']);
+		Route::get('payment_method/{id}/edit', [PaymentMethodController::class, 'edit']);
+		Route::get('payment_method/{id}/delete', [PaymentMethodController::class, 'confirm']);
+		Route::get('payment_method/{id}/show', [PaymentMethodController::class, 'show']);
+		
+		// Пользователи
+		Route::get('user', [UserController::class, 'index'])->name('userIndex');
+		Route::get('user/list/ajax', [UserController::class, 'getListAjax'])->name('userList');
+		
+		Route::post('user', [UserController::class, 'store']);
+		Route::put('user/{id}', [UserController::class, 'update']);
+		Route::delete('user/{id}', [UserController::class, 'delete']);
+		
+		Route::get('user/add', [UserController::class, 'add']);
+		Route::get('user/{id}/edit', [UserController::class, 'edit']);
+		Route::get('user/{id}/delete', [UserController::class, 'confirm']);
+		Route::get('user/{id}/show', [UserController::class, 'show']);
+		
+		Route::post('user/{id}/password/reset/notification', [UserController::class, 'passwordResetNotification'])->name('passwordResetNotification');
+
 		// Лог операций
 		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
 		Route::get('log/{entity?}/{object_id?}', [RevisionController::class, 'index'])->name('revisionIndex');
 		
+		// Счета
+		Route::post('bill', [BillController::class, 'store']);
+		Route::put('bill/{id}', [BillController::class, 'update']);
+
+		Route::get('bill/{deal_id}/add', [BillController::class, 'add']);
+		Route::get('bill/{id}/edit', [BillController::class, 'edit']);
+		
+		Route::post('bill/paylink/send', [BillController::class, 'sendPayLink'])->name('sendPayLink');
+
 		// Payments
-		Route::get('pay/request/{id}/{city_id}', [PayController::class, 'sendPayRequest'])->name('sendPayRequest');
+		/*Route::get('pay/request/{id}/{city_id}', [PayController::class, 'sendPayRequest'])->name('sendPayRequest');
 		Route::get('pay/success', [PayController::class, 'paySuccess'])->name('successPay');
 		Route::get('pay/fail', [PayController::class, 'payFail'])->name('failPay');
 		Route::get('pay/return', [PayController::class, 'payReturn'])->name('returnPay');
-		Route::get('pay/callback', [PayController::class, 'payCallback'])->name('callbackPay');
+		Route::get('pay/callback', [PayController::class, 'payCallback'])->name('callbackPay');*/
+		
+		// Wiki
+		Route::get('wiki', [WikiController::class, 'index'])->name('wikiIndex');
 	});
 });
 
@@ -199,12 +351,14 @@ Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 	Route::get('/virtualt', [MainController::class, 'virtualTour']);
 	Route::get('/contacts', [MainController::class, 'contacts']);
 	Route::get('/price', [MainController::class, 'price']);
+	
+	Route::get('/pay/{uuid}', [MainController::class, 'payLink']);
 });
 
 Route::domain(env('DOMAIN_EN', 'dream.aero'))->group(function () {
 	Route::get('/', [MainController::class, 'en/home']);
 });
 
-/*Route::fallback(function () {
+Route::fallback(function () {
 	abort(404);
-});*/
+});

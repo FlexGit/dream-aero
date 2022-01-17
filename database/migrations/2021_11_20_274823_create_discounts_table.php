@@ -16,7 +16,7 @@ class CreateDiscountsTable extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->string('value')->comment('размер скидки');
+            $table->integer('value')->nullable()->comment('размер скидки');
 			$table->boolean('is_fixed')->default(true)->index()->comment('фиксированная скидка');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();

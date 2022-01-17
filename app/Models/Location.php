@@ -48,6 +48,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Location withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Location withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FlightSimulator[] $simulators
+ * @property-read int|null $simulators_count
  */
 class Location extends Model
 {
@@ -107,24 +109,26 @@ class Location extends Model
 
 	public function city()
 	{
-		return $this->belongsTo('App\Models\City', 'city_id', 'id');
+		return $this->belongsTo(City::class, 'city_id', 'id');
 	}
 	
 	public function legalEntity()
 	{
-		return $this->belongsTo('App\Models\LegalEntity', 'legal_entity_id', 'id');
+		return $this->belongsTo(LegalEntity::class, 'legal_entity_id', 'id');
 	}
 
-	public function simulator()
+	public function simulators()
 	{
-		return $this->hasMany('App\Models\FlightSimulator', 'location_id', 'id');
+		return $this->belongsToMany(FlightSimulator::class, 'locations_flight_simulators', 'location_id', 'flight_simulator_id')
+			->withPivot('data_json')
+			->withTimestamps();
 	}
 	
 	public function employee()
 	{
-		return $this->hasMany('App\Models\Employee', 'location_id', 'id');
+		return $this->hasMany(Employee::class, 'location_id', 'id');
 	}
-
+	
 	public function format()
 	{
 		$data = $this->data_json ?? [];

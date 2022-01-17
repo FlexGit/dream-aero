@@ -66,14 +66,30 @@ input[readonly]{
 	z-index: 1037;
 	background-color: #fff;
 }
-.table {
+.table-sticky {
 	position: sticky;
 	z-index: 1036;
 	background-color: #fff;
 }
-.table thead {
+.table-sticky thead {
 	position: sticky;
 	top: 142px;
 	z-index: 1038;
+	background-color: #fff;
+}
+
+.hidden {
+	display: none !important;
+}
+.table-data {
+	position: sticky;
+	z-index: 1036;
+	top: 130px;
+	background-color: #fff;
+}
+.table-data thead {
+	position: sticky;
+	z-index: 1037;
+	top: 130px;
 	background-color: #fff;
 }

@@ -4,11 +4,8 @@
 	<input type="text" class="form-control form-control-sm" id="name" name="name" value="{{ $location->name }}" placeholder="Наименование">
 </div>
 <div class="form-group">
-	<label for="is_active">Активность</label>
-	<select class="form-control form-control-sm" id="is_active" name="is_active">
-		<option value="1" @if($location->is_active) selected @endif>Да</option>
-		<option value="0" @if(!$location->is_active) selected @endif>Нет</option>
-	</select>
+	<label for="alias">Алиас</label>
+	<input type="text" class="form-control form-control-sm" id="alias" name="alias" value="{{ $location->alias }}" placeholder="Алиас">
 </div>
 <div class="form-group">
 	<label for="legal_entity_id">Юридическое лицо</label>
@@ -65,4 +62,11 @@
 	@if(array_key_exists('scheme_file_path', $location->data_json) && $location->data_json['scheme_file_path'])
 		<img src="/upload/{{ $location->data_json['scheme_file_path'] }}" width="300" alt="">
 	@endif
+</div>
+<div class="form-group">
+	<label for="is_active">Активность</label>
+	<select class="form-control form-control-sm" id="is_active" name="is_active">
+		<option value="1" @if($location->is_active) selected @endif>Да</option>
+		<option value="0" @if(!$location->is_active) selected @endif>Нет</option>
+	</select>
 </div>

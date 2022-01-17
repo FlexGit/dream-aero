@@ -99,7 +99,7 @@ class Token extends Model
 	
 	public function contractor()
 	{
-		return $this->belongsTo('App\Models\Contractor', 'contractor_id', 'id');
+		return $this->belongsTo(Contractor::class, 'contractor_id', 'id');
 	}
 	
 	/**

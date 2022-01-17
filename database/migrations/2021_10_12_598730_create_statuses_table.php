@@ -20,6 +20,7 @@ class CreateStatusesTable extends Migration
 			$table->string('name')->comment('наименование');
 			$table->string('alias')->comment('алиас');
 			$table->string('type', 50)->default('')->index()->comment('тип сущности: контрагент, заказ, сделка, счет, платеж, сертификат');
+			$table->integer('flight_time')->default(0)->comment('время налета');
 			$table->integer('sort')->default(0)->comment('сортировка');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
@@ -29,40 +30,44 @@ class CreateStatusesTable extends Migration
         
         $statuses = [
         	'contractor' => [
-        		'gold' => [
+        		'contractor_gold' => [
         			'name' => 'Золотой',
+					'flight_time' => 600,
+					'discount_id' => 3,
 					'sort' => 30,
 					'data' => [
-						'flight_time' => 600,
-						'discount' => 15,
+						'color' => '',
 					],
 				],
-				'silver' => [
+				'contractor_silver' => [
 					'name' => 'Серебряный',
+					'flight_time' => 300,
+					'discount_id' => 2,
 					'sort' => 20,
 					'data' => [
-						'flight_time' => 300,
-						'discount' => 10,
+						'color' => '',
 					],
 				],
-				'bronze' => [
+				'contractor_bronze' => [
 					'name' => 'Бронзовый',
+					'flight_time' => 120,
+					'discount_id' => 1,
 					'sort' => 10,
 					'data' => [
-						'flight_time' => 120,
-						'discount' => 5,
+						'color' => '',
 					],
 				],
-				'platinum' => [
+				'contractor_platinum' => [
 					'name' => 'Платиновый',
+					'flight_time' => 1140,
+					'discount_id' => 4,
 					'sort' => 40,
 					'data' => [
-						'flight_time' => 1140,
-						'discount' => 20,
+						'color' => '',
 					],
 				],
 			],
-			'order' => [
+			/*'order' => [
 				'received' => [
 					'name' => 'Принята',
 					'sort' => 10,
@@ -91,30 +96,37 @@ class CreateStatusesTable extends Migration
 						'color' => '#ffbdba',
 					],
 				],
-			],
+			],*/
 			'deal' => [
-				'created' => [
+				'deal_created' => [
 					'name' => 'Создана',
 					'sort' => 10,
 					'data' => [
 						'color' => '#f0eed8',
 					],
 				],
-				'calendar' => [
-					'name' => 'В календаре',
-					'sort' => 30,
+				'deal_confirmed' => [
+					'name' => 'Подтверждена',
+					'sort' => 20,
 					'data' => [
 						'color' => '#e9ffc9',
 					],
 				],
-				'pauseed' => [
+				'deal_pauseed' => [
 					'name' => 'На паузе',
-					'sort' => 40,
+					'sort' => 30,
 					'data' => [
 						'color' => '#d7baff',
 					],
 				],
-				'canceled' => [
+				'deal_returned' => [
+					'name' => 'Возврат',
+					'sort' => 40,
+					'data' => [
+						'color' => '#edc9ff',
+					],
+				],
+				'deal_canceled' => [
 					'name' => 'Отменена',
 					'sort' => 50,
 					'data' => [
@@ -123,55 +135,61 @@ class CreateStatusesTable extends Migration
 				],
 			],
 			'certificate' => [
-				'created' => [
+				'certificate_created' => [
 					'name' => 'Создан',
 					'sort' => 10,
 					'data' => [
 						'color' => '#f0eed8',
 					],
 				],
-				'registered' => [
+				'certificate_registered' => [
 					'name' => 'Зарегистрирован',
 					'sort' => 20,
 					'data' => [
 						'color' => '#e9ffc9',
 					],
 				],
-				'returned' => [
-					'name' => 'Возврат',
-					'sort' => 30,
-					'data' => [
-						'color' => '#e9ffc9',
-					],
-				],
-				'canceled' => [
+				'certificate_canceled' => [
 					'name' => 'Аннулирован',
-					'sort' => 40,
+					'sort' => 30,
 					'data' => [
 						'color' => '#ffbdba',
 					],
 				],
 			],
 			'bill' => [
-				'not_payed' => [
+				'bill_not_payed' => [
 					'name' => 'Не оплачен',
 					'sort' => 10,
+					'data' => [
+						'color' => '#f0eed8',
+					],
 				],
-				'payed' => [
+				'bill_payed' => [
 					'name' => 'Оплачен',
 					'sort' => 20,
+					'data' => [
+						'color' => '#e9ffc9',
+					],
+				],
+				'bill_canceled' => [
+					'name' => 'Отменен',
+					'sort' => 30,
+					'data' => [
+						'color' => '#ffbdba',
+					],
 				],
 			],
-			'payment' => [
-				'not_succeed' => [
+			/*'payment' => [
+				'payment_not_succeed' => [
 					'name' => 'Не проведен',
 					'sort' => 10,
 				],
-				'succeed' => [
+				'payment_succeed' => [
 					'name' => 'Проведен',
 					'sort' => 20,
 				],
-			],
+			],*/
 		];
         
         foreach ($statuses as $type => $statusItem) {

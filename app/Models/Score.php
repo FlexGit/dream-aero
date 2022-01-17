@@ -8,36 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use \Venturecraft\Revisionable\RevisionableTrait;
 
-/**
- * App\Models\Score
- *
- * @property int $id
- * @property int $score количество баллов
- * @property int $contractor_id контрагент
- * @property int $deal_position_id ссылка на позицию сделки
- * @property \datetime|null $created_at
- * @property \datetime|null $updated_at
- * @property \datetime|null $deleted_at
- * @property-read \App\Models\Contractor|null $contractor
- * @property-read \App\Models\Deal|null $deal
- * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
- * @property-read int|null $revision_history_count
- * @method static \Illuminate\Database\Eloquent\Builder|Score newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Score newQuery()
- * @method static \Illuminate\Database\Query\Builder|Score onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Score query()
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereContractorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereDealPositionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereScore($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Score withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Score withoutTrashed()
- * @mixin \Eloquent
- * @property-read \App\Models\DealPosition|null $dealPosition
- */
 class Score extends Model
 {
 	use HasFactory, SoftDeletes, RevisionableTrait;
@@ -45,7 +15,7 @@ class Score extends Model
 	const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'contractor_id' => 'Контрагент',
-		'deal_position_id' => 'Позиция сделки',
+		'event_id' => 'Сделка',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
@@ -62,7 +32,7 @@ class Score extends Model
 	protected $fillable = [
 		'score',
 		'contractor_id',
-		'deal_position_id',
+		'event_id',
 		'data_json',
 	];
 
@@ -80,11 +50,11 @@ class Score extends Model
 	
 	public function contractor()
 	{
-		return $this->hasOne('App\Models\Contractor', 'id', 'contractor_id');
+		return $this->hasOne(Contractor::class, 'id', 'contractor_id');
 	}
 
-	public function dealPosition()
+	public function event()
 	{
-		return $this->hasOne('App\Models\DealPosition', 'id', 'deal_position_id');
+		return $this->hasOne(Event::class, 'id', 'event_id');
 	}
 }

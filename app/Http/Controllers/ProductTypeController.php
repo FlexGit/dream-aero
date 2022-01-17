@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Validator;
-
 use App\Models\ProductType;
 
 class ProductTypeController extends Controller
@@ -34,6 +32,10 @@ class ProductTypeController extends Controller
 	 */
 	public function getListAjax()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
 		$productTypes = ProductType::get();
 
 		$VIEW = view('admin.productType.list', ['productTypes' => $productTypes]);
@@ -47,13 +49,23 @@ class ProductTypeController extends Controller
 	 */
 	public function edit($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$productType = ProductType::find($id);
 		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
-
-		return view('admin.productType.modal.edit', [
+		
+		$VIEW = view('admin.productType.modal.edit', [
 			'productType' => $productType,
 			'durations' => ProductType::DURATIONS,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -61,23 +73,63 @@ class ProductTypeController extends Controller
 	 */
 	public function add()
 	{
-		return view('admin.productType.modal.add', [
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		$VIEW = view('admin.productType.modal.add', [
 			'durations' => ProductType::DURATIONS,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function show($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$productType = ProductType::find($id);
+		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		
+		$VIEW = view('admin.productType.modal.show', [
+			'productType' => $productType,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
 	/**
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
 	 */
 	public function confirm($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$productType = ProductType::find($id);
 		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		return view('admin.productType.modal.delete', [
+		$VIEW = view('admin.productType.modal.delete', [
 			'productType' => $productType,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -85,13 +137,23 @@ class ProductTypeController extends Controller
 	 */
 	public function store()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$rules = [
-			'name' => 'required|max:255'
+			'name' => ['required', 'max:255', 'unique:product_types,name'],
+			'alias' => ['required', 'min:3', 'max:50', 'unique:product_types,alias'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
-				'name' => 'Наименование'
+				'name' => 'Наименование',
+				'alias' => 'Алиас',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -99,6 +161,7 @@ class ProductTypeController extends Controller
 		
 		$productType = new ProductType();
 		$productType->name = $this->request->name;
+		$productType->alias = $this->request->alias;
 		$productType->is_tariff = $this->request->is_tariff;
 		$productType->is_active = $this->request->is_active;
 		$productType->data_json = [
@@ -108,7 +171,7 @@ class ProductTypeController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $productType->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -117,22 +180,33 @@ class ProductTypeController extends Controller
 	 */
 	public function update($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$productType = ProductType::find($id);
 		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 
 		$rules = [
-			'name' => 'required|max:255'
+			'name' => ['required', 'max:255', 'unique:product_types,name,' . $id],
+			'alias' => ['required', 'min:3', 'max:50', 'unique:product_types,alias,' . $id],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
-				'name' => 'Наименование'
+				'name' => 'Наименование',
+				'alias' => 'Алиас',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
 		$productType->name = $this->request->name;
+		$productType->alias = $this->request->alias;
 		$productType->is_tariff = $this->request->is_tariff;
 		$productType->is_active = $this->request->is_active;
 		$productType->data_json = [
@@ -142,7 +216,7 @@ class ProductTypeController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $productType->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -151,6 +225,14 @@ class ProductTypeController extends Controller
 	 */
 	public function delete($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$productType = ProductType::find($id);
 		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
@@ -158,6 +240,6 @@ class ProductTypeController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $productType->id]);
+		return response()->json(['status' => 'success']);
 	}
 }

@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-3.20.0.js"></script>
+    <script src="../docs/js/tryitout-3.19.1.js"></script>
 
-    <script src="../docs/js/theme-default-3.20.0.js"></script>
+    <script src="../docs/js/theme-default-3.19.1.js"></script>
 
 </head>
 
@@ -142,9 +142,6 @@
                                     <li class="tocify-item level-2" data-unique="endpoints-GETapi-flights">
                         <a href="#endpoints-GETapi-flights">Flight list</a>
                     </li>
-                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-order-create">
-                        <a href="#endpoints-POSTapi-order-create">Order create</a>
-                    </li>
                                     <li class="tocify-item level-2" data-unique="endpoints-GETapi-code-verify">
                         <a href="#endpoints-GETapi-code-verify">Code verify</a>
                     </li>
@@ -156,6 +153,9 @@
                     </li>
                                     <li class="tocify-item level-2" data-unique="endpoints-GETapi-notification">
                         <a href="#endpoints-GETapi-notification">Notification detailed</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-deal-create">
+                        <a href="#endpoints-POSTapi-deal-create">Deal create</a>
                     </li>
                                                     </ul>
                             </ul>
@@ -169,7 +169,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: December 27 2021</li>
+        <li>Last updated: January 7 2022</li>
     </ul>
 </div>
 
@@ -184,10 +184,10 @@ You can switch the language used with the tabs at the top right (or from the nav
 <blockquote>
 <p>Base URL</p>
 </blockquote>
-<pre><code class="language-yaml">http://admin.dream-aero.loc</code></pre>
+<pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
-<p>This API is authenticated by sending a query parameter <strong><code>api_key</code></strong> in the request.</p>
+<p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 
         <h1 id="endpoints">Endpoints</h1>
@@ -3818,7 +3818,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"laborum\"
+    \"file_base64\": \"ratione\"
 }"
 </code></pre></div>
 
@@ -3841,7 +3841,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "laborum"
+    "file_base64": "ratione"
 };
 
 fetch(url, {
@@ -3865,7 +3865,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'laborum',
+            'file_base64' =&gt; 'ratione',
         ],
     ]
 );
@@ -4032,7 +4032,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="laborum"
+               value="ratione"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4928,408 +4928,6 @@ print_r(json_decode((string) $body));</code></pre></div>
             </p>
                 </form>
 
-            <h2 id="endpoints-POSTapi-order-create">Order create</h2>
-
-<p>
-<small class="badge badge-darkred">requires authentication</small>
-</p>
-
-
-
-<span id="example-requests-POSTapi-order-create">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/order/create?api_key=&amp;token=" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"name\": null,
-    \"phone\": null,
-    \"email\": null,
-    \"product_id\": null,
-    \"product_amount\": null,
-    \"is_certificate_order\": null
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://dev.dream-aero.ru/api/order/create"
-);
-
-const params = {
-    "api_key": "",
-    "token": "",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": null,
-    "phone": null,
-    "email": null,
-    "product_id": null,
-    "product_amount": null,
-    "is_certificate_order": null
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-
-<div class="php-example">
-    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$response = $client-&gt;post(
-    'http://dev.dream-aero.ru/api/order/create',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-        'query' =&gt; [
-            'api_key'=&gt; '',
-            'token'=&gt; '',
-        ],
-        'json' =&gt; [
-            'name' =&gt; null,
-            'phone' =&gt; null,
-            'email' =&gt; null,
-            'product_id' =&gt; null,
-            'product_amount' =&gt; null,
-            'is_certificate_order' =&gt; null,
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-order-create">
-            <blockquote>
-            <p>Example response (200, success):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Профиль успешно сохранен&quot;,
-    &quot;data&quot;: {
-        &quot;order&quot;: {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city_id&quot;: 1,
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;
-        }
-    }
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (400, Bad Request):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: {
-        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
-    },
-    &quot;debug&quot;: null
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (400, Bad Request):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
-    &quot;debug&quot;: null
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (404, Resource Not Found):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Ресурс не найден&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (405, Method Not Allowed):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Метод не разрешен&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-            <blockquote>
-            <p>Example response (500, Internal Server Error):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">{
-    &quot;success&quot;: false,
-    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
-    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-POSTapi-order-create" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-order-create"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-order-create"></code></pre>
-</span>
-<span id="execution-error-POSTapi-order-create" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-order-create"></code></pre>
-</span>
-<form id="form-POSTapi-order-create" data-method="POST"
-      data-path="api/order/create"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-order-create', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-order-create"
-                    onclick="tryItOut('POSTapi-order-create');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-order-create"
-                    onclick="cancelTryOut('POSTapi-order-create');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-order-create" hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/order/create</code></b>
-        </p>
-                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
-                    <p>
-                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="api_key"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="token"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <p>
-            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="name"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>phone</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="phone"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-<p>+71234567890</p>
-        </p>
-                <p>
-            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="email"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>product_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="product_id"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>product_amount</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
-               name="product_amount"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>is_certificate_order</code></b>&nbsp;&nbsp;<small>boolean</small>  &nbsp;
-                <label data-endpoint="POSTapi-order-create" hidden>
-            <input type="radio" name="is_certificate_order"
-                   value="true"
-                   data-endpoint="POSTapi-order-create"
-                   data-component="body"
-            >
-            <code>true</code>
-        </label>
-        <label data-endpoint="POSTapi-order-create" hidden>
-            <input type="radio" name="is_certificate_order"
-                   value="false"
-                   data-endpoint="POSTapi-order-create"
-                   data-component="body"
-            >
-            <code>false</code>
-        </label>
-    <br>
-
-        </p>
-                <p>
-            <b><code>flight_date</code></b>&nbsp;&nbsp;<small>date</small>     <i>optional</i> &nbsp;
-                <input type="text"
-               name="flight_date"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>flight_time</code></b>&nbsp;&nbsp;<small>time</small>     <i>optional</i> &nbsp;
-                <input type="text"
-               name="flight_time"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>is_unified</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
-                <label data-endpoint="POSTapi-order-create" hidden>
-            <input type="radio" name="is_unified"
-                   value="true"
-                   data-endpoint="POSTapi-order-create"
-                   data-component="body"
-            >
-            <code>true</code>
-        </label>
-        <label data-endpoint="POSTapi-order-create" hidden>
-            <input type="radio" name="is_unified"
-                   value="false"
-                   data-endpoint="POSTapi-order-create"
-                   data-component="body"
-            >
-            <code>false</code>
-        </label>
-    <br>
-
-        </p>
-                <p>
-            <b><code>location_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
-                <input type="number"
-               name="location_id"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>promocode_id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
-                <input type="text"
-               name="promocode_id"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>certificate_id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
-                <input type="text"
-               name="certificate_id"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
-            <b><code>certificate_whom</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
-                <input type="text"
-               name="certificate_whom"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-<p>For whom certificate.</p>
-        </p>
-                <p>
-            <b><code>comment</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
-                <input type="text"
-               name="comment"
-               data-endpoint="POSTapi-order-create"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-        </form>
-
             <h2 id="endpoints-GETapi-code-verify">Code verify</h2>
 
 <p>
@@ -6159,6 +5757,396 @@ print_r(json_decode((string) $body));</code></pre></div>
 
             </p>
                 </form>
+
+            <h2 id="endpoints-POSTapi-deal-create">Deal create</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-deal-create">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://dev.dream-aero.ru/api/deal/create?api_key=&amp;token=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": null,
+    \"phone\": null,
+    \"email\": null,
+    \"product_id\": null,
+    \"product_amount\": null,
+    \"is_certificate_purchase\": null
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://dev.dream-aero.ru/api/deal/create"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": null,
+    "phone": null,
+    "email": null,
+    "product_id": null,
+    "product_amount": null,
+    "is_certificate_purchase": null
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://dev.dream-aero.ru/api/deal/create',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+        ],
+        'json' =&gt; [
+            'name' =&gt; null,
+            'phone' =&gt; null,
+            'email' =&gt; null,
+            'product_id' =&gt; null,
+            'product_amount' =&gt; null,
+            'is_certificate_purchase' =&gt; null,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-deal-create">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Заявка успешно создана&quot;,
+	&quot;data&quot;: {
+		&quot;deal&quot;: {
+			&quot;id&quot;: 1,
+			&quot;number&quot;: &quot;12345&quot;,
+			&quot;status&quot;: &quot;Создана&quot;,
+		}
+	}
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-deal-create" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-deal-create"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-deal-create"></code></pre>
+</span>
+<span id="execution-error-POSTapi-deal-create" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-deal-create"></code></pre>
+</span>
+<form id="form-POSTapi-deal-create" data-method="POST"
+      data-path="api/deal/create"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-deal-create', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-deal-create"
+                    onclick="tryItOut('POSTapi-deal-create');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-deal-create"
+                    onclick="cancelTryOut('POSTapi-deal-create');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-deal-create" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/deal/create</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="name"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>phone</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="phone"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>+71234567890</p>
+        </p>
+                <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_id"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_amount</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_amount"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>is_certificate_purchase</code></b>&nbsp;&nbsp;<small>boolean</small>  &nbsp;
+                <label data-endpoint="POSTapi-deal-create" hidden>
+            <input type="radio" name="is_certificate_purchase"
+                   value="true"
+                   data-endpoint="POSTapi-deal-create"
+                   data-component="body"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-deal-create" hidden>
+            <input type="radio" name="is_certificate_purchase"
+                   value="false"
+                   data-endpoint="POSTapi-deal-create"
+                   data-component="body"
+            >
+            <code>false</code>
+        </label>
+    <br>
+
+        </p>
+                <p>
+            <b><code>flight_date</code></b>&nbsp;&nbsp;<small>date</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="flight_date"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>flight_time</code></b>&nbsp;&nbsp;<small>time</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="flight_time"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>is_unified</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
+                <label data-endpoint="POSTapi-deal-create" hidden>
+            <input type="radio" name="is_unified"
+                   value="true"
+                   data-endpoint="POSTapi-deal-create"
+                   data-component="body"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-deal-create" hidden>
+            <input type="radio" name="is_unified"
+                   value="false"
+                   data-endpoint="POSTapi-deal-create"
+                   data-component="body"
+            >
+            <code>false</code>
+        </label>
+    <br>
+
+        </p>
+                <p>
+            <b><code>location_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="location_id"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>promocode_id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="promocode_id"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>certificate_id</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="certificate_id"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>certificate_whom</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="certificate_whom"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>For whom certificate.</p>
+        </p>
+                <p>
+            <b><code>comment</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="comment"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
 
     
 

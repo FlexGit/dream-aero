@@ -17,7 +17,7 @@ class CreateScoresTable extends Migration
             $table->id();
 			$table->integer('score')->default(0)->comment('количество баллов');
 			$table->integer('contractor_id')->default(0)->index()->comment('контрагент');
-			$table->integer('deal_position_id')->default(0)->index()->comment('позиция сделки');
+			$table->integer('event_id')->default(0)->index()->comment('событие');
             $table->timestamps();
 			$table->softDeletes();
         });

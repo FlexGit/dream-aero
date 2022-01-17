@@ -3,7 +3,6 @@
 		@continue
 	@endif
 	<tr class="odd" data-id="{{ $revision['id'] }}">
-		{{--<td class="text-center">{{ $loop->iteration }}</td>--}}
 		<td class="align-middle">{{ $revision['revisionable_type'] }}</td>
 		<td class="align-middle d-none d-sm-table-cell">{{ $revision['object'] }}</td>
 		<td class="align-middle d-none d-sm-table-cell">

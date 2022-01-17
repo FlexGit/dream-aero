@@ -228,11 +228,11 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
+        /*[
             'type'         => 'navbar-search',
             'text'         => 'search',
             'topnav_right' => true,
-        ],
+        ],*/
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
@@ -248,13 +248,21 @@ return [
             'label_color' => '',
         ],
 		[
+			'key'		  => 'deal',
+			'text'        => 'Сделки',
+			'url'         => '/deal',
+			'icon'        => 'fas fa-handshake',
+			'label'       => '',
+			'label_color' => '',
+		],
+		/*[
 			'key'         => 'certificate',
 			'text'        => 'Сертификаты',
 			'url'         => '/certificate',
 			'icon'        => 'far fa-fw fa-file-alt',
 			'label'       => '',
 			'label_color' => '',
-		],
+		],*/
 		[
 			'key'         => 'contractor',
 			'text'        => 'Контрагенты',
@@ -263,12 +271,12 @@ return [
 			'label'       => '',
 			'label_color' => '',
 		],
-        [
+        /*[
             'text' => 'Профиль',
             'url'  => 'admin/profile',
             'icon' => 'far fa-fw fa-user',
 			'topnav_user' => true,
-        ],
+        ],*/
         /*[
             'text' => 'change_password',
             'url'  => 'admin/settings',
@@ -278,20 +286,26 @@ return [
 		[
 			'text'    => 'Ценообразование',
 			'icon'    => 'fas fa-fw fa-dollar-sign',
+			'can'	  => 'is_superadmin',
 			'submenu' => [
 				[
+					'text' => 'Цены',
+					'url'  => '/pricing',
+					'icon'    => 'fas fa-hand-holding-usd',
+				],
+				[
 					'text' => 'Промокоды',
-					'url'  => '/pricing/promocode',
+					'url'  => '/promocode',
 					'icon'    => 'fas fa-fw fa-tag',
 				],
 				[
 					'text' => 'Акции',
-					'url'  => '/pricing/promo',
+					'url'  => '/promo',
 					'icon'    => 'fas fa-fw fa-exclamation',
 				],
 				[
 					'text' => 'Типы скидок',
-					'url'  => '/pricing/discount',
+					'url'  => '/discount',
 					'icon'    => 'fas fa-fw fa-percentage',
 				],
 			],
@@ -299,6 +313,7 @@ return [
 		[
 			'text'    => 'Справочники',
 			'icon'    => 'fas fa-fw fa-book',
+			'can'	  => 'is_superadmin',
 			'submenu' => [
 				[
 					'text' => 'Города',
@@ -357,23 +372,26 @@ return [
 				],
 			],
 		],
-		[
+		/*[
 			'text'        => 'Права доступа',
 			'url'         => '/access_right',
 			'icon'        => 'fas fa-fw fa-low-vision',
+			'can'	  => 'is_superadmin',
 			'label'       => '',
 			'label_color' => '',
-		],
+		],*/
 		[
 			'text'        => 'Лог операций',
 			'url'         => '/log',
 			'icon'        => 'fas fa-fw fa-history',
+			'can'	  => 'is_superadmin',
 			'label'       => '',
 			'label_color' => '',
 		],
         [
             'text'    => 'Аналитика',
             'icon'    => 'far fa-fw fa-file-excel',
+			'can'	  => 'is_superadmin',
             'submenu' => [
                 /*[
                     'text' => 'Отчет 1',

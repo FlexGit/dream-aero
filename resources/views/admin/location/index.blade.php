@@ -21,27 +21,41 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-flex justify-content-between mb-2">
-						<a href="#" class="btn btn-secondary btn-sm invisible" title="Выгрузка в Excel"><span><i class="fa fa-file-excel"></i></span></a>
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/location/add" data-action="/location" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+					<div class="table-filter d-sm-flex mb-2">
+						<div class="form-group">
+							<label for="filter_city_id">Город</label>
+							<select class="form-control" id="filter_city_id" name="filter_city_id">
+								<option value="0">Все</option>
+								@foreach($cities ?? [] as $city)
+									<option value="{{ $city->id }}">{{ $city->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="form-group pl-2">
+							<label for="filter_legal_entity_id">Юр.лицо</label>
+							<select class="form-control" id="filter_legal_entity_id" name="filter_legal_entity_id">
+								<option value="0">Все</option>
+								@foreach($legalEntities ?? [] as $legalEntity)
+									<option value="{{ $legalEntity->id }}">{{ $legalEntity->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="form-group align-self-end text-right ml-auto pl-2">
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/location/add" data-action="/location" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+						</div>
 					</div>
-					<table id="locationTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="locationTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							<th class="text-center">ID</th>
 							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Активность</th>
+							<th class="text-center d-none d-sm-table-cell">Алиас</th>
+							<th class="text-center d-none d-sm-table-cell">Город</th>
 							<th class="text-center d-none d-md-table-cell">Юр.лицо</th>
-							<th class="text-center d-none d-md-table-cell">Город</th>
-							<th class="text-center d-none d-xl-table-cell">Создано</th>
-							<th class="text-center d-none d-xl-table-cell">Изменено</th>
+							<th class="text-center d-none d-lg-table-cell">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td colspan="30" class="text-center">Загрузка данных...</td>
-							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -58,7 +72,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="locationForm" enctype="multipart/form-data">
+				<form id="location" enctype="multipart/form-data">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Заркыть</button>
@@ -80,23 +94,35 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList(url) {
+			function getList() {
+				var $selector = $('#locationTable tbody');
+
+				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+
 				$.ajax({
-					url: url,
+					url: "{{ route('locationList') }}",
 					type: 'GET',
 					dataType: 'json',
+					data: {
+						"filter_city_id": $('#filter_city_id').val(),
+						"filter_legal_entity_id": $('#filter_legal_entity_id').val(),
+					},
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
 						}
 
-						$('#locationTable tbody').html(result.html);
+						if (result.html) {
+							$selector.html(result.html);
+						} else {
+							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+						}
 					}
 				})
 			}
 
-			getList('{{ route('locationList') }}');
+			getList();
 
 			$(document).on('click', '[data-url]', function(e) {
 				e.preventDefault();
@@ -104,13 +130,11 @@
 				var url = $(this).data('url'),
 					action = $(this).data('action'),
 					method = $(this).data('method'),
-					id = $(this).data('id'),
 					title = $(this).data('title');
 
-				if (!url || !method) return;
-
-				if (id) {
-					title = title + ' ID ' + id;
+				if (!url) {
+					toastr.error('Некорректные параметры');
+					return null;
 				}
 
 				$('.modal .modal-title, .modal .modal-body').empty();
@@ -118,17 +142,27 @@
 				$.ajax({
 					url: url,
 					type: 'GET',
-					dataType: 'html',
+					dataType: 'json',
 					success: function(result) {
-						$('#modal form').attr('action', action).attr('method', method);
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						if (action && method) {
+							$('#modal form').attr('action', action).attr('method', method);
+							$('button[type="submit"]').show();
+						} else {
+							$('button[type="submit"]').hide();
+						}
 						$('#modal .modal-title').text(title);
-						$('#modal .modal-body').html(result);
+						$('#modal .modal-body').html(result.html);
 						$('#modal').modal('show');
 					}
 				});
 			});
 
-			$(document).on('submit', '#locationForm', function(e) {
+			$(document).on('submit', '#location', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -159,7 +193,7 @@
 							return;
 						}
 
-						var msg = 'Запись #' + result.id + ' успешно ';
+						var msg = 'Локация успешно ';
 						if (method === 'POST') {
 							msg += 'добавлена';
 						} else if (method === 'PUT') {
@@ -169,7 +203,7 @@
 						}
 
 						$('#modal').modal('hide');
-						getList('{{ route('locationList') }}');
+						getList();
 						toastr.success(msg);
 					}
 				});
@@ -177,7 +211,11 @@
 
 			$(document).on('change', '.custom-file-input', function() {
 				$(this).next('.custom-file-label').html($(this).val());
-			})
+			});
+
+			$(document).on('change', '#filter_city_id, #filter_legal_entity_id', function(e) {
+				getList();
+			});
 		});
 	</script>
 @stop

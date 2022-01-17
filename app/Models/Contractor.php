@@ -3,67 +3,18 @@
 namespace App\Models;
 
 use App\Http\Controllers\Controller;
-use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use \Venturecraft\Revisionable\RevisionableTrait;
 
-/**
- * App\Models\Contractor
- *
- * @property int $id
- * @property string $name имя
- * @property string|null $lastname фамилия
- * @property \datetime|null $birthdate дата рождения
- * @property string|null $phone основной номер телефона
- * @property string $email основной e-mail
- * @property string|null $password пароль в md5
- * @property string|null $remember_token
- * @property int $city_id город, к которому привязан контрагент
- * @property \App\Models\Discount|null $discount скидка
- * @property array|null $data_json дополнительная информация
- * @property bool $is_active признак активности
- * @property \datetime|null $last_auth_at дата последней по времени авторизации
- * @property \datetime|null $created_at
- * @property \datetime|null $updated_at
- * @property \datetime|null $deleted_at
- * @property-read \App\Models\City|null $city
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
- * @property-read int|null $revision_history_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
- * @property-read int|null $tokens_count
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor newQuery()
- * @method static \Illuminate\Database\Query\Builder|Contractor onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor query()
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereBirthdate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereCityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDataJson($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastAuthAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Contractor withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Contractor withoutTrashed()
- * @mixin \Eloquent
- */
 class Contractor extends Authenticatable
 {
 	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, RevisionableTrait;
@@ -77,19 +28,32 @@ class Contractor extends Authenticatable
 		'password' => 'Пароль',
 		'city_id' => 'Город',
 		'discount_id' => 'Скидка',
+		'source' => 'Источник',
 		'data_json' => 'Дополнительная информация',
 		'is_active' => 'Признак активности',
 		'last_auth_at' => 'Последняя авторизация',
+		'user_id' => 'Пользователь',
+		'uuid' => 'Uuid',
+		'is_subscribed' => 'Подписан ра рассылку',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
 	];
-
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
 	
 	CONST RESEND_CODE_INTERVAL = 25;
 	CONST CODE_TTL = 5 * 60;
+	
+	const ADMIN_SOURCE = 'admin';
+	const WEB_SOURCE = 'web';
+	const MOB_SOURCE = 'api';
+	const SOURCES = [
+		self::ADMIN_SOURCE => 'Админка',
+		self::WEB_SOURCE => 'Web',
+		self::MOB_SOURCE => 'Mob',
+	];
+	
+	protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;
 	
 	/**
 	 * The attributes that are mass assignable.
@@ -105,9 +69,13 @@ class Contractor extends Authenticatable
 		'password',
 		'city_id',
 		'discount_id',
+		'source',
 		'data_json',
 		'is_active',
 		'last_auth_at',
+		'user_id',
+		'uuid',
+		'is_subscribed',
 	];
 
 	/**
@@ -134,12 +102,18 @@ class Contractor extends Authenticatable
 		'birthdate' => 'datetime:Y-m-d',
 		'is_active' => 'boolean',
 		'data_json' => 'array',
+		'is_subscribed' => 'boolean',
 	];
 	
 	public static function boot()
 	{
 		parent::boot();
 		
+		Contractor::created(function (Contractor $contractor) {
+			$contractor->uuid = $contractor->generateUuid();
+			$contractor->save();
+		});
+
 		Contractor::deleting(function (Contractor $contractor) {
 			$contractor->tokens()->delete();
 		});
@@ -147,17 +121,31 @@ class Contractor extends Authenticatable
 	
 	public function city()
 	{
-		return $this->hasOne('App\Models\City', 'id', 'city_id');
+		return $this->hasOne(City::class, 'id', 'city_id');
 	}
 	
 	public function discount()
 	{
-		return $this->hasOne('App\Models\Discount', 'id', 'discount_id');
+		return $this->hasOne(Discount::class, 'id', 'discount_id');
 	}
 	
 	public function tokens()
 	{
-		return $this->hasMany('App\Models\Token', 'contractor_id', 'id');
+		return $this->hasMany(Token::class, 'contractor_id', 'id');
+	}
+	
+	public function user()
+	{
+		return $this->hasOne(User::class, 'id', 'user_id');
+	}
+	
+	/**
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function generateUuid()
+	{
+		return (string)\Webpatser\Uuid\Uuid::generate();
 	}
 	
 	public function format()
@@ -176,26 +164,18 @@ class Contractor extends Authenticatable
 			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);
 		}
 
-		$flightTime = DealPosition::where('status_id', '>', 0)
-			->whereRelation('deal', 'contractor_id', '=', $this->id)
-			->sum('duration');
+		// все статусы контрагента
+		$statuses = Status::where('is_active', true)
+			->where('type', 'contractor')
+			->get();
 		
-		$score = Score::where('contractor_id', $this->id)
-			->whereRelation('dealPosition', 'status_id', '>', 0)
-			->sum('score');
-		
-		$status = HelpFunctions::getContractorStatus($flightTime ?? 0);
+		// время налета контрагента
+		$contractorFlightTime = $this->getFlightTime();
+		// баллы контрагента
+		$score = $this->getScore();
+		// статус контрагента
+		$status = $this->getStatus($statuses, $contractorFlightTime ?? 0);
 
-		if ($this->discount) {
-			$discount = $this->discount->format();
-		} else {
-			$data = $status->data_json ?? [];
-			$discount = [
-				'value' => array_key_exists('discount', $data) ? $data['discount'] : 0,
-				'is_fixed' => false,
-			];
-		}
-		
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
@@ -207,9 +187,104 @@ class Contractor extends Authenticatable
 			'avatar_file_base64' => $base64 ?: null,
 			'score' => $score ?? 0,
 			'status' => $status->name ?? null,
-			'flight_time' => (int)$flightTime,
-			'discount' => $discount ?? null,
+			'flight_time' => (int)$contractorFlightTime,
+			'discount' => $this->discount ? $this->discount->format() : null,
 			'is_new' => $this->password ? true : false,
 		];
+	}
+	
+	/**
+	 * @param $statuses
+	 * @param int $contractorFlightTime
+	 * @return mixed|null
+	 */
+	public function getStatus($statuses, $contractorFlightTime = 0)
+	{
+		$flightTimes = [];
+		foreach ($statuses ?? [] as $status) {
+			if ($status->type != Status::STATUS_TYPE_CONTRACTOR) continue;
+			
+			$flightTimes[$status->id] = $status->flight_time;
+		}
+		if (!$flightTimes) return null;
+		
+		krsort($flightTimes);
+		$result = array_filter($flightTimes, function($item) use ($contractorFlightTime) {
+			return $item <= $contractorFlightTime;
+		});
+		if (!$result) return null;
+		
+		$statusId = array_key_first($result);
+		
+		foreach ($statuses ?? [] as $status) {
+			if ($status->id == $statusId) {
+				return $status;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getScore()
+	{
+		return Score::where('contractor_id', $this->id)
+			->sum('score');
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getFlightTime()
+	{
+		return Event::where('event_type', Event::EVENT_TYPE_DEAL)
+			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
+			->whereRelation('deal', 'contractor_id', '=', $this->id)
+			->sum(DB::raw('TIMESTAMPDIFF(minute, start_at, stop_at)'));
+	}
+	
+	/**
+	 * @return mixed
+	 */
+	public function getFlightCount()
+	{
+		return Event::where('event_type', Event::EVENT_TYPE_DEAL)
+			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
+			->whereRelation('deal', 'contractor_id', '=', $this->id)
+			->count();
+	}
+	
+	/**
+	 * @param $statuses
+	 * @return int|mixed
+	 */
+	public function getBalance($statuses)
+	{
+		$dealReturnedStatusId = $dealCanceledStatusId = $billPayedStatusId = 0;
+		foreach ($statuses ?? [] as $status) {
+			if ($status->type == Status::STATUS_TYPE_DEAL && $status->alias == Deal::RETURNED_STATUS) {
+				$dealReturnedStatusId = $status->id;
+			}
+			if ($status->type == Status::STATUS_TYPE_DEAL && $status->alias == Deal::CANCELED_STATUS) {
+				$dealCanceledStatusId = $status->id;
+			}
+			if ($status->type == Status::STATUS_TYPE_BILL && $status->alias == Bill::PAYED_STATUS) {
+				$billPayedStatusId = $status->id;
+			}
+			
+		}
+		if (!$dealReturnedStatusId || !$dealCanceledStatusId || !$billPayedStatusId) return 0;
+		
+		$dealSum = Deal::whereNotIn('status_id', [$dealReturnedStatusId, $dealCanceledStatusId])
+			->where('contractor_id', $this->id)
+			->sum('amount');
+
+		$billSum = Bill::where('status_id', $billPayedStatusId)
+			->whereRelation('deals', 'contractor_id', '=', $this->id)
+			->sum('amount');
+		
+		return ($billSum - $dealSum);
 	}
 }

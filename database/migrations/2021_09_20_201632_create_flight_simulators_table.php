@@ -17,6 +17,7 @@ class CreateFlightSimulatorsTable extends Migration
         Schema::create('flight_simulators', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50)->comment('наименование авиатренажера');
+			$table->string('alias', 25)->comment('алиас');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
             $table->timestamps();
 			$table->softDeletes();
@@ -25,15 +26,18 @@ class CreateFlightSimulatorsTable extends Migration
 		$items = [
 			'0' => [
 				'name' => 'BOEING 737 NG',
+				'alias' => '737',
 			],
 			'1' => [
 				'name' => 'AIRBUS A320',
+				'alias' => 'A320',
 			],
 		];
 	
 		foreach ($items as $item) {
 			$flightSimulator = new FlightSimulator();
 			$flightSimulator->name = $item['name'];
+			$flightSimulator->alias = $item['alias'];
 			$flightSimulator->save();
 		}
     }

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use \Venturecraft\Revisionable\RevisionableTrait;
 
 /**
@@ -22,8 +21,12 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $location
- * @property-read int|null $location_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
+ * @property-read int|null $locations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
+ * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promocode[] $promocodes
+ * @property-read int|null $promocodes_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @method static \Illuminate\Database\Eloquent\Builder|City newModelQuery()
@@ -44,8 +47,6 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|City withTrashed()
  * @method static \Illuminate\Database\Query\Builder|City withoutTrashed()
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
- * @property-read int|null $locations_count
  */
 class City extends Model
 {
@@ -108,9 +109,24 @@ class City extends Model
 	
 	public function locations()
 	{
-		return $this->hasMany('App\Models\Location', 'city_id', 'id');
+		return $this->hasMany(Location::class, 'city_id', 'id');
 	}
 	
+	public function products()
+	{
+		return $this->belongsToMany(Product::class, 'cities_products', 'city_id', 'product_id')
+			->using(CityProduct::class)
+			->withPivot(['price', 'discount_id', 'is_hit', 'is_active', 'data_json'])
+			->withTimestamps();
+	}
+	
+	public function promocodes()
+	{
+		return $this->belongsToMany(Promocode::class, 'cities_promocodes', 'city_id', 'promocode_id')
+			->using(CityPromocode::class)
+			->withTimestamps();
+	}
+
 	/**
 	 * @return array
 	 */

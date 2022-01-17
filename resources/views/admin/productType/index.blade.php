@@ -21,27 +21,23 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-flex justify-content-between mb-2">
-						<a href="#" class="btn btn-secondary btn-sm invisible" title="Выгрузка в Excel"><span><i class="fa fa-file-excel"></i></span></a>
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/product_type/add" data-action="/product_type" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+					<div class="table-filter mb-2">
+						<div class="table-filter d-sm-flex justify-content-end mb-2">
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/product_type/add" data-action="/product_type" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+						</div>
 					</div>
-					<table id="productTypeTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="productTypeTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							<th class="text-center">ID</th>
 							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Тариф</th>
-							<th class="text-center d-none d-md-table-cell">Длительность</th>
-							<th class="text-center d-none d-md-table-cell">Активность</th>
-							<th class="text-center d-none d-xl-table-cell">Создано</th>
-							<th class="text-center d-none d-xl-table-cell">Изменено</th>
+							<th class="text-center d-none d-sm-table-cell">Алиас</th>
+							<th class="text-center d-none d-md-table-cell">Тариф</th>
+							<th class="text-center d-none d-lg-table-cell">Длительность</th>
+							<th class="text-center d-none d-xl-table-cell">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<td colspan="30" class="text-center">Загрузка данных...</td>
-						</tr>
 						</tbody>
 					</table>
 				</div>
@@ -82,9 +78,13 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList(url) {
+			function getList() {
+				var $selector = $('#productTypeTable tbody');
+
+				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+
 				$.ajax({
-					url: url,
+					url: "{{ route('productTypeList') }}",
 					type: 'GET',
 					dataType: 'json',
 					success: function(result) {
@@ -93,12 +93,16 @@
 							return;
 						}
 
-						$('#productTypeTable tbody').html(result.html);
+						if (result.html) {
+							$selector.html(result.html);
+						} else {
+							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+						}
 					}
 				})
 			}
 
-			getList('{{ route('productTypeList') }}');
+			getList();
 
 			$(document).on('click', '[data-url]', function(e) {
 				e.preventDefault();
@@ -108,18 +112,31 @@
 					method = $(this).data('method'),
 					title = $(this).data('title');
 
-				if (!url) return;
+				if (!url) {
+					toastr.error('Некорректные параметры');
+					return null;
+				}
 
 				$('.modal .modal-title, .modal .modal-body').empty();
 
 				$.ajax({
 					url: url,
 					type: 'GET',
-					dataType: 'html',
+					dataType: 'json',
 					success: function(result) {
-						$('#modal form').attr('action', action).attr('method', method);
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						if (action && method) {
+							$('#modal form').attr('action', action).attr('method', method);
+							$('button[type="submit"]').show();
+						} else {
+							$('button[type="submit"]').hide();
+						}
 						$('#modal .modal-title').text(title);
-						$('#modal .modal-body').html(result);
+						$('#modal .modal-body').html(result.html);
 						$('#modal').modal('show');
 					}
 				});
@@ -142,17 +159,17 @@
 							return;
 						}
 
-						var msg = 'Запись успешно ';
+						var msg = 'Тип продукта успешно ';
 						if (method === 'POST') {
-							msg += 'добавлена';
+							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменена';
+							msg += 'изменен';
 						} else if (method === 'DELETE') {
-							msg += 'удалена';
+							msg += 'удален';
 						}
 
 						$('#modal').modal('hide');
-						getList('{{ route('productTypeList') }}');
+						getList();
 						toastr.success(msg);
 					}
 				});

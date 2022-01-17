@@ -4,6 +4,10 @@
 	<input type="text" class="form-control" id="name" name="name" value="{{ $productType->name }}" placeholder="Наименование">
 </div>
 <div class="form-group">
+	<label for="alias">Алиас</label>
+	<input type="text" class="form-control" id="alias" name="alias" value="{{ $productType->alias }}" placeholder="Алиас">
+</div>
+<div class="form-group">
 	<label for="is_tariff">Тариф</label>
 	<select class="form-control" id="is_tariff" name="is_tariff">
 		<option value="1" @if($productType->is_tariff) selected @endif>Да</option>

@@ -12,14 +12,13 @@ class RevisionController extends Controller
 	const ENTITIES = [
 		'City' => 'Город',
 		'Contractor' => 'Контрагент',
-		'Deal' => 'Группа сделок',
+		'Deal' => 'Сделка',
 		'Employee' => 'Сотрудник',
 		'EmployeePosition' => 'Позиция сотрудника',
 		'FlightSimulator' => 'Авиатренажер',
-		'LegalEntity' => 'Юр. лицо',
+		'LegalEntity' => 'Юр.лицо',
 		'Location' => 'Локация',
-		'Order' => 'Заявка',
-		'DealPosition' => 'Сделка',
+		//'Order' => 'Заявка',
 		'Promo' => 'Акция',
 		'Promocode' => 'Промокод',
 		'Score' => 'Баллы',
@@ -28,7 +27,7 @@ class RevisionController extends Controller
 		'ProductType' => 'Тип продукта',
 		'User' => 'Пользователь',
 		'Bill' => 'Счет',
-		'Payment' => 'Платеж',
+		//'Payment' => 'Платеж',
 		'Certificate' => 'Сертификат',
 		'Discount' => 'Скидка',
 	];
@@ -65,6 +64,7 @@ class RevisionController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
+		
 		if (!$this->request->user()->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
@@ -73,17 +73,19 @@ class RevisionController extends Controller
 		
 		$table = $this->request->filter_entity_alias ? app('App\Models\\' . $this->request->filter_entity_alias)->getTable() : '';
 		switch ($table) {
-			case 'orders':
+			//case 'orders':
 			case 'deals':
-			case 'dealPositions':
 			case 'certificates':
 			case 'bills':
-			case 'payments':
+			//case 'payments':
 			case 'promocodes':
 				$field = 'number';
 			break;
 			case 'discounts':
 				$field = 'value';
+			break;
+			case 'scores':
+				$field = 'score';
 			break;
 			case '':
 				$field = 'title';
@@ -92,7 +94,6 @@ class RevisionController extends Controller
 				$field = 'name';
 		}
 
-		//DB::connection()->enableQueryLog();
 		$revisions = DB::table('revisions')
 			->leftJoin('users as u', 'revisions.user_id', '=', 'u.id')
 			->select('revisions.*', 'u.name as user')
@@ -106,17 +107,19 @@ class RevisionController extends Controller
 			$revisions = $revisions->where($table . '.' . $field, 'like', '%' . $this->request->search_object . '%');
 		}
 		$revisions = $revisions->limit(20)->get();
-		//$queries = DB::getQueryLog();
-		//\Log::debug($queries);
 
 		$revisionData = [];
 		foreach ($revisions as $revision) {
 			$model = $revision->revisionable_type::find($revision->revisionable_id);
+			if (!$model) continue;
+			
 			$object = '';
 			if ($model->number) {
 				$object = $model->number;
 			} elseif ($model->value) {
 				$object = $model->value;
+			} elseif ($model->score) {
+				$object = $model->score;
 			} elseif ($model->title) {
 				$object = $model->title;
 			} elseif ($model->name) {
@@ -137,6 +140,8 @@ class RevisionController extends Controller
 						$newValue = $model->number;
 					} elseif ($model->value) {
 						$newValue = $model->value;
+					} elseif ($model->score) {
+						$newValue = $model->score;
 					} elseif ($model->title) {
 						$newValue = $model->title;
 					} else {

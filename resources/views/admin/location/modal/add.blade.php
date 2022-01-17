@@ -4,11 +4,8 @@
 	<input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="Наименование">
 </div>
 <div class="form-group">
-	<label for="is_active">Активность</label>
-	<select class="form-control form-control-sm" id="is_active" name="is_active">
-		<option value="1" selected>Да</option>
-		<option value="0">Нет</option>
-	</select>
+	<label for="alias">Алиас</label>
+	<input type="text" class="form-control form-control-sm" id="alias" name="alias" placeholder="Алиас">
 </div>
 <div class="form-group">
 	<label for="legal_entity_id">Юридическое лицо</label>
@@ -55,4 +52,18 @@
 <div class="form-group">
 	<label for="map_link">Ссылка на карту</label>
 	<textarea class="form-control form-control-sm" id="map_link" name="map_link" rows="2"></textarea>
+</div>
+<div class="form-group">
+	<label for="scheme_file">Путь к файлу план-схемы</label>
+	<div class="custom-file">
+		<input type="file" class="custom-file-input" id="scheme_file" name="scheme_file">
+		<label class="custom-file-label" for="scheme_file">Выбрать файл</label>
+	</div>
+</div>
+<div class="form-group">
+	<label for="is_active">Активность</label>
+	<select class="form-control form-control-sm" id="is_active" name="is_active">
+		<option value="1" selected>Да</option>
+		<option value="0">Нет</option>
+	</select>
 </div>

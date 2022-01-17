@@ -109,7 +109,7 @@ class ProductType extends Model
 	
 	public function products()
 	{
-		return $this->hasMany('App\Models\Product', 'product_type_id', 'id');
+		return $this->hasMany(Product::class, 'product_type_id', 'id');
 	}
 	
 	/**

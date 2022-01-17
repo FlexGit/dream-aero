@@ -23,21 +23,18 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       email:
         name: email
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       password:
         name: password
         description: 'Password (md5).'
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -101,14 +98,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters:
       email:
         name: email
@@ -116,42 +111,36 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       name:
         name: name
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       lastname:
         name: lastname
         description: ''
         required: false
         example: null
         type: string
-        custom: []
       birthdate:
         name: birthdate
         description: ''
         required: true
         example: null
         type: date
-        custom: []
       phone:
         name: phone
         description: '+71234567890'
         required: false
         example: null
         type: string
-        custom: []
       city_id:
         name: city_id
         description: ''
         required: true
         example: null
         type: integer
-        custom: []
     responses:
       -
         status: 200
@@ -231,14 +220,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -292,21 +279,18 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       email:
         name: email
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       type:
         name: type
         description: 'Action type. For Registration - empty value, for Password Restore - "password_restore".'
         required: false
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -365,14 +349,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       contractor_id:
         name: contractor_id
         description: ''
         required: false
         example: null
         type: integer
-        custom: []
     bodyParameters:
       password:
         name: password
@@ -380,42 +362,36 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       password_confirmation:
         name: password_confirmation
         description: 'Password confirmation (md5).'
         required: true
         example: null
         type: string
-        custom: []
       email:
         name: email
         description: ''
         required: false
         example: null
         type: string
-        custom: []
       name:
         name: name
         description: ''
         required: false
         example: null
         type: string
-        custom: []
       birthdate:
         name: birthdate
         description: ''
         required: false
         example: null
         type: date
-        custom: []
       city_id:
         name: city_id
         description: ''
         required: false
         example: null
         type: integer
-        custom: []
     responses:
       -
         status: 200
@@ -499,14 +475,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -560,14 +534,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters:
       password:
         name: password
@@ -575,14 +547,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       password_confirmation:
         name: password_confirmation
         description: 'Password confirmation (md5).'
         required: true
         example: null
         type: string
-        custom: []
     responses:
       -
         status: 200
@@ -662,14 +632,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -745,7 +713,6 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -808,21 +775,18 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       tariff_type_id:
         name: tariff_type_id
         description: ''
         required: true
         example: null
         type: integer
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -906,21 +870,18 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       tariff_id:
         name: tariff_id
         description: ''
         required: true
         example: null
         type: integer
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1002,14 +963,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1070,14 +1029,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1146,14 +1103,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1215,14 +1170,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: false
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1289,14 +1242,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       promo_id:
         name: promo_id
         description: ''
         required: true
         example: null
         type: integer
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1361,14 +1312,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1444,22 +1393,19 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters:
       file_base64:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: laborum
+        example: ratione
         type: string
-        custom: []
     responses:
       -
         status: 200
@@ -1539,14 +1485,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1627,42 +1571,36 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       tariff_id:
         name: tariff_id
         description: ''
         required: true
         example: null
         type: integer
-        custom: []
       flight_at:
         name: flight_at
         description: ''
         required: false
         example: null
         type: string
-        custom: []
       is_unified:
         name: is_unified
         description: 'Unified certificate.'
         required: false
         example: null
         type: boolean
-        custom: []
       promocode_id:
         name: promocode_id
         description: ''
         required: false
         example: null
         type: integer
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1723,21 +1661,18 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       promocode:
         name: promocode
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1794,14 +1729,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: false
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1886,188 +1819,6 @@ endpoints:
     responseFields: []
   -
     httpMethods:
-      - POST
-    uri: api/order/create
-    metadata:
-      title: 'Order create'
-      description: ''
-      authenticated: true
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    queryParameters:
-      api_key:
-        name: api_key
-        description: ''
-        required: true
-        example: null
-        type: string
-        custom: []
-      token:
-        name: token
-        description: ''
-        required: true
-        example: null
-        type: string
-        custom: []
-    bodyParameters:
-      name:
-        name: name
-        description: ''
-        required: true
-        example: null
-        type: string
-        custom: []
-      phone:
-        name: phone
-        description: '+71234567890'
-        required: true
-        example: null
-        type: string
-        custom: []
-      email:
-        name: email
-        description: ''
-        required: true
-        example: null
-        type: string
-        custom: []
-      product_id:
-        name: product_id
-        description: ''
-        required: true
-        example: null
-        type: integer
-        custom: []
-      product_amount:
-        name: product_amount
-        description: ''
-        required: true
-        example: null
-        type: integer
-        custom: []
-      is_certificate_order:
-        name: is_certificate_order
-        description: ''
-        required: true
-        example: null
-        type: boolean
-        custom: []
-      flight_date:
-        name: flight_date
-        description: ''
-        required: false
-        example: null
-        type: date
-        custom: []
-      flight_time:
-        name: flight_time
-        description: ''
-        required: false
-        example: null
-        type: time
-        custom: []
-      is_unified:
-        name: is_unified
-        description: ''
-        required: false
-        example: null
-        type: boolean
-        custom: []
-      location_id:
-        name: location_id
-        description: ''
-        required: false
-        example: null
-        type: integer
-        custom: []
-      promocode_id:
-        name: promocode_id
-        description: ''
-        required: false
-        example: null
-        type: string
-        custom: []
-      certificate_id:
-        name: certificate_id
-        description: ''
-        required: false
-        example: null
-        type: string
-        custom: []
-      certificate_whom:
-        name: certificate_whom
-        description: 'For whom certificate.'
-        required: false
-        example: null
-        type: string
-        custom: []
-      comment:
-        name: comment
-        description: ''
-        required: false
-        example: null
-        type: string
-        custom: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-          	"success": true,
-          	"message": "Профиль успешно сохранен",
-          	"data": {
-          		"order": {
-          			"id": 1,
-          			"name": "John",
-          			"lastname": "Smith",
-          			"email": "john.smith@gmail.com",
-          			"phone": null,
-          			"city_id": 1,
-          		"discount": {
-          			"value": 5,
-          				"is_fixed": false
-          		},
-          		"birthdate": "1990-01-01",
-          			"avatar_file_base64": null,
-          			"flight_time": 100,
-          			"score": 10000,
-          			"status": "Золотой"
-          		}
-          	}
-          }
-        headers: []
-        description: '200, success'
-      -
-        status: 400
-        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
-        headers: []
-        description: '400, Bad Request'
-      -
-        status: 400
-        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
-        headers: []
-        description: '400, Bad Request'
-      -
-        status: 404
-        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '404, Resource Not Found'
-      -
-        status: 405
-        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '405, Method Not Allowed'
-      -
-        status: 500
-        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
-        headers: []
-        description: '500, Internal Server Error'
-    responseFields: []
-  -
-    httpMethods:
       - GET
     uri: api/code/verify
     metadata:
@@ -2086,21 +1837,18 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       email:
         name: email
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       code:
         name: code
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -2181,28 +1929,24 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       number:
         name: number
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       product_id:
         name: product_id
         description: ''
         required: true
         example: null
         type: integer
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -2259,14 +2003,12 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -2331,21 +2073,18 @@ endpoints:
         required: true
         example: null
         type: string
-        custom: []
       token:
         name: token
         description: ''
         required: true
         example: null
         type: string
-        custom: []
       notification_id:
         name: notification_id
         description: ''
         required: true
         example: null
         type: integer
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -2367,6 +2106,160 @@ endpoints:
           }
         headers: []
         description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/deal/create
+    metadata:
+      title: 'Deal create'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: null
+        type: string
+      phone:
+        name: phone
+        description: '+71234567890'
+        required: true
+        example: null
+        type: string
+      email:
+        name: email
+        description: ''
+        required: true
+        example: null
+        type: string
+      product_id:
+        name: product_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+      product_amount:
+        name: product_amount
+        description: ''
+        required: true
+        example: null
+        type: integer
+      is_certificate_purchase:
+        name: is_certificate_purchase
+        description: ''
+        required: true
+        example: null
+        type: boolean
+      flight_date:
+        name: flight_date
+        description: ''
+        required: false
+        example: null
+        type: date
+      flight_time:
+        name: flight_time
+        description: ''
+        required: false
+        example: null
+        type: time
+      is_unified:
+        name: is_unified
+        description: ''
+        required: false
+        example: null
+        type: boolean
+      location_id:
+        name: location_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+      promocode_id:
+        name: promocode_id
+        description: ''
+        required: false
+        example: null
+        type: string
+      certificate_id:
+        name: certificate_id
+        description: ''
+        required: false
+        example: null
+        type: string
+      certificate_whom:
+        name: certificate_whom
+        description: 'For whom certificate.'
+        required: false
+        example: null
+        type: string
+      comment:
+        name: comment
+        description: ''
+        required: false
+        example: null
+        type: string
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Заявка успешно создана",
+          	"data": {
+          		"deal": {
+          			"id": 1,
+          			"number": "12345",
+          			"status": "Создана",
+          		}
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
       -
         status: 400
         content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'

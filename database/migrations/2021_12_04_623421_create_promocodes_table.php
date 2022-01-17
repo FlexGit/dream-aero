@@ -16,7 +16,6 @@ class CreatePromocodesTable extends Migration
         Schema::create('promocodes', function (Blueprint $table) {
             $table->id();
             $table->string('number')->comment('промокод');
-			$table->integer('city_id')->default(0)->index()->comment('город, в котором действует промокод');
 			$table->integer('discount_id')->default(0)->index()->comment('скидка');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->timestamp('active_from_at')->nullable()->comment('дата начала активности');

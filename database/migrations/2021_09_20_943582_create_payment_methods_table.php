@@ -40,10 +40,6 @@ class CreatePaymentMethodsTable extends Migration
 				'name' => 'Онлайн',
 				'alias' => 'online',
 			],
-			'4' => [
-				'name' => 'Бесплатно',
-				'alias' => 'free',
-			],
 		];
 	
 		foreach ($items as $item) {

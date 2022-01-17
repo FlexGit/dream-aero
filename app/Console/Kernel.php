@@ -24,7 +24,14 @@ class Kernel extends ConsoleKernel
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		// $schedule->command('inspire')->hourly();
+		$filePath = storage_path('logs/schedule.log');
+		
+		$schedule->command('score:add')
+			->hourly()
+			->withoutOverlapping()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
 	}
 
 	/**

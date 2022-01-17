@@ -47,6 +47,8 @@ class PaymentMethod extends Model
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
 	];
+	
+	const ONLINE_ALIAS = 'online';
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;

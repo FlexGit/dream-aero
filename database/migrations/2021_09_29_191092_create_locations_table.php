@@ -40,7 +40,7 @@ class CreateLocationsTable extends Migration
 	
 		$items[] = [
 			'name' => 'ТРЦ "Афимолл Сити"',
-			'alias' => 'afi',
+			'alias' => 'msk_afi',
 			'legal_entity_id' => $murinLegalEntity ? $murinLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 10,
@@ -61,7 +61,7 @@ class CreateLocationsTable extends Migration
 		];
 		$items[] = [
 			'name' => 'ТРК "VEGAS Кунцево"',
-			'alias' => 'afi',
+			'alias' => 'msk_veg',
 			'legal_entity_id' => $murinLegalEntity ? $murinLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 20,
@@ -82,7 +82,7 @@ class CreateLocationsTable extends Migration
 		];
 		$items[] = [
 			'name' => 'ТРЦ "Columbus"',
-			'alias' => 'bus',
+			'alias' => 'msk_bus',
 			'legal_entity_id' => $ryazhkoLegalEntity ? $ryazhkoLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 30,
@@ -107,7 +107,7 @@ class CreateLocationsTable extends Migration
 		
 		$items[] = [
 			'name' => 'ТРК "РИО"',
-			'alias' => 'rio',
+			'alias' => 'piter_rio',
 			'legal_entity_id' => $murinLegalEntity ? $murinLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 10,
@@ -128,7 +128,7 @@ class CreateLocationsTable extends Migration
 		];
 		$items[] = [
 			'name' => 'ТРЦ "Охта Молл"',
-			'alias' => 'ohta',
+			'alias' => 'piter_ohta',
 			'legal_entity_id' => $murinLegalEntity ? $murinLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 20,
@@ -149,7 +149,7 @@ class CreateLocationsTable extends Migration
 		];
 		$items[] = [
 			'name' => 'ТРК "ПИТЕРЛЭНД"',
-			'alias' => 'piterland',
+			'alias' => 'piter_piterland',
 			'legal_entity_id' => $murinLegalEntity ? $murinLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 30,
@@ -174,7 +174,7 @@ class CreateLocationsTable extends Migration
 	
 		$items[] = [
 			'name' => 'ТРЦ "Центр Галереи Чижова"',
-			'alias' => 'chizh',
+			'alias' => 'vrn_chizhova',
 			'legal_entity_id' => $murinLegalEntity ? $murinLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 10,
@@ -224,7 +224,7 @@ class CreateLocationsTable extends Migration
 	
 		$items[] = [
 			'name' => 'ТРК "СБС Мегамолл"',
-			'alias' => 'krd_megamall',
+			'alias' => 'krd_sbs_megamall',
 			'legal_entity_id' => $ryazhkoLegalEntity? $ryazhkoLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 10,
@@ -298,7 +298,7 @@ class CreateLocationsTable extends Migration
 		$city = HelpFunctions::getCityByAlias(City::EKB_ALIAS);
 	
 		$items[] = [
-			'name' => 'ТРЦ "Космопорт"',
+			'name' => 'ТРЦ "Алатырь"',
 			'alias' => 'ekb_alatyr',
 			'legal_entity_id' => $ryazhkoLegalEntity? $ryazhkoLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
@@ -324,7 +324,7 @@ class CreateLocationsTable extends Migration
 	
 		$items[] = [
 			'name' => 'ТРЦ "Сибирский молл"',
-			'alias' => 'nsk_siberianmall',
+			'alias' => 'nsk_siberian',
 			'legal_entity_id' => $ryazhkoLegalEntity? $ryazhkoLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 10,
@@ -349,7 +349,7 @@ class CreateLocationsTable extends Migration
 	
 		$items[] = [
 			'name' => 'ТРЦ "Brosko Mall"',
-			'alias' => 'nsk_siberianmall',
+			'alias' => 'khv_brosko',
 			'legal_entity_id' => $ryazhkoLegalEntity? $ryazhkoLegalEntity->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 10,
@@ -400,7 +400,7 @@ Ground Floor, next to Centrepoint Dubai, UAE',
 	
 		$items[] = [
 			'name' => 'WESTFIELD Montgomery Mall',
-			'alias' => 'dc_westfield',
+			'alias' => 'usa_westfield',
 			'legal_entity_id' => 0,
 			'city_id' => $city ? $city->id : 0,
 			'sort' => 10,

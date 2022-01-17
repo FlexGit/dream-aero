@@ -12,7 +12,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * App\Models\Discount
  *
  * @property int $id
- * @property string $value размер скидки
+ * @property int|null $value размер скидки
  * @property bool $is_fixed фиксированная скидка
  * @property bool $is_active признак активности
  * @property \datetime|null $created_at
@@ -80,5 +80,9 @@ class Discount extends Model
 			'value' => $this->value,
 			'is_fixed' => $this->is_fixed,
 		];
+	}
+	
+	public function valueFormatted() {
+		return number_format($this->value, 0, '.', ' ') . ' ' . ($this->is_fixed ? 'руб' : '%');
 	}
 }

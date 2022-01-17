@@ -21,8 +21,8 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-flex justify-content-between mb-2">
-						<div class="d-flex">
+					<div class="table-filter mb-2">
+						<div class="d-sm-flex">
 							<div class="form-group">
 								<label for="filter_city_id">Город</label>
 								<select class="form-control" id="filter_city_id" name="filter_city_id">
@@ -35,29 +35,22 @@
 									@endforeach
 								</select>
 							</div>
-							<div class="form-group ml-4">
-								<label for="search">Поиск</label>
-								<input type="search" class="form-control" id="search" name="search">
+							<div class="form-group ml-2">
+								<label for="search_contractor">Контрагент</label>
+								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
+							</div>
+							<div class="form-group align-self-end ml-auto pl-2">
+								<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/add" data-action="/contractor" data-method="POST" data-type="contractor" data-title="Новый контрагент" class="btn btn-secondary btn-sm" title="Добавить контрагента">Добавить контрагента</a>
 							</div>
 						</div>
-						<div class="form-group">
-							<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/add" data-action="/contractor" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
-						</div>
 					</div>
-					<table id="contractorTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="contractorTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							<th class="text-center">#</th>
-							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Активность</th>
-							<th class="text-center d-none d-md-table-cell">E-mail</th>
-							<th class="text-center text-nowrap d-none d-md-table-cell">Телефон</th>
-							<th class="text-center d-none d-lg-table-cell">Город</th>
-							<th class="text-center text-nowrap d-none d-xl-table-cell">Скидка, %</th>
-							<th class="text-center d-none d-xl-table-cell">Последний вход</th>
-							{{--<th class="text-center d-none d-xl-table-cell">Создано</th>
-							<th class="text-center d-none d-xl-table-cell">Изменено</th>--}}
-							<th class="text-center">Действие</th>
+							<th class="text-center">Контрагент</th>
+							<th class="text-center text-nowrap d-none d-sm-table-cell">Детали</th>
+							<th class="text-center d-none d-xl-table-cell">Баланс</th>
+							<th class="text-center d-none d-md-table-cell">Активность</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -101,10 +94,11 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList() {
+			function getList(loadMore) {
 				var $selector = $('#contractorTable tbody');
 
-				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+				var $tr = $('tr.odd[data-id]:last'),
+					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
 
 				$.ajax({
 					url: '{{ route('contractorList') }}',
@@ -112,7 +106,8 @@
 					dataType: 'json',
 					data: {
 						"filter_city_id": $('#filter_city_id').val(),
-						"search": $('#search').val(),
+						"search_contractor": $('#search_contractor').val(),
+						"id": id
 					},
 					success: function(result) {
 						if (result.status !== 'success') {
@@ -121,15 +116,22 @@
 						}
 
 						if (result.html) {
-							$selector.html(result.html);
+							if (loadMore) {
+								$selector.append(result.html);
+							} else {
+								$selector.html(result.html);
+							}
+							$(window).data('ajaxready', true);
 						} else {
-							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							if (!id) {
+								$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							}
 						}
 					}
 				})
 			}
 
-			getList();
+			getList(false);
 
 			$(document).on('click', '[data-url]', function(e) {
 				e.preventDefault();
@@ -137,12 +139,18 @@
 				var url = $(this).data('url'),
 					action = $(this).data('action'),
 					method = $(this).data('method'),
-					title = $(this).data('title');
+					title = $(this).data('title'),
+					type = $(this).data('type'),
+					$modalDialog = $('.modal').find('.modal-dialog');
 
 				if (!url) {
 					toastr.error('Некорректные параметры');
 					return null;
 				}
+
+				$modalDialog.find('form').attr('id', type);
+
+				var $submit = $('button[type="submit"]');
 
 				$('.modal .modal-title, .modal .modal-body').empty();
 
@@ -158,9 +166,9 @@
 
 						if (action && method) {
 							$('#modal form').attr('action', action).attr('method', method);
-							$('button[type="submit"]').show();
+							$submit.removeClass('hidden');
 						} else {
-							$('button[type="submit"]').hide();
+							$submit.addClass('hidden');
 						}
 						$('#modal .modal-title').text(title);
 						$('#modal .modal-body').html(result.html);
@@ -174,6 +182,7 @@
 
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
+					formId = $(this).attr('id'),
 					data = $(this).serializeArray();
 
 				$.ajax({
@@ -186,17 +195,15 @@
 							return;
 						}
 
-						var msg = 'Запись успешно ';
+						var msg = 'Контрагент успешно ';
 						if (method === 'POST') {
-							msg += 'добавлена';
+							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменена';
-						} else if (method === 'DELETE') {
-							msg += 'удалена';
+							msg += 'изменен';
 						}
 
 						$('#modal').modal('hide');
-						getList('{{ route('contractorList') }}');
+						getList(false);
 						toastr.success(msg);
 					}
 				});
@@ -206,7 +213,35 @@
 			});
 
 			$(document).on('change', '#filter_city_id', function(e) {
-				getList();
+				getList(false);
+			});
+
+			$(document).on('keyup', '#search_contractor', function(e) {
+				if ($.inArray(e.keyCode, [33, 34]) !== -1) return;
+
+				getList(false);
+			});
+
+			$.fn.isInViewport = function () {
+				let elementTop = $(this).offset().top;
+				let elementBottom = elementTop + $(this).outerHeight();
+
+				let viewportTop = $(window).scrollTop();
+				let viewportBottom = viewportTop + $(window).height();
+
+				return elementBottom > viewportTop && elementTop < viewportBottom;
+			};
+
+			$(window).on('scroll', function() {
+				if ($(window).data('ajaxready') === false) return;
+
+				var $tr = $('tr.odd[data-id]:last');
+				if (!$tr.length) return;
+
+				if ($tr.isInViewport()) {
+					$(window).data('ajaxready', false);
+					getList(true);
+				}
 			});
 		});
 	</script>

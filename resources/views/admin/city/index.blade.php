@@ -21,25 +21,21 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-flex justify-content-between mb-2">
-						<a href="#" class="btn btn-secondary btn-sm invisible" title="Выгрузка в Excel"><span><i class="fa fa-file-excel"></i></span></a>
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/city/add" data-action="/city" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+					<div class="table-filter mb-2">
+						<div class="d-sm-flex justify-content-end">
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/city/add" data-action="/city" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+						</div>
 					</div>
-					<table id="cityTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="cityTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 							<tr>
-								<th class="text-center">#</th>
 								<th class="text-center">Наименование</th>
+								<th class="text-center d-none d-sm-table-cell">Алиас</th>
 								<th class="text-center d-none d-sm-table-cell">Активность</th>
-								<th class="text-center d-none d-xl-table-cell">Создано</th>
-								<th class="text-center d-none d-xl-table-cell">Изменено</th>
 								<th class="text-center">Действие</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td colspan="30" class="text-center">Загрузка данных...</td>
-							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -56,7 +52,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="cityForm">
+				<form id="city">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Заркыть</button>
@@ -78,9 +74,13 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList(url) {
+			function getList() {
+				var $selector = $('#cityTable tbody');
+
+				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+
 				$.ajax({
-					url: url,
+					url: "{{ route('cityList') }}",
 					type: 'GET',
 					dataType: 'json',
 					success: function(result) {
@@ -89,12 +89,16 @@
 							return;
 						}
 
-						$('#cityTable tbody').html(result.html);
+						if (result.html) {
+							$selector.html(result.html);
+						} else {
+							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+						}
 					}
 				})
 			}
 
-			getList('{{ route('cityList') }}');
+			getList();
 
 			$(document).on('click', '[data-url]', function(e) {
 				e.preventDefault();
@@ -102,13 +106,11 @@
 				var url = $(this).data('url'),
 					action = $(this).data('action'),
 					method = $(this).data('method'),
-					id = $(this).data('id'),
 					title = $(this).data('title');
 
-				if (!url || !method) return;
-
-				if (id) {
-					title = title + ' #' + id;
+				if (!url) {
+					toastr.error('Некорректные параметры');
+					return null;
 				}
 
 				$('.modal .modal-title, .modal .modal-body').empty();
@@ -116,17 +118,27 @@
 				$.ajax({
 					url: url,
 					type: 'GET',
-					dataType: 'html',
+					dataType: 'json',
 					success: function(result) {
-						$('#modal form').attr('action', action).attr('method', method);
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						if (action && method) {
+							$('#modal form').attr('action', action).attr('method', method);
+							$('button[type="submit"]').show();
+						} else {
+							$('button[type="submit"]').hide();
+						}
 						$('#modal .modal-title').text(title);
-						$('#modal .modal-body').html(result);
+						$('#modal .modal-body').html(result.html);
 						$('#modal').modal('show');
 					}
 				});
 			});
 
-			$(document).on('submit', '#cityForm', function(e) {
+			$(document).on('submit', '#city', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -153,7 +165,7 @@
 						}
 
 						$('#modal').modal('hide');
-						getList('{{ route('cityList') }}');
+						getList();
 						toastr.success(msg);
 					}
 				});

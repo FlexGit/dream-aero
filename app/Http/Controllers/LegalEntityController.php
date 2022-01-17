@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Validator;
 
@@ -12,15 +11,11 @@ use App\Models\LegalEntity;
 class LegalEntityController extends Controller
 {
 	private $request;
-	private $user;
 	
 	/**
 	 * @param Request $request
 	 */
 	public function __construct(Request $request) {
-		$this->middleware('auth');
-		
-		$this->user = Auth::user();
 		$this->request = $request;
 	}
 	
@@ -29,7 +24,7 @@ class LegalEntityController extends Controller
 	 */
 	public function index()
 	{
-		return view('admin/legalEntity/index', [
+		return view('admin.legalEntity.index', [
 		]);
 	}
 	
@@ -39,7 +34,7 @@ class LegalEntityController extends Controller
 	public function getListAjax()
 	{
 		if (!$this->request->ajax()) {
-			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+			abort(404);
 		}
 
 		$legalEntities = LegalEntity::get();
@@ -55,12 +50,22 @@ class LegalEntityController extends Controller
 	 */
 	public function edit($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 
-		return view('admin/legalEntity/modal/edit', [
+		$VIEW = view('admin.legalEntity.modal.edit', [
 			'legalEntity' => $legalEntity,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -69,12 +74,39 @@ class LegalEntityController extends Controller
 	public function add()
 	{
 		if (!$this->request->ajax()) {
-			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
-		return view('admin/legalEntity/modal/add');
+		$VIEW = view('admin.legalEntity.modal.add', [
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function show($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$legalEntity = LegalEntity::find($id);
+		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		
+		$VIEW = view('admin.legalEntity.modal.show', [
+			'legalEntity' => $legalEntity,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
 	/**
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
@@ -82,15 +114,21 @@ class LegalEntityController extends Controller
 	public function confirm($id)
 	{
 		if (!$this->request->ajax()) {
-			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		return view('admin/legalEntity/modal/delete', [
+		$VIEW = view('admin.legalEntity.modal.delete', [
 			'legalEntity' => $legalEntity,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -99,45 +137,47 @@ class LegalEntityController extends Controller
 	public function store()
 	{
 		if (!$this->request->ajax()) {
-			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
 		$rules = [
-			'name' => ['required', 'max:255'],
+			'name' => ['required', 'max:255', 'unique:legal_entities,name'],
+			'alias' => ['required', 'min:3', 'max:50', 'unique:legal_entities,alias'],
 			'public_offer' => ['required', 'mimes:pdf', 'max:5120'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
+				'alias' => 'Алиас',
 				'public_offer' => 'Публичная оферта',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$fileName =  $this->request->file('public_offer')->getFilename();
-		$fileExt =  $this->request->file('public_offer')->extension();
-		
-		if (!$this->request->file('file')->storeAs('upload/public_offer', $fileName . '.' . $fileExt, 'public')) {
-			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		$isFileUploaded = false;
+		if($file = $this->request->file('public_offer')) {
+			$filename = md5(rand(1000, 9999)) . '.pdf';
+			$isFileUploaded = $file->move(public_path('upload/public_offer'), $filename);
 		}
 		
 		$legalEntity = new LegalEntity();
 		$legalEntity->name = $this->request->name;
+		$legalEntity->alias = $this->request->alias;
 		$legalEntity->is_active = $this->request->is_active;
-		$data = json_decode($legalEntity->data_json, true);
-		$data['public_offer_file_path'] = [
-			'name' => $fileName,
-			'ext' => $fileExt,
+		$legalEntity->data_json = [
+			'public_offer_file_path' => $isFileUploaded ? 'public_offer/' . $filename : '',
 		];
-		$legalEntity->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
-		
 		if (!$legalEntity->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $legalEntity->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -147,31 +187,54 @@ class LegalEntityController extends Controller
 	public function update($id)
 	{
 		if (!$this->request->ajax()) {
-			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 
 		$rules = [
-			'name' => 'required|max:255'
+			'name' => ['required', 'max:255', 'unique:legal_entities,name, ' . $id],
+			'alias' => ['required', 'min:3', 'max:50', 'unique:legal_entities,alias,' . $id],
+			'public_offer' => ['required', 'mimes:pdf', 'max:5120'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
-				'name' => 'Наименование'
+				'name' => 'Наименование',
+				'alias' => 'Алиас',
+				'public_offer' => 'Публичная оферта',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
+		
+		$isFileUploaded = false;
+		if($file = $this->request->file('public_offer')) {
+			$filename = md5(rand(1000, 9999)) . '.pdf';
+			$isFileUploaded = $file->move(public_path('upload/public_offer'), $filename);
+		}
+		
+		// удаляем старый файл оферты
+		if ($isFileUploaded && $legalEntity->data_json && array_key_exists('public_offer_file_path', $legalEntity->data_json) && is_file(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']))) {
+			unlink(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']));
+		}
 
 		$legalEntity->name = $this->request->name;
+		$legalEntity->alias = $this->request->alias;
 		$legalEntity->is_active = $this->request->is_active;
+		$legalEntity->data_json = [
+			'public_offer_file_path' => $isFileUploaded ? 'public_offer/' . $filename : '',
+		];
 		if (!$legalEntity->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $legalEntity->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -181,7 +244,11 @@ class LegalEntityController extends Controller
 	public function delete($id)
 	{
 		if (!$this->request->ajax()) {
-			return response()->json(['status' => 'error', 'reason' => 'Ошибка, попробуйте повторить операцию позже']);
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
 		$legalEntity = LegalEntity::find($id);
@@ -191,6 +258,11 @@ class LegalEntityController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $legalEntity->id]);
+		// удаляем файл оферты
+		if ($legalEntity->data_json && array_key_exists('public_offer_file_path', $legalEntity->data_json) && is_file(public_path('upload/public_offer/' . $legalEntity->data_json['public_offer_file_path']))) {
+			unlink(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']));
+		}
+		
+		return response()->json(['status' => 'success']);
 	}
 }

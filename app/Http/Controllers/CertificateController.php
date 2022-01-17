@@ -264,7 +264,7 @@ class CertificateController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $certificate->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -278,46 +278,25 @@ class CertificateController extends Controller
 		}
 		
 		$certificate = Certificate::find($id);
-		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
 		$rules = [
 			'status_id' => 'required|numeric',
-			'product_id' => 'required|numeric',
-			'city_id' => 'required|numeric',
-			'location_id' => 'required|numeric',
-			'contractor_id' => 'required|numeric',
-			'payment_method_id' => 'required|numeric',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'status_id' => 'Статус',
-				'product_id' => 'Продукт',
-				'city_id' => 'Город',
-				'location_id' => 'Локация',
-				'contractor_id' => 'Контрагент',
-				'payment_method_id' => 'Способ оплаты',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$data = [];
-		
-		$certificate = new Certificate();
 		$certificate->status_id = $this->request->status_id;
-		$certificate->contractor_id = $this->request->contractor_id;
-		$certificate->city_id = $this->request->city_id;
-		$certificate->location_id = $this->request->location_id;
-		$certificate->product_id = $this->request->product_id;
-		$certificate->payment_method_id = $this->request->payment_method_id;
-		$certificate->data_json = $data;
-		$certificate->expire_at = $this->request->expire_at;
-		
 		if (!$certificate->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $certificate->id]);
+		return response()->json(['status' => 'success']);
 	}
 }

@@ -27,7 +27,19 @@ class LocationController extends Controller
 	 */
 	public function index()
 	{
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->get();
+		
+		$legalEntities = LegalEntity::where('is_active', true)
+			->orderBy('name', 'asc')
+			->get();
+
 		return view('admin.location.index', [
+			'cities' => $cities,
+			'legalEntities' => $legalEntities,
 		]);
 	}
 	
@@ -36,8 +48,18 @@ class LocationController extends Controller
 	 */
 	public function getListAjax()
 	{
-		$locations = Location::with(['city', 'legalEntity'])
-			->get();
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$locations = Location::with(['city', 'legalEntity']);
+		if ($this->request->filter_city_id) {
+			$locations = $locations->where('city_id', $this->request->filter_city_id);
+		}
+		if ($this->request->filter_legal_entity_id) {
+			$locations = $locations->where('legal_entity_id', $this->request->filter_legal_entity_id);
+		}
+		$locations = $locations->get();
 
 		$VIEW = view('admin.location.list', ['locations' => $locations]);
 
@@ -50,6 +72,14 @@ class LocationController extends Controller
 	 */
 	public function edit($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$location = Location::find($id);
 		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
@@ -61,11 +91,13 @@ class LocationController extends Controller
 			->orderBy('name', 'asc')
 			->get();
 		
-		return view('admin/location/modal/edit', [
+		$VIEW = view('admin.location.modal.edit', [
 			'location' => $location,
 			'cities' => $cities,
 			'legalEntities' => $legalEntities,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -73,6 +105,14 @@ class LocationController extends Controller
 	 */
 	public function add()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$cities = City::where('is_active', true)
 			->orderBy('name', 'asc')
 			->get();
@@ -81,24 +121,56 @@ class LocationController extends Controller
 			->orderBy('name', 'asc')
 			->get();
 
-		return view('admin/location/modal/add', [
+		$VIEW = view('admin.location.modal.add', [
 			'cities' => $cities,
 			'legalEntities' => $legalEntities,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function show($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$location = Location::find($id);
+		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		
+		$VIEW = view('admin.location.modal.show', [
+			'location' => $location,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
 	/**
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
 	 */
 	public function confirm($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$location = Location::find($id);
 		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		return view('admin/location/modal/delete', [
+		$VIEW = view('admin.location.modal.delete', [
 			'location' => $location,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -106,20 +178,30 @@ class LocationController extends Controller
 	 */
 	public function store()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$rules = [
-			'name' => 'required|max:255',
+			'name' => 'required|max:255|unique:locations,name',
+			'alias' => 'required|min:2|max:25|unique:locations,alias',
 			'legal_entity_id' => 'required|integer',
 			'city_id' => 'required|integer',
 			'address' => 'required',
 			'working_hours' => 'required',
 			'phone' => 'required',
 			'email' => 'required|email',
-			'scheme_file' => 'file|max:512|mimes:webp',
+			'scheme_file' => 'sometimes|image|max:512|mimes:webp',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
+				'alias' => 'Алиас',
 				'legal_entity_id' => 'Юр.лицо',
 				'city_id' => 'Город',
 				'address' => 'Адрес',
@@ -132,8 +214,14 @@ class LocationController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
+		$isFileUploaded = false;
+		if($file = $this->request->file('scheme_file')) {
+			$isFileUploaded = $file->move(public_path('upload/scheme'), $file->getClientOriginalName());
+		}
+
 		$location = new Location();
 		$location->name = $this->request->name;
+		$location->alias = $this->request->alias;
 		$location->is_active = $this->request->is_active;
 		$location->legal_entity_id = $this->request->legal_entity_id;
 		$location->city_id = $this->request->city_id;
@@ -145,7 +233,7 @@ class LocationController extends Controller
 			'map_link' => $this->request->map_link,
 			'skype' => $this->request->skype,
 			'whatsapp' => $this->request->whatsapp,
-			'scheme_file_path' => $this->request->scheme_file,
+			'scheme_file_path' => $isFileUploaded ? 'scheme/' . $file->getClientOriginalName() : '',
 		];
 		if (!$location->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -160,11 +248,20 @@ class LocationController extends Controller
 	 */
 	public function update($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$location = Location::find($id);
 		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
 		$rules = [
-			'name' => 'required|max:255',
+			'name' => 'required|max:255|unique:locations,name,' . $id,
+			'alias' => 'required|min:2|max:25|unique:locations,alias,' . $id,
 			'legal_entity_id' => 'required|integer',
 			'city_id' => 'required|integer',
 			'address' => 'required',
@@ -177,6 +274,7 @@ class LocationController extends Controller
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
+				'alias' => 'Алиас',
 				'legal_entity_id' => 'Юр.лицо',
 				'city_id' => 'Город',
 				'address' => 'Адрес',
@@ -195,6 +293,7 @@ class LocationController extends Controller
 		}
 			
 		$location->name = $this->request->name;
+		$location->alias = $this->request->alias;
 		$location->is_active = $this->request->is_active;
 		$location->legal_entity_id = $this->request->legal_entity_id;
 		$location->city_id = $this->request->city_id;
@@ -221,6 +320,14 @@ class LocationController extends Controller
 	 */
 	public function delete($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$location = Location::find($id);
 		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		

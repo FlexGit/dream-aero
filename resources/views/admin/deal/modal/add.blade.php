@@ -1,99 +1,107 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="contractor_id" name="contractor_id">
-<div class="form-group">
-	<label for="contractor">Контрагент</label>
-	<input type="text" class="form-control" id="contractor" name="contractor" placeholder="Введите Имя, Фамилию, E-mail или Телефон">
+<input type="hidden" id="amount" name="amount">
+
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="contractor">Поиск контрагента</label>
+			<input type="text" class="form-control" id="contractor" name="contractor" placeholder="Имя, Фамилия, E-mail, Телефон">
+		</div>
+	</div>
 </div>
 <div class="row">
 	<div class="col">
 		<div class="form-group">
-			<label for="promocode">Промокод</label>
-			<input type="text" class="form-control" id="promocode" name="promocode" placeholder="">
+			<label for="name">Имя</label>
+			<input type="text" class="form-control" id="name" name="name" placeholder="Имя">
 		</div>
 	</div>
-	<div class="col"></div>
-</div>
-<hr>
-<div class="row mb-2">
-	<div class="col text-center">
-		<h4>Позиции сделки</h4>
+	<div class="col">
+		<div class="form-group">
+			<label for="email">E-mail</label>
+			<input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
+		</div>
 	</div>
-</div>
-<div class="js-deal-positions-container">
-	<div class="js-deal-position-container">
-		<div class="row mb-3">
-			<div class="col">
-				<span class="js-deal-position-title mr-2">Позиция #<span>1</span></span> [ <a href="javascript:void(0)" class="js-deal-position-delete" title="Удалить">x</a> ]
-			</div>
-			<div class="col">
-				<div class="form-check form-check-inline">
-					<input class="form-check-input js-is_tariff mr-2" type="checkbox" name="is_tariff[]" value="1" checked style="width: 18px;height: 18px;">
-					<label class="form-check-label text-bold">Является тарифом?</label>
-				</div>
-			</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="phone">Телефон</label>
+			<input type="text" class="form-control" id="phone" name="phone" placeholder="+71234567890">
 		</div>
-		<div class="row is-tariff-container">
-			<div class="col">
-				<div class="form-group">
-					<label>Город</label>
-					<select class="form-control" name="city_id[]">
-						<option></option>
-						@foreach($cities ?? [] as $city)
-							<option value="{{ $city->id }}">{{ $city->name }}</option>
-						@endforeach
-					</select>
-				</div>
-			</div>
-			<div class="col">
-				<div class="form-group">
-					<label>Локация</label>
-					<select class="form-control" name="location_id[]">
-						<option></option>
-						@foreach($locations ?? [] as $location)
-							<option value="{{ $location->id }}" data-city_id="{{ $location->city_id }}" style="display: none;">{{ $location->name }}</option>
-						@endforeach
-					</select>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="form-group">
-					<label>Продукт</label>
-					<select class="form-control js-product" name="product_id[]">
-						<option></option>
-						@foreach($productTypes ?? [] as $productType)
-							<optgroup label="{{ $productType->name }}">
-								@foreach($productType->products ?? [] as $product)
-									@if(!$product->is_active)
-										@continue
-									@endif
-
-									<option value="{{ $product->id }}">{{ $product->name }}</option>
-								@endforeach
-							</optgroup>
-						@endforeach
-					</select>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col is-tariff-container">
-				<div class="form-group">
-					<label>Дата и время полета</label>
-					<div class="d-flex">
-						<input type="date" class="form-control" name="flight_at_date[]" placeholder="Дата полета">
-						<input type="time" class="form-control ml-2" name="flight_at_time[]" placeholder="Время полета">
-					</div>
-				</div>
-			</div>
-			<div class="col"></div>
-		</div>
-		<hr>
 	</div>
 </div>
 <div class="row">
-	<div class="col text-right">
-		<a href="javascript:void(0)" class="js-add-deal-position">Добавить позицию</a>
+	<div class="col">
+		<div class="form-group">
+			<label for="product_id">Продукт</label>
+			<select class="form-control js-product" id="product_id" name="product_id">
+				<option></option>
+				@foreach($productTypes ?? [] as $productType)
+					<optgroup label="{{ $productType->name }}">
+						@foreach($productType->products ?? [] as $product)
+							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}">{{ $product->name }}</option>
+						@endforeach
+					</optgroup>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="promo_id">Акция</label>
+			<select class="form-control" id="promo_id" name="promo_id">
+				<option value=""></option>
+				@foreach($promos ?? [] as $promo)
+					<option value="{{ $promo->id }}">{{ $promo->name }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col text-center">
+		<div class="form-group">
+			{{--<label for="payment_method_id">Способ оплаты</label>
+			<select class="form-control" id="payment_method_id" name="payment_method_id">
+				<option value=""></option>
+				@foreach($paymentMethods ?? [] as $paymentMethod)
+					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+				@endforeach
+			</select>--}}
+			<div class="custom-control custom-switch custom-control-inline" style="margin-top: 40px;">
+				<input type="checkbox" id="is_free" name="is_free" value="1" class="custom-control-input">
+				<label class="custom-control-label font-weight-normal" for="is_free">Бесплатно</label>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="city_id">Город</label>
+			{{--<div class="custom-control custom-switch custom-control-inline ml-1">
+				<input type="checkbox" id="is_unified" name="is_unified" value="1" class="custom-control-input">
+				<label class="custom-control-label font-weight-normal" for="is_unified">Любой</label>
+			</div>--}}
+			<select class="form-control" id="city_id" name="city_id">
+				<option value="0">Любой</option>
+				@foreach($cities ?? [] as $city)
+					<option value="{{ $city->id }}">{{ $city->name }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col">
+		<label for="certificate_whom">Для кого сертификат</label>
+		<input type="text" class="form-control" id="certificate_whom" name="certificate_whom">
+	</div>
+	<div class="col text-right mt-4">
+		<div id="amount-text" class="d-inline-block ml-1">
+			<h1 class="d-inline-block">0</h1> <i class="fas fa-ruble-sign" style="font-size: 25px;"></i>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<label for="comment">Комментарий</label>
+		<textarea class="form-control" id="comment" name="comment" rows="2"></textarea>
 	</div>
 </div>

@@ -21,7 +21,7 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-sm-flex mb-2">
+					<div class="table-filter d-sm-flex mb-2">
 						<div class="form-group">
 							<label for="search_doc">Сертификат</label>
 							<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Номер">
@@ -254,10 +254,6 @@
 			});
 
 			$(document).on('change', '#filter_status_id, #filter_city_id, #filter_product_type_id', function(e) {
-				getList(false);
-			});
-
-			$(document).on('change', '#filter_city_id', function(e) {
 				getList(false);
 			});
 

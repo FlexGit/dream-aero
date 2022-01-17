@@ -3,25 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Validator;
-
 use App\Models\City;
 use App\Models\Employee;
 
 class CityController extends Controller
 {
 	private $request;
-	private $user;
 	
 	/**
 	 * @param Request $request
 	 */
 	public function __construct(Request $request) {
-		$this->middleware('auth');
-		
-		$this->user = Auth::user();
 		$this->request = $request;
 	}
 	
@@ -30,7 +24,7 @@ class CityController extends Controller
 	 */
 	public function index()
 	{
-		return view('admin/city/index', [
+		return view('admin.city.index', [
 		]);
 	}
 	
@@ -39,6 +33,10 @@ class CityController extends Controller
 	 */
 	public function getListAjax()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
 		$cities = City::get();
 		
 		$VIEW = view('admin.city.list', ['cities' => $cities]);
@@ -52,12 +50,23 @@ class CityController extends Controller
 	 */
 	public function edit($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$city = City::find($id);
 		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 
-		return view('admin/city/modal/edit', [
+		$VIEW = view('admin.city.modal.edit', [
 			'city' => $city,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+		
 	}
 	
 	/**
@@ -65,7 +74,38 @@ class CityController extends Controller
 	 */
 	public function add()
 	{
-		return view('admin/city/modal/add');
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
+		$VIEW = view('admin.city.modal.add', [
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function show($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$city = City::find($id);
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		
+		$VIEW = view('admin.city.modal.show', [
+			'city' => $city,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -74,12 +114,22 @@ class CityController extends Controller
 	 */
 	public function confirm($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$city = City::find($id);
 		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		return view('admin/city/modal/delete', [
+		$VIEW = view('admin.city.modal.delete', [
 			'city' => $city,
 		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -87,13 +137,23 @@ class CityController extends Controller
 	 */
 	public function store()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$rules = [
-			'name' => 'required|max:255'
+			'name' => 'required|max:255|unique:cities,name',
+			'alias' => 'required|min:2|max:3|unique:cities,alias',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
-				'name' => 'Наименование'
+				'name' => 'Наименование',
+				'alias' => 'Алиас',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -101,12 +161,13 @@ class CityController extends Controller
 		
 		$city = new City();
 		$city->name = $this->request->name;
+		$city->alias = $this->request->alias;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $city->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -115,28 +176,39 @@ class CityController extends Controller
 	 */
 	public function update($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$city = City::find($id);
 		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 
 		$rules = [
-			'name' => 'required|max:255'
+			'name' => 'required|max:255|unique:cities,name,' . $id,
+			'alias' => 'required|min:2|max:3|unique:cities,alias,' . $id,
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
-				'name' => 'Наименование'
+				'name' => 'Наименование',
+				'alias' => 'Алиас',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 
 		$city->name = $this->request->name;
+		$city->alias = $this->request->alias;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $city->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -145,6 +217,14 @@ class CityController extends Controller
 	 */
 	public function delete($id)
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$city = City::find($id);
 		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
@@ -152,7 +232,7 @@ class CityController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success', 'id' => $city->id]);
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -160,6 +240,14 @@ class CityController extends Controller
 	 */
 	public function getEmployeeList()
 	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$employeeData = [];
 
 		if ($this->request->cityId) {

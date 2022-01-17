@@ -11,7 +11,6 @@ use App\Models\Location;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Status;
-use App\Models\Contractor;
 
 class OrderController extends Controller
 {
@@ -32,8 +31,8 @@ class OrderController extends Controller
 		$cities = City::orderBy('name')
 			->get();
 		
-		$locations = Location::orderBy('name')
-			->get();
+		/*$locations = Location::orderBy('name')
+			->get();*/
 		
 		/*$products = Product::orderBy('name')
 			->get();*/
@@ -41,16 +40,26 @@ class OrderController extends Controller
 		$productTypes = ProductType::orderBy('name')
 			->get();
 		
-		$statuses = Status::where('type', Status::STATUS_TYPE_ORDER)
+		$statuses = Status::whereNotIn('type', [Status::STATUS_TYPE_CONTRACTOR])
+			->orderby('type')
 			->orderBy('sort')
 			->get();
+			
+		$statusData = [];
+		foreach ($statuses as $status) {
+			$statusData[Status::STATUS_TYPES[$status->type]][] = [
+				'id' => $status->id,
+				'alias' => $status->alias,
+				'name' => $status->name,
+			];
+		}
 		
 		return view('admin.order.index', [
 			'cities' => $cities,
-			'locations' => $locations,
+			/*'locations' => $locations,*/
 			/*'products' => $products,*/
 			'productTypes' => $productTypes,
-			'statuses' => $statuses,
+			'statusData' => $statusData,
 		]);
 	}
 	
@@ -64,6 +73,26 @@ class OrderController extends Controller
 		}
 		
 		$id = $this->request->id ?? 0;
+		
+		$deals = Deal::/*with(['contractor', 'user', 'dealPositions'])
+			->*/orderBy('id', 'desc');
+		if ($this->request->filter_status_id) {
+			$deals = $deals->whereHas('dealPositions', function ($q) {
+				return $q->where('status_id', $this->request->filter_status_id);
+			});
+		}
+		if ($this->request->filter_contractor_id) {
+			$deals = $deals->whereHas('contractor', function ($q) {
+				return $q->where('contractor_id', $this->request->filter_contractor_id);
+			});
+		}
+		/*if ($this->request->filter_city_id) {
+			$deals = $deals->where('city_id', $this->request->filter_city_id);
+		}
+		if ($this->request->filter_location_id) {
+			$orders = $orders->where('location_id', $this->request->filter_location_id);
+		}*/
+		$deals = $deals->get();
 		
 		$orders = Order::with(['city', 'location', 'product', 'contractor', 'status'])
 			->orderBy('id', 'desc');
@@ -157,7 +186,7 @@ class OrderController extends Controller
 	 * @param $id
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	/*public function show($id)
+	public function show($id)
 	{
 		$order = Order::find($id);
 		if (!$order) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
@@ -183,7 +212,7 @@ class OrderController extends Controller
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}*/
+	}
 	
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View

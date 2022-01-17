@@ -21,44 +21,18 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-flex justify-content-between mb-2">
-						<div class="d-flex">
-							<div class="form-group">
-								<label for="filter_city_id">Город</label>
-								<select class="form-control" id="filter_city_id" name="filter_city_id">
-									<option value="0">Все</option>
-									@foreach($cities ?? [] as $city)
-										<option value="{{ $city->id }}">{{ $city->name }}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group ml-4">
-								<label for="filter_product_type_id">Тип продукта</label>
-								<select class="form-control" id="filter_product_type_id" name="filter_product_type_id">
-									<option value="0">Все</option>
-									@foreach($productTypes ?? [] as $productType)
-										<option value="{{ $productType->id }}">{{ $productType->name }}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
+					<div class="table-filter d-sm-flex justify-content-end mb-2">
 						<div class="form-group">
-							<a href="javascript:void(0)" data-toggle="modal" data-url="/product/add" data-action="/product" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/product/add" data-action="/product" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
 						</div>
 					</div>
-					<table id="productTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="productTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							<th class="text-center">#</th>
 							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Активность</th>
-							<th class="text-center d-none d-sm-table-cell">Город</th>
+							<th class="text-center">Алиас</th>
 							<th class="text-center text-nowrap d-none d-md-table-cell">Тип тарифа</th>
 							<th class="text-center text-nowrap d-none d-lg-table-cell">Длительность, мин</th>
-							<th class="text-center text-nowrap d-none d-xl-table-cell">Стоимость, руб</th>
-							<th class="text-center d-none d-xl-table-cell">Хит</th>
-							{{--<th class="text-center">Создано</th>
-							<th class="text-center">Изменено</th>--}}
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>
@@ -93,13 +67,11 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
@@ -112,10 +84,6 @@
 					url: '{{ route('productList') }}',
 					type: 'GET',
 					dataType: 'json',
-					data: {
-						"filter_city_id": $('#filter_city_id').val(),
-						"filter_product_type_id": $('#filter_product_type_id').val(),
-					},
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
@@ -139,16 +107,11 @@
 				var url = $(this).data('url'),
 					action = $(this).data('action'),
 					method = $(this).data('method'),
-					id = $(this).data('id'),
 					title = $(this).data('title');
 
 				if (!url) {
 					toastr.error('Некорректные параметры');
 					return null;
-				}
-
-				if (id) {
-					title = title + ' #' + id;
 				}
 
 				$('.modal .modal-title, .modal .modal-body').empty();
@@ -193,85 +156,23 @@
 							return;
 						}
 
-						var msg = 'Запись успешно ';
+						var msg = 'Продукт успешно ';
 						if (method === 'POST') {
-							msg += 'добавлена';
+							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменена';
+							msg += 'изменен';
 						} else if (method === 'DELETE') {
-							msg += 'удалена';
+							msg += 'удален';
 						}
 
 						$('#modal').modal('hide');
-						getList('{{ route('productList') }}');
+						getList();
 						toastr.success(msg);
 					}
 				});
 			});
 
-			function getEmployeesByCity(cityId, employeeId) {
-				var $selector = $('#modal #employee_id'),
-					data = {'cityId': cityId};
-
-				$selector.html('');
-
-				$.ajax({
-					url: 'city/employee',
-					type: 'GET',
-					dataType: 'json',
-					data: data,
-					success: function(result) {
-						if (result.status !== 'success') {
-							toastr.error(result.reason);
-							return null;
-						}
-
-						$selector.append('<option></option>');
-						$.each(result.employees, function(key, value) {
-							$selector.append('<option value="' + value.id + '" ' + ((value.id === employeeId) ? 'selected' : '') + '>' + value.name + '</option>');
-						});
-					}
-				});
-			}
-
-			$(document).on('change', '#city_id', function(e) {
-				getEmployeesByCity($(this).val(), 0);
-			});
-
 			$(document).on('show.bs.modal', '#modal', function(e) {
-				var $employeeIdElement = $('#employee_id'),
-					$cityIdElement = $('#city_id');
-
-				$cityIdElement.multiselect({
-					includeSelectAllOption: true,
-					selectAllText: 'Все города',
-					buttonWidth: '100%',
-					selectAllValue: 0,
-					buttonTextAlignment: 'left',
-					buttonText: function(options, select) {
-						if (options.length === 0) {
-							return '';
-						} else {
-							var labels = [];
-							options.each(function () {
-								if ($(this).attr('label') !== undefined) {
-									labels.push($(this).attr('label'));
-								} else {
-									labels.push($(this).html());
-								}
-							});
-							return labels.join(', ') + '';
-						}
-					},
-				});
-
-				if ($employeeIdElement.length) {
-					var cityId = $cityIdElement.val().length ? $cityIdElement.val() : 0,
-						employeeId = $employeeIdElement.data('employee_id') ? $employeeIdElement.data('employee_id') : 0;
-
-					getEmployeesByCity(cityId, employeeId);
-				}
-
 				var $durationSelector = $('#duration');
 
 				if ($durationSelector.length) {
@@ -293,8 +194,6 @@
 					$employeeSelector.closest('.form-group').addClass('d-none');
 				}
 
-				console.log(durations);
-
 				$durationSelector.html('<option></option>');
 				$.each(durations, function(key, value) {
 					$durationSelector.append('<option value="' + value + '" ' + ((value === duration) ? 'selected' : '')+ '>' + value + '</option>');
@@ -303,10 +202,6 @@
 
 			$(document).on('change', '#product_type_id', function(e) {
 				getDurationByProductType(0);
-			});
-
-			$(document).on('change', '#filter_city_id, #filter_product_type_id', function(e) {
-				getList();
 			});
 		});
 	</script>

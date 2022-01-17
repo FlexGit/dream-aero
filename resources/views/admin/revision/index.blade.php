@@ -36,10 +36,9 @@
 							<input type="text" class="form-control" id="search_object" name="search_object" @if($objectId) value="{{ $objectId }}" @endif placeholder="ID объекта">
 						</div>
 					</div>
-					<table id="revisionTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="revisionTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr class="text-center">
-							{{--<th class="align-middle">#</th>--}}
 							<th class="align-middle">Сущность</th>
 							<th class="align-middle text-nowrap d-none d-sm-table-cell">Объект</th>
 							<th class="align-middle d-none d-sm-table-cell">Атрибут</th>

@@ -4,6 +4,10 @@
 	<input type="text" class="form-control" id="name" name="name" placeholder="Наименование">
 </div>
 <div class="form-group">
+	<label for="alias">Алиас</label>
+	<input type="text" class="form-control" id="alias" name="alias" placeholder="Алиас">
+</div>
+<div class="form-group">
 	<label for="is_tariff">Тариф</label>
 	<select class="form-control" id="is_tariff" name="is_tariff">
 		<option value="1" selected>Да</option>
