@@ -1,7 +1,6 @@
 $(function(){
 	// Control Sidebar
 	let controlSidebar = localStorage.getItem('control-sidebar');
-	console.log(controlSidebar);
 	if (controlSidebar == 'expanded') {
 		$('.control-sidebar').ControlSidebar('show');
 	} else {

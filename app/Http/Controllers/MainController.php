@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\Review;
 use App\Models\Location;
-use App\Models\FlightSimulatorType;
+use App\Models\FlightSimulator;
 use App\Models\File;
 use App\Models\ProductType;
 use App\Models\Product;
@@ -52,7 +52,7 @@ class MainController extends Controller
 	 */
 	public function about()
 	{
-		$flightSimulatorTypes = FlightSimulatorType::get();
+		$flightSimulatorTypes = FlightSimulator::get();
 
 		$locations = Location::where('is_active', true)
 			->where('city_id', $this->cityId)

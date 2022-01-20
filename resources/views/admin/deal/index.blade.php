@@ -70,8 +70,8 @@
 									@endforeach
 								</select>
 							</div>
-							<div class="form-group align-self-end ml-auto pl-2">
-								<a href="javascript:void(0)" {{--id="addDeal"--}} data-toggle="modal" data-url="/deal/add" data-action="/deal" data-method="POST" data-type="deal" data-title="Новая сделка" {{--@if($contractorId) data-contractor_id="{{ $contractorId }}" @endif--}} class="btn btn-secondary btn-sm" title="Создать сделку">Создать сделку</a>
+							<div class="form-group align-self-end ml-auto pl-2 text-nowrap">
+								<a href="javascript:void(0)" {{--id="addDeal"--}} data-toggle="modal" data-url="/deal/certificate/add" data-action="/deal" data-method="POST" data-type="deal" data-title="Новая сделка на покупку сертификата" {{--@if($contractorId) data-contractor_id="{{ $contractorId }}" @endif--}} class="btn btn-secondary btn-sm" title="Создать сделку">Создать сделку</a>
 							</div>
 						</div>
 					</div>
@@ -107,7 +107,7 @@
 				<form id="deal">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default js-reset mr-5">Очистить</button>
+						<button type="button" class="btn btn-default js-reset mr-5">Сбросить</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 						<button type="submit" class="btn btn-primary">Подтвердить</button>
 					</div>
@@ -139,8 +139,6 @@
 					type: 'GET',
 					dataType: 'json',
 					data: {
-						/*"filter_is_certificate": $('#filter_is_certificate').is(':checked') ? 1 : 0,
-						"filter_is_booking": $('#filter_is_booking').is(':checked') ? 1 : 0,*/
 						"filter_status_id": $('#filter_status_id').val(),
 						"filter_location_id": $('#filter_location_id').val(),
 						"filter_product_id": $('#filter_product_id').val(),
@@ -222,7 +220,7 @@
 				});
 			});
 
-			$(document).on('submit', '#deal, #bill, #certificate', function(e) {
+			$(document).on('submit', '#deal, #bill, #certificate, #event', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -262,6 +260,13 @@
 							} else if (method === 'PUT') {
 								msg += 'сохранен';
 							}
+						} else if (formId === 'event') {
+							msg = 'Событие успешно ';
+							if (method === 'POST') {
+								msg += 'создано';
+							} else if (method === 'PUT') {
+								msg += 'сохранено';
+							}
 						}
 
 						$('#modal').modal('hide');
@@ -269,6 +274,10 @@
 						toastr.success(msg);
 					}
 				});
+			});
+
+			$(document).on('change', '#event #location_id', function(e) {
+				$('#event #flight_simulator_id').val($(this).find(':selected').data('simulator_id'));
 			});
 
 			$(document).on('show.bs.modal', '#modal', function(e) {
@@ -280,32 +289,40 @@
 					$('.js-reset').removeClass('hidden');
 				}
 
-				$('#contractor').autocomplete({
-					serviceUrl: '{{ route('contractorSearch') }}',
-					minChars: 1,
-					showNoSuggestionNotice: true,
-					noSuggestionNotice: 'Ничего не найдено',
-					type: 'POST',
-					dataType: 'json',
-					onSelect: function (suggestion) {
-						if (suggestion.id) {
-							$('#contractor_id').val(suggestion.id);
+				if ($form.attr('id') === 'deal') {
+					$('#contractor').autocomplete({
+						serviceUrl: '{{ route('contractorSearch') }}',
+						minChars: 1,
+						showNoSuggestionNotice: true,
+						noSuggestionNotice: 'Ничего не найдено',
+						type: 'POST',
+						dataType: 'json',
+						onSelect: function (suggestion) {
+							if (suggestion.id) {
+								$('#contractor_id').val(suggestion.id);
+							}
+							if (suggestion.data.name) {
+								$('#name').val(suggestion.data.name);
+							}
+							if (suggestion.data.lastname) {
+								$('#lastname').val(suggestion.data.lastname);
+							}
+							if (suggestion.data.email) {
+								$('#email').val(suggestion.data.email);
+							}
+							if (suggestion.data.phone) {
+								$('#phone').val(suggestion.data.phone);
+							}
+							if (suggestion.data.city_id) {
+								$('#city_id').val(suggestion.data.city_id);
+							}
+							calcProductAmount();
 						}
-						if (suggestion.data.name) {
-							$('#name').val(suggestion.data.name);
-						}
-						if (suggestion.data.email) {
-							$('#email').val(suggestion.data.email);
-						}
-						if (suggestion.data.phone) {
-							$('#phone').val(suggestion.data.phone);
-						}
-						calcProductAmount();
-					}
-				});
+					});
+				}
 			});
 
-			$(document).on('change', '#deal #product_id, #deal #promo_id, #deal #is_unified, #deal #city_id, #deal #is_free', function(e) {
+			$(document).on('change', '#deal #product_id, #deal #promo_id, #deal #city_id, #deal #is_free', function(e) {
 				calcProductAmount();
 			});
 
@@ -326,7 +343,7 @@
 			});
 
 			function calcProductAmount() {
-				var $isUnified = $('#is_unified');
+				/*var $isUnified = $('#is_unified');*/
 
 				$.ajax({
 					url: "{{ route('calcProductAmount') }}",
@@ -336,8 +353,8 @@
 						'product_id': $('#product_id').val(),
 						'contractor_id': $('#contractor_id').val(),
 						'promo_id': $('#promo_id').val(),
-						'is_unified': $isUnified.is(':checked') ? $isUnified.val() : 0,
-						'payment_method_id': $('#payment_method_id').val(),
+						/*'is_unified': $isUnified.is(':checked') ? $isUnified.val() : 0,*/
+						/*'payment_method_id': $('#payment_method_id').val(),*/
 						'city_id': $('#city_id').val(),
 						'is_free': $('#is_free').is(':checked') ? 1 : 0,
 					},
@@ -362,7 +379,6 @@
 				}
 			});
 
-
 			$(document).on('shown.bs.modal', '#modal', function(e) {
 				$('#contractor').focus();
 			});
@@ -378,7 +394,7 @@
 			});
 
 			$(document).on('click', '.js-sent-pay-link', function(e) {
-				if (confirm('Вы уверены?')) {
+				if (confirm('Вы уверены, что хотите отправить ссылку на оплату Счета?')) {
 					var $payLink = $(this);
 
 					$.ajax({
@@ -394,13 +410,13 @@
 								return;
 							}
 
-							$payLink.attr('title', 'Ссылка на оплату отправлена ' + result.link_sent_at);
+							$payLink.attr('title', 'Ссылка на оплату Счета отправлена ' + result.link_sent_at);
 							$i = $payLink.find('i');
 							$i.addClass('fa-envelope-open');
 							if ($i.hasClass('fa-envelope')) {
 								$i.removeClass('fa-envelope');
 							}
-							toastr.success('Ссылка на оплату успешно отправлена');
+							toastr.success('Ссылка на оплату Счета успешно отправлена');
 						}
 					});
 				}
@@ -428,54 +444,6 @@
 					getList(true);
 				}
 			});
-
-			/*$(document).on('click', '.js-add-deal-position', function(e) {
-				var $dealPositionsContainer = $('.js-deal-positions-container'),
-					$lastDealPositionContainer = $('.js-deal-position-container').last(),
-					number = $('.js-deal-position-container').length,
-					dealLimit = 10;
-
-				if (number >= dealLimit) {
-					toastr.error('Достигнуто максимальное ограничение на количество позиций в сделке');
-					return;
-				}
-
-				var newNumber = ++ number;
-
-				$lastDealPositionContainer = $lastDealPositionContainer.clone();
-				$lastDealPositionContainer.appendTo($dealPositionsContainer);
-				$lastDealPositionContainer.find('.js-deal-position-title span').text(newNumber);
-
-				var $isTariff = $lastDealPositionContainer.find('.js-is_tariff');
-				if (!$isTariff.is(':checked')) {
-					$isTariff.prop('checked', true).trigger('change');
-				}
-
-				toastr.success('Позиция успешно добавлена');
-
-				$('#modal').stop().animate({scrollTop: $('#modal .modal-dialog').height()}, 500);
-			});*/
-
-			/*$(document).on('click', '.js-deal-position-delete', function(e) {
-				var $dealPositionContainer = $(this).closest('.js-deal-position-container'),
-					number = $('.js-deal-position-container').length;
-
-				if (number == 1) {
-					toastr.error('Достигнуто минимальное ограничение на количество позиций в сделке');
-					return;
-				}
-
-				$dealPositionContainer.remove();
-
-				number = 1;
-
-				$('.js-deal-position-container').each(function() {
-					$(this).find('.js-deal-position-title span').text(number);
-					++ number;
-				});
-
-				toastr.success('Позиция успешно удалена');
-			});*/
 		});
 	</script>
 @stop

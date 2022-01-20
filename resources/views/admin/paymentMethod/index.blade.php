@@ -21,10 +21,12 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter d-sm-flex justify-content-end mb-2">
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/payment_method/add" data-action="/payment_method" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+					<div class="table-filter d-sm-flex">
+						<div class="form-group align-self-end text-right ml-auto">
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/payment_method/add" data-action="/payment_method" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+						</div>
 					</div>
-					<table id="paymentMethodTable" class="table table-hover table-sm table-bordered table-striped table-data">
+					<table id="paymentMethodTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 						<tr>
 							<th class="text-center">Наименование</th>
@@ -157,7 +159,7 @@
 						if (method === 'POST') {
 							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменен';
+							msg += 'сохранен';
 						} else if (method === 'DELETE') {
 							msg += 'удален';
 						}

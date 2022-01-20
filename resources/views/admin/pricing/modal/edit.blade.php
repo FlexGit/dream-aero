@@ -16,6 +16,10 @@
 	</select>
 </div>
 <div class="form-group">
+	<label for="score">Баллы, начисляемые контрагенту</label>
+	<input type="number" class="form-control" id="score" name="score" value="{{ $cityProduct ? $cityProduct->score : '' }}" placeholder="Баллы">
+</div>
+<div class="form-group">
 	<label for="is_active">Активность</label>
 	<select class="form-control" id="is_active" name="is_active">
 		<option value="1" @if($cityProduct && $cityProduct->is_active) selected @endif>Да</option>

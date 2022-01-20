@@ -79,7 +79,7 @@ class ProductController extends Controller
 		}
 
 		$product = Product::find($id);
-		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		
 		$productTypes = ProductType::where('is_active', true)
 			->orderBy('name')
@@ -104,7 +104,7 @@ class ProductController extends Controller
 		}
 
 		$product = Product::find($id);
-		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 
 		$productTypes = ProductType::where('is_active', true)
 			->orderBy('name')
@@ -157,7 +157,7 @@ class ProductController extends Controller
 		}
 
 		$product = Product::find($id);
-		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		
 		$VIEW = view('admin.product.modal.delete', [
 			'product' => $product,
@@ -182,7 +182,7 @@ class ProductController extends Controller
 		$rules = [
 			'name' => 'required|max:255|unique:products,name',
 			'alias' => 'required|max:255',
-			'product_type_id' => 'required|numeric',
+			'product_type_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -227,12 +227,12 @@ class ProductController extends Controller
 		}
 
 		$product = Product::find($id);
-		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		
 		$rules = [
 			'name' => 'required|max:255|unique:cities,name' . $id,
 			'alias' => 'required|max:255',
-			'product_type_id' => 'required|numeric',
+			'product_type_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -276,7 +276,7 @@ class ProductController extends Controller
 		}
 
 		$product = Product::find($id);
-		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		
 		if (!$product->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

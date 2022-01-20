@@ -81,7 +81,7 @@ class StatusController extends Controller
 		}
 		
 		$status = Status::find($id);
-		if (!$status) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$status) return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
 		
 		$discounts = Discount::where('is_active', true)
 			->orderBy('is_fixed')
@@ -114,7 +114,7 @@ class StatusController extends Controller
 		}
 		
 		$status = Status::find($id);
-		if (!$status) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$status) return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
 		
 		$rules = [
 			'name' => 'required|max:255|unique:statuses,name,' . $id,
@@ -129,13 +129,17 @@ class StatusController extends Controller
 		}
 		
 		$status->name = $this->request->name;
-		$data = [];
 		if ($this->request->flight_time) {
+			$status->flight_time = $this->request->flight_time;
+		}
+
+		$data = [];
+		/*if ($this->request->flight_time) {
 			$data['flight_time'] = $this->request->flight_time;
 		}
 		if ($this->request->discount_id) {
 			$data['discount_id'] = $this->request->discount_id;
-		}
+		}*/
 		if ($this->request->color) {
 			$data['color'] = $this->request->color;
 		}
@@ -158,7 +162,7 @@ class StatusController extends Controller
 		}
 		
 		$status = Status::find($id);
-		if (!$status) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$status) return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
 		
 		$discounts = Discount::get();
 		

@@ -81,7 +81,7 @@ class LocationController extends Controller
 		}
 
 		$location = Location::find($id);
-		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		
 		$cities = City::where('is_active', true)
 			->orderBy('name', 'asc')
@@ -140,7 +140,7 @@ class LocationController extends Controller
 		}
 		
 		$location = Location::find($id);
-		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		
 		$VIEW = view('admin.location.modal.show', [
 			'location' => $location,
@@ -164,7 +164,7 @@ class LocationController extends Controller
 		}
 
 		$location = Location::find($id);
-		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		
 		$VIEW = view('admin.location.modal.delete', [
 			'location' => $location,
@@ -257,7 +257,7 @@ class LocationController extends Controller
 		}
 
 		$location = Location::find($id);
-		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		
 		$rules = [
 			'name' => 'required|max:255|unique:locations,name,' . $id,
@@ -329,7 +329,7 @@ class LocationController extends Controller
 		}
 
 		$location = Location::find($id);
-		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		
 		if (!$location->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

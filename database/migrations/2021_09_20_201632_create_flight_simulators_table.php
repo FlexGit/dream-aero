@@ -26,7 +26,7 @@ class CreateFlightSimulatorsTable extends Migration
 		$items = [
 			'0' => [
 				'name' => 'BOEING 737 NG',
-				'alias' => '737',
+				'alias' => '737NG',
 			],
 			'1' => [
 				'name' => 'AIRBUS A320',

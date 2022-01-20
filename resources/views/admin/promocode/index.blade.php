@@ -21,12 +21,12 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter mb-2">
-						<div class="d-sm-flex justify-content-end">
+					<div class="table-filter d-sm-flex">
+						<div class="form-group align-self-end text-right ml-auto">
 							<a href="javascript:void(0)" data-toggle="modal" data-url="/promocode/add" data-action="/promocode" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
 						</div>
 					</div>
-					<table id="promocodeTable" class="table table-hover table-sm table-bordered table-striped table-data">
+					<table id="promocodeTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 							<tr>
 								<th class="text-center">Номер</th>
@@ -164,7 +164,7 @@
 						if (method === 'POST') {
 							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменен';
+							msg += 'сохранен';
 						} else if (method === 'DELETE') {
 							msg += 'удален';
 						}

@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "dev.dream-aero.ru"
+            "value": "http:\/\/admin.dream-aero.loc"
         }
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "59413f88-170e-4be4-994c-fc0cea506c03",
+        "_postman_id": "fa219131-a331-4ebe-9227-50efcfd15288",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -23,7 +23,6 @@
                     "name": "Authentification",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/login",
                             "query": [
@@ -40,7 +39,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/login?email=&password="
+                            "raw": "{{baseUrl}}\/api\/login?email=&password="
                         },
                         "method": "POST",
                         "header": [
@@ -99,7 +98,6 @@
                     "name": "Profile save",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/profile\/save",
                             "query": [
@@ -110,7 +108,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/save?token="
+                            "raw": "{{baseUrl}}\/api\/profile\/save?token="
                         },
                         "method": "POST",
                         "header": [
@@ -172,7 +170,6 @@
                     "name": "Profile delete",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/profile\/delete",
                             "query": [
@@ -183,7 +180,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/delete?token="
+                            "raw": "{{baseUrl}}\/api\/profile\/delete?token="
                         },
                         "method": "POST",
                         "header": [
@@ -236,7 +233,6 @@
                     "name": "Verification code send",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/code\/send",
                             "query": [
@@ -253,7 +249,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/code\/send?email=&type="
+                            "raw": "{{baseUrl}}\/api\/code\/send?email=&type="
                         },
                         "method": "POST",
                         "header": [
@@ -312,7 +308,6 @@
                     "name": "Registration",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/register",
                             "query": [
@@ -323,7 +318,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/register?contractor_id="
+                            "raw": "{{baseUrl}}\/api\/register?contractor_id="
                         },
                         "method": "POST",
                         "header": [
@@ -385,7 +380,6 @@
                     "name": "Logout",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/logout",
                             "query": [
@@ -396,7 +390,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/logout?token="
+                            "raw": "{{baseUrl}}\/api\/logout?token="
                         },
                         "method": "POST",
                         "header": [
@@ -449,7 +443,6 @@
                     "name": "Password change",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/password\/reset",
                             "query": [
@@ -460,7 +453,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/password\/reset?token="
+                            "raw": "{{baseUrl}}\/api\/password\/reset?token="
                         },
                         "method": "POST",
                         "header": [
@@ -522,7 +515,6 @@
                     "name": "Profile",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/profile",
                             "query": [
@@ -533,7 +525,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile?token="
+                            "raw": "{{baseUrl}}\/api\/profile?token="
                         },
                         "method": "GET",
                         "header": [
@@ -586,11 +578,17 @@
                     "name": "Tariff type list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/tariff_types",
-                            "query": [],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/tariff_types"
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "",
+                                    "description": "",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/tariff_types?token="
                         },
                         "method": "GET",
                         "header": [
@@ -643,7 +641,6 @@
                     "name": "Tariff list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/tariffs",
                             "query": [
@@ -660,7 +657,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/tariffs?token=&tariff_type_id="
+                            "raw": "{{baseUrl}}\/api\/tariffs?token=&tariff_type_id="
                         },
                         "method": "GET",
                         "header": [
@@ -680,7 +677,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"is_hit\": false,\n\t\t\t\t\"is_unified\": false,\n\t\t\t\"is_order_allow\": true,\n\t\t\t\"is_certificate_allow\": true,\n\t\t\t\"tariff_type\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\"description\": null\n\t\t\t},\n\t\t\t\"employee\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\"instagram\": null\n\t\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\t}\n\t\t\t}\n\t\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"is_hit\": false,\n\t\t\t\t\"is_unified\": false,\n\t\t\t\"is_booking_allow\": true,\n\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\"tariff_type\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\"description\": null\n\t\t\t},\n\t\t\t\"employee\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\"instagram\": null\n\t\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\t}\n\t\t\t}\n\t\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -713,7 +710,6 @@
                     "name": "Tariff detailed",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/tariff",
                             "query": [
@@ -730,7 +726,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/tariff?token=&tariff_id="
+                            "raw": "{{baseUrl}}\/api\/tariff?token=&tariff_id="
                         },
                         "method": "GET",
                         "header": [
@@ -750,7 +746,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"tariff\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"duration\": 30,\n\t\t\"price\": 6300,\n\t\t\"is_hit\": false,\n\t\t\"is_unified\": false,\n\t\t\"is_order_allow\": true,\n\t\t\"is_certificate_allow\": true,\n\t\t\"tariff_type\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"alias\": \"regular\",\n\t\t\t\"description\": null\n\t\t},\n\t\t\"employee\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John Smith\",\n\t\t\t\"photo_file_path\": null,\n\t\t\t\"icon_file_path\": null,\n\t\t\t\"instagram\": null\n\t\t},\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t}\n\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"tariff\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"duration\": 30,\n\t\t\"price\": 6300,\n\t\t\"is_hit\": false,\n\t\t\"is_unified\": false,\n\t\t\"is_booking_allow\": true,\n\t\t\"is_certificate_purchase_allow\": true,\n\t\t\"tariff_type\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"alias\": \"regular\",\n\t\t\t\"description\": null\n\t\t},\n\t\t\"employee\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John Smith\",\n\t\t\t\"photo_file_path\": null,\n\t\t\t\"icon_file_path\": null,\n\t\t\t\"instagram\": null\n\t\t},\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t}\n\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -783,7 +779,6 @@
                     "name": "City list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/cities",
                             "query": [
@@ -794,7 +789,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/cities?token="
+                            "raw": "{{baseUrl}}\/api\/cities?token="
                         },
                         "method": "GET",
                         "header": [
@@ -847,7 +842,6 @@
                     "name": "Location list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/locations",
                             "query": [
@@ -858,7 +852,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/locations?token="
+                            "raw": "{{baseUrl}}\/api\/locations?token="
                         },
                         "method": "GET",
                         "header": [
@@ -911,7 +905,6 @@
                     "name": "Legal Entity list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/legal_entities",
                             "query": [
@@ -922,7 +915,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/legal_entities?token="
+                            "raw": "{{baseUrl}}\/api\/legal_entities?token="
                         },
                         "method": "GET",
                         "header": [
@@ -975,7 +968,6 @@
                     "name": "Promo list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/promos",
                             "query": [
@@ -983,10 +975,10 @@
                                     "key": "token",
                                     "value": "",
                                     "description": "",
-                                    "disabled": true
+                                    "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/promos?token="
+                            "raw": "{{baseUrl}}\/api\/promos?token="
                         },
                         "method": "GET",
                         "header": [
@@ -1039,10 +1031,15 @@
                     "name": "Promo detailed",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/promo",
                             "query": [
+                                {
+                                    "key": "token",
+                                    "value": "",
+                                    "description": "",
+                                    "disabled": false
+                                },
                                 {
                                     "key": "promo_id",
                                     "value": "",
@@ -1050,7 +1047,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/promo?promo_id="
+                            "raw": "{{baseUrl}}\/api\/promo?token=&promo_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1103,7 +1100,6 @@
                     "name": "Profile Reset",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/profile\/reset",
                             "query": [
@@ -1114,7 +1110,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/reset?token="
+                            "raw": "{{baseUrl}}\/api\/profile\/reset?token="
                         },
                         "method": "GET",
                         "header": [
@@ -1167,7 +1163,6 @@
                     "name": "Avatar save",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/profile\/avatar\/save",
                             "query": [
@@ -1178,7 +1173,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/avatar\/save?token="
+                            "raw": "{{baseUrl}}\/api\/profile\/avatar\/save?token="
                         },
                         "method": "POST",
                         "header": [
@@ -1193,7 +1188,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"ratione\"}"
+                            "raw": "{\"file_base64\":\"molestias\"}"
                         },
                         "description": ""
                     },
@@ -1240,7 +1235,6 @@
                     "name": "Avatar delete",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/profile\/avatar\/delete",
                             "query": [
@@ -1251,7 +1245,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/profile\/avatar\/delete?token="
+                            "raw": "{{baseUrl}}\/api\/profile\/avatar\/delete?token="
                         },
                         "method": "POST",
                         "header": [
@@ -1310,7 +1304,6 @@
                     "name": "Tariff Amount",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/tariff\/price",
                             "query": [
@@ -1345,7 +1338,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/tariff\/price?token=&tariff_id=&flight_at=&is_unified=&promocode_id="
+                            "raw": "{{baseUrl}}\/api\/tariff\/price?token=&tariff_id=&flight_at=&is_unified=&promocode_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1404,7 +1397,6 @@
                     "name": "Promocode Verify",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/promocode\/verify",
                             "query": [
@@ -1421,7 +1413,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/promocode\/verify?token=&promocode="
+                            "raw": "{{baseUrl}}\/api\/promocode\/verify?token=&promocode="
                         },
                         "method": "GET",
                         "header": [
@@ -1474,7 +1466,6 @@
                     "name": "Flight list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/flights",
                             "query": [
@@ -1482,10 +1473,10 @@
                                     "key": "token",
                                     "value": "",
                                     "description": "",
-                                    "disabled": true
+                                    "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/flights?token="
+                            "raw": "{{baseUrl}}\/api\/flights?token="
                         },
                         "method": "GET",
                         "header": [
@@ -1505,7 +1496,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"flight\": {\n\t\t\t\"flight\": {\n\t\t\t\t\t\"date\": \"2021-01-01\",\n\t\t\t\t\t\"time\": \"12:00:00\"\n\t\t\t\t\"tariff\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\"duration\": 30,\n\t\t\t\t\t\"price\": 6300,\n\t\t\t\t\t\"is_hit\": false,\n\t\t\t\t\t\t\"is_unified\": false,\n\t\t\t\t\t\"is_order_allow\": true,\n\t\t\t\t\t\"is_certificate_allow\": true,\n\t\t\t\t\t\"tariff_type\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\t\t\"description\": null\n\t\t\t\t\t},\n\t\t\t\t\t\"employee\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\t\t\"instagram\": null\n\t\t\t\t\t\t},\n\t\t\t\t\t\"city\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\"location\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\t\t\t\"address\": null,\n\t\t\t\t\t\"working_hours\": null,\n\t\t\t\t\t\"phone\": null,\n\t\t\t\t\t\"email\": null,\n\t\t\t\t\t\"map_link\": null,\n\t\t\t\t\t\"skype\": null,\n\t\t\t\t\t\"whatsapp\": null,\n\t\t\t\t\t\"scheme_file_path\": null\n\t\t\t\t\t},\n\t\t\t\t\"score\": \"300\"\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"flight\": {\n\t\t\t\"flight\": {\n\t\t\t\t\t\"date\": \"2021-01-01\",\n\t\t\t\t\t\"time\": \"12:00:00\"\n\t\t\t\t\"tariff\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\"duration\": 30,\n\t\t\t\t\t\"price\": 6300,\n\t\t\t\t\t\"is_hit\": false,\n\t\t\t\t\t\t\"is_unified\": false,\n\t\t\t\t\t\"is_booking_allow\": true,\n\t\t\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\t\t\"tariff_type\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\t\t\"description\": null\n\t\t\t\t\t},\n\t\t\t\t\t\"employee\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\t\t\"instagram\": null\n\t\t\t\t\t\t},\n\t\t\t\t\t\"city\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\"location\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\t\t\t\"address\": null,\n\t\t\t\t\t\"working_hours\": null,\n\t\t\t\t\t\"phone\": null,\n\t\t\t\t\t\"email\": null,\n\t\t\t\t\t\"map_link\": null,\n\t\t\t\t\t\"skype\": null,\n\t\t\t\t\t\"whatsapp\": null,\n\t\t\t\t\t\"scheme_file_path\": null\n\t\t\t\t\t},\n\t\t\t\t\"score\": \"300\"\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -1538,7 +1529,6 @@
                     "name": "Code verify",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/code\/verify",
                             "query": [
@@ -1555,7 +1545,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/code\/verify?email=&code="
+                            "raw": "{{baseUrl}}\/api\/code\/verify?email=&code="
                         },
                         "method": "GET",
                         "header": [
@@ -1614,7 +1604,6 @@
                     "name": "Certificate Verify",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/certificate\/verify",
                             "query": [
@@ -1637,7 +1626,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/certificate\/verify?token=&number=&product_id="
+                            "raw": "{{baseUrl}}\/api\/certificate\/verify?token=&number=&product_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1690,7 +1679,6 @@
                     "name": "Notification list",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/notifications",
                             "query": [
@@ -1701,7 +1689,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/notifications?token="
+                            "raw": "{{baseUrl}}\/api\/notifications?token="
                         },
                         "method": "GET",
                         "header": [
@@ -1754,7 +1742,6 @@
                     "name": "Notification detailed",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/notification",
                             "query": [
@@ -1771,7 +1758,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/notification?token=&notification_id="
+                            "raw": "{{baseUrl}}\/api\/notification?token=&notification_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1824,7 +1811,6 @@
                     "name": "Deal create",
                     "request": {
                         "url": {
-                            "protocol": "http",
                             "host": "{{baseUrl}}",
                             "path": "api\/deal\/create",
                             "query": [
@@ -1835,7 +1821,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "http:\/\/{{baseUrl}}\/api\/deal\/create?token="
+                            "raw": "{{baseUrl}}\/api\/deal\/create?token="
                         },
                         "method": "POST",
                         "header": [

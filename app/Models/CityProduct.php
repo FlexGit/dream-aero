@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|CityProduct newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CityProduct query()
  * @mixin \Eloquent
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
  */
 class CityProduct extends Pivot
 {
@@ -47,6 +49,7 @@ class CityProduct extends Pivot
 		'price',
 		'discount_id',
 		'is_hit',
+		'score',
 		'is_active',
 		'data_json',
 	];

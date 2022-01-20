@@ -199,7 +199,7 @@
 						if (method === 'POST') {
 							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменен';
+							msg += 'сохранен';
 						}
 
 						$('#modal').modal('hide');

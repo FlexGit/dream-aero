@@ -16,6 +16,7 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
 			$table->string('number')->nullable()->comment('номер счета');
+			$table->integer('contractor_id')->default(0)->index()->comment('контрагент');
 			$table->integer('payment_method_id')->default(0)->index()->comment('способ оплаты');
 			$table->integer('status_id')->default(0)->index()->comment('статус');
 			$table->integer('amount')->default(0)->comment('сумма счета');

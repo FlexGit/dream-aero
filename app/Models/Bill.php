@@ -58,6 +58,7 @@ class Bill extends Model
 	
 	const ATTRIBUTES = [
 		'number' => 'Номер счета',
+		'contractor_id' => 'контрагент',
 		'payment_method_id' => 'Способ оплаты',
 		'status_id' => 'Статус счета',
 		'amount' => 'Сумма',
@@ -90,6 +91,7 @@ class Bill extends Model
 	 */
 	protected $fillable = [
 		'number',
+		'contractor_id',
 		'payment_method_id',
 		'status_id',
 		'amount',
@@ -129,6 +131,11 @@ class Bill extends Model
 				$bill->save();
 			}
 		});
+	}
+
+	public function contractor()
+	{
+		return $this->hasOne(Contractor::class, 'id', 'contractor_id');
 	}
 
 	public function status()

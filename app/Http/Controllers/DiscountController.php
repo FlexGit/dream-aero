@@ -61,7 +61,7 @@ class DiscountController extends Controller
 		}
 
 		$discount = Discount::find($id);
-		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Скидка не найдена']);
 
 		$VIEW = view('admin.discount.modal.edit', [
 			'discount' => $discount,
@@ -103,7 +103,7 @@ class DiscountController extends Controller
 		}
 
 		$discount = Discount::find($id);
-		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Скидка не найдена']);
 		
 		$VIEW = view('admin.discount.modal.delete', [
 			'discount' => $discount,
@@ -171,7 +171,7 @@ class DiscountController extends Controller
 		}
 
 		$discount = Discount::find($id);
-		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Скидка не найдена']);
 		
 		$rules = [
 			'value' => [
@@ -219,7 +219,7 @@ class DiscountController extends Controller
 		}
 
 		$discount = Discount::find($id);
-		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Скидка не найдена']);
 		
 		if (!$discount->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

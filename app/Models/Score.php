@@ -8,6 +8,35 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use \Venturecraft\Revisionable\RevisionableTrait;
 
+/**
+ * App\Models\Score
+ *
+ * @property int $id
+ * @property int $score количество баллов
+ * @property int $contractor_id контрагент
+ * @property int $event_id событие
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read \App\Models\Contractor|null $contractor
+ * @property-read \App\Models\Event|null $event
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Score newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Score newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Score onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Score query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereContractorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereScore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Score withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Score withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Score extends Model
 {
 	use HasFactory, SoftDeletes, RevisionableTrait;

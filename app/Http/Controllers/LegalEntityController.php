@@ -59,7 +59,7 @@ class LegalEntityController extends Controller
 		}
 
 		$legalEntity = LegalEntity::find($id);
-		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Юр.лицо не найдено']);
 
 		$VIEW = view('admin.legalEntity.modal.edit', [
 			'legalEntity' => $legalEntity,
@@ -98,7 +98,7 @@ class LegalEntityController extends Controller
 		}
 		
 		$legalEntity = LegalEntity::find($id);
-		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Юр.лицо не найдено']);
 		
 		$VIEW = view('admin.legalEntity.modal.show', [
 			'legalEntity' => $legalEntity,
@@ -122,7 +122,7 @@ class LegalEntityController extends Controller
 		}
 
 		$legalEntity = LegalEntity::find($id);
-		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Юр.лицо не найдено']);
 		
 		$VIEW = view('admin.legalEntity.modal.delete', [
 			'legalEntity' => $legalEntity,
@@ -195,7 +195,7 @@ class LegalEntityController extends Controller
 		}
 
 		$legalEntity = LegalEntity::find($id);
-		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Юр.лицо не найдено']);
 
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:legal_entities,name, ' . $id],
@@ -252,7 +252,7 @@ class LegalEntityController extends Controller
 		}
 
 		$legalEntity = LegalEntity::find($id);
-		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Юр.лицо не найдено']);
 		
 		if (!$legalEntity->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

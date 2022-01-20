@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +19,6 @@ class RevisionController extends Controller
 		'FlightSimulator' => 'Авиатренажер',
 		'LegalEntity' => 'Юр.лицо',
 		'Location' => 'Локация',
-		//'Order' => 'Заявка',
 		'Promo' => 'Акция',
 		'Promocode' => 'Промокод',
 		'Score' => 'Баллы',
@@ -27,9 +27,9 @@ class RevisionController extends Controller
 		'ProductType' => 'Тип продукта',
 		'User' => 'Пользователь',
 		'Bill' => 'Счет',
-		//'Payment' => 'Платеж',
 		'Certificate' => 'Сертификат',
 		'Discount' => 'Скидка',
+		'Event' => 'Событие',
 	];
 	
 	/**
@@ -73,11 +73,9 @@ class RevisionController extends Controller
 		
 		$table = $this->request->filter_entity_alias ? app('App\Models\\' . $this->request->filter_entity_alias)->getTable() : '';
 		switch ($table) {
-			//case 'orders':
 			case 'deals':
 			case 'certificates':
 			case 'bills':
-			//case 'payments':
 			case 'promocodes':
 				$field = 'number';
 			break;
@@ -87,6 +85,9 @@ class RevisionController extends Controller
 			case 'scores':
 				$field = 'score';
 			break;
+			case 'events':
+				$field = 'start_at';
+			break;
 			case '':
 				$field = 'title';
 			break;
@@ -94,6 +95,7 @@ class RevisionController extends Controller
 				$field = 'name';
 		}
 
+		//DB::connection()->enableQueryLog();
 		$revisions = DB::table('revisions')
 			->leftJoin('users as u', 'revisions.user_id', '=', 'u.id')
 			->select('revisions.*', 'u.name as user')
@@ -107,23 +109,30 @@ class RevisionController extends Controller
 			$revisions = $revisions->where($table . '.' . $field, 'like', '%' . $this->request->search_object . '%');
 		}
 		$revisions = $revisions->limit(20)->get();
+		//$queries = DB::getQueryLog();
+		//\Log::debug($queries);
 
 		$revisionData = [];
 		foreach ($revisions as $revision) {
 			$model = $revision->revisionable_type::find($revision->revisionable_id);
-			if (!$model) continue;
+			//if (!$model) continue;
 			
 			$object = '';
-			if ($model->number) {
-				$object = $model->number;
-			} elseif ($model->value) {
-				$object = $model->value;
-			} elseif ($model->score) {
-				$object = $model->score;
-			} elseif ($model->title) {
-				$object = $model->title;
-			} elseif ($model->name) {
-				$object = $model->name;
+
+			if ($model) {
+				if ($model->number) {
+					$object = $model->number;
+				} else if ($model->value) {
+					$object = $model->value;
+				} else if ($model->score) {
+					$object = $model->score;
+				} else if ($model->title) {
+					$object = $model->title;
+				} else if ($model->name) {
+					$object = $model->name;
+				} else if ($model->start_at) {
+					$object = Carbon::parse($model->start_at)->format('Y-m-d H:i');
+				}
 			}
 
 			$oldValue = $newValue = '';
@@ -131,11 +140,11 @@ class RevisionController extends Controller
 				$tableName = substr($revision->key, 0, strlen($revision->key) - 3);
 				$entity = 'App\Models\\' . \Str::studly(\Str::singular($tableName));
 				if ($revision->old_value) {
-					$model = $entity::find($revision->old_value);
+					$model = $entity::withTrashed()->find($revision->old_value);
 					$oldValue = $model->number ?: $model->name;
 				}
 				if ($revision->new_value) {
-					$model = $entity::find($revision->new_value);
+					$model = $entity::withTrashed()->find($revision->new_value);
 					if ($model->number) {
 						$newValue = $model->number;
 					} elseif ($model->value) {

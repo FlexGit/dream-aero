@@ -15,6 +15,66 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use \Venturecraft\Revisionable\RevisionableTrait;
 
+/**
+ * App\Models\Contractor
+ *
+ * @property int $id
+ * @property string $name имя
+ * @property string|null $lastname фамилия
+ * @property \datetime|null $birthdate дата рождения
+ * @property string|null $phone основной номер телефона
+ * @property string $email основной e-mail
+ * @property string|null $password пароль в md5
+ * @property string|null $remember_token
+ * @property int $city_id город, к которому привязан контрагент
+ * @property int $discount_id скидка
+ * @property int $user_id пользователь
+ * @property bool $is_active признак активности
+ * @property \datetime|null $last_auth_at дата последней по времени авторизации
+ * @property string|null $source источник
+ * @property string|null $uuid uuid
+ * @property bool $is_subscribed подписан на рассылку
+ * @property array|null $data_json дополнительная информация
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\Discount|null $discount
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Token[] $tokens
+ * @property-read int|null $tokens_count
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Contractor onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereBirthdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsSubscribed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastAuthAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUuid($value)
+ * @method static \Illuminate\Database\Query\Builder|Contractor withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Contractor withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Contractor extends Authenticatable
 {
 	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, RevisionableTrait;

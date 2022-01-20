@@ -16,20 +16,20 @@ namespace App\Models{
  *
  * @property int $id
  * @property string|null $number номер счета
+ * @property int $payment_method_id способ оплаты
  * @property int $status_id статус
  * @property int $amount сумма счета
- * @property int $deal_id сделка, по которой выставлен счет
- * @property int $deal_position_id позиция сделки, по которой выставлен счет
- * @property array|null $data_json дополнительная информация
- * @property bool $is_active признак активности
+ * @property string|null $uuid
+ * @property \datetime|null $payed_at дата проведения платежа
+ * @property \datetime|null $link_sent_at
  * @property int $user_id пользователь
+ * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \App\Models\Deal|null $deal
- * @property-read \App\Models\DealPosition|null $dealPosition
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
- * @property-read int|null $payments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Deal[] $deals
+ * @property-read int|null $deals_count
+ * @property-read \App\Models\PaymentMethod|null $paymentMethod
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @property-read \App\Models\Status|null $status
@@ -40,15 +40,16 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDataJson($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDealId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDealPositionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Bill whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereLinkSentAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill wherePayedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill wherePaymentMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereUuid($value)
  * @method static \Illuminate\Database\Query\Builder|Bill withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Bill withoutTrashed()
  * @mixin \Eloquent
@@ -61,19 +62,15 @@ namespace App\Models{
  * App\Models\Certificate
  *
  * @property int $id
- * @property string $number номер сертификата
+ * @property string|null $number номер
  * @property int $status_id статус
- * @property int $contractor_id контрагент
- * @property int $product_id продукт
- * @property int $city_id город
  * @property \datetime|null $expire_at срок окончания действия сертификата
  * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \App\Models\City|null $city
- * @property-read \App\Models\Contractor|null $contractor
- * @property-read \App\Models\Product|null $product
+ * @property string|null $uuid
+ * @property-read \App\Models\Deal $deal
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @property-read \App\Models\Status|null $status
@@ -81,22 +78,18 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate newQuery()
  * @method static \Illuminate\Database\Query\Builder|Certificate onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate query()
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereCityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereContractorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereExpireAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereUuid($value)
  * @method static \Illuminate\Database\Query\Builder|Certificate withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Certificate withoutTrashed()
  * @mixin \Eloquent
- * @property bool $is_unified сертификат действует во всех городах
- * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereIsUnified($value)
  */
 	class Certificate extends \Eloquent {}
 }
@@ -116,8 +109,12 @@ namespace App\Models{
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $location
- * @property-read int|null $location_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
+ * @property-read int|null $locations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
+ * @property-read int|null $products_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promocode[] $promocodes
+ * @property-read int|null $promocodes_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @method static \Illuminate\Database\Eloquent\Builder|City newModelQuery()
@@ -138,10 +135,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|City withTrashed()
  * @method static \Illuminate\Database\Query\Builder|City withoutTrashed()
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
- * @property-read int|null $locations_count
  */
 	class City extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CityProduct
+ *
+ * @property-read \App\Models\Discount $discount
+ * @method static \Illuminate\Database\Eloquent\Builder|CityProduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CityProduct newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CityProduct query()
+ * @mixin \Eloquent
+ */
+	class CityProduct extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\CityPromocode
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|CityPromocode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CityPromocode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CityPromocode query()
+ * @mixin \Eloquent
+ */
+	class CityPromocode extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -192,20 +212,26 @@ namespace App\Models{
  * @property string|null $password пароль в md5
  * @property string|null $remember_token
  * @property int $city_id город, к которому привязан контрагент
- * @property \App\Models\Discount|null $discount скидка
- * @property array|null $data_json дополнительная информация
+ * @property int $discount_id скидка
+ * @property int $user_id пользователь
  * @property bool $is_active признак активности
  * @property \datetime|null $last_auth_at дата последней по времени авторизации
+ * @property string|null $source источник
+ * @property string|null $uuid uuid
+ * @property bool $is_subscribed подписан на рассылку
+ * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
  * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\Discount|null $discount
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Token[] $tokens
  * @property-read int|null $tokens_count
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor newQuery()
  * @method static \Illuminate\Database\Query\Builder|Contractor onlyTrashed()
@@ -215,17 +241,21 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereDiscountId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereIsSubscribed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastAuthAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereLastname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereSource($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereUuid($value)
  * @method static \Illuminate\Database\Query\Builder|Contractor withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Contractor withoutTrashed()
  * @mixin \Eloquent
@@ -238,31 +268,73 @@ namespace App\Models{
  * App\Models\Deal
  *
  * @property int $id
- * @property string|null $number номер сделки
- * @property int $contractor_id контрагент, с которым заключена сделка
- * @property array|null $data_json дополнительная информация
+ * @property string|null $number номер
+ * @property int $status_id статус
+ * @property int $contractor_id контрагент
+ * @property string $name имя
+ * @property string $phone номер телефона
+ * @property string $email e-mail
+ * @property int $product_id продукт
+ * @property int $certificate_id сертификат
+ * @property int $duration продолжительность полета
+ * @property int $amount стоимость
+ * @property int $city_id город, в котором будет осуществлен полет
+ * @property int $location_id локация, на которой будет осуществлен полет
+ * @property int $promo_id акция
+ * @property int $promocode_id промокод
+ * @property bool $is_certificate_purchase покупка сертификата
+ * @property int $is_unified сертификат действует во всех городах
+ * @property \datetime|null $flight_at дата и время полета
+ * @property \datetime|null $invite_sent_at последняя дата отправки приглашения на e-mail
+ * @property \datetime|null $certificate_sent_at последняя дата отправки сертификата на e-mail
+ * @property string|null $source источник
  * @property int $user_id пользователь
+ * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bill[] $bills
  * @property-read int|null $bills_count
- * @property-read \App\Models\Contractor|null $contractor
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DealPosition[] $dealPositions
- * @property-read int|null $deal_positions_count
+ * @property-read \App\Models\Certificate|null $certificate
+ * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\Contractor $contractor
+ * @property-read \App\Models\Event|null $event
+ * @property-read \App\Models\Location|null $location
+ * @property-read \App\Models\Product|null $product
+ * @property-read \App\Models\Promo|null $promo
+ * @property-read \App\Models\Promocode|null $promocode
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
- * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\Status|null $status
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Deal newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Deal newQuery()
  * @method static \Illuminate\Database\Query\Builder|Deal onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Deal query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereCertificateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereCertificateSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereContractorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereFlightAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereInviteSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereIsCertificatePurchase($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereIsUnified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal wherePromoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal wherePromocodeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|Deal withTrashed()
@@ -274,73 +346,10 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\DealPosition
- *
- * @property int $id
- * @property string $number номер позиции сделки
- * @property int $deal_id сделка
- * @property int $status_id статус
- * позиции сделки
- * @property int $order_id заказ
- * @property int $product_id продукт
- * @property int $certificate_id сертификат
- * @property int $duration продолжительность полета
- * @property int $amount стоимость
- * @property int $city_id город, в котором будет осуществлен полет
- * @property int $location_id локация, на которой будет осуществлен полет
- * @property \datetime|null $flight_at дата и время полета
- * @property \datetime|null $invite_sent_at последняя дата отправки приглашения на e-mail
- * @property \datetime|null $certificate_sent_at последняя дата отправки сертификата на e-mail
- * @property array|null $data_json дополнительная информация
- * @property \datetime|null $created_at
- * @property \datetime|null $updated_at
- * @property \datetime|null $deleted_at
- * @property-read \App\Models\Certificate|null $certificate
- * @property-read \App\Models\City|null $city
- * @property-read \App\Models\Deal|null $deal
- * @property-read \App\Models\Location|null $location
- * @property-read \App\Models\Order|null $order
- * @property-read \App\Models\Product|null $product
- * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
- * @property-read int|null $revision_history_count
- * @property-read \App\Models\Status|null $status
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition newQuery()
- * @method static \Illuminate\Database\Query\Builder|DealPosition onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition query()
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateSentAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDataJson($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDealId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereFlightAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereInviteSentAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|DealPosition withTrashed()
- * @method static \Illuminate\Database\Query\Builder|DealPosition withoutTrashed()
- * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bill[] $bills
- * @property-read int|null $bills_count
- */
-	class DealPosition extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Discount
  *
  * @property int $id
- * @property string $value размер скидки
+ * @property int|null $value размер скидки
  * @property bool $is_fixed фиксированная скидка
  * @property bool $is_active признак активности
  * @property \datetime|null $created_at
@@ -362,6 +371,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Discount withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Discount withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $alias алиас
+ * @method static \Illuminate\Database\Eloquent\Builder|Discount whereAlias($value)
  */
 	class Discount extends \Eloquent {}
 }
@@ -432,20 +443,120 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Event
+ *
+ * @property int $id
+ * @property string $event_type тип события
+ * @property int $deal_id сделка
+ * @property int $employee_id сотрудник
+ * @property int $city_id город, в котором будет осуществлен полет
+ * @property int $location_id локация, на которой будет осуществлен полет
+ * @property int $flight_simulator_id авиатренажер, на котором будет осуществлен полет
+ * @property \datetime|null $start_at дата и время начала события
+ * @property \datetime|null $stop_at дата и время окончания события
+ * @property int $extra_time дополнительное время
+ * @property int $is_repeated_flight признак повторного полета
+ * @property int $is_unexpected_flight признак спонтанного полета
+ * @property int $is_test_flight признак повторного полета
+ * @property string $notification_type способ оповещения контрагента о полете
+ * @property array|null $data_json дополнительная информация
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read \App\Models\City $city
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\EventComment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read \App\Models\Deal $deal
+ * @property-read \App\Models\Employee $employee
+ * @property-read \App\Models\Location $location
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
+ * @property-read \App\Models\FlightSimulator $simulator
+ * @method static \Illuminate\Database\Eloquent\Builder|Event newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Event onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDealId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereEmployeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereExtraTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereFlightSimulatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsRepeatedFlight($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsTestFlight($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsUnexpectedFlight($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereNotificationType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereStartAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereStopAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Event withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Event withoutTrashed()
+ * @mixin \Eloquent
+ */
+	class Event extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\EventComment
+ *
+ * @property int $id
+ * @property string $name комментарий
+ * @property int $event_id событие
+ * @property int $created_by кто создал
+ * @property int $updated_by кто изменил
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read \App\Models\Event $event
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment newQuery()
+ * @method static \Illuminate\Database\Query\Builder|EventComment onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereEventId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EventComment whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|EventComment withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|EventComment withoutTrashed()
+ * @mixin \Eloquent
+ * @property-read \App\Models\User|null $createdUser
+ * @property-read \App\Models\User|null $updatedUser
+ */
+	class EventComment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\FlightSimulator
  *
  * @property int $id
  * @property string $name наименование авиатренажера
+ * @property string $alias алиас
  * @property bool $is_active признак активности
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
+ * @property-read int|null $locations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator newQuery()
  * @method static \Illuminate\Database\Query\Builder|FlightSimulator onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator whereAlias($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FlightSimulator whereId($value)
@@ -533,8 +644,34 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Location withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Location withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FlightSimulator[] $simulators
+ * @property-read int|null $simulators_count
  */
 	class Location extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\LocationFlightSimulator
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator query()
+ * @mixin \Eloquent
+ */
+	class LocationFlightSimulator extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\LocationFlightSimulator
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator query()
+ * @mixin \Eloquent
+ */
+	class LocationProduct extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -580,122 +717,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Order
- *
- * @property int $id
- * @property string|null $number номер заказа
- * @property int $status_id статус заказа
- * @property int $contractor_id контрагент, совершивший заказ
- * @property string $name имя
- * @property string $phone номер телефона
- * @property string $email e-mail
- * @property int $city_id город, в котором будет осуществлен полет
- * @property int $location_id локация, на которой будет осуществлен полет
- * @property int $product_id продукт
- * @property int $amount стоимость
- * @property int $duration продолжительность полета
- * @property int $promocode_id промокод
- * @property int $certificate_id сертификат
- * @property \datetime|null $flight_at дата и время полета
- * @property bool $is_certificate_order заказ сертификата
- * @property bool $is_unified сертификат действует во всех городах
- * @property string|null $source источник
- * @property array|null $data_json дополнительная информация
- * @property int $user_id пользователь
- * @property \datetime|null $created_at
- * @property \datetime|null $updated_at
- * @property \datetime|null $deleted_at
- * @property-read \App\Models\Certificate|null $certificate
- * @property-read \App\Models\City|null $city
- * @property-read \App\Models\Contractor|null $contractor
- * @property-read \App\Models\DealPosition $dealPosition
- * @property-read \App\Models\Location|null $location
- * @property-read \App\Models\Product|null $product
- * @property-read \App\Models\Promocode|null $promocode
- * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
- * @property-read int|null $revision_history_count
- * @property-read \App\Models\Status|null $status
- * @property-read \App\Models\User|null $user
- * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
- * @method static \Illuminate\Database\Query\Builder|Order onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCertificateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereContractorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereDataJson($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereFlightAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereIsCertificateOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereIsUnified($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePromocodeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereSource($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|Order withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Order withoutTrashed()
- * @mixin \Eloquent
- */
-	class Order extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\Payment
- *
- * @property int $id
- * @property int $payment_method_id способ платежа
- * @property int $status_id статус
- * @property int $amount сумма платежа
- * @property \datetime|null $performed_at дата проведения платежа шлюзом или ОФД
- * @property int $deal_id сделка, к которой привязан платеж
- * @property array|null $data_json дополнительная информация: ОФД - номер смены, состав позиций, номер ФД, №пп, оператор. Шлюз -
- * @property \datetime|null $created_at
- * @property \datetime|null $updated_at
- * @property \datetime|null $deleted_at
- * @property-read \App\Models\Bill|null $bill
- * @property-read \App\Models\PaymentMethod|null $paymentMethod
- * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
- * @property-read int|null $revision_history_count
- * @property-read \App\Models\Status|null $status
- * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
- * @method static \Illuminate\Database\Query\Builder|Payment onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereDataJson($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereDealId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentMethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePerformedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Payment withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Payment withoutTrashed()
- * @mixin \Eloquent
- * @property string|null $number номер платежа
- * @property int $bill_id счет, по которому совершен платеж
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereBillId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereNumber($value)
- */
-	class Payment extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\PaymentMethod
  *
  * @property int $id
@@ -734,17 +755,13 @@ namespace App\Models{
  * @property string $alias алиас
  * @property int $product_type_id тип продукта
  * @property int $employee_id пилот
- * @property int $city_id город, в котором действует продукт
  * @property int $duration длительность полёта, мин.
- * @property int $price базовая цена продукта
- * @property bool $is_hit является ли продукт хитом продаж
- * @property bool $is_active признак активности
- * @property bool $is_unified сертификат действует на всех локациях
  * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \App\Models\City|null $city
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\City[] $cities
+ * @property-read int|null $cities_count
  * @property-read \App\Models\Employee|null $employee
  * @property-read \App\Models\ProductType|null $productType
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
@@ -754,18 +771,13 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Product onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Product query()
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereAlias($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereEmployeeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereIsHit($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereIsUnified($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereProductTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Product withTrashed()
@@ -854,6 +866,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Promo withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Promo withoutTrashed()
+ * @mixin \Eloquent
  */
 	class Promo extends \Eloquent {}
 }
@@ -864,8 +877,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $number промокод
- * @property int $city_id город, в котором действует промокод
- * @property \App\Models\Discount|null $discount_id скидка
+ * @property int $discount_id скидка
  * @property bool $is_active признак активности
  * @property \datetime|null $active_from_at дата начала активности
  * @property \datetime|null $active_to_at дата окончания активности
@@ -873,7 +885,9 @@ namespace App\Models{
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
- * @property-read \App\Models\City $city
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\City[] $cities
+ * @property-read int|null $cities_count
+ * @property-read \App\Models\Discount|null $discount
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode newModelQuery()
@@ -882,11 +896,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode query()
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereActiveFromAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereActiveToAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDiscountId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereNumber($value)
@@ -894,8 +907,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Promocode withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Promocode withoutTrashed()
  * @mixin \Eloquent
- * @property-read \App\Models\Discount|null $discount
- * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereDiscountId($value)
  */
 	class Promocode extends \Eloquent {}
 }
@@ -941,12 +952,12 @@ namespace App\Models{
  * @property int $id
  * @property int $score количество баллов
  * @property int $contractor_id контрагент
- * @property int $deal_position_id ссылка на позицию сделки
+ * @property int $event_id событие
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
  * @property-read \App\Models\Contractor|null $contractor
- * @property-read \App\Models\Deal|null $deal
+ * @property-read \App\Models\Event|null $event
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @method static \Illuminate\Database\Eloquent\Builder|Score newModelQuery()
@@ -955,15 +966,14 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Score query()
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereContractorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Score whereDealPositionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereEventId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Score withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Score withoutTrashed()
  * @mixin \Eloquent
- * @property-read \App\Models\DealPosition|null $dealPosition
  */
 	class Score extends \Eloquent {}
 }
@@ -976,6 +986,7 @@ namespace App\Models{
  * @property string $name наименование
  * @property string $alias алиас
  * @property string $type тип сущности: контрагент, заказ, сделка, счет, платеж, сертификат
+ * @property int $flight_time время налета
  * @property int $sort сортировка
  * @property bool $is_active признак активности
  * @property array|null $data_json дополнительная информация
@@ -992,6 +1003,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereFlightTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereName($value)
@@ -1081,6 +1093,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\City $city
+ * @property-read \App\Models\Location $location
  */
 	class User extends \Eloquent {}
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\City;
 use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -108,7 +109,7 @@ class Product extends Model
 	{
 		return $this->belongsToMany(City::class, 'cities_products', 'product_id', 'city_id')
 			->using(CityProduct::class)
-			->withPivot(['price', 'discount_id', 'is_hit', 'is_active', 'data_json'])
+			->withPivot(['price', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
 			->withTimestamps();
 	}
 	
@@ -123,9 +124,9 @@ class Product extends Model
 			'id' => $this->id,
 			'name' => $this->name,
 			'duration' => $this->duration,
-			'price' => $this->price,
-			'is_hit' => (bool)$this->is_hit,
-			'is_unified' => (bool)$this->is_unified,
+			'price' => $this->pivot->price,
+			'is_hit' => (bool)$this->pivot->is_hit,
+			'is_unified' => in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]),
 			'is_booking_allow' => array_key_exists('is_booking_allow', $data) ? (bool)$data['is_booking_allow'] : false,
 			'is_certificate_purchase_allow' => array_key_exists('is_certificate_purchase_allow', $data) ? (bool)$data['is_certificate_purchase_allow'] : false,
 			'tariff_type' => $this->productType ? $this->productType->format() : null,
@@ -146,9 +147,9 @@ class Product extends Model
 		$productTypeId = $product->product_type_id ?? 0;
 		$alias = $product->productType->alias ?? null;
 		
-		// для тарифа, действующего в любой локации
+		// для тарифа, действующего в любом городе
 		if ($isUnified && in_array($alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
-			$city = HelpFunctions::getEntityByAlias('\App\Models\City', City::MSK_ALIAS);
+			$city = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 			
 			$product = Product::where('product_type_id', $productTypeId)
 				->whereIn('city_id', [$city->id, 0])
@@ -157,13 +158,20 @@ class Product extends Model
 				->first();
 		}
 		
-		// Todo счастливые часы
-		
-		
 		// базовая цена тарифа
 		$price = $product->price ?? 0;
-		
-		// персональная скидка контрагента
+		if (!$price) return 0;
+
+		// скидка по продукту
+		if ($product->discount) {
+			if ($product->discount->is_fixed) {
+				$price = round($price - $product->discount->value);
+			} else {
+				$price = round($price - $price * $product->discount->value / 100);
+			}
+		};
+
+		// персональная скидка контрагента (по времени налета)
 		if ($contractor->discount) {
 			if ($contractor->discount->is_fixed) {
 				$price = round($price - $contractor->discount->value);
@@ -172,9 +180,7 @@ class Product extends Model
 			}
 		}
 		
-		// скидка контрагента по налету
-		
-		// промокод
+		// скидка по промокоду
 		if ($promocode instanceof Promocode && $promocode->discount) {
 			if ($promocode->discount->is_fixed) {
 				$price = round($price - $promocode->discount->value);
@@ -185,7 +191,7 @@ class Product extends Model
 		
 		$date = date('Y-m-d');
 		
-		// акции
+		// скидка по акции
 		$promo = Promo::where('is_active', true)
 			->where('active_from_at', '<=', $date)
 			->where('active_to_at', '>=', $date)
@@ -223,18 +229,34 @@ class Product extends Model
 		
 		return false;
 	}
-	
-	public function calcAmount($contractorId, $promoId, $paymentMethodId, $cityId = 0)
+
+	/**
+	 * @param $contractorId
+	 * @param $promoId
+	 * @param $cityId
+	 * @param $paymentMethodId
+	 * @param $isFree
+	 * @param $source
+	 * @param bool $isAirlineMilesPurchase
+	 *
+	 * @return float|int
+	 */
+	public function calcAmount($contractorId, $cityId, $paymentMethodId, $promoId, $promocodeId, $isFree, $source, $isAirlineMilesPurchase = false)
 	{
+		if ($isFree) return 0;
+
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
 		$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;
-		
-		if ($paymentMethod && $paymentMethod->alias == PaymentMethod::FREE_ALIAS) return 0;
-		
+		$promocode = $promocodeId ? PromoCode::whereIsActive(true)
+			->where('actve_from_at', '<=', Carbon::now()->parse('Y-m-d H:i:s'))
+			->where('actve_to_at', '>=', Carbon::now()->parse('Y-m-d H:i:s'))
+			->whereRelation('cities', 'id', '=', $cityId)
+			->find($promocodeId) : null;
+
 		// если город любой, то цены продуктов города Москва
 		if (!$cityId) {
-			$mskCity = HelpFunctions::getEntityByAlias('\App\Models\City', City::MSK_ALIAS);
+			$mskCity = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 			$cityId = $mskCity->id;
 		}
 		
@@ -243,27 +265,37 @@ class Product extends Model
 	
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
-		
+
 		// скидка на продукт
 		$discount = $cityProduct->pivot->discount ?? null;
 		if ($discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+
+			return round($amount);
+		}
+
+		// сидка по промокоду
+		$discount = ($promocode && $promocode->discount) ? $promocode->discount : null;
+		if ($discount) {
+			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+
+			return round($amount);
 		}
 
 		// скидка по акции
-		$discount = $promo->discount ?? null;
+		$discount = ($promo && $promo->discount) ? $promo->discount : null;
 		if ($discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
-			
+
 			return round($amount);
 		}
 
 		// скидка контрагента
-		$discount = $contractor->discount ?? null;
+		$discount = ($contractor && $contractor->discount) ? $contractor->discount : null;
 		if ($discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 		}
-		
+
 		return round($amount);
 	}
 }

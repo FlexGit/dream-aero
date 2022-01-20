@@ -14,7 +14,7 @@
 					<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/edit" data-action="/contractor/{{ $contractor->id }}" data-method="PUT" data-type="contractor" data-title="Редактирование контрагента" title="Редактировать контрагента">{{ $contractor->name }} {{ $contractor->lastname ?? '' }}</a>
 				</div>
 				<div>
-					<i class="fas fa-map-marker-alt"></i> {{ $contractor->city ? $contractor->city->name : '' }}
+					{{ $contractor->city ? $contractor->city->name : '' }}
 				</div>
 				<div class="d-flex justify-content-between mt-2">
 					<div>
@@ -29,14 +29,14 @@
 				</div>
 			</div>
 			<div class="d-inline-block col-6 align-top ml-3">
-				<div>
+				<div title="Телефон">
 					<i class="fas fa-mobile-alt"></i> {{ $contractor->phone }}
 				</div>
-				<div>
+				<div title="E-mail">
 					<i class="far fa-envelope"></i> {{ $contractor->email }}
 				</div>
 				@if($contractor->birthdate)
-					<div>
+					<div title="Дата рождения">
 						<i class="fas fa-birthday-cake"></i> {{ \Carbon\Carbon::parse($contractor->birthdate)->format('Y-m-d') }}
 					</div>
 				@endif

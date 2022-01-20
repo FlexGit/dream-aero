@@ -1,4 +1,5 @@
 <input type="hidden" id="deal_id" name="deal_id" value="{{ $deal->id }}">
+
 <div class="form-group">
 	<label for="status_id">Статус</label>
 	<select class="form-control" id="status_id" name="status_id">

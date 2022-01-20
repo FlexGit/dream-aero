@@ -3,37 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.hash = `#${id}`;
     };
 
-    const throttledUpdateHash = _.throttle(updateHash, 200);
-
-    const observer = new IntersectionObserver((entries) => {
-        // If intersectionRatio is 0, the target is out of view
-        // and we do not need to do anything.
-        if (entries[0].intersectionRatio <= 0) {
-            return;
-        }
-
-        throttledUpdateHash(entries[0].target.id);
-    }, {
-        rootMargin: '-8% 0px -8% 0px', // shrink the intersection viewport
-        threshold: 1.0, // trigger at 100% visibility
-    });
-
-    function makeObserver(elem) {
-        return observer.observe(elem);
-    }
-
-    const titles = document.querySelectorAll('.content h1, .content h2');
-    Array.from(titles).forEach(makeObserver);
-
     const navButton = document.getElementById('nav-button');
     const menuWrapper = document.querySelector('.tocify-wrapper');
-    function toggleSidebar() {
+    function toggleSidebar(event) {
+        event.preventDefault();
         if (menuWrapper) {
             menuWrapper.classList.toggle('open');
             navButton.classList.toggle('open');
         }
     }
-    function closeSidebar() {
+    function closeSidebar(event) {
+        event.preventDefault();
         if (menuWrapper) {
             menuWrapper.classList.remove('open');
             navButton.classList.remove('open');

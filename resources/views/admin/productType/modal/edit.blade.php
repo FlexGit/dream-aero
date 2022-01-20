@@ -1,4 +1,5 @@
 <input type="hidden" id="id" name="id" value="{{ $productType->id }}">
+
 <div class="form-group">
 	<label for="name">Наименование</label>
 	<input type="text" class="form-control" id="name" name="name" value="{{ $productType->name }}" placeholder="Наименование">

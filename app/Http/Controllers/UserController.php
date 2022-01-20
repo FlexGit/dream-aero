@@ -65,7 +65,7 @@ class UserController extends Controller
 		}
 		
 		$user = User::find($id);
-		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
 		
 		$roles = User::ROLES;
 		
@@ -132,7 +132,7 @@ class UserController extends Controller
 		}
 		
 		$user = User::find($id);
-		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
 		
 		$roles = User::ROLES;
 
@@ -159,7 +159,7 @@ class UserController extends Controller
 		}
 		
 		$user = User::find($id);
-		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
 		
 		$VIEW = view('admin.user.modal.delete', [
 			'user' => $user,
@@ -227,7 +227,7 @@ class UserController extends Controller
 		}
 		
 		$user = User::find($id);
-		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
 
 		$rules = [
 			'name' => ['required', 'max:255'],
@@ -269,7 +269,7 @@ class UserController extends Controller
 		}
 		
 		$user = User::find($id);
-		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
 		
 		return response()->json(['status' => 'success']);
 	}
@@ -289,7 +289,7 @@ class UserController extends Controller
 		}
 		
 		$user = User::find($id);
-		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
 		
 		if (!$user->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

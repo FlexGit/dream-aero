@@ -4,13 +4,13 @@
 	<div class="row mb-2">
 		<div class="col-sm-6">
 			<h1 class="m-0 text-dark">
-				Типы авиатренажеров
+				Авиатренажеры
 			</h1>
 		</div>
 		<div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
 				<li class="breadcrumb-item"><a href="/">Главная</a></li>
-				<li class="breadcrumb-item active">Типы авиатренажеров</li>
+				<li class="breadcrumb-item active">Авиатренажеры</li>
 			</ol>
 		</div>
 	</div>
@@ -21,10 +21,12 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter d-flex justify-content-end mb-2">
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/flight_simulator/add" data-action="/flight_simulator" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+					<div class="table-filter d-sm-flex">
+						<div class="form-group align-self-end text-right ml-auto">
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/flight_simulator/add" data-action="/flight_simulator" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+						</div>
 					</div>
-					<table id="flightSimulatorTable" class="table table-hover table-sm table-bordered table-striped table-data">
+					<table id="flightSimulatorTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 						<tr>
 							<th class="text-center">Наименование</th>
@@ -153,11 +155,11 @@
 							return;
 						}
 
-						var msg = 'Тип авиатренажера успешно ';
+						var msg = 'Авиатренажер успешно ';
 						if (method === 'POST') {
 							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменен';
+							msg += 'сохранен';
 						} else if (method === 'DELETE') {
 							msg += 'удален';
 						}

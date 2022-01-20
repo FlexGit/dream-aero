@@ -10,9 +10,8 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-
 use App\Models\Deal;
-use App\Models\Payment;
+use App\Models\Bill;
 
 class PayAnyWayService {
 	
@@ -26,12 +25,11 @@ class PayAnyWayService {
 	
 	/**
 	 * @param $payAccountId
-	 * @param Payment $payment
-	 * @param Deal $deal
+	 * @param Bill $bill
 	 * @return null
 	 * @throws \GuzzleHttp\Exception\GuzzleException
 	 */
-	public static function sendPayRequest($payAccountId, Payment $payment, Deal $deal) {
+	public static function sendPayRequest($payAccountId, Bill $bill) {
 		try {
 			$stack = HandlerStack::create();
 			$stack->push(
@@ -50,13 +48,13 @@ class PayAnyWayService {
 			$result = $client->post(self::PAY_REQUEST_URL, [
 				'form_params' => [
 					'MNT_ID' => $payAccountId,
-					'MNT_AMOUNT' => number_format($payment->amount, 2, '.', ''),
-					'MNT_TRANSACTION_ID' => $payment->id,
+					'MNT_AMOUNT' => number_format($bill->amount, 2, '.', ''),
+					'MNT_TRANSACTION_ID' => $bill->id,
 					'MNT_CURRENCY_CODE' => self::CURRENCY_CODE,
 					'MNT_TEST_MODE' => self::TEST_MODE,
-					'MNT_DESCRIPTION' => 'Оплата заказа #' . $payment->id. ' на сумму ' . $payment->amount . ' руб.',
-					'MNT_SUBSCRIBER_ID' => $deal->contractor_id,
-					'MNT_SIGNATURE' => md5($payAccountId . $payment->id . $payment->amount . self::CURRENCY_CODE . $deal->contractor_id . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE),
+					'MNT_DESCRIPTION' => 'Оплата заказа #' . $bill->id. ' на сумму ' . $bill->amount . ' руб.',
+					'MNT_SUBSCRIBER_ID' => $bill->contractor_id,
+					'MNT_SIGNATURE' => md5($payAccountId . $bill->id . $bill->amount . self::CURRENCY_CODE . $bill->contractor_id . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE),
 					'MNT_SUCCESS_URL' => route('successPay'),
 					'MNT_FAIL_URL' => route('failPay'),
 					'MNT_RETURN_URL' => route('returnPay'),

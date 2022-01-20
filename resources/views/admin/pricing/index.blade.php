@@ -162,7 +162,7 @@
 						if (method === 'POST') {
 							msg += 'добавлена';
 						} else if (method === 'PUT') {
-							msg += 'изменена';
+							msg += 'сохранена';
 						} else if (method === 'DELETE') {
 							msg += 'удалена';
 						}

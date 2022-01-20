@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
+use App\Models\City;
 use App\Models\PaymentMethod;
 use App\Models\Deal;
 use App\Models\Status;
 use App\Services\HelpFunctions;
+use App\Services\PayAnyWayService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -113,14 +115,17 @@ class BillController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
 		$deal = Deal::find($this->request->deal_id);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+
+		if (!$deal->contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 
 		try {
 			\DB::beginTransaction();
 
 			$bill = new Bill();
+			$bill->contractor_id = $deal->contractor->id ?? 0;
 			$bill->payment_method_id = $this->request->payment_method_id;
 			$billStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Bill::NOT_PAYED_STATUS);
 			$bill->status_id = $billStatus ? $billStatus->id : 0;
@@ -153,7 +158,7 @@ class BillController extends Controller
 		}
 
 		$bill = Bill::find($id);
-		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
 		$rules = [
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
@@ -230,5 +235,76 @@ class BillController extends Controller
 		}
 		
 		return response()->json(['status' => 'success', 'link_sent_at' => $linkSentAt]);
+	}
+
+	/**
+	 * @param $id
+	 * @param $cityId
+	 * @return \Illuminate\Http\JsonResponse|null
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function sendPayRequest($id, $cityId) {
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if(!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		}
+
+		$payAccountId = $city->pay_account_id ?? 0;
+		if (!$payAccountId) {
+			return response()->json(['status' => 'error', 'reason' => 'Некорректный номер счета платежной системы']);
+		}
+
+		$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+		if (!$billStatus) {
+			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
+		}
+
+		$bill = Bill::where('status_id', $billStatus->id)
+			->find($id);
+		if(!$bill) {
+			return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
+		}
+
+		if (!$bill->deals) {
+			return response()->json(['status' => 'error', 'reason' => 'Счет не привязан ни к одной сделке']);
+		}
+
+		$result = PayAnyWayService::sendPayRequest($payAccountId, $bill);
+
+		return $result;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function payCallback() {
+		$result = PayAnyWayService::checkPayCallback($this->request);
+
+		if (!$result) {
+			return 'FAIL';
+		}
+
+		$billId = $this->request->MNT_TRANSACTION_ID ?? 0;
+		if ($billId) {
+			$bill = Bill::find($billId);
+			if ($bill && $bill->amount == $this->request->MNT_AMOUNT) {
+
+			}
+		}
+
+		return 'SUCCESS';
+	}
+
+	public function paySuccess() {
+		return 'success';
+	}
+
+	public function payFail() {
+		return 'fail';
+	}
+
+	public function payReturn() {
+		return 'cancel';
 	}
 }

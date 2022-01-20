@@ -100,7 +100,7 @@ class Certificate extends Model
 		parent::boot();
 		
 		Certificate::created(function (Certificate $certificate) {
-			$certificate->number = $certificate->generateNumber();
+			/*$certificate->number = $certificate->generateNumber();*/
 			$certificate->uuid = $certificate->generateUuid();
 			$certificate->save();
 		});
@@ -121,7 +121,7 @@ class Certificate extends Model
 	 */
 	public function generateNumber()
 	{
-		$alias = $this->deal->is_unified ? 'uni' : ($this->deal->city ? mb_strtolower($this->deal->city->alias) : '');
+		$alias = /*$this->deal->is_unified*/ !$this->deal->city_id ? 'uni' : ($this->deal->city ? mb_strtolower($this->deal->city->alias) : '');
 		$productTypeAlias = ($this->deal->product && $this->deal->product->productType) ? mb_strtoupper(substr($this->deal->product->productType->alias, 0, 1)) : '';
 		$productDuration = $this->deal->product ? $this->deal->product->duration : '';
 		

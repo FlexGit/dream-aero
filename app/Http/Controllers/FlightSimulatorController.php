@@ -58,7 +58,7 @@ class FlightSimulatorController extends Controller
 		}
 
 		$flightSimulator = FlightSimulator::find($id);
-		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		
 		$VIEW = view('admin.flightSimulator.modal.edit', [
 			'flightSimulator' => $flightSimulator,
@@ -97,7 +97,7 @@ class FlightSimulatorController extends Controller
 		}
 		
 		$flightSimulator = FlightSimulator::find($id);
-		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		
 		$VIEW = view('admin.flightSimulator.modal.show', [
 			'flightSimulator' => $flightSimulator,
@@ -121,7 +121,7 @@ class FlightSimulatorController extends Controller
 		}
 
 		$flightSimulator = FlightSimulator::find($id);
-		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		
 		$VIEW = view('admin.flightSimulator.modal.delete', [
 			'flightSimulator' => $flightSimulator,
@@ -183,7 +183,7 @@ class FlightSimulatorController extends Controller
 		}
 
 		$flightSimulator = FlightSimulator::find($id);
-		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:flight_simulators,name,' . $id],
@@ -224,7 +224,7 @@ class FlightSimulatorController extends Controller
 		}
 
 		$flightSimulator = FlightSimulator::find($id);
-		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		
 		if (!$flightSimulator->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

@@ -14,7 +14,7 @@
 @if($status->type == 'contractor')
 	<div class="form-group">
 		<label for="flight_time">Время налета</label>
-		<input type="number" class="form-control" id="flight_time" name="flight_time" value="{{ ($status->data_json && array_key_exists('flight_time', $status->data_json)) ? $status->data_json['flight_time'] : '' }}" placeholder="Время налета">
+		<input type="number" class="form-control" id="flight_time" name="flight_time" value="{{ $status->flight_time }}" placeholder="Время налета">
 	</div>
 	<div class="form-group">
 		<label for="discount_id">Скидка</label>

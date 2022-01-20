@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LocationFlightSimulator query()
  * @mixin \Eloquent
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
  */
 class LocationProduct extends Pivot
 {

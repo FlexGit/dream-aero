@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Validator;
-
 use App\Models\Certificate;
-use App\Models\Order;
 use App\Models\Deal;
-use App\Models\DealPosition;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\Product;
@@ -112,7 +108,7 @@ class CertificateController extends Controller
 		}
 		
 		$certificate = Certificate::find($id);
-		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
 		$cities = City::orderBy('name')
 			->get();
@@ -154,7 +150,7 @@ class CertificateController extends Controller
 	public function show($id)
 	{
 		$certificate = Certificate::find($id);
-		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
 		$cities = City::orderBy('name')
 			->get();
@@ -229,11 +225,11 @@ class CertificateController extends Controller
 		}
 		
 		$rules = [
-			'product_id' => 'required|numeric',
-			'city_id' => 'required|numeric',
-			'location_id' => 'required|numeric',
-			'contractor_id' => 'required|numeric',
-			'payment_method_id' => 'required|numeric',
+			'product_id' => 'required|numeric|min:0|not_in:0',
+			'city_id' => 'required|numeric|min:0|not_in:0',
+			'location_id' => 'required|numeric|min:0|not_in:0',
+			'contractor_id' => 'required|numeric|min:0|not_in:0',
+			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -281,7 +277,7 @@ class CertificateController extends Controller
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
 		$rules = [
-			'status_id' => 'required|numeric',
+			'status_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)

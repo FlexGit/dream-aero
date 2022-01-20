@@ -129,19 +129,63 @@ class DealController extends Controller
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
-	
+
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function addCertificate()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->get();
+
+		$productTypes = ProductType::where('is_active', true)
+			->orderBy('name')
+			->get();
+
+		$promos = Promo::where('is_active', true)
+			->orderBy('name')
+			->get();
+
+		$discounts = Discount::where('is_active', true)
+			->orderBy('is_fixed')
+			->orderBy('value')
+			->get();
+
+		$paymentMethods = PaymentMethod::where('is_active', true)
+			->orderBy('name')
+			->get();
+
+		$VIEW = view('admin.deal.modal.add', [
+			'isCertificatePurchase' => (bool)$this->request->isCertificatePurchase,
+			'cities' => $cities,
+			'productTypes' => $productTypes,
+			'promos' => $promos,
+			'discounts' => $discounts,
+			'paymentMethods' => $paymentMethods,
+		]);
+
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
 	/**
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
 	 */
-	public function edit($id)
+	public function editCertificate($id)
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
 
 		$deal = Deal::find($id);
-		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
 		$statuses = Status::where('type', Status::STATUS_TYPE_DEAL)
 			->orderBy('sort')
@@ -190,20 +234,20 @@ class DealController extends Controller
 	public function show($id)
 	{
 		$deal = Deal::find($id);
-		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
-		
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+
 		$cities = City::orderBy('name')
 			->get();
-		
+
 		$locations = Location::orderBy('name')
 			->get();
-		
+
 		$products = Product::orderBy('name')
 			->get();
-		
+
 		$statuses = Status::orderBy('sort')
 			->get();
-		
+
 		$VIEW = view('admin.deal.modal.show', [
 			'deal' => $deal,
 			'cities' => $cities,
@@ -211,53 +255,10 @@ class DealController extends Controller
 			'products' => $products,
 			'statuses' => $statuses,
 		]);
-		
+
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
-	
-	/**
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function add()
-	{
-		if (!$this->request->ajax()) {
-			abort(404);
-		}
-		
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->get();
-		
-		$productTypes = ProductType::where('is_active', true)
-			->orderBy('name')
-			->get();
-		
-		$promos = Promo::where('is_active', true)
-			->orderBy('name')
-			->get();
-		
-		$discounts = Discount::where('is_active', true)
-			->orderBy('is_fixed')
-			->orderBy('value')
-			->get();
-		
-		$paymentMethods = PaymentMethod::where('is_active', true)
-			->orderBy('name')
-			->get();
-		
-		$VIEW = view('admin.deal.modal.add', [
-			'cities' => $cities,
-			'productTypes' => $productTypes,
-			'promos' => $promos,
-			'discounts' => $discounts,
-			'paymentMethods' => $paymentMethods,
-		]);
-		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}
-	
+
 	/**
 	 * @return \Illuminate\Http\JsonResponse
 	 */
@@ -271,8 +272,8 @@ class DealController extends Controller
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
 			'phone' => 'required|valid_phone',
-			'product_id' => 'required|numeric',
-			'city_id' => 'required|numeric',
+			'product_id' => 'required|numeric|min:0|not_in:0',
+			'city_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -306,7 +307,12 @@ class DealController extends Controller
 		try {
 			\DB::beginTransaction();
 
-			if (!$this->request->contractor_id) {
+			if ($this->request->contractor_id) {
+				$contractor = Contractor::find($this->request->contractor_id);
+				if (!$contractor) {
+					return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+				}
+			} else {
 				$contractor = new Contractor();
 				$contractor->name = $this->request->name ?? '';
 				$contractor->email = $this->request->email ?? '';
@@ -316,14 +322,13 @@ class DealController extends Controller
 			}
 			
 			$certificate = new Certificate();
-			$certificateStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Certificate::CREATED_STATUS);
+			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			$certificate->status_id = $certificateStatus ? $certificateStatus->id : 0;
 			$certificate->expire_at = Carbon::parse($this->request->certificate_expire_at)->addYear()->format('Y-m-d H:i:s');
 			$certificate->save();
 			
 			$deal = new Deal();
-			//$deal->number = $this->request->number;
-			$dealStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Deal::CREATED_STATUS);
+			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 			$deal->status_id = $dealStatus ? $dealStatus->id : 0;
 			$deal->contractor_id = $contractor ? $contractor->id : $this->request->contractor_id;
 			$deal->name = $this->request->name ?? '';
@@ -336,21 +341,10 @@ class DealController extends Controller
 			$deal->city_id = $this->request->city_id ?? 0;
 			$deal->promo_id = $this->request->promo_id ?? 0;
 			$deal->is_certificate_purchase = 1;
-			$deal->is_unified = ($this->request->city_id == 0) ? true : false;
-			$deal->source = 'admin';
+			$deal->source = Deal::WEB_SOURCE;
 			$deal->user_id = $this->request->user()->id;
 			$deal->data_json = $data;
 			$deal->save();
-			
-			/*$bill = new Bill();
-			$bill->payment_method_id = $this->request->payment_method_id ?? 0;
-			$billStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Bill::NOT_PAYED_STATUS);
-			$bill->status_id = $billStatus ? $billStatus->id : 0;
-			$bill->amount = $this->request->amount;
-			$bill->user_id = $this->request->user()->id;
-			$bill->save();
-			
-			$deal->bills()->attach($bill->id);*/
 
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -381,9 +375,9 @@ class DealController extends Controller
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
 			'phone' => 'required|valid_phone|unique_email',
-			'product_id' => 'required|numeric',
-			'city_id' => 'required|numeric',
-			'status_id' => 'required|numeric',
+			'product_id' => 'required|numeric|min:0|not_in:0',
+			'city_id' => 'required|numeric|min:0|not_in:0',
+			'status_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -428,7 +422,6 @@ class DealController extends Controller
 			$deal->city_id = $this->request->city_id ?? 0;
 			$deal->promo_id = $this->request->promo_id ?? 0;
 			/*$deal->is_certificate_purchase = 1;*/
-			$deal->is_unified = ($this->request->city_id == 0) ? true : false;
 			$deal->data_json = $data;
 			$deal->save();
 			
@@ -472,21 +465,22 @@ class DealController extends Controller
 		$productId = $this->request->product_id ?? 0;
 		$contractorId = $this->request->contractor_id ?? 0;
 		$promoId = $this->request->promo_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
 		/*$isUnified = (bool)$this->request->is_unified;*/
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$cityId = $this->request->city_id ?? 0;
 		$isFree = $this->request->is_free ?? 0;
 		
-		if (!$productId || $isFree) {
+		if (!$productId) {
 			return response()->json(['status' => 'success', 'amount' => 0]);
 		}
 		
 		$product = Product::find($productId);
 		if (!$product) {
-			return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 		
-		$amount = $product->calcAmount($contractorId, $promoId, $paymentMethodId, $cityId);
+		$amount = $product->calcAmount($contractorId, $cityId, $paymentMethodId, $promoId, $promocodeId, $isFree, 'admin');
 
 		return response()->json(['status' => 'success', 'amount' => $amount]);
 	}

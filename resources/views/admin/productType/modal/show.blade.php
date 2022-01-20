@@ -2,39 +2,35 @@
 	<tbody>
 		<tr class="odd">
 			<td>ID</td>
-			<td>{{ $user->id }}</td>
+			<td>{{ $productType->id }}</td>
 		</tr>
 		<tr class="odd">
-			<td>Имя</td>
-			<td>{{ $user->name }}</td>
+			<td>Наименование</td>
+			<td>{{ $productType->name }}</td>
 		</tr>
 		<tr class="odd">
-			<td>E-mail</td>
-			<td>{{ $user->email }}</td>
+			<td>Алиас</td>
+			<td>{{ $productType->alias }}</td>
 		</tr>
 		<tr class="odd">
-			<td>Роль</td>
-			<td>{{ $user->role }}</td>
+			<td>Является тарифом</td>
+			<td>{{ $productType->is_tariff ? 'Да' : 'Нет' }}</td>
 		</tr>
 		<tr class="odd">
-			<td>Горол</td>
-			<td>{{ $user->city ? $user->city->name : '' }}</td>
-		</tr>
-		<tr class="odd">
-			<td>Локация</td>
-			<td>{{ $user->location ? $user->location->name : '' }}</td>
+			<td>Длительность</td>
+			<td>{{ array_key_exists('duration', $productType->data_json) ? implode(',', $productType->data_json['duration']) : '' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Активность</td>
-			<td>{{ $user->enable ? 'Да' : 'Нет' }}</td>
+			<td>{{ $productType->enable ? 'Да' : 'Нет' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Дата создания</td>
-			<td>{{ $user->created_at }}</td>
+			<td>{{ $productType->created_at }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Дата последнего изменения</td>
-			<td>{{ $user->updated_at }}</td>
+			<td>{{ $productType->updated_at }}</td>
 		</tr>
 	</tbody>
 </table>

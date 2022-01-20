@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeePositionController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PricingController;
+use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
@@ -109,8 +112,9 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('event/list/ajax', [EventController::class, 'getListAjax'])->name('eventList');
 		Route::post('event', [EventController::class, 'store'])->name('store-event');
 		Route::put('event/{id}', [EventController::class, 'update'])->name('update-event');
+		Route::delete('event/{id}', [EventController::class, 'delete'])->name('delete-event');
 
-		Route::get('event/add', [EventController::class, 'add'])->name('add-event');
+		Route::get('event/{deal_id}/add', [EventController::class, 'add'])->name('add-event');
 		Route::get('event/{id}/edit', [EventController::class, 'edit'])->name('edit-event');
 		Route::get('event/{id}/show', [EventController::class, 'show'])->name('show-event');
 		
@@ -120,8 +124,10 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::post('deal', [DealController::class, 'store']);
 		Route::put('deal/{id}', [DealController::class, 'update']);
 		
-		Route::get('deal/add', [DealController::class, 'add']);
-		Route::get('deal/{id}/edit', [DealController::class, 'edit']);
+		Route::get('deal/certificate/add', [DealController::class, 'addCertificate']);
+		Route::get('deal/certificate/{id}/edit', [DealController::class, 'editCertificate']);
+		Route::get('deal/booking/add', [DealController::class, 'addBooking']);
+		Route::get('deal/booking/{id}/edit', [DealController::class, 'editBooking']);
 		Route::get('deal/{id}/show', [DealController::class, 'show']);
 		
 		Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
@@ -319,6 +325,45 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('user/{id}/show', [UserController::class, 'show']);
 		
 		Route::post('user/{id}/password/reset/notification', [UserController::class, 'passwordResetNotification'])->name('passwordResetNotification');
+
+		// Сотрудники
+		Route::get('employee', [EmployeeController::class, 'index'])->name('employeeIndex');
+		Route::get('employee/list/ajax', [EmployeeController::class, 'getListAjax'])->name('employeeList');
+
+		Route::post('employee', [EmployeeController::class, 'store']);
+		Route::put('employee/{id}', [EmployeeController::class, 'update']);
+		Route::delete('employee/{id}', [EmployeeController::class, 'delete']);
+
+		Route::get('employee/add', [EmployeeController::class, 'add']);
+		Route::get('employee/{id}/edit', [EmployeeController::class, 'edit']);
+		Route::get('employee/{id}/delete', [EmployeeController::class, 'confirm']);
+		Route::get('employee/{id}/show', [EmployeeController::class, 'show']);
+
+		// Позиции сотрудников
+		Route::get('position', [EmployeePositionController::class, 'index'])->name('positionIndex');
+		Route::get('position/list/ajax', [EmployeePositionController::class, 'getListAjax'])->name('positionList');
+
+		Route::post('position', [EmployeePositionController::class, 'store']);
+		Route::put('position/{id}', [EmployeePositionController::class, 'update']);
+		Route::delete('position/{id}', [EmployeePositionController::class, 'delete']);
+
+		Route::get('position/add', [EmployeePositionController::class, 'add']);
+		Route::get('position/{id}/edit', [EmployeePositionController::class, 'edit']);
+		Route::get('position/{id}/delete', [EmployeePositionController::class, 'confirm']);
+		Route::get('position/{id}/show', [EmployeePositionController::class, 'show']);
+
+		// Акции
+		Route::get('promo', [PromoController::class, 'index'])->name('promoIndex');
+		Route::get('promo/list/ajax', [PromoController::class, 'getListAjax'])->name('promoList');
+
+		Route::post('promo', [PromoController::class, 'store']);
+		Route::put('promo/{id}', [PromoController::class, 'update']);
+		Route::delete('promo/{id}', [PromoController::class, 'delete']);
+
+		Route::get('promo/add', [PromoController::class, 'add']);
+		Route::get('promo/{id}/edit', [PromoController::class, 'edit']);
+		Route::get('promo/{id}/delete', [PromoController::class, 'confirm']);
+		Route::get('promo/{id}/show', [PromoController::class, 'show']);
 
 		// Лог операций
 		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');

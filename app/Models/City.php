@@ -116,7 +116,7 @@ class City extends Model
 	{
 		return $this->belongsToMany(Product::class, 'cities_products', 'city_id', 'product_id')
 			->using(CityProduct::class)
-			->withPivot(['price', 'discount_id', 'is_hit', 'is_active', 'data_json'])
+			->withPivot(['price', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
 			->withTimestamps();
 	}
 	

@@ -92,7 +92,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'statusName' => $deal->status ? $deal->status->name : '',
 			'certificateNumber' => $deal->certificate ? $deal->certificate->number : '',
 			'certificateExpireAt' => $deal->certificate ? $deal->certificate->expire_at : '',
-			'isUnified' => (bool)$deal->is_unified,
+			/*'isUnified' => (bool)$deal->is_unified,*/
 			'flightAt' => $deal->flight_at,
 			'cityName' => $deal->city ? $deal->city->name : '',
 			'locationAddress' => array_key_exists('address', $locationData) ? $locationData['address'] : '',

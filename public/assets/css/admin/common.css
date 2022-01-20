@@ -93,3 +93,6 @@ input[readonly]{
 	top: 130px;
 	background-color: #fff;
 }
+.table-no-filter, .table-no-filter thead {
+	top: 100px;
+}

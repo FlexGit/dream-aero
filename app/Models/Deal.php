@@ -102,6 +102,7 @@ class Deal extends Model
 		'amount' => 'Стоимость',
 		'city_id' => 'Город',
 		'location_id' => 'Локация',
+		'flight_simulator_id' => 'Авиатренажер',
 		'promocode_id' => 'Промокод',
 		'is_certificate_purchase' => 'Покупка сертификата',
 		'is_unified' => 'Единый сертификат',
@@ -131,13 +132,13 @@ class Deal extends Model
 		self::CANCELED_STATUS,
 	];
 
-	const ADMIN_TYPE = 'admin';
-	const WEB_TYPE = 'web';
-	const MOB_TYPE = 'api';
+	const ADMIN_SOURCE = 'admin';
+	const WEB_SOURCE = 'web';
+	const MOB_SOURCE = 'api';
 	const SOURCES = [
-		self::ADMIN_TYPE => 'Админка',
-		self::WEB_TYPE => 'Web',
-		self::MOB_TYPE => 'Mob',
+		self::ADMIN_SOURCE => 'Админка',
+		self::WEB_SOURCE => 'Web',
+		self::MOB_SOURCE => 'Mob',
 	];
 
 	protected $revisionForceDeleteEnabled = true;
@@ -161,6 +162,7 @@ class Deal extends Model
 		'amount',
 		'city_id',
 		'location_id',
+		'flight_simulator_id',
 		'promo_id',
 		'promocode_id',
 		'is_certificate_purchase',
@@ -227,7 +229,12 @@ class Deal extends Model
 	{
 		return $this->hasOne(Location::class, 'id', 'location_id');
 	}
-	
+
+	public function simulator()
+	{
+		return $this->hasOne(FlightSimulator::class, 'id', 'flight_simulator_id');
+	}
+
 	public function status()
 	{
 		return $this->hasOne(Status::class, 'id', 'status_id');

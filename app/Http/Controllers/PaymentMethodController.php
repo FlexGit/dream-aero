@@ -58,7 +58,7 @@ class PaymentMethodController extends Controller
 		}
 		
 		$paymentMethod = PaymentMethod::find($id);
-		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 		
 		$VIEW = view('admin.paymentMethod.modal.edit', [
 			'paymentMethod' => $paymentMethod,
@@ -97,7 +97,7 @@ class PaymentMethodController extends Controller
 		}
 		
 		$paymentMethod = PaymentMethod::find($id);
-		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 		
 		$VIEW = view('admin.paymentMethod.modal.show', [
 			'paymentMethod' => $paymentMethod,
@@ -121,7 +121,7 @@ class PaymentMethodController extends Controller
 		}
 		
 		$paymentMethod = PaymentMethod::find($id);
-		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 		
 		$VIEW = view('admin.paymentMethod.modal.delete', [
 			'paymentMethod' => $paymentMethod,
@@ -183,7 +183,7 @@ class PaymentMethodController extends Controller
 		}
 		
 		$paymentMethod = PaymentMethod::find($id);
-		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:payment_methods,name,' . $id],
@@ -224,7 +224,7 @@ class PaymentMethodController extends Controller
 		}
 		
 		$paymentMethod = PaymentMethod::find($id);
-		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 		
 		if (!$paymentMethod->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

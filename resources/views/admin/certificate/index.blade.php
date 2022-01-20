@@ -219,7 +219,7 @@
 						if (method === 'POST') {
 							msg += 'создан';
 						} else if (method === 'PUT') {
-							msg += 'изменен';
+							msg += 'сохранен';
 						} else if (method === 'DELETE') {
 							msg += 'удален';
 						}

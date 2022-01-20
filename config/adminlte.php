@@ -304,7 +304,7 @@ return [
 					'icon'    => 'fas fa-fw fa-exclamation',
 				],
 				[
-					'text' => 'Типы скидок',
+					'text' => 'Варианты скидок',
 					'url'  => '/discount',
 					'icon'    => 'fas fa-fw fa-percentage',
 				],
@@ -367,7 +367,7 @@ return [
 				],
 				[
 					'text' => 'Позиции сотрудников',
-					'url'  => '/employee_type',
+					'url'  => '/position',
 					'icon'    => 'fas fa-fw fa-briefcase',
 				],
 			],

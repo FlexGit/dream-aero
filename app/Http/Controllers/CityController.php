@@ -59,7 +59,7 @@ class CityController extends Controller
 		}
 
 		$city = City::find($id);
-		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 
 		$VIEW = view('admin.city.modal.edit', [
 			'city' => $city,
@@ -99,7 +99,7 @@ class CityController extends Controller
 		}
 		
 		$city = City::find($id);
-		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 		
 		$VIEW = view('admin.city.modal.show', [
 			'city' => $city,
@@ -123,7 +123,7 @@ class CityController extends Controller
 		}
 
 		$city = City::find($id);
-		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 		
 		$VIEW = view('admin.city.modal.delete', [
 			'city' => $city,

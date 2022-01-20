@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Discount;
 use App\Models\Promo;
+use App\Services\HelpFunctions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -30,26 +32,41 @@ class CreatePromosTable extends Migration
         });
 		
 		$items = [];
-		
+
+		$discount = HelpFunctions::getEntityByAlias(Discount::class, Discount::DISCOUNT_5_ALIAS);
 		$items[] = [
 			'name' => 'День рождения',
+			'discount_id' => $discount ? $discount->id : 0,
 		];
+
+		$discount = HelpFunctions::getEntityByAlias(Discount::class, Discount::DISCOUNT_FIXED_2000_ALIAS);
 		$items[] = [
 			'name' => 'От руководителя',
+			'discount_id' => $discount ? $discount->id : 0,
 		];
+
+		$discount = HelpFunctions::getEntityByAlias(Discount::class, Discount::DISCOUNT_10_ALIAS);
 		$items[] = [
 			'name' => 'Сотрудник',
+			'discount_id' => $discount ? $discount->id : 0,
 		];
+
+		$discount = HelpFunctions::getEntityByAlias(Discount::class, Discount::DISCOUNT_10_ALIAS);
 		$items[] = [
 			'name' => 'Инвалид',
+			'discount_id' => $discount ? $discount->id : 0,
 		];
+
+		$discount = HelpFunctions::getEntityByAlias(Discount::class, Discount::DISCOUNT_25_ALIAS);
 		$items[] = [
 			'name' => 'Черная пятница',
+			'discount_id' => $discount ? $discount->id : 0,
 		];
 
 		foreach ($items as $item) {
 			$promo = new Promo();
 			$promo->name = $item['name'];
+			$promo->discount_id = $item['discount_id'];
 			$promo->save();
 		}
     }

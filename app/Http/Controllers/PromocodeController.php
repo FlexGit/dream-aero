@@ -69,7 +69,7 @@ class PromocodeController extends Controller
 		}
 
 		$promocode = Promocode::find($id);
-		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 		
 		$cities = City::orderBy('version', 'desc')
 			->orderByRaw("FIELD(alias, 'msk') DESC")
@@ -137,7 +137,7 @@ class PromocodeController extends Controller
 		}
 
 		$promocode = Promocode::find($id);
-		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 		
 		$VIEW = view('admin.promocode.modal.show', [
 			'promocode' => $promocode,
@@ -161,7 +161,7 @@ class PromocodeController extends Controller
 		}
 		
 		$promocode = Promocode::find($id);
-		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 		
 		$VIEW = view('admin.promocode.modal.delete', [
 			'promocode' => $promocode,
@@ -195,6 +195,8 @@ class PromocodeController extends Controller
 			'discount_id' => [
 				'required',
 				'numeric',
+				'min:0',
+				'not_in:0',
 			],
 		];
 		
@@ -245,7 +247,7 @@ class PromocodeController extends Controller
 		}
 
 		$promocode = Promocode::find($id);
-		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 		
 		$rules = [
 			'number' => [
@@ -259,6 +261,8 @@ class PromocodeController extends Controller
 			'discount_id' => [
 				'required',
 				'numeric',
+				'min:0',
+				'not_in:0',
 			],
 		];
 		
@@ -308,7 +312,7 @@ class PromocodeController extends Controller
 		}
 
 		$promocode = Promocode::find($id);
-		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$promocode) return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 		
 		if (!$promocode->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

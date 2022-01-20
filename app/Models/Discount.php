@@ -34,6 +34,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Discount withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Discount withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $alias алиас
+ * @method static \Illuminate\Database\Eloquent\Builder|Discount whereAlias($value)
  */
 class Discount extends Model
 {
@@ -47,6 +49,24 @@ class Discount extends Model
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
 	];
+
+	const DISCOUNT_5_ALIAS = 'percent_5';
+	const DISCOUNT_10_ALIAS = 'percent_10';
+	const DISCOUNT_15_ALIAS = 'percent_15';
+	const DISCOUNT_20_ALIAS = 'percent_20';
+	const DISCOUNT_25_ALIAS = 'percent_25';
+	const DISCOUNT_30_ALIAS = 'percent_30';
+	const DISCOUNT_35_ALIAS = 'percent_35';
+	const DISCOUNT_40_ALIAS = 'percent_40';
+	const DISCOUNT_45_ALIAS = 'percent_45';
+	const DISCOUNT_50_ALIAS = 'percent_50';
+	const DISCOUNT_FIXED_500_ALIAS = 'fixed_500';
+	const DISCOUNT_FIXED_1000_ALIAS = 'fixed_1000';
+	const DISCOUNT_FIXED_1500_ALIAS = 'fixed_1500';
+	const DISCOUNT_FIXED_2000_ALIAS = 'fixed_2000';
+	const DISCOUNT_FIXED_2500_ALIAS = 'fixed_2500';
+	const DISCOUNT_FIXED_3000_ALIAS = 'fixed_3000';
+	const DISCOUNT_FIXED_5000_ALIAS = 'fixed_5000';
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;

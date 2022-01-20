@@ -27,7 +27,6 @@ use App\Models\Location;
 use App\Models\Promocode;
 use App\Models\Score;
 use App\Models\Bill;
-use App\Models\Payment;
 use App\Models\Certificate;
 use App\Models\Status;
 
@@ -415,11 +414,19 @@ class ApiController extends Controller
 			if ($contractor) {
 				return $this->responseError('Контрагент с таким E-mail уже существует', 400);
 			}
+
+			$contractor = Contractor::where('phone', $this->request->phone)
+				->first();
+			if ($contractor) {
+				return $this->responseError('Контрагент с таким телефоном уже существует', 400);
+			}
+
 			$contractor = new Contractor();
 			$contractor->name = $this->request->name;
 			$contractor->email = $this->request->email;
 			$contractor->city_id = $this->request->city_id;
 			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+			$contractor->source = Contractor::MOB_SOURCE;
 		}
 		
 		$contractor->password = $this->request->password;
@@ -1083,6 +1090,7 @@ class ApiController extends Controller
 	 * Tariff type list
 	 *
 	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1104,6 +1112,27 @@ class ApiController extends Controller
 	 */
 	public function getTariffTypes()
 	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
 		$tariffTypes = ProductType::where('is_tariff', true)
 			->where('is_active', true)
 			->get();
@@ -1170,28 +1199,16 @@ class ApiController extends Controller
 	 */
 	public function getTariffs()
 	{
-		$tariffTypeId = $this->request->tariff_type_id;
-		if (!$tariffTypeId) {
-			return $this->responseError('Не передан ID типа тарифа', 400);
-		}
-		
 		$authToken = $this->request->token ?? '';
 		if (!$authToken) {
 			return $this->responseError('Не передан токен авторизации', 400);
 		}
-		
-		$tariffType = ProductType::where('is_tariff', true)
-			->where('is_active', true)
-			->find($tariffTypeId);
-		if (!$tariffType) {
-			return $this->responseError('Тип тарифа не найден', 400);
-		}
-		
+
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
-		
+
 		$contractorId = $token->contractor_id ?? 0;
 		if (!$contractorId) {
 			return $this->responseError('Контрагент не найден', 400);
@@ -1202,20 +1219,33 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-		
-		$cityId = $contractor->city_id ?? 0;
 
-		if ($cityId) {
-			$city = City::where('is_active', true)
-				->find($cityId);
-			if (!$city) {
-				return $this->responseError('Город не найден', 400);
-			}
+		$tariffTypeId = $this->request->tariff_type_id;
+		if (!$tariffTypeId) {
+			return $this->responseError('Не передан ID типа тарифа', 400);
+		}
+		
+		$tariffType = ProductType::where('is_tariff', true)
+			->where('is_active', true)
+			->find($tariffTypeId);
+		if (!$tariffType) {
+			return $this->responseError('Тип тарифа не найден', 400);
+		}
+
+		$cityId = $contractor->city_id ?? 0;
+		if (!$cityId) {
+			return $this->responseError('Город не найден', 400);
+		}
+
+		$city = City::where('is_active', true)
+			->find($cityId);
+		if (!$city) {
+			return $this->responseError('Город не найден', 400);
 		}
 
 		$tariffs = Product::where('product_type_id', $tariffTypeId)
-			->whereIn('city_id', [$city->id, 0])
-			->where('is_active', true)
+			->whereRelation('cities', 'id', '=', $city->id)
+			/*->where('is_active', true)*/
 			->get();
 		
 		$data = [];
@@ -1664,7 +1694,7 @@ class ApiController extends Controller
 	 * Promo list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam token string No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1743,6 +1773,7 @@ class ApiController extends Controller
 	 * Promo detailed
 	 *
 	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
 	 * @queryParam promo_id int required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
@@ -1767,6 +1798,27 @@ class ApiController extends Controller
 	 */
 	public function getPromo()
 	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
 		$promoId = $this->request->promo_id;
 		if (!$promoId) {
 			return $this->responseError('Не передан ID акции', 400);
@@ -1871,7 +1923,7 @@ class ApiController extends Controller
 	 * Flight list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam token string No-example
+	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -2105,8 +2157,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передана стоимость позиции', 400);
 		}
 		
-		$product = Product::where('is_active', true)
-				->find($productId);
+		$product = Product::/*where('is_active', true)
+				->*/find($productId);
 		if (!$product) {
 			return $this->responseError('Позиция не найдена', 400);
 		}
@@ -2201,15 +2253,16 @@ class ApiController extends Controller
 			$deal->is_certificate_purchase = $this->request->is_certificate_purchase ?? 0;
 			$deal->duration = $product->duration ?? 0;
 			$deal->amount = $productAmount ?? 0;
-			$deal->city_id = $city->id;
-			$deal->source = 'api';
+			$deal->source = Deal::MOB_SOURCE;
 			$dealData['comment'] = $this->request->comment;
 			$dealData = [];
 			if (!$this->request->is_certificate_purchase) {
+				$deal->city_id = $city->id;
 				$deal->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
 				$deal->flight_at = $flightDateCarbon->format('Y-m-d H:i');
 			} else {
-				$deal->is_unified = $this->request->is_unified ?? 0;
+				$deal->city_id = $this->request->is_unified ?: $city->id;
+				/*$deal->is_unified = $this->request->is_unified ?? 0;*/
 				$dealData['certificate_whom'] = $this->request->certificate_whom;
 			}
 			$deal->data_json = $dealData;
@@ -2306,8 +2359,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID позиции', 400);
 		}
 		
-		$product = Product::where('is_active', true)
-			->find($productId);
+		$product = Product::/*where('is_active', true)
+			->*/find($productId);
 		if (!$product) {
 			return $this->responseError('Позиция не найдена', 400);
 		}
@@ -2320,10 +2373,11 @@ class ApiController extends Controller
 		$date = date('Y-m-d');
 		
 		$certificate = Certificate::where('number', $number)
-			->where(function ($query) use ($city) {
+			->whereIn('city_id', [$city->id])
+			/*->where(function ($query) use ($city) {
 				$query->whereIn('city_id', [$city->id, 0])
 					->orWhere('is_unified', true);
-			})
+			})*/
 			->where('status_id', $statusesData['certificate'][Certificate::CREATED_STATUS]['id'])
 			->where('product_id', $product->id)
 			->where(function ($query) use ($date) {

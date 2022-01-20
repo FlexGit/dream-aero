@@ -58,7 +58,7 @@ class ProductTypeController extends Controller
 		}
 
 		$productType = ProductType::find($id);
-		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Тип продукта не найден']);
 		
 		$VIEW = view('admin.productType.modal.edit', [
 			'productType' => $productType,
@@ -99,7 +99,7 @@ class ProductTypeController extends Controller
 		}
 		
 		$productType = ProductType::find($id);
-		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Тип продукта не найден']);
 		
 		$VIEW = view('admin.productType.modal.show', [
 			'productType' => $productType,
@@ -123,7 +123,7 @@ class ProductTypeController extends Controller
 		}
 
 		$productType = ProductType::find($id);
-		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Тип продукта не найден']);
 		
 		$VIEW = view('admin.productType.modal.delete', [
 			'productType' => $productType,
@@ -189,7 +189,7 @@ class ProductTypeController extends Controller
 		}
 
 		$productType = ProductType::find($id);
-		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Тип продукта не найден']);
 
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:product_types,name,' . $id],
@@ -234,7 +234,7 @@ class ProductTypeController extends Controller
 		}
 
 		$productType = ProductType::find($id);
-		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Тип продукта не найден']);
 		
 		if (!$productType->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

@@ -47,9 +47,9 @@ class AddContractorScore extends Command
     	foreach ($events as $event) {
     		$score = Score::where('event_id', $event->id)->first();
     		if ($score) continue;
-    		
+
     		$score = new Score();
-    		$score->score = Carbon::parse($event->stop_at)->diffInMinutes(Carbon::parse($event->start_at));
+    		$score->score = ($event->deal && $event->deal->product) ? $event->deal->product->score : 0;
 			$score->contractor_id = $event->deal ? $event->deal->contractor_id : 0;
 			$score->event_id = $event->id;
 			$score->save();

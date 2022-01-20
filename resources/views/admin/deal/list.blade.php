@@ -1,7 +1,7 @@
 @foreach ($deals as $deal)
 	<tr class="odd" data-id="{{ $deal->id }}">
 		<td class="text-center align-middle">
-			<a href="javascript:void(0)" data-toggle="modal" data-url="/deal/{{ $deal->id }}/edit" data-action="/deal/{{ $deal->id }}" data-method="PUT" data-type="deal" data-title="Редактирование сделки" title="Редактировать сделку">{{ $deal->number }}</a>
+			<a href="javascript:void(0)" data-toggle="modal" @if($deal->is_certificate_purchase) data-url="/deal/certificate/{{ $deal->id }}/edit" @else data-url="/deal/booking/{{ $deal->id }}/edit" @endif data-action="/deal/{{ $deal->id }}" data-method="PUT" data-type="deal" data-title="Редактирование сделки" title="Редактировать сделку">{{ $deal->number }}</a>
 			<div class="text-nowrap">
 				от {{ $deal->created_at ? $deal->created_at->format('Y-m-d H:i') : '' }}
 			</div>
@@ -43,16 +43,37 @@
 		<td class="align-middle d-none d-lg-table-cell">
 			<div class="col-12 text-nowrap">
 				<div class="d-inline-block col-6 text-center align-top">
-					@if($deal->is_certificate_purchase && $deal->certificate)
-						Покупка сертификата
-					@elseif($deal->certificate)
-						Бронирование по сертификату
-					@else
-						Бронирование
-					@endif
+					<div>
+						@if($deal->is_certificate_purchase && $deal->certificate)
+							<div>Покупка сертификата</div>
+						@else
+							@if($deal->certificate)
+								<div>Бронирование по сертификату</div>
+							@else
+								<div>Бронирование</div>
+								<div>
+									<i class="fas fa-map-marker-alt" title="Локация"></i>
+									@if($deal->city)
+										{{ $deal->city->name }}
+										@if($deal->location)
+											{{ $deal->location->name }}
+										@endif
+										@if($deal->simulator)
+											<div>{{ $deal->simulator->name }}</div>
+										@endif
+									@else
+										Любой город
+									@endif
+								</div>
+							@endif
+							<div>
+								<i class="far fa-calendar-alt" title="Желаемое время полета"></i> {{ \Carbon\Carbon::parse($deal->flight_at)->format('Y-m-d H:i') }}
+							</div>
+						@endif
+					</div>
 					<div>
 						@if($deal->certificate)
-							<i class="far fa-file-alt"></i>
+							<i class="far fa-file-alt" title="Сертификат"></i>
 							<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $deal->certificate->id }}/edit" data-action="/certificate/{{ $deal->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
 								@if ($deal->certificate->number)
 									{{ $deal->certificate->number }}
@@ -60,16 +81,16 @@
 									без номера
 								@endif
 							</a>
-							<div class="text-nowrap" style="line-height: 0.9;">
+							{{--<div class="text-nowrap" style="line-height: 0.9;">
 								от {{ $deal->certificate->created_at ? $deal->certificate->created_at->format('Y-m-d H:i') : '' }}
-							</div>
-							@if(array_key_exists('certificate_whom', $deal->data_json))
+							</div>--}}
+							@if(array_key_exists('certificate_whom', $deal->data_json) && $deal->data_json['certificate_whom'])
 								<div style="line-height: 0.9;">
 									{{ $deal->data_json['certificate_whom'] }}
 								</div>
 							@endif
 							@if ($deal->certificate->status)
-								<div class="mt-2 p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $deal->certificate->status->data_json ?? []) ? $deal->certificate->status->data_json['color'] : 'none' }};">{{ $deal->certificate->status->name }}</div>
+								<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $deal->certificate->status->data_json ?? []) ? $deal->certificate->status->data_json['color'] : 'none' }};">{{ $deal->certificate->status->name }}</div>
 							@endif
 						@endif
 					</div>
@@ -78,11 +99,13 @@
 					<div>
 						{{ $deal->product ? $deal->product->name : '' }}
 					</div>
+					@if($deal->duration)
+						<div>
+							<i class="far fa-clock" title="Длительность полета"></i> {{ $deal->duration }}
+						</div>
+					@endif
 					<div>
-						<i class="far fa-clock"></i> {{ $deal->duration }}
-					</div>
-					<div>
-						<i class="fas fa-ruble-sign"></i> {{ number_format($deal->amount, 0, '.', ' ') }}
+						<i class="fas fa-ruble-sign" title="Стоимость"></i> {{ number_format($deal->amount, 0, '.', ' ') }}
 						<div class="d-inline-block ml-1">
 							@if(!$deal->amount)
 								<span class="pl-2 pr-2" style="background-color: #e9ffc9;">бесплатно</span>
@@ -98,25 +121,30 @@
 					</div>
 					@if($deal->promo)
 						<div>
-							<i class="fas fa-percent"></i> {{ $deal->promo->name }}
+							<i class="fas fa-percent" title="Акция"></i> {{ $deal->promo->name }}
 						</div>
 					@endif
 					@if($deal->promocode)
 						<div>
-							<i class="fas fa-tag"></i> {{ $deal->promocode->number }}
+							<i class="fas fa-tag" title="Промокод"></i> {{ $deal->promocode->number }}
 						</div>
 					@endif
-					<div>
-						<i class="far fa-building"></i>
-						@if($deal->is_unified)
-							Любой город
-						@elseif($deal->city)
-							{{ $deal->city->name }}
-						@endif
-						@if($deal->location)
-							{{ $deal->location->name }}
-						@endif
-					</div>
+					@if($deal->is_certificate_purchase)
+						<div>
+							<i class="fas fa-map-marker-alt" title="Локация"></i>
+							@if($deal->city)
+								{{ $deal->city->name }}
+								@if($deal->location)
+									{{ $deal->location->name }}
+								@endif
+								@if($deal->simulator)
+									{{ $deal->simulator->name }}
+								@endif
+							@else
+								Любой город
+							@endif
+						</div>
+					@endif
 				</div>
 			</div>
 		</td>
@@ -154,11 +182,12 @@
 				@if($deal->event)
 					<div>
 						<i class="far fa-calendar-alt"></i>
-						{{ \Carbon\Carbon::parse($deal->event->start_at)->format('Y-m-d') }} /
-						{{ \Carbon\Carbon::parse($deal->event->start_at)->format('H:i') }} - {{ \Carbon\Carbon::parse($deal->event->stop_at)->format('H:i') }}
-						@if($deal->event->extra_time)
+						{{ \Carbon\Carbon::parse($deal->event->start_at)->format('Y-m-d') }}
+						<br>
+						с {{ \Carbon\Carbon::parse($deal->event->start_at)->format('H:i') }} по {{ \Carbon\Carbon::parse($deal->event->stop_at)->addMinutes($deal->event->extra_time)->format('H:i') }}
+						{{--@if($deal->event->extra_time)
 							(+ {{ $deal->event->extra_time }} мин)
-						@endif
+						@endif--}}
 					</div>
 					@if($deal->event->location)
 						<div>
@@ -170,7 +199,7 @@
 							<i class="fas fa-plane"></i> {{ $deal->event->simulator->name }}
 						</div>
 					@endif
-					@if($deal->event->comments)
+					@if(count($deal->event->comments))
 						<div class="text-center mt-2" style="margin: 0 auto;max-width: 300px;">
 							<div class="text-left" style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;">
 								@foreach($deal->event->comments ?? [] as $comment)
@@ -191,11 +220,11 @@
 						</div>
 					@endif
 					<div class="mt-2">
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $deal->id }}/add" data-action="/event" data-method="PUT" data-title="Редактирование события" data-type="event" title="Редактировать событие" class="btn btn-secondary btn-sm"><i class="far fa-calendar-alt"></i></a>
+						<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $deal->event->id }}/edit" data-action="/event/{{ $deal->event->id }}" data-method="PUT" data-title="Редактирование события" data-type="event" title="Редактировать событие" class="btn btn-success btn-sm"><i class="far fa-calendar-alt"></i></a>
 					</div>
 				@else
 					<div>
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/event/add" data-action="/event" data-method="POST" data-title="Создание события" data-type="event" title="Создать событие" class="btn btn-success btn-sm"><i class="far fa-calendar-plus"></i></a>
+						<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $deal->id }}/add" data-action="/event" data-method="POST" data-title="Создание события" data-type="event" title="Создать событие" class="btn btn-warning btn-sm"><i class="far fa-calendar-plus"></i></a>
 					</div>
 				@endif
 			@endif

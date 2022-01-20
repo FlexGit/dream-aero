@@ -137,7 +137,7 @@ class ContractorController extends Controller
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
 			'phone' => 'required|valid_phone',
-			'city_id' => 'required|numeric',
+			'city_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -167,6 +167,7 @@ class ContractorController extends Controller
 		$contractor->source = Contractor::ADMIN_SOURCE;
 		$contractor->is_active = (bool)$this->request->is_active;
 		$contractor->is_subscribed = (bool)$this->request->is_subscribed;
+		$contractor->user_id = $this->request->user()->id;
 		$contractor->data_json = $data;
 		if (!$contractor->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -192,7 +193,7 @@ class ContractorController extends Controller
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
 			'phone' => 'required|valid_phone',
-			'city_id' => 'required|numeric',
+			'city_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -249,9 +250,11 @@ class ContractorController extends Controller
 				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . ']',
 				'id' => $contractor->id,
 				'data' => [
-					'name' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : ''),
+					'name' => $contractor->name,
+					'lastname' => $contractor->lastname ?? '',
 					'email' => $contractor->email ?? '',
 					'phone' => $contractor->phone ?? '',
+					'city_id' => $contractor->city ? $contractor->city->id : 0,
 				],
 			];
 		}

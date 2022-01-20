@@ -36,7 +36,7 @@ class CreateStatusesTable extends Migration
 					'discount_id' => 3,
 					'sort' => 30,
 					'data' => [
-						'color' => '',
+						'color' => '#f3ef7f',
 					],
 				],
 				'contractor_silver' => [
@@ -45,7 +45,7 @@ class CreateStatusesTable extends Migration
 					'discount_id' => 2,
 					'sort' => 20,
 					'data' => [
-						'color' => '',
+						'color' => '#dadada',
 					],
 				],
 				'contractor_bronze' => [
@@ -54,7 +54,7 @@ class CreateStatusesTable extends Migration
 					'discount_id' => 1,
 					'sort' => 10,
 					'data' => [
-						'color' => '',
+						'color' => '#c5a437',
 					],
 				],
 				'contractor_platinum' => [
@@ -63,7 +63,7 @@ class CreateStatusesTable extends Migration
 					'discount_id' => 4,
 					'sort' => 40,
 					'data' => [
-						'color' => '',
+						'color' => '#76e7e7',
 					],
 				],
 			],
@@ -199,6 +199,7 @@ class CreateStatusesTable extends Migration
 				$status->alias = $alias;
 				$status->name = $item['name'];
 				$status->sort = $item['sort'];
+				$status->flight_time = $item['flight_time'] ?? 0;
 				$status->data_json = $item['data'] ?? null;
 				$status->save();
 			}

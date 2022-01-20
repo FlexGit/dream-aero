@@ -29,16 +29,30 @@ class CreateUsersTable extends Migration
 			$table->softDeletes();
         });
 	
-		$users = [
-			'0' => [
-				'name' => 'Дмитрий',
-				'email' => 'webmanage@inbox.ru',
-				'password' => '$2y$10$JxmanInukUGs4iJp38GHuO2B22jHhNPBbMvf2Kk.x6dvmen.OH25i',
-				'role' => User::ROLE_SUPERADMIN,
-				'remember_token' => '17ukgipc2dKzlVheH7a4lHuJN215T15r3GNIhxxnhxDMPzg5a4Bt23auzoDq',
-			],
+		$users = [];
+
+		$users[] = [
+			'name' => 'Дмитрий',
+			'email' => 'webmanage@inbox.ru',
+			'password' => 'D#$hUDS*5onGE',
+			'role' => User::ROLE_SUPERADMIN,
+			'remember_token' => '',
 		];
-	
+		$users[] = [
+			'name' => 'Антон',
+			'email' => 'anton.s@dream-aero.com',
+			'password' => 'k*#hf93hFfsd',
+			'role' => User::ROLE_SUPERADMIN,
+			'remember_token' => '',
+		];
+		$users[] = [
+			'name' => 'Екатерина',
+			'email' => 'ekaterina.e@dream-aero.com',
+			'password' => 'sk98#Ynpn8YP#',
+			'role' => User::ROLE_SUPERADMIN,
+			'remember_token' => '',
+		];
+
 		foreach ($users as $item) {
 			$user = new User();
 			$user->name = $item['name'];

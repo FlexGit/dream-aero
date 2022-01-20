@@ -27,7 +27,7 @@ class CreateEventsTable extends Migration
 			$table->boolean('is_repeated_flight')->default(false)->index()->comment('признак повторного полета');
 			$table->boolean('is_unexpected_flight')->default(false)->index()->comment('признак спонтанного полета');
 			$table->boolean('is_test_flight')->default(false)->index()->comment('признак повторного полета');
-			$table->string('notification_type')->comment('способ оповещения контрагента о полете');
+			$table->string('notification_type')->nullable()->comment('способ оповещения контрагента о полете');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();

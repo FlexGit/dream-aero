@@ -21,8 +21,8 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter d-sm-flex mb-2">
-						<div class="form-group">
+					<div class="table-filter d-sm-flex">
+						<div class="form-group align-self-start">
 							<label for="filter_status_type_id">Сущность</label>
 							<select class="form-control" id="filter_status_type_id" name="filter_status_type_id">
 								<option value="0">Все</option>
@@ -170,7 +170,7 @@
 						if (method === 'POST') {
 							msg += 'добавлен';
 						} else if (method === 'PUT') {
-							msg += 'изменен';
+							msg += 'сохранен';
 						} else if (method === 'DELETE') {
 							msg += 'удален';
 						}

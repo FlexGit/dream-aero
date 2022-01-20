@@ -26,18 +26,19 @@ class CreateCitiesProductsTable extends Migration
 			$table->integer('price')->default(0)->comment('базовая цена продукта');
 			$table->integer('discount_id')->default(0)->index()->comment('скидка на продукт');
 			$table->boolean('is_hit')->default(0)->comment('является ли продукт хитом продаж');
+			$table->integer('score')->default(0)->comment('количество баллов, начисляемое клиенту по продукту');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
 			$table->timestamps();
         });
 	
-		$regular = HelpFunctions::getProductTypeByAlias(ProductType::REGULAR_ALIAS);
-		$ultimate = HelpFunctions::getProductTypeByAlias(ProductType::ULTIMATE_ALIAS);
-		$courses = HelpFunctions::getProductTypeByAlias(ProductType::COURSES_ALIAS);
-		$vip = HelpFunctions::getProductTypeByAlias(ProductType::VIP_ALIAS);
-		$services = HelpFunctions::getProductTypeByAlias(ProductType::SERVICES_ALIAS);
+		$regular = HelpFunctions::getEntityByAlias(ProductType::class,ProductType::REGULAR_ALIAS);
+		$ultimate = HelpFunctions::getEntityByAlias(ProductType::class,ProductType::ULTIMATE_ALIAS);
+		$courses = HelpFunctions::getEntityByAlias(ProductType::class,ProductType::COURSES_ALIAS);
+		$vip = HelpFunctions::getEntityByAlias(ProductType::class,ProductType::VIP_ALIAS);
+		$services = HelpFunctions::getEntityByAlias(ProductType::class,ProductType::SERVICES_ALIAS);
 	
-		$city = HelpFunctions::getCityByAlias(City::MSK_ALIAS);
+		$city = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 	
 		$items = [];
 
@@ -49,6 +50,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 30,
 			'price' => 6300,
 			'is_hit' => true,
+			'score' => 500,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -63,6 +65,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 60,
 			'price' => 10900,
 			'is_hit' => true,
+			'score' => 900,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -77,6 +80,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 90,
 			'price' => 15900,
 			'is_hit' => false,
+			'score' => 1300,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -91,6 +95,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 120,
 			'price' => 20500,
 			'is_hit' => false,
+			'score' => 1700,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -105,6 +110,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 180,
 			'price' => 26000,
 			'is_hit' => false,
+			'score' => 2400,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -119,6 +125,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 30,
 			'price' => 7500,
 			'is_hit' => true,
+			'score' => 500,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -133,6 +140,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 60,
 			'price' => 12900,
 			'is_hit' => true,
+			'score' => 900,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -147,6 +155,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 90,
 			'price' => 18800,
 			'is_hit' => false,
+			'score' => 1300,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -161,6 +170,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 120,
 			'price' => 24200,
 			'is_hit' => false,
+			'score' => 1700,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -175,6 +185,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 180,
 			'price' => 34500,
 			'is_hit' => false,
+			'score' => 2400,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -189,6 +200,7 @@ class CreateCitiesProductsTable extends Migration
 			'duration' => 150,
 			'price' => 28900,
 			'is_hit' => false,
+			'score' => 2600,
 			'data' => [
 				'is_booking_allow' => true,
 				'is_certificate_purchase_allow' => true,
@@ -309,8 +321,8 @@ class CreateCitiesProductsTable extends Migration
 			$product->product_type_id = $item['product_type_id'];
 			$product->duration = $item['duration'];
 			$product->save();
-			
-			$city->products()->attach($city->id, ['price' => $item['price'], 'is_hit' => (bool)$item['is_hit'], 'data_json' => json_encode($item['data'], JSON_UNESCAPED_UNICODE)]);
+
+			$product->cities()->attach($city->id, ['price' => $item['price'], 'is_hit' => (bool)$item['is_hit'], 'score' => $item['score'] ?? 0, 'data_json' => json_encode($item['data'], JSON_UNESCAPED_UNICODE)]);
 		}
 	}
 

@@ -21,11 +21,13 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter d-flex justify-content-end mb-2">
-						{{--<a href="#" class="btn btn-secondary btn-sm invisible" title="Выгрузка в Excel"><span><i class="fa fa-file-excel"></i></span></a>--}}
-						<a href="javascript:void(0)" data-toggle="modal" data-url="/legal_entity/add" data-action="/legal_entity" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+					<div class="table-filter d-sm-flex">
+						<div class="form-group align-self-end text-right ml-auto">
+							{{--<a href="#" class="btn btn-secondary btn-sm invisible" title="Выгрузка в Excel"><span><i class="fa fa-file-excel"></i></span></a>--}}
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/legal_entity/add" data-action="/legal_entity" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
+						</div>
 					</div>
-					<table id="legalEntityTable" class="table table-hover table-sm table-bordered table-striped table-data">
+					<table id="legalEntityTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 							<tr>
 								<th class="text-center">Наименование</th>
@@ -173,7 +175,7 @@
 						if (method === 'POST') {
 							msg += 'добавлено';
 						} else if (method === 'PUT') {
-							msg += 'изменено';
+							msg += 'сохранено';
 						} else if (method === 'DELETE') {
 							msg += 'удалено';
 						}

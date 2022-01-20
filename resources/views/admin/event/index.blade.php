@@ -5,7 +5,7 @@
 
 	<div id="calendar"></div>
 
-	<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -14,9 +14,10 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="eventForm" action="{{ route('store-event') }}" method="POST">
+				<form id="event">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
+						<button type="button" class="btn btn-default js-reset mr-5">Сбросить</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Заркыть</button>
 						<button type="submit" class="btn btn-primary">Подтвердить</button>
 					</div>
@@ -96,6 +97,7 @@
 					slotLabelInterval: '01:00',
 					nowIndicator: true,
 					/*timeZone: 'local',*/
+					/*timeZone: 'Europe/Moscow',*/
 					dayMaxEvents: true,
 					firstDay: 1,
 					allDayText: 'Смена',
@@ -158,23 +160,84 @@
 						},
 					],*/
 					/*eventOverlap: false,*/
-					eventClick: function (info) {
+					/*dateClick: function (info) {
+						console.log(info);
 						var id = $(info.event)[0]._def.publicId,
-							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
-							end = $(info.event)[0]._instance.range.end;
+							end = $(info.event)[0]._instance.range.end,
+							url = 'event/add',
+							action = '/event',
+							method = 'POST',
+							type = $(this).data('type'),
+							$modalDialog = $('.modal').find('.modal-dialog');
 
 						$(info.el).tooltip('hide');
+
+						$modalDialog.find('form').attr('id', type);
+
+						var $submit = $('button[type="submit"]');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
 
 						$.ajax({
-							url: 'event/' + id + '/edit',
+							url: url,
 							type: 'GET',
-							dataType: 'html',
+							dataType: 'json',
 							success: function(result) {
-								//$('#modal .modal-title').text(title);
-								$('#modal .modal-body').html(result);
+								if (result.status === 'error') {
+									toastr.error(result.reason);
+									return null;
+								}
+
+								if (action && method) {
+									$('#modal form').attr('action', action).attr('method', method);
+									$submit.removeClass('hidden');
+								} else {
+									$submit.addClass('hidden');
+								}
+								$('#modal .modal-title').text('Новое событие');
+								$('#modal .modal-body').html(result.html);
+								$('#modal').modal('show');
+							}
+						});
+					},*/
+					eventClick: function (info) {
+						var id = $(info.event)[0]._def.publicId,
+							title = $(info.event)[0]._def.title,
+							start = $(info.event)[0]._instance.range.start,
+							end = $(info.event)[0]._instance.range.end,
+							url = 'event/' + id + '/edit',
+							action = '/event/' + id,
+							method = 'PUT',
+							type = $(this).data('type'),
+							$modalDialog = $('.modal').find('.modal-dialog');
+
+						$(info.el).tooltip('hide');
+
+						$modalDialog.find('form').attr('id', type);
+
+						var $submit = $('button[type="submit"]');
+
+						$('.modal .modal-title, .modal .modal-body').empty();
+
+						$.ajax({
+							url: url,
+							type: 'GET',
+							dataType: 'json',
+							success: function(result) {
+								if (result.status === 'error') {
+									toastr.error(result.reason);
+									return null;
+								}
+
+								if (action && method) {
+									$('#modal form').attr('action', action).attr('method', method);
+									$submit.removeClass('hidden');
+								} else {
+									$submit.addClass('hidden');
+								}
+								$('#modal .modal-title').text('Событие ' + title);
+								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
 						});
@@ -184,18 +247,50 @@
 							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
-						//console.log(start);
 
 						$(info.el).tooltip('hide');
+
+						$.ajax({
+							url: '/event/' + id,
+							type: 'PUT',
+							dataType: 'json',
+							data: {
+								'source': 'calendar',
+								'start_at': moment(start).utc().format('YYYY-MM-DD HH:mm'),
+								'stop_at': moment(end).utc().format('YYYY-MM-DD HH:mm'),
+							},
+							success: function(result) {
+								if (result.status !== 'success') {
+									toastr.error(result.reason);
+									return;
+								}
+							}
+						});
 					},
 					eventResize: function (info) {
 						var id = $(info.event)[0]._def.publicId,
 							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
-						//console.log(end);
 
 						$(info.el).tooltip('hide');
+
+						$.ajax({
+							url: '/event/' + id,
+							type: 'PUT',
+							dataType: 'json',
+							data: {
+								'source': 'calendar',
+								'start_at': moment(start).utc().format('YYYY-MM-DD HH:mm'),
+								'stop_at': moment(end).utc().format('YYYY-MM-DD HH:mm'),
+							},
+							success: function(result) {
+								if (result.status !== 'success') {
+									toastr.error(result.reason);
+									return;
+								}
+							}
+						});
 					},
 					eventContent: function (info) {
 						//console.log($(info.event)[0]._def);
@@ -208,11 +303,9 @@
 							notificationType = $(info.event)[0].extendedProps.notificationType,
 							comments = $(info.event)[0].extendedProps.comments;
 
-						//console.log(comments);
-
 						var content = '<div class="fc-event-main">' +
 							'<div class="fc-event-main-frame" data-toggle="modal" data-id="' + id + '" data-title="' + title + '">' +
-							(!allDay ? '<div class="fc-event-time"><div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div>' + moment(start).format('H:mm') + ' - ' + moment(end).format('H:mm') + '</div>' : '') +
+							(!allDay ? '<div class="fc-event-time"><div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div>' + moment(start).utc().format('H:mm') + ' - ' + moment(end).utc().format('H:mm') + '</div>' : '') +
 									'<div class="fc-event-title-container">' +
 										'<div class="fc-event-title fc-sticky">' + title + '</div>' +
 									'</div>' +
@@ -230,7 +323,7 @@
 
 						$.each(comments, function(index, value) {
 							data += '<div class="comment">' + value['name'] + '</div>' +
-								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + moment(value['date']).format('DD.MM.YYYY H:mm:ss') + '</div>'
+								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + moment(value['date']).utc().format('DD.MM.YYYY H:mm:ss') + '</div>'
 						});
 
 						$(info.el).tooltip({
@@ -246,12 +339,12 @@
 					},
 					eventDataTransform: function(event) {
 						if(event.allDay) {
-							//event.end = moment(event.end).add(1, 'days')
+							//event.end = moment(event.end).utc().add(1, 'days')
 						}
 						return event;
 					},
 					selectAllow: function(info) {
-						return !moment(info.start).isBefore(moment());
+						return !moment(info.start).utc().isBefore(moment());
 					},
 					/*select: function(startDate, endDate) {
 						console.log(startDate.format() + ' - ' + endDate.format());
@@ -264,17 +357,64 @@
 				$(window).trigger('resize');
 			});
 
+			$(document).on('submit', '#event', function(e) {
+				e.preventDefault();
+
+				var action = $(this).attr('action'),
+					method = $(this).attr('method'),
+					data = $(this).serializeArray();
+
+				$.ajax({
+					url: action,
+					type: method,
+					data: data,
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						var msg = 'Событие успешно ';
+						if (method === 'POST') {
+							msg += 'создано';
+						} else if (method === 'PUT') {
+							msg += 'сохранено';
+						}
+
+						$('#modal').modal('hide');
+						toastr.success(msg);
+						calendar.refetchEvents();
+					}
+				});
+			});
+
+			$(document).on('change', '#event #location_id', function(e) {
+				$('#event #flight_simulator_id').val($(this).find(':selected').data('simulator_id'));
+			});
+
 			$(document).on('click', '.event-close-btn', function() {
 				var id = $(this).data('id'),
 					title = $(this).data('title');
 
 				var listEvent = calendar.getEvents();
-				if(confirm('Вы уверены, что хотите удалить "' + title + '" ?')) {
-					// ToDo удалять в бэке
-					//jQuery.post("/vacation/deleteEvent", {"id": id});
-					listEvent.forEach(event => {
-						if (event._def.publicId == id) {
-							event.remove();
+				if(confirm('Вы уверены, что хотите удалить событие "' + title + '" ?')) {
+					$.ajax({
+						url: '/event/' + id,
+						type: 'DELETE',
+						dataType: 'json',
+						success: function(result) {
+							if (result.status !== 'success') {
+								toastr.error(result.reason);
+								return;
+							}
+
+							toastr.success('Событие успешно удалено');
+
+							listEvent.forEach(event => {
+								if (event._def.publicId == id) {
+									event.remove();
+								}
+							});
 						}
 					});
 				}
@@ -302,6 +442,12 @@
 					title = $(this).data('title');
 
 				//console.log(id);
+			});
+
+			$(document).on('click', '.js-reset', function(e) {
+				var $form  = $(this).closest('form');
+
+				$form.trigger('reset');
 			});
 
 		});
