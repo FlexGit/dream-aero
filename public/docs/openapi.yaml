@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 servers:
   -
-    url: 'http://admin.dream-aero.loc'
+    url: 'http://dev.dream-aero.ru'
 paths:
   /api/login:
     post:
@@ -3015,7 +3015,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: molestias
+                  example: expedita
               required:
                 - file_base64
   /api/profile/avatar/delete:

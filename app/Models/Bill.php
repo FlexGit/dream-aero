@@ -51,6 +51,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Bill withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Bill withoutTrashed()
  * @mixin \Eloquent
+ * @property int $contractor_id
+ * @property-read \App\Models\Contractor|null $contractor
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereContractorId($value)
  */
 class Bill extends Model
 {

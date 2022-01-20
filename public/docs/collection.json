@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/admin.dream-aero.loc"
+            "value": "http:\/\/dev.dream-aero.ru"
         }
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "fa219131-a331-4ebe-9227-50efcfd15288",
+        "_postman_id": "7bac67f4-0d86-401d-945b-7e5e86e2bb0a",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1188,7 +1188,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"molestias\"}"
+                            "raw": "{\"file_base64\":\"expedita\"}"
                         },
                         "description": ""
                     },

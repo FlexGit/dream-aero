@@ -84,6 +84,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Deal withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Deal withoutTrashed()
  * @mixin \Eloquent
+ * @property int $flight_simulator_id
+ * @property-read \App\Models\FlightSimulator|null $simulator
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereFlightSimulatorId($value)
  */
 class Deal extends Model
 {
