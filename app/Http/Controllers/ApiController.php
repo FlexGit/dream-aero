@@ -1344,8 +1344,8 @@ class ApiController extends Controller
 			}
 		}
 
-		$tariff = Product::where('is_active', true)
-			->find($tariffId);
+		$tariff = Product::/*where('is_active', true)
+			->*/find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
 		}
@@ -1417,8 +1417,8 @@ class ApiController extends Controller
 			}
 		}
 		
-		$tariff = Product::where('is_active', true)
-			->whereIn('city_id', [$city->id, 0])
+		$tariff = Product::/*where('is_active', true)
+			->*/whereIn('city_id', [$city->id, 0])
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
