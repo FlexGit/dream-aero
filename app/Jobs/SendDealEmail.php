@@ -3,8 +3,8 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
-use App\Services\Locker;
-use App\Services\Semaphore;
+/*use App\Services\Locker;
+use App\Services\Semaphore;*/
 use App\Models\Deal;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,7 +24,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		$semaphore = Semaphore::getSemaphoreOrNull('SendDealEmail', 1, 0, 50); // 1 слот для одновременной обработки, 0 секунд ждём свою очередь, 50 секунд даём на обработку
+		/*$semaphore = Semaphore::getSemaphoreOrNull('SendDealEmail', 1, 0, 50); // 1 слот для одновременной обработки, 0 секунд ждём свою очередь, 50 секунд даём на обработку
 		if (!$semaphore) {
 			// пишем в лог проблему на случай, если попыток было слишком много и всё равно требуется начинать job с нуля
 			if ($this->attempts() >= 5) {
@@ -33,12 +33,12 @@ class SendDealEmail extends Job implements ShouldQueue {
 			} else {
 				return $this->releaseAgain($this->attempts() * 3);
 			}
-		}
+		}*/
 		
 		$deal = Deal::find($this->dealId);
 		if (!$deal) return;
 		
-		$lock = Locker::getLockOrNull("SendDealEmail_{$deal->id}", 15, 100); // 15 секунд ждём лок, 100 секунд даём на обработку
+		/*$lock = Locker::getLockOrNull("SendDealEmail_{$deal->id}", 15, 100); // 15 секунд ждём лок, 100 секунд даём на обработку
 		if (!$lock) {
 			if ($this->attempts() <= 4) {
 				$this->releaseAgain(10);
@@ -46,16 +46,16 @@ class SendDealEmail extends Job implements ShouldQueue {
 				$this->releaseCleanAttempt(10);
 			}
 			return;
-		}
+		}*/
 		
 		// логируем рассылку
-		$log = new \Monolog\Logger('deal_send_notifier');
+		/*$log = new \Monolog\Logger('deal_send_notifier');
 		try {
 			$log->pushHandler(new \Monolog\Handler\StreamHandler(storage_path('logs/deal_send_notifier.log'), \Monolog\Logger::INFO));
 		} catch (\Exception $e) {
 			\Log::critical('Cannot create log file for deal_send_notifier', [$e->getMessage()]);
 			$log = \Log::getMonolog();
-		}
+		}*/
 		
 		$locationData = $deal->location ? $deal->location->data_json ?? [] : [];
 		
@@ -117,7 +117,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 				throw new \Exception("Email $deal->email in a failed list");
 			}
 		} catch (\Exception $e) {
-			$log->error('ERROR on Deal send ', ['number' => $deal->number, 'email' => $deal->email, 'msg' => $e->getMessage()]);
+			/*$log->error('ERROR on Deal send ', ['number' => $deal->number, 'email' => $deal->email, 'msg' => $e->getMessage()]);*/
 		}
 	}
 }
