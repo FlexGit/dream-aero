@@ -42,7 +42,7 @@
 	</div>
 	<div class="col">
 		<label for="birthdate">Дата рождения</label>
-		<input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ \Carbon\Carbon::parse($contractor->birthdate)->format('Y-m-d') }}" placeholder="Дата рождения">
+		<input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ $contractor->birthdate ? \Carbon\Carbon::parse($contractor->birthdate)->format('Y-m-d') : '' }}" placeholder="Дата рождения">
 	</div>
 </div>
 <div class="row">
