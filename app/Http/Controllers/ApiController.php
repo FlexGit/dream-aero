@@ -1418,7 +1418,7 @@ class ApiController extends Controller
 		}
 		
 		$tariff = Product::/*where('is_active', true)
-			->*/->whereRelation('cities', 'id', '=', $city->id)
+			->*/whereRelation('cities', 'id', '=', $city->id)
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
