@@ -23,7 +23,7 @@
 				<div class="card-body">
 					<div class="table-filter d-sm-flex mb-2">
 						<div class="form-group">
-							<label for="filter_status_id">Сущность</label>
+							<label for="filter_entity_alias">Сущность</label>
 							<select class="form-control" id="filter_entity_alias" name="filter_entity_alias">
 								<option value="0">Выберите</option>
 								@foreach($entities ?? [] as $entityAlias => $entityName)
@@ -33,7 +33,7 @@
 						</div>
 						<div class="form-group pl-2">
 							<label for="search_contractor">Объект</label>
-							<input type="text" class="form-control" id="search_object" name="search_object" @if($objectId) value="{{ $objectId }}" @endif placeholder="ID объекта">
+							<input type="text" class="form-control" id="search_object" name="search_object" @if($objectId) value="{{ $objectId }}" @endif placeholder="Объект">
 						</div>
 					</div>
 					<table id="revisionTable" class="table table-hover table-sm table-bordered table-striped table-data">
