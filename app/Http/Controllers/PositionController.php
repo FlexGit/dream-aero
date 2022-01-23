@@ -405,7 +405,7 @@ class PositionController extends Controller
 			$position->certificate_id = $certificate ? $certificate->id : 0;
 			$position->duration = $product ? $product->duration : 0;
 			$position->amount = $this->request->amount;
-			$position->currency_id = $cityProduct ? $cityProduct->currency_id : 0;
+			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
 			$position->city_id = $this->request->city_id ?? 0;
 			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
 			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
@@ -533,7 +533,7 @@ class PositionController extends Controller
 			$position->certificate_id = ($this->request->certificate && $certificate) ? $certificate->id : 0;
 			$position->duration = $product ? $product->duration : 0;
 			$position->amount = $this->request->amount;
-			$position->currency_id = $cityProduct ? $cityProduct->currency_id : 0;
+			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
 			$position->city_id = ($location && $location->city) ? $location->city->id : 0;
 			$position->location_id = $location ? $location->id : 0;
 			$position->flight_simulator_id = $simulator ? $simulator->id : 0;
@@ -614,7 +614,6 @@ class PositionController extends Controller
 		}
 
 		$cityProduct = $product->cities->find($this->request->city_id);
-		\Log::debug($cityProduct);
 
 		$data = [];
 		if ($this->request->comment) {
@@ -627,7 +626,7 @@ class PositionController extends Controller
 			$position = new DealPosition();
 			$position->product_id = $product ? $product->id : 0;
 			$position->amount = $this->request->amount;
-			$position->currency_id = $cityProduct ? $cityProduct->currency_id : 0;
+			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
 			$position->city_id = $this->request->city_id ?? 0;
 			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
 			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
