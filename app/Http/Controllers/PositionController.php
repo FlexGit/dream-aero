@@ -614,6 +614,7 @@ class PositionController extends Controller
 		}
 
 		$cityProduct = $product->cities->find($this->request->city_id);
+		\Log::debug($cityProduct);
 
 		$data = [];
 		if ($this->request->comment) {
