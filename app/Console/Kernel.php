@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/schedule.log');
 		
 		$schedule->command('score:add')
-			->everyMinute()/*hourly()*/
+			->/*everyMinute()*/hourly()
 			->withoutOverlapping()
 			->runInBackground()
 			->appendOutputTo($filePath)

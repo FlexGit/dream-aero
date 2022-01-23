@@ -55,12 +55,8 @@ class AddContractorScore extends Command
 			$product = ($event->deal && $event->deal->product) ? $event->deal->product : null;
 			if (!$product) continue;
 
-			\Log::debug($product);
-
 			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
 			if (!$cityProduct || !$cityProduct->pivot) continue;
-
-			\Log::debug($cityProduct);
 
     		$score = new Score();
     		$score->score = $cityProduct->score ?? 0;

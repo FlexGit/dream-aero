@@ -370,7 +370,7 @@ class CreateLocationsTable extends Migration
 		];
 	
 		// Dubai
-		$city = HelpFunctions::getEntityByAlias(City::class, City::UAE_ALIAS);
+		/*$city = HelpFunctions::getEntityByAlias(City::class, City::UAE_ALIAS);
 	
 		$items[] = [
 			'name' => 'Festival City Mall',
@@ -393,7 +393,7 @@ Ground Floor, next to Centrepoint Dubai, UAE',
 					'account_number' => null,
 				],
 			],
-		];
+		];*/
 	
 		// Washington D.C.
 		$city = HelpFunctions::getEntityByAlias(City::class, City::DC_ALIAS);
