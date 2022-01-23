@@ -47,6 +47,7 @@ class CityProduct extends Pivot
 		'product_id',
 		'city_id',
 		'price',
+		'currency_id',
 		'discount_id',
 		'is_hit',
 		'score',
@@ -71,5 +72,10 @@ class CityProduct extends Pivot
 	public function discount()
 	{
 		return $this->hasOne(Discount::class, 'id', 'discount_id');
+	}
+
+	public function currency()
+	{
+		return $this->hasOne(Currency::class, 'id', 'currency_id');
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -40,7 +41,7 @@ class DiscountController extends Controller
 		$discounts = Discount::orderBy('is_fixed')
 			->orderBy('value')
 			->get();
-		
+
 		$VIEW = view('admin.discount.list', ['discounts' => $discounts]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -63,8 +64,11 @@ class DiscountController extends Controller
 		$discount = Discount::find($id);
 		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Скидка не найдена']);
 
+		$currencies = Currency::get();
+
 		$VIEW = view('admin.discount.modal.edit', [
 			'discount' => $discount,
+			'currencies' => $currencies,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -83,7 +87,11 @@ class DiscountController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
-		$VIEW = view('admin.discount.modal.add');
+		$currencies = Currency::get();
+
+		$VIEW = view('admin.discount.modal.add', [
+			'currencies' => $currencies,
+		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
@@ -148,6 +156,7 @@ class DiscountController extends Controller
 		$discount = new Discount();
 		$discount->value = $this->request->value;
 		$discount->is_fixed = $this->request->is_fixed;
+		$discount->currency_id = $this->request->currency_id;
 		$discount->is_active = $this->request->is_active;
 		if (!$discount->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -196,6 +205,7 @@ class DiscountController extends Controller
 		
 		$discount->value = $this->request->value;
 		$discount->is_fixed = $this->request->is_fixed;
+		$discount->currency_id = $this->request->currency_id;
 		$discount->is_active = $this->request->is_active;
 		if (!$discount->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

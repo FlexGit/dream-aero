@@ -14,6 +14,14 @@
 		<option value="0">Нет</option>
 	</select>
 </div>
+<div class="form-group">
+	<label for="version">Версия</label>
+	<select class="form-control" id="version" name="version">
+		@foreach(app('\App\Models\ProductType')::VERSIONS ?? [] as $version)
+			<option value="{{ $version }}">{{ $version }}</option>
+		@endforeach
+	</select>
+</div>
 <div class="form-group js-duration-container">
 	<label for="duration">Длительность</label>
 	<select class="form-control" id="duration" name="duration[]" multiple="multiple">

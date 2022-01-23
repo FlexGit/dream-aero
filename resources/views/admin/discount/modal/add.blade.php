@@ -10,6 +10,14 @@
 		<option value="0" selected>Нет</option>
 	</select>
 </div>
+<div class="form-group hidden">
+	<label for="currency_id">Валюта</label>
+	<select class="form-control" id="currency_id" name="currency_id">
+		@foreach($currencies ?? [] as $currency)
+			<option value="{{ $currency->id }}">{{ $currency->name }}</option>
+		@endforeach
+	</select>
+</div>
 <div class="form-group">
 	<label for="is_active">Активность</label>
 	<select class="form-control" id="is_active" name="is_active">

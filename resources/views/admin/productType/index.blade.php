@@ -32,6 +32,7 @@
 							<th class="text-center">Наименование</th>
 							<th class="text-center d-none d-sm-table-cell">Алиас</th>
 							<th class="text-center d-none d-md-table-cell">Тариф</th>
+							<th class="text-center d-none d-md-table-cell">Версия</th>
 							<th class="text-center d-none d-lg-table-cell">Длительность</th>
 							<th class="text-center d-none d-xl-table-cell">Активность</th>
 							<th class="text-center">Действие</th>

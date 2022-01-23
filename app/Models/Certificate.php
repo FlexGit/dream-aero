@@ -48,6 +48,8 @@ class Certificate extends Model
 	const ATTRIBUTES = [
 		'number' => 'Номер',
 		'status_id' => 'Статус',
+		'city_id' => 'Город',
+		'product_id' => 'Продукт',
 		'uuid' => 'Uuid',
 		'expire_at' => 'Срок окончания действия',
 		'data_json' => 'Дополнительная информация',
@@ -78,6 +80,8 @@ class Certificate extends Model
 	protected $fillable = [
 		'number',
 		'status_id',
+		'city_id',
+		'product_id',
 		'uuid',
 		'expire_at',
 		'data_json',
@@ -100,7 +104,7 @@ class Certificate extends Model
 		parent::boot();
 		
 		Certificate::created(function (Certificate $certificate) {
-			/*$certificate->number = $certificate->generateNumber();*/
+			$certificate->number = $certificate->generateNumber();
 			$certificate->uuid = $certificate->generateUuid();
 			$certificate->save();
 		});
@@ -110,10 +114,20 @@ class Certificate extends Model
 	{
 		return $this->hasOne(Status::class, 'id', 'status_id');
 	}
-	
-	public function deal()
+
+	public function city()
 	{
-		return $this->belongsTo(Deal::class, 'certificate_id', 'id');
+		return $this->hasOne(City::class, 'id', 'city_id');
+	}
+
+	public function product()
+	{
+		return $this->hasOne(Product::class, 'id', 'product_id');
+	}
+
+	public function dealPosition()
+	{
+		return $this->belongsTo(DealPosition::class, 'certificate_id', 'id');
 	}
 	
 	/**
@@ -121,9 +135,9 @@ class Certificate extends Model
 	 */
 	public function generateNumber()
 	{
-		$alias = /*$this->deal->is_unified*/ !$this->deal->city_id ? 'uni' : ($this->deal->city ? mb_strtolower($this->deal->city->alias) : '');
-		$productTypeAlias = ($this->deal->product && $this->deal->product->productType) ? mb_strtoupper(substr($this->deal->product->productType->alias, 0, 1)) : '';
-		$productDuration = $this->deal->product ? $this->deal->product->duration : '';
+		$alias = !$this->city_id ? 'uni' : ($this->city ? mb_strtolower($this->city->alias) : '');
+		$productTypeAlias = ($this->product && $this->product->productType) ? mb_strtoupper(substr($this->product->productType->alias, 0, 1)) : '';
+		$productDuration = $this->product ? $this->product->duration : '';
 		
 		return 'C' . date('y') . $alias . $productTypeAlias . $productDuration  . sprintf('%05d', $this->id);
 	}

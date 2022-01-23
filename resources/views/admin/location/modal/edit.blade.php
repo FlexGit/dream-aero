@@ -1,4 +1,5 @@
 <input type="hidden" id="id" name="id" value="{{ $location->id }}">
+
 <div class="form-group">
 	<label for="name">Наименование</label>
 	<input type="text" class="form-control form-control-sm" id="name" name="name" value="{{ $location->name }}" placeholder="Наименование">
@@ -6,6 +7,48 @@
 <div class="form-group">
 	<label for="alias">Алиас</label>
 	<input type="text" class="form-control form-control-sm" id="alias" name="alias" value="{{ $location->alias }}" placeholder="Алиас">
+</div>
+<div class="form-group">
+	<label>Авиатренажеры</label>
+	@foreach($simulators ?? [] as $simulator)
+		@php
+			$locationSimulator = $location->simulators()->where('flight_simulator_id', $simulator->id)->first();
+			$data = [];
+			if ($locationSimulator) {
+				$locationSimulator->toArray();
+				$data = json_decode($locationSimulator['pivot']['data_json'], true);
+			}
+		@endphp
+
+		<div class="row">
+			<div class="col">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input mr-2 js-simulator" type="checkbox" name="simulator[{{ $simulator->id }}]" value="1" @if($locationSimulator) checked @endif data-simulator-id="{{ $simulator->id }}" style="width: 18px;height: 18px;">
+					<label class="form-check-label text-bold">{{ $simulator->name }}</label>
+				</div>
+				<table class="table table-hover table-sm table-bordered table-striped small">
+					<tr>
+						<td class="text-center align-middle">
+							Событие
+						</td>
+						<td class="text-center align-middle">
+							Цвет события в календаре
+						</td>
+					</tr>
+					@foreach(app('\App\Models\Event')::EVENT_TYPES as $type => $title)
+						<tr>
+							<td class="align-middle">
+								{{ $title }}
+							</td>
+							<td>
+								<input type="text" class="form-control form-control-sm js-simulator-field" name="color[{{ $simulator->id }}][{{ $type }}]" value="{{ $data[$type] ?? '' }}" data-simulator-id="{{ $simulator->id }}" @if(!$locationSimulator) disabled @endif style="border-color: {{ $data[$type] ?? 'inherit' }};">
+							</td>
+						</tr>
+					@endforeach
+				</table>
+			</div>
+		</div>
+	@endforeach
 </div>
 <div class="form-group">
 	<label for="legal_entity_id">Юридическое лицо</label>

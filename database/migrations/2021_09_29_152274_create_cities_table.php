@@ -18,7 +18,7 @@ class CreateCitiesTable extends Migration
             $table->id();
             $table->string('name', 50)->comment('наименование');
 			$table->string('alias', 50)->comment('алиас');
-			$table->string('version', 25)->nullable()->comment('версия сайта');
+			$table->string('version', 25)->default('ru')->index()->comment('версия');
 			$table->string('timezone', 50)->nullable()->comment('временная зона');
 			$table->integer('sort')->default(0)->comment('сортировка');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
@@ -88,15 +88,9 @@ class CreateCitiesTable extends Migration
 				'version' => 'ru',
 				'timezone' => 'Asia/Vladivostok',
 			],
-			'uae' => [
-				'name' => 'Dubai',
-				'sort' => 10,
-				'version' => 'en',
-				'timezone' => 'Asia/Dubai',
-			],
 			'dc' => [
 				'name' => 'Washington D.C.',
-				'sort' => 20,
+				'sort' => 10,
 				'version' => 'en',
 				'timezone' => 'America/New_York',
 			],

@@ -52,7 +52,7 @@ class PayAnyWayService {
 					'MNT_TRANSACTION_ID' => $bill->id,
 					'MNT_CURRENCY_CODE' => self::CURRENCY_CODE,
 					'MNT_TEST_MODE' => self::TEST_MODE,
-					'MNT_DESCRIPTION' => 'Оплата заказа #' . $bill->id. ' на сумму ' . $bill->amount . ' руб.',
+					'MNT_DESCRIPTION' => 'Оплата заказа #' . $bill->id. ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->name : ''),
 					'MNT_SUBSCRIBER_ID' => $bill->contractor_id,
 					'MNT_SIGNATURE' => md5($payAccountId . $bill->id . $bill->amount . self::CURRENCY_CODE . $bill->contractor_id . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE),
 					'MNT_SUCCESS_URL' => route('successPay'),

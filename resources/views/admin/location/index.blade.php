@@ -49,9 +49,10 @@
 						<tr>
 							<th class="text-center">Наименование</th>
 							<th class="text-center d-none d-sm-table-cell">Алиас</th>
-							<th class="text-center d-none d-sm-table-cell">Город</th>
-							<th class="text-center d-none d-md-table-cell">Юр.лицо</th>
-							<th class="text-center d-none d-lg-table-cell">Активность</th>
+							<th class="text-center d-none d-md-table-cell">Авиатренажеры</th>
+							<th class="text-center d-none d-lg-table-cell">Город</th>
+							<th class="text-center d-none d-xl-table-cell">Юр.лицо</th>
+							<th class="text-center d-none d-xl-table-cell">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>
@@ -215,6 +216,14 @@
 
 			$(document).on('change', '#filter_city_id, #filter_legal_entity_id', function(e) {
 				getList();
+			});
+
+			$(document).on('change', '.js-simulator', function(e) {
+				var disabled = true;
+				if ($(this).is(':checked')) {
+					disabled = false
+				}
+				$('.js-simulator-field[data-simulator-id="' + $(this).data('simulator-id') + '"]').attr('disabled', disabled);
 			});
 		});
 	</script>

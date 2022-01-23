@@ -124,4 +124,11 @@ class Promo extends Model
 			'detail_text' => $this->detail_text,
 		];
 	}
+
+	public function valueFormatted() {
+		$value = $this->name;
+		$value .= $this->discount ? ' (-' . $this->discount->valueFormatted() . ')' : '';
+
+		return  $value;
+	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FlightSimulator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -90,11 +91,14 @@ class LocationController extends Controller
 		$legalEntities = LegalEntity::where('is_active', true)
 			->orderBy('name', 'asc')
 			->get();
+
+		$simulators = FlightSimulator::get();
 		
 		$VIEW = view('admin.location.modal.edit', [
 			'location' => $location,
 			'cities' => $cities,
 			'legalEntities' => $legalEntities,
+			'simulators' => $simulators,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -310,6 +314,18 @@ class LocationController extends Controller
 		if (!$location->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
+
+		$colors = $this->request->color ?? [];
+		$locationSimulatorData = [];
+		foreach (array_keys($this->request->simulator) ?? [] as $simulatorId) {
+			$locationSimulatorData[$simulatorId]['data_json'] = [];
+			foreach ($colors[$simulatorId] as $eventType => $color) {
+				$locationSimulatorData[$simulatorId]['data_json'][$eventType] = $color ?? '';
+			}
+			$locationSimulatorData[$simulatorId]['data_json'] = json_encode($locationSimulatorData[$simulatorId]['data_json'], JSON_UNESCAPED_UNICODE);
+		}
+
+		$location->simulators()->sync($locationSimulatorData);
 		
 		return response()->json(['status' => 'success', 'id' => $location->id]);
 	}

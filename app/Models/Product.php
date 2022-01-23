@@ -109,7 +109,7 @@ class Product extends Model
 	{
 		return $this->belongsToMany(City::class, 'cities_products', 'product_id', 'city_id')
 			->using(CityProduct::class)
-			->withPivot(['price', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
+			->withPivot(['price', 'currency_id', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
 			->withTimestamps();
 	}
 	
@@ -241,21 +241,37 @@ class Product extends Model
 	 *
 	 * @return float|int
 	 */
-	public function calcAmount($contractorId, $cityId, $paymentMethodId, $promoId, $promocodeId, $isFree, $source, $isAirlineMilesPurchase = false)
+	public function calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, $source, $certificateNumber = '', $isAirlineMilesPurchase = false)
 	{
 		if ($isFree) return 0;
 
+		if ($certificateNumber && $locationId) {
+			$date = date('Y-m-d');
+			$location = Location::find($locationId);
+			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
+			// проверка сертификата на валидность
+			$certificate = Certificate::where('number', $certificateNumber)
+				->whereIn('city_id', [$location->city->id, 0])
+				->where('status_id', $certificateStatus->id)
+				->where('product_id', $this->id)
+				->where(function ($query) use ($date) {
+					$query->where('expire_at', '>=', $date)
+						->orWhereNull('expire_at');
+				})->first();
+			if ($certificate) return 0;
+		}
+
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
-		$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;
-		$promocode = $promocodeId ? PromoCode::whereIsActive(true)
+		/*$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;*/
+		$promocode = $promocodeId ? PromoCode::/*whereIsActive(true)
 			->where('actve_from_at', '<=', Carbon::now()->parse('Y-m-d H:i:s'))
 			->where('actve_to_at', '>=', Carbon::now()->parse('Y-m-d H:i:s'))
-			->whereRelation('cities', 'id', '=', $cityId)
+			->*/whereRelation('cities', 'cities.id', '=', $cityId)
 			->find($promocodeId) : null;
 
-		// если город любой, то цены продуктов города Москва
-		if (!$cityId) {
+		// если это бронирование и город любой, то цены продуктов города Москва
+		if (!$cityId && !$locationId) {
 			$mskCity = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 			$cityId = $mskCity->id;
 		}
@@ -271,7 +287,7 @@ class Product extends Model
 		if ($discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-			return round($amount);
+			return ($amount > 0) ? round($amount) : 0;
 		}
 
 		// сидка по промокоду
@@ -279,7 +295,7 @@ class Product extends Model
 		if ($discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-			return round($amount);
+			return ($amount > 0) ? round($amount) : 0;
 		}
 
 		// скидка по акции
@@ -287,7 +303,7 @@ class Product extends Model
 		if ($discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-			return round($amount);
+			return ($amount > 0) ? round($amount) : 0;
 		}
 
 		// скидка контрагента
@@ -296,6 +312,6 @@ class Product extends Model
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 		}
 
-		return round($amount);
+		return ($amount > 0) ? round($amount) : 0;
 	}
 }

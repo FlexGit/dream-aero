@@ -44,6 +44,7 @@ class Discount extends Model
 	const ATTRIBUTES = [
 		'value' => 'Размер скидки',
 		'is_fixed' => 'Фиксированная скидка',
+		'currency_id' => 'Валюта',
 		'is_active' => 'Активность',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
@@ -79,6 +80,7 @@ class Discount extends Model
 	protected $fillable = [
 		'value',
 		'is_fixed',
+		'currency_id',
 		'is_active',
 	];
 
@@ -94,7 +96,12 @@ class Discount extends Model
 		'is_active' => 'boolean',
 		'is_fixed' => 'boolean',
 	];
-	
+
+	public function currency()
+	{
+		return $this->hasOne(Currency::class, 'id', 'currency_id');
+	}
+
 	public function format() {
 		return [
 			'value' => $this->value,
@@ -103,6 +110,6 @@ class Discount extends Model
 	}
 	
 	public function valueFormatted() {
-		return number_format($this->value, 0, '.', ' ') . ' ' . ($this->is_fixed ? 'руб' : '%');
+		return number_format($this->value, 0, '.', ' ') . ' ' . ($this->is_fixed ? ($this->currency ? $this->currency->name : '') : '%');
 	}
 }

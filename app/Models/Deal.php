@@ -99,26 +99,12 @@ class Deal extends Model
 		'name' => 'Имя',
 		'phone' => 'Телефон',
 		'email' => 'E-mail',
-		'product_id' => 'Продукт',
-		'certificate_id' => 'Сертификат',
-		'duration' => 'Длительность',
-		'amount' => 'Стоимость',
-		'city_id' => 'Город',
-		'location_id' => 'Локация',
-		'flight_simulator_id' => 'Авиатренажер',
-		'promocode_id' => 'Промокод',
-		'is_certificate_purchase' => 'Покупка сертификата',
-		'is_unified' => 'Единый сертификат',
-		'flight_at' => 'Дата полета',
-		'invite_sent_at' => 'Дата отправки приглашения',
-		'certificate_sent_at' => 'Дата отправки сертификата',
 		'source' => 'Источник',
 		'user_id' => 'Пользователь',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
-		'certificate_whom' => 'Для кого сертифкат',
 		'comment' => 'Комментарий',
 	];
 	
@@ -159,23 +145,8 @@ class Deal extends Model
 		'name',
 		'phone',
 		'email',
-		'product_id',
-		'certificate_id',
-		'duration',
-		'amount',
-		'city_id',
-		'location_id',
-		'flight_simulator_id',
-		'promo_id',
-		'promocode_id',
-		'is_certificate_purchase',
-		'is_unified',
-		'flight_at',
-		'invite_sent_at',
-		'certificate_sent_at',
 		'user_id',
 		'source',
-		
 		'data_json',
 	];
 
@@ -185,13 +156,9 @@ class Deal extends Model
 	 * @var array
 	 */
 	protected $casts = [
-		'flight_at' => 'datetime:Y-m-d H:i',
-		'invite_sent_at' => 'datetime:Y-m-d H:i',
-		'certificate_sent_at' => 'datetime:Y-m-d H:i',
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
-		'is_certificate_purchase' => 'boolean',
 		'data_json' => 'array',
 	];
 	
@@ -202,10 +169,19 @@ class Deal extends Model
 			$deal->number = $deal->generateNumber();
 			$deal->save();
 		});
-		
-		/*Deal::deleting(function(Deal $deal) {
-			$deal->certificate()->delete();
-		});*/
+
+		Deal::saved(function (Deal $deal) {
+			if (!$deal->user_id) {
+				$deal->user_id = \Auth::user()->id;
+				$deal->save();
+			}
+		});
+
+		Deal::deleting(function(Deal $deal) {
+			$deal->positions()->delete();
+			$deal->bills()->delete();
+			$deal->events()->delete();
+		});
 	}
 	
 	public function contractor()
@@ -213,29 +189,14 @@ class Deal extends Model
 		return $this->hasOne(Contractor::class, 'id', 'contractor_id');
 	}
 
-	public function product()
+	public function positions()
 	{
-		return $this->hasOne(Product::class, 'id', 'product_id');
-	}
-	
-	public function certificate()
-	{
-		return $this->hasOne(Certificate::class, 'id', 'certificate_id');
+		return $this->hasMany(DealPosition::class);
 	}
 
-	public function city()
+	public function bills()
 	{
-		return $this->hasOne(City::class, 'id', 'city_id');
-	}
-	
-	public function location()
-	{
-		return $this->hasOne(Location::class, 'id', 'location_id');
-	}
-
-	public function simulator()
-	{
-		return $this->hasOne(FlightSimulator::class, 'id', 'flight_simulator_id');
+		return $this->hasMany(Bill::class, 'deal_id', 'id');
 	}
 
 	public function status()
@@ -243,31 +204,14 @@ class Deal extends Model
 		return $this->hasOne(Status::class, 'id', 'status_id');
 	}
 	
-	public function bills()
+	public function events()
 	{
-		return $this->belongsToMany(Bill::class, 'deals_bills', 'deal_id', 'bill_id')
-			->withPivot('data_json')
-			->withTimestamps();
-	}
-	
-	public function event()
-	{
-		return $this->hasOne(Event::class, 'deal_id', 'id');
+		return $this->hasMany(Event::class, 'deal_id', 'id');
 	}
 	
 	public function user()
 	{
 		return $this->hasOne(User::class, 'id', 'user_id');
-	}
-	
-	public function promocode()
-	{
-		return $this->hasOne(Promocode::class, 'id', 'promocode_id');
-	}
-	
-	public function promo()
-	{
-		return $this->hasOne(Promo::class, 'id', 'promo_id');
 	}
 	
 	/**
@@ -276,7 +220,8 @@ class Deal extends Model
 	public function generateNumber()
 	{
 		$locationCount = $this->city ? $this->city->locations->count() : 0;
-		$cityAlias = $this->city ? $this->city->alias : '';
+		//$cityAlias = $this->city ? $this->city->alias : '';
+		$cityAlias = !$this->city_id ? 'uni' : ($this->city ? mb_strtolower($this->city->alias) : '');
 		$locationAlias = $this->location ? $this->location->alias : '';
 		$productTypeAlias = ($this->product && $this->product->productType) ? mb_strtoupper(substr($this->product->productType->alias, 0, 1)) : '';
 		$productDuration = $this->product ? $this->product->duration : '';
@@ -298,28 +243,33 @@ class Deal extends Model
 			'status' => $this->status ? $this->status->name : null,
 		];
 	}
-	
-	public function billAmount()
+
+	public function amount()
 	{
-		$billAmountSum = 0;
-		foreach ($this->bills ?? [] as $bill) {
-			if ($bill->status->alias == Bill::CANCELED_STATUS) continue;
-			
-			$billAmountSum += $bill->amount;
+		$amount = 0;
+		foreach ($this->positions ?? [] as $position) {
+			if ($position->certificate && $position->certificate->status && in_array($position->certificate->status->alias, [Certificate::CANCELED_STATUS, Certificate::RETURNED_STATUS])) continue;
+
+			$amount += $position->amount;
 		}
 
-		return $billAmountSum;
+		return $amount;
 	}
-	
+
 	public function billPayedAmount()
 	{
-		$billAmountSum = 0;
+		$amount = 0;
 		foreach ($this->bills ?? [] as $bill) {
 			if ($bill->status->alias != Bill::PAYED_STATUS) continue;
-			
-			$billAmountSum += $bill->amount;
+
+			$amount += $bill->amount;
 		}
-		
-		return $billAmountSum;
+
+		return $amount;
+	}
+
+	public function balance()
+	{
+		return $this->billPayedAmount() - $this->amount();
 	}
 }

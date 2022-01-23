@@ -71,6 +71,7 @@ class Event extends Model
 	const ATTRIBUTES = [
 		'event_type' => 'Тип события',
 		'deal_id' => 'Сделка',
+		'deal_position_id' => 'Позиция сделки',
 		'employee_id' => 'Сотрудник',
 		'extra_time' => 'Дополнительное время',
 		'city_id' => 'Город',
@@ -87,7 +88,23 @@ class Event extends Model
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
 
+	const EVENT_SOURCE_DEAL = 'deal';
+	const EVENT_SOURCE_CALENDAR = 'calendar';
+
 	const EVENT_TYPE_DEAL = 'deal';
+
+	const EVENT_TYPE_DEAL_PAID = 'deal_paid';
+	const EVENT_TYPE_DEAL_NOT_PAID = 'deal_notpaid';
+	const EVENT_TYPE_NOTE = 'note';
+	const EVENT_TYPE_SHIFT_ADMIN = 'shift_admin';
+	const EVENT_TYPE_SHIFT_PILOT = 'shift_pilot';
+	const EVENT_TYPES = [
+		self::EVENT_TYPE_DEAL_PAID => 'Сделка оплачена',
+		self::EVENT_TYPE_DEAL_NOT_PAID => 'Сделка не оплачена',
+		self::EVENT_TYPE_NOTE => 'Уведомление',
+		self::EVENT_TYPE_SHIFT_ADMIN => 'Смена администратора',
+		self::EVENT_TYPE_SHIFT_PILOT => 'Смена пилота',
+	];
 	
 	/**
 	 * The attributes that are mass assignable.
@@ -97,6 +114,7 @@ class Event extends Model
 	protected $fillable = [
 		'event_type',
 		'deal_id',
+		'deal_position_id',
 		'employee_id',
 		'extra_time',
 		'city_id',
@@ -140,7 +158,12 @@ class Event extends Model
 	{
 		return $this->belongsTo(Deal::class, 'deal_id', 'id');
 	}
-	
+
+	public function dealPosition()
+	{
+		return $this->belongsTo(DealPosition::class, 'deal_position_id', 'id');
+	}
+
 	public function employee()
 	{
 		return $this->belongsTo(Employee::class, 'employee_id', 'id');

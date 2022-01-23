@@ -17,6 +17,8 @@ class CreateCertificatesTable extends Migration
             $table->id();
 			$table->string('number')->nullable()->comment('номер');
 			$table->integer('status_id')->default(0)->index()->comment('статус');
+			$table->integer('city_id')->default(0)->index()->comment('город');
+			$table->integer('product_id')->default(0)->index()->comment('продукт');
 			$table->string('uuid')->nullable()->comment('uuid');
 			$table->timestamp('expire_at')->nullable()->comment('срок окончания действия сертификата');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');

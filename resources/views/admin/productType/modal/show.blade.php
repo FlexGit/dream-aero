@@ -17,6 +17,10 @@
 			<td>{{ $productType->is_tariff ? 'Да' : 'Нет' }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Версия</td>
+			<td>{{ $productType->version }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Длительность</td>
 			<td>{{ array_key_exists('duration', $productType->data_json) ? implode(',', $productType->data_json['duration']) : '' }}</td>
 		</tr>

@@ -17,9 +17,11 @@ class CreateBillsTable extends Migration
             $table->id();
 			$table->string('number')->nullable()->comment('номер счета');
 			$table->integer('contractor_id')->default(0)->index()->comment('контрагент');
+			$table->integer('deal_id')->default(0)->index()->comment('сделка');
 			$table->integer('payment_method_id')->default(0)->index()->comment('способ оплаты');
 			$table->integer('status_id')->default(0)->index()->comment('статус');
 			$table->integer('amount')->default(0)->comment('сумма счета');
+			$table->integer('currency_id')->default(0)->index()->comment('валюта');
 			$table->string('uuid')->nullable()->comment('uuid');
 			$table->timestamp('payed_at')->nullable()->comment('дата проведения платежа');
 			$table->timestamp('link_sent_at')->nullable()->comment('дата отправка ссылки на оплату');

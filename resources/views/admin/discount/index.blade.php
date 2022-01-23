@@ -31,7 +31,8 @@
 							<tr>
 								<th class="text-center">Размер скидки</th>
 								<th class="text-center d-none d-sm-table-cell">Фиксированная скидка</th>
-								<th class="text-center d-none d-sm-table-cell">Активность</th>
+								<th class="text-center d-none d-md-table-cell">Валюта</th>
+								<th class="text-center d-none d-lg-table-cell">Активность</th>
 								<th class="text-center">Действие</th>
 							</tr>
 						</thead>
@@ -169,6 +170,16 @@
 						toastr.success(msg);
 					}
 				});
+			});
+
+			$(document).on('change', '#is_fixed', function(e) {
+				var $container = $('#currency_id').closest('.form-group');
+
+				if ($(this).val() == 1) {
+					$container.removeClass('hidden');
+				} else {
+					$container.addClass('hidden');
+				}
 			});
 		});
 	</script>

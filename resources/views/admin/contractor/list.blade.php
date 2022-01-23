@@ -4,7 +4,7 @@
 		$flightCnt = $contractor->getFlightCount();
 		$status = $contractor->getStatus($statuses, $flightTime);
 		$score = $contractor->getScore();
-		$balance = $contractor->getBalance($statuses);
+		//$balance = $contractor->getBalance($statuses);
 	@endphp
 <tr class="odd" data-id="{{ $contractor->id }}">
 	<td class="align-middle">
@@ -67,15 +67,14 @@
 			</div>
 		</div>
 	</td>
-	<td class="text-center align-middle d-none d-xl-table-cell">
-		{{--{{ $contractor->last_auth_at }}--}}
+	{{--<td class="text-center align-middle d-none d-xl-table-cell">
 		<div title="Баланс">
 			<i class="fas fa-coins"></i>
 			<span class="pl-2 pr-2" @if($balance < 0) style="background-color: #ffbdba;" @elseif($balance > 0) style="background-color: #e9ffc9;" @endif>
 				{{ number_format($balance, 0, '.', ' ') }}
 				</span>
 		</div>
-	</td>
+	</td>--}}
 	<td class="text-center align-middle d-none d-sm-table-cell">
 		{{ $contractor->is_active ? 'Да' : 'Нет' }}
 	</td>

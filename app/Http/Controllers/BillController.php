@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\City;
+use App\Models\Currency;
 use App\Models\PaymentMethod;
 use App\Models\Deal;
 use App\Models\Status;
@@ -47,11 +48,14 @@ class BillController extends Controller
 		$paymentMethods = PaymentMethod::where('is_active', true)
 			->orderBy('name')
 			->get();
-		
+
+		$currencies = Currency::get();
+
 		$VIEW = view('admin.bill.modal.edit', [
 			'bill' => $bill,
 			'paymentMethods' => $paymentMethods,
 			'statuses' => $statuses,
+			'currencies' => $currencies,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -71,7 +75,7 @@ class BillController extends Controller
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
 		
-		$amount = $deal->amount - $deal->billAmount();
+		$amount = $deal->amount() - $deal->billPayedAmount();
 		
 		$statuses = Status::where('type', Status::STATUS_TYPE_BILL)
 			->orderBy('sort')
@@ -80,12 +84,15 @@ class BillController extends Controller
 		$paymentMethods = PaymentMethod::where('is_active', true)
 			->orderBy('name')
 			->get();
+
+		$currencies = Currency::get();
 		
 		$VIEW = view('admin.bill.modal.add', [
 			'deal' => $deal,
 			'amount' => ($amount > 0) ? $amount : 0,
 			'paymentMethods' => $paymentMethods,
 			'statuses' => $statuses,
+			'currencies' => $currencies,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -103,6 +110,7 @@ class BillController extends Controller
 		$rules = [
 			'deal_id' => 'required|numeric|min:0|not_in:0',
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
+			'status_id' => 'required|numeric|min:0|not_in:0',
 			'amount' => 'required|numeric|min:0|not_in:0',
 		];
 		
@@ -110,10 +118,16 @@ class BillController extends Controller
 			->setAttributeNames([
 				'deal_id' => 'Сделка',
 				'payment_method_id' => 'Способ оплаты',
+				'status_id' => 'Статус',
 				'amount' => 'Сумма',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+
+		$status = Status::find($this->request->status_id);
+		if (!$status) {
+			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
 		}
 
 		$deal = Deal::find($this->request->deal_id);
@@ -127,13 +141,12 @@ class BillController extends Controller
 			$bill = new Bill();
 			$bill->contractor_id = $deal->contractor->id ?? 0;
 			$bill->payment_method_id = $this->request->payment_method_id;
-			$billStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Bill::NOT_PAYED_STATUS);
-			$bill->status_id = $billStatus ? $billStatus->id : 0;
+			$bill->status_id = $this->request->status_id ?? 0;
 			$bill->amount = $this->request->amount;
 			$bill->user_id = $this->request->user()->id;
 			$bill->save();
 			
-			$deal->bills()->attach($bill->id);
+			$deal->bills()->save($bill);
 
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -175,18 +188,46 @@ class BillController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
-		$bill->payment_method_id = $this->request->payment_method_id;
-		$bill->status_id = $this->request->status_id;
-		$bill->amount = $this->request->amount;
 
+		$status = Status::find($this->request->status_id);
+		if (!$status) {
+			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
+		}
+
+		$bill->payment_method_id = $this->request->payment_method_id ?? 0;
+		$bill->status_id = $this->request->status_id ?? 0;
+		$bill->amount = $this->request->amount;
+		if ($status->alias == Bill::PAYED_STATUS && !$bill->payed_at) {
+			$bill->payed_at = Carbon::now()->format('Y-m-d H:i:s');
+		}
 		if (!$bill->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
 		return response()->json(['status' => 'success']);
 	}
-	
+
+	/**
+	 * @param $id
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function delete($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$bill = Bill::find($id);
+		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
+
+		if (!$bill->delete()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+
+		return response()->json(['status' => 'success']);
+	}
+
 	public function sendPayLink() {
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -207,14 +248,8 @@ class BillController extends Controller
 		$bill = Bill::find($this->request->bill_id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
-		$email = '';
-		foreach ($bill->deals ?? [] as $deal) {
-			if ($deal->contractor) {
-				$email = $deal->contractor->email;
-				break;
-			}
-		}
-		
+		$email = ($bill->deal && $bill->deal->contractor) ? $bill->deal->contractor->email : '';
+
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
 		
 		$link = 'https://dream-aero.ru/pay/' . $bill->uuid;

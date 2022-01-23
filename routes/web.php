@@ -5,6 +5,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeePositionController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserController;
@@ -114,34 +115,41 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::put('event/{id}', [EventController::class, 'update'])->name('update-event');
 		Route::delete('event/{id}', [EventController::class, 'delete'])->name('delete-event');
 
-		Route::get('event/{deal_id}/add', [EventController::class, 'add'])->name('add-event');
+		Route::get('event/{position_id}/add', [EventController::class, 'add'])->name('add-event');
 		Route::get('event/{id}/edit', [EventController::class, 'edit'])->name('edit-event');
 		Route::get('event/{id}/show', [EventController::class, 'show'])->name('show-event');
 		
 		// Сделки
 		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
 		Route::get('deal/list/ajax', [DealController::class, 'getListAjax'])->name('dealList');
-		Route::post('deal', [DealController::class, 'store']);
+		Route::post('deal/certificate', [DealController::class, 'storeCertificate']);
+		Route::post('deal/booking', [DealController::class, 'storeBooking']);
+		Route::post('deal/product', [DealController::class, 'storeProduct']);
 		Route::put('deal/{id}', [DealController::class, 'update']);
-		
+
 		Route::get('deal/certificate/add', [DealController::class, 'addCertificate']);
-		Route::get('deal/certificate/{id}/edit', [DealController::class, 'editCertificate']);
 		Route::get('deal/booking/add', [DealController::class, 'addBooking']);
-		Route::get('deal/booking/{id}/edit', [DealController::class, 'editBooking']);
-		Route::get('deal/{id}/show', [DealController::class, 'show']);
-		
+		Route::get('deal/product/add', [DealController::class, 'addProduct']);
+		Route::get('deal/{id}/edit', [DealController::class, 'edit']);
+
 		Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
 
-		// Заявки
-		/*Route::get('order', [OrderController::class, 'index'])->name('orderIndex');
-		Route::get('order/list/ajax', [OrderController::class, 'getListAjax'])->name('orderList');
-		Route::post('order', [OrderController::class, 'store']);
-		Route::put('order/{id}', [OrderController::class, 'update']);
-		
-		Route::get('order/add', [OrderController::class, 'add']);
-		Route::get('order/{id}/edit', [OrderController::class, 'edit']);
-		Route::get('order/{id}/show', [OrderController::class, 'show']);*/
-		
+		// Позиции сделки
+		Route::post('deal_position/certificate', [PositionController::class, 'storeCertificate']);
+		Route::put('deal_position/certificate/{id}', [PositionController::class, 'updateCertificate']);
+		Route::post('deal_position/booking', [PositionController::class, 'storeBooking']);
+		Route::put('deal_position/booking/{id}', [PositionController::class, 'updateBooking']);
+		Route::post('deal_position/product', [PositionController::class, 'storeProduct']);
+		Route::put('deal_position/product/{id}', [PositionController::class, 'updateProduct']);
+		Route::delete('deal_position/{id}', [PositionController::class, 'delete']);
+
+		Route::get('deal_position/certificate/add/{deal_id}', [PositionController::class, 'addCertificate']);
+		Route::get('deal_position/certificate/{id}/edit', [PositionController::class, 'editCertificate']);
+		Route::get('deal_position/booking/add/{deal_id}', [PositionController::class, 'addBooking']);
+		Route::get('deal_position/booking/{id}/edit', [PositionController::class, 'editBooking']);
+		Route::get('deal_position/product/add/{deal_id}', [PositionController::class, 'addProduct']);
+		Route::get('deal_position/product/{id}/edit', [PositionController::class, 'editProduct']);
+
 		// Сертификаты
 		Route::post('certificate', [CertificateController::class, 'store']);
 		Route::put('certificate/{id}', [CertificateController::class, 'update']);
@@ -372,6 +380,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		// Счета
 		Route::post('bill', [BillController::class, 'store']);
 		Route::put('bill/{id}', [BillController::class, 'update']);
+		Route::delete('bill/{id}', [BillController::class, 'delete']);
 
 		Route::get('bill/{deal_id}/add', [BillController::class, 'add']);
 		Route::get('bill/{id}/edit', [BillController::class, 'edit']);

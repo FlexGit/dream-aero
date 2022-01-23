@@ -67,36 +67,6 @@ class CreateStatusesTable extends Migration
 					],
 				],
 			],
-			/*'order' => [
-				'received' => [
-					'name' => 'Принята',
-					'sort' => 10,
-					'data' => [
-						'color' => '#f0eed8',
-					],
-				],
-				'on_phone' => [
-					'name' => 'Недозвон',
-					'sort' => 20,
-					'data' => [
-						'color' => '#fed5a5',
-					],
-				],
-				'processed' => [
-					'name' => 'Обработана',
-					'sort' => 30,
-					'data' => [
-						'color' => '#e9ffc9',
-					],
-				],
-				'canceled' => [
-					'name' => 'Отменена',
-					'sort' => 40,
-					'data' => [
-						'color' => '#ffbdba',
-					],
-				],
-			],*/
 			'deal' => [
 				'deal_created' => [
 					'name' => 'Создана',
@@ -156,6 +126,13 @@ class CreateStatusesTable extends Migration
 						'color' => '#ffbdba',
 					],
 				],
+				'certificate_returned' => [
+					'name' => 'Возврат',
+					'sort' => 40,
+					'data' => [
+						'color' => '#edc9ff',
+					],
+				],
 			],
 			'bill' => [
 				'bill_not_payed' => [
@@ -172,24 +149,7 @@ class CreateStatusesTable extends Migration
 						'color' => '#e9ffc9',
 					],
 				],
-				'bill_canceled' => [
-					'name' => 'Отменен',
-					'sort' => 30,
-					'data' => [
-						'color' => '#ffbdba',
-					],
-				],
 			],
-			/*'payment' => [
-				'payment_not_succeed' => [
-					'name' => 'Не проведен',
-					'sort' => 10,
-				],
-				'payment_succeed' => [
-					'name' => 'Проведен',
-					'sort' => 20,
-				],
-			],*/
 		];
         
         foreach ($statuses as $type => $statusItem) {

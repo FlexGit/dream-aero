@@ -17,6 +17,7 @@ class CreateEventsTable extends Migration
             $table->id();
 			$table->string('event_type')->comment('тип события');
 			$table->integer('deal_id')->default(0)->index()->comment('сделка');
+			$table->integer('deal_position_id')->default(0)->index()->comment('позиция сделки');
 			$table->integer('employee_id')->default(0)->index()->comment('сотрудник');
 			$table->integer('city_id')->default(0)->index()->comment('город, в котором будет осуществлен полет');
 			$table->integer('location_id')->default(0)->index()->comment('локация, на которой будет осуществлен полет');

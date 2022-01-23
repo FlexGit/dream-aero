@@ -23,7 +23,7 @@
 			<td>{{ $product->duration }}</td>
 		</tr>
 		<tr class="odd">
-			<td>Стоимость, руб</td>
+			<td>Стоимость</td>
 			<td>{{ number_format($product->price, 0, '.', ' ') }}</td>
 		</tr>
 		<tr class="odd">

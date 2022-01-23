@@ -1,5 +1,5 @@
 <div>
-	Здравствуйте, {{ $name }}!
+	Здравствуйте, {{ $name ?? '' }}!
 </div>
 
 @if($isCertificatePurchase)
@@ -7,36 +7,36 @@
 		Вами или кем-то на Ваше имя оформлена заявка на покупку сертификата.
 	</div>
 	<div>
-		Статус Вашей заявки: {{ $statusName }}
+		Статус Вашей заявки: {{ $statusName ?? '' }}
 	</div>
 	<div>
-		Номер Вашего сертификата: {{ $certificateNumber }}
+		Номер Вашего сертификата: {{ $certificateNumber ?? '' }}
 	</div>
 	<div>
 		Срок действия сертификата: @if($certificateExpireAt) {{ Carbon\Carbon::parse($certificateExpireAt)->format('d.m.Y') }} @else бессрочный @endif
 	</div>
 	<div>
-		Город действия сертификата: @if($isUnified) все города России присутствия Dream Aero @else{{ $cityName }} @endif
+		Город действия сертификата: @if(!$cityName) все города России присутствия Dream Aero @else {{ $cityName }} @endif
 	</div>
 @else
 	<div>
 		Вами или кем-то на Ваше имя оформлена заявка на бронирование полета на авиатренажере.
 	</div>
 	<div>
-		Статус заявки: {{ $statusName }}
+		Статус заявки: {{ $statusName ?? '' }}
 	</div>
 	<div>
-		Номер заявки: <b>{{ $number }}</b>
+		Номер заявки: <b>{{ $number ?? '' }}</b>
 	</div>
 	<div>
-		Желаемая дата и время полета: {{ Carbon\Carbon::parse($flightAt)->format('d.m.Y H:i') }}
+		Желаемая дата и время полета: {{ $flightAt ? Carbon\Carbon::parse($flightAt)->format('d.m.Y H:i') : '' }}
 	</div>
 	<div>
-		Адрес авиатренажера: {{ $locationAddress }}
+		Адрес авиатренажера: {{ $locationAddress ?? '' }}
 	</div>
 @endif
 <div>
-	Тариф: <b>{{ $productName }}</b> длительностью <b>{{ $duration }}</b> мин и стоимостью <b>{{ number_format($amount, 0, '.', ' ') }} руб.</b>
+	Тариф: <b>{{ $productName }}</b> длительностью <b>{{ $duration ?? '' }}</b> мин и стоимостью <b>{{ number_format($amount ?? 0, 0, '.', ' ') }} {{ $currency ?? '' }}.</b>
 </div>
 
 <div>

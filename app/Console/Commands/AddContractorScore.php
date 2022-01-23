@@ -40,16 +40,30 @@ class AddContractorScore extends Command
      */
     public function handle()
     {
-    	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
+    	$events = Event::where('event_type', Event::EVENT_SOURCE_DEAL)
 			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
+			->where('stop_at', '>=', Carbon::today()->format('Y-m-d H:i:s'))
 			->with('deal')
 			->get();
     	foreach ($events as $event) {
     		$score = Score::where('event_id', $event->id)->first();
     		if ($score) continue;
 
+			$cityId = ($event->deal && $event->deal->city) ? $event->deal->city->id : 0;
+			if (!$cityId) continue;
+
+			$product = ($event->deal && $event->deal->product) ? $event->deal->product : null;
+			if (!$product) continue;
+
+			\Log::debug($product);
+
+			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
+			if (!$cityProduct || !$cityProduct->pivot) continue;
+
+			\Log::debug($cityProduct);
+
     		$score = new Score();
-    		$score->score = ($event->deal && $event->deal->product) ? $event->deal->product->score : 0;
+    		$score->score = $cityProduct->score ?? 0;
 			$score->contractor_id = $event->deal ? $event->deal->contractor_id : 0;
 			$score->event_id = $event->id;
 			$score->save();

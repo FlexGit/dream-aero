@@ -148,12 +148,14 @@ class CityController extends Controller
 		$rules = [
 			'name' => 'required|max:255|unique:cities,name',
 			'alias' => 'required|min:2|max:3|unique:cities,alias',
+			'version' => ['required'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
+				'version' => 'Версия',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -162,6 +164,7 @@ class CityController extends Controller
 		$city = new City();
 		$city->name = $this->request->name;
 		$city->alias = $this->request->alias;
+		$city->version = $this->request->version;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -190,12 +193,14 @@ class CityController extends Controller
 		$rules = [
 			'name' => 'required|max:255|unique:cities,name,' . $id,
 			'alias' => 'required|min:2|max:3|unique:cities,alias,' . $id,
+			'version' => ['required'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
+				'version' => 'Версия',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -203,6 +208,7 @@ class CityController extends Controller
 
 		$city->name = $this->request->name;
 		$city->alias = $this->request->alias;
+		$city->version = $this->request->version;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

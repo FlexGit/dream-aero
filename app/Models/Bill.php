@@ -61,10 +61,12 @@ class Bill extends Model
 	
 	const ATTRIBUTES = [
 		'number' => 'Номер счета',
-		'contractor_id' => 'контрагент',
+		'contractor_id' => 'Контрагент',
+		'dela_id' => 'Сделка',
 		'payment_method_id' => 'Способ оплаты',
 		'status_id' => 'Статус счета',
 		'amount' => 'Сумма',
+		'currency_id' => 'Валюта',
 		'uuid' => 'Uuid',
 		'data_json' => 'Дополнительная информация',
 		'user_id' => 'Пользователь',
@@ -77,11 +79,9 @@ class Bill extends Model
 
 	const NOT_PAYED_STATUS = 'bill_not_payed';
 	const PAYED_STATUS = 'bill_payed';
-	const CANCELED_STATUS = 'bill_canceled';
 	const STATUSES = [
 		self::NOT_PAYED_STATUS,
 		self::PAYED_STATUS,
-		self::CANCELED_STATUS,
 	];
 	
 	protected $revisionForceDeleteEnabled = true;
@@ -95,9 +95,11 @@ class Bill extends Model
 	protected $fillable = [
 		'number',
 		'contractor_id',
+		'deal_id',
 		'payment_method_id',
 		'status_id',
 		'amount',
+		'currency_id',
 		'uuid',
 		'payed_at',
 		'link_sent_at',
@@ -127,18 +129,16 @@ class Bill extends Model
 			$bill->uuid = $bill->generateUuid();
 			$bill->save();
 		});
-		
-		Bill::saved(function (Bill $bill) {
-			if ($bill->status->alias == Bill::PAYED_STATUS && is_null($bill->payed_at)) {
-				$bill->payed_at = Carbon::now()->format('Y-m-d H:i:s');
-				$bill->save();
-			}
-		});
 	}
 
 	public function contractor()
 	{
 		return $this->hasOne(Contractor::class, 'id', 'contractor_id');
+	}
+
+	public function deal()
+	{
+		return $this->belongsTo(Deal::class);
 	}
 
 	public function status()
@@ -151,13 +151,11 @@ class Bill extends Model
 		return $this->hasOne(PaymentMethod::class, 'id', 'payment_method_id');
 	}
 
-	public function deals()
+	public function currency()
 	{
-		return $this->belongsToMany(Deal::class, 'deals_bills', 'bill_id', 'deal_id')
-			->withPivot('data_json')
-			->withTimestamps();
+		return $this->hasOne(Currency::class, 'id', 'currency_id');
 	}
-	
+
 	/**
 	 * @return string
 	 */

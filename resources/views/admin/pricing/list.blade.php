@@ -9,7 +9,7 @@
 					<thead>
 					<tr>
 						<th class="text-center">Продукт</th>
-						<th class="text-center">Стоимость, руб</th>
+						<th class="text-center">Стоимость</th>
 						<th class="text-center d-none d-sm-table-cell">Скидка</th>
 						<th class="text-center d-none d-md-table-cell">Баллы</th>
 						<th class="text-center d-none d-md-table-cell">Активность</th>
@@ -18,23 +18,20 @@
 					</tr>
 					</thead>
 					<tbody>
-					@foreach ($products as $product)
+					@foreach($products as $product)
+						@if($product->productType->version != $city->version)
+							@continue
+						@endif
 						<tr class="odd">
 							<td class="align-middle">
-								{{--@if(isset($citiesProductsData[$city->id][$product->id]))
-									<a href="javascript:void(0)" data-toggle="modal" data-url="/pricing/{{ $city->id }}/{{ $product->id }}/show" data-title="Просмотр" title="Посмотреть">
-										{{ $product->name }}
-									</a>
-								@else--}}
-									{{ $product->name }}
-								{{--@endif--}}
+								{{ $product->name }}
 							</td>
 							<td class="text-right align-middle">
-								{{ isset($citiesProductsData[$city->id][$product->id]) ? number_format($citiesProductsData[$city->id][$product->id]['price'], 0, '.', ' ') : '' }}
+								{{ isset($citiesProductsData[$city->id][$product->id]) ? number_format($citiesProductsData[$city->id][$product->id]['price'], 0, '.', ' ') . ' ' . $citiesProductsData[$city->id][$product->id]['currency'] : '' }}
 							</td>
 							<td class="text-right align-middle d-none d-sm-table-cell">
 								@if(isset($citiesProductsData[$city->id][$product->id]) && isset($citiesProductsData[$city->id][$product->id]['discount']))
-									{{ $citiesProductsData[$city->id][$product->id]['discount']['value'] }} {{ $citiesProductsData[$city->id][$product->id]['discount']['is_fixed'] ? 'руб' : '%' }}
+									{{ $citiesProductsData[$city->id][$product->id]['discount']['value'] }} {{ $citiesProductsData[$city->id][$product->id]['discount']['is_fixed'] ? '' : '%' }}
 								@endif
 							</td>
 							<td class="text-right align-middle d-none d-md-table-cell">

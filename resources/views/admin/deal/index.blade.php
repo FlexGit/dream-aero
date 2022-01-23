@@ -24,17 +24,23 @@
 					<div class="table-filter mb-2">
 						<div class="d-sm-flex">
 							<div class="form-group">
-								<label for="search_doc">Документ</label>
+								<div>
+									<label for="search_doc">Документ</label>
+								</div>
 								<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Номер">
 							</div>
 							<div class="form-group ml-2">
-								<label for="search_contractor">Контрагент</label>
+								<div>
+									<label for="search_contractor">Контрагент</label>
+								</div>
 								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
 							</div>
 							<div class="form-group ml-2">
-								<label for="filter_status_id">Статус</label>
-								<select class="form-control" id="filter_status_id" name="filter_status_id">
-									<option value="0">Все</option>
+								<div>
+									<label for="filter_status_id">Статус</label>
+								</div>
+								<select class="form-control" id="filter_status_id" name="filter_status_id[]" multiple="multiple">
+									{{--<option value="0">Все</option>--}}
 									@foreach($statusData ?? [] as $statusType => $statuses)
 										<optgroup label="{{ $statusType }}">
 											@foreach($statuses ?? [] as $status)
@@ -45,22 +51,27 @@
 								</select>
 							</div>
 							<div class="form-group ml-2">
-								<label for="filter_location_id">Локация</label>
-								<select class="form-control" id="filter_location_id" name="filter_location_id">
-									<option value="0">Все</option>
+								<div>
+									<label for="filter_location_id">Локация</label>
+								</div>
+								<select class="form-control" id="filter_location_id" name="filter_location_id[]" multiple="multiple">
 									@foreach($cities ?? [] as $city)
 										<optgroup label="{{ $city->name }}">
 											@foreach($city->locations ?? [] as $location)
-												<option value="{{ $location->id }}" data-city_id="{{ $location->city_id }}">{{ $location->name }}</option>
+												@foreach($location->simulators ?? [] as $simulator)
+													<option value="{{ $location->id }}" data-city_id="{{ $location->city_id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+												@endforeach
 											@endforeach
 										</optgroup>
 									@endforeach
 								</select>
 							</div>
 							<div class="form-group ml-2 text-nowrap">
-								<label for="filter_product_id">Продукт</label>
-								<select class="form-control" id="filter_product_id" name="filter_product_id">
-									<option value="0">Все</option>
+								<div>
+									<label for="filter_product_id">Продукт</label>
+								</div>
+								<select class="form-control" id="filter_product_id" name="filter_product_id[]" multiple="multiple">
+									{{--<option value="0">Все</option>--}}
 									@foreach($productTypes ?? [] as $productType)
 										<optgroup label="{{ $productType->name }}">
 											@foreach($productType->products ?? [] as $product)
@@ -71,18 +82,37 @@
 								</select>
 							</div>
 							<div class="form-group align-self-end ml-auto pl-2 text-nowrap">
-								<a href="javascript:void(0)" {{--id="addDeal"--}} data-toggle="modal" data-url="/deal/certificate/add" data-action="/deal" data-method="POST" data-type="deal" data-title="Новая сделка на покупку сертификата" {{--@if($contractorId) data-contractor_id="{{ $contractorId }}" @endif--}} class="btn btn-secondary btn-sm" title="Создать сделку">Создать сделку</a>
+								<div class="btn-group dropleft">
+									<a href="javascript:void(0)" class="btn btn-secondary btn-sm dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Создать сделку">Создать сделку</a>
+
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="z-index: 9999;">
+										<a href="javascript:void(0)" data-toggle="modal" data-url="/deal/certificate/add" data-action="/deal/certificate" data-method="POST" data-type="deal" data-title="Новая сделка на покупку сертификата" class="btn btn-secondary btn-sm dropdown-item">Покупка сертификата</a>
+										<a href="javascript:void(0)" data-toggle="modal" data-url="/deal/booking/add" data-action="/deal/booking" data-method="POST" data-type="deal" data-title="Новая сделка на бронирование" class="btn btn-secondary btn-sm dropdown-item">Бронирование</a>
+										<a href="javascript:void(0)" data-toggle="modal" data-url="/deal/product/add" data-action="/deal/product" data-method="POST" data-type="deal" data-title="Новая сделка на товар / услугу" class="btn btn-secondary btn-sm dropdown-item">Товар / услуга</a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 					<table id="dealTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							<th class="text-center">Сделка</th>
-							<th class="text-center d-none d-sm-table-cell">Контрагент</th>
-							<th class="text-center d-none d-lg-table-cell">Детали</th>
+							<th class="text-center">Контрагент</th>
+							<th class="text-center d-none d-sm-table-cell">Сделка</th>
 							<th class="text-center d-none d-xl-table-cell">Счета</th>
-							<th class="text-center d-none d-xl-table-cell">Полет</th>
+							<th class="d-none d-xl-table-cell">
+								<div class="d-sm-flex justify-content-between">
+									<div></div>
+									<div>
+										Позиции
+									</div>
+									<div>
+										<a href="javascript:void(0)" class="js-reload" title="Обновить список сделок">
+											<i class="fas fa-redo"></i>
+										</a>
+									</div>
+								</div>
+							</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -107,7 +137,7 @@
 				<form id="deal">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default js-reset mr-5">Сбросить</button>
+						{{--<button type="button" class="btn btn-default js-add-deal mr-5">Добавить сделку</button>--}}
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 						<button type="submit" class="btn btn-primary">Подтвердить</button>
 					</div>
@@ -119,12 +149,14 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
+	<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
@@ -185,7 +217,7 @@
 					return null;
 				}
 
-				if ($.inArray(type, ['deal']) !== -1) {
+				if ($.inArray(type, ['deal', 'position']) !== -1) {
 					$modalDialog.addClass('modal-lg');
 				} else {
 					$modalDialog.removeClass('modal-lg');
@@ -220,7 +252,7 @@
 				});
 			});
 
-			$(document).on('submit', '#deal, #bill, #certificate, #event', function(e) {
+			$(document).on('submit', '#deal, #position, #bill, #certificate, #event', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -245,6 +277,15 @@
 								msg += 'создана';
 							} else if (method === 'PUT') {
 								msg += 'сохранена';
+							}
+						} else if (formId === 'position') {
+							msg = 'Позиция успешно ';
+							if (method === 'POST') {
+								msg += 'создана';
+							} else if (method === 'PUT') {
+								msg += 'сохранена';
+							} else if (method === 'DELETE') {
+								msg += 'удалена';
 							}
 						} else if (formId === 'bill') {
 							msg = 'Счет успешно ';
@@ -276,23 +317,18 @@
 				});
 			});
 
-			$(document).on('change', '#event #location_id', function(e) {
-				$('#event #flight_simulator_id').val($(this).find(':selected').data('simulator_id'));
+			$(document).on('change', '#location_id', function(e) {
+				$('#flight_simulator_id').val($(this).find(':selected').data('simulator_id'));
 			});
 
 			$(document).on('show.bs.modal', '#modal', function(e) {
 				var $form = $(this).find('form');
 
-				if ($form.attr('id') === 'deal' && $form.find('#id').val().length) {
-					$('.js-reset').addClass('hidden');
-				} else {
-					$('.js-reset').removeClass('hidden');
-				}
-
-				if ($form.attr('id') === 'deal') {
-					$('#contractor').autocomplete({
+				if ($form.attr('id') === 'deal' && !$form.find('#contractor_id').val().length) {
+					$('#email').autocomplete({
 						serviceUrl: '{{ route('contractorSearch') }}',
 						minChars: 1,
+						width: 'flex',
 						showNoSuggestionNotice: true,
 						noSuggestionNotice: 'Ничего не найдено',
 						type: 'POST',
@@ -313,38 +349,38 @@
 							if (suggestion.data.phone) {
 								$('#phone').val(suggestion.data.phone);
 							}
-							if (suggestion.data.city_id) {
+							if (suggestion.data.city_id && $('#city_id').length) {
 								$('#city_id').val(suggestion.data.city_id);
 							}
+							$('.js-contractor').text(suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
 							calcProductAmount();
 						}
 					});
 				}
 			});
 
-			$(document).on('change', '#deal #product_id, #deal #promo_id, #deal #city_id, #deal #is_free', function(e) {
-				calcProductAmount();
-			});
+			$(document).on('shown.bs.modal', '#modal', function(e) {
+				var $form = $(this).find('form');
 
-			var prevAmount = 0;
-			$(document).on('change', '#bill #payment_method_id', function(e) {
-				var $amount = $('#amount');
-
-				if ($(this).find(':selected').data('alias') === 'free') {
-					$amount.closest('div').addClass('hidden');
-					prevAmount = $amount.val();
-					$amount.val(0);
-				} else {
-					$amount.closest('div').removeClass('hidden');
-					if (prevAmount) {
-						$amount.val(prevAmount);
-					}
+				if ($form.attr('id') === 'deal' && !$form.find('#contractor_id').val().length) {
+					$('#email').focus();
 				}
 			});
 
-			function calcProductAmount() {
-				/*var $isUnified = $('#is_unified');*/
+			$(document).on('click', '.js-contractor-delete', function(e) {
+				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
+				$('#contractor_id').val('');
+			});
 
+			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free', function(e) {
+				calcProductAmount();
+			});
+
+			$(document).on('keyup', '#certificate', function(e) {
+				calcProductAmount();
+			});
+
+			function calcProductAmount() {
 				$.ajax({
 					url: "{{ route('calcProductAmount') }}",
 					type: 'GET',
@@ -353,9 +389,11 @@
 						'product_id': $('#product_id').val(),
 						'contractor_id': $('#contractor_id').val(),
 						'promo_id': $('#promo_id').val(),
-						/*'is_unified': $isUnified.is(':checked') ? $isUnified.val() : 0,*/
+						'promocode_id': $('#promocode_id').val(),
 						/*'payment_method_id': $('#payment_method_id').val(),*/
 						'city_id': $('#city_id').val(),
+						'location_id': $('#location_id').val(),
+						'certificate': $('#certificate').val(),
 						'is_free': $('#is_free').is(':checked') ? 1 : 0,
 					},
 					success: function(result) {
@@ -370,19 +408,6 @@
 				});
 			}
 
-			$(document).on('click', '.js-reset', function(e) {
-				var $form  = $(this).closest('form');
-
-				$form.trigger('reset');
-				if ($form.attr('id') === 'deal') {
-					$('#amount-text h1').text(0);
-				}
-			});
-
-			$(document).on('shown.bs.modal', '#modal', function(e) {
-				$('#contractor').focus();
-			});
-
 			$(document).on('change', '#filter_status_id, #filter_product_id, #filter_location_id', function(e) {
 				getList(false);
 			});
@@ -392,6 +417,82 @@
 
 				getList(false);
 			});
+
+			/*$(document).on('change', '.js-product', function(e) {
+				if ($(this).data('currency') == 'USD') {
+					$('.fa-dollar-sign').removeClass('hidden');
+					$('.fa-ruble-sign').addClass('hidden');
+				} else {
+					$('.fa-ruble-sign').removeClass('hidden');
+					$('.fa-dollar-sign').addClass('hidden');
+				}
+			});*/
+
+			$(document).on('click', '.js-remove-position', function(e) {
+				if (confirm('Вы уверены, что хотите удалить позицию?')) {
+					$.ajax({
+						url: '/deal_position/' + $(this).data('id'),
+						type: 'DELETE',
+						dataType: 'json',
+						success: function(result) {
+							if (result.status !== 'success') {
+								toastr.error(result.reason);
+								return;
+							}
+
+							getList(false);
+						}
+					});
+				}
+			});
+
+			$(document).on('click', '.js-remove-bill', function(e) {
+				if (confirm('Вы уверены, что хотите удалить счет?')) {
+					$.ajax({
+						url: '/bill/' + $(this).data('id'),
+						type: 'DELETE',
+						dataType: 'json',
+						success: function(result) {
+							if (result.status !== 'success') {
+								toastr.error(result.reason);
+								return;
+							}
+
+							getList(false);
+						}
+					});
+				}
+			});
+
+			$('#filter_status_id, #filter_location_id, #filter_product_id').multiselect({
+				includeSelectAllOption: true,
+				selectAllText: 'Всe',
+				buttonWidth: '200px',
+				selectAllValue: 0,
+				buttonTextAlignment: 'left',
+				maxHeight: 300,
+				buttonText: function (options, select) {
+					if (options.length === 0) {
+						return 'Все';
+					} else {
+						var labels = [];
+						options.each(function () {
+							if ($(this).attr('label') !== undefined) {
+								labels.push($(this).attr('label'));
+							} else {
+								labels.push($(this).html());
+							}
+						});
+						return labels.join(', ') + '';
+					}
+				},
+			});
+
+			$(document).on('click', '.js-reload', function(e) {
+				getList(false);
+				toastr.success('Список сделок обновлен!');
+			});
+
 
 			$(document).on('click', '.js-sent-pay-link', function(e) {
 				if (confirm('Вы уверены, что хотите отправить ссылку на оплату Счета?')) {

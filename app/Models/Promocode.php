@@ -112,4 +112,11 @@ class Promocode extends Model
 			'name' => $this->name,
 		];
 	}
+
+	public function valueFormatted() {
+		$value = $this->number;
+		$value .= $this->discount ? ' (-' . $this->discount->valueFormatted() . ')' : '';
+
+		return  $value;
+	}
 }

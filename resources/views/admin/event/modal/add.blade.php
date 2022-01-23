@@ -1,8 +1,8 @@
-<input type="hidden" id="deal_id" name="deal_id" value="{{ $deal->id }}">
-<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $deal->flight_simulator_id ?? 0 }}">
-<input type="hidden" id="source" name="source" value="deal">
+<input type="hidden" id="position_id" name="position_id" value="{{ $position->id }}">
+{{--<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $position->flight_simulator_id ?? 0 }}">--}}
+<input type="hidden" id="source" name="source" value="{{ app('\App\Models\Event')::EVENT_SOURCE_DEAL }}">
 
-<div class="form-group">
+{{--<div class="form-group">
 	<label for="location_id">Локация</label>
 	<select class="form-control" id="location_id" name="location_id">
 		<option value="0"></option>
@@ -10,20 +10,20 @@
 			<optgroup label="{{ $city->name }}">
 				@foreach($city->locations ?? [] as $location)
 					@foreach($location->simulators ?? [] as $simulator)
-						<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($deal->location_id == $location->id && $deal->flight_simulator_id == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
+						<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($position->location_id == $location->id && $position->flight_simulator_id == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
 					@endforeach
 				@endforeach
 			</optgroup>
 		@endforeach
 	</select>
-</div>
+</div>--}}
 <div class="row">
 	<div class="col">
 		<div class="form-group">
 			<label>Дата и время начала полета</label>
 			<div class="d-flex">
-				<input type="date" class="form-control" name="start_at_date" value="{{ $deal->flight_at ? \Carbon\Carbon::parse($deal->flight_at)->format('Y-m-d') : '' }}" placeholder="Дата начала полета">
-				<input type="time" class="form-control ml-2" name="start_at_time" value="{{ $deal->flight_at ? \Carbon\Carbon::parse($deal->flight_at)->format('H:i') : '' }}" placeholder="Время начала полета">
+				<input type="date" class="form-control" name="start_at_date" value="{{ $position->flight_at ? \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d') : '' }}" placeholder="Дата начала полета">
+				<input type="time" class="form-control ml-2" name="start_at_time" value="{{ $position->flight_at ? \Carbon\Carbon::parse($position->flight_at)->format('H:i') : '' }}" placeholder="Время начала полета">
 			</div>
 		</div>
 	</div>

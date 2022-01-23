@@ -10,6 +10,14 @@
 		<option value="0" @if(!$discount->is_fixed) selected @endif>Нет</option>
 	</select>
 </div>
+<div class="form-group @if(!$discount->is_fixed) hidden @endif">
+	<label for="currency_id">Валюта</label>
+	<select class="form-control" id="currency_id" name="currency_id">
+		@foreach($currencies ?? [] as $currency)
+			<option value="{{ $currency->id }}" @if($currency->id == $discount->currency_id) selected @endif>{{ $currency->name }}</option>
+		@endforeach
+	</select>
+</div>
 <div class="form-group">
 	<label for="is_active">Активность</label>
 	<select class="form-control" id="is_active" name="is_active">

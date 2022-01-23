@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Models\Discount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -67,6 +68,7 @@ class PricingController extends Controller
 
 				$citiesProductsData[$city->id][$product->id] = [
 					'price' => $cityProduct->pivot->price,
+					'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : '',
 					'is_hit' => $cityProduct->pivot->is_hit,
 					'score' => $cityProduct->pivot->score,
 					'is_active' => $cityProduct->pivot->is_active,
@@ -123,13 +125,16 @@ class PricingController extends Controller
 			->orderBy('is_fixed')
 			->orderBy('value')
 			->get();
-		
+
+		$currencies = Currency::get();
+
 		$VIEW = view('admin.pricing.modal.edit', [
 			'cityId' => $cityId,
 			'productId' => $productId,
 			'cities' => $cities,
 			'products' => $products,
 			'discounts' => $discounts,
+			'currencies' => $currencies,
 			'cityProduct' => $cityProduct ? $cityProduct->pivot : null,
 		]);
 		
@@ -224,10 +229,11 @@ class PricingController extends Controller
 		}
 		
 		$data = [
-			'price' => $this->request->price,
+			'price' => $this->request->price ?? 0,
+			'currency_id' => $this->request->currency_id ?? 0,
 			'discount_id' => $this->request->discount_id ?? 0,
 			'is_hit' => (bool)$this->request->is_hit,
-			'score' => $this->request->score,
+			'score' => $this->request->score ?? 0,
 			'is_active' => (bool)$this->request->is_active,
 			'data_json' => json_encode([
 				'is_booking_allow' => (bool)$this->request->is_booking_allow,

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\City;
+use App\Models\Currency;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Services\HelpFunctions;
@@ -39,6 +40,7 @@ class CreateCitiesProductsTable extends Migration
 		$services = HelpFunctions::getEntityByAlias(ProductType::class,ProductType::SERVICES_ALIAS);
 	
 		$city = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
+		$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 	
 		$items = [];
 
@@ -49,6 +51,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 30,
 			'price' => 6300,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => true,
 			'score' => 500,
 			'data' => [
@@ -64,6 +67,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 60,
 			'price' => 10900,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => true,
 			'score' => 900,
 			'data' => [
@@ -79,6 +83,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 90,
 			'price' => 15900,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'score' => 1300,
 			'data' => [
@@ -94,6 +99,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 120,
 			'price' => 20500,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'score' => 1700,
 			'data' => [
@@ -109,6 +115,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 180,
 			'price' => 26000,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'score' => 2400,
 			'data' => [
@@ -124,6 +131,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 30,
 			'price' => 7500,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => true,
 			'score' => 500,
 			'data' => [
@@ -139,6 +147,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 60,
 			'price' => 12900,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => true,
 			'score' => 900,
 			'data' => [
@@ -154,6 +163,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 90,
 			'price' => 18800,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'score' => 1300,
 			'data' => [
@@ -165,10 +175,11 @@ class CreateCitiesProductsTable extends Migration
 		$items[] = [
 			'name' => 'Ultimate 120',
 			'alias' => 'ultimate_120',
-			'product_type_id' => $regular ? $regular->id : 0,
+			'product_type_id' => $ultimate ? $ultimate->id : 0,
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 120,
 			'price' => 24200,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'score' => 1700,
 			'data' => [
@@ -184,6 +195,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 180,
 			'price' => 34500,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'score' => 2400,
 			'data' => [
@@ -199,6 +211,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 150,
 			'price' => 28900,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'score' => 2600,
 			'data' => [
@@ -214,6 +227,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 360,
 			'price' => 49000,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 				'is_booking_allow' => true,
@@ -228,6 +242,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 360,
 			'price' => 49000,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 				'is_booking_allow' => true,
@@ -242,6 +257,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 540,
 			'price' => 67500,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 				'is_booking_allow' => true,
@@ -256,6 +272,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 1200,
 			'price' => 9900,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 				'is_booking_allow' => true,
@@ -270,6 +287,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 60,
 			'price' => 20000,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 				'is_booking_allow' => false,
@@ -284,6 +302,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => $city ? $city->id : 0,
 			'duration' => 60,
 			'price' => 20000,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 				'is_booking_allow' => false,
@@ -298,6 +317,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => 0,
 			'duration' => 0,
 			'price' => 500,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 			],
@@ -309,6 +329,7 @@ class CreateCitiesProductsTable extends Migration
 			'city_id' => 0,
 			'duration' => 0,
 			'price' => 500,
+			'currency_id' => $currency->id ?? 0,
 			'is_hit' => false,
 			'data' => [
 			],
@@ -322,7 +343,7 @@ class CreateCitiesProductsTable extends Migration
 			$product->duration = $item['duration'];
 			$product->save();
 
-			$product->cities()->attach($city->id, ['price' => $item['price'], 'is_hit' => (bool)$item['is_hit'], 'score' => $item['score'] ?? 0, 'data_json' => json_encode($item['data'], JSON_UNESCAPED_UNICODE)]);
+			$product->cities()->attach($city->id, ['price' => $item['price'], 'currency_id' => $item['currency_id'], 'is_hit' => (bool)$item['is_hit'], 'score' => $item['score'] ?? 0, 'data_json' => json_encode($item['data'], JSON_UNESCAPED_UNICODE)]);
 		}
 	}
 

@@ -3,8 +3,9 @@
 	<td>
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/city/{{ $city->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $city->name }}</a>
 	</td>
-	<td class="text-center">{{ $city->alias }}</td>
-	<td class="text-center d-none d-sm-table-cell">{{ $city->is_active ? 'Да' : 'Нет' }}</td>
+	<td class="text-center d-none d-sm-table-cell">{{ $city->alias }}</td>
+	<td class="text-center d-none d-md-table-cell">{{ $city->version }}</td>
+	<td class="text-center d-none d-md-table-cell">{{ $city->is_active ? 'Да' : 'Нет' }}</td>
 	<td class="text-center">
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/city/{{ $city->id }}/edit" data-action="/city/{{ $city->id }}" data-method="PUT" data-title="Редактирование">
 			<i class="fa fa-edit" aria-hidden="true"></i>

@@ -19,6 +19,7 @@ class CreateProductTypesTable extends Migration
             $table->string('name')->comment('наименование типа продукта');
 			$table->string('alias')->comment('алиас');
 			$table->boolean('is_tariff')->default(true)->index()->comment('является ли продукт тарифом');
+			$table->string('version', 25)->default('ru')->index()->comment('версия');
 			$table->integer('sort')->default(0)->comment('сортировка');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');

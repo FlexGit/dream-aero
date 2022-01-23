@@ -6,7 +6,7 @@
 	<div id="calendar"></div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="modalLabel">Событие</h5>
@@ -17,7 +17,7 @@
 				<form id="event">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default js-reset mr-5">Сбросить</button>
+						{{--<button type="button" class="btn btn-default js-reset mr-5">Сбросить</button>--}}
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Заркыть</button>
 						<button type="submit" class="btn btn-primary">Подтвердить</button>
 					</div>
@@ -30,19 +30,40 @@
 @section('right-sidebar')
 	<div id="datepicker" data-date="{{ date('d.m.Y') }}"></div>
 
-	<div class="m-2">
-		<label for="location_simulator_id">Календарь</label>
-		<select class="form-control" id="location_simulator_id" name="location_simulator_id">
-			<option value="0"></option>
-			@foreach($locations as $location)
-				@if (in_array($location->alias, ['uae_festival', 'usa_westfield']))
-					@continue
-				@endif
-				@foreach($location->simulators as $simulator)
-					<option value="{{ $simulator->pivot->id }}">{{ $location->name }} {{ $simulator->name }}</option>
+	<div class="m-2 pl-4 pr-3">
+		<div class="text-center mb-2">
+			Календари
+		</div>
+		<div>
+			@foreach($cities ?? [] as $city)
+				@php
+					$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
+				@endphp
+
+				@foreach($city->locations ?? [] as $location)
+					@if (in_array($location->alias, ['west']))
+						@continue
+					@endif
+
+					@php
+						$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
+					@endphp
+
+					@foreach($location->simulators ?? [] as $simulator)
+						@php
+							$simulatorName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $simulator->alias : '';
+						@endphp
+
+						<div>
+							<div class="form-check form-check-inline" style="line-height: 0.9em;">
+								<input class="form-check-input align-top" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" name="location-{{ $location->id }}-{{ $simulator->id }}" value="1" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
+								<label for="location-{{ $location->id }}-{{ $simulator->id }}" class="form-check-label small font-weight-light">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</label>
+							</div>
+						</div>
+					@endforeach
 				@endforeach
 			@endforeach
-		</select>
+		</div>
 	</div>
 @stop
 
@@ -65,6 +86,7 @@
 	<script src="{{ asset('js/admin/bootstrap-datepicker.min.js') }}"></script>
 	<script src="{{ asset('js/admin/bootstrap-datepicker.ru.min.js') }}"></script>
 	<script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
+	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script src="{{ asset('js/admin/event.js') }}"></script>
 	<script>
@@ -116,92 +138,48 @@
 							toastr.error('Ошибка при загрузке событий!');
 						}
 					},
-					/*events: [
-						{
-							id			   : 1,
-							title          : 'First',
-							start          : new Date(y, m, d + 1, 13, 45),
-							end            : new Date(y, m, d + 1, 14, 3),
-							backgroundColor: '#f56954',
-							borderColor    : '#f56954',
-							textColor	   : '#000000',
-						},
-						{
-							id			   : 2,
-							title          : 'Long Event',
-							start          : new Date(y, m, d, 12, 0),
-							end            : new Date(y, m, d, 12, 30),
-							backgroundColor: '#f39c12', //yellow
-							borderColor    : '#f39c12' //yellow
-						},
-						{
-							id			   : 4,
-							title          : 'Lunch',
-							start          : new Date(y, m, d, 16, 0),
-							end            : new Date(y, m, d, 16, 45),
-							backgroundColor: '#00c0ef', //Info (aqua)
-							borderColor    : '#00c0ef' //Info (aqua)
-						},
-						{
-							id			   : 4,
-							title          : 'Иванов Иван',
-							start          : new Date(y, m, d, 9, 0),
-							allDay         : true,
-							backgroundColor: '#00a65a', //Success (green)
-							borderColor    : '#00a65a' //Success (green)
-						},
-						{
-							id			   : 4,
-							title          : 'Смирнова Екатерина',
-							start          : new Date(y, m, d, 9, 0),
-							allDay         : true,
-							backgroundColor: '#00a65a', //Success (green)
-							borderColor    : '#00a65a' //Success (green)
-						},
-					],*/
 					/*eventOverlap: false,*/
-					/*dateClick: function (info) {
-						console.log(info);
-						var id = $(info.event)[0]._def.publicId,
-							start = $(info.event)[0]._instance.range.start,
-							end = $(info.event)[0]._instance.range.end,
-							url = 'event/add',
-							action = '/event',
+					dateClick: function (info) {
+						var action = '/deal/booking',
 							method = 'POST',
-							type = $(this).data('type'),
+							type = 'deal',
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						$(info.el).tooltip('hide');
-
 						$modalDialog.find('form').attr('id', type);
-
-						var $submit = $('button[type="submit"]');
+						$modalDialog.addClass('modal-lg');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
 
 						$.ajax({
-							url: url,
+							url: '/deal/booking/add',
 							type: 'GET',
 							dataType: 'json',
+							data: {
+								'action': action,
+								'method': method,
+								'type': type,
+								'source': 'calendar',
+								'flight_at': moment($(info.date)[0])/*.utc()*/.format('YYYY-MM-DD HH:mm'),
+							},
 							success: function(result) {
 								if (result.status === 'error') {
 									toastr.error(result.reason);
 									return null;
 								}
 
-								if (action && method) {
-									$('#modal form').attr('action', action).attr('method', method);
-									$submit.removeClass('hidden');
-								} else {
-									$submit.addClass('hidden');
-								}
-								$('#modal .modal-title').text('Новое событие');
+								$('#modal form').attr('action', action).attr('method', method);
+
+								$('#modal .modal-title').text('Новая сделка на бронирование');
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
 						});
-					},*/
+					},
 					eventClick: function (info) {
+						if ($(info.jsEvent.target).hasClass('event-close-btn')) {
+							return;
+						}
+
 						var id = $(info.event)[0]._def.publicId,
 							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
@@ -215,6 +193,7 @@
 						$(info.el).tooltip('hide');
 
 						$modalDialog.find('form').attr('id', type);
+						$modalDialog.removeClass('modal-lg');
 
 						var $submit = $('button[type="submit"]');
 
@@ -244,7 +223,7 @@
 					},
 					eventDrop: function (info) {
 						var id = $(info.event)[0]._def.publicId,
-							title = $(info.event)[0]._def.title,
+							/*title = $(info.event)[0]._def.title,*/
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
@@ -262,6 +241,7 @@
 							success: function(result) {
 								if (result.status !== 'success') {
 									toastr.error(result.reason);
+									info.revert();
 									return;
 								}
 							}
@@ -287,6 +267,7 @@
 							success: function(result) {
 								if (result.status !== 'success') {
 									toastr.error(result.reason);
+									info.revert();
 									return;
 								}
 							}
@@ -343,9 +324,9 @@
 						}
 						return event;
 					},
-					selectAllow: function(info) {
+					/*selectAllow: function(info) {
 						return !moment(info.start).utc().isBefore(moment());
-					},
+					},*/
 					/*select: function(startDate, endDate) {
 						console.log(startDate.format() + ' - ' + endDate.format());
 					}*/
@@ -357,11 +338,12 @@
 				$(window).trigger('resize');
 			});
 
-			$(document).on('submit', '#event', function(e) {
+			$(document).on('submit', '#deal, #event', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
+					formId = $(this).attr('id'),
 					data = $(this).serializeArray();
 
 				$.ajax({
@@ -374,11 +356,21 @@
 							return;
 						}
 
-						var msg = 'Событие успешно ';
-						if (method === 'POST') {
-							msg += 'создано';
-						} else if (method === 'PUT') {
-							msg += 'сохранено';
+						var msg = '';
+						if (formId === 'deal') {
+							msg = 'Сделка успешно ';
+							if (method === 'POST') {
+								msg += 'создана';
+							} else if (method === 'PUT') {
+								msg += 'сохранена';
+							}
+						} else if (formId === 'event') {
+							msg = 'Событие успешно ';
+							if (method === 'POST') {
+								msg += 'создано';
+							} else if (method === 'PUT') {
+								msg += 'сохранено';
+							}
 						}
 
 						$('#modal').modal('hide');
@@ -388,11 +380,100 @@
 				});
 			});
 
-			$(document).on('change', '#event #location_id', function(e) {
-				$('#event #flight_simulator_id').val($(this).find(':selected').data('simulator_id'));
+			$(document).on('change', '#location_id', function(e) {
+				$('#flight_simulator_id').val($(this).find(':selected').data('simulator_id'));
 			});
 
-			$(document).on('click', '.event-close-btn', function() {
+			$(document).on('show.bs.modal', '#modal', function(e) {
+				var $form = $(this).find('form');
+
+				if ($form.attr('id') === 'deal' && $form.find('#contractor_id').length && !$form.find('#contractor_id').val().length) {
+					$('#email').autocomplete({
+						serviceUrl: '{{ route('contractorSearch') }}',
+						minChars: 1,
+						width: 'flex',
+						showNoSuggestionNotice: true,
+						noSuggestionNotice: 'Ничего не найдено',
+						type: 'POST',
+						dataType: 'json',
+						onSelect: function (suggestion) {
+							if (suggestion.id) {
+								$('#contractor_id').val(suggestion.id);
+							}
+							if (suggestion.data.name) {
+								$('#name').val(suggestion.data.name);
+							}
+							if (suggestion.data.lastname) {
+								$('#lastname').val(suggestion.data.lastname);
+							}
+							if (suggestion.data.email) {
+								$('#email').val(suggestion.data.email);
+							}
+							if (suggestion.data.phone) {
+								$('#phone').val(suggestion.data.phone);
+							}
+							if (suggestion.data.city_id && $('#city_id').length) {
+								$('#city_id').val(suggestion.data.city_id);
+							}
+							$('.js-contractor').text(suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
+							calcProductAmount();
+						}
+					});
+				}
+			});
+
+			$(document).on('shown.bs.modal', '#modal', function(e) {
+				var $form = $(this).find('form');
+
+				if ($form.attr('id') === 'deal' && $form.find('#contractor_id').length && !$form.find('#contractor_id').val().length) {
+					$('#email').focus();
+				}
+			});
+
+			$(document).on('click', '.js-contractor-delete', function(e) {
+				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
+				$('#contractor_id').val('');
+			});
+
+			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free', function(e) {
+				calcProductAmount();
+			});
+
+			$(document).on('keyup', '#certificate', function(e) {
+				calcProductAmount();
+			});
+
+			function calcProductAmount() {
+				$.ajax({
+					url: "{{ route('calcProductAmount') }}",
+					type: 'GET',
+					dataType: 'json',
+					data: {
+						'product_id': $('#product_id').val(),
+						'contractor_id': $('#contractor_id').val(),
+						'promo_id': $('#promo_id').val(),
+						'promocode_id': $('#promocode_id').val(),
+						/*'payment_method_id': $('#payment_method_id').val(),*/
+						'city_id': $('#city_id').val(),
+						'location_id': $('#location_id').val(),
+						'certificate': $('#certificate').val(),
+						'is_free': $('#is_free').is(':checked') ? 1 : 0,
+					},
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						$('#amount').val(result.amount);
+						$('#amount-text h1').text(result.amount);
+					}
+				});
+			}
+
+			$(document).on('click', '.event-close-btn', function(e) {
+				e.stopImmediatePropagation();
+
 				var id = $(this).data('id'),
 					title = $(this).data('title');
 
@@ -435,21 +516,11 @@
 				$('#datepicker').hide(100);
 			});*/
 
-			$(document).on('click', '.fc-event-title a', function(e) {
-				e.preventDefault();
-
-				var id = $(this).data('id'),
-					title = $(this).data('title');
-
-				//console.log(id);
-			});
-
-			$(document).on('click', '.js-reset', function(e) {
+			/*$(document).on('click', '.js-reset', function(e) {
 				var $form  = $(this).closest('form');
 
 				$form.trigger('reset');
-			});
-
+			});*/
 		});
 	</script>
 @stop

@@ -234,12 +234,13 @@ class ContractorController extends Controller
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
 		$contractors = Contractor::where('is_active', true)
-			->where(function($query) use ($q) {
+			/*->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")
 					->orWhere("lastname", "LIKE", "%{$q}%")
 					->orWhere("email", "LIKE", "%{$q}%")
 					->orWhere("phone", "LIKE", "%{$q}%");
-			})
+			})*/
+			->where("email", "LIKE", "%{$q}%")
 			->orderBy("name")
 			->orderBy("lastname")
 			->get();

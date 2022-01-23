@@ -63,11 +63,19 @@ class ProductType extends Model
 	const COURSES_ALIAS = 'courses';
 	const VIP_ALIAS = 'vip';
 	const SERVICES_ALIAS = 'services';
+
+	const RU_VERSION = 'ru';
+	const EN_VERSION = 'ru';
+	const VERSIONS = [
+		self::RU_VERSION,
+		self::EN_VERSION,
+	];
     
     const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
 		'is_tariff' => 'Является тарифом',
+		'version' => 'Версия',
 		'is_active' => 'Активность',
 		'data_json' => 'Дополнительная информация',
 		'duration' => 'Длительность',
@@ -89,6 +97,7 @@ class ProductType extends Model
 		'name',
 		'alias',
 		'is_tariff',
+		'version',
 		'is_active',
 		'data_json'
 	];
@@ -109,7 +118,9 @@ class ProductType extends Model
 	
 	public function products()
 	{
-		return $this->hasMany(Product::class, 'product_type_id', 'id');
+		return $this->hasMany(Product::class, 'product_type_id', 'id')
+			->orderBy('product_type_id')
+			->orderBy('duration');
 	}
 	
 	/**

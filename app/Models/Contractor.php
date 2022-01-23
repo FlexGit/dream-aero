@@ -299,7 +299,7 @@ class Contractor extends Authenticatable
 	 */
 	public function getFlightTime()
 	{
-		return Event::where('event_type', Event::EVENT_TYPE_DEAL)
+		return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
 			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
 			->whereRelation('deal', 'contractor_id', '=', $this->id)
 			->sum(DB::raw('TIMESTAMPDIFF(minute, start_at, stop_at)'));
@@ -310,7 +310,7 @@ class Contractor extends Authenticatable
 	 */
 	public function getFlightCount()
 	{
-		return Event::where('event_type', Event::EVENT_TYPE_DEAL)
+		return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
 			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
 			->whereRelation('deal', 'contractor_id', '=', $this->id)
 			->count();
@@ -322,7 +322,7 @@ class Contractor extends Authenticatable
 	 */
 	public function getBalance($statuses)
 	{
-		$dealReturnedStatusId = $dealCanceledStatusId = $billPayedStatusId = 0;
+		$dealReturnedStatusId = $dealCanceledStatusId = $billPayedStatusId = $certificateReturnedStatus = $certificateCanceledStatus = 0;
 		foreach ($statuses ?? [] as $status) {
 			if ($status->type == Status::STATUS_TYPE_DEAL && $status->alias == Deal::RETURNED_STATUS) {
 				$dealReturnedStatusId = $status->id;
@@ -333,17 +333,34 @@ class Contractor extends Authenticatable
 			if ($status->type == Status::STATUS_TYPE_BILL && $status->alias == Bill::PAYED_STATUS) {
 				$billPayedStatusId = $status->id;
 			}
-			
+			if ($status->type == Status::STATUS_TYPE_CERTIFICATE && $status->alias == Certificate::RETURNED_STATUS) {
+				$certificateReturnedStatus = $status->id;
+			}
+			if ($status->type == Status::STATUS_TYPE_CERTIFICATE && $status->alias == Certificate::CANCELED_STATUS) {
+				$certificateCanceledStatus = $status->id;
+			}
 		}
 		if (!$dealReturnedStatusId || !$dealCanceledStatusId || !$billPayedStatusId) return 0;
-		
-		$dealSum = Deal::whereNotIn('status_id', [$dealReturnedStatusId, $dealCanceledStatusId])
+
+		$dealSum = 0;
+		$deals = Deal::whereNotIn('status_id', [$dealReturnedStatusId, $dealCanceledStatusId])
+			->where('contractor_id', $this->id)
+			->orWhereRelation('positions', function ($query) use ($certificateReturnedStatus, $certificateCanceledStatus) {
+				return $query->orWhereHas('certificate', function ($query) use ($certificateReturnedStatus, $certificateCanceledStatus) {
+					return $query->whereNotIn('certificates.status_id', [$certificateReturnedStatus, $certificateCanceledStatus]);
+				});
+			})
+			->withSum('positions as amount', 'amount')
+			->get();
+		foreach ($deals as $deal) {
+			$dealSum += $deal->amount;
+		}
+
+		$billSum = Bill::where('status_id', $billPayedStatusId)
 			->where('contractor_id', $this->id)
 			->sum('amount');
 
-		$billSum = Bill::where('status_id', $billPayedStatusId)
-			->whereRelation('deals', 'contractor_id', '=', $this->id)
-			->sum('amount');
+		\Log::debug($this->id . ' - ' . $dealSum . ' - ' . $billSum);
 		
 		return ($billSum - $dealSum);
 	}

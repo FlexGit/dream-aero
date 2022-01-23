@@ -5,6 +5,7 @@
 	</td>
 	<td class="text-center d-none d-sm-table-cell">{{ $productType->alias }}</td>
 	<td class="text-center d-none d-md-table-cell">{{ $productType->is_tariff ? 'Да' : 'Нет' }}</td>
+	<td class="text-center d-none d-md-table-cell">{{ $productType->version }}</td>
 	<td class="text-center d-none d-lg-table-cell">{{ is_array($productType->data_json['duration']) ? implode(', ', $productType->data_json['duration']) : $productType->data_json['duration'] }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $productType->is_active ? 'Да' : 'Нет' }}</td>
 	<td class="text-center">

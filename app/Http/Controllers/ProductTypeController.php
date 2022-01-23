@@ -148,12 +148,14 @@ class ProductTypeController extends Controller
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:product_types,name'],
 			'alias' => ['required', 'min:3', 'max:50', 'unique:product_types,alias'],
+			'version' => ['required'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
+				'version' => 'Версия',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -163,6 +165,7 @@ class ProductTypeController extends Controller
 		$productType->name = $this->request->name;
 		$productType->alias = $this->request->alias;
 		$productType->is_tariff = $this->request->is_tariff;
+		$productType->version = $this->request->version;
 		$productType->is_active = $this->request->is_active;
 		$productType->data_json = [
 			'duration' => ($this->request->duration && $this->request->is_tariff) ? (!is_array($this->request->duration) ? array_map('intval', explode(',', $this->request->duration)) : array_map('intval', $this->request->duration)) : null,
@@ -194,12 +197,14 @@ class ProductTypeController extends Controller
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:product_types,name,' . $id],
 			'alias' => ['required', 'min:3', 'max:50', 'unique:product_types,alias,' . $id],
+			'version' => ['required'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
+				'version' => 'Версия',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -208,6 +213,7 @@ class ProductTypeController extends Controller
 		$productType->name = $this->request->name;
 		$productType->alias = $this->request->alias;
 		$productType->is_tariff = $this->request->is_tariff;
+		$productType->version = $this->request->version;
 		$productType->is_active = $this->request->is_active;
 		$productType->data_json = [
 			'duration' => ($this->request->duration && $this->request->is_tariff) ? (!is_array($this->request->duration) ? array_map('intval', explode(',', $this->request->duration)) : array_map('intval', $this->request->duration)) : null,

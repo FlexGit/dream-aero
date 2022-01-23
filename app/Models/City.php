@@ -64,7 +64,14 @@ class City extends Model
 	const KHV_ALIAS = 'khv';
 	const UAE_ALIAS = 'uae';
 	const DC_ALIAS = 'dc';
-	
+
+	const RU_VERSION = 'ru';
+	const EN_VERSION = 'ru';
+	const VERSIONS = [
+		self::RU_VERSION,
+		self::EN_VERSION,
+	];
+
 	const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
@@ -116,7 +123,7 @@ class City extends Model
 	{
 		return $this->belongsToMany(Product::class, 'cities_products', 'city_id', 'product_id')
 			->using(CityProduct::class)
-			->withPivot(['price', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
+			->withPivot(['price', 'currency_id', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
 			->withTimestamps();
 	}
 	

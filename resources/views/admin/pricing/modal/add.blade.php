@@ -18,7 +18,7 @@
 	</select>
 </div>
 <div class="form-group">
-	<label for="price">Стоимость, руб</label>
+	<label for="price">Стоимость</label>
 	<input type="number" class="form-control" id="price" name="price" placeholder="Стоимость">
 </div>
 <div class="form-group">

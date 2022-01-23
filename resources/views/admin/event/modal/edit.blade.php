@@ -1,9 +1,9 @@
 <input type="hidden" id="id" name="id" value="{{ $event->id }}">
-<input type="hidden" id="deal_id" name="deal_id" value="{{ $event->deal_id }}">
-<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $event->flight_simulator_id ?? 0 }}">
-<input type="hidden" id="source" name="source" value="deal">
+{{--<input type="hidden" id="position_id" name="position_id" value="{{ $event->deal_position_id }}">--}}
+{{--<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $event->flight_simulator_id ?? 0 }}">--}}
+<input type="hidden" id="source" name="source" value="{{ app('\App\Models\Event')::EVENT_SOURCE_DEAL }}">
 
-<div class="form-group">
+{{--<div class="form-group">
 	<label for="product_id">Продукт</label>
 	<select class="form-control js-product" id="product_id" name="product_id">
 		<option></option>
@@ -13,7 +13,7 @@
 			@endif
 			<optgroup label="{{ $productType->name }}">
 				@foreach($productType->products ?? [] as $product)
-					<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($event->deal && $product->id == $event->deal->product_id) selected @endif>{{ $product->name }}</option>
+					<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($event->dealPosition && $product->id == $event->dealPosition->product_id) selected @endif>{{ $product->name }}</option>
 				@endforeach
 			</optgroup>
 		@endforeach
@@ -33,7 +33,7 @@
 			</optgroup>
 		@endforeach
 	</select>
-</div>
+</div>--}}
 <div class="row">
 	<div class="col">
 		<div class="form-group">

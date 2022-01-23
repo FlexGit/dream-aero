@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\Contractor;
+use App\Models\DealPosition;
 use App\Models\Discount;
+use App\Models\Event;
+use App\Models\FlightSimulator;
 use App\Models\PaymentMethod;
 use App\Models\Promo;
 use App\Models\Deal;
@@ -13,6 +16,7 @@ use App\Models\City;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\ProductType;
+use App\Models\Promocode;
 use App\Models\Status;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
@@ -76,34 +80,43 @@ class DealController extends Controller
 		}
 		
 		$id = $this->request->id ?? 0;
-		
-		$deals = Deal::with('event')
-			->orderBy('id', 'desc');
+
+		//\DB::connection()->enableQueryLog();
+
+		$deals = Deal::orderBy('id', 'desc');
 		if ($this->request->filter_status_id) {
 			$deals = $deals->where(function ($query) {
-				$query->where('status_id', $this->request->filter_status_id)
-					->orWhereHas('certificate', function ($query) {
-						return $query->where('status_id', $this->request->filter_status_id);
+				$query->whereIn('status_id', $this->request->filter_status_id)
+					->orWhereRelation('positions', function ($query) {
+						return $query->orWhereHas('certificate', function ($query) {
+							return $query->whereIn('certificates.status_id', $this->request->filter_status_id);
+						});
 					})
 					->orWhereHas('bills', function ($query) {
-						return $query->where('status_id', $this->request->filter_status_id);
+						return $query->whereIn('bills.status_id', $this->request->filter_status_id);
 					});
 			});
 		}
 		if ($this->request->filter_location_id) {
-			$deals = $deals->where('location_id', $this->request->filter_location_id);
+			$deals = $deals->whereHas('positions', function ($query) {
+				return $query->whereIn('location_id', $this->request->filter_location_id);
+			});
 		}
 		if ($this->request->filter_product_id) {
-			$deals = $deals->where('product_id', $this->request->filter_product_id);
+			$deals = $deals->whereHas('positions', function ($query) {
+				return $query->whereIn('product_id', $this->request->filter_product_id);
+			});
 		}
 		if ($this->request->search_doc) {
 			$deals = $deals->where(function ($query) {
 				$query->where('number', 'like', '%' . $this->request->search_doc . '%')
-					->orWhereHas('certificate', function ($q) {
-						return $q->where('number', 'like', '%' . $this->request->search_doc . '%');
+					->orWhereRelation('positions', function ($query) {
+						return $query->orWhereHas('certificate', function ($query) {
+							return $query->where('certificates.number', 'like', '%' . $this->request->search_doc . '%');
+						});
 					})
 					->orWhereHas('bills', function ($q) {
-						return $q->where('number', 'like', '%' . $this->request->search_doc . '%');
+						return $q->where('bills.number', 'like', '%' . $this->request->search_doc . '%');
 					});
 			});
 		}
@@ -124,7 +137,10 @@ class DealController extends Controller
 			$deals = $deals->where('id', '<', $id);
 		}
 		$deals = $deals->limit(20)->get();
-		
+
+		//$queries = \DB::getQueryLog();
+		//\Log::debug($queries);
+
 		$VIEW = view('admin.deal.list', ['deals' => $deals]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -143,9 +159,11 @@ class DealController extends Controller
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
+			->whereNotIn('alias', ['uae'])
 			->get();
 
 		$productTypes = ProductType::where('is_active', true)
+			->whereNotIn('alias', ['services'])
 			->orderBy('name')
 			->get();
 
@@ -153,22 +171,126 @@ class DealController extends Controller
 			->orderBy('name')
 			->get();
 
-		$discounts = Discount::where('is_active', true)
+		$promocodes = Promocode::where('is_active', true)
+			->orderBy('number')
+			->get();
+
+		/*$discounts = Discount::where('is_active', true)
 			->orderBy('is_fixed')
 			->orderBy('value')
-			->get();
+			->get();*/
 
-		$paymentMethods = PaymentMethod::where('is_active', true)
+		/*$paymentMethods = PaymentMethod::where('is_active', true)
 			->orderBy('name')
-			->get();
+			->get();*/
 
-		$VIEW = view('admin.deal.modal.add', [
-			'isCertificatePurchase' => (bool)$this->request->isCertificatePurchase,
+		$VIEW = view('admin.deal.modal.certificate.add', [
 			'cities' => $cities,
 			'productTypes' => $productTypes,
 			'promos' => $promos,
-			'discounts' => $discounts,
-			'paymentMethods' => $paymentMethods,
+			'promocodes' => $promocodes,
+			/*'discounts' => $discounts,*/
+			/*'paymentMethods' => $paymentMethods,*/
+			'contractor' => $contractor ?? null,
+		]);
+
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function addBooking()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->whereNotIn('alias', ['uae'])
+			->get();
+
+		$productTypes = ProductType::where('is_active', true)
+			->whereNotIn('alias', ['services'])
+			->orderBy('name')
+			->get();
+
+		$promos = Promo::where('is_active', true)
+			->orderBy('name')
+			->get();
+
+		$promocodes = Promocode::where('is_active', true)
+			->orderBy('number')
+			->get();
+
+		/*$discounts = Discount::where('is_active', true)
+			->orderBy('is_fixed')
+			->orderBy('value')
+			->get();*/
+
+		/*$paymentMethods = PaymentMethod::where('is_active', true)
+			->orderBy('name')
+			->get();*/
+
+		$VIEW = view('admin.deal.modal.booking.add', [
+			'cities' => $cities,
+			'productTypes' => $productTypes,
+			'promos' => $promos,
+			'promocodes' => $promocodes,
+			/*'discounts' => $discounts,*/
+			/*'paymentMethods' => $paymentMethods,*/
+			'contractor' => $contractor ?? null,
+			'source' => $this->request->source ?? '',
+			'flightAt' => $this->request->flight_at ?? '',
+		]);
+
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function addProduct()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->whereNotIn('alias', ['uae'])
+			->get();
+
+		$productTypes = ProductType::where('is_active', true)
+			->whereIn('alias', ['services'])
+			->orderBy('name')
+			->get();
+
+		$promos = Promo::where('is_active', true)
+			->orderBy('name')
+			->get();
+
+		$promocodes = Promocode::where('is_active', true)
+			->orderBy('number')
+			->get();
+
+		/*$discounts = Discount::where('is_active', true)
+			->orderBy('is_fixed')
+			->orderBy('value')
+			->get();*/
+
+		$VIEW = view('admin.deal.modal.product.add', [
+			'cities' => $cities,
+			'productTypes' => $productTypes,
+			'promos' => $promos,
+			'promocodes' => $promocodes,
+			/*'discounts' => $discounts,*/
+			'deal' => $deal ?? null,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -178,7 +300,7 @@ class DealController extends Controller
 	 * @param $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
 	 */
-	public function editCertificate($id)
+	public function edit($id)
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -191,78 +313,18 @@ class DealController extends Controller
 			->orderBy('sort')
 			->get();
 		
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->get();
-		
-		$productTypes = ProductType::where('is_active', true)
-			->orderBy('name')
-			->get();
-		
-		$promos = Promo::where('is_active', true)
-			->orderBy('name')
-			->get();
-		
-		$discounts = Discount::where('is_active', true)
-			->orderBy('is_fixed')
-			->orderBy('value')
-			->get();
-		
-		$paymentMethods = PaymentMethod::where('is_active', true)
-			->orderBy('name')
-			->get();
-		
 		$VIEW = view('admin.deal.modal.edit', [
 			'deal' => $deal,
-			'cities' => $cities,
-			'productTypes' => $productTypes,
-			'promos' => $promos,
-			'discounts' => $discounts,
-			'paymentMethods' => $paymentMethods,
 			'statuses' => $statuses,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
-	
-	/**
-	 * @param $id
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function show($id)
-	{
-		$deal = Deal::find($id);
-		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
-
-		$cities = City::orderBy('name')
-			->get();
-
-		$locations = Location::orderBy('name')
-			->get();
-
-		$products = Product::orderBy('name')
-			->get();
-
-		$statuses = Status::orderBy('sort')
-			->get();
-
-		$VIEW = view('admin.deal.modal.show', [
-			'deal' => $deal,
-			'cities' => $cities,
-			'locations' => $locations,
-			'products' => $products,
-			'statuses' => $statuses,
-		]);
-
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}
 
 	/**
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function store()
+	public function storeCertificate()
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -273,7 +335,7 @@ class DealController extends Controller
 			'email' => 'required|email|unique_email',
 			'phone' => 'required|valid_phone',
 			'product_id' => 'required|numeric|min:0|not_in:0',
-			'city_id' => 'required|numeric|min:0|not_in:0',
+			'city_id' => 'required|numeric|min:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -287,18 +349,29 @@ class DealController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
-		$productId = $this->request->product_id ?? 0;
-		if ($productId) {
-			$product = Product::find($productId);
+
+		$product = Product::find($this->request->product_id);
+		if (!$product) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
-		
+
+		if ($this->request->promo_id) {
+			$promo = Promo::find($this->request->promo_id);
+			if (!$promo) {
+				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
+			}
+		}
+
+		if ($this->request->promocode_id) {
+			$promocode = Promocode::find($this->request->promocode_id);
+			if (!$promocode) {
+				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+			}
+		}
+
 		$data = [];
 		if ($this->request->certificate_whom) {
 			$data['certificate_whom'] = $this->request->certificate_whom;
-		}
-		if ($this->request->certificate_comment) {
-			$data['certificate_comment'] = $this->request->certificate_comment;
 		}
 		if ($this->request->comment) {
 			$data['comment'] = $this->request->comment;
@@ -318,15 +391,19 @@ class DealController extends Controller
 				$contractor->email = $this->request->email ?? '';
 				$contractor->phone = $this->request->phone ?? '';
 				$contractor->city_id = $this->request->city_id ?? 0;
+				$contractor->source = Contractor::ADMIN_SOURCE;
+				$contractor->user_id = $this->request->user()->id;
 				$contractor->save();
 			}
-			
+
 			$certificate = new Certificate();
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			$certificate->status_id = $certificateStatus ? $certificateStatus->id : 0;
+			$certificate->city_id = $this->request->city_id ?? 0;
+			$certificate->product_id = $product ? $product->id : 0;
 			$certificate->expire_at = Carbon::parse($this->request->certificate_expire_at)->addYear()->format('Y-m-d H:i:s');
 			$certificate->save();
-			
+
 			$deal = new Deal();
 			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 			$deal->status_id = $dealStatus ? $dealStatus->id : 0;
@@ -334,30 +411,333 @@ class DealController extends Controller
 			$deal->name = $this->request->name ?? '';
 			$deal->phone = $this->request->phone ?? '';
 			$deal->email = $this->request->email ?? '';
-			$deal->product_id = $product ? $product->id : 0;
-			$deal->certificate_id = $certificate->id;
-			$deal->duration = $product ? $product->duration : 0;
-			$deal->amount = $this->request->amount;
-			$deal->city_id = $this->request->city_id ?? 0;
-			$deal->promo_id = $this->request->promo_id ?? 0;
-			$deal->is_certificate_purchase = 1;
-			$deal->source = Deal::WEB_SOURCE;
+			$deal->source = Deal::ADMIN_SOURCE;
 			$deal->user_id = $this->request->user()->id;
 			$deal->data_json = $data;
 			$deal->save();
+
+			$position = new DealPosition();
+			$position->product_id = $product ? $product->id : 0;
+			$position->certificate_id = $certificate ? $certificate->id : 0;
+			$position->duration = $product ? $product->duration : 0;
+			$position->amount = $this->request->amount;
+			$position->city_id = $this->request->city_id ?? 0;
+			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
+			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
+			$position->is_certificate_purchase = 1;
+			$position->source = Deal::ADMIN_SOURCE;
+			$position->user_id = $this->request->user()->id;
+			$position->data_json = $data;
+			$position->save();
+
+			$deal->positions()->save($position);
 
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
 			
-			Log::debug('500 - Deal Create: ' . $e->getMessage());
+			Log::debug('500 - Deal Certificate Store: ' . $e->getMessage());
 			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
 		return response()->json(['status' => 'success']);
 	}
-	
+
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function storeBooking()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$rules = [
+			'name' => 'required|min:3|max:50',
+			'email' => 'required|email|unique_email',
+			'phone' => 'required|valid_phone',
+			'product_id' => 'required|numeric|min:0|not_in:0',
+			'location_id' => 'required|numeric|min:0|not_in:0',
+			'flight_date_at' => 'required|date',
+			'flight_time_at' => 'required',
+		];
+
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'name' => 'Имя',
+				'email' => 'E-mail',
+				'phone' => 'Телефон',
+				'product_id' => 'Продукт',
+				'location_id' => 'Локация',
+				'flight_date_at' => 'Желаемая дата полета',
+				'flight_time_at' => 'Желаемая время полета',
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+
+		$product = Product::find($this->request->product_id);
+		if (!$product) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+
+		if (!$product->validateFlightDate($this->request->flight_date_at . ' ' . $this->request->flight_time_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
+		}
+
+		$location = Location::find($this->request->location_id);
+		if (!$location) {
+			return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
+		}
+
+		if (!$location->city) {
+			return response()->json(['status' => 'error', 'reason' => 'Локация не привязана к городу не найден']);
+		}
+
+		$simulator = FlightSimulator::find($this->request->flight_simulator_id);
+		if (!$simulator) {
+			return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
+		}
+
+		if ($this->request->promo_id) {
+			$promo = Promo::find($this->request->promo_id);
+			if (!$promo) {
+				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
+			}
+		}
+
+		if ($this->request->promocode_id) {
+			$promocode = Promocode::find($this->request->promocode_id);
+			if (!$promocode) {
+				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+			}
+		}
+
+		if ($this->request->certificate) {
+			$date = date('Y-m-d');
+			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
+			// проверка сертификата на валидность
+			$certificate = Certificate::whereIn('city_id', [$location->city->id, 0])
+				->where('status_id', $certificateStatus->id)
+				->where('product_id', $product->id)
+				->where(function ($query) use ($date) {
+					$query->where('expire_at', '>=', $date)
+						->orWhereNull('expire_at');
+				})
+				->where('number', $this->request->certificate)
+				->first();
+			if (!$certificate) {
+				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден или не соответствует выбранным параметрам']);
+			}
+		}
+
+		$data = [];
+		if ($this->request->comment) {
+			$data['comment'] = $this->request->comment;
+		}
+
+		try {
+			\DB::beginTransaction();
+
+			if ($this->request->contractor_id) {
+				$contractor = Contractor::find($this->request->contractor_id);
+				if (!$contractor) {
+					return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+				}
+			} else {
+				$contractor = new Contractor();
+				$contractor->name = $this->request->name ?? '';
+				$contractor->email = $this->request->email ?? '';
+				$contractor->phone = $this->request->phone ?? '';
+				$contractor->city_id = ($location && $location->city) ? $location->city->id : 0;
+				$contractor->source = Contractor::ADMIN_SOURCE;
+				$contractor->user_id = $this->request->user()->id;
+				$contractor->save();
+			}
+
+			$deal = new Deal();
+			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+			$deal->status_id = $dealStatus ? $dealStatus->id : 0;
+			$deal->contractor_id = $contractor ? $contractor->id : $this->request->contractor_id;
+			$deal->name = $this->request->name ?? '';
+			$deal->phone = $this->request->phone ?? '';
+			$deal->email = $this->request->email ?? '';
+			$deal->source = Deal::ADMIN_SOURCE;
+			$deal->user_id = $this->request->user()->id;
+			$deal->data_json = $data;
+			$deal->save();
+
+			$position = new DealPosition();
+			$position->product_id = $product ? $product->id : 0;
+			$position->certificate_id = ($this->request->certificate && $certificate) ? $certificate->id : 0;
+			$position->duration = $product ? $product->duration : 0;
+			$position->amount = $this->request->amount;
+			$position->city_id = ($location && $location->city) ? $location->city->id : 0;
+			$position->location_id = $location ? $location->id : 0;
+			$position->flight_simulator_id = $simulator ? $simulator->id : 0;
+			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
+			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
+			$position->flight_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
+			$position->source = Deal::ADMIN_SOURCE;
+			$position->user_id = $this->request->user()->id;
+			$position->data_json = $data;
+			$position->save();
+
+			$deal->positions()->save($position);
+
+			// если сделка на бронирование по сертификату, то регистрируем сертификат
+			if ($this->request->certificate && $certificate) {
+				$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::REGISTERED_STATUS);
+				$certificate->status_id = $certificateStatus->id;
+				$certificate->save();
+			}
+
+			\Log::debug($this->request->source);
+
+			// если сделка создается из календаря, создаем сразу и событие
+			if ($this->request->source == 'calendar') {
+				$startAt = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
+				$stopAt = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
+
+				$event = new Event();
+				$event->event_type = Event::EVENT_TYPE_DEAL;
+				$event->deal_id = $deal->id ?? 0;
+				$event->deal_position_id = $position->id ?? 0;
+				$event->city_id = ($location && $location->city) ? $location->city->id : 0;
+				$event->location_id = $location ? $location->id : 0;
+				$event->flight_simulator_id = $simulator ? $simulator->id : 0;
+				$event->start_at = $startAt;
+				$event->stop_at = $stopAt;
+				$event->extra_time = (int)$this->request->extra_time;
+				$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
+				$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
+				$event->save();
+
+				$position->event()->save($event);
+			}
+
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+
+			Log::debug('500 - Deal Booking Store: ' . $e->getMessage());
+
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+
+		return response()->json(['status' => 'success']);
+	}
+
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function storeProduct()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$rules = [
+			'name' => 'required|min:3|max:50',
+			'email' => 'required|email|unique_email',
+			'phone' => 'required|valid_phone',
+			'product_id' => 'required|numeric|min:0|not_in:0',
+			'city_id' => 'required|numeric|min:0|not_in:0',
+		];
+
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'name' => 'Имя',
+				'email' => 'E-mail',
+				'phone' => 'Телефон',
+				'product_id' => 'Продукт',
+				'city_id' => 'Город',
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+
+		$product = Product::find($this->request->product_id);
+		if (!$product) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+
+		if ($this->request->promo_id) {
+			$promo = Promo::find($this->request->promo_id);
+			if (!$promo) {
+				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
+			}
+		}
+
+		if ($this->request->promocode_id) {
+			$promocode = Promocode::find($this->request->promocode_id);
+			if (!$promocode) {
+				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+			}
+		}
+
+		$data = [];
+		if ($this->request->comment) {
+			$data['comment'] = $this->request->comment;
+		}
+
+		try {
+			\DB::beginTransaction();
+
+			if ($this->request->contractor_id) {
+				$contractor = Contractor::find($this->request->contractor_id);
+				if (!$contractor) {
+					return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+				}
+			} else {
+				$contractor = new Contractor();
+				$contractor->name = $this->request->name ?? '';
+				$contractor->email = $this->request->email ?? '';
+				$contractor->phone = $this->request->phone ?? '';
+				$contractor->city_id = $this->request->city_id ?? 0;
+				$contractor->source = Contractor::ADMIN_SOURCE;
+				$contractor->user_id = $this->request->user()->id;
+				$contractor->save();
+			}
+
+			$deal = new Deal();
+			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+			$deal->status_id = $dealStatus ? $dealStatus->id : 0;
+			$deal->contractor_id = $contractor ? $contractor->id : $this->request->contractor_id;
+			$deal->name = $this->request->name ?? '';
+			$deal->phone = $this->request->phone ?? '';
+			$deal->email = $this->request->email ?? '';
+			$deal->source = Deal::ADMIN_SOURCE;
+			$deal->user_id = $this->request->user()->id;
+			$deal->data_json = $data;
+			$deal->save();
+
+			$position = new DealPosition();
+			$position->product_id = $product ? $product->id : 0;
+			$position->amount = $this->request->amount;
+			$position->city_id = $this->request->city_id ?? 0;
+			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
+			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
+			$position->source = Deal::ADMIN_SOURCE;
+			$position->user_id = $this->request->user()->id;
+			$position->data_json = $data;
+			$position->save();
+
+			$deal->positions()->save($position);
+
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+
+			Log::debug('500 - Position Product Store: ' . $e->getMessage());
+
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+
+		return response()->json(['status' => 'success']);
+	}
+
 	/**
 	 * @param $id
 	 * @return \Illuminate\Http\JsonResponse
@@ -375,8 +755,6 @@ class DealController extends Controller
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
 			'phone' => 'required|valid_phone|unique_email',
-			'product_id' => 'required|numeric|min:0|not_in:0',
-			'city_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
@@ -385,26 +763,13 @@ class DealController extends Controller
 				'name' => 'Имя',
 				'email' => 'E-mail',
 				'phone' => 'Телефон',
-				'product_id' => 'Продукт',
-				'city_id' => 'Город',
 				'status_id' => 'Статус',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$productId = $this->request->product_id ?? 0;
-		if ($productId) {
-			$product = Product::find($productId);
-		}
-		
 		$data = [];
-		if ($this->request->certificate_whom) {
-			$data['certificate_whom'] = $this->request->certificate_whom;
-		}
-		if ($this->request->certificate_comment) {
-			$data['certificate_comment'] = $this->request->certificate_comment;
-		}
 		if ($this->request->comment) {
 			$data['comment'] = $this->request->comment;
 		}
@@ -416,16 +781,10 @@ class DealController extends Controller
 			$deal->name = $this->request->name ?? '';
 			$deal->phone = $this->request->phone ?? '';
 			$deal->email = $this->request->email ?? '';
-			$deal->product_id = $product ? $product->id : 0;
-			$deal->duration = $product ? $product->duration : 0;
-			$deal->amount = $this->request->amount;
-			$deal->city_id = $this->request->city_id ?? 0;
-			$deal->promo_id = $this->request->promo_id ?? 0;
-			/*$deal->is_certificate_purchase = 1;*/
 			$deal->data_json = $data;
 			$deal->save();
 			
-			if (in_array($deal->status->alias, [Deal::CANCELED_STATUS]) && $deal->certificate && $deal->is_certificate_purchase) {
+			/*if (in_array($deal->status->alias, [Deal::CANCELED_STATUS]) && $deal->certificate && $deal->is_certificate_purchase) {
 				$certificateStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Certificate::CANCELED_STATUS);
 				if ($certificateStatus) {
 					$certificate = Certificate::find($deal->certificate->id);
@@ -439,20 +798,20 @@ class DealController extends Controller
 					$certificate->status_id = $certificateStatus->id;
 					$certificate->save();
 				}
-			}
+			}*/
 			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
 			
-			Log::debug('500 - Deal Create: ' . $e->getMessage());
+			Log::debug('500 - Deal Update: ' . $e->getMessage());
 			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
 		return response()->json(['status' => 'success']);
 	}
-	
+
 	/**
 	 * @return \Illuminate\Http\JsonResponse
 	 */
@@ -466,9 +825,18 @@ class DealController extends Controller
 		$contractorId = $this->request->contractor_id ?? 0;
 		$promoId = $this->request->promo_id ?? 0;
 		$promocodeId = $this->request->promocode_id ?? 0;
-		/*$isUnified = (bool)$this->request->is_unified;*/
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
-		$cityId = $this->request->city_id ?? 0;
+		$locationId = $this->request->location_id ?? 0;
+		$certificate = $this->request->certificate ?? '';
+
+		if ($this->request->city_id) {
+			$cityId = $this->request->city_id ?? 0;
+		} elseif ($this->request->location_id) {
+			$location = Location::find($locationId);
+			$cityId = $location->city ? $location->city->id : 0;
+		} else {
+			$cityId = 0;
+		}
 		$isFree = $this->request->is_free ?? 0;
 		
 		if (!$productId) {
@@ -479,8 +847,8 @@ class DealController extends Controller
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
-		
-		$amount = $product->calcAmount($contractorId, $cityId, $paymentMethodId, $promoId, $promocodeId, $isFree, 'admin');
+
+		$amount = $product->calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, 'admin', $certificate);
 
 		return response()->json(['status' => 'success', 'amount' => $amount]);
 	}
