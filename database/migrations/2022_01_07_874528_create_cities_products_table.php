@@ -25,6 +25,7 @@ class CreateCitiesProductsTable extends Migration
 			$table->unsignedBigInteger('city_id')->nullable(false)->index();
 			$table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
 			$table->integer('price')->default(0)->comment('базовая цена продукта');
+			$table->integer('currency_id')->default(0)->index()->comment('валюта');
 			$table->integer('discount_id')->default(0)->index()->comment('скидка на продукт');
 			$table->boolean('is_hit')->default(0)->comment('является ли продукт хитом продаж');
 			$table->integer('score')->default(0)->comment('количество баллов, начисляемое клиенту по продукту');
