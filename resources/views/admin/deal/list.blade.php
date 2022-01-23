@@ -119,16 +119,16 @@
 		<td class="align-top text-center d-none d-md-table-cell">
 			<table class="table table-sm table-bordered table-striped mb-0">
 				<tr>
-					<td class="small font-weight-bold">
+					<td class="col-4 small font-weight-bold">
 						Тип сделки
 					</td>
-					<td class="small font-weight-bold">
+					<td class="col-2 small font-weight-bold">
 						Продукт
 					</td>
-					<td class="small font-weight-bold">
+					<td class="col-3 small font-weight-bold">
 						Полет
 					</td>
-					<td></td>
+					<td class="col-1"></td>
 				</tr>
 				@foreach($deal->positions ?? [] as $position)
 					<tr>
