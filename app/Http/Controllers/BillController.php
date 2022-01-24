@@ -143,6 +143,7 @@ class BillController extends Controller
 			$bill->payment_method_id = $this->request->payment_method_id;
 			$bill->status_id = $this->request->status_id ?? 0;
 			$bill->amount = $this->request->amount;
+			$bill->currency_id = $this->request->currency_id ?? 0;
 			$bill->user_id = $this->request->user()->id;
 			$bill->save();
 			
@@ -197,6 +198,7 @@ class BillController extends Controller
 		$bill->payment_method_id = $this->request->payment_method_id ?? 0;
 		$bill->status_id = $this->request->status_id ?? 0;
 		$bill->amount = $this->request->amount;
+		$bill->currency_id = $this->request->currency_id ?? 0;
 		if ($status->alias == Bill::PAYED_STATUS && !$bill->payed_at) {
 			$bill->payed_at = Carbon::now()->format('Y-m-d H:i:s');
 		}

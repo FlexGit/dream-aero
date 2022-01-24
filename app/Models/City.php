@@ -66,7 +66,7 @@ class City extends Model
 	const DC_ALIAS = 'dc';
 
 	const RU_VERSION = 'ru';
-	const EN_VERSION = 'ru';
+	const EN_VERSION = 'en';
 	const VERSIONS = [
 		self::RU_VERSION,
 		self::EN_VERSION,

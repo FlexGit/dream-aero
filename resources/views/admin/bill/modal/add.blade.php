@@ -1,4 +1,5 @@
 <input type="hidden" id="deal_id" name="deal_id" value="{{ $deal->id }}">
+<input type="hidden" id="currency_id" name="currency_id" value="{{ ($deal->contractor && $deal->contractor->city && $deal->contractor->city->version == app('\App\Models\City')::EN_VERSION) ? 2 : 1 }}">
 
 <div class="row">
 	<div class="col">
@@ -31,13 +32,13 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-3">
+	<div class="col-6">
 		<div class="form-group">
 			<label for="amount">Сумма</label>
 			<input type="number" class="form-control" id="amount" name="amount" value="{{ $amount }}" placeholder="Сумма">
 		</div>
 	</div>
-	<div class="col-3">
+	{{--<div class="col-3">
 		<div class="form-group">
 			<label for="currency_id">Валюта</label>
 			<select class="form-control" id="currency_id" name="currency_id">
@@ -46,5 +47,5 @@
 				@endforeach
 			</select>
 		</div>
-	</div>
+	</div>--}}
 </div>
