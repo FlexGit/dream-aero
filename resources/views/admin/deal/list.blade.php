@@ -78,7 +78,7 @@
 						<div class="d-inline-block font-weight-bold">
 							<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $bill->id }}/edit" data-action="/bill/{{ $bill->id }}" data-method="PUT" data-title="Редактирование счета" data-type="bill" title="Редактировать счет">{{ $bill->number }}</a>
 						</div>
-						<div class="d-inline-block pl-2">
+						<div class="d-inline-block ml-2">
 							<a href="javascript:void(0)" class="js-remove-bill" data-id="{{ $bill->id }}" title="Удалить счет"><i class="fas fa-times" style="color: #aaa;"></i></a>
 						</div>
 					</div>
@@ -134,28 +134,43 @@
 					<tr>
 						<td class="small">
 							<div>
-								<div class="d-inline-block font-weight-bold">
-									@if($position->is_certificate_purchase)
-										<div>Покупка сертификата</div>
+								@if($position->is_certificate_purchase)
+									<div class="font-weight-bold">Покупка сертификата</div>
+									<div class="d-inline-block font-weight-bold">
 										<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/certificate/{{ $position->id }}/edit" data-action="/deal_position/certificate/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку сертификата {{ $position->number }}">{{ $position->number }}</a>
-									@else
-										@if($position->location)
-											@if($position->certificate)
-												<div>Бронирование по сертификату</div>
+									</div>
+									<div class="d-inline-block ml-2">
+										<a href="javascript:void(0)" class="js-remove-position" data-id="{{ $position->id }}" title="Удалить позицию"><i class="fas fa-times" style="color: #aaa;"></i></a>
+									</div>
+								@else
+									@if($position->location)
+										@if($position->certificate)
+											<div class="font-weight-bold">Бронирование по сертификату</div>
+											<div class="d-inline-block font-weight-bold">
 												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование по сертификату {{ $position->number }}">{{ $position->number }}</a>
-											@else
-												<div>Бронирование</div>
-												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование {{ $position->number }}">{{ $position->number }}</a>
-											@endif
+											</div>
+											<div class="d-inline-block ml-2">
+												<a href="javascript:void(0)" class="js-remove-position" data-id="{{ $position->id }}" title="Удалить позицию"><i class="fas fa-times" style="color: #aaa;"></i></a>
+											</div>
 										@else
-											<div>Покупка товара / услуги</div>
-											<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/product/{{ $position->id }}/edit" data-action="/deal_position/product/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку товара / услуги {{ $position->number }}">{{ $position->number }}</a>
+											<div class="font-weight-bold">Бронирование</div>
+											<div class="d-inline-block font-weight-bold">
+												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование {{ $position->number }}">{{ $position->number }}</a>
+											</div>
+											<div class="d-inline-block ml-2">
+												<a href="javascript:void(0)" class="js-remove-position" data-id="{{ $position->id }}" title="Удалить позицию"><i class="fas fa-times" style="color: #aaa;"></i></a>
+											</div>
 										@endif
+									@else
+										<div class="font-weight-bold">Покупка товара / услуги</div>
+										<div class="d-inline-block font-weight-bold">
+											<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/product/{{ $position->id }}/edit" data-action="/deal_position/product/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку товара / услуги {{ $position->number }}">{{ $position->number }}</a>
+										</div>
+										<div class="d-inline-block ml-2">
+											<a href="javascript:void(0)" class="js-remove-position" data-id="{{ $position->id }}" title="Удалить позицию"><i class="fas fa-times" style="color: #aaa;"></i></a>
+										</div>
 									@endif
-								</div>
-								<div class="d-inline-block">
-									<a href="javascript:void(0)" class="js-remove-position" data-id="{{ $position->id }}" title="Удалить позицию"><i class="fas fa-times" style="color: #aaa;"></i></a>
-								</div>
+								@endif
 							</div>
 							<div>
 								<i class="fas fa-map-marker-alt"></i>
