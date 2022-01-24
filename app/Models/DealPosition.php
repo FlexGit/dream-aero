@@ -13,6 +13,7 @@ class DealPosition extends Model
 	use HasFactory, SoftDeletes, RevisionableTrait;
 	
 	const ATTRIBUTES = [
+		'number' => 'Номер',
 		'deal_id' => 'Сделка',
 		'product_id' => 'Продукт',
 		'certificate_id' => 'Сертификат',
@@ -56,6 +57,7 @@ class DealPosition extends Model
 	 * @var string[]
 	 */
 	protected $fillable = [
+		'number',
 		'deal_id',
 		'product_id',
 		'certificate_id',
@@ -94,6 +96,11 @@ class DealPosition extends Model
 	
 	public static function boot() {
 		parent::boot();
+
+		DealPosition::created(function (DealPosition $dealPosition) {
+			$dealPosition->number = $dealPosition->generateNumber();
+			$dealPosition->save();
+		});
 
 		DealPosition::saved(function (DealPosition $dealPosition) {
 			if (!$dealPosition->user_id) {
@@ -160,5 +167,23 @@ class DealPosition extends Model
 	public function promo()
 	{
 		return $this->hasOne(Promo::class, 'id', 'promo_id');
+	}
+
+	/**
+	 * @return string
+	 */
+	public function generateNumber()
+	{
+		$locationCount = ($this->city && $this->city->locations) ? $this->city->locations->count() : 1;
+
+		$cityAlias = $this->city ? mb_strtolower($this->city->alias) : '';
+		$locationAlias = $this->location ? $this->location->alias : '';
+
+		$productTypeAlias = ($this->product && $this->product->productType) ? mb_strtoupper(substr($this->product->productType->alias, 0, 1)) : '';
+		$productDuration = $this->product ? $this->product->duration : '';
+
+		$alias = ($locationCount > 1 && $locationAlias) ? mb_strtolower($locationAlias) : mb_strtolower($cityAlias);
+
+		return 'P' . date('y') . $alias . $productTypeAlias . $productDuration . sprintf('%05d', $this->id);
 	}
 }

@@ -136,25 +136,29 @@
 							<div>
 								<div class="d-inline-block font-weight-bold">
 									@if($position->is_certificate_purchase)
-										<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/certificate/{{ $position->id }}/edit" data-action="/deal_position/certificate/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку сертификата в сделке {{ $deal->number }}">Покупка сертификата</a>
+										<div>Покупка сертификата</div>
+										<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/certificate/{{ $position->id }}/edit" data-action="/deal_position/certificate/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку сертификата {{ $position->number }}">{{ $position->number }}</a>
 									@else
 										@if($position->location)
 											@if($position->certificate)
-												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование по сертификату в сделке {{ $deal->number }}">Бронирование по сертификату</a>
+												<div>Бронирование по сертификату</div>
+												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование по сертификату {{ $position->number }}">{{ $position->number }}</a>
 											@else
-												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование в сделке {{ $deal->number }}">Бронирование</a>
+												<div>Бронирование</div>
+												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование {{ $position->number }}">{{ $position->number }}</a>
 											@endif
 										@else
-											<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/product/{{ $position->id }}/edit" data-action="/deal_position/product/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку товара / услуги в сделке {{ $deal->number }}">Покупка товара / услуги</a>
+											<div>Покупка товара / услуги</div>
+											<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/product/{{ $position->id }}/edit" data-action="/deal_position/product/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку товара / услуги {{ $position->number }}">{{ $position->number }}</a>
 										@endif
 									@endif
 								</div>
-								<div class="d-inline-block pl-2">
+								<div class="d-inline-block">
 									<a href="javascript:void(0)" class="js-remove-position" data-id="{{ $position->id }}" title="Удалить позицию"><i class="fas fa-times" style="color: #aaa;"></i></a>
 								</div>
 							</div>
 							<div>
-								<i class="fas fa-map-marker-alt" title="Локация"></i>
+								<i class="fas fa-map-marker-alt"></i>
 								@if($position->city)
 									{{ $position->city->name }}
 									@if($position->location)

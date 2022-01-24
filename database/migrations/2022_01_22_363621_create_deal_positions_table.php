@@ -15,6 +15,7 @@ class CreateDealPositionsTable extends Migration
     {
         Schema::create('deal_positions', function (Blueprint $table) {
             $table->id();
+			$table->string('number')->nullable()->comment('номер');
 			$table->integer('deal_id')->default(0)->index()->comment('сделка');
 			$table->integer('product_id')->default(0)->index()->comment('продукт');
 			$table->integer('certificate_id')->default(0)->index()->comment('сертификат');
