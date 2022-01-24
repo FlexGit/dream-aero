@@ -681,9 +681,16 @@ class PositionController extends Controller
 			$product = Product::find($productId);
 		}
 
-		$city = City::find($this->request->city_id);
-		if (!$city) {
-			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		if ($this->request->city_id) {
+			$city = City::find($this->request->city_id);
+			if (!$city) {
+				return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+			}
+		} else {
+			$city = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
+			if (!$city) {
+				return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+			}
 		}
 
 		if ($this->request->promo_id) {
@@ -700,7 +707,7 @@ class PositionController extends Controller
 			}
 		}
 
-		$cityProduct = $product->cities->find($this->request->city_id);
+		$cityProduct = $product->cities->find($city->id);
 
 		$data = [];
 		if ($this->request->certificate_whom) {
@@ -716,8 +723,8 @@ class PositionController extends Controller
 			$position->product_id = $product ? $product->id : 0;
 			$position->duration = $product ? $product->duration : 0;
 			$position->amount = $this->request->amount;
-			$position->currency_id = $cityProduct ? $cityProduct->currency_id : 0;
-			$position->city_id = $city ? $city->id : 0;
+			$position->currency_id = /*$cityProduct ? $cityProduct->currency_id : 0*/1; //ToDo убрать костыль
+			$position->city_id = $this->request->city_id ?? 0;
 			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
 			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
 			$position->data_json = $data;
