@@ -103,7 +103,7 @@ class DealPosition extends Model
 		});
 
 		DealPosition::saved(function (DealPosition $dealPosition) {
-			if (!$dealPosition->user_id) {
+			if (!$dealPosition->user_id && $dealPosition->source == Deal::ADMIN_SOURCE) {
 				$dealPosition->user_id = \Auth::user()->id;
 				$dealPosition->save();
 			}

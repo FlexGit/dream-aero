@@ -171,7 +171,7 @@ class Deal extends Model
 		});
 
 		Deal::saved(function (Deal $deal) {
-			if (!$deal->user_id) {
+			if (!$deal->user_id && $deal->source == Deal::ADMIN_SOURCE) {
 				$deal->user_id = \Auth::user()->id;
 				$deal->save();
 			}
