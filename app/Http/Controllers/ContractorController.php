@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Status;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Validator;
@@ -155,14 +156,12 @@ class ContractorController extends Controller
 		
 		$contractor = new Contractor();
 		$contractor->name = $this->request->name;
-		if ($this->request->lastname) {
-			$contractor->lastname = $this->request->lastname;
-		}
+		$contractor->lastname = $this->request->lastname;
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
 		if ($this->request->birthdate) {
-			$contractor->birthdate = $this->request->birthdate;
+			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
 		}
 		$contractor->source = Contractor::ADMIN_SOURCE;
 		$contractor->is_active = (bool)$this->request->is_active;
@@ -210,14 +209,12 @@ class ContractorController extends Controller
 		$data = [];
 		
 		$contractor->name = $this->request->name;
-		if ($this->request->lastname) {
-			$contractor->lastname = $this->request->lastname;
-		}
+		$contractor->lastname = $this->request->lastname;
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
 		if ($this->request->birthdate) {
-			$contractor->birthdate = $this->request->birthdate;
+			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
 		}
 		$contractor->is_active = (bool)$this->request->is_active;
 		$contractor->is_subscribed = (bool)$this->request->is_subscribed;
