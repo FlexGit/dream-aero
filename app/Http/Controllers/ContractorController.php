@@ -213,9 +213,7 @@ class ContractorController extends Controller
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
-		if ($this->request->birthdate) {
-			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
-		}
+		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
 		$contractor->is_active = (bool)$this->request->is_active;
 		$contractor->is_subscribed = (bool)$this->request->is_subscribed;
 		$contractor->data_json = $data;
