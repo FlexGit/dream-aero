@@ -202,8 +202,8 @@ class UserController extends Controller
 		$user->email = $this->request->email;
 		$user->password = '';
 		$user->role = $this->request->role;
-		$user->city_id = $this->request->city_id;
-		$user->location_id = $this->request->location_id;
+		$user->city_id = $this->request->city_id ?? 0;
+		$user->location_id = $this->request->location_id ?? 0;
 		$user->enable = $this->request->enable;
 		if (!$user->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -248,8 +248,8 @@ class UserController extends Controller
 		$user->name = $this->request->name;
 		$user->email = $this->request->email;
 		$user->role = $this->request->role;
-		$user->city_id = $this->request->city_id;
-		$user->location_id = $this->request->location_id;
+		$user->city_id = $this->request->city_id ?? 0;
+		$user->location_id = $this->request->location_id ?? 0;
 		$user->enable = $this->request->enable;
 		if (!$user->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
