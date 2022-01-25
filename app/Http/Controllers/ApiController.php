@@ -2260,7 +2260,7 @@ class ApiController extends Controller
 			// создание сделки
 			$deal = new Deal();
 			$deal->status_id = $statusesData['deal'][Deal::CREATED_STATUS]['id'];
-			$deal->contractor_id = $contractor->id;
+			$deal->contractor_id = $contractor ? $contractor->id : 0;
 			$deal->name = $this->request->name;
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
@@ -2283,7 +2283,7 @@ class ApiController extends Controller
 				$position->flight_simulator_id = 0;
 				$position->flight_at = $flightDateCarbon->format('Y-m-d H:i');
 			} else {
-				$position->city_id = !$this->request->is_unified ? $city->id : 0;
+				$position->city_id = (!$this->request->is_unified && $city) ? $city->id : 0;
 			}
 			$position->source = Deal::MOB_SOURCE;
 			//$position->data_json = $data;
