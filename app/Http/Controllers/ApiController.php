@@ -2288,10 +2288,10 @@ class ApiController extends Controller
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
 			$deal->source = Deal::MOB_SOURCE;
-			$dealData = [];
+			/*$dealData = [];
 			$dealData['comment'] = $this->request->comment;
 			$dealData['certificate_whom'] = $this->request->certificate_whom;
-			$deal->data_json = $dealData;
+			$deal->data_json = $dealData;*/
 			$deal->save();
 
 			$position = new DealPosition();
@@ -2300,6 +2300,7 @@ class ApiController extends Controller
 			$position->duration = $product ? $product->duration : 0;
 			$position->amount = $productAmount ?? 0;
 			$position->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
+			$position->is_certificate_purchase = (bool)$this->request->is_certificate_purchase;
 			if (!$this->request->is_certificate_purchase) {
 				$position->city_id =  $city ? $city->id : 0;
 				$position->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
@@ -2311,7 +2312,10 @@ class ApiController extends Controller
 			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 			$position->currency_id = $currency ? $currency->id : 0;
 			$position->source = Deal::MOB_SOURCE;
-			//$position->data_json = $data;
+			$positionData = [];
+			$positionData['comment'] = $this->request->comment;
+			$positionData['certificate_whom'] = $this->request->certificate_whom;
+			$position->data_json = $positionData;
 			$position->save();
 
 			$deal->positions()->save($position);
