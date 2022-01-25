@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "9c206df4-d7a6-41eb-a9b5-df8f115cf23d",
+        "_postman_id": "60df6f2e-e127-46ed-b990-b0d120889614",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -872,7 +872,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"location\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\t\"address\": null,\n\t\t\t\"working_hours\": null,\n\t\t\t\"phone\": null,\n\t\t\t\"email\": null,\n\t\t\t\"map_link\": null,\n\t\t\t\"skype\": null,\n\t\t\t\"whatsapp\": null,\n\t\t\t\"scheme_file_path\": null\n\t\t\t}\n\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"location\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\t\"address\": null,\n\t\t\t\"working_hours\": null,\n\t\t\t\"phone\": null,\n\t\t\t\"email\": null,\n\t\t\t\"map_link\": null,\n\t\t\t\"skype\": null,\n\t\t\t\"whatsapp\": null,\n\t\t\t\"scheme_file_path\": null,\n\t\t\t\t\"flight_simulators\": {\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"BOEING 737 NG\"\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -1188,7 +1188,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"incidunt\"}"
+                            "raw": "{\"file_base64\":\"nostrum\"}"
                         },
                         "description": ""
                     },

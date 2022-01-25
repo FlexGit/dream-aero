@@ -2909,24 +2909,30 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: null,
-    &quot;data&quot;: [
-        {
-            &quot;location&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;ТРК VEGAS Кунцево&quot;,
-                &quot;address&quot;: null,
-                &quot;working_hours&quot;: null,
-                &quot;phone&quot;: null,
-                &quot;email&quot;: null,
-                &quot;map_link&quot;: null,
-                &quot;skype&quot;: null,
-                &quot;whatsapp&quot;: null,
-                &quot;scheme_file_path&quot;: null
-            }
-        }
-    ]
+	&quot;success&quot;: true,
+	&quot;message&quot;: null,
+	&quot;data&quot;: [
+	{
+			&quot;location&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;ТРК VEGAS Кунцево&quot;,
+			&quot;address&quot;: null,
+			&quot;working_hours&quot;: null,
+			&quot;phone&quot;: null,
+			&quot;email&quot;: null,
+			&quot;map_link&quot;: null,
+			&quot;skype&quot;: null,
+			&quot;whatsapp&quot;: null,
+			&quot;scheme_file_path&quot;: null,
+				&quot;flight_simulators&quot;: {
+					{
+						&quot;id&quot;: 1,
+						&quot;name&quot;: &quot;BOEING 737 NG&quot;
+					}
+				}
+			}
+	}
+	]
 }</code>
  </pre>
             <blockquote>
@@ -3844,7 +3850,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"incidunt\"
+    \"file_base64\": \"nostrum\"
 }"
 </code></pre></div>
 
@@ -3867,7 +3873,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "incidunt"
+    "file_base64": "nostrum"
 };
 
 fetch(url, {
@@ -3891,7 +3897,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'incidunt',
+            'file_base64' =&gt; 'nostrum',
         ],
     ]
 );
@@ -4058,7 +4064,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="incidunt"
+               value="nostrum"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -6128,6 +6134,16 @@ print_r(json_decode((string) $body));</code></pre></div>
             <b><code>location_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
                 <input type="number"
                name="location_id"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>flight_simulator_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
                value=""
                data-component="body" hidden>

@@ -2040,49 +2040,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: null
-                  data:
-                    -
-                      location:
-                        id: 1
-                        name: 'ТРК VEGAS Кунцево'
-                        address: null
-                        working_hours: null
-                        phone: null
-                        email: null
-                        map_link: null
-                        skype: null
-                        whatsapp: null
-                        scheme_file_path: null
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: null
-                  data:
-                    type: array
-                    example:
-                      -
-                        location:
-                          id: 1
-                          name: 'ТРК VEGAS Кунцево'
-                          address: null
-                          working_hours: null
-                          phone: null
-                          email: null
-                          map_link: null
-                          skype: null
-                          whatsapp: null
-                          scheme_file_path: null
-                    items:
-                      type: object
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"location\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"ТРК VEGAS Кунцево\",\n\t\t\t\"address\": null,\n\t\t\t\"working_hours\": null,\n\t\t\t\"phone\": null,\n\t\t\t\"email\": null,\n\t\t\t\"map_link\": null,\n\t\t\t\"skype\": null,\n\t\t\t\"whatsapp\": null,\n\t\t\t\"scheme_file_path\": null,\n\t\t\t\t\"flight_simulators\": {\n\t\t\t\t\t{\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"BOEING 737 NG\"\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -3015,7 +2976,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: incidunt
+                  example: nostrum
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4469,6 +4430,10 @@ paths:
                   description: ''
                   example: null
                 location_id:
+                  type: integer
+                  description: ''
+                  example: null
+                flight_simulator_id:
                   type: integer
                   description: ''
                   example: null

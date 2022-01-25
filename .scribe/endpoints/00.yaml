@@ -1103,7 +1103,13 @@ endpoints:
           			"map_link": null,
           			"skype": null,
           			"whatsapp": null,
-          			"scheme_file_path": null
+          			"scheme_file_path": null,
+          				"flight_simulators": {
+          					{
+          						"id": 1,
+          						"name": "BOEING 737 NG"
+          					}
+          				}
           			}
           	}
           	]
@@ -1469,7 +1475,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: incidunt
+        example: nostrum
         type: string
         custom: []
     responses:
@@ -2312,6 +2318,13 @@ endpoints:
         custom: []
       location_id:
         name: location_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+        custom: []
+      flight_simulator_id:
+        name: flight_simulator_id
         description: ''
         required: false
         example: null
