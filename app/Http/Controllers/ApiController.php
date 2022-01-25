@@ -2184,7 +2184,11 @@ class ApiController extends Controller
 		if (!$product) {
 			return $this->responseError('Позиция не найдена', 400);
 		}
-			
+
+		if (!$product->validateFlightDate($flightDateCarbon)) {
+			return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+		}
+
 		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
 		// ToDO: сообщение об ошибке, если цена не совпадет с полученной
 		
