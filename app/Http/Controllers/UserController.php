@@ -183,7 +183,7 @@ class UserController extends Controller
 
 		$rules = [
 			'name' => ['required', 'max:255'],
-			'email' => ['required', 'email', 'unique:users,email'],
+			'email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL'],
 			'role' => ['required'],
 		];
 		
@@ -231,7 +231,7 @@ class UserController extends Controller
 
 		$rules = [
 			'name' => ['required', 'max:255'],
-			'email' => ['required', 'email', 'unique:users,email,' . $id],
+			'email' => ['required', 'email', 'unique:users,email,' . $id . ',id,deleted_at,NULL'],
 			'role' => ['required'],
 		];
 		
