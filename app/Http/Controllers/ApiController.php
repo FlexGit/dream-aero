@@ -2224,7 +2224,10 @@ class ApiController extends Controller
 			$promocode = Promocode::/*whereIn('city_id', [$city->id, 0])
 				->*/whereRelation('cities', 'cities.id', '=', $cityId)
 				->where('is_active', true)
-				->where('active_from_at', '<=', $date)
+				->where(function ($query) use ($date) {
+					$query->where('active_from_at', '<=', $date)
+						->orWhereNull('active_from_at');
+				})
 				->where(function ($query) use ($date) {
 					$query->where('active_to_at', '>=', $date)
 						->orWhereNull('active_to_at');
