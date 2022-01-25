@@ -151,7 +151,9 @@ class ContractorController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$birthdate = $this->request->birthdate ?? null;
+
 		$data = [];
 		
 		$contractor = new Contractor();
@@ -160,9 +162,7 @@ class ContractorController extends Controller
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
-		if ($this->request->birthdate) {
-			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
-		}
+		$contractor->birthdate = $birthdate ? Carbon::parse($birthdate)->format('Y-m-d') : null;
 		$contractor->source = Contractor::ADMIN_SOURCE;
 		$contractor->is_active = (bool)$this->request->is_active;
 		$contractor->is_subscribed = (bool)$this->request->is_subscribed;
@@ -205,7 +205,9 @@ class ContractorController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$birthdate = $this->request->birthdate ?? null;
+
 		$data = [];
 		
 		$contractor->name = $this->request->name;
@@ -213,7 +215,7 @@ class ContractorController extends Controller
 		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone;
 		$contractor->city_id = $this->request->city_id;
-		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+		$contractor->birthdate = $birthdate ? Carbon::parse($birthdate)->format('Y-m-d') : null;
 		$contractor->is_active = (bool)$this->request->is_active;
 		$contractor->is_subscribed = (bool)$this->request->is_subscribed;
 		$contractor->data_json = $data;
