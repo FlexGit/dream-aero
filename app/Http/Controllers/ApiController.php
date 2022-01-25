@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\DealPosition;
 use App\Models\Event;
+use App\Models\FlightSimulator;
 use App\Models\Notification;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
@@ -1559,7 +1561,13 @@ class ApiController extends Controller
 	 *				"map_link": null,
 	 *				"skype": null,
 	 *				"whatsapp": null,
-	 *				"scheme_file_path": null
+	 *				"scheme_file_path": null,
+	 * 				"flight_simulators": {
+	 * 					{
+	 * 						"id": 1,
+	 * 						"name": "BOEING 737 NG"
+	 * 					}
+	 * 				}
 	 * 			}
 	 *		}
 	 * 	]
@@ -2066,6 +2074,7 @@ class ApiController extends Controller
 	 * @bodyParam flight_time time No-example
 	 * @bodyParam is_unified bool No-example
 	 * @bodyParam location_id int No-example
+	 * @bodyParam flight_simulator_id int No-example
 	 * @bodyParam promocode_id string No-example
 	 * @bodyParam certificate_id string No-example
 	 * @bodyParam certificate_whom string For whom certificate. No-example
@@ -2105,6 +2114,7 @@ class ApiController extends Controller
 			'flight_time' => ['required_if:is_certificate_purchase,false', 'date_format:H:i'],
 			'is_unified' => ['required_if:is_certificate_purchase,true', 'boolean'],
 			'location_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
+			'flight_simulator_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
 			'promocode_id' => ['sometimes', 'required', 'numeric'],
 			'certificate_id' => ['sometimes', 'required_if:is_certificate_purchase,false', 'numeric'],
 			'certificate_whom' => ['required_if:is_certificate_purchase,true', 'min:3', 'max:50'],
@@ -2121,6 +2131,7 @@ class ApiController extends Controller
 				'flight_time' => 'Время полета',
 				'is_unified' => 'Единый сертификат',
 				'location_id' => 'Локация',
+				'flight_simulator_id' => 'Авиатренажер',
 				'promocode_id' => 'Промокод',
 				'certificate_id' => 'Сертификат',
 				'certificate_whom' => 'Для кого сертификат',
@@ -2193,7 +2204,15 @@ class ApiController extends Controller
 				return $this->responseError('Город не найден', 400);
 			}
 		}
-		
+
+		if ($this->request->flight_simulator_id) {
+			$simulator = FlightSimulator::where('is_active', true)
+				->find($this->request->flight_simulator_id);
+			if (!$location) {
+				return $this->responseError('Авиатренажер не найден', 400);
+			}
+		}
+
 		$date = date('Y-m-d');
 		
 		$statusesData = HelpFunctions::getStatusesByType();
@@ -2280,11 +2299,13 @@ class ApiController extends Controller
 			if (!$this->request->is_certificate_purchase) {
 				$position->city_id =  $city ? $city->id : 0;
 				$position->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
-				$position->flight_simulator_id = 0;
+				$position->flight_simulator_id = $simulator ? $simulator->id : 0;
 				$position->flight_at = $flightDateCarbon->format('Y-m-d H:i');
 			} else {
 				$position->city_id = (!$this->request->is_unified && $city) ? $city->id : 0;
 			}
+			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
+			$position->currency_id = $currency ? $currency->id : 0;
 			$position->source = Deal::MOB_SOURCE;
 			//$position->data_json = $data;
 			$position->save();

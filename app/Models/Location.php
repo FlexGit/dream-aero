@@ -144,6 +144,7 @@ class Location extends Model
 			'whatsapp' => array_key_exists('whatsapp', $data) ? $data['whatsapp'] : null,
 			'map_link' => array_key_exists('map_link', $data) ? $data['map_link'] : null,
 			'scheme_file_path' => array_key_exists('scheme_file_path', $data) ? \URL::to('/upload/' . $data['scheme_file_path']) : null,
+			'flight_simulators' => $this->simulators,
 			/*'is_active' => $this->is_active,*/
 			/*'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
 			'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,*/
