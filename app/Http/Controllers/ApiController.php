@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Deal;
+use App\Models\DealPosition;
+use App\Models\Event;
 use App\Models\Notification;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
@@ -443,6 +445,12 @@ class ApiController extends Controller
 
 			$contractor->last_auth_at = date('Y-m-d H:i:s');
 			$contractor->save();
+
+			// начисляем 500 баллов за регистрацию
+			$score = new Score();
+			$score->score = Contractor::REGISTRATION_SCORE;
+			$score->contractor_id = $contractor->id;
+			$score->save();
 			
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -1135,6 +1143,7 @@ class ApiController extends Controller
 
 		$tariffTypes = ProductType::where('is_tariff', true)
 			->where('is_active', true)
+			->where('version', ProductType::RU_VERSION)
 			->get();
 		
 		if ($tariffTypes->isEmpty()) {
@@ -1227,6 +1236,7 @@ class ApiController extends Controller
 		
 		$tariffType = ProductType::where('is_tariff', true)
 			->where('is_active', true)
+			->where('version', ProductType::RU_VERSION)
 			->find($tariffTypeId);
 		if (!$tariffType) {
 			return $this->responseError('Тип тарифа не найден', 400);
@@ -1245,7 +1255,6 @@ class ApiController extends Controller
 
 		$tariffs = Product::where('product_type_id', $tariffTypeId)
 			->whereRelation('cities', 'cities.id', '=', $city->id)
-			/*->where('is_active', true)*/
 			->get();
 		
 		$data = [];
@@ -1344,8 +1353,8 @@ class ApiController extends Controller
 			}
 		}
 
-		$tariff = Product::/*where('is_active', true)
-			->*/find($tariffId);
+		$tariff = Product::whereRelation('cities', 'cities.id', '=', $city->id)
+			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
 		}
@@ -1417,8 +1426,7 @@ class ApiController extends Controller
 			}
 		}
 		
-		$tariff = Product::/*where('is_active', true)
-			->*/whereRelation('cities', 'cities.id', '=', $city->id)
+		$tariff = Product::whereRelation('cities', 'cities.id', '=', $city->id)
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
@@ -1434,7 +1442,7 @@ class ApiController extends Controller
 		
 		$date = date('Y-m-d');
 		
-		if ($this->request->promocode_id) {
+		/*if ($this->request->promocode_id) {
 			$promocode = Promocode::whereIn('city_id', [$city->id, 0])
 				->where('is_active', true)
 				->where('active_from_at', '<=', $date)
@@ -1443,22 +1451,27 @@ class ApiController extends Controller
 			if (!$promocode) {
 				return $this->responseError('Промокод не найден', 400);
 			}
-		}
+		}*/
+		$promocodeId = $this->request->promocode_id ?? 0;
 
 		$flightAt = $this->request->flight_at ?? date('d.m.Y');
 		$isUnified = $this->request->is_unified ?? false;
+		if ($isUnified) {
+			$cityId = 0;
+		}
 		
 		if (!$tariff->validateFlightDate($flightAt)) {
 			return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
 		}
 
-		$price = $tariff->calculateProductPrice($contractor, $promocode ?? null, $flightAt, $isUnified);
-		if ($price <= 0) {
+		//$amount = $tariff->calculateProductPrice($contractor, $promocode ?? null, $flightAt, $isUnified);
+		$amount = $tariff->calcAmount($contractor->id, $cityId, 0, 0, 0, $promocodeId, 0, 'api', '');
+		if ($amount <= 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
 		
 		$data = [
-			'amount' => $price,
+			'amount' => $amount,
 		];
 		
 		return $this->responseSuccess(null, $data);
@@ -1896,7 +1909,8 @@ class ApiController extends Controller
 		$date = date('Y-m-d');
 		
 		$promocode = Promocode::where('number', $number)
-			->whereIn('city_id', [$city->id, 0])
+			/*->whereIn('city_id', [$city->id, 0])*/
+			->whereRelation('cities', 'cities.id', '=', $cityId)
 			->where('is_active', true)
 			->where(function ($query) use ($date) {
 				$query->where('active_from_at', '<=', $date)
@@ -2006,32 +2020,30 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		/*$dealIds = Deal::where('contractor_id', $contractorId)
-			->pluck('id');*/
-		$deals = Deal::where('contractor_id', $contractorId)
-				->whereRelation('event', 'event_type', '=', 'deal')
-				->whereRelation('event', 'stop_at', '<', Carbon::now());
-		$dealIds = $deals->pluck('id');
-		$deals = $deals->get();
+		$events = Event::where('contractor_id', $contractorId)
+				->where('event_type', Event::EVENT_TYPE_DEAL)
+				->where('stop_at', '<', Carbon::now());
+		$eventIds = $events->pluck('id');
+		$events = $events->get();
 
 		$scores = Score::where('contractor_id', $contractorId)
-			->whereIn('deal_id', $dealIds)
+			->whereIn('event_id', $eventIds)
 			->get();
 
 		$scoreData = [];
 		foreach ($scores ?? [] as $score) {
-			$scoreData[$score->deal_id] = $score->score;
+			$scoreData[$score->event_id] = $score->score;
 		}
 		
 		$data = [];
-		foreach ($deals as $deal) {
+		foreach ($events as $event) {
 			$data[] = [
 				'flight' => [
-					'date' => Carbon::parse($deal->flight_at)->format('Y-m-d'),
-					'time' => Carbon::parse($deal->flight_at)->format('H:i'),
-					'tariff' =>  $deal->product ? $deal->product->format() : null,
-					'location' =>  $deal->location ? $deal->location->format() : null,
-					'score' =>  $scoreData[$deal->id] ?? 0,
+					'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
+					'time' => Carbon::parse($event->start_at)->format('H:i'),
+					'tariff' =>  ($event->position && $event->position->product) ? $event->position->product->format() : null,
+					'location' =>  $event->location ? $event->location->format() : null,
+					'score' =>  $scoreData[$event->id] ?? 0,
 				],
 			];
 		}
@@ -2157,8 +2169,7 @@ class ApiController extends Controller
 			return $this->responseError('Не передана стоимость позиции', 400);
 		}
 		
-		$product = Product::/*where('is_active', true)
-				->*/find($productId);
+		$product = Product::find($productId);
 		if (!$product) {
 			return $this->responseError('Позиция не найдена', 400);
 		}
@@ -2210,7 +2221,8 @@ class ApiController extends Controller
 		}
 		
 		if ($this->request->promocode_id) {
-			$promocode = Promocode::whereIn('city_id', [$city->id, 0])
+			$promocode = Promocode::/*whereIn('city_id', [$city->id, 0])
+				->*/whereRelation('cities', 'cities.id', '=', $cityId)
 				->where('is_active', true)
 				->where('active_from_at', '<=', $date)
 				->where(function ($query) use ($date) {
@@ -2230,7 +2242,9 @@ class ApiController extends Controller
 			if ($this->request->is_certificate_purchase) {
 				$certificate = new Certificate();
 				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
-				$certificate->expire_at = Carbon::now()->addYear();
+				$certificate->city_id = $city ? $city->id : 0;
+				$certificate->product_id = $product ? $product->id : 0;
+				$certificate->expire_at = Carbon::now()->addYear()->format('Y-m-d H:i:s');
 				$certificate->save();
 			}
 			
@@ -2247,36 +2261,33 @@ class ApiController extends Controller
 			$deal->name = $this->request->name;
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
-			$deal->product_id = $product->id;
-			$deal->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
-			$deal->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
-			$deal->is_certificate_purchase = $this->request->is_certificate_purchase ?? 0;
-			$deal->duration = $product->duration ?? 0;
-			$deal->amount = $productAmount ?? 0;
 			$deal->source = Deal::MOB_SOURCE;
-			$dealData['comment'] = $this->request->comment;
 			$dealData = [];
-			if (!$this->request->is_certificate_purchase) {
-				$deal->city_id = $city->id;
-				$deal->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
-				$deal->flight_at = $flightDateCarbon->format('Y-m-d H:i');
-			} else {
-				$deal->city_id = $this->request->is_unified ?: $city->id;
-				/*$deal->is_unified = $this->request->is_unified ?? 0;*/
-				$dealData['certificate_whom'] = $this->request->certificate_whom;
-			}
+			$dealData['comment'] = $this->request->comment;
+			$dealData['certificate_whom'] = $this->request->certificate_whom;
 			$deal->data_json = $dealData;
 			$deal->save();
-			
-			// создание счета
-			$bill = new Bill();
-			$bill->status_id = $statusesData['bill'][Bill::NOT_PAYED_STATUS]['id'];
-			$bill->amount = $productAmount ?? 0;
-			$bill->save();
-			
-			// заполняем pivot
-			$deal->bills()->attach($bill->id);
-			
+
+			$position = new DealPosition();
+			$position->product_id = $product ? $product->id : 0;
+			$position->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
+			$position->duration = $product ? $product->duration : 0;
+			$position->amount = $productAmount ?? 0;
+			$position->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
+			if (!$this->request->is_certificate_purchase) {
+				$position->city_id =  $city ? $city->id : 0;
+				$position->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
+				$position->flight_simulator_id = 0;
+				$position->flight_at = $flightDateCarbon->format('Y-m-d H:i');
+			} else {
+				$position->city_id = !$this->request->is_unified ? $city->id : 0;
+			}
+			$position->source = Deal::MOB_SOURCE;
+			//$position->data_json = $data;
+			$position->save();
+
+			$deal->positions()->save($position);
+
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -2359,8 +2370,7 @@ class ApiController extends Controller
 			return $this->responseError('Не передан ID позиции', 400);
 		}
 		
-		$product = Product::/*where('is_active', true)
-			->*/find($productId);
+		$product = Product::find($productId);
 		if (!$product) {
 			return $this->responseError('Позиция не найдена', 400);
 		}
@@ -2373,7 +2383,7 @@ class ApiController extends Controller
 		$date = date('Y-m-d');
 		
 		$certificate = Certificate::where('number', $number)
-			->whereIn('city_id', [$city->id])
+			->whereIn('city_id', [$city->id, 0])
 			/*->where(function ($query) use ($city) {
 				$query->whereIn('city_id', [$city->id, 0])
 					->orWhere('is_unified', true);

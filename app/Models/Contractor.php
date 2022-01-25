@@ -111,6 +111,8 @@ class Contractor extends Authenticatable
 		self::WEB_SOURCE => 'Web',
 		self::MOB_SOURCE => 'Mob',
 	];
+
+	const REGISTRATION_SCORE = 500;
 	
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;

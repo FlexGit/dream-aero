@@ -56,8 +56,11 @@ class SendDealEmail extends Job implements ShouldQueue {
 			\Log::critical('Cannot create log file for deal_send_notifier', [$e->getMessage()]);
 			$log = \Log::getMonolog();
 		}*/
-		
-		$locationData = $deal->location ? $deal->location->data_json ?? [] : [];
+
+		$position = $deal->positions()->first();
+		if (!$position) return;
+
+		$locationData = $position->location ? $position->location->data_json ?? [] : [];
 		
 		// собираем контакты со всех локаций города на случай, если локации в заказе не было
 		// либо нет данных о конкретном виде связи
@@ -67,8 +70,8 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'skype' => [],
 			'email' => [],
 		];
-		if ($deal->city && $deal->city->locations) {
-			foreach ($deal->city->locations as $location) {
+		if ($position->city && $position->city->locations) {
+			foreach ($position->city->locations as $location) {
 				$locationData = $location->data_json ?? [];
 				if (array_key_exists('phone', $locationData)) {
 					$cityData['phone'][] = $locationData['phone'];
@@ -86,19 +89,18 @@ class SendDealEmail extends Job implements ShouldQueue {
 		}
 		
 		$messageData = [
-			'name' => $deal->name,
-			'number' => $deal->number,
-			'isCertificatePurchase' => (bool)$deal->is_certificate_purchase,
+			'name' => $position->name,
+			'number' => $position->number,
+			'isCertificatePurchase' => (bool)$position->is_certificate_purchase,
 			'statusName' => $deal->status ? $deal->status->name : '',
-			'certificateNumber' => $deal->certificate ? $deal->certificate->number : '',
-			'certificateExpireAt' => $deal->certificate ? $deal->certificate->expire_at : '',
-			/*'isUnified' => (bool)$deal->is_unified,*/
-			'flightAt' => $deal->flight_at,
-			'cityName' => $deal->city ? $deal->city->name : '',
+			'certificateNumber' => $position->certificate ? $position->certificate->number : '',
+			'certificateExpireAt' => $position->certificate ? $position->certificate->expire_at : '',
+			'flightAt' => $position->flight_at,
+			'cityName' => $position->city ? $position->city->name : '',
 			'locationAddress' => array_key_exists('address', $locationData) ? $locationData['address'] : '',
-			'productName' => $deal->product ? $deal->product->name : '',
-			'duration' => $deal->duration,
-			'amount' => $deal->amount,
+			'productName' => $position->product ? $position->product->name : '',
+			'duration' => $position->duration,
+			'amount' => $position->amount,
 			'phone' => array_key_exists('phone', $locationData) ? $locationData['phone'] : implode(', ', $cityData['phone']),
 			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : implode(', ', $cityData['whatsapp']),
 			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : implode(', ', $cityData['skype']),
@@ -106,7 +108,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 		];
 		
 		try {
-			$subject = $deal->is_certificate_purchase ? env('APP_NAME') . ': заявка на покупку сертификата' : env('APP_NAME') . ': заявка на бронирование полета';
+			$subject = $position->is_certificate_purchase ? env('APP_NAME') . ': заявка на покупку сертификата' : env('APP_NAME') . ': заявка на бронирование полета';
 			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject, $deal) {
 				/** @var \Illuminate\Mail\Message $message */
 				$message->subject($subject);
