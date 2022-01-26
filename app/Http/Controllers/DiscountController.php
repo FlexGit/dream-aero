@@ -38,6 +38,7 @@ class DiscountController extends Controller
 		}
 
 		$discounts = Discount::orderBy('is_fixed')
+			->orderBy('currency_id')
 			->orderBy('value')
 			->get();
 
