@@ -49,12 +49,12 @@
 				<div title="Количество полетов">
 					<i class="fas fa-plane"></i> <span>{{ $flightCnt ?? 0 }}</span>
 					@if($flightTime)
-						<span title="Время налета">({{ $flightTime ?? 0 }} мин)</span>
+						<span title="Время налета">({{ $flightTime ? number_format($flightTime, 0, '.', ' ') : 0 }} мин)</span>
 					@endif
 					<small>[<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/score" data-action="/contractor/{{ $contractor->id }}/score" data-method="POST" data-type="score" data-title="Добавление полета" title="Добавить полет">добавить</a>]</small>
 				</div>
 				<div title="Количество баллов">
-					<i class="far fa-star"></i> {{ $score ?? 0 }} баллов
+					<i class="far fa-star"></i> {{ $score ? number_format($score, 0, '.', ' ') : 0 }} баллов
 				</div>
 			</div>
 			<div class="d-inline-block col-6 align-top">
