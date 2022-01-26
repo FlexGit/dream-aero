@@ -2051,7 +2051,7 @@ class ApiController extends Controller
 			'flights' => []
 		];
 		foreach ($events as $event) {
-			\Log::debug($event->dealPosition);
+			\Log::debug($event->dealPosition->product);
 			$data[] = [
 				'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
 				'time' => Carbon::parse($event->start_at)->format('H:i'),
