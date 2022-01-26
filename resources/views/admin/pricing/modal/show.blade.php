@@ -30,10 +30,10 @@
 			<td>Город</td>
 			<td>{{ optional($product->city)->name ?? 'Все' }}</td>
 		</tr>
-		@if(array_key_exists('with_employee', $product->productType->data_json) && (bool)$product->productType->data_json['with_employee'])
+		@if(array_key_exists('with_user', $product->productType->data_json) && (bool)$product->productType->data_json['with_user'])
 		<tr class="odd">
 			<td>Пилот</td>
-			<td>{{ optional($product->employee)->name ?? '' }}</td>
+			<td>{{ optional($product->user)->name ?? '' }}</td>
 		</tr>
 		@endif
 		<tr class="odd">

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\City;
-use App\Models\Employee;
+use App\Models\User;
 
 class CityController extends Controller
 {
@@ -244,7 +243,7 @@ class CityController extends Controller
 	/**
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getEmployeeList()
+	public function getUserList()
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -254,7 +253,7 @@ class CityController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
-		$employeeData = [];
+		$userData = [];
 
 		if ($this->request->cityId) {
 			$city = City::find($this->request->cityId);
@@ -263,32 +262,32 @@ class CityController extends Controller
 			}
 			
 			foreach ($city->location ?? [] as $location) {
-				$employees = $location->employee;
-				foreach ($employees as $employee) {
-					if (!$employee->is_active) continue;
+				$users = $location->user;
+				foreach ($users as $user) {
+					if (!$user->is_active) continue;
 					
-					$employeeData[] = [
-						'id' => $employee->id,
-						'name' => $employee->name,
+					$userData[] = [
+						'id' => $user->id,
+						'name' => $user->name,
 					];
 				}
 			}
 		} else {
-			$employees = Employee::where('is_active', true)
+			$users = User::where('is_active', true)
 				->orderBy('name', 'asc')
 				->get();
-			foreach ($employees as $employee) {
-				$employeeData[] = [
-					'id' => $employee->id,
-					'name' => $employee->name,
+			foreach ($users as $user) {
+				$userData[] = [
+					'id' => $user->id,
+					'name' => $user->name,
 				];
 			}
 		}
 
-		usort($employeeData, function($a, $b) {
+		usort($userData, function($a, $b) {
 			return $a['name'] <=> $b['name'];
 		});
 
-		return response()->json(['status' => 'success', 'employees' => $employeeData]);
+		return response()->json(['status' => 'success', 'users' => $userData]);
 	}
 }

@@ -9,6 +9,10 @@
 			<td>{{ $promo->name }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Алиас</td>
+			<td>{{ $promo->alias }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Скидка</td>
 			<td>{{ $promo->discount ? $promo->discount->valueFormatted() : '' }}</td>
 		</tr>

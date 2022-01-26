@@ -84,9 +84,9 @@ class AppServiceProvider extends ServiceProvider
 		
 		Validator::extend('valid_city', function($attribute, $value, $parameters, $validator) {
 			$inputs = $validator->getData();
-			
+
 			$city = City::find($inputs['city_id']);
-			if (!$city || !$city->is_active) {
+			if (!$city || !$city->is_active || (\Auth::check() && \Auth::user()->city && \Auth::user()->city->id != $city->id)) {
 				return false;
 			}
 			

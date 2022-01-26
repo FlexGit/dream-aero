@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Location;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\User;
 
@@ -182,14 +181,18 @@ class UserController extends Controller
 		}
 
 		$rules = [
+			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
+			'middlename' => ['required', 'max:255'],
 			'email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL'],
 			'role' => ['required'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
+				'lastname' => 'Фамилия',
 				'name' => 'Имя',
+				'middlename' => 'Отчество',
 				'email' => 'E-mail',
 				'role' => 'Роль',
 			]);
@@ -198,7 +201,9 @@ class UserController extends Controller
 		}
 		
 		$user = new User();
+		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
+		$user->middlename = $this->request->middlename;
 		$user->email = $this->request->email;
 		$user->password = '';
 		$user->role = $this->request->role;
@@ -230,22 +235,28 @@ class UserController extends Controller
 		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
 
 		$rules = [
+			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
+			'middlename' => ['required', 'max:255'],
 			'email' => ['required', 'email', 'unique:users,email,' . $id . ',id,deleted_at,NULL'],
 			'role' => ['required'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
+				'lastname' => 'Фамилия',
 				'name' => 'Имя',
+				'middlename' => 'Отчество',
 				'email' => 'E-mail',
 				'role' => 'Роль',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
+		$user->middlename = $this->request->middlename;
 		$user->email = $this->request->email;
 		$user->role = $this->request->role;
 		$user->city_id = $this->request->city_id ?? 0;
@@ -290,6 +301,10 @@ class UserController extends Controller
 		
 		$user = User::find($id);
 		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
+
+		if (in_array($user->id, [1])) {
+			return response()->json(['status' => 'error', 'reason' => 'Запрещено удаление данного пользователя']);
+		}
 		
 		if (!$user->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

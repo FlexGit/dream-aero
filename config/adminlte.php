@@ -244,6 +244,7 @@ return [
             'text'        => 'Календарь',
             'url'         => '/',
             'icon'        => 'far fa-fw fa-calendar-alt',
+			'can'	  => 'is_superadmin',
             'label'       => '',
             'label_color' => '',
         ],
@@ -252,6 +253,7 @@ return [
 			'text'        => 'Сделки',
 			'url'         => '/deal',
 			'icon'        => 'fas fa-handshake',
+			'can'	  => 'is_superadmin',
 			'label'       => '',
 			'label_color' => '',
 		],
@@ -360,16 +362,6 @@ return [
 					'url'  => '/user',
 					'icon'    => 'fas fa-fw fa-users',
 				],
-				[
-					'text' => 'Сотрудники',
-					'url'  => '/employee',
-					'icon'    => 'fas fa-fw fa-user-tie',
-				],
-				[
-					'text' => 'Позиции сотрудников',
-					'url'  => '/position',
-					'icon'    => 'fas fa-fw fa-briefcase',
-				],
 			],
 		],
 		/*[
@@ -400,13 +392,13 @@ return [
                 ],*/
             ],
         ],
-		[
+		/*[
 			'text'        => 'Wiki',
 			'url'         => '/wiki',
 			'icon'        => 'fas fa-fw fa-info',
 			'label'       => '',
 			'label_color' => '',
-		],
+		],*/
         /*['header' => 'labels'],
         [
             'text'       => 'important',

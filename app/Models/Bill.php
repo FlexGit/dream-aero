@@ -54,6 +54,12 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property int $contractor_id
  * @property-read \App\Models\Contractor|null $contractor
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereContractorId($value)
+ * @property int $deal_id
+ * @property int $currency_id
+ * @property-read \App\Models\Currency|null $currency
+ * @property-read \App\Models\Deal|null $deal
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereCurrencyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDealId($value)
  */
 class Bill extends Model
 {

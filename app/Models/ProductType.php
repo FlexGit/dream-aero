@@ -42,6 +42,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|ProductType withTrashed()
  * @method static \Illuminate\Database\Query\Builder|ProductType withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $version
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductType whereVersion($value)
  */
 class ProductType extends Model
 {
@@ -79,7 +81,7 @@ class ProductType extends Model
 		'is_active' => 'Активность',
 		'data_json' => 'Дополнительная информация',
 		'duration' => 'Длительность',
-		'with_employee' => 'С пилотом',
+		'with_user' => 'С пилотом',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',

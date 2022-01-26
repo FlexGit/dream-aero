@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 
 use App\Models\ProductType;
@@ -199,7 +198,7 @@ class ProductController extends Controller
 		$product->name = $this->request->name;
 		$product->alias = $this->request->alias;
 		$product->product_type_id = $this->request->product_type_id;
-		$product->employee_id = $this->request->employee_id ?? 0;
+		$product->user_id = $this->request->user_id ?? 0;
 		$product->duration = $this->request->duration ?? 0;
 		$product->data_json = [
 			'description' => $this->request->description ?? null,
@@ -248,7 +247,7 @@ class ProductController extends Controller
 		$product->name = $this->request->name;
 		$product->alias = $this->request->alias;
 		$product->product_type_id = $this->request->product_type_id;
-		$product->employee_id = $this->request->employee_id ?? 0;
+		$product->user_id = $this->request->user_id ?? 0;
 		$product->duration = $this->request->duration ?? 0;
 		$product->data_json = [
 			'description' => $this->request->description ?? null,

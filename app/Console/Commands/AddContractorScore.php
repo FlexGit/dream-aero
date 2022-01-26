@@ -62,6 +62,7 @@ class AddContractorScore extends Command
     		$score->score = $cityProduct->score ?? 0;
 			$score->contractor_id = $event->deal ? $event->deal->contractor_id : 0;
 			$score->event_id = $event->id;
+			$score->duration = $product->duration;
 			$score->save();
 		}
 			

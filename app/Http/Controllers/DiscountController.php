@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Currency;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\Discount;
@@ -140,7 +139,8 @@ class DiscountController extends Controller
 				Rule::unique('discounts')
 					->where(function ($query) {
 						return $query->where('value', $this->request->value)
-							->where('is_fixed', $this->request->is_fixed);
+							->where('is_fixed', $this->request->is_fixed)
+							->where('currency_id', $this->request->currency_id);
 					}),
 			],
 		];
@@ -152,11 +152,16 @@ class DiscountController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
+
+		if ($this->request->currency_id) {
+			$currency = Currency::find($this->request->currency_id);
+		}
 		
 		$discount = new Discount();
 		$discount->value = $this->request->value;
+		$discount->alias = ($this->request->is_fixed ? 'fixed' : 'percent') . '_' . $this->request->value . (($this->request->is_fixed && $this->request->currency_id && $currency) ? ('_' . $currency->alias) : '');
 		$discount->is_fixed = $this->request->is_fixed;
-		$discount->currency_id = $this->request->currency_id;
+		$discount->currency_id = ($this->request->is_fixed && $currency) ? $currency->id : 0;
 		$discount->is_active = $this->request->is_active;
 		if (!$discount->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -190,6 +195,7 @@ class DiscountController extends Controller
 					->where(function ($query) {
 						return $query->where('value', $this->request->value)
 							->where('is_fixed', $this->request->is_fixed)
+							->where('currency_id', $this->request->currency_id)
 							->where('id', '!=', $this->request->id);
 					}),
 			],
@@ -202,10 +208,15 @@ class DiscountController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		if ($this->request->currency_id) {
+			$currency = Currency::find($this->request->currency_id);
+		}
+
 		$discount->value = $this->request->value;
+		$discount->alias = ($this->request->is_fixed ? 'fixed' : 'percent') . '_' . $this->request->value . (($this->request->is_fixed && $this->request->currency_id && $currency) ? ('_' . $currency->alias) : '');
 		$discount->is_fixed = $this->request->is_fixed;
-		$discount->currency_id = $this->request->currency_id;
+		$discount->currency_id = ($this->request->is_fixed && $currency) ? $currency->id : 0;
 		$discount->is_active = $this->request->is_active;
 		if (!$discount->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

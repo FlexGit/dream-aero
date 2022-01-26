@@ -19,7 +19,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property string $name наименование продукта
  * @property string $alias алиас
  * @property int $product_type_id тип продукта
- * @property int $employee_id пилот
+ * @property int $user_id пользователь
  * @property int $duration длительность полёта, мин.
  * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
@@ -27,7 +27,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property \datetime|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\City[] $cities
  * @property-read int|null $cities_count
- * @property-read \App\Models\Employee|null $employee
+ * @property-read \App\Models\User|null $user
  * @property-read \App\Models\ProductType|null $productType
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
@@ -40,7 +40,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereEmployeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereProductTypeId($value)
@@ -48,6 +48,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Product withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Product withoutTrashed()
  * @mixin \Eloquent
+ * @property int $employee_id пилот
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereEmployeeId($value)
  */
 class Product extends Model
 {
@@ -57,7 +59,7 @@ class Product extends Model
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
 		'product_type_id' => 'Тип продукта',
-		'employee_id' => 'Пилот',
+		'user_id' => 'Пользователь',
 		'city_id' => 'Город',
 		'duration' => 'Длительность',
 		'data_json' => 'Дополнительная информация',
@@ -78,7 +80,7 @@ class Product extends Model
 		'name',
 		'alias',
 		'product_type_id',
-		'employee_id',
+		'user_id',
 		'duration',
 		'data_json',
 	];
@@ -100,9 +102,9 @@ class Product extends Model
 		return $this->hasOne(ProductType::class, 'id', 'product_type_id');
 	}
 	
-	public function employee()
+	public function user()
 	{
-		return $this->hasOne(Employee::class, 'id', 'employee_id');
+		return $this->hasOne(User::class, 'id', 'user_id');
 	}
 	
 	public function cities()
@@ -136,7 +138,7 @@ class Product extends Model
 			'is_booking_allow' => array_key_exists('is_booking_allow', $data) ? (bool)$data['is_booking_allow'] : false,
 			'is_certificate_purchase_allow' => array_key_exists('is_certificate_purchase_allow', $data) ? (bool)$data['is_certificate_purchase_allow'] : false,
 			'tariff_type' => $this->productType ? $this->productType->format() : null,
-			'employee' => $this->employee ? $this->employee->format() : null,
+			'user' => $this->user ? $this->user->format() : null,
 			/*'city' => $this->city ? $this->city->format() : null,*/
 		];
 	}

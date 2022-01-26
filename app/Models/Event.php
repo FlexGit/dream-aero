@@ -14,7 +14,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property int $id
  * @property string $event_type тип события
  * @property int $deal_id сделка
- * @property int $employee_id сотрудник
+ * @property int $user_id пользователь
  * @property int $city_id город, в котором будет осуществлен полет
  * @property int $location_id локация, на которой будет осуществлен полет
  * @property int $flight_simulator_id авиатренажер, на котором будет осуществлен полет
@@ -33,7 +33,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\EventComment[] $comments
  * @property-read int|null $comments_count
  * @property-read \App\Models\Deal $deal
- * @property-read \App\Models\Employee $employee
+ * @property-read \App\Models\User $user
  * @property-read \App\Models\Location $location
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
@@ -47,7 +47,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDealId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Event whereEmployeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereExtraTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereFlightSimulatorId($value)
@@ -63,6 +63,11 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Event withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Event withoutTrashed()
  * @mixin \Eloquent
+ * @property int $deal_position_id
+ * @property int $employee_id сотрудник
+ * @property-read \App\Models\DealPosition|null $dealPosition
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDealPositionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereEmployeeId($value)
  */
 class Event extends Model
 {
@@ -72,7 +77,7 @@ class Event extends Model
 		'event_type' => 'Тип события',
 		'deal_id' => 'Сделка',
 		'deal_position_id' => 'Позиция сделки',
-		'employee_id' => 'Сотрудник',
+		'user_id' => 'Пользователь',
 		'extra_time' => 'Дополнительное время',
 		'city_id' => 'Город',
 		'location_id' => 'Локация',
@@ -115,7 +120,7 @@ class Event extends Model
 		'event_type',
 		'deal_id',
 		'deal_position_id',
-		'employee_id',
+		'user_id',
 		'extra_time',
 		'city_id',
 		'location_id',
@@ -164,9 +169,9 @@ class Event extends Model
 		return $this->belongsTo(DealPosition::class, 'deal_position_id', 'id');
 	}
 
-	public function employee()
+	public function user()
 	{
-		return $this->belongsTo(Employee::class, 'employee_id', 'id');
+		return $this->belongsTo(User::class, 'user_id', 'id');
 	}
 	
 	public function comments()

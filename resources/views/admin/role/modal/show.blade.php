@@ -2,19 +2,23 @@
 	<tbody>
 		<tr class="odd">
 			<td>ID</td>
-			<td>{{ $position->id }}</td>
+			<td>{{ $role->id }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Наименование</td>
-			<td>{{ $position->name }}</td>
+			<td>{{ $role->name }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Алиас</td>
+			<td>{{ $role->alias }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Дата создания</td>
-			<td>{{ $position->created_at }}</td>
+			<td>{{ $role->created_at }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Дата последнего изменения</td>
-			<td>{{ $position->updated_at }}</td>
+			<td>{{ $role->updated_at }}</td>
 		</tr>
 	</tbody>
 </table>

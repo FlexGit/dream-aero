@@ -23,18 +23,20 @@
 				<div class="card-body">
 					<div class="table-filter mb-2">
 						<div class="d-sm-flex">
-							<div class="form-group">
-								<label for="filter_city_id">Город</label>
-								<select class="form-control" id="filter_city_id" name="filter_city_id">
-									<option value="0">Все</option>
-									@foreach($cities ?? [] as $city)
-										@if(!$city->is_active)
-											@continue
-										@endif
-										<option value="{{ $city->id }}">{{ $city->name }}</option>
-									@endforeach
-								</select>
-							</div>
+							@if(!\Auth::user()->city)
+								<div class="form-group">
+									<label for="filter_city_id">Город</label>
+									<select class="form-control" id="filter_city_id" name="filter_city_id">
+										<option value="0">Все</option>
+										@foreach($cities ?? [] as $city)
+											@if(!$city->is_active)
+												@continue
+											@endif
+											<option value="{{ $city->id }}">{{ $city->name }}</option>
+										@endforeach
+									</select>
+								</div>
+							@endif
 							<div class="form-group ml-2">
 								<label for="search_contractor">Контрагент</label>
 								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
@@ -177,7 +179,7 @@
 				});
 			});
 
-			$(document).on('submit', '#contractor', function(e) {
+			$(document).on('submit', '#contractor, #score', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -195,11 +197,21 @@
 							return;
 						}
 
-						var msg = 'Контрагент успешно ';
-						if (method === 'POST') {
-							msg += 'добавлен';
-						} else if (method === 'PUT') {
-							msg += 'сохранен';
+						var msg = '';
+						if (formId === 'score') {
+							msg = 'Время полета успешно ';
+							if (method === 'POST') {
+								msg += 'добавлено';
+							} else if (method === 'PUT') {
+								msg += 'сохранено';
+							}
+						} else if (formId === 'contractor') {
+							msg = 'Контрагент успешно ';
+							if (method === 'POST') {
+								msg += 'добавлен';
+							} else if (method === 'PUT') {
+								msg += 'сохранен';
+							}
 						}
 
 						$('#modal').modal('hide');

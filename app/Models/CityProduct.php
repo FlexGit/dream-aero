@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @mixin \Eloquent
  * @property \datetime $created_at
  * @property \datetime $updated_at
+ * @property-read \App\Models\Currency|null $currency
  */
 class CityProduct extends Pivot
 {

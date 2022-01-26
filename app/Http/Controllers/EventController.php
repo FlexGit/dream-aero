@@ -35,6 +35,11 @@ class EventController extends Controller
 	 */
 	public function index()
 	{
+		// Временный редирект для админов
+		if (!\Auth::user()->isSuperAdmin()) {
+			return redirect('/contractor');
+		}
+
 		$cities = City::orderBy('version', 'desc')
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
@@ -67,7 +72,7 @@ class EventController extends Controller
 				$query->whereDate('stop_at', '<=', $stopAt)
 					->orWhereNull('stop_at');
 			})
-			->with(['dealPosition', 'employee'])
+			->with(['dealPosition', 'user'])
 			->get();
 
 		$eventData = [];
@@ -93,14 +98,14 @@ class EventController extends Controller
 					}
 				break;
 				case 'shift_admin':
-					$title = $event->employee->name;
+					$title = $event->user->name;
 					$allDay = true;
 					if ($data && isset($data['shift_admin'])) {
 						$color = $data['shift_admin'];
 					}
 				break;
 				case 'shift_pilot':
-					$title = $event->employee->name;
+					$title = $event->user->name;
 					$allDay = true;
 					if ($data && isset($data['shift_pilot'])) {
 						$color = $data['shift_pilot'];
@@ -391,7 +396,7 @@ class EventController extends Controller
 		return response()->json(['status' => 'success']);
 	}
 
-	public function clear()
+	/*public function clear()
 	{
 		if (!$this->request->user()->isSuperAdmin()) {
 			redirect(route('eventIndex'));
@@ -399,5 +404,5 @@ class EventController extends Controller
 
 		Deal::where('user_id', 0)
 			->delete();
-	}
+	}*/
 }

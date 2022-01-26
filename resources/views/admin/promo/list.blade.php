@@ -3,6 +3,7 @@
 	<td>
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/promo/{{ $promo->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $promo->name }}</a>
 	</td>
+	<td class="text-center d-none d-sm-table-cell">{{ $promo->alias }}</td>
 	<td class="text-center d-none d-sm-table-cell">{{ $promo->discount ? $promo->discount->valueFormatted() : '' }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $promo->city ? $promo->city->name : '' }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $promo->is_published ? 'Да' : 'Нет' }}</td>

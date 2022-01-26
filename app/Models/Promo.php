@@ -48,6 +48,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Promo withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Promo withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $alias
+ * @method static \Illuminate\Database\Eloquent\Builder|Promo whereAlias($value)
  */
 class Promo extends Model
 {
@@ -55,6 +57,7 @@ class Promo extends Model
 	
 	const ATTRIBUTES = [
 		'name' => 'Наименование',
+		'alias' => 'Алиас',
 		'discount_id' => 'Скидка',
 		'preview_text' => 'Превью текст',
 		'detail_text' => 'Детальное описание',
@@ -78,6 +81,7 @@ class Promo extends Model
 	 */
 	protected $fillable = [
 		'name',
+		'alias',
 		'preview_text',
 		'detail_text',
 		'city_id',

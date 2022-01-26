@@ -5,8 +5,16 @@
 			<td>{{ $user->id }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Фамилия</td>
+			<td>{{ $user->lastname }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Имя</td>
 			<td>{{ $user->name }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Отчество</td>
+			<td>{{ $user->middlename }}</td>
 		</tr>
 		<tr class="odd">
 			<td>E-mail</td>

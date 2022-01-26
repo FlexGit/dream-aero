@@ -87,6 +87,10 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property int $flight_simulator_id
  * @property-read \App\Models\FlightSimulator|null $simulator
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereFlightSimulatorId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
+ * @property-read int|null $events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DealPosition[] $positions
+ * @property-read int|null $positions_count
  */
 class Deal extends Model
 {

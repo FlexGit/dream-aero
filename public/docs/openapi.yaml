@@ -1564,7 +1564,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"is_hit\": false,\n\t\t\t\t\"is_unified\": false,\n\t\t\t\"is_booking_allow\": true,\n\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\"tariff_type\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\"description\": null\n\t\t\t},\n\t\t\t\"employee\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\"instagram\": null\n\t\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Москва\",\n\t\t\t}\n\t\t\t}\n\t\t}\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"is_hit\": false,\n\t\t\t\t\"is_unified\": false,\n\t\t\t\"is_booking_allow\": true,\n\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\"tariff_type\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\"description\": null\n\t\t\t},\n\t\t\t\"user\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\"instagram\": null\n\t\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Москва\",\n\t\t\t}\n\t\t\t}\n\t\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -1721,7 +1721,7 @@ paths:
                         name: Regular
                         alias: regular
                         description: null
-                      employee:
+                      user:
                         id: 1
                         name: 'John Smith'
                         photo_file_path: null
@@ -1754,7 +1754,7 @@ paths:
                           name: Regular
                           alias: regular
                           description: null
-                        employee:
+                        user:
                           id: 1
                           name: 'John Smith'
                           photo_file_path: null
@@ -2976,7 +2976,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: vitae
+                  example: et
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3511,7 +3511,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"flight\": {\n\t\t\t\"flight\": {\n\t\t\t\t\t\"date\": \"2021-01-01\",\n\t\t\t\t\t\"time\": \"12:00:00\"\n\t\t\t\t\"tariff\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\"duration\": 30,\n\t\t\t\t\t\"price\": 6300,\n\t\t\t\t\t\"is_hit\": false,\n\t\t\t\t\t\t\"is_unified\": false,\n\t\t\t\t\t\"is_booking_allow\": true,\n\t\t\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\t\t\"tariff_type\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\t\t\"description\": null\n\t\t\t\t\t},\n\t\t\t\t\t\"employee\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\t\t\"instagram\": null\n\t\t\t\t\t\t},\n\t\t\t\t\t\"city\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Москва\"\n\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\"location\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"ТРК VEGAS Кунцево\",\n\t\t\t\t\t\"address\": null,\n\t\t\t\t\t\"working_hours\": null,\n\t\t\t\t\t\"phone\": null,\n\t\t\t\t\t\"email\": null,\n\t\t\t\t\t\"map_link\": null,\n\t\t\t\t\t\"skype\": null,\n\t\t\t\t\t\"whatsapp\": null,\n\t\t\t\t\t\"scheme_file_path\": null\n\t\t\t\t\t},\n\t\t\t\t\"score\": \"300\"\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"flight\": {\n\t\t\t\"flight\": {\n\t\t\t\t\t\"date\": \"2021-01-01\",\n\t\t\t\t\t\"time\": \"12:00:00\"\n\t\t\t\t\"tariff\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\"duration\": 30,\n\t\t\t\t\t\"price\": 6300,\n\t\t\t\t\t\"is_hit\": false,\n\t\t\t\t\t\t\"is_unified\": false,\n\t\t\t\t\t\"is_booking_allow\": true,\n\t\t\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\t\t\"tariff_type\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\t\t\"description\": null\n\t\t\t\t\t},\n\t\t\t\t\t\"user\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\t\t\"instagram\": null\n\t\t\t\t\t\t},\n\t\t\t\t\t\"city\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Москва\"\n\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\"location\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"ТРК VEGAS Кунцево\",\n\t\t\t\t\t\"address\": null,\n\t\t\t\t\t\"working_hours\": null,\n\t\t\t\t\t\"phone\": null,\n\t\t\t\t\t\"email\": null,\n\t\t\t\t\t\"map_link\": null,\n\t\t\t\t\t\"skype\": null,\n\t\t\t\t\t\"whatsapp\": null,\n\t\t\t\t\t\"scheme_file_path\": null\n\t\t\t\t\t},\n\t\t\t\t\"score\": \"300\"\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}"
         400:
           description: 'Bad Request'
           content:

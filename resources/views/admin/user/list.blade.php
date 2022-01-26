@@ -1,7 +1,7 @@
 @foreach ($users as $user)
 <tr class="odd">
 	<td>
-		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $user->name }}</a>
+		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $user->lastname }} {{ $user->name }} {{ $user->middlename }}</a>
 	</td>
 	<td class="text-center d-none d-sm-table-cell">{{ $user->email }}</td>
 	<td class="text-center d-none d-md-table-cell">{{ isset($roles[$user->role]) ? $roles[$user->role] : '' }}</td>

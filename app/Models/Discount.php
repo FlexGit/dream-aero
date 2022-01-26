@@ -36,6 +36,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @mixin \Eloquent
  * @property string|null $alias алиас
  * @method static \Illuminate\Database\Eloquent\Builder|Discount whereAlias($value)
+ * @property int $currency_id
+ * @property-read \App\Models\Currency|null $currency
+ * @method static \Illuminate\Database\Eloquent\Builder|Discount whereCurrencyId($value)
  */
 class Discount extends Model
 {

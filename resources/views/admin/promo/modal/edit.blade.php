@@ -4,7 +4,11 @@
 
 <div class="form-group">
 	<label for="name">Наименование</label>
-	<input type="text" class="form-control" id="name" name="name" value="{{ $promo->name }}" placeholder="Имя">
+	<input type="text" class="form-control" id="name" name="name" value="{{ $promo->name }}" placeholder="Наименование">
+</div>
+<div class="form-group">
+	<label for="alias">Алиас</label>
+	<input type="text" class="form-control" id="alias" name="alias" value="{{ $promo->alias }}" placeholder="Алиас">
 </div>
 <div class="form-group">
 	<label for="discount_id">Скидка</label>

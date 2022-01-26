@@ -8,6 +8,76 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use \Venturecraft\Revisionable\RevisionableTrait;
 
+/**
+ * App\Models\DealPosition
+ *
+ * @property int $id
+ * @property string|null $number
+ * @property int $deal_id сделка
+ * @property int $product_id продукт
+ * @property int $certificate_id сертификат
+ * @property int $duration продолжительность полета
+ * @property int $amount стоимость
+ * @property int $currency_id
+ * @property int $city_id город, в котором будет осуществлен полет
+ * @property int $location_id локация, на которой будет осуществлен полет
+ * @property int $flight_simulator_id
+ * @property int $promo_id акция
+ * @property int $promocode_id промокод
+ * @property bool $is_certificate_purchase покупка сертификата
+ * @property \datetime|null $flight_at дата и время полета
+ * @property \datetime|null $invite_sent_at последняя дата отправки приглашения на e-mail
+ * @property \datetime|null $certificate_sent_at последняя дата отправки сертификата на e-mail
+ * @property string|null $source источник
+ * @property int $user_id пользователь
+ * @property array|null $data_json дополнительная информация
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read \App\Models\Certificate|null $certificate
+ * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\Currency|null $currency
+ * @property-read \App\Models\Deal|null $deal
+ * @property-read \App\Models\Event|null $event
+ * @property-read \App\Models\Location|null $location
+ * @property-read \App\Models\Product|null $product
+ * @property-read \App\Models\Promo|null $promo
+ * @property-read \App\Models\Promocode|null $promocode
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
+ * @property-read int|null $revision_history_count
+ * @property-read \App\Models\FlightSimulator|null $simulator
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition newQuery()
+ * @method static \Illuminate\Database\Query\Builder|DealPosition onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCurrencyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDealId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereFlightAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereFlightSimulatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereInviteSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereIsCertificatePurchase($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition wherePromoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition wherePromocodeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|DealPosition withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|DealPosition withoutTrashed()
+ * @mixin \Eloquent
+ */
 class DealPosition extends Model
 {
 	use HasFactory, SoftDeletes, RevisionableTrait;
@@ -116,8 +186,7 @@ class DealPosition extends Model
 	
 	public function product()
 	{
-		return $this->hasOne(Product::class, 'id', 'product_id')
-			->withPivot('price', 'is_hit');
+		return $this->hasOne(Product::class, 'id', 'product_id');
 	}
 
 	public function currency()

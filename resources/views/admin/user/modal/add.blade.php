@@ -1,7 +1,15 @@
 <input type="hidden" id="id" name="id">
 <div class="form-group">
+	<label for="lastname">Фамилия</label>
+	<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Фамилия">
+</div>
+<div class="form-group">
 	<label for="name">Имя</label>
 	<input type="text" class="form-control" id="name" name="name" placeholder="Имя">
+</div>
+<div class="form-group">
+	<label for="middlename">Отчество</label>
+	<input type="text" class="form-control" id="middlename" name="middlename" placeholder="Отчество">
 </div>
 <div class="form-group">
 	<label for="email">E-mail</label>

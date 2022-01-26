@@ -32,6 +32,10 @@ class CreateCurrenciesTable extends Migration
 			'name' => '$',
 			'alias' => 'USD',
 		];
+		$items[] = [
+			'name' => 'Баллы',
+			'alias' => 'SCORE',
+		];
 
 		foreach ($items as $item) {
 			$currency = new Currency();

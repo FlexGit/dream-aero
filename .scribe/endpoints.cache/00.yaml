@@ -855,7 +855,7 @@ endpoints:
           				"alias": "regular",
           				"description": null
           			},
-          			"employee": {
+          			"user": {
           				"id": 1,
           					"name": "John Smith",
           					"photo_file_path": null,
@@ -952,7 +952,7 @@ endpoints:
           			"alias": "regular",
           			"description": null
           		},
-          		"employee": {
+          		"user": {
           			"id": 1,
           			"name": "John Smith",
           			"photo_file_path": null,
@@ -1477,7 +1477,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: vitae
+        example: et
         type: string
         custom: []
     responses:
@@ -1851,7 +1851,7 @@ endpoints:
           						"alias": "regular",
           						"description": null
           					},
-          					"employee": {
+          					"user": {
           						"id": 1,
           							"name": "John Smith",
           							"photo_file_path": null,

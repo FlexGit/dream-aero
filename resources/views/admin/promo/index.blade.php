@@ -30,6 +30,7 @@
 						<thead>
 						<tr>
 							<th class="text-center">Наименование</th>
+							<th class="text-center d-none d-sm-table-cell">Алиас</th>
 							<th class="text-center d-none d-sm-table-cell">Скидка</th>
 							<th class="text-center d-none d-xl-table-cell">Город</th>
 							<th class="text-center d-none d-xl-table-cell">Для публикации</th>

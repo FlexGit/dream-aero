@@ -19,6 +19,7 @@ class CreatePromosTable extends Migration
         Schema::create('promos', function (Blueprint $table) {
 			$table->id();
             $table->string('name')->comment('наименование');
+			$table->string('alias')->nullable()->comment('алиас');
 			$table->integer('discount_id')->default(0)->index()->comment('скидка');
             $table->text('preview_text')->nullable()->comment('анонс');
             $table->text('detail_text')->nullable()->comment('описание');

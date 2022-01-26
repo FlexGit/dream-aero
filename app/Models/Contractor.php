@@ -270,14 +270,24 @@ class Contractor extends Authenticatable
 		}
 		if (!$flightTimes) return null;
 		
-		krsort($flightTimes);
+		rsort($flightTimes);
 		$result = array_filter($flightTimes, function($item) use ($contractorFlightTime) {
 			return $item <= $contractorFlightTime;
 		});
 		if (!$result) return null;
-		
-		$statusId = array_key_first($result);
-		
+
+		$flightTime = array_shift($result);
+
+		$statusId = 0;
+		foreach ($statuses ?? [] as $status) {
+			if ($status->type != Status::STATUS_TYPE_CONTRACTOR) continue;
+
+			if ($status->flight_time == $flightTime) {
+				$statusId = $status->id;
+				break;
+			}
+		}
+
 		foreach ($statuses ?? [] as $status) {
 			if ($status->id == $statusId) {
 				return $status;
@@ -301,10 +311,12 @@ class Contractor extends Authenticatable
 	 */
 	public function getFlightTime()
 	{
-		return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
+		/*return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
 			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
 			->whereRelation('deal', 'contractor_id', '=', $this->id)
-			->sum(DB::raw('TIMESTAMPDIFF(minute, start_at, stop_at)'));
+			->sum(DB::raw('TIMESTAMPDIFF(minute, start_at, stop_at)'));*/
+		return Score::where('contractor_id', $this->id)
+			->sum('duration');
 	}
 	
 	/**
@@ -312,9 +324,13 @@ class Contractor extends Authenticatable
 	 */
 	public function getFlightCount()
 	{
-		return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
+		/*return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
 			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
 			->whereRelation('deal', 'contractor_id', '=', $this->id)
+			->count();*/
+
+		return Score::where('contractor_id', $this->id)
+			->where('duration', '>', 0)
 			->count();
 	}
 	

@@ -6,7 +6,6 @@ use App\Models\City;
 use App\Models\Discount;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\Promo;
 
@@ -189,6 +188,7 @@ class PromoController extends Controller
 		
 		$promo = new Promo();
 		$promo->name = $this->request->name;
+		$promo->alias = $this->request->alias;
 		$promo->discount_id = $this->request->discount_id ?? 0;
 		$promo->city_id = $this->request->city_id ?? 0;
 		$promo->preview_text = $this->request->preview_text ?? '';
@@ -234,6 +234,7 @@ class PromoController extends Controller
 		}
 
 		$promo->name = $this->request->name;
+		$promo->alias = $this->request->alias;
 		$promo->discount_id = $this->request->discount_id ?? 0;
 		$promo->city_id = $this->request->city_id ?? 0;
 		$promo->preview_text = $this->request->preview_text ?? '';

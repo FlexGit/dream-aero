@@ -183,15 +183,15 @@
 
 			function getDurationByProductType(duration) {
 				var $durationSelector = $('#duration'),
-					$employeeSelector = $('#employee_id'),
+					$userSelector = $('#user_id'),
 					$productTypeIdSelector = $('#product_type_id'),
 					durations = $productTypeIdSelector.find(':selected').data('duration'),
-					withEmployee = $productTypeIdSelector.find(':selected').data('with_employee');
+					withUser = $productTypeIdSelector.find(':selected').data('with_user');
 
-				if (withEmployee) {
-					$employeeSelector.closest('.form-group').removeClass('d-none');
+				if (withUser) {
+					$userSelector.closest('.form-group').removeClass('d-none');
 				} else {
-					$employeeSelector.closest('.form-group').addClass('d-none');
+					$userSelector.closest('.form-group').addClass('d-none');
 				}
 
 				$durationSelector.html('<option></option>');

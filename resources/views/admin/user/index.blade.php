@@ -29,7 +29,7 @@
 					<table id="userTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 						<tr>
-							<th class="text-center">Имя</th>
+							<th class="text-center">ФИО</th>
 							<th class="text-center d-none d-sm-table-cell">E-mail</th>
 							<th class="text-center d-none d-md-table-cell">Роль</th>
 							<th class="text-center d-none d-lg-table-cell">Город</th>
@@ -176,9 +176,17 @@
 
 			$(document).on('change', '#city_id', function() {
 				$('#location_id').val('');
-				$('#location_id option').hide();
-				$('#location_id option[data-city_id="' + $(this).val() + '"]').show();
+				getLocation($(this).val());
 			});
+
+			$(document).on('show.bs.modal', '#modal', function(e) {
+				getLocation($('#city_id').val());
+			});
+
+			function getLocation(cityId) {
+				$('#location_id option').hide();
+				$('#location_id option[data-city_id="' + cityId + '"]').show();
+			}
 		});
 	</script>
 @stop

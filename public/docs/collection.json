@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "e7a10fcb-3197-4dc0-ab9b-82c9358910a8",
+        "_postman_id": "f110323e-4942-476b-80a8-8e8017d3fa96",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -677,7 +677,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"is_hit\": false,\n\t\t\t\t\"is_unified\": false,\n\t\t\t\"is_booking_allow\": true,\n\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\"tariff_type\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\"description\": null\n\t\t\t},\n\t\t\t\"employee\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\"instagram\": null\n\t\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\t}\n\t\t\t}\n\t\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"tariff\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"duration\": 30,\n\t\t\t\"price\": 6300,\n\t\t\t\"is_hit\": false,\n\t\t\t\t\"is_unified\": false,\n\t\t\t\"is_booking_allow\": true,\n\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\"tariff_type\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\"description\": null\n\t\t\t},\n\t\t\t\"user\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\"instagram\": null\n\t\t\t\t},\n\t\t\t\"city\": {\n\t\t\t\t\"id\": 1,\n\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\",\n\t\t\t}\n\t\t\t}\n\t\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -746,7 +746,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"tariff\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"duration\": 30,\n\t\t\"price\": 6300,\n\t\t\"is_hit\": false,\n\t\t\"is_unified\": false,\n\t\t\"is_booking_allow\": true,\n\t\t\"is_certificate_purchase_allow\": true,\n\t\t\"tariff_type\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"alias\": \"regular\",\n\t\t\t\"description\": null\n\t\t},\n\t\t\"employee\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John Smith\",\n\t\t\t\"photo_file_path\": null,\n\t\t\t\"icon_file_path\": null,\n\t\t\t\"instagram\": null\n\t\t},\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t}\n\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\"tariff\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"Regular\",\n\t\t\"duration\": 30,\n\t\t\"price\": 6300,\n\t\t\"is_hit\": false,\n\t\t\"is_unified\": false,\n\t\t\"is_booking_allow\": true,\n\t\t\"is_certificate_purchase_allow\": true,\n\t\t\"tariff_type\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Regular\",\n\t\t\t\"alias\": \"regular\",\n\t\t\t\"description\": null\n\t\t},\n\t\t\"user\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John Smith\",\n\t\t\t\"photo_file_path\": null,\n\t\t\t\"icon_file_path\": null,\n\t\t\t\"instagram\": null\n\t\t},\n\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t}\n\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -1188,7 +1188,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"vitae\"}"
+                            "raw": "{\"file_base64\":\"et\"}"
                         },
                         "description": ""
                     },
@@ -1496,7 +1496,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"flight\": {\n\t\t\t\"flight\": {\n\t\t\t\t\t\"date\": \"2021-01-01\",\n\t\t\t\t\t\"time\": \"12:00:00\"\n\t\t\t\t\"tariff\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\"duration\": 30,\n\t\t\t\t\t\"price\": 6300,\n\t\t\t\t\t\"is_hit\": false,\n\t\t\t\t\t\t\"is_unified\": false,\n\t\t\t\t\t\"is_booking_allow\": true,\n\t\t\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\t\t\"tariff_type\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\t\t\"description\": null\n\t\t\t\t\t},\n\t\t\t\t\t\"employee\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\t\t\"instagram\": null\n\t\t\t\t\t\t},\n\t\t\t\t\t\"city\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\"location\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\t\t\t\"address\": null,\n\t\t\t\t\t\"working_hours\": null,\n\t\t\t\t\t\"phone\": null,\n\t\t\t\t\t\"email\": null,\n\t\t\t\t\t\"map_link\": null,\n\t\t\t\t\t\"skype\": null,\n\t\t\t\t\t\"whatsapp\": null,\n\t\t\t\t\t\"scheme_file_path\": null\n\t\t\t\t\t},\n\t\t\t\t\"score\": \"300\"\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"flight\": {\n\t\t\t\"flight\": {\n\t\t\t\t\t\"date\": \"2021-01-01\",\n\t\t\t\t\t\"time\": \"12:00:00\"\n\t\t\t\t\"tariff\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\"duration\": 30,\n\t\t\t\t\t\"price\": 6300,\n\t\t\t\t\t\"is_hit\": false,\n\t\t\t\t\t\t\"is_unified\": false,\n\t\t\t\t\t\"is_booking_allow\": true,\n\t\t\t\t\t\"is_certificate_purchase_allow\": true,\n\t\t\t\t\t\"tariff_type\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"Regular\",\n\t\t\t\t\t\t\"alias\": \"regular\",\n\t\t\t\t\t\t\"description\": null\n\t\t\t\t\t},\n\t\t\t\t\t\"user\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\t\"name\": \"John Smith\",\n\t\t\t\t\t\t\t\"photo_file_path\": null,\n\t\t\t\t\t\t\t\"icon_file_path\": null,\n\t\t\t\t\t\t\t\"instagram\": null\n\t\t\t\t\t\t},\n\t\t\t\t\t\"city\": {\n\t\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\"location\": {\n\t\t\t\t\t\"id\": 1,\n\t\t\t\t\t\"name\": \"\u0422\u0420\u041a VEGAS \u041a\u0443\u043d\u0446\u0435\u0432\u043e\",\n\t\t\t\t\t\"address\": null,\n\t\t\t\t\t\"working_hours\": null,\n\t\t\t\t\t\"phone\": null,\n\t\t\t\t\t\"email\": null,\n\t\t\t\t\t\"map_link\": null,\n\t\t\t\t\t\"skype\": null,\n\t\t\t\t\t\"whatsapp\": null,\n\t\t\t\t\t\"scheme_file_path\": null\n\t\t\t\t\t},\n\t\t\t\t\"score\": \"300\"\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}",
                             "name": "success"
                         },
                         {

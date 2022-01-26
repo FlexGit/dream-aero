@@ -23,8 +23,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
  * @property-read \App\Models\City $city
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employee[] $employee
- * @property-read int|null $employee_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $user
+ * @property-read int|null $user_count
  * @property-read \App\Models\LegalEntity $legalEntity
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
@@ -124,9 +124,9 @@ class Location extends Model
 			->withTimestamps();
 	}
 	
-	public function employee()
+	public function user()
 	{
-		return $this->hasMany(Employee::class, 'location_id', 'id');
+		return $this->hasMany(User::class, 'location_id', 'id');
 	}
 	
 	public function format()

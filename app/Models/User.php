@@ -56,6 +56,12 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @mixin \Eloquent
  * @property-read \App\Models\City $city
  * @property-read \App\Models\Location $location
+ * @property string|null $lastname
+ * @property string|null $middlename
+ * @property string|null $data_json
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereMiddlename($value)
  */
 class User extends Authenticatable
 {
@@ -63,11 +69,11 @@ class User extends Authenticatable
 
     const ROLE_SUPERADMIN = 'superadmin';
     const ROLE_ADMIN = 'admin';
-	/*const ROLE_MANAGER = 'manager';*/
+	const ROLE_PILOT = 'pilot';
     const ROLES = [
     	self::ROLE_SUPERADMIN => 'Суперадмин',
 		self::ROLE_ADMIN => 'Админ',
-		/*self::ROLE_MANAGER => 'Менеджер',*/
+		self::ROLE_PILOT => 'Пилот',
 	];
  
 	const ATTRIBUTES = [
@@ -125,19 +131,27 @@ class User extends Authenticatable
 	/**
 	 * @return bool
 	 */
-    public function isAdmin()
+	public function isSuperAdmin()
 	{
-    	return $this->role == 'admin';
+		return $this->role == self::ROLE_SUPERADMIN;
 	}
-	
+
 	/**
 	 * @return bool
 	 */
-	public function isSuperAdmin()
+	public function isAdmin()
 	{
-		return $this->role == 'superadmin';
+		return $this->role == self::ROLE_ADMIN;
 	}
-	
+
+	/**
+	 * @return bool
+	 */
+	public function isPilot()
+	{
+		return $this->role == self::ROLE_PILOT;
+	}
+
 	public function city()
 	{
 		return $this->belongsTo(City::class, 'city_id', 'id');

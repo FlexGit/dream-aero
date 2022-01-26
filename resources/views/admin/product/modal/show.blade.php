@@ -20,10 +20,10 @@
 			<td>Длительность, мин</td>
 			<td>{{ $product->duration }}</td>
 		</tr>
-		@if(isset($product->productType->data_json['with_employee']) ? $product->productType->data_json['with_employee'] : '') && (bool)$product->productType->data_json['with_employee'])
+		@if((isset($product->productType->data_json['with_user']) ? $product->productType->data_json['with_user'] : '') && (bool)$product->productType->data_json['with_user'])
 		<tr class="odd">
 			<td>Пилот</td>
-			<td>{{ optional($product->employee)->name ?? '' }}</td>
+			<td>{{ optional($product->user)->name ?? '' }}</td>
 		</tr>
 		@endif
 		<tr class="odd">

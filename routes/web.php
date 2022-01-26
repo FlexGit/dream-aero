@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\EmployeePositionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
@@ -105,9 +104,23 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		->name('logout');
 
 	Route::group(['middleware' => ['auth']], function () {
+		// Контрагенты
+		Route::get('contractor/add', [ContractorController::class, 'add']);
+		Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
+		/*Route::get('contractor/{id}/show', [ContractorController::class, 'show']);*/
+
+		Route::get('contractor', [ContractorController::class, 'index'])->name('contractorIndex');
+		Route::get('contractor/list/ajax', [ContractorController::class, 'getListAjax'])->name('contractorList');
+		Route::post('contractor', [ContractorController::class, 'store']);
+		Route::post('contractor/search', [ContractorController::class, 'search'])->name('contractorSearch');
+		Route::put('contractor/{id}', [ContractorController::class, 'update']);
+
+		Route::get('contractor/{id}/score', [ContractorController::class, 'addScore']);
+		Route::post('contractor/{id}/score', [ContractorController::class, 'storeScore']);
+
 		// Очистка тестовых данных
-		Route::get('/clear', [EventController::class, 'clear'])->name('clear');
-		
+		//Route::get('/clear', [EventController::class, 'clear'])->name('clear');
+
 		// События
 		Route::get('/', [EventController::class, 'index'])->name('eventIndex');
 		Route::get('event/list/ajax', [EventController::class, 'getListAjax'])->name('eventList');
@@ -118,7 +131,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('event/{position_id}/add', [EventController::class, 'add'])->name('add-event');
 		Route::get('event/{id}/edit', [EventController::class, 'edit'])->name('edit-event');
 		Route::get('event/{id}/show', [EventController::class, 'show'])->name('show-event');
-		
+
 		// Сделки
 		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
 		Route::get('deal/list/ajax', [DealController::class, 'getListAjax'])->name('dealList');
@@ -153,42 +166,48 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		// Сертификаты
 		Route::post('certificate', [CertificateController::class, 'store']);
 		Route::put('certificate/{id}', [CertificateController::class, 'update']);
-		
+
 		Route::get('certificate/{deal_id}/add', [CertificateController::class, 'add']);
 		Route::get('certificate/{id}/edit', [CertificateController::class, 'edit']);
-		
-		// Контрагенты
-		Route::get('contractor/add', [ContractorController::class, 'add']);
-		Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
-		/*Route::get('contractor/{id}/show', [ContractorController::class, 'show']);*/
 
-		Route::get('contractor', [ContractorController::class, 'index'])->name('contractorIndex');
-		Route::get('contractor/list/ajax', [ContractorController::class, 'getListAjax'])->name('contractorList');
-		Route::post('contractor', [ContractorController::class, 'store']);
-		Route::post('contractor/search', [ContractorController::class, 'search'])->name('contractorSearch');
-		Route::put('contractor/{id}', [ContractorController::class, 'update']);
-		
+		// Счета
+		Route::post('bill', [BillController::class, 'store']);
+		Route::put('bill/{id}', [BillController::class, 'update']);
+		Route::delete('bill/{id}', [BillController::class, 'delete']);
+
+		Route::get('bill/{deal_id}/add', [BillController::class, 'add']);
+		Route::get('bill/{id}/edit', [BillController::class, 'edit']);
+
+		Route::post('bill/paylink/send', [BillController::class, 'sendPayLink'])->name('sendPayLink');
+
+		// Payments
+		/*Route::get('pay/request/{id}/{city_id}', [PayController::class, 'sendPayRequest'])->name('sendPayRequest');
+		Route::get('pay/success', [PayController::class, 'paySuccess'])->name('successPay');
+		Route::get('pay/fail', [PayController::class, 'payFail'])->name('failPay');
+		Route::get('pay/return', [PayController::class, 'payReturn'])->name('returnPay');
+		Route::get('pay/callback', [PayController::class, 'payCallback'])->name('callbackPay');*/
+
 		// Скидки
 		Route::get('discount', [DiscountController::class, 'index'])->name('discountIndex');
 		Route::get('discount/list/ajax', [DiscountController::class, 'getListAjax'])->name('discountList');
-		
+
 		Route::post('discount', [DiscountController::class, 'store']);
 		Route::put('discount/{id}', [DiscountController::class, 'update']);
 		Route::delete('discount/{id}', [DiscountController::class, 'delete']);
-		
+
 		Route::get('discount/add', [DiscountController::class, 'add']);
 		Route::get('discount/{id}/edit', [DiscountController::class, 'edit']);
 		Route::get('discount/{id}/delete', [DiscountController::class, 'confirm']);
 		Route::get('discount/{id}/show', [DiscountController::class, 'show']);
-		
+
 		// Промокоды
 		Route::get('promocode', [PromocodeController::class, 'index'])->name('promocodeIndex');
 		Route::get('promocode/list/ajax', [PromocodeController::class, 'getListAjax'])->name('promocodeList');
-		
+
 		Route::post('promocode', [PromocodeController::class, 'store']);
 		Route::put('promocode/{id}', [PromocodeController::class, 'update']);
 		Route::delete('promocode/{id}', [PromocodeController::class, 'delete']);
-		
+
 		Route::get('promocode/add', [PromocodeController::class, 'add']);
 		Route::get('promocode/{id}/edit', [PromocodeController::class, 'edit']);
 		Route::get('promocode/{id}/delete', [PromocodeController::class, 'confirm']);
@@ -197,37 +216,37 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		// Цены
 		Route::get('pricing', [PricingController::class, 'index'])->name('pricingIndex');
 		Route::get('pricing/list/ajax', [PricingController::class, 'getListAjax'])->name('pricingList');
-		
+
 		Route::put('pricing/{city_id}/{product_id}', [PricingController::class, 'update']);
 		Route::delete('pricing/{city_id}/{product_id}', [PricingController::class, 'delete']);
-		
+
 		Route::get('pricing/{city_id}/{product_id}/edit', [PricingController::class, 'edit']);
 		Route::get('pricing/{city_id}/{product_id}/delete', [PricingController::class, 'confirm']);
 		Route::get('pricing/{city_id}/{product_id}/show', [PricingController::class, 'show']);
-		
+
 		// Города
 		Route::get('city', [CityController::class, 'index'])->name('cityIndex');
 		Route::get('city/list/ajax', [CityController::class, 'getListAjax'])->name('cityList');
-		
+
 		Route::post('city', [CityController::class, 'store']);
 		Route::put('city/{id}', [CityController::class, 'update']);
 		Route::delete('city/{id}', [CityController::class, 'delete']);
-	
+
 		Route::get('city/add', [CityController::class, 'add']);
 		Route::get('city/{id}/edit', [CityController::class, 'edit']);
 		Route::get('city/{id}/delete', [CityController::class, 'confirm']);
 		Route::get('city/{id}/show', [CityController::class, 'show']);
-		
-		Route::get('city/employee', [CityController::class, 'getEmployeeList'])->name('employeeListByCity');
-		
+
+		Route::get('city/user', [CityController::class, 'getUserList'])->name('userListByCity');
+
 		// Локации
 		Route::get('location', [LocationController::class, 'index'])->name('locationIndex');
 		Route::get('location/list/ajax', [LocationController::class, 'getListAjax'])->name('locationList');
-		
+
 		Route::post('location', [LocationController::class, 'store']);
 		Route::put('location/{id}', [LocationController::class, 'update']);
 		Route::delete('location/{id}', [LocationController::class, 'delete']);
-		
+
 		Route::get('location/add', [LocationController::class, 'add']);
 		Route::get('location/{id}/edit', [LocationController::class, 'edit']);
 		Route::get('location/{id}/delete', [LocationController::class, 'confirm']);
@@ -246,7 +265,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('legal_entity/{id}/delete', [LegalEntityController::class, 'confirm']);
 		Route::get('legal_entity/{id}/show', [LegalEntityController::class, 'show']);
 
-		// Типы авиатренажеров
+		// Авиатренажероы
 		Route::get('flight_simulator', [FlightSimulatorController::class, 'index'])->name('flightSimulatorIndex');
 		Route::get('flight_simulator/list/ajax', [FlightSimulatorController::class, 'getListAjax'])->name('flightSimulatorList');
 
@@ -258,18 +277,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('flight_simulator/{id}/edit', [FlightSimulatorController::class, 'edit']);
 		Route::get('flight_simulator/{id}/delete', [FlightSimulatorController::class, 'confirm']);
 		Route::get('flight_simulator/{id}/show', [FlightSimulatorController::class, 'show']);
-
-		// Авиатренажеры
-		/*Route::get('flight_simulator', [FlightSimulatorController::class, 'index'])->name('flightSimulatorIndex');
-		Route::get('flight_simulator/list/ajax', [FlightSimulatorController::class, 'getListAjax'])->name('flightSimulatorList');
-
-		Route::post('flight_simulator', [FlightSimulatorController::class, 'store']);
-		Route::put('flight_simulator/{id}', [FlightSimulatorController::class, 'update']);
-		Route::delete('flight_simulator/{id}', [FlightSimulatorController::class, 'delete']);
-
-		Route::get('flight_simulator/add', [FlightSimulatorController::class, 'add']);
-		Route::get('flight_simulator/{id}/edit', [FlightSimulatorController::class, 'edit']);
-		Route::get('flight_simulator/{id}/delete', [FlightSimulatorController::class, 'confirm']);*/
 
 		// Типы продуктов
 		Route::get('product_type', [ProductTypeController::class, 'index'])->name('productTypeIndex');
@@ -283,82 +290,56 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('product_type/{id}/edit', [ProductTypeController::class, 'edit']);
 		Route::get('product_type/{id}/delete', [ProductTypeController::class, 'confirm']);
 		Route::get('product_type/{id}/show', [ProductTypeController::class, 'show']);
-		
+
 		// Продукты
 		Route::get('product', [ProductController::class, 'index'])->name('productIndex');
 		Route::get('product/list/ajax', [ProductController::class, 'getListAjax'])->name('productList');
-		
+
 		Route::post('product', [ProductController::class, 'store']);
 		Route::put('product/{id}', [ProductController::class, 'update']);
 		Route::delete('product/{id}', [ProductController::class, 'delete']);
-		
+
 		Route::get('product/add', [ProductController::class, 'add']);
 		Route::get('product/{id}/edit', [ProductController::class, 'edit']);
 		Route::get('product/{id}/delete', [ProductController::class, 'confirm']);
 		Route::get('product/{id}/show', [ProductController::class, 'show']);
-		
+
 		// Статусы
 		Route::get('status', [StatusController::class, 'index'])->name('statusIndex');
 		Route::get('status/list/ajax', [StatusController::class, 'getListAjax'])->name('statusList');
-		
+
 		Route::put('status/{id}', [StatusController::class, 'update']);
-		
+
 		Route::get('status/{id}/edit', [StatusController::class, 'edit']);
 		Route::get('status/{id}/show', [StatusController::class, 'show']);
-		
+
 		// Способы оплаты
 		Route::get('payment_method', [PaymentMethodController::class, 'index'])->name('paymentMethodIndex');
 		Route::get('payment_method/list/ajax', [PaymentMethodController::class, 'getListAjax'])->name('paymentMethodList');
-		
+
 		Route::post('payment_method', [PaymentMethodController::class, 'store']);
 		Route::put('payment_method/{id}', [PaymentMethodController::class, 'update']);
 		Route::delete('payment_method/{id}', [PaymentMethodController::class, 'delete']);
-		
+
 		Route::get('payment_method/add', [PaymentMethodController::class, 'add']);
 		Route::get('payment_method/{id}/edit', [PaymentMethodController::class, 'edit']);
 		Route::get('payment_method/{id}/delete', [PaymentMethodController::class, 'confirm']);
 		Route::get('payment_method/{id}/show', [PaymentMethodController::class, 'show']);
-		
+
 		// Пользователи
 		Route::get('user', [UserController::class, 'index'])->name('userIndex');
 		Route::get('user/list/ajax', [UserController::class, 'getListAjax'])->name('userList');
-		
+
 		Route::post('user', [UserController::class, 'store']);
 		Route::put('user/{id}', [UserController::class, 'update']);
 		Route::delete('user/{id}', [UserController::class, 'delete']);
-		
+
 		Route::get('user/add', [UserController::class, 'add']);
 		Route::get('user/{id}/edit', [UserController::class, 'edit']);
 		Route::get('user/{id}/delete', [UserController::class, 'confirm']);
 		Route::get('user/{id}/show', [UserController::class, 'show']);
-		
+
 		Route::post('user/{id}/password/reset/notification', [UserController::class, 'passwordResetNotification'])->name('passwordResetNotification');
-
-		// Сотрудники
-		Route::get('employee', [EmployeeController::class, 'index'])->name('employeeIndex');
-		Route::get('employee/list/ajax', [EmployeeController::class, 'getListAjax'])->name('employeeList');
-
-		Route::post('employee', [EmployeeController::class, 'store']);
-		Route::put('employee/{id}', [EmployeeController::class, 'update']);
-		Route::delete('employee/{id}', [EmployeeController::class, 'delete']);
-
-		Route::get('employee/add', [EmployeeController::class, 'add']);
-		Route::get('employee/{id}/edit', [EmployeeController::class, 'edit']);
-		Route::get('employee/{id}/delete', [EmployeeController::class, 'confirm']);
-		Route::get('employee/{id}/show', [EmployeeController::class, 'show']);
-
-		// Позиции сотрудников
-		Route::get('position', [EmployeePositionController::class, 'index'])->name('positionIndex');
-		Route::get('position/list/ajax', [EmployeePositionController::class, 'getListAjax'])->name('positionList');
-
-		Route::post('position', [EmployeePositionController::class, 'store']);
-		Route::put('position/{id}', [EmployeePositionController::class, 'update']);
-		Route::delete('position/{id}', [EmployeePositionController::class, 'delete']);
-
-		Route::get('position/add', [EmployeePositionController::class, 'add']);
-		Route::get('position/{id}/edit', [EmployeePositionController::class, 'edit']);
-		Route::get('position/{id}/delete', [EmployeePositionController::class, 'confirm']);
-		Route::get('position/{id}/show', [EmployeePositionController::class, 'show']);
 
 		// Акции
 		Route::get('promo', [PromoController::class, 'index'])->name('promoIndex');
@@ -376,24 +357,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		// Лог операций
 		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
 		Route::get('log/{entity?}/{object_id?}', [RevisionController::class, 'index'])->name('revisionIndex');
-		
-		// Счета
-		Route::post('bill', [BillController::class, 'store']);
-		Route::put('bill/{id}', [BillController::class, 'update']);
-		Route::delete('bill/{id}', [BillController::class, 'delete']);
 
-		Route::get('bill/{deal_id}/add', [BillController::class, 'add']);
-		Route::get('bill/{id}/edit', [BillController::class, 'edit']);
-		
-		Route::post('bill/paylink/send', [BillController::class, 'sendPayLink'])->name('sendPayLink');
-
-		// Payments
-		/*Route::get('pay/request/{id}/{city_id}', [PayController::class, 'sendPayRequest'])->name('sendPayRequest');
-		Route::get('pay/success', [PayController::class, 'paySuccess'])->name('successPay');
-		Route::get('pay/fail', [PayController::class, 'payFail'])->name('failPay');
-		Route::get('pay/return', [PayController::class, 'payReturn'])->name('returnPay');
-		Route::get('pay/callback', [PayController::class, 'payCallback'])->name('callbackPay');*/
-		
 		// Wiki
 		Route::get('wiki', [WikiController::class, 'index'])->name('wikiIndex');
 	});

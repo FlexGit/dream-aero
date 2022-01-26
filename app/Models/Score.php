@@ -36,6 +36,11 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Score withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Score withoutTrashed()
  * @mixin \Eloquent
+ * @property int $duration
+ * @property int $user_id
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereUserId($value)
  */
 class Score extends Model
 {
@@ -45,6 +50,8 @@ class Score extends Model
 		'name' => 'Наименование',
 		'contractor_id' => 'Контрагент',
 		'event_id' => 'Сделка',
+		'duration' => 'Длительность полета',
+		'user_id' => 'Пользователь',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
@@ -62,6 +69,8 @@ class Score extends Model
 		'score',
 		'contractor_id',
 		'event_id',
+		'duration',
+		'user_id',
 		'data_json',
 	];
 
@@ -80,6 +89,11 @@ class Score extends Model
 	public function contractor()
 	{
 		return $this->hasOne(Contractor::class, 'id', 'contractor_id');
+	}
+
+	public function user()
+	{
+		return $this->hasOne(User::class, 'id', 'user_id');
 	}
 
 	public function event()

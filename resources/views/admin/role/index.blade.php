@@ -4,13 +4,13 @@
 	<div class="row mb-2">
 		<div class="col-sm-6">
 			<h1 class="m-0 text-dark">
-				Позиции сотрудников
+				Роли доступа
 			</h1>
 		</div>
 		<div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
 				<li class="breadcrumb-item"><a href="/">Главная</a></li>
-				<li class="breadcrumb-item active">Позиции сотрудников</li>
+				<li class="breadcrumb-item active">Роли доступа</li>
 			</ol>
 		</div>
 	</div>
@@ -23,10 +23,10 @@
 				<div class="card-body">
 					<div class="table-filter d-sm-flex">
 						<div class="form-group align-self-end text-right ml-auto">
-							<a href="javascript:void(0)" data-toggle="modal" data-url="/position/add" data-action="/position" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/role/add" data-action="/role" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
 						</div>
 					</div>
-					<table id="positionTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
+					<table id="roleTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 						<tr>
 							<th class="text-center">Наименование</th>
@@ -50,7 +50,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="position">
+				<form id="role">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -73,12 +73,12 @@
 	<script>
 		$(function() {
 			function getList() {
-				var $selector = $('#positionTable tbody');
+				var $selector = $('#roleTable tbody');
 
 				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
 
 				$.ajax({
-					url: "{{ route('positionList') }}",
+					url: "{{ route('roleList') }}",
 					type: 'GET',
 					dataType: 'json',
 					success: function(result) {
@@ -136,7 +136,7 @@
 				});
 			});
 
-			$(document).on('submit', '#position', function(e) {
+			$(document).on('submit', '#role', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),

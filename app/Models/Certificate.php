@@ -40,6 +40,13 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Certificate withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Certificate withoutTrashed()
  * @mixin \Eloquent
+ * @property int $city_id
+ * @property int $product_id
+ * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\DealPosition|null $dealPosition
+ * @property-read \App\Models\Product|null $product
+ * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Certificate whereProductId($value)
  */
 class Certificate extends Model
 {
