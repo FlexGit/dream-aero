@@ -1477,7 +1477,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: commodi
+        example: velit
         type: string
         custom: []
     responses:
