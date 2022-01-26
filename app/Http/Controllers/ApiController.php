@@ -2051,11 +2051,10 @@ class ApiController extends Controller
 			'flights' => []
 		];
 		foreach ($events as $event) {
-			\Log::debug($event->dealPosition->product);
 			$data[] = [
 				'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
 				'time' => Carbon::parse($event->start_at)->format('H:i'),
-				'tariff' => ($event->dealPosition && $event->dealPosition->product) ? $event->position->product->format() : null,
+				'tariff' => ($event->dealPosition && $event->dealPosition->product) ? $event->dealPosition->product->format() : null,
 				'location' =>  $event->location ? $event->location->format() : null,
 				'flight_simulator' => $event->simulator ? $event->simulator->name : null,
 				'score' =>  $scoreData[$event->id] ?? 0,
