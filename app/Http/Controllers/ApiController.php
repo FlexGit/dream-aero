@@ -2028,7 +2028,7 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 
-		\DB::connection()->enableQueryLog();
+		//\DB::connection()->enableQueryLog();
 		$events = Event::/*where('contractor_id', $contractorId)
 				->*/where('event_type', Event::EVENT_TYPE_DEAL)
 				->where('stop_at', '<', Carbon::now())
@@ -2039,25 +2039,25 @@ class ApiController extends Controller
 		$scores = Score::where('contractor_id', $contractorId)
 			->whereIn('event_id', $eventIds)
 			->get();
-		$queries = \DB::getQueryLog();
-		\Log::debug($queries);
+		//$queries = \DB::getQueryLog();
+		//\Log::debug($queries);
 
 		$scoreData = [];
 		foreach ($scores ?? [] as $score) {
 			$scoreData[$score->event_id] = $score->score;
 		}
 		
-		$data = [];
+		$data = [
+			'flights' => []
+		];
 		foreach ($events as $event) {
 			$data[] = [
-				'flight' => [
-					'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
-					'time' => Carbon::parse($event->start_at)->format('H:i'),
-					'tariff' => ($event->position && $event->position->product) ? $event->position->product->format() : null,
-					'location' =>  $event->location ? $event->location->format() : null,
-					'flight_simulator' => $event->simulator ? $event->simulator->name : null,
-					'score' =>  $scoreData[$event->id] ?? 0,
-				],
+				'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
+				'time' => Carbon::parse($event->start_at)->format('H:i'),
+				'tariff' => ($event->dealPosition && $event->dealPosition->product) ? $event->position->product->format() : null,
+				'location' =>  $event->location ? $event->location->format() : null,
+				'flight_simulator' => $event->simulator ? $event->simulator->name : null,
+				'score' =>  $scoreData[$event->id] ?? 0,
 			];
 		}
 		
