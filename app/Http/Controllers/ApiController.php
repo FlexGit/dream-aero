@@ -2032,7 +2032,7 @@ class ApiController extends Controller
 		$events = Event::/*where('contractor_id', $contractorId)
 				->*/where('event_type', Event::EVENT_TYPE_DEAL)
 				->where('stop_at', '<', Carbon::now())
-				->whereRelation('deals', 'deals.contractor_id', '=', $contractorId);
+				->whereRelation('deal', 'deals.contractor_id', '=', $contractorId);
 		$eventIds = $events->pluck('id');
 		$events = $events->get();
 
