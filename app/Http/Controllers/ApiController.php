@@ -2054,7 +2054,7 @@ class ApiController extends Controller
 			$data[] = [
 				'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
 				'time' => Carbon::parse($event->start_at)->format('H:i'),
-				'tariff' => ($event->dealPosition && $event->dealPosition->product) ? $event->dealPosition->product->format() : null,
+				'tariff' => ($event->dealPosition && $event->dealPosition->product) ? $event->dealPosition->product->format($contractor->city_id ?? 1) : null,
 				'location' =>  $event->location ? $event->location->format() : null,
 				'flight_simulator' => $event->simulator ? $event->simulator->name : null,
 				'score' =>  $scoreData[$event->id] ?? 0,

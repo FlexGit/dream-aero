@@ -112,9 +112,9 @@ class PricingController extends Controller
 
 		$product = Product::find($productId);
 		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
-		
-		$cityProduct = $city->products->find($productId);
-		
+
+		$cityProduct = $city->products()->find($productId);
+
 		$cities = City::orderBy('name')
 			->get();
 		

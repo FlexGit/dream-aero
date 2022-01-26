@@ -112,14 +112,20 @@ class Product extends Model
 			->withPivot(['price', 'currency_id', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
 			->withTimestamps();
 	}
-	
+
 	/**
+	 * @param $cityId
+	 *
 	 * @return array
 	 */
-	public function format()
+	public function format($cityId = 1)
 	{
 		$data = $this->data_json ?? [];
-		
+
+		$cityProduct = $this->cities()->find($cityId);
+		/*$cityProduct = $this->cities()->where('cities_products.is_active', true)->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) return 0;*/
+
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
