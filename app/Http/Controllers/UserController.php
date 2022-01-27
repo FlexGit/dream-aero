@@ -38,6 +38,9 @@ class UserController extends Controller
 		}
 
 		$users = User::orderBy('city_id')
+			->orderBy('location_id')
+			->orderBy('lastname')
+			->orderBy('name')
 			->get();
 
 		$roles = User::ROLES;
