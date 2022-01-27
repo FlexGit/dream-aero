@@ -42,12 +42,13 @@ class ContractorImport implements OnEachRow, /*WithChunkReading, ShouldQueue,*/ 
 
 			$city = HelpFunctions::getEntityByAlias(City::class, trim($row[1]));
 			$cityId = $city ? $city->id : 0;
-
+			
 			$contractor = new Contractor();
 			$contractor->name = trim($row[0]);
 			$contractor->email = trim(mb_strtolower($row[3]));
-			$contractor->phone = trim($row[4]);
+			$contractor->phone = preg_replace('/[^0-9,]/', '', trim($row[4]));
 			$contractor->city_id = $cityId;
+			$contractor->is_subscribed = !(bool)($row[5] ?? 0);
 			$contractor->save();
 
 			if ((int)$row[2] > 0) {

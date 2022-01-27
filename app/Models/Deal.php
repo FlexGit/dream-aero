@@ -91,6 +91,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read int|null $events_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DealPosition[] $positions
  * @property-read int|null $positions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Score[] $scores
+ * @property-read int|null $scores_count
  */
 class Deal extends Model
 {

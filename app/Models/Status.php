@@ -42,6 +42,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Status withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Status withoutTrashed()
  * @mixin \Eloquent
+ * @property int $discount_id скидка
+ * @property-read \App\Models\Discount|null $discount
+ * @method static \Illuminate\Database\Eloquent\Builder|Status whereDiscountId($value)
  */
 class Status extends Model
 {

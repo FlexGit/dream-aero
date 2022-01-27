@@ -41,6 +41,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereUserId($value)
+ * @property string|null $type количество баллов
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereType($value)
  */
 class Score extends Model
 {

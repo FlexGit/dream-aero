@@ -77,6 +77,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|DealPosition withTrashed()
  * @method static \Illuminate\Database\Query\Builder|DealPosition withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\Score|null $score
  */
 class DealPosition extends Model
 {
