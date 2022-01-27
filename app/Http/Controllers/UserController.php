@@ -37,7 +37,8 @@ class UserController extends Controller
 			abort(404);
 		}
 
-		$users = User::get();
+		$users = User::orderBy('city_id')
+			->get();
 
 		$roles = User::ROLES;
 		
