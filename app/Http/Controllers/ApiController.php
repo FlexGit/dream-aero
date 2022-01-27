@@ -2093,13 +2093,14 @@ class ApiController extends Controller
 	 * @bodyParam certificate_id string No-example
 	 * @bodyParam certificate_whom string For whom certificate. No-example
 	 * @bodyParam comment string No-example
+	 * @bodyParam score int No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "Заявка успешно создана",
 	 * 	"data": {
 	 * 		"deal": {
 	 * 			"id": 1,
-	 * 			"number": "12345",
+	 * 			"number": "D2200001",
 	 * 			"status": "Создана",
 	 * 		}
 	 * 	}
@@ -2274,7 +2275,15 @@ class ApiController extends Controller
 				return $this->responseError('Промокод не найден', 400);
 			}
 		}
-		
+
+		$debitScore = (int)$this->request->score ?? 0;
+		if ($debitScore > 0) {
+			$actualScore = $contractor->getScore();
+			if ($actualScore < $debitScore) {
+				return $this->responseError('Превышен лимит на количество баллов для списания', 400);
+			}
+		}
+
 		try {
 			\DB::beginTransaction();
 			
@@ -2333,6 +2342,13 @@ class ApiController extends Controller
 			$position->save();
 
 			$deal->positions()->save($position);
+
+			$score = new Score();
+			$score->score = (-1 * $debitScore);
+			$score->contractor_id = $contractor ? $contractor->id : 0;
+			$score->deal_id = $deal->id;
+			$score->deal_position_id = $position->id;
+			$score->save();
 
 			\DB::commit();
 		} catch (Throwable $e) {
