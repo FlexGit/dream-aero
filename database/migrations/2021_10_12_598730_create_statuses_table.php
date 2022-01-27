@@ -21,6 +21,7 @@ class CreateStatusesTable extends Migration
 			$table->string('alias')->comment('алиас');
 			$table->string('type', 50)->default('')->index()->comment('тип сущности: контрагент, заказ, сделка, счет, платеж, сертификат');
 			$table->integer('flight_time')->default(0)->comment('время налета');
+			$table->integer('discount_id')->default(0)->index()->comment('скидка');
 			$table->integer('sort')->default(0)->comment('сортировка');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
@@ -160,6 +161,7 @@ class CreateStatusesTable extends Migration
 				$status->name = $item['name'];
 				$status->sort = $item['sort'];
 				$status->flight_time = $item['flight_time'] ?? 0;
+				$status->discount_id = $item['discount_id'] ?? 0;
 				$status->data_json = $item['data'] ?? null;
 				$status->save();
 			}

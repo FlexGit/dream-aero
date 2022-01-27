@@ -21,7 +21,7 @@
 		<select class="form-control" id="discount_id" name="discount_id">
 			<option></option>
 			@foreach($discounts ?? [] as $discount)
-				<option value="{{ $discount->id }}" @if($status->data_json && array_key_exists('discount_id', $status->data_json) && $status->data_json['discount_id'] == $discount->id) selected @endif>{{ $discount->valueFormatted() }}</option>
+				<option value="{{ $discount->id }}" @if($status->discount && $status->discount->id == $discount->id) selected @endif>{{ $discount->valueFormatted() }}</option>
 			@endforeach
 		</select>
 	</div>

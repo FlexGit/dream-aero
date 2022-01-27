@@ -129,17 +129,9 @@ class StatusController extends Controller
 		}
 		
 		$status->name = $this->request->name;
-		if ($this->request->flight_time) {
-			$status->flight_time = $this->request->flight_time;
-		}
-
+		$status->flight_time = $this->request->flight_time ?? 0;
+		$status->discount_id = $this->request->discount_id ?? 0;
 		$data = [];
-		/*if ($this->request->flight_time) {
-			$data['flight_time'] = $this->request->flight_time;
-		}
-		if ($this->request->discount_id) {
-			$data['discount_id'] = $this->request->discount_id;
-		}*/
 		if ($this->request->color) {
 			$data['color'] = $this->request->color;
 		}

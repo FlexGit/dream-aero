@@ -2348,6 +2348,7 @@ class ApiController extends Controller
 			$score->contractor_id = $contractor ? $contractor->id : 0;
 			$score->deal_id = $deal->id;
 			$score->deal_position_id = $position->id;
+			$score->type = Score::USED_TYPE;
 			$score->save();
 
 			\DB::commit();

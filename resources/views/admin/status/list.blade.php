@@ -9,8 +9,8 @@
 	@if($status->type == 'contractor' && $status->flight_time)
 		Время налета: {{ number_format($status->flight_time, 0, '.', ' ') }} мин.
 	@endif
-	@if($status->data_json && array_key_exists('discount_id', $status->data_json) && isset($discountData[$status->data_json['discount_id']]))
-		Скидка: {{ $discountData[$status->data_json['discount_id']] }}.
+	@if($status->discount)
+		Скидка: {{ $status->discount->valueFormatted() }}.
 	@endif
 	@if($status->data_json && array_key_exists('color', $status->data_json))
 		Цвет: {{ $status->data_json['color'] }}.

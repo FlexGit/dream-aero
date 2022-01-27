@@ -217,7 +217,12 @@ class Deal extends Model
 	{
 		return $this->hasOne(User::class, 'id', 'user_id');
 	}
-	
+
+	public function scores()
+	{
+		return $this->hasMany(Score::class, 'deal_id', 'id');
+	}
+
 	/**
 	 * @return string
 	 */

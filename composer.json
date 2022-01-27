@@ -16,6 +16,7 @@
     "laravel/sanctum": "^2.11",
     "laravel/tinker": "^2.5",
     "laravel/ui": "^3.3",
+    "maatwebsite/excel": "^3.1",
     "predis/predis": "^1.1",
     "venturecraft/revisionable": "^1.38",
     "webpatser/laravel-uuid": "^4.0",

@@ -107,4 +107,9 @@ class Status extends Model
 		'data_json' => 'array',
 		'is_active' => 'boolean',
 	];
+
+	public function discount()
+	{
+		return $this->hasOne(Discount::class, 'id', 'discount_id');
+	}
 }

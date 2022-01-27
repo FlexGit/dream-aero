@@ -15,11 +15,11 @@
 		@if($status->type == 'contractor')
 			<tr class="odd">
 				<td>Время налета</td>
-				<td>{{ ($status->data_json && array_key_exists('flight_time', $status->data_json)) ? $status->data_json['flight_time'] : '' }}</td>
+				<td>{{ $status->flight_time ?? '' }} мин</td>
 			</tr>
 			<tr class="odd">
 				<td>Скидка</td>
-				<td>{{ ($status->data_json && array_key_exists('discount_id', $status->data_json) && isset($discountData[$status->data_json['discount_id']])) ? $discountData[$status->data_json['discount_id']] : '' }}</td>
+				<td>{{ $status->discount ? $status->discount->valueFormatted() : '' }}</td>
 			</tr>
 		@endif
 		<tr class="odd">

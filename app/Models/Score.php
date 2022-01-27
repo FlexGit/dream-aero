@@ -57,6 +57,9 @@ class Score extends Model
 		'deleted_at' => 'Удалено',
 	];
 
+	const USED_TYPE = 'user';
+	const SCORING_TYPE = 'scoring';
+
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
 	

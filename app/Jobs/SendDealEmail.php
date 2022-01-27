@@ -6,6 +6,8 @@ use App\Jobs\QueueExtension\ReleaseHelperTrait;
 /*use App\Services\Locker;
 use App\Services\Semaphore;*/
 use App\Models\Deal;
+use App\Models\Score;
+use App\Models\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -60,6 +62,13 @@ class SendDealEmail extends Job implements ShouldQueue {
 		$position = $deal->positions()->first();
 		if (!$position) return;
 
+		$score = 0;
+		foreach ($deal->positions ?? [] as $position) {
+			if (!$position->score || !$position->type != Score::USED_TYPE) continue;
+
+			$score += $position->score->score;
+		}
+
 		$locationData = $position->location ? $position->location->data_json ?? [] : [];
 		
 		// собираем контакты со всех локаций города на случай, если локации в заказе не было
@@ -87,6 +96,18 @@ class SendDealEmail extends Job implements ShouldQueue {
 				}
 			}
 		}
+
+		$recipients = [];
+		if ($deal->contractor && $deal->contractor->city) {
+			$users = User::where('enable', true)
+				->whereIn('role', [User::ROLE_ADMIN])
+				->where('city_id', $deal->contractor->city->id)
+				->get();
+			foreach ($users ?? [] as $user) {
+				$recipients[] = $user->email;
+			}
+		}
+		if (!$recipients) return;
 		
 		$messageData = [
 			'name' => $position->name,
@@ -101,6 +122,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'productName' => $position->product ? $position->product->name : '',
 			'duration' => $position->duration,
 			'amount' => $position->amount,
+			'score' => $score,
 			'phone' => array_key_exists('phone', $locationData) ? $locationData['phone'] : implode(', ', $cityData['phone']),
 			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : implode(', ', $cityData['whatsapp']),
 			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : implode(', ', $cityData['skype']),
@@ -109,14 +131,16 @@ class SendDealEmail extends Job implements ShouldQueue {
 		
 		try {
 			$subject = $position->is_certificate_purchase ? env('APP_NAME') . ': заявка на покупку сертификата' : env('APP_NAME') . ': заявка на бронирование полета';
-			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject, $deal) {
+			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject, $deal, $recipients) {
 				/** @var \Illuminate\Mail\Message $message */
 				$message->subject($subject);
 				$message->priority(2);
-				$message->to($deal->email);
+				$message->to($recipients); //$deal->email
 			});
-			if (in_array($deal->email, Mail::failures())) {
-				throw new \Exception("Email $deal->email in a failed list");
+			foreach ($recipients as $recipient) {
+				if (in_array($recipient, Mail::failures())) {
+					throw new \Exception("Email $recipient in a failed list");
+				}
 			}
 		} catch (\Exception $e) {
 			/*$log->error('ERROR on Deal send ', ['number' => $deal->number, 'email' => $deal->email, 'msg' => $e->getMessage()]);*/

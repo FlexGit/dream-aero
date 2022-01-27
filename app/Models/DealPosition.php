@@ -239,6 +239,11 @@ class DealPosition extends Model
 		return $this->hasOne(Promo::class, 'id', 'promo_id');
 	}
 
+	public function score()
+	{
+		return $this->belongsTo(Score::class);
+	}
+
 	/**
 	 * @return string
 	 */

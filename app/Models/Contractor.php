@@ -228,7 +228,7 @@ class Contractor extends Authenticatable
 
 		// все статусы контрагента
 		$statuses = Status::where('is_active', true)
-			->where('type', 'contractor')
+			->where('type', Status::STATUS_TYPE_CONTRACTOR)
 			->get();
 		
 		// время налета контрагента
