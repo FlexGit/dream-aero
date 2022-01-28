@@ -29,7 +29,7 @@
 				</div>
 			</div>
 			<div class="d-inline-block col-6 align-top ml-3">
-				<div title="Телефон">
+				<div title="Телефон" class="text-wrap">
 					<i class="fas fa-mobile-alt"></i> {{ implode(', ', explode(',', $contractor->phone)) }}
 				</div>
 				<div title="E-mail">
