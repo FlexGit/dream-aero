@@ -30,7 +30,7 @@
 			</div>
 			<div class="d-inline-block col-6 align-top ml-3">
 				<div title="Телефон">
-					<i class="fas fa-mobile-alt"></i> {{ $contractor->phone }}
+					<i class="fas fa-mobile-alt"></i> {{ implode(', ', explode(',', $contractor->phone)) }}
 				</div>
 				<div title="E-mail">
 					<i class="far fa-envelope"></i> {{ $contractor->email }}
