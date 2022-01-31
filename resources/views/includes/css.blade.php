@@ -78,6 +78,10 @@
 		width: inherit;
 		padding-top: 0;
 	}
+	.dropdown-menu {
+		top: auto;
+		left: auto;
+	}
 </style>
 
 {{--

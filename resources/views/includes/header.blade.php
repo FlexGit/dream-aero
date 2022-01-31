@@ -10,7 +10,7 @@
 					<a href="{{ url($city->alias) }}">Главная</a>
 				</li>
 				<ul>
-					<li class="first dropdownf"><a href="{{ url('o-trenazhere') }}">О тренажере</a>
+					<li class="first dropdownf"><a href="{{ url($city->alias ? $city->alias . '/o-trenazhere' : 'o-trenazhere') }}">О тренажере</a>
 						<ul class="dropdown-menu">
 							<li class="first">
 								<a href="{{ url('virtualt/#virttourboeing') }}">Виртуальный тур B737</a>
