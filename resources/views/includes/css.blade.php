@@ -1,15 +1,17 @@
+<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+{{--<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('css/jquery.fancybox.css?v=2.1.7') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('css/pricestyle.css?v=1') }}" rel="stylesheet" type="text/css" />
-<link href="{{ asset('css/contactstyle.css?v=1') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('css/contactstyle.css?v=1') }}" rel="stylesheet" type="text/css" />--}}
 <link href="{{ asset('css/default.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ asset('css/simulstyle.css?v=1') }}" rel="stylesheet" type="text/css" />
+{{--<link href="{{ asset('css/simulstyle.css?v=1') }}" rel="stylesheet" type="text/css" />--}}
 <link href="{{ asset('css/styles.min.css') }}" rel="stylesheet" type="text/css" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+{{--<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />--}}
 
 <style type="text/css">
+/*
 	.fprIlH {
 		display: none;
 	}
@@ -57,6 +59,26 @@
 			width: 100%;
 		}
 	}
+*/
+	.modal-header {
+		border-bottom: 0;
+	}
+	.modal-content {
+		border: 3px solid #FF8200;
+		border-radius: 0;
+	}
+	.modal-dialog {
+		-webkit-transform: translate(0,0);
+		transform: translate(0,0);
+		transition: transform .3s ease-out,
+		-webkit-transform .3s ease-out;
+		width: 450px;
+	}
+	.gl-default, .gl-change-select {
+		width: inherit;
+		padding-top: 0;
+	}
 </style>
 
-<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+{{--
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">--}}

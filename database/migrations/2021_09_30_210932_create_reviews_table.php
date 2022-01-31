@@ -17,7 +17,7 @@ class CreateReviewsTable extends Migration
             $table->id();
             $table->string('name', 50)->comment('имя пользователя');
 			$table->text('comment')->nullable()->comment('текст отзыва');
-			$table->integer('location_id')->default(0)->index()->comment('локация, о которой отзыв');
+			$table->integer('city_id')->default(0)->index()->comment('город');
 			$table->boolean('is_active')->default(false)->index()->comment('признак активности');
             $table->timestamps();
 			$table->softDeletes();

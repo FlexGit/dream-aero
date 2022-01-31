@@ -1,48 +1,49 @@
 <footer class="footer">
 	<div class="container">
 		<div class="footer-menu">
-			<a href="#" class="logo"><img src="/assets/img/logo-footer.webp" alt="logo"></a>
+			<a href="{{ url('/') }}" class="logo">
+				<img src="{{ asset('img/logo-footer.webp') }}" alt="logo">
+			</a>
 			<div class="social">
 				<a href="https://www.facebook.com/dreamaero/"  target="_block"><div class="icon-fb"></div></a>
 				<a href="https://vk.com/dream.aero" target="_block"><div class="icon-vk"></div></a>
 				<a href="https://www.instagram.com/dream.aero/" target="_block"><div class="icon-inst"></div></a>
 				<a href="https://www.youtube.com/channel/UC3huC7ltIlfkNMsz8Jt4qnw" target="_block"><div class="icon-yout"></div></a>
-
 			</div>
 		</div>
 		<div class="footer-menu">
-			<ul class="">
+			<ul>
 				<li class="first">
-					<a href="o-trenazhere" >О тренажере</a>
+					<a href="{{ url('o-trenazhere') }}">О тренажере</a>
 				</li>
 				<li>
-					<a href="podarit-polet" >Подарить полет</a>
+					<a href="{{ url('podarit-polet') }}">Подарить полет</a>
 				</li>
 				<li>
-					<a href="variantyi-poleta" >Варианты полета</a>
+					<a href="{{ url('variantyi-poleta') }}">Варианты полета</a>
 				</li>
 				<li>
-					<a href="/news" >Новости</a>
+					<a href="{{ url('news') }}">Новости</a>
 				</li>
 				<li>
-					<a href="/instruktazh" >Инструктаж</a>
+					<a href="{{ url('instruktazh') }}">Инструктаж</a>
 				</li>
 				<li>
-					<a href="price" >Цены</a></li>
+					<a href="{{ url('price') }}">Цены</a></li>
 				<li>
-					<a href="/galereya" >Галерея</a>
+					<a href="{{ url('galereya') }}">Галерея</a>
 				</li>
 				<li>
-					<a href="/reviews" >Отзывы</a>
+					<a href="{{ url('reviews') }}">Отзывы</a>
 				</li>
 				<li>
-					<a href="contacts" >Контакты</a>
+					<a href="{{ url('contacts') }}">Контакты</a>
 				</li>
 				<li>
-					<a href="pravila" >Правила</a>
+					<a href="{{ url('pravila') }}">Правила</a>
 				</li>
 				<li class="last">
-					<a href="/assets/docs/OFERTA_DREAMAERO_KM_2021.pdf" target=_blank>Публичная оферта</a>
+					<a href="{{ asset('docs/OFERTA_DREAMAERO_KM_2021.pdf') }}" target=_blank>Публичная оферта</a>
 				</li>
 			</ul>
 			<div class="advert" style="font-size: 13px;">Копирование любых материалов сайта запрещено</div>
@@ -50,9 +51,9 @@
 		<div class="footer-menu">
 			<span>
 				<a href="https://www.rossiya-airlines.com/" target="_blank">
-					<img style="width:172px; margin:0px 15px 15px 15px;" src="/assets/img/logo-white.webp">
+					<img style="width: 172px;margin:0 15px 15px 15px;" src="{{ asset('assets/img/logo-white.webp') }}" alt="">
 				</a>
-				<p style="color:white;margin-top: -5px;font-size:9px" >В партнерстве с Авиакомпанией "Россия"</p>
+				<p style="color: white;margin-top: -5px;font-size: 9px">В партнерстве с Авиакомпанией "Россия"</p>
 				<p class="advert" style="margin: 0;text-align: right;margin-top: 45px;">
 					Реклама и сотрудничество: <a href="mailto:ads@dream-aero.com">ads@dream-aero.com</a>
 				</p>
@@ -81,9 +82,11 @@
 	</script>--}}
 
 	<div class="mfp-hide popup ajax_form" id="editform">
-		<div style="text-align: center;"><img src="/assets/img/planes.gif" alt=""></div>
+		<div style="text-align: center;">
+			<img src="{{ url('assets/img/planes.gif') }}" alt="">
+		</div>
 	</div>
-	<div id="main-bronsert" class="mfp-hide popup bronsert ajax_form" >
+	<div id="main-bronsert" class="mfp-hide popup bronsert ajax_form">
 		<input id="brontab" type="radio" name="tabs" checked onclick="mainbron('brontab')">
 		<label for="brontab">Забронировать время</label>
 		<input id="paytab" type="radio" name="tabs" onclick="mainbron('paytab')">
@@ -92,7 +95,7 @@
 			<input name="TITLE" id="serttitle" value="Бронирование полета г. Москва" type="hidden">
 			<p class="popup-description">Заполните пару полей и наш менеджер свяжется с вами, чтобы подтвердить бронь</p>
 			<fieldset>
-				<select required class="popup-input"  id='rtitle'>
+				<select required class="popup-input" id="rtitle">
 					<option value="" disabled selected>Выберите продолжительность полета *</option>
 					<option value='30' >30 мин</option>
 					<option value='60'>60 мин</option>
@@ -167,6 +170,21 @@
 </footer>
 
 <div class="go-up"></div>
+
+<div class="modal fade" id="city_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <form method="post" id="popup-mainpay" class="mfp-hide popup popup-mainpay ajax_form">
 	<p class="popup-description">Приобрести сертификат на полет<br/> в один клик</p>

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
@@ -364,11 +363,16 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 });
 
 Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
-	Route::get('/', [MainController::class, 'home']);
-	Route::get('/o-trenazhere', [MainController::class, 'about']);
-	Route::get('/virtualt', [MainController::class, 'virtualTour']);
-	Route::get('/contacts', [MainController::class, 'contacts']);
-	Route::get('/price', [MainController::class, 'price']);
+	Route::group(['middleware' => ['citycheck']], function () {
+		Route::get('/{alias?}', [MainController::class, 'home']);
+		Route::get('/{alias?}/o-trenazhere', [MainController::class, 'about']);
+		Route::get('/{alias?}/virtualt', [MainController::class, 'virtualTour']);
+		Route::get('/{alias?}/contacts', [MainController::class, 'contacts']);
+		Route::get('/{alias?}/price', [MainController::class, 'price']);
+	});
+	
+	Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
+	Route::get('city/change', [MainController::class, 'changeCity']);
 	
 	Route::get('/pay/{uuid}', [MainController::class, 'payLink']);
 });

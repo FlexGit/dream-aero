@@ -30,6 +30,7 @@ $(document).ready(function(){
 			window.location.hash = '#' + virtid;
 		}
 	}
+
 	function setLocation(curLoc) {
 		try {
 			history.pushState(null,null, curLoc);
@@ -74,7 +75,7 @@ $(document).ready(function(){
 		$('#mainphone').attr('href', '#popup-call-back');
 	}
 
-	$('.lazy').lazy();
+	/*$('.lazy').lazy();*/
 
 	$('.main-menu .dropdown-menu a').click(function() {
 		newContent('tourDIV',hash);
@@ -88,13 +89,14 @@ $(document).ready(function(){
 		return false;
 	});
 
-	$('.ajax_form').append('<input type="text" name="org" value="" class="_org" style="visability: hidden; height: 0;width: 0;padding: 0;border: none;" />');
+	$('.ajax_form').append('<input type="text" name="org" value="" class="_org" style="visibility: hidden; height: 0;width: 0;padding: 0;border: none;" />');
 
 	$('.airbo').append('dfdf');
 
-	$('select').niceSelect();
+	/*$('select').niceSelect();*/
 
 	$objWindow = $(window);
+
 	$('div[data-type="background"]').each(function() {
 		var $bgObj = $(this);
 		$(window).scroll(function(){
@@ -141,28 +143,28 @@ $(document).ready(function(){
         }
 	});
 
-$('body').on('click','.promoblock .rugs-button', function () {
-    $('#err_mess').remove();
-         $.ajax({
-       type:'post',//тип запроса: get,post либо head
-       url:'/admin/dealajax',//url адрес файла обработчика
-       data:{'action':'getpromocode','promocode':$('.promoblock input').val(),'client_city':$('#current_city').text(),'prod_type':$('.promoblock input').attr("data-type")},//параметры запроса
-       response:'text',//тип возвращаемого ответа text либо xml
-       success:function (data) {//возвращаемый результат от сервера
-        var promodata = jQuery.parseJSON(data);
-        if (promodata.promo_id){
-        $('.promoblock .rugs-button').hide();
-        $('.promoblock input').attr("readonly",1);
-        $('.promoblock input').css("padding","15px");
-        $('.promoblock input').css("background-color","#E4E4E4");
-        $('.promoblock').prepend("<div id=\"paypromo\"><input type=\"hidden\" name=\"promoid\"  id=\"promoid\"  value="+promodata.promo_id+"><input type=\"hidden\" id=\"promoamount\" value="+promodata.promo_disc+"><input type=\"hidden\" id=\"promotype\" value="+promodata.promo_curr+"></div>");
-     }
-      else{
-           $('.promoblock').prepend("<p id=\"err_mess\" style=\"color:red\">Промокод либо недействителен, либо истек срок его действия.</p>");
-        }
-        TotalPrice();
-       }
-    });
+	$('body').on('click','.promoblock .rugs-button', function () {
+    	$('#err_mess').remove();
+
+    	$.ajax({
+       		type:'post',//тип запроса: get,post либо head
+       		url:'/admin/dealajax',//url адрес файла обработчика
+       		data:{'action':'getpromocode','promocode':$('.promoblock input').val(),'client_city':$('#current_city').text(),'prod_type':$('.promoblock input').attr("data-type")},//параметры запроса
+       		response:'text',//тип возвращаемого ответа text либо xml
+       		success:function (data) {//возвращаемый результат от сервера
+        		var promodata = jQuery.parseJSON(data);
+        		if (promodata.promo_id){
+        			$('.promoblock .rugs-button').hide();
+        			$('.promoblock input').attr("readonly",1);
+        			$('.promoblock input').css("padding","15px");
+        			$('.promoblock input').css("background-color","#E4E4E4");
+        			$('.promoblock').prepend("<div id=\"paypromo\"><input type=\"hidden\" name=\"promoid\"  id=\"promoid\"  value="+promodata.promo_id+"><input type=\"hidden\" id=\"promoamount\" value="+promodata.promo_disc+"><input type=\"hidden\" id=\"promotype\" value="+promodata.promo_curr+"></div>");
+     			} else {
+           			$('.promoblock').prepend("<p id=\"err_mess\" style=\"color:red\">Промокод либо недействителен, либо истек срок его действия.</p>");
+        		}
+        		TotalPrice();
+       		}
+    	});
     });
     
     $("body").on("click", ".aerbonus_btns #charge", function(){
@@ -172,11 +174,12 @@ $('body').on('click','.promoblock .rugs-button', function () {
         }
         $('#bonus_info').html('<i>Будет начислено <b>'+calculate_mils()+'</b> миль (1 миля за каждые потраченные 50 рублей)</i><input type="hidden" name="bonus_charge" value="'+calculate_mils()+'">');
     });
+
     $("body").on("click", ".aerbonus_btns #use", function(){
         bonus4use();
-        
     });
-        $("body").on("click", ".aerocard .rugs-button", function(){
+
+    $("body").on("click", ".aerocard .rugs-button", function(){
         $('#errmess').remove();
 	     $.ajax({
            type:'post',//тип запроса: get,post либо head
@@ -204,6 +207,7 @@ $('body').on('click','.promoblock .rugs-button', function () {
         $('.aerbonus_btns li').removeClass('active');
 	    $(this).addClass('active');
 	});
+
     $("body").on("click", ".have_promo", function(){
 	    $(this).hide();
 	    $('.aeroflotbonus').hide();
@@ -220,14 +224,13 @@ $('body').on('click','.promoblock .rugs-button', function () {
 	       $('#total-amount,.have_promo').hide();
 	       
 	   }
-	        
-	
 	});
+
 	$('body').on('dp.change',' #datetimepicker', function () {
         getbrontarif();
-});
+	});
 
-$("body").on("click", "#mainbronform button", function(){
+	$("body").on("click", "#mainbronform button", function(){
 	    if (CheckForm('#mainbronform')){
 	    var fd = $("#mainbronform").serialize()+'&clcity='+$('#current_city').text()+'&contextalias='+$('#current_city').attr('data-context')+'&action=submitform&type=bron';
 	    $.ajax({
@@ -244,7 +247,8 @@ $("body").on("click", "#mainbronform button", function(){
 	    });
 	    return false;
 	    }
-});
+	});
+
 	$("body").on("click", "#mainsertform button", function(){
 	   if ($('#tarif').val()=='')
 	       $('.notarif').html('<b>Выберите тариф</b>');
@@ -281,7 +285,8 @@ $("body").on("click", "#mainbronform button", function(){
 	    }
 	     return false;
 	});
-		$("body").on("click", "._1nZS", function(){
+
+	$("body").on("click", "._1nZS", function(){
 	    $(".promoblock").hide();
 	    $('#err_mess').remove();
 	    $('.promoblock input').val("");
@@ -297,12 +302,14 @@ $("body").on("click", "#mainbronform button", function(){
 	    $(".have_promo").show();
     	        
 	});
-     $("body").on("click", ".have_aerocard", function(){
+
+	$("body").on("click", ".have_aerocard", function(){
 	    $(this).hide();
 	     $( "._1nZS" ).trigger( "click" );
 	    $(".aerocard").show();
     	        
 	});
+
 	$("body").on("input", "#bonus_mils", function(){
 	    mils=$(this).val().replace(/\D+/g,"");
 	    console.log(mils+' '+$(this).attr("data-max")+' '+$(this).attr("data-min"));
@@ -317,22 +324,88 @@ $("body").on("click", "#mainbronform button", function(){
             price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
             $('#total-amount').html('Стоимость: <b class="strikethrough">'+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+'</b>'+String((price-$(this).val())).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+' руб');
         }
-        
-          
 	});
+
 	$("body").on("click", "._1nZsS", function(){
 	    
 	    $(".aerocard").hide();
 	    $(".have_aerocard").show();
     	        
 	});
-$('.popup-close').click(function(e){e.preventDefault();$.magnificPopup.close();});$('.popup-with-form').magnificPopup({type:'inline',preloader:false,focus:'#name',removalDelay:300,mainClass:'mfp-fade',callbacks:{beforeOpen:function(){if($(window).width()<700){this.st.focus=false;}else{this.st.focus='#name';}}}});$(document).on('af_complete',function(event,response){var form=response.form;if(form.attr('id')=='popup-payonline'){$.magnificPopup.open({items:{src:"#online-welcome"},type:'inline',preloader:false,removalDelay:3000,mainClass:'mfp-fade'});onlinepay("popup-payonline");}
-else if(form.attr('id')=='popup-mainpay'){$.magnificPopup.open({items:{src:"#online-welcome"},type:'inline',preloader:false,removalDelay:3000,mainClass:'mfp-fade'});onlinepay("popup-mainpay");}
-else if(form.attr('id')=='popup-gensert'){$.magnificPopup.open({items:{src:"#popup-sert"},type:'inline',preloader:false,removalDelay:3000,mainClass:'mfp-fade'});window.open('https://dream-aero.ru/assets/files/'+document.getElementById("sertnum").value+'.jpg');}
-else{$.magnificPopup.open({items:{src:"#popup-welcome"},type:'inline',preloader:false,removalDelay:300,mainClass:'mfp-fade'});}
-setTimeout(function(){$.magnificPopup.close();},40000)
-return false;});var wow=new WOW({boxClass:'wow',animateClass:'animated',offset:0,mobile:false,live:true,scrollContainer:null});wow.init();$(window).on('resize',function(){bodyPadding();});$(window).resize(function(){$('#varsL').height($('#varsR').height());$('#varsL img').height($('#varsR').height());});bodyPadding();});function bodyPadding(){var header=$('.header');var headerHeight=$(header).outerHeight();$('body').css('padding-top',headerHeight);}
-function onlinepay(ID){if(CheckForm('form#'+ID)){var form=document.getElementById(ID);form.action="https://www.payanyway.ru/assistant.htm";document.getElementById('MNT_DESCRIPTION').value=document.getElementById('MNT_TRANSACTION_ID').value+" ("+document.getElementById('on-resname').value+")";form.submit();}}
+
+	$('.popup-close').click(function(e){
+		e.preventDefault();
+		//$.magnificPopup.close();
+	});
+
+	/*$('.popup-with-form').magnificPopup({
+		type:'inline',
+		preloader:false,
+		focus:'#name',
+		removalDelay:300,
+		mainClass:'mfp-fade',
+		callbacks:{beforeOpen:function(){
+			if($(window).width()<700){
+				this.st.focus=false;
+			}else{
+				this.st.focus='#name';
+			}
+		}}
+	});*/
+
+	/*$(document).on('af_complete',function(event,response){
+		var form=response.form;
+		if(form.attr('id')=='popup-payonline'){
+			$.magnificPopup.open({
+				items:{
+					src:"#online-welcome"},
+					type:'inline',
+					preloader:false,
+					removalDelay:3000,
+					mainClass:'mfp-fade'});
+					onlinepay("popup-payonline");
+				}
+	else if(form.attr('id')=='popup-mainpay'){$.magnificPopup.open({items:{src:"#online-welcome"},type:'inline',preloader:false,removalDelay:3000,mainClass:'mfp-fade'});onlinepay("popup-mainpay");}
+	else if(form.attr('id')=='popup-gensert'){$.magnificPopup.open({items:{src:"#popup-sert"},type:'inline',preloader:false,removalDelay:3000,mainClass:'mfp-fade'});window.open('https://dream-aero.ru/assets/files/'+document.getElementById("sertnum").value+'.jpg');}
+	else{$.magnificPopup.open({items:{src:"#popup-welcome"},type:'inline',preloader:false,removalDelay:300,mainClass:'mfp-fade'});}
+
+		setTimeout(function(){
+			$.magnificPopup.close();
+		},40000)
+		return false;
+	});*/
+
+	var wow = new WOW({
+		boxClass:'wow',
+		animateClass:'animated',
+		offset:0,
+		mobile:false,
+		live:true,
+		scrollContainer:null
+	});
+
+	wow.init();
+
+	$(window).on('resize',function(){
+		bodyPadding();
+	});
+
+	$(window).resize(function(){
+		$('#varsL').height($('#varsR').height());
+		$('#varsL img').height($('#varsR').height());
+	});
+
+	bodyPadding();
+});
+
+function bodyPadding(){
+	var header=$('.header');var headerHeight=$(header).outerHeight();$('body').css('padding-top',headerHeight);
+}
+
+function onlinepay(ID){
+	if(CheckForm('form#'+ID)){var form=document.getElementById(ID);form.action="https://www.payanyway.ru/assistant.htm";document.getElementById('MNT_DESCRIPTION').value=document.getElementById('MNT_TRANSACTION_ID').value+" ("+document.getElementById('on-resname').value+")";form.submit();}
+}
+
 function CheckForm(ID){
     $('.error.checkinput').remove();
     $('.error.checkcheckbox').remove();
@@ -349,6 +422,7 @@ function CheckForm(ID){
     });
             if(reqcount>0){return false;}
             else{return true;}}
+
 function getbrontarif(){
     var eventDate=$('#datetimepicker').val();
     if ($("#tarif_time").length)
@@ -383,6 +457,7 @@ function getbrontarif(){
     else if(!eventTrafic)
         $('#total-amount').text('Выберите продолжительность полета для расчета стоимости');
 }
+
 function bonus4use(){
      $.ajax({
        type:'post',//тип запроса: get,post либо head
@@ -410,13 +485,15 @@ function bonus4use(){
        }
 	    });
 }
- function calculate_mils(){
+
+function calculate_mils(){
     if ($('#total-amount .strikethrough').length) 
         price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
      else
         price=parseInt($('#total-amount').text().replace(/\D+/g,""));
     return Math.floor(price/50);
- }
+}
+
 function TotalPrice(){
     $('#submibtn').hide();
      $.ajax({

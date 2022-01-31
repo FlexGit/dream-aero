@@ -45,7 +45,7 @@ class Review extends Model
 	const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'comment' => 'Комментарий',
-		'location_id' => 'Локация',
+		'city_id' => 'Город',
 		'active_to_at' => 'Окончание активности',
 		'is_active' => 'Активность',
 		'data_json' => 'Дополнительная информация',
@@ -65,7 +65,7 @@ class Review extends Model
 	protected $fillable = [
 		'name',
 		'comment',
-		'location_id',
+		'city_id',
 		'is_active',
 	];
 
@@ -82,8 +82,8 @@ class Review extends Model
 		'is_active' => 'boolean',
 	];
 
-	public function location()
+	public function city()
 	{
-		return $this->hasOne('App\Models\Location', 'id', 'location_id');
+		return $this->hasOne(City::class, 'id', 'city_id');
 	}
 }

@@ -14,14 +14,14 @@ if (typeof(gl) == 'undefined') {
 gl = {
 	initialize: function () {
 		if (!jQuery().colorbox) {
-			document.writeln('<style data-compiled-css>@import url(' + glConfig.assetsUrl + 'vendor/colorbox/example1/colorbox.css); </style>');
-			document.writeln('<script src="' + glConfig.assetsUrl + 'vendor/colorbox/jquery.colorbox-min.js"><\/script>');
-			document.writeln('<script src="' + glConfig.assetsUrl + 'vendor/colorbox/i18n/jquery.colorbox-ru.js"><\/script>');
+			document.writeln('<style data-compiled-css>@import url(/public/assets/vendor/colorbox/example1/colorbox.css); </style>');
+			document.writeln('<script src="/public/assets/vendor/colorbox/jquery.colorbox-min.js"><\/script>');
+			document.writeln('<script src="/public/assets/vendor/colorbox/i18n/jquery.colorbox-ru.js"><\/script>');
 		}
 		if (!jQuery().select2) {
-			document.writeln('<style data-compiled-css>@import url(' + glConfig.assetsUrl + 'vendor/select2/dist/css/select2.min.css); </style>');
-			document.writeln('<script src="' + glConfig.assetsUrl + 'vendor/select2/dist/js/select2.min.js"><\/script>');
-			document.writeln('<script src="' + glConfig.assetsUrl + 'vendor/select2/dist/js/i18n/ru.js"><\/script>');
+			document.writeln('<style data-compiled-css>@import url(/public/assets/vendor/select2/dist/css/select2.min.css); </style>');
+			document.writeln('<script src="/public/assets/vendor/select2/dist/js/select2.min.js"><\/script>');
+			document.writeln('<script src="/public/assets/vendor/select2/dist/js/i18n/ru.js"><\/script>');
 		}
 		$(document).ready(function () {
 
@@ -105,9 +105,9 @@ gl.location = {
 		});
 
 		$(document).ready(function () {
-			if (glConfig.modalShow) {
+			/*if (glConfig.modalShow) {*/
 				gl.location.modal();
-			}
+			/*}*/
 		});
 
 	},
@@ -121,7 +121,8 @@ gl.location = {
 	},
 
 	request: function (action, data) {
-	    console.log(1,action,glConfig.actionUrl);
+	    console.log(1, action, glConfig.actionUrl);
+
 		$.ajax({
 			url: glConfig.actionUrl,
 			dataType: 'json',
@@ -138,9 +139,9 @@ gl.location = {
 					document.location.href = response.object.current.data.resource_url;
 				}
 
-				if (glConfig.pageReload) {
+				/*if (glConfig.pageReload) {*/
 					location.reload();
-				}
+				/*}*/
 
 				if (response.object.pls) {
 					var row = response.object.pls;

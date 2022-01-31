@@ -168,11 +168,14 @@
 		<div class="container">
 			<h2 class="block-title">НАША КОМАНДА</h2>
 			<div class="owl-carousel">
-				@foreach($employees as $employee)
-				<div>
-					<div class="img lazy" style="background-image: url('/upload/{{ $employee->data_json['photo_file_path'] }}');"></div>
-					<p>{{ $employee->position['name'] }} <b>{{ $employee['name'] }}</b></p>
-				</div>
+				@foreach($users as $user)
+					@if(!$user->data_json || !array_key_exists('photo_file_path', $user->data_json))
+						@continue
+					@endif
+					<div>
+						<div class="img" style="background-image: url('/upload/{{ $user->data_json['photo_file_path'] }}');"></div>
+						<p>{{ app('\App\Models\User')::ROLES[$user->role] }} <b>{{ $user['lastname'] }} {{ $user['name'] }}</b></p>
+					</div>
 				@endforeach
 			</div>
 		</div>
@@ -263,4 +266,18 @@
 			</div>
 		</div>
 	</div>
+@endsection
+
+@section('css')
+	{{--<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">--}}
+@endsection
+
+@section('js')
+	{{--<script src="{{ asset('js/owl.carousel.js') }}"></script>
+	<script src="{{ asset('js/main.js?v=2.1.3') }}"></script>
+	<script src="{{ asset('js/mainonly.js') }}"></script>--}}
+	<script>
+		$(function() {
+		});
+	</script>
 @endsection
