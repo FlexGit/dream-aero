@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-3.21.0.js"></script>
+    <script src="../docs/js/tryitout-3.23.0.js"></script>
 
-    <script src="../docs/js/theme-default-3.21.0.js"></script>
+    <script src="../docs/js/theme-default-3.23.0.js"></script>
 
 </head>
 
@@ -169,7 +169,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: January 27 2022</li>
+        <li>Last updated: February 1 2022</li>
     </ul>
 </div>
 
@@ -2666,7 +2666,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/cities?api_key=&amp;token=" \
+    --get "http://dev.dream-aero.ru/api/cities?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -2678,7 +2678,6 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 const params = {
     "api_key": "",
-    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -2705,7 +2704,6 @@ $response = $client-&gt;get(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'token'=&gt; '',
         ],
     ]
 );
@@ -2822,16 +2820,6 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="api_key"
-               data-endpoint="GETapi-cities"
-               value=""
-               data-component="query" hidden>
-    <br>
-
-            </p>
-                    <p>
-                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="token"
                data-endpoint="GETapi-cities"
                value=""
                data-component="query" hidden>
@@ -3850,7 +3838,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"et\"
+    \"file_base64\": \"impedit\"
 }"
 </code></pre></div>
 
@@ -3873,7 +3861,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "et"
+    "file_base64": "impedit"
 };
 
 fetch(url, {
@@ -3897,7 +3885,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'et',
+            'file_base64' =&gt; 'impedit',
         ],
     ]
 );
@@ -4064,7 +4052,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="et"
+               value="impedit"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -5893,7 +5881,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 	&quot;data&quot;: {
 		&quot;deal&quot;: {
 			&quot;id&quot;: 1,
-			&quot;number&quot;: &quot;12345&quot;,
+			&quot;number&quot;: &quot;D2200001&quot;,
 			&quot;status&quot;: &quot;Создана&quot;,
 		}
 	}
@@ -6184,6 +6172,16 @@ print_r(json_decode((string) $body));</code></pre></div>
             <b><code>comment</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
                 <input type="text"
                name="comment"
+               data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>score</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="score"
                data-endpoint="POSTapi-deal-create"
                value=""
                data-component="body" hidden>

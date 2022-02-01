@@ -1492,7 +1492,6 @@ class ApiController extends Controller
 	 * City list
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam token string required No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": null,
@@ -1512,28 +1511,11 @@ class ApiController extends Controller
 	 */
 	public function getCities()
 	{
-		$authToken = $this->request->token ?? '';
-		if (!$authToken) {
-			return $this->responseError('Не передан токен авторизации', 400);
-		}
-
-		$token = HelpFunctions::validToken($authToken);
-		if (!$token) {
-			return $this->responseError('Токен авторизации не найден', 400);
-		}
-
-		$contractorId = $token->contractor_id ?? 0;
-		if (!$contractorId) {
-			return $this->responseError('Контрагент не найден', 400);
-		}
-
-		$contractor = Contractor::where('is_active', true)
-			->find($contractorId);
-		if (!$contractor) {
-			return $this->responseError('Контрагент не найден', 400);
-		}
-
 		$cities = City::where('is_active', true)
+			->where('version', City::RU_VERSION)
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
 			->get();
 		
 		if ($cities->isEmpty()) {

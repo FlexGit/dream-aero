@@ -1861,16 +1861,6 @@ paths:
             description: ''
             example: null
         -
-          in: query
-          name: token
-          description: ''
-          example: null
-          required: true
-          schema:
-            type: string
-            description: ''
-            example: null
-        -
           in: header
           name: Content-Type
           description: ''
@@ -2976,7 +2966,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: et
+                  example: impedit
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4303,7 +4293,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": \"Заявка успешно создана\",\n\t\"data\": {\n\t\t\"deal\": {\n\t\t\t\"id\": 1,\n\t\t\t\"number\": \"12345\",\n\t\t\t\"status\": \"Создана\",\n\t\t}\n\t}\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Заявка успешно создана\",\n\t\"data\": {\n\t\t\"deal\": {\n\t\t\t\"id\": 1,\n\t\t\t\"number\": \"D2200001\",\n\t\t\t\"status\": \"Создана\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -4451,6 +4441,10 @@ paths:
                   example: null
                 comment:
                   type: string
+                  description: ''
+                  example: null
+                score:
+                  type: integer
                   description: ''
                   example: null
               required:

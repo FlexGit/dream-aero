@@ -1010,13 +1010,6 @@ endpoints:
         example: null
         type: string
         custom: []
-      token:
-        name: token
-        description: ''
-        required: true
-        example: null
-        type: string
-        custom: []
     bodyParameters: []
     responses:
       -
@@ -1477,7 +1470,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: et
+        example: impedit
         type: string
         custom: []
     responses:
@@ -2360,6 +2353,13 @@ endpoints:
         example: null
         type: string
         custom: []
+      score:
+        name: score
+        description: ''
+        required: false
+        example: null
+        type: integer
+        custom: []
     responses:
       -
         status: 200
@@ -2370,7 +2370,7 @@ endpoints:
           	"data": {
           		"deal": {
           			"id": 1,
-          			"number": "12345",
+          			"number": "D2200001",
           			"status": "Создана",
           		}
           	}

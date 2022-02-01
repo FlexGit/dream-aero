@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "f110323e-4942-476b-80a8-8e8017d3fa96",
+        "_postman_id": "719f3371-19fb-4aec-826c-b0b6d75164de",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -781,15 +781,8 @@
                         "url": {
                             "host": "{{baseUrl}}",
                             "path": "api\/cities",
-                            "query": [
-                                {
-                                    "key": "token",
-                                    "value": "",
-                                    "description": "",
-                                    "disabled": false
-                                }
-                            ],
-                            "raw": "{{baseUrl}}\/api\/cities?token="
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/cities"
                         },
                         "method": "GET",
                         "header": [
@@ -1188,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"et\"}"
+                            "raw": "{\"file_base64\":\"impedit\"}"
                         },
                         "description": ""
                     },
@@ -1844,7 +1837,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0417\u0430\u044f\u0432\u043a\u0430 \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0437\u0434\u0430\u043d\u0430\",\n\t\"data\": {\n\t\t\"deal\": {\n\t\t\t\"id\": 1,\n\t\t\t\"number\": \"12345\",\n\t\t\t\"status\": \"\u0421\u043e\u0437\u0434\u0430\u043d\u0430\",\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0417\u0430\u044f\u0432\u043a\u0430 \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0437\u0434\u0430\u043d\u0430\",\n\t\"data\": {\n\t\t\"deal\": {\n\t\t\t\"id\": 1,\n\t\t\t\"number\": \"D2200001\",\n\t\t\t\"status\": \"\u0421\u043e\u0437\u0434\u0430\u043d\u0430\",\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
