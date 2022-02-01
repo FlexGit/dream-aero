@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "719f3371-19fb-4aec-826c-b0b6d75164de",
+        "_postman_id": "7cee3f4f-c456-47a1-aa0d-33dadc63570c",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -802,7 +802,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t\t}\n\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t\"id\": 1,\n\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"impedit\"}"
+                            "raw": "{\"file_base64\":\"sed\"}"
                         },
                         "description": ""
                     },

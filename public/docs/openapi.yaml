@@ -1878,33 +1878,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: null
-                  data:
-                    -
-                      city:
-                        id: 1
-                        name: Москва
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: null
-                  data:
-                    type: array
-                    example:
-                      -
-                        city:
-                          id: 1
-                          name: Москва
-                    items:
-                      type: object
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t\"id\": 1,\n\t\"name\": \"Москва\"\n\t]\n}"
         400:
           description: 'Bad Request'
           content:
@@ -2966,7 +2943,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: impedit
+                  example: sed
               required:
                 - file_base64
   /api/profile/avatar/delete:
