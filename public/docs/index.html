@@ -2719,12 +2719,14 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: [
-	&quot;id&quot;: 1,
-	&quot;name&quot;: &quot;Москва&quot;
-	]
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Москва&quot;
+        }
+    ]
 }</code>
  </pre>
             <blockquote>
@@ -3834,7 +3836,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"sed\"
+    \"file_base64\": \"voluptatem\"
 }"
 </code></pre></div>
 
@@ -3857,7 +3859,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "sed"
+    "file_base64": "voluptatem"
 };
 
 fetch(url, {
@@ -3881,7 +3883,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'sed',
+            'file_base64' =&gt; 'voluptatem',
         ],
     ]
 );
@@ -4048,7 +4050,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="sed"
+               value="voluptatem"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>

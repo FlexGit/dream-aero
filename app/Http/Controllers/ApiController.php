@@ -1496,8 +1496,10 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 *		"id": 1,
-	 *		"name": "Москва"
+	 *		{
+	 *			"id": 1,
+	 *			"name": "Москва"
+	 *		}
 	 * 	]
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
