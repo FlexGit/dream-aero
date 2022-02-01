@@ -122,21 +122,31 @@ class Product extends Model
 	 */
 	public function format($cityId = 1)
 	{
-		$data = $this->data_json ?? [];
+		$cityProduct = $this->cities()
+			->where('cities_products.is_active', true)
+			->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) return [];
 
-		$cityProduct = $this->cities()->find($cityId);
-		/*$cityProduct = $this->cities()->where('cities_products.is_active', true)->find($cityId);
-		if (!$cityProduct || !$cityProduct->pivot) return 0;*/
+		$price = $cityProduct->pivot->price;
+		if ($cityProduct->pivot->discount) {
+			$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
+		}
+
+		$data = $this->data_json ?? [];
+		$pivotData = json_decode($cityProduct->pivot->data_json, true);
 
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
+			'alias' => $this->alias,
 			'duration' => $this->duration,
-			'price' => $this->pivot->price,
-			'is_hit' => (bool)$this->pivot->is_hit,
+			'price' => round($price),
+			'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
+			'is_hit' => (bool)$cityProduct->pivot->is_hit,
 			'is_unified' => in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]),
-			'is_booking_allow' => array_key_exists('is_booking_allow', $data) ? (bool)$data['is_booking_allow'] : false,
-			'is_certificate_purchase_allow' => array_key_exists('is_certificate_purchase_allow', $data) ? (bool)$data['is_certificate_purchase_allow'] : false,
+			'icon' => (is_array($this->data_json) && array_key_exists('icon', $this->data_json)) ? $this->data_json['icon'] : '',
+			'is_booking_allow' => (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) ? true : false,
+			'is_certificate_purchase_allow' => (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) ? true : false,
 			'tariff_type' => $this->productType ? $this->productType->format() : null,
 			'user' => $this->user ? $this->user->format() : null,
 			/*'city' => $this->city ? $this->city->format() : null,*/

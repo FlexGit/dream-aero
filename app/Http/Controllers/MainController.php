@@ -146,7 +146,7 @@ class MainController extends Controller
 						'duration' => $product->duration,
 						'price' => round($price),
 						'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
-						'is_hit' => $cityProduct->pivot->is_hit,
+						'is_hit' => (bool)$cityProduct->pivot->is_hit,
 						'is_booking_allow' => false,
 						'is_certificate_purchase_allow' => false,
 						'icon' => (is_array($product->data_json) && array_key_exists('icon', $product->data_json)) ? $product->data_json['icon'] : '',
