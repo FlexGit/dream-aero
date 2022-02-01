@@ -1468,7 +1468,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: at
+        example: sit
         type: string
         custom: []
     responses:

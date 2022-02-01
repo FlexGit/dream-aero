@@ -144,7 +144,7 @@ class Product extends Model
 			'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
 			'is_hit' => (bool)$cityProduct->pivot->is_hit,
 			'is_unified' => in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]),
-			'icon' => (is_array($this->data_json) && array_key_exists('icon', $this->data_json)) ? $this->data_json['icon'] : '',
+			'icon' => (is_array($this->data_json) && array_key_exists('icon', $this->data_json)) ? request()->getSchemeAndHttpHost() . '/public/' . $this->data_json['icon'] : null,
 			'is_booking_allow' => (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) ? true : false,
 			'is_certificate_purchase_allow' => (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) ? true : false,
 			'tariff_type' => $this->productType ? $this->productType->format() : null,
