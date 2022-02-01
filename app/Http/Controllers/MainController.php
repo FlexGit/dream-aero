@@ -31,8 +31,9 @@ class MainController extends Controller
 	 */
 	public function home($cityAlias = null)
 	{
+		//dump($cityAlias);exit;
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-		
+
 		$users = User::where('enable', true)
 			->whereIn('city_id', [$city->id, 0])
 			->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
