@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use App\Models\City;
@@ -39,7 +40,7 @@ class MainController extends Controller
 			->get();
 		
 		$reviews = Review::where('is_active', true)
-			->whereIn('city_id', [$city->id, 0])
+			/*->whereIn('city_id', [$city->id, 0])*/
 			->latest()
 			->limit(10)
 			->get();
@@ -48,6 +49,7 @@ class MainController extends Controller
 			'users' => $users,
 			'reviews' => $reviews,
 			'city' => $city,
+			'cityAlias' => $cityAlias,
 		]);
 	}
 	
@@ -112,21 +114,60 @@ class MainController extends Controller
 	 */
 	public function price($cityAlias = null)
 	{
-		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		$productTypes = ProductType::where('is_active', true)
+			->where('version', $city->version)
 			->orderBy('name')
 			->get();
-
-		$products = Product::where('is_active', true)
-			->where('city_id', $city->id)
-			->orderBy('name')
-			->get();
-
+		
+		$cityProducts = $city->products;
+		
+		$products = [];
+		foreach ($productTypes as $productType) {
+			$products[mb_strtoupper($productType->alias)] = [];
+			
+			foreach ($productType->products ?? [] as $product) {
+				foreach ($cityProducts ?? [] as $cityProduct) {
+					if ($product->id != $cityProduct->id) continue;
+					
+					$price = $cityProduct->pivot->price;
+					if ($cityProduct->pivot->discount) {
+						$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
+					}
+					
+					$pivotData = json_decode($cityProduct->pivot->data_json, true);
+					
+					$products[mb_strtoupper($productType->alias)][$product->alias] = [
+						'id' => $product->id,
+						'name' => $product->name,
+						'alias' => $product->alias,
+						'duration' => $product->duration,
+						'price' => round($price),
+						'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
+						'is_hit' => $cityProduct->pivot->is_hit,
+						'is_booking_allow' => false,
+						'is_certificate_purchase_allow' => false,
+						'icon' => (is_array($product->data_json) && array_key_exists('icon', $product->data_json)) ? $product->data_json['icon'] : '',
+					];
+					
+					if (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) {
+						$products[mb_strtoupper($productType->alias)][$product->alias]['is_booking_allow'] = true;
+					}
+					if (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) {
+						$products[mb_strtoupper($productType->alias)][$product->alias]['is_certificate_purchase_allow'] = true;
+					}
+				}
+			}
+		}
+		
+		//dump($products);exit;
+		
 		return view('price', [
 			'productTypes' => $productTypes,
 			'products' => $products,
 			'city' => $city,
+			'cityAlias' => $cityAlias,
 		]);
 	}
 	

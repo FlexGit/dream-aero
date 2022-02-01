@@ -1,4 +1,4 @@
-<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+{{--<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />--}}
 <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet" type="text/css" />
 {{--<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" />

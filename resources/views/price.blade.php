@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="breadcrumbs container"><a href="/">Главная</a> <span>Цены</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(($cityAlias && $city) ? $city->alias : '/') }}">Главная</a> <span>Цены</span></div>
 
 	<article class="article">
 		<div class="container">
@@ -25,262 +25,128 @@
 										<br>
 										Пожалуйста, не забывайте брать с собой сертификат. Без его предъявления обслуживание невозможно.</p>
 								</div>
+								<div class="ab-inf">
+									<p class="bold">Аэрофлот Бонус</p>
+									<p></p><p>«Аэрофлот Бонус» – это программа лояльности авиакомпании Аэрофлот. Участие в программе позволяет копить мили и использовать их на различные премии.</p>
+									<a href="{{ url('news/aeroflot-bonus') }}" target="_blank">Подробнее</a><p></p>
+								</div>
 							</div>
+
 							<div class="right-price">
 								<div class="tabs">
 									<div class="flexdiv">
-										<ul class="tabs__caption"><li class="active"><p>REGULAR</p><small>только будни</small></li><li ><p>ULTIMATE</p><small>без ограничений</small></li></ul>
-									</div>
-
-									<div class="tabs__content active">
-										<p class="stars"> <i>*</i> Сертификат Regular действует с понедельника по пятницу, в праздничные дни, которые выпадают на будние сертификат недействителен. Ultimate - действителен в любой день, включая выходные и праздники. </p>
-
-										@foreach ($tariffs as $tariff)
-											<div class="block-price" >
-												@if ($tariff->is_hit)
-													<span>хит продаж</span>
+										<ul class="tabs__caption">
+											@foreach($productTypes as $productType)
+												@if(!in_array($productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS,]))
+													@continue;
 												@endif
-												<p class="title">REGULAR</p>
-												<p class="time">30 мин</p>
-												<img src="/assets/img/clock30.png" alt="">
-												<div style="position:relative; margin-top:42.5px">
-													<p class="pr">от 5 500 руб*</p>
-												</div>
-												<a id="REGULAR30" data-type="REGULAR" data-time="30" data-title="REGULAR" class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)"><i>бронь/сертификат</i></a>
-											</div>
-										@endforeach
-
-										<div class="block-price">
-											<span>хит продаж</span>
-											<p class="title">REGULAR</p>
-											<p class="time">60 мин</p>
-											<img src="/clock1h.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													от 9 500 руб*</p></div>
-											<a id="REGULAR60"
-											   data-type="REGULAR"
-											   data-time="60"
-											   data-title="REGULAR"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" >
-
-											<p class="title">REGULAR</p>
-											<p class="time">90 мин</p>
-											<img src="/clock90.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													от 13 900 руб*</p></div>
-											<a id="REGULAR90"
-											   data-type="REGULAR"
-											   data-time="90"
-											   data-title="REGULAR"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" >
-
-											<p class="title">REGULAR</p>
-											<p class="time">120 мин</p>
-											<img src="/clock2h.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													от 17 900 руб*</p></div>
-											<a id="REGULAR120"
-											   data-type="REGULAR"
-											   data-time="120"
-											   data-title="REGULAR"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" >
-
-											<p class="title">REGULAR</p>
-											<p class="time">180 мин</p>
-											<img src="/clock3h.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													от 24 900 руб*</p></div>
-											<a id="REGULAR180"
-											   data-type="REGULAR"
-											   data-time="180"
-											   data-title="REGULAR"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" onmouseover="$(this).find('.h4plat').show()" onmouseleave="$(this).find('.h4plat').hide()">
-
-											<p class="title">Platinum</p>
-											<p class="time">150 мин</p>
-											<img src="/present.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													28 900 руб</p></div>
-											<a id="PLATINUM150"
-											   data-type="REGULAR"
-											   data-time="150"
-											   data-title="Platinum"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>сертификат</i></a>
-											<p class="h4plat">Развлекательный курс по лучшим аэропортам мира, 30 минут теории и два часа незабываемых полетов. Срок действия сертификата 1 год. Акции и скидки на тариф не распространяются<br/><a href="/assets/docs/Tarif_Platinum.pdf" target="_blank" >План полетов</a></p>
-
-
-
-										</div><div class="block-price" onmouseover="$(this).find('.h4plat,.nysanta').show()" onmouseleave="$(this).find('.h4plat,.nysanta').hide()">
-											<p class="title">ДЕНИС ОКАНЬ</p>
-											<p class="time">60 мин</p>
-											<img src="/assets/img/vip/okan-min.png" style="width:50%">
-											<div style="position:relative; margin-top:42.5px"><p class="pr">20 000 руб</p></div>
-											<a id="vip_okan" data-time="60"  data-title="ДЕНИС ОКАНЬ"  data-price="20000"
-											   data-saleprice=""
-											   data-sale=""
-											   data-pageid="1512"
-											   data-salebron=""
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#buy-vipsert" onClick="bronsert(this.id)" ><i>СЕРТИФИКАТ</i></a>
-
-											<p class="h4plat">Сертификат на Vip полет с Денисом Оканем. <b>Полеты в Москве</b>. <br/>Два гостя по сертификату, срок действия - год.<br/><a href="/vipflight" target="_blank">Подробнее</a></p>
-
-
-
-										</div><div class="block-price" onmouseover="$(this).find('.h4plat,.nysanta').show()" onmouseleave="$(this).find('.h4plat,.nysanta').hide()">
-											<p class="title">ЛЕТЧИК ЛЕХА</p>
-											<p class="time">60 мин</p>
-											<img src="/assets/img/vip/lekha-min.png" style="width:50%">
-											<div style="position:relative; margin-top:42.5px"><p class="pr">20 000 руб</p></div>
-											<a id="vip_lekha" data-time="60"  data-title="ЛЕТЧИК ЛЕХА"  data-price="20000"
-											   data-saleprice=""
-											   data-sale=""
-											   data-pageid="1512"
-											   data-salebron=""
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#buy-vipsert" onClick="bronsert(this.id)" ><i>СЕРТИФИКАТ</i></a>
-
-
-											<p class="h4plat">Сертификат на Vip полет с Летчиком Лёхой. <b>Полеты в Москве</b>. <br/>Два гостя по сертификату, срок действия - год.<br/><a href="/vipflight" target="_blank">Подробнее</a></p>
-
-
-										</div>
-
-										<p class="stars" style="margin-top: 20px;"><i>*</i> цена действительна по акции “Счастливые часы“ (с пн. по чт., с 13:30 до 17:00)</p>
-
-									</div><div class="tabs__content ">
-										<p class="stars"> <i>*</i> Сертификат Regular действует с понедельника по пятницу, в праздничные дни, которые выпадают на будние сертификат недействителен. Ultimate - действителен в любой день, включая выходные и праздники. </p>
-										<div class="block-price" >
-											<span>хит продаж</span>
-											<p class="title">ULTIMATE</p>
-											<p class="time">30 мин</p>
-											<img src="/assets/img/clock30.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													7 500 руб</p></div>
-											<a id="ULTIMATE30"
-											   data-type="ULTIMATE"
-											   data-time="30"
-											   data-title="ULTIMATE"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" >
-											<span>хит продаж</span>
-											<p class="title">ULTIMATE</p>
-											<p class="time">60 мин</p>
-											<img src="/clock1h.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													12 900 руб</p></div>
-											<a id="ULTIMATE60"
-											   data-type="ULTIMATE"
-											   data-time="60"
-											   data-title="ULTIMATE"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" >
-
-											<p class="title">ULTIMATE</p>
-											<p class="time">90 мин</p>
-											<img src="/clock90.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													18 800 руб</p></div>
-											<a id="ULTIMATE90"
-											   data-type="ULTIMATE"
-											   data-time="90"
-											   data-title="ULTIMATE"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" >
-
-											<p class="title">ULTIMATE</p>
-											<p class="time">120 мин</p>
-											<img src="/clock2h.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													24 200 руб</p></div>
-											<a id="ULTIMATE120"
-											   data-type="ULTIMATE"
-											   data-time="120"
-											   data-title="ULTIMATE"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" >
-
-											<p class="title">ULTIMATE</p>
-											<p class="time">180 мин</p>
-											<img src="/clock3h.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													34 500 руб</p></div>
-											<a id="ULTIMATE180"
-											   data-type="ULTIMATE"
-											   data-time="180"
-											   data-title="ULTIMATE"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>бронь/сертификат</i></a>
-
-
-
-
-										</div><div class="block-price" onmouseover="$(this).find('.h4plat').show()" onmouseleave="$(this).find('.h4plat').hide()">
-
-											<p class="title">Platinum</p>
-											<p class="time">150 мин</p>
-											<img src="/present.png" >
-											<div style="position:relative; margin-top:42.5px"><p class="pr">
-													28 900 руб</p></div>
-											<a id="PLATINUM150"
-											   data-type="ULTIMATE"
-											   data-time="150"
-											   data-title="Platinum"
-											   class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="#online-reservation" onClick="bronsert(this.id)" ><i>Сертификат</i></a>
-											<p class="h4plat">Развлекательный курс по лучшим аэропортам мира, 30 минут теории и два часа незабываемых полетов. Срок действия сертификата 1 год. Акции и скидки на тариф не распространяются<br/><a href="/assets/docs/Tarif_Platinum.pdf" target="_blank" >План полетов</a></p>
-
-
-
-										</div>
-
-										<p class="stars" style="margin-top: 20px;"><i>*</i> цена действительна по акции “Счастливые часы“ (с пн. по чт., с 13:30 до 17:00)</p>
-
+												<li class="@if($productType->alias == app('\App\Models\ProductType')::REGULAR_ALIAS) active @endif">
+													<p style="text-transform: uppercase;">{{ $productType->name }}</p>
+													<small>{{ $productType->alias == app('\App\Models\ProductType')::REGULAR_ALIAS ? 'только будни' : 'без ограничений' }}</small>
+												</li>
+											@endforeach
+										</ul>
 									</div>
 
+									@foreach($productTypes as $productType)
+										@if(!in_array($productType->alias,
+											[
+												app('\App\Models\ProductType')::REGULAR_ALIAS,
+												app('\App\Models\ProductType')::ULTIMATE_ALIAS,
+											]
+										))
+											@continue;
+										@endif
+
+										<div class="tabs__content @if($productType->alias == app('\App\Models\ProductType')::REGULAR_ALIAS) active @endif">
+											<p class="stars"> <i>*</i> Сертификат Regular действует с понедельника по пятницу, в праздничные дни, которые выпадают на будние сертификат недействителен. Ultimate - действителен в любой день, включая выходные и праздники.</p>
+
+											@foreach($products[mb_strtoupper($productType->alias)] ?? [] as $productAlias => $product)
+												<div class="block-price">
+													@if($product['is_hit'])
+														<span>хит продаж</span>
+													@endif
+													<p class="title">
+														{{ $productType->alias }}
+													</p>
+													<p class="time">{{ $product['duration'] }} мин</p>
+													<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+													<div style="position: relative;margin-top: 42.5px">
+														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
+													</div>
+													<a class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="{{ url('#online-reservation') }}" data-type="{{ mb_strtoupper($productType->alias) }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
+												</div>
+											@endforeach
+
+											{{--Platinum--}}
+											@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::COURSES_ALIAS)] ?? [] as $productAlias => $product)
+												@if($productAlias != 'platinum')
+													@continue
+												@endif
+
+												<div class="block-price">
+													@if($product['is_hit'])
+														<span>хит продаж</span>
+													@endif
+													<p class="title">
+														{{ $product['name'] }}
+													</p>
+													<p class="time">{{ $product['duration'] }} мин</p>
+													<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+													<div style="position: relative;margin-top: 42.5px">
+														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
+													</div>
+													<a class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="{{ url('#online-reservation') }}" data-type="{{ mb_strtoupper($productType->alias) }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
+													<p class="h4plat" style="display: none;">
+														Развлекательный курс по лучшим аэропортам мира, 30 минут теории и два часа незабываемых полетов. Срок действия сертификата 1 год. Акции и скидки на тариф не распространяются
+														<br>
+														<a href="{{ url('upload/doc/Tarif_Platinum.pdf') }}" target="_blank">План полетов</a>
+													</p>
+												</div>
+											@endforeach
+
+											{{--VIP полеты--}}
+											@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::VIP_ALIAS)] ?? [] as $productAlias => $product)
+
+												<div class="block-price">
+													@if($product['is_hit'])
+														<span>хит продаж</span>
+													@endif
+													<p class="title">
+														{{ $product['name'] }}
+													</p>
+													<p class="time">{{ $product['duration'] }} мин</p>
+													<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+													<div style="position: relative;margin-top: 42.5px">
+														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
+													</div>
+													<a class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="{{ url('#online-reservation') }}" data-type="{{ mb_strtoupper($productType->alias) }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
+													<p class="h4plat" style="display: none;">
+														Сертификат на Vip полет с Денисом Оканем. <b>Полеты в Москве</b>.
+														<br>
+														Два гостя по сертификату, срок действия - год.
+														<br>
+														<a href="{{ url('vipflight') }}" target="_blank">Подробнее</a>
+													</p>
+												</div>
+											@endforeach
+										</div>
+									@endforeach
 								</div>
 							</div>
 						</div>
+
 						<h4>Подготовьтесь к полёту на 100%</h4>
+
 						<div class="row download">
 							<div class="col-md-4">
-								<p>Выберите&nbsp;<a href="/variantyi-poleta" target="_blank" rel="noopener noreferrer">программу</a>&nbsp;полёта, соответствующую вашим интересам.</p>
-							</div><div class="col-md-4">
-								<p>Внимательно ознакомьтесь с <a href="/pravila">правилами безопасности&nbsp;и посещения</a> тренажера</p>
-							</div><div class="col-md-4">
-								<p>Пройдите&nbsp;<a href="/instruktazh/boeing-737-ng" target="_blank" rel="noopener noreferrer">краткий инструктаж</a>&nbsp;для предварительного ознакомления с оборудованием и техникой полёта.</p>
+								<p>Выберите&nbsp;<a href="{{ url('variantyi-poleta') }}" target="_blank" rel="noopener noreferrer">программу</a>&nbsp;полёта, соответствующую вашим интересам.</p>
+							</div>
+							<div class="col-md-4">
+								<p>Внимательно ознакомьтесь с <a href="{{ url('pravila') }}">правилами безопасности&nbsp;и посещения</a> тренажера</p>
+							</div>
+							<div class="col-md-4">
+								<p>Пройдите&nbsp;<a href="{{ url('instruktazh/boeing-737-ng') }}" target="_blank" rel="noopener noreferrer">краткий инструктаж</a>&nbsp;для предварительного ознакомления с оборудованием и техникой полёта.</p>
 							</div>
 						</div>
 					</div>
@@ -292,130 +158,130 @@
 			<div class="container">
 				<h2 class="block-title">КУРС ПИЛОТА*</h2>
 				<ul class="row bacground">
-					<li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible; animation-duration: 2s; animation-name: fadeInUp;">
-						<div class="ico"><img src="/assets/img/circle.png" alt=""></div>
-						<span id="kurstime">6<br>часов</span>
+					<li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-name: fadeInUp;">
+						<div class="ico"><img src="{{ asset('img/circle.png') }}" alt=""></div>
+						<span>6<br>часов</span>
 						<p>Теории и практики</p>
-					</li><li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible; animation-duration: 2s; animation-name: fadeInUp;">
-						<div class="ico"><img src="/assets/img/docum.png" alt=""></div>
-						<span id="kurstime">Книга пилота/<br>сувенир</span>
+					</li>
+					<li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-name: fadeInUp;">
+						<div class="ico"><img src="{{ asset('img/docum.png') }}" alt=""></div>
+						<span>Книга пилота/<br>сувенир</span>
 						<p>В подарок</p>
-					</li><li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible; animation-duration: 2s; animation-name: fadeInUp;">
-						<div class="ico"><img src="/assets/img/card.png" alt=""></div>
-						<span id="kurstime">Дисконтная карта от 5 %</span>
+					</li>
+					<li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-name: fadeInUp;">
+						<div class="ico"><img src="{{ asset('img/card.png') }}" alt=""></div>
+						<span>Дисконтная карта от 5 %</span>
 						<p>В подарок</p>
-					</li><li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible; animation-duration: 2s; animation-name: fadeInUp;">
-						<div class="ico"><img src="/assets/img/aircraft.png" alt=""></div>
-						<span id="kurstime">Удостоверение виртуального пилота</span>
-
+					</li>
+					<li class="col-md-3 wow fadeInUp" data-wow-delay="0" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-name: fadeInUp;">
+						<div class="ico"><img src="{{ asset('img/aircraft.png') }}" alt=""></div>
+						<span>Удостоверение виртуального пилота</span>
 					</li>
 				</ul>
 			</div>
 		</div>
+
 		<div class="conteiner-min">
 			<div class="tabs2">
 				<ul class="tabs2__caption">
+					@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::COURSES_ALIAS)] ?? [] as $productAlias => $product)
+						@if(!in_array($product['alias'], ['basic', 'advanced', 'expert']))
+							@continue
+						@endif
 
-
-
-					<li class="active">BASIC</li>
-
-					<li >ADVANCED</li>
-
-					<li >EXPERT</li>
-
-
-
-
+						<li @if($product['alias'] == 'basic') class="active" @endif>
+							{{ mb_strtoupper($product['name']) }}
+						</li>
+					@endforeach
 				</ul>
-				<div class="tabs2__content active">
-					<p>После обучения по базовой программе работы на <strong>авиатренажёре</strong>&nbsp;вы узнаете:</p>
-					<ul>
-						<li>Основы аэродинамики</li>
-						<li>Общие принципы устройства самолётов Боинг</li>
-						<li>Основные правила выполнения полётов</li>
-						<li>Научитесь выполнять основные элементы полётных заданий</li>
-						<li>Освоите визуальную и приборную визуализацию при управлении самолётом</li>
-						<li>Научитесь взлетать и производить посадку</li>
-					</ul>
-					<p>Базовый 6-часовой курс стоит 49&nbsp;000 рублей.</p>
+				@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::COURSES_ALIAS)] ?? [] as $productAlias => $product)
+					@if(!in_array($product['alias'], ['basic', 'advanced', 'expert']))
+						@continue
+					@endif
 
-					<div class="block-price ather">
-						<p class="title">КУРС ПИЛОТА (BASIC)</p>
-						<p class="time">6 часов</p>
-						<img src="/kurs.png">
-						<p class="pr">49 000 руб</p>
+					<div class="tabs2__content @if($product['alias'] == 'basic') active @endif">
+						@if($product['alias'] == 'basic')
+							<p>После обучения по базовой программе работы на <strong>авиатренажёре</strong>&nbsp;вы узнаете:</p>
+							<ul>
+								<li>Основы аэродинамики</li>
+								<li>Общие принципы устройства самолётов Боинг</li>
+								<li>Основные правила выполнения полётов</li>
+								<li>Научитесь выполнять основные элементы полётных заданий</li>
+								<li>Освоите визуальную и приборную визуализацию при управлении самолётом</li>
+								<li>Научитесь взлетать и производить посадку</li>
+							</ul>
+							<p>Базовый 6-часовой курс стоит {{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}.</p>
+						@elseif($product['alias'] == 'advanced')
+							<p>Программа Advanced позволит Вам узнать:</p>
+							<ul>
+								<li>научитесь читать и понимать схемы Jeppesen в части касающейся полетов в зоне аэродрома;</li>
+								<li>изучите основные процедуры взаимодействия экипажа в полете согласно SOP (Standard Operating Procedures) авиакомпании;</li>
+								<li>основы аэронавигации;</li>
+								<li>процедуры связанные с выполнением полета по маршруту;</li>
+								<li>авиационный код METAR, анализ погоды перед полетом.</li>
+							</ul>
+							<p>Курс Advanced стоит {{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}.</p>
+							<p>*курс&nbsp;приобретается <strong>только</strong> после прохождения курса&nbsp;Basic</p>
+						@elseif($product['alias'] == 'expert')
+							<p>Программа Expert научит вас:</p>
+							<ul>
+								<li>основам аэродинамики самолета</li>
+								<li>управлять самолетом визуально и по приборам</li>
+								<li>производить посадку в простых и сложных метеоусловиях (как при низкой видимости, так и при сильном ветре)</li>
+								<li>основным процедурам взаимодействия в экипаже согласно SOP (Standard Operating Procedures) авиакомпании</li>
+								<li>использовать схемы Jeppesen в части касающейся полетов в зоне аэродрома</li>
+								<li>использовать FMC для полета по маршруту</li>
+							</ul>
+						@endif
 
-						<a id="BASIC" data-time="6 часов" data-type="kurs" data-title="КУРС ПИЛОТА (BASIC)" data-price="49000" data-crm="BASIC" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form" href="#online-reservation" onClick="bronsert(this.id)" ><i>заказать</i></a>
-
+						@if($product['alias'] != 'advanced')
+							<div class="block-price ather">
+								<p class="title">КУРС ПИЛОТА ({{ mb_strtoupper($product['name']) }})</p>
+								<p class="time">{{ $product['duration'] / 60 }} часов</p>
+								<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+								<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
+								<a class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#online-reservation') }}"><i>заказать</i></a>
+							</div>
+						@endif
 					</div>
-
-				</div><div class="tabs2__content ">
-					<p>Программа Advanced позволит Вам узнать:</p>
-					<ul>
-						<li>научитесь читать и понимать схемы Jeppesen в части касающейся полетов в зоне аэродрома;</li>
-						<li>изучите основные процедуры взаимодействия экипажа в полете согласно SOP (Standard Operating Procedures) авиакомпании;</li>
-						<li>основы аэронавигации;</li>
-						<li>процедуры связанные с выполнением полета по маршруту;</li>
-						<li>авиационный код METAR, анализ погоды перед полетом.</li>
-					</ul>
-					<p>Курс Advanced стоит 49&nbsp;000 рублей.</p>
-					<p>*курс&nbsp;приобретается <strong>только</strong> после прохождения курса&nbsp;Basic</p>
-
-
-				</div><div class="tabs2__content ">
-					<p>Программа Expert научит вас:</p>
-					<ul>
-						<li>основам аэродинамики самолета</li>
-						<li>управлять самолетом визуально и по приборам</li>
-						<li>производить посадку в простых и сложных метеоусловиях (как при низкой видимости, так и при сильном ветре)</li>
-						<li>основным процедурам взаимодействия в экипаже согласно SOP (Standard Operating Procedures) авиакомпании</li>
-						<li>использовать схемы Jeppesen в части касающейся полетов в зоне аэродрома</li>
-						<li>использовать FMC для полета по маршруту</li>
-					</ul>
-
-					<div class="block-price ather">
-						<p class="title">КУРС ПИЛОТА (EXPERT)</p>
-						<p class="time">9 часов</p>
-						<img src="/kurs.png">
-						<p class="pr">67 500 руб</p>
-
-						<a id="EXPERT" data-time="9 часов" data-type="kurs" data-title="КУРС ПИЛОТА (EXPERT)" data-price="67500" data-crm="EXPERT" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form" href="#online-reservation" onClick="bronsert(this.id)" ><i>Заказать</i></a>
-
-					</div>
-
-				</div>
+				@endforeach
 			</div>
 		</div>
-		<div class="letaem">
-			<div class="container">
-				<h2 class="block-title">Видео-курс "Летаем без страха"</h2>
-				<div class="text col-md-7">
-					Вам нужно пройти курс, если:
-					<ul><li>Вы боитесь летать, и это ограничивает вас и ваших близких. Алкоголь и снотворные уже не помогают, страх выматывает физически и морально, отдых превращается в каторгу.</li>
-						<li>Вы страдаете от приступов панических атак или клаустрофобии, беспокоитесь за свой организм, боитесь собственного страха, избегаете лифтов, метро, тоннелей мостов или, возможно, стараетесь не удаляться от дома в одиночку.</li>
-						<li>Перфекционизм, гиперконтроль, низкая самооценка и постоянная самокритика сильно мешают вам в работе и в жизни.</li>
-					</ul>
-					Более 20 часов знаний, методик и техник самоконтроля. Тысячи наших выпускников, воспользовавшись этим курсом, стали летать гораздо спокойнее, чем до него. Некоторые улучшили свои полеты лишь немного. Некоторые избавились от страха совсем. Некоторые стали бортпроводниками и пилотами-любителями.
-					<p>В любом случае, мы еще не видели никого, кто бы сожалел об их прохождении. Вот что есть в этом курсе:</p>
-					<ul>
-						<li>Авиация: метеорология, аэродинамика, человеческий фактор, система обеспечения безопасности и многое другое. </li>
-						<li>Психология страха и паники. Образование и развитие аэрофобии. </li>
-						<li>Физиология страха и методы самоконтроля.</li>
-						<li>Работа с рефлексом “самолет = страх”. </li>
-						<li>Анализ и корректировка ошибок мышления.</li>
-						<li>Мастер-классы: взлет, посадка, турбулентность, перфекционизм и связь между ними, влияние погоды на безопасность полетов, и многое другое... - глубокое раскрытие каждой из тем, каждый мастер-класс продолжается более 2-х часов.</li>
-						<li>Курс "Без паники" - для работы с паническими атаками и клаустрофобией.</li>
-					</ul>
-					<a class="button-pipaluk button-pipaluk-orange" href="/lechenie-aerofobii"><i>Подробнее</i></a>
 
+		@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::COURSES_ALIAS)] ?? [] as $productAlias => $product)
+			@if($product['alias'] != 'fly_no_fear')
+				@continue
+			@endif
+
+			<div class="letaem">
+				<div class="container">
+					<h2 class="block-title">{{ $product['name'] }}</h2>
+					<div class="text col-md-7">
+						Вам нужно пройти курс, если:
+						<ul>
+							<li>Вы боитесь летать, и это ограничивает вас и ваших близких. Алкоголь и снотворные уже не помогают, страх выматывает физически и морально, отдых превращается в каторгу.</li>
+							<li>Вы страдаете от приступов панических атак или клаустрофобии, беспокоитесь за свой организм, боитесь собственного страха, избегаете лифтов, метро, тоннелей мостов или, возможно, стараетесь не удаляться от дома в одиночку.</li>
+							<li>Перфекционизм, гиперконтроль, низкая самооценка и постоянная самокритика сильно мешают вам в работе и в жизни.</li>
+						</ul>
+						Более 20 часов знаний, методик и техник самоконтроля. Тысячи наших выпускников, воспользовавшись этим курсом, стали летать гораздо спокойнее, чем до него. Некоторые улучшили свои полеты лишь немного. Некоторые избавились от страха совсем. Некоторые стали бортпроводниками и пилотами-любителями.
+						<p>В любом случае, мы еще не видели никого, кто бы сожалел об их прохождении. Вот что есть в этом курсе:</p>
+						<ul>
+							<li>Авиация: метеорология, аэродинамика, человеческий фактор, система обеспечения безопасности и многое другое. </li>
+							<li>Психология страха и паники. Образование и развитие аэрофобии. </li>
+							<li>Физиология страха и методы самоконтроля.</li>
+							<li>Работа с рефлексом “самолет = страх”. </li>
+							<li>Анализ и корректировка ошибок мышления.</li>
+							<li>Мастер-классы: взлет, посадка, турбулентность, перфекционизм и связь между ними, влияние погоды на безопасность полетов, и многое другое... - глубокое раскрытие каждой из тем, каждый мастер-класс продолжается более 2-х часов.</li>
+							<li>Курс "Без паники" - для работы с паническими атаками и клаустрофобией.</li>
+						</ul>
+						<a class="button-pipaluk button-pipaluk-orange" href="{{ url('lechenie-aerofobii') }}"><i>Подробнее</i></a>
+					</div>
+					<div class="col-md-5">
+						<a href="{{ url('lechenie-aerofobii') }}"><img style="width: 100%;" src="{{ asset('img/letaemkurs.jpg') }}" alt=""></a>
+					</div>
 				</div>
-				<div class="col-md-5"><a href="/lechenie-aerofobii"><img style="width:100%" src="/assets/img/letaemkurs.jpg"></a></div>
-
-
-
 			</div>
-		</div>
+		@endforeach
 
 		<div class="container">
 			<div class="row free">
@@ -424,19 +290,19 @@
 				</div>
 				<div class="col-md-6">
 					<div class="photo">
-						<img src="/assets/img/img1.jpg">
+						<img src="{{ asset('img/img1.jpg') }}" alt="">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="photo">
-						<img src="/assets/img/img5.jpg">
+						<img src="{{ asset('img/img5.jpg') }}" alt="">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<p>Мы не делаем никаких скидок, но с удовольствием предоставим вам возможность немного полетать в свободное время. Однако, к сожалению, мы не можем гарантировать вам положительное решение на ваш запрос и просим с пониманием отнестись к этому факту. Спасибо.</p>
 				</div>
 				<div class="button-free">
-					<a href="#popup-call-back-new" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form"><i>НАПИСАТЬ НАМ</i></a>
+					<a href="{{ url('#popup-call-back-new') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form"><i>НАПИСАТЬ НАМ</i></a>
 				</div>
 			</div>
 		</div>
@@ -450,7 +316,7 @@
 					<div class="text">
 						<p>Однообразные и скучные вечеринки с нашей помощью превратятся в увлекательный, азартный и познавательный отдых.</p>
 						<p>Каждый участник такой корпоративной вечеринки получит возможность полетать самостоятельно. За действиями коллег можно наблюдать из кресел в кабине или снаружи на внешних экранах. Дух соревнования и общее интересное дело сближает людей, располагает к неформальному дружескому общению.</p>
-						<a class="button-pipaluk button-pipaluk-orange popup-with-form" href="#popup-call-back"><i>ЗАКАЗАТЬ ОБРАТНЫЙ ЗВОНОК</i></a>
+						<a class="button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#popup-call-back') }}"><i>ЗАКАЗАТЬ ОБРАТНЫЙ ЗВОНОК</i></a>
 					</div>
 				</div>
 				<div class="col-md-4 wow fadeInRight" data-wow-delay="1s" data-wow-duration="2s">
@@ -461,11 +327,12 @@
 						<li>Возможна организация соревнований с призами, например на лучшую посадку лайнера.</li>
 						<li>Цена авиасимулятора для корпоративного мероприятия &ndash; от 4 000 на человека.</li>
 					</ul>
-					<p>Смотреть&nbsp;<a href="/galereya/">фотографии</a></p>
+					<p>Смотреть&nbsp;<a href="{{ url('galereya') }}">фотографии</a></p>
 				</div>
 			</div>
 		</div>
 	</div>
+
 	<div class="stock under">
 		<div class="container">
 			<div class="row">
@@ -478,50 +345,50 @@
 				</div>
 				<div class="col-md-4">
 					<div class="img wow fadeInRight" data-wow-delay="1s" data-wow-duration="2s">
-						<img src="/assets/img/plane.png?v1" alt="">
-						<a class="button-pipaluk button-pipaluk-orange popup-with-form" href="#popup-call-back-new"><i>МНЕ ЭТО ИНТЕРЕСНО</i></a>
+						<img src="{{ asset('img/plane.png') }}" alt="">
+						<a class="button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#popup-call-back-new') }}"><i>МНЕ ЭТО ИНТЕРЕСНО</i></a>
 					</div>
-
 				</div>
 			</div>
 		</div>
 	</div>
 @endsection
 
-<script>
-	$(document).ready(function() {
-		$(".fancybox, .various").fancybox({
-			padding: 0,
+@push('css')
+	<link rel="stylesheet" href="{{ asset('css/pricestyle.css') }}">
+@endpush
+
+@push('scripts')
+	<script>
+		$(function(){
+			var date = new Date(), utc;
+			utc = 3;
+			date.setHours( date.getHours() + utc, date.getMinutes() + date.getTimezoneOffset()  );
+
+			$('#datetimepicker').datetimepicker({
+				locale: 'ru',
+				sideBySide: true,
+				stepping: 30,
+				minDate: date,
+				useCurrent: false,
+				disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+			});
+
+			$(document).on('click', 'ul.tabs__caption li:not(.active)', function(e) {
+				$(this).addClass('active').siblings().removeClass('active').closest('div.tabs').find('div.tabs__content').removeClass('active').eq($(this).index()).addClass('active');
+			});
+
+			$(document).on('click', 'ul.tabs2__caption li:not(.active)', function(e) {
+				$(this).addClass('active').siblings().removeClass('active').closest('div.tabs2').find('div.tabs2__content').removeClass('active').eq($(this).index()).addClass('active');
+			});
+
+			$(document).on('mouseover', '.block-price', function(e) {
+				$(this).find('.h4plat').show();
+			});
+
+			$(document).on('mouseleave', '.block-price', function(e) {
+				$(this).find('.h4plat').hide();
+			});
 		});
-	});
-
-	$(function(){
-		if (!localStorage["clbox"]) {
-			$("#delaydiv").delay(8).fadeIn(500);
-		}
-
-		$("#saletxt p").fadeToggle(2000, "linear", fun_name2);
-
-		var date = new Date(), utc;
-		utc = 3;
-		date.setHours( date.getHours() + utc, date.getMinutes() + date.getTimezoneOffset()  );
-
-		$('#datetimepicker').datetimepicker({
-			locale: 'ru',
-			sideBySide: true,
-			stepping: 30,
-			minDate: date,
-			useCurrent: false,
-			disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-		});
-	});
-	function fun_name2(){
-		$("#saletxt p").fadeToggle(2000, "linear", fun_name4);
-	}
-	function fun_name4(){
-		$("#saletxt p").fadeToggle(2000, "linear", fun_name6);
-	}
-	function fun_name6(){
-		$("#saletxt p").fadeToggle(2000, "linear");
-	}
-</script>
+	</script>
+@endpush

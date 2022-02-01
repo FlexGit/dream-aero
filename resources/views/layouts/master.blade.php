@@ -62,6 +62,7 @@
 
 	<!-- CSS -->
 	@include('includes.css')
+	@stack('css')
 	<!-- END CSS -->
 </head>
 <body>
@@ -79,6 +80,7 @@
 
 	<!-- JS -->
 	@include('includes.js')
+	@stack('scripts')
 	<!-- END JS -->
 </body>
 </html>
