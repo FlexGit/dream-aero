@@ -1178,11 +1178,14 @@ class ApiController extends Controller
 	 *		{
 	 * 			"tariff": {
 	 *				"id": 1,
-	 *				"name": "Regular",
+	 *				"name": "Regular 30",
+	 * 				"alias": "regular_30",
 	 *				"duration": 30,
 	 *				"price": 6300,
+	 * 				"currency": "руб",
 	 *				"is_hit": false,
 	 * 				"is_unified": false,
+	 * 				"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
 	 *				"is_booking_allow": true,
 	 *				"is_certificate_purchase_allow": true,
 	 *				"tariff_type": {
@@ -1197,11 +1200,7 @@ class ApiController extends Controller
 	 * 					"photo_file_path": null,
 	 * 					"icon_file_path": null,
 	 * 					"instagram": null
-	 * 				},
-	 *				"city": {
-	 *					"id": 1,
-	 *					"name": "Москва",
-	 *				}
+	 * 				}
 	 * 			}
 	 * 		}
 	 * 	]
@@ -1288,11 +1287,14 @@ class ApiController extends Controller
 	 * 	"data": {
 	 *		"tariff": {
 	 *			"id": 1,
-	 *			"name": "Regular",
+	 *			"name": "Regular 30",
+	 * 			"alias": "regular_30",
 	 *			"duration": 30,
 	 *			"price": 6300,
+	 * 			"currency": "руб",
 	 *			"is_hit": false,
-	 *			"is_unified": false,
+	 * 			"is_unified": false,
+	 * 			"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
 	 *			"is_booking_allow": true,
 	 *			"is_certificate_purchase_allow": true,
 	 *			"tariff_type": {
@@ -1303,15 +1305,11 @@ class ApiController extends Controller
 	 *			},
 	 *			"user": {
 	 *				"id": 1,
-	 *				"name": "John Smith",
-	 *				"photo_file_path": null,
-	 *				"icon_file_path": null,
-	 *				"instagram": null
-	 *			},
-	 *			"city": {
-	 *				"id": 1,
-	 *				"name": "Москва"
-	 *			}
+	 * 				"name": "John Smith",
+	 * 				"photo_file_path": null,
+	 * 				"icon_file_path": null,
+	 * 				"instagram": null
+	 * 			}
 	 *		}
 	 * 	}
 	 * }
@@ -1938,11 +1936,14 @@ class ApiController extends Controller
 	 * 					"time": "12:00:00"
 	 *					"tariff": {
 	 *						"id": 1,
-	 *						"name": "Regular",
+	 *						"name": "Regular 30",
+	 * 						"alias": "regular_30",
 	 *						"duration": 30,
 	 *						"price": 6300,
+	 * 						"currency": "руб",
 	 *						"is_hit": false,
-	 * 						"is_unified": false,
+	 *		 				"is_unified": false,
+	 * 						"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
 	 *						"is_booking_allow": true,
 	 *						"is_certificate_purchase_allow": true,
 	 *						"tariff_type": {
@@ -1954,14 +1955,10 @@ class ApiController extends Controller
 	 *						"user": {
 	 *							"id": 1,
 	 * 							"name": "John Smith",
-	 * 							"photo_file_path": null,
+	 *		 					"photo_file_path": null,
 	 * 							"icon_file_path": null,
 	 * 							"instagram": null
 	 * 						},
-	 *						"city": {
-	 *							"id": 1,
-	 *							"name": "Москва"
-	 *						}
 	 * 					},
 	 *					"location": {
 	 *						"id": 1,

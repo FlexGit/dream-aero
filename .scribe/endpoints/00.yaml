@@ -840,11 +840,14 @@ endpoints:
           	{
           			"tariff": {
           			"id": 1,
-          			"name": "Regular",
+          			"name": "Regular 30",
+          				"alias": "regular_30",
           			"duration": 30,
           			"price": 6300,
+          				"currency": "руб",
           			"is_hit": false,
           				"is_unified": false,
+          				"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
           			"is_booking_allow": true,
           			"is_certificate_purchase_allow": true,
           			"tariff_type": {
@@ -859,11 +862,7 @@ endpoints:
           					"photo_file_path": null,
           					"icon_file_path": null,
           					"instagram": null
-          				},
-          			"city": {
-          				"id": 1,
-          				"name": "Москва",
-          			}
+          				}
           			}
           		}
           	]
@@ -937,11 +936,14 @@ endpoints:
           	"data": {
           	"tariff": {
           		"id": 1,
-          		"name": "Regular",
+          		"name": "Regular 30",
+          			"alias": "regular_30",
           		"duration": 30,
           		"price": 6300,
+          			"currency": "руб",
           		"is_hit": false,
-          		"is_unified": false,
+          			"is_unified": false,
+          			"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
           		"is_booking_allow": true,
           		"is_certificate_purchase_allow": true,
           		"tariff_type": {
@@ -952,15 +954,11 @@ endpoints:
           		},
           		"user": {
           			"id": 1,
-          			"name": "John Smith",
-          			"photo_file_path": null,
-          			"icon_file_path": null,
-          			"instagram": null
-          		},
-          		"city": {
-          			"id": 1,
-          			"name": "Москва"
-          		}
+          				"name": "John Smith",
+          				"photo_file_path": null,
+          				"icon_file_path": null,
+          				"instagram": null
+          			}
           	}
           	}
           }
@@ -1466,7 +1464,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: laudantium
+        example: consequuntur
         type: string
         custom: []
     responses:
@@ -1827,11 +1825,14 @@ endpoints:
           					"time": "12:00:00"
           				"tariff": {
           					"id": 1,
-          					"name": "Regular",
+          					"name": "Regular 30",
+          						"alias": "regular_30",
           					"duration": 30,
           					"price": 6300,
+          						"currency": "руб",
           					"is_hit": false,
-          						"is_unified": false,
+          	 				"is_unified": false,
+          						"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
           					"is_booking_allow": true,
           					"is_certificate_purchase_allow": true,
           					"tariff_type": {
@@ -1843,14 +1844,10 @@ endpoints:
           					"user": {
           						"id": 1,
           							"name": "John Smith",
-          							"photo_file_path": null,
+          	 					"photo_file_path": null,
           							"icon_file_path": null,
           							"instagram": null
           						},
-          					"city": {
-          						"id": 1,
-          						"name": "Москва"
-          					}
           					},
           				"location": {
           					"id": 1,

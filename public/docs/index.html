@@ -2279,39 +2279,38 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-	&quot;success&quot;: true,
-	&quot;message&quot;: null,
-	&quot;data&quot;: [
-	{
-			&quot;tariff&quot;: {
-			&quot;id&quot;: 1,
-			&quot;name&quot;: &quot;Regular&quot;,
-			&quot;duration&quot;: 30,
-			&quot;price&quot;: 6300,
-			&quot;is_hit&quot;: false,
-				&quot;is_unified&quot;: false,
-			&quot;is_booking_allow&quot;: true,
-			&quot;is_certificate_purchase_allow&quot;: true,
-			&quot;tariff_type&quot;: {
-				&quot;id&quot;: 1,
-				&quot;name&quot;: &quot;Regular&quot;,
-				&quot;alias&quot;: &quot;regular&quot;,
-				&quot;description&quot;: null
-			},
-			&quot;user&quot;: {
-				&quot;id&quot;: 1,
-					&quot;name&quot;: &quot;John Smith&quot;,
-					&quot;photo_file_path&quot;: null,
-					&quot;icon_file_path&quot;: null,
-					&quot;instagram&quot;: null
-				},
-			&quot;city&quot;: {
-				&quot;id&quot;: 1,
-				&quot;name&quot;: &quot;Москва&quot;,
-			}
-			}
-		}
-	]
+    &quot;success&quot;: true,
+    &quot;message&quot;: null,
+    &quot;data&quot;: [
+        {
+            &quot;tariff&quot;: {
+                &quot;id&quot;: 1,
+                &quot;name&quot;: &quot;Regular 30&quot;,
+                &quot;alias&quot;: &quot;regular_30&quot;,
+                &quot;duration&quot;: 30,
+                &quot;price&quot;: 6300,
+                &quot;currency&quot;: &quot;руб&quot;,
+                &quot;is_hit&quot;: false,
+                &quot;is_unified&quot;: false,
+                &quot;icon&quot;: &quot;http://dev.dream-aero.ru/upload/product/clock30.webp&quot;,
+                &quot;is_booking_allow&quot;: true,
+                &quot;is_certificate_purchase_allow&quot;: true,
+                &quot;tariff_type&quot;: {
+                    &quot;id&quot;: 1,
+                    &quot;name&quot;: &quot;Regular&quot;,
+                    &quot;alias&quot;: &quot;regular&quot;,
+                    &quot;description&quot;: null
+                },
+                &quot;user&quot;: {
+                    &quot;id&quot;: 1,
+                    &quot;name&quot;: &quot;John Smith&quot;,
+                    &quot;photo_file_path&quot;: null,
+                    &quot;icon_file_path&quot;: null,
+                    &quot;instagram&quot;: null
+                }
+            }
+        }
+    ]
 }</code>
  </pre>
             <blockquote>
@@ -2507,11 +2506,14 @@ print_r(json_decode((string) $body));</code></pre></div>
     &quot;data&quot;: {
         &quot;tariff&quot;: {
             &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Regular&quot;,
+            &quot;name&quot;: &quot;Regular 30&quot;,
+            &quot;alias&quot;: &quot;regular_30&quot;,
             &quot;duration&quot;: 30,
             &quot;price&quot;: 6300,
+            &quot;currency&quot;: &quot;руб&quot;,
             &quot;is_hit&quot;: false,
             &quot;is_unified&quot;: false,
+            &quot;icon&quot;: &quot;http://dev.dream-aero.ru/upload/product/clock30.webp&quot;,
             &quot;is_booking_allow&quot;: true,
             &quot;is_certificate_purchase_allow&quot;: true,
             &quot;tariff_type&quot;: {
@@ -2526,10 +2528,6 @@ print_r(json_decode((string) $body));</code></pre></div>
                 &quot;photo_file_path&quot;: null,
                 &quot;icon_file_path&quot;: null,
                 &quot;instagram&quot;: null
-            },
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
             }
         }
     }
@@ -3836,7 +3834,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"laudantium\"
+    \"file_base64\": \"consequuntur\"
 }"
 </code></pre></div>
 
@@ -3859,7 +3857,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "laudantium"
+    "file_base64": "consequuntur"
 };
 
 fetch(url, {
@@ -3883,7 +3881,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'laudantium',
+            'file_base64' =&gt; 'consequuntur',
         ],
     ]
 );
@@ -4050,7 +4048,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="laudantium"
+               value="consequuntur"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4797,11 +4795,14 @@ print_r(json_decode((string) $body));</code></pre></div>
 					&quot;time&quot;: &quot;12:00:00&quot;
 				&quot;tariff&quot;: {
 					&quot;id&quot;: 1,
-					&quot;name&quot;: &quot;Regular&quot;,
+					&quot;name&quot;: &quot;Regular 30&quot;,
+						&quot;alias&quot;: &quot;regular_30&quot;,
 					&quot;duration&quot;: 30,
 					&quot;price&quot;: 6300,
+						&quot;currency&quot;: &quot;руб&quot;,
 					&quot;is_hit&quot;: false,
-						&quot;is_unified&quot;: false,
+	 				&quot;is_unified&quot;: false,
+						&quot;icon&quot;: &quot;http://dev.dream-aero.ru/upload/product/clock30.webp&quot;,
 					&quot;is_booking_allow&quot;: true,
 					&quot;is_certificate_purchase_allow&quot;: true,
 					&quot;tariff_type&quot;: {
@@ -4813,14 +4814,10 @@ print_r(json_decode((string) $body));</code></pre></div>
 					&quot;user&quot;: {
 						&quot;id&quot;: 1,
 							&quot;name&quot;: &quot;John Smith&quot;,
-							&quot;photo_file_path&quot;: null,
+	 					&quot;photo_file_path&quot;: null,
 							&quot;icon_file_path&quot;: null,
 							&quot;instagram&quot;: null
 						},
-					&quot;city&quot;: {
-						&quot;id&quot;: 1,
-						&quot;name&quot;: &quot;Москва&quot;
-					}
 					},
 				&quot;location&quot;: {
 					&quot;id&quot;: 1,
