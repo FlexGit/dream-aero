@@ -1496,12 +1496,8 @@ class ApiController extends Controller
 	 * 	"success": true,
 	 * 	"message": null,
 	 * 	"data": [
-	 *		{
-	 * 			"city": {
-	 *				"id": 1,
-	 *				"name": "Москва"
-	 * 			}
-	 *		}
+	 *		"id": 1,
+	 *		"name": "Москва"
 	 * 	]
 	 * }
 	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
@@ -1524,9 +1520,7 @@ class ApiController extends Controller
 		
 		$data = [];
 		foreach ($cities as $city) {
-			$data[] = [
-				'city' => $city->format(),
-			];
+			$data[] = $city->format();
 		}
 
 		return $this->responseSuccess(null, $data);

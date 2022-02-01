@@ -1019,12 +1019,8 @@ endpoints:
           	"success": true,
           	"message": null,
           	"data": [
-          	{
-          			"city": {
-          			"id": 1,
-          			"name": "Москва"
-          			}
-          	}
+          	"id": 1,
+          	"name": "Москва"
           	]
           }
         headers: []
@@ -1470,7 +1466,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: impedit
+        example: voluptas
         type: string
         custom: []
     responses:
