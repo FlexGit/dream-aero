@@ -419,12 +419,6 @@ class ApiController extends Controller
 				return $this->responseError('Контрагент с таким E-mail уже существует', 400);
 			}
 
-			/*$contractor = Contractor::where('phone', $this->request->phone)
-				->first();
-			if ($contractor) {
-				return $this->responseError('Контрагент с таким телефоном уже существует', 400);
-			}*/
-
 			$contractor = new Contractor();
 			$contractor->name = $this->request->name;
 			$contractor->email = $this->request->email;
