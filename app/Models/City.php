@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\City
@@ -50,7 +50,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class City extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 
 	const MSK_ALIAS = 'msk';
 	const SPB_ALIAS = 'spb';
@@ -62,7 +62,7 @@ class City extends Model
 	const EKB_ALIAS = 'ekb';
 	const NSK_ALIAS = 'nsk';
 	const KHV_ALIAS = 'khv';
-	const UAE_ALIAS = 'uae';
+	/*const UAE_ALIAS = 'uae';*/
 	const DC_ALIAS = 'dc';
 
 	const RU_VERSION = 'ru';
@@ -72,7 +72,7 @@ class City extends Model
 		self::EN_VERSION,
 	];
 
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
 		'version' => 'Версия сайта',
@@ -85,7 +85,7 @@ class City extends Model
 	];
 
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

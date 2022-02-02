@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Notification
@@ -47,9 +46,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Notification extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'title' => 'Заголовок',
 		'description' => 'Описание',
 		'city_id' => 'Город',
@@ -63,7 +62,7 @@ class Notification extends Model
 	];
 	
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

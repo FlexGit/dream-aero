@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Code
@@ -41,9 +41,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Code extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'code' => 'Код подтверждения',
 		'email' => 'E-mail',
 		'contractor_id' => 'Контрагент',
@@ -56,7 +56,7 @@ class Code extends Model
 	];
 	
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 
 	/**
 	 * The attributes that are mass assignable.

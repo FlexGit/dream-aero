@@ -9,8 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Product
@@ -53,9 +52,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Product extends Model
 {
-    use HasFactory, SoftDeletes, RevisionableTrait;
+    use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
 		'product_type_id' => 'Тип продукта',
@@ -69,7 +68,7 @@ class Product extends Model
 	];
 	
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

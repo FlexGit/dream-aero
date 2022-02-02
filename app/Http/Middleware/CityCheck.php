@@ -14,9 +14,15 @@ class CityCheck
 		
 		$cityAliases = City::where('is_active', true)
 			->pluck('alias')->all();
-		
-		if ($cityAlias && !in_array($request->segment(1), $cityAliases)) {
-			return redirect($cityAlias . '/' . $request->segment(1));
+
+		// если в урл не указан город
+		if (!in_array($request->segment(1), $cityAliases)) {
+			// если есть сессия
+			if ($cityAlias) {
+				return redirect($cityAlias . '/' . $request->segment(1) . '/');
+			}
+			// по умолчанию Москва
+			return redirect(City::MSK_ALIAS . '/' . $request->segment(1) . '/');
 		}
 		
 		return $next($request);

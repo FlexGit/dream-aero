@@ -335,23 +335,25 @@ $(document).ready(function(){
 
 	$('.popup-close').click(function(e){
 		e.preventDefault();
-		//$.magnificPopup.close();
+		$.magnificPopup.close();
 	});
 
-	/*$('.popup-with-form').magnificPopup({
-		type:'inline',
-		preloader:false,
-		focus:'#name',
-		removalDelay:300,
-		mainClass:'mfp-fade',
-		callbacks:{beforeOpen:function(){
-			if($(window).width()<700){
-				this.st.focus=false;
-			}else{
-				this.st.focus='#name';
+	$('.popup-with-form').magnificPopup({
+		type: 'inline',
+		preloader: false,
+		focus: '#name',
+		removalDelay: 300,
+		mainClass: 'mfp-fade',
+		callbacks: {
+			beforeOpen: function() {
+				if ($(window).width() < 700) {
+					this.st.focus = false;
+				} else {
+					this.st.focus = '#name';
+				}
 			}
-		}}
-	});*/
+		}
+	});
 
 	/*$(document).on('af_complete',function(event,response){
 		var form=response.form;

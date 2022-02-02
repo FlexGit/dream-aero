@@ -363,18 +363,22 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 });
 
 Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
-	Route::group(['middleware' => ['citycheck']], function () {
-		Route::get('/{alias?}', [MainController::class, 'home']);
-		Route::get('/{alias?}/o-trenazhere', [MainController::class, 'about']);
-		Route::get('/{alias?}/virtualt', [MainController::class, 'virtualTour']);
-		Route::get('/{alias?}/contacts', [MainController::class, 'contacts']);
-		Route::get('/{alias?}/price', [MainController::class, 'price']);
-	});
-	
+	Route::get('o-trenazhere', [MainController::class, 'about']);
+	Route::get('virtualt', [MainController::class, 'virtualTour']);
+	Route::get('podarit-polet', [MainController::class, 'giftFlight']);
+	Route::get('variantyi-poleta', [MainController::class, 'flightTypes']);
+	Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction']);
+
 	Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
 	Route::get('city/change', [MainController::class, 'changeCity']);
-	
-	Route::get('/pay/{uuid}', [MainController::class, 'payLink']);
+
+	Route::get('pay/{uuid}', [MainController::class, 'payLink']);
+
+	Route::group(['middleware' => ['citycheck']], function () {
+		Route::get('{alias?}', [MainController::class, 'home']);
+		Route::get('{alias?}/price', [MainController::class, 'price']);
+		Route::get('{alias?}/contacts', [MainController::class, 'contacts']);
+	});
 });
 
 Route::domain(env('DOMAIN_EN', 'dream.aero'))->group(function () {

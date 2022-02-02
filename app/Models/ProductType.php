@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\ProductType
@@ -47,7 +46,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class ProductType extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
     const DURATIONS = [
     	30,
@@ -73,7 +72,7 @@ class ProductType extends Model
 		self::EN_VERSION,
 	];
     
-    const ATTRIBUTES = [
+    /*const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
 		'is_tariff' => 'Является тарифом',
@@ -88,7 +87,7 @@ class ProductType extends Model
 	];
  
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

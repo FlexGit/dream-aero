@@ -268,16 +268,15 @@
 	</div>
 @endsection
 
-@section('css')
-	{{--<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">--}}
-@endsection
+@push('css')
+	<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
+@endpush
 
-@section('js')
-	{{--<script src="{{ asset('js/owl.carousel.js') }}"></script>
-	<script src="{{ asset('js/main.js?v=2.1.3') }}"></script>
-	<script src="{{ asset('js/mainonly.js') }}"></script>--}}
+@push('scripts')
+	<script src="{{ asset('js/owl.carousel.js') }}"></script>
+	<script src="{{ asset('js/mainonly.js') }}"></script>
 	<script>
 		$(function() {
 		});
 	</script>
-@endsection
+@endpush

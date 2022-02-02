@@ -8,8 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\User
@@ -65,7 +64,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, SoftDeletes, Notifiable, RevisionableTrait;
+    use HasApiTokens, HasFactory, SoftDeletes, Notifiable/*, RevisionableTrait*/;
 
     const ROLE_SUPERADMIN = 'superadmin';
     const ROLE_ADMIN = 'admin';
@@ -76,7 +75,7 @@ class User extends Authenticatable
 		self::ROLE_PILOT => 'Пилот',
 	];
  
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'name' => 'Имя',
 		'email' => 'E-mail',
 		'email_verified_at' => 'E-mail подтвержден',
@@ -90,7 +89,7 @@ class User extends Authenticatable
 	];
 
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
      * The attributes that are mass assignable.

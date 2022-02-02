@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\PaymentMethod
@@ -37,9 +36,11 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class PaymentMethod extends Model
 {
-    use HasFactory, SoftDeletes, RevisionableTrait;
-	
-	const ATTRIBUTES = [
+    use HasFactory, SoftDeletes/*, RevisionableTrait*/;
+
+	const ONLINE_ALIAS = 'online';
+
+	/*const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
 		'is_active' => 'Признак активности',
@@ -48,10 +49,8 @@ class PaymentMethod extends Model
 		'deleted_at' => 'Удалено',
 	];
 	
-	const ONLINE_ALIAS = 'online';
-
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

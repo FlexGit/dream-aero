@@ -4,12 +4,12 @@
 <script src="{{ asset('js/ajaxjs.js') }}"></script>--}}
 
 {{--<script src="{{ asset('js/jquery.lazy.min.js') }}"></script>--}}
-{{--<script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>--}}
+<script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
 {{--<script src="{{ asset('js/jquery.nice-select.js') }}"></script>--}}
 {{--<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>--}}
 <script src="{{ asset('js/owl.carousel.js') }}"></script>
 {{--<script src="{{ asset('js/scrollspeed.js') }}"></script>--}}
-<script src="{{ asset('js/main.js?v=2.1.3') }}"></script>
+<script src="{{ asset('js/main.js?v=3') }}"></script>
 
 {{--<script src="{{ asset('js/tabs.js') }}"></script>--}}
 {{--<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>--}}

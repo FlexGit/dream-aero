@@ -26,10 +26,10 @@ class MainController extends Controller
 	}
 	
 	/**
-	 * @param null $cityAlias
+	 * @param $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function home($cityAlias = null)
+	public function home($cityAlias)
 	{
 		//dump($cityAlias);exit;
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
@@ -55,17 +55,17 @@ class MainController extends Controller
 	}
 	
 	/**
-	 * @param null $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function about($cityAlias = null)
+	public function about()
 	{
-		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
-		
+		$cityAlias = $this->request->session()->get('cityAlias');
+
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
 		$flightSimulatorTypes = FlightSimulator::get();
 
 		$locations = Location::where('is_active', true)
-			->where('city_id', $city->id)
 			->orderBy('name')
 			->get();
 
@@ -73,47 +73,115 @@ class MainController extends Controller
 			'flightSimulatorTypes' => $flightSimulatorTypes,
 			'locations' => $locations,
 			'city' => $city,
+			'cityAlias' => $cityAlias,
 		]);
 	}
 	
 	/**
-	 * @param null $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function virtualTour($cityAlias = null)
+	public function virtualTour()
 	{
-		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
+		$cityAlias = $this->request->session()->get('cityAlias');
+
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		return view('virtual-tour', [
 			'city' => $city,
+			'cityAlias' => $cityAlias,
 		]);
 	}
-	
+
 	/**
-	 * @param null $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function contacts($cityAlias = null)
+	public function giftFlight()
 	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		return view('gift-flight', [
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function flightTypes()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		return view('flight-types', [
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+
+	/**
+	 * @param null $simulator
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function instruction($simulator = null)
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		if ($simulator && $simulator == 'boeing-737-ng') {
+			return view('instruction-737-ng', [
+				'city' => $city,
+				'cityAlias' => $cityAlias,
+			]);
+		}
+
+		if ($simulator && $simulator == 'airbus-a320') {
+			return view('instruction-a320', [
+				'city' => $city,
+				'cityAlias' => $cityAlias,
+			]);
+		}
+
+		return view('instruction', [
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+
+	/**
+	 * @param $cityAlias
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function contacts($cityAlias)
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
 		
 		$locations = Location::where('is_active', true)
 			->where('city_id', $city->id)
+			->orderByRaw("FIELD(alias, 'afi') DESC")
+			->orderByRaw("FIELD(alias, 'veg') DESC")
 			->orderBy('name')
-			->with('simulator')
 			->get();
 
 		return view('contacts', [
 			'locations' => $locations,
 			'city' => $city,
+			'cityAlias' => $cityAlias,
 		]);
 	}
 	
 	/**
-	 * @param null $cityAlias
+	 * @param $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function price($cityAlias = null)
+	public function price($cityAlias)
 	{
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
@@ -161,8 +229,6 @@ class MainController extends Controller
 				}
 			}
 		}
-		
-		//dump($products);exit;
 		
 		return view('price', [
 			'productTypes' => $productTypes,

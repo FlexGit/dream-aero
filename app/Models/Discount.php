@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Discount
@@ -42,9 +41,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Discount extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'value' => 'Размер скидки',
 		'is_fixed' => 'Фиксированная скидка',
 		'currency_id' => 'Валюта',
@@ -52,7 +51,7 @@ class Discount extends Model
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
-	];
+	];*/
 
 	const DISCOUNT_5_ALIAS = 'percent_5';
 	const DISCOUNT_10_ALIAS = 'percent_10';
@@ -72,8 +71,8 @@ class Discount extends Model
 	const DISCOUNT_FIXED_3000_ALIAS = 'fixed_3000';
 	const DISCOUNT_FIXED_5000_ALIAS = 'fixed_5000';
 
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	/*protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

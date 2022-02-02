@@ -51,7 +51,7 @@
 		<div class="footer-menu">
 			<span>
 				<a href="https://www.rossiya-airlines.com/" target="_blank">
-					<img style="width: 172px;margin:0 15px 15px 15px;" src="{{ asset('assets/img/logo-white.webp') }}" alt="">
+					<img style="width: 172px;margin:0 15px 15px 15px;" src="{{ asset('img/logo-white.webp') }}" alt="">
 				</a>
 				<p style="color: white;margin-top: -5px;font-size: 9px">В партнерстве с Авиакомпанией "Россия"</p>
 				<p class="advert" style="margin: 0;text-align: right;margin-top: 45px;">

@@ -14,10 +14,15 @@
 .contacts-list li.skype:before{background-image:url(../img/skype.png);width:19px;height:20px;}
 .contacts-list li:before{content:'';display:block;position:absolute;left:0;background-color:transparent;background-position:center center;background-size:contain;background-repeat:no-repeat;}
 .contacts-button{width:220px;color:#FF8200;display:block;font-family:"GothamProMedium";font-size:14px;letter-spacing:0.2px;padding:20px 0;text-decoration:none;text-transform:uppercase;transition:all 0.5s ease 0s;vertical-align:top;text-align:center;margin-top:38px;}
-.map{min-height:600px;float:left;width:54%;}
-#map{
-        position: relative;
+.map{
+    min-height:600px;
+    float:left;
+    width:54%;
+    position: relative;
 }
+/*#map{
+        position: relative;
+}*/
 .contacts h3{
     margin-left:55px;
 }

@@ -11,24 +11,24 @@ class RevisionController extends Controller
 	private $request;
 
 	const ENTITIES = [
-		'City' => 'Город',
 		'Contractor' => 'Контрагент',
 		'Deal' => 'Сделка',
+		'Score' => 'Баллы',
+		'Bill' => 'Счет',
+		'Certificate' => 'Сертификат',
+		'Event' => 'Событие',
+		/*'City' => 'Город',
 		'Role' => 'Роль',
 		'FlightSimulator' => 'Авиатренажер',
 		'LegalEntity' => 'Юр.лицо',
 		'Location' => 'Локация',
 		'Promo' => 'Акция',
 		'Promocode' => 'Промокод',
-		'Score' => 'Баллы',
 		'Status' => 'Статус',
 		'Product' => 'Продукт',
 		'ProductType' => 'Тип продукта',
 		'User' => 'Пользователь',
-		'Bill' => 'Счет',
-		'Certificate' => 'Сертификат',
-		'Discount' => 'Скидка',
-		'Event' => 'Событие',
+		'Discount' => 'Скидка',*/
 	];
 	
 	/**
@@ -75,12 +75,12 @@ class RevisionController extends Controller
 			case 'deals':
 			case 'certificates':
 			case 'bills':
-			case 'promocodes':
+			/*case 'promocodes':*/
 				$field = 'number';
 			break;
-			case 'discounts':
+			/*case 'discounts':
 				$field = 'value';
-			break;
+			break;*/
 			case 'scores':
 				$field = 'score';
 			break;

@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Promocode
@@ -46,9 +45,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Promocode extends Model
 {
-    use HasFactory, SoftDeletes, RevisionableTrait;
+    use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
-    const ATTRIBUTES = [
+    /*const ATTRIBUTES = [
 		'number' => 'Номер',
 		'discount_id' => 'Скидка',
 		'active_from_at' => 'Начало активности',
@@ -61,7 +60,7 @@ class Promocode extends Model
 	];
 	
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

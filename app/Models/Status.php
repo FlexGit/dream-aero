@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Status
@@ -48,7 +47,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Status extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
     const STATUS_TYPE_CONTRACTOR = 'contractor';
 	/*const STATUS_TYPE_ORDER = 'order';*/
@@ -65,7 +64,7 @@ class Status extends Model
 		/*Status::STATUS_TYPE_PAYMENT => 'Платеж',*/
 	];
 	
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
 		'type' => 'Сущность',
@@ -80,7 +79,7 @@ class Status extends Model
 	];
 	
 	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.
