@@ -1185,9 +1185,9 @@ class ApiController extends Controller
 	 * 				"currency": "руб",
 	 *				"is_hit": false,
 	 * 				"is_unified": false,
-	 * 				"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
 	 *				"is_booking_allow": true,
 	 *				"is_certificate_purchase_allow": true,
+	 *				"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
 	 *				"tariff_type": {
 	 *					"id": 1,
 	 *					"name": "Regular",
@@ -1197,8 +1197,6 @@ class ApiController extends Controller
 	 *				"user": {
 	 *					"id": 1,
 	 * 					"name": "John Smith",
-	 * 					"photo_file_path": null,
-	 * 					"icon_file_path": null,
 	 * 					"instagram": null
 	 * 				}
 	 * 			}
@@ -1294,9 +1292,9 @@ class ApiController extends Controller
 	 * 			"currency": "руб",
 	 *			"is_hit": false,
 	 * 			"is_unified": false,
-	 * 			"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
 	 *			"is_booking_allow": true,
 	 *			"is_certificate_purchase_allow": true,
+	 *			"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
 	 *			"tariff_type": {
 	 *				"id": 1,
 	 *				"name": "Regular",
@@ -1306,8 +1304,6 @@ class ApiController extends Controller
 	 *			"user": {
 	 *				"id": 1,
 	 * 				"name": "John Smith",
-	 * 				"photo_file_path": null,
-	 * 				"icon_file_path": null,
 	 * 				"instagram": null
 	 * 			}
 	 *		}
@@ -1943,9 +1939,9 @@ class ApiController extends Controller
 	 * 						"currency": "руб",
 	 *						"is_hit": false,
 	 *		 				"is_unified": false,
-	 * 						"icon": "http://dev.dream-aero.ru/upload/product/clock30.webp",
 	 *						"is_booking_allow": true,
 	 *						"is_certificate_purchase_allow": true,
+	 *						"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
 	 *						"tariff_type": {
 	 *							"id": 1,
 	 *							"name": "Regular",
@@ -1955,8 +1951,6 @@ class ApiController extends Controller
 	 *						"user": {
 	 *							"id": 1,
 	 * 							"name": "John Smith",
-	 *		 					"photo_file_path": null,
-	 * 							"icon_file_path": null,
 	 * 							"instagram": null
 	 * 						},
 	 * 					},

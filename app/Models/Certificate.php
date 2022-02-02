@@ -78,6 +78,7 @@ class Certificate extends Model
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
+	protected $dontKeepRevisionOf = ['uuid', 'data_json'];
 	
 	/**
 	 * The attributes that are mass assignable.

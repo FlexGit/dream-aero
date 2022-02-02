@@ -68,7 +68,7 @@ class Bill extends Model
 	const ATTRIBUTES = [
 		'number' => 'Номер счета',
 		'contractor_id' => 'Контрагент',
-		'dela_id' => 'Сделка',
+		'deal_id' => 'Сделка',
 		'payment_method_id' => 'Способ оплаты',
 		'status_id' => 'Статус счета',
 		'amount' => 'Сумма',
@@ -92,6 +92,7 @@ class Bill extends Model
 	
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
+	protected $dontKeepRevisionOf = ['uuid', 'data_json'];
 	
 	/**
 	 * The attributes that are mass assignable.

@@ -169,7 +169,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 1 2022</li>
+        <li>Last updated: February 2 2022</li>
     </ul>
 </div>
 
@@ -2292,9 +2292,9 @@ print_r(json_decode((string) $body));</code></pre></div>
                 &quot;currency&quot;: &quot;руб&quot;,
                 &quot;is_hit&quot;: false,
                 &quot;is_unified&quot;: false,
-                &quot;icon&quot;: &quot;http://dev.dream-aero.ru/upload/product/clock30.webp&quot;,
                 &quot;is_booking_allow&quot;: true,
                 &quot;is_certificate_purchase_allow&quot;: true,
+                &quot;icon_file_path&quot;: &quot;http://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
                 &quot;tariff_type&quot;: {
                     &quot;id&quot;: 1,
                     &quot;name&quot;: &quot;Regular&quot;,
@@ -2304,8 +2304,6 @@ print_r(json_decode((string) $body));</code></pre></div>
                 &quot;user&quot;: {
                     &quot;id&quot;: 1,
                     &quot;name&quot;: &quot;John Smith&quot;,
-                    &quot;photo_file_path&quot;: null,
-                    &quot;icon_file_path&quot;: null,
                     &quot;instagram&quot;: null
                 }
             }
@@ -2513,9 +2511,9 @@ print_r(json_decode((string) $body));</code></pre></div>
             &quot;currency&quot;: &quot;руб&quot;,
             &quot;is_hit&quot;: false,
             &quot;is_unified&quot;: false,
-            &quot;icon&quot;: &quot;http://dev.dream-aero.ru/upload/product/clock30.webp&quot;,
             &quot;is_booking_allow&quot;: true,
             &quot;is_certificate_purchase_allow&quot;: true,
+            &quot;icon_file_path&quot;: &quot;http://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
             &quot;tariff_type&quot;: {
                 &quot;id&quot;: 1,
                 &quot;name&quot;: &quot;Regular&quot;,
@@ -2525,8 +2523,6 @@ print_r(json_decode((string) $body));</code></pre></div>
             &quot;user&quot;: {
                 &quot;id&quot;: 1,
                 &quot;name&quot;: &quot;John Smith&quot;,
-                &quot;photo_file_path&quot;: null,
-                &quot;icon_file_path&quot;: null,
                 &quot;instagram&quot;: null
             }
         }
@@ -3834,7 +3830,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"consequuntur\"
+    \"file_base64\": \"distinctio\"
 }"
 </code></pre></div>
 
@@ -3857,7 +3853,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "consequuntur"
+    "file_base64": "distinctio"
 };
 
 fetch(url, {
@@ -3881,7 +3877,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'consequuntur',
+            'file_base64' =&gt; 'distinctio',
         ],
     ]
 );
@@ -4048,7 +4044,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="consequuntur"
+               value="distinctio"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4802,9 +4798,9 @@ print_r(json_decode((string) $body));</code></pre></div>
 						&quot;currency&quot;: &quot;руб&quot;,
 					&quot;is_hit&quot;: false,
 	 				&quot;is_unified&quot;: false,
-						&quot;icon&quot;: &quot;http://dev.dream-aero.ru/upload/product/clock30.webp&quot;,
 					&quot;is_booking_allow&quot;: true,
 					&quot;is_certificate_purchase_allow&quot;: true,
+					&quot;icon_file_path&quot;: &quot;http://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
 					&quot;tariff_type&quot;: {
 						&quot;id&quot;: 1,
 						&quot;name&quot;: &quot;Regular&quot;,
@@ -4814,8 +4810,6 @@ print_r(json_decode((string) $body));</code></pre></div>
 					&quot;user&quot;: {
 						&quot;id&quot;: 1,
 							&quot;name&quot;: &quot;John Smith&quot;,
-	 					&quot;photo_file_path&quot;: null,
-							&quot;icon_file_path&quot;: null,
 							&quot;instagram&quot;: null
 						},
 					},

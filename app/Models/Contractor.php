@@ -116,6 +116,7 @@ class Contractor extends Authenticatable
 	
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
+	protected $dontKeepRevisionOf = ['password', 'source', 'data_json', 'last_auth_at', 'uuid'];
 	
 	/**
 	 * The attributes that are mass assignable.

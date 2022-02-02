@@ -190,6 +190,7 @@ class UserController extends Controller
 			'middlename' => ['required', 'max:255'],
 			'email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL'],
 			'role' => ['required'],
+			'photo_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -199,11 +200,17 @@ class UserController extends Controller
 				'middlename' => 'Отчество',
 				'email' => 'E-mail',
 				'role' => 'Роль',
+				'photo_file' => 'Фото',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$isPhotoFileUploaded = false;
+		if($photoFile = $this->request->file('photo_file')) {
+			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
+		}
+
 		$user = new User();
 		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
@@ -214,6 +221,11 @@ class UserController extends Controller
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
 		$user->enable = $this->request->enable;
+		$data = [];
+		if ($isPhotoFileUploaded) {
+			$data['photo_file_path'] = 'user/photo/' . $photoFile->getClientOriginalName();
+		}
+		$user->data_json = $data;
 		if (!$user->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -244,6 +256,7 @@ class UserController extends Controller
 			'middlename' => ['required', 'max:255'],
 			'email' => ['required', 'email', 'unique:users,email,' . $id . ',id,deleted_at,NULL'],
 			'role' => ['required'],
+			'photo_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -253,9 +266,15 @@ class UserController extends Controller
 				'middlename' => 'Отчество',
 				'email' => 'E-mail',
 				'role' => 'Роль',
+				'photo_file' => 'Фото',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+
+		$isPhotoFileUploaded = false;
+		if($photoFile = $this->request->file('photo_file')) {
+			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
 		}
 
 		$user->lastname = $this->request->lastname;
@@ -266,6 +285,11 @@ class UserController extends Controller
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
 		$user->enable = $this->request->enable;
+		$data = $user->data_json;
+		if ($isPhotoFileUploaded) {
+			$data['photo_file_path'] = 'user/photo/' . $photoFile->getClientOriginalName();
+		}
+		$user->data_json = $data;
 		if (!$user->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}

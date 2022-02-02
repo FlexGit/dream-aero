@@ -43,6 +43,13 @@
 	</select>
 </div>
 <div class="form-group">
+	<label>Путь к файлу фото</label>
+	<div class="custom-file">
+		<input type="file" class="custom-file-input" id="photo_file" name="photo_file">
+		<label class="custom-file-label" for="photo_file">Выбрать файл</label>
+	</div>
+</div>
+<div class="form-group">
 	<label for="enable">Активность</label>
 	<select class="form-control" id="enable" name="enable">
 		<option value="1" selected>Да</option>

@@ -20,11 +20,11 @@
 			<td>Длительность, мин</td>
 			<td>{{ $product->duration }}</td>
 		</tr>
-		@if((isset($product->productType->data_json['with_user']) ? $product->productType->data_json['with_user'] : '') && (bool)$product->productType->data_json['with_user'])
-		<tr class="odd">
-			<td>Пилот</td>
-			<td>{{ optional($product->user)->name ?? '' }}</td>
-		</tr>
+		@if($product->productType && $product->productType->alias == app('\App\Models\ProductType')::VIP_ALIAS)
+			<tr class="odd">
+				<td>Пилот</td>
+				<td>{{ optional($product->user)->fio() ?? '' }}</td>
+			</tr>
 		@endif
 		<tr class="odd">
 			<td>Описание</td>

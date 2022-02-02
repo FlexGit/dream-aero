@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Validator;
-
 use App\Models\ProductType;
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Validator;
 
 class ProductController extends Controller
 {
@@ -83,10 +83,16 @@ class ProductController extends Controller
 		$productTypes = ProductType::where('is_active', true)
 			->orderBy('name')
 			->get();
-		
+
+		$pilots = User::where('role', User::ROLE_PILOT)
+			->orderBy('lastname')
+			->orderBy('name')
+			->get();
+
 		$VIEW = view('admin.product.modal.edit', [
 			'product' => $product,
 			'productTypes' => $productTypes,
+			'pilots' => $pilots,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -134,8 +140,14 @@ class ProductController extends Controller
 			->orderBy('name')
 			->get();
 
+		$pilots = User::where('role', User::ROLE_PILOT)
+			->orderBy('lastname')
+			->orderBy('name')
+			->get();
+
 		$VIEW = view('admin.product.modal.add', [
 			'productTypes' => $productTypes,
+			'pilots' => $pilots,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -180,8 +192,9 @@ class ProductController extends Controller
 
 		$rules = [
 			'name' => 'required|max:255|unique:products,name',
-			'alias' => 'required|max:255',
+			'alias' => 'required|max:255|unique:products,alias',
 			'product_type_id' => 'required|numeric|min:0|not_in:0',
+			'icon_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -189,21 +202,29 @@ class ProductController extends Controller
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
 				'product_type_id' => 'Тип продукта',
+				'icon_file' => 'Иконка',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$isIconFileUploaded = false;
+		if($iconFile = $this->request->file('icon_file')) {
+			$isIconFileUploaded = $iconFile->move(public_path('upload/product/icon'), $iconFile->getClientOriginalName());
+		}
+
 		$product = new Product();
 		$product->name = $this->request->name;
 		$product->alias = $this->request->alias;
 		$product->product_type_id = $this->request->product_type_id;
 		$product->user_id = $this->request->user_id ?? 0;
 		$product->duration = $this->request->duration ?? 0;
-		$product->data_json = [
-			'description' => $this->request->description ?? null,
-			'icon' => $this->request->icon ?? null,
-		];
+		$data = [];
+		$data['description'] = $this->request->description ?? null;
+		if ($isIconFileUploaded) {
+			$data['icon_file_path'] = 'product/icon/' . $iconFile->getClientOriginalName();
+		}
+		$product->data_json = $data;
 		if (!$product->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -229,9 +250,10 @@ class ProductController extends Controller
 		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		
 		$rules = [
-			'name' => 'required|max:255|unique:cities,name' . $id,
-			'alias' => 'required|max:255',
+			'name' => 'required|max:255|unique:products,name,' . $id,
+			'alias' => 'required|max:255|unique:products,alias,' . $id,
 			'product_type_id' => 'required|numeric|min:0|not_in:0',
+			'icon_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -239,20 +261,28 @@ class ProductController extends Controller
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
 				'product_type_id' => 'Тип продукта',
+				'icon_file' => 'Иконка',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$isIconFileUploaded = false;
+		if($iconFile = $this->request->file('icon_file')) {
+			$isIconFileUploaded = $iconFile->move(public_path('upload/product/icon'), $iconFile->getClientOriginalName());
+		}
+
 		$product->name = $this->request->name;
 		$product->alias = $this->request->alias;
 		$product->product_type_id = $this->request->product_type_id;
 		$product->user_id = $this->request->user_id ?? 0;
 		$product->duration = $this->request->duration ?? 0;
-		$product->data_json = [
-			'description' => $this->request->description ?? null,
-			'icon' => $this->request->icon ?? null,
-		];
+		$data = [];
+		$data['description'] = $this->request->description ?? null;
+		if ($isIconFileUploaded) {
+			$data['icon_file_path'] = 'product/icon/' . $iconFile->getClientOriginalName();
+		}
+		$product->data_json = $data;
 		if (!$product->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}

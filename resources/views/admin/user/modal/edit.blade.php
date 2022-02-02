@@ -44,6 +44,16 @@
 	</select>
 </div>
 <div class="form-group">
+	<label>Путь к файлу фото</label>
+	<div class="custom-file">
+		<input type="file" class="custom-file-input" id="photo_file" name="photo_file">
+		<label class="custom-file-label" for="photo_file">Выбрать файл</label>
+	</div>
+	@if($user->data_json && array_key_exists('photo_file_path', $user->data_json) && $user->data_json['photo_file_path'])
+		<img src="/upload/{{ $user->data_json['photo_file_path'] }}" width="150" alt="">
+	@endif
+</div>
+<div class="form-group">
 	<label for="enable">Активность</label>
 	<select class="form-control" id="enable" name="enable">
 		<option value="1" @if($user->enable) selected @endif>Да</option>

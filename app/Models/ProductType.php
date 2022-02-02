@@ -62,11 +62,12 @@ class ProductType extends Model
     const REGULAR_ALIAS = 'regular';
 	const ULTIMATE_ALIAS = 'ultimate';
 	const COURSES_ALIAS = 'courses';
+	const PLATINUM_ALIAS = 'platinum';
 	const VIP_ALIAS = 'vip';
 	const SERVICES_ALIAS = 'services';
 
 	const RU_VERSION = 'ru';
-	const EN_VERSION = 'ru';
+	const EN_VERSION = 'en';
 	const VERSIONS = [
 		self::RU_VERSION,
 		self::EN_VERSION,

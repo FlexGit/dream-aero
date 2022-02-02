@@ -70,7 +70,9 @@
 														{{ $productType->alias }}
 													</p>
 													<p class="time">{{ $product['duration'] }} мин</p>
-													<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+													@if($product['icon_file_path'])
+														<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
+													@endif
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
 													</div>
@@ -79,11 +81,7 @@
 											@endforeach
 
 											{{--Platinum--}}
-											@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::COURSES_ALIAS)] ?? [] as $productAlias => $product)
-												@if($productAlias != 'platinum')
-													@continue
-												@endif
-
+											@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::PLATINUM_ALIAS)] ?? [] as $productAlias => $product)
 												<div class="block-price">
 													@if($product['is_hit'])
 														<span>хит продаж</span>
@@ -92,7 +90,9 @@
 														{{ $product['name'] }}
 													</p>
 													<p class="time">{{ $product['duration'] }} мин</p>
-													<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+													@if($product['icon_file_path'])
+														<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
+													@endif
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
 													</div>
@@ -107,7 +107,6 @@
 
 											{{--VIP полеты--}}
 											@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::VIP_ALIAS)] ?? [] as $productAlias => $product)
-
 												<div class="block-price">
 													@if($product['is_hit'])
 														<span>хит продаж</span>
@@ -116,7 +115,9 @@
 														{{ $product['name'] }}
 													</p>
 													<p class="time">{{ $product['duration'] }} мин</p>
-													<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+													@if($product['icon_file_path'])
+														<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
+													@endif
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
 													</div>
@@ -238,7 +239,9 @@
 							<div class="block-price ather">
 								<p class="title">КУРС ПИЛОТА ({{ mb_strtoupper($product['name']) }})</p>
 								<p class="time">{{ $product['duration'] / 60 }} часов</p>
-								<img src="{{ '/upload/' . $product['icon'] }}" alt="">
+								@if($product['icon_file_path'])
+									<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
+								@endif
 								<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
 								<a class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#online-reservation') }}"><i>заказать</i></a>
 							</div>

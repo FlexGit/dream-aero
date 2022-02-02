@@ -15,8 +15,9 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->comment('имя пользователя');
-			$table->text('comment')->nullable()->comment('текст отзыва');
+            $table->string('name')->comment('имя');
+			$table->text('comment')->nullable()->comment('комментарий');
+			$table->text('reply')->nullable()->comment('ответ');
 			$table->integer('city_id')->default(0)->index()->comment('город');
 			$table->boolean('is_active')->default(false)->index()->comment('признак активности');
             $table->timestamps();

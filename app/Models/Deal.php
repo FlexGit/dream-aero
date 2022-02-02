@@ -138,6 +138,7 @@ class Deal extends Model
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
+	protected $dontKeepRevisionOf = ['source'];
 	
 	/**
 	 * The attributes that are mass assignable.

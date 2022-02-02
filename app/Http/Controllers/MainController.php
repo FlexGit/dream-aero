@@ -217,7 +217,7 @@ class MainController extends Controller
 						'is_hit' => (bool)$cityProduct->pivot->is_hit,
 						'is_booking_allow' => false,
 						'is_certificate_purchase_allow' => false,
-						'icon' => (is_array($product->data_json) && array_key_exists('icon', $product->data_json)) ? $product->data_json['icon'] : '',
+						'icon_file_path' => (is_array($product->data_json) && array_key_exists('icon_file_path', $product->data_json)) ? $product->data_json['icon_file_path'] : '',
 					];
 					
 					if (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) {

@@ -161,4 +161,27 @@ class User extends Authenticatable
 	{
 		return $this->belongsTo(Location::class, 'location_id', 'id');
 	}
+
+	/**
+	 * @return string
+	 */
+	public function fio()
+	{
+		return $this->lastname . ' ' . $this->name . ' ' . $this->middlename;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function format()
+	{
+		$data = $this->data_json ?? [];
+
+		return [
+			'id' => $this->id,
+			'fullname' => $this->fio(),
+			/*'photo_file_path' => (array_key_exists('photo_file_path', $data) && $data['photo_file_path']) ? \URL::to('/upload/' . $data['photo_file_path']) : null,*/
+			'instagram' => array_key_exists('instagram', $data) ? $data['instagram'] : null,
+		];
+	}
 }
