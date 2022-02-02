@@ -217,6 +217,29 @@
 			$(document).on('change', '#product_type_id', function(e) {
 				getDurationByProductType(0);
 			});
+
+			$(document).on('click', '.js-product-icon-delete', function(e) {
+				if (!confirm('Вы уверены?')) {
+					return false;
+				}
+
+				$div = $(this).closest('div');
+
+				$.ajax({
+					url: '/product/' + $(this).data('id') + '/icon/delete',
+					type: 'PUT',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						$div.hide();
+						toastr.success('Файл успешно удален');
+					}
+				});
+			});
 		});
 	</script>
 @stop

@@ -313,4 +313,27 @@ class ProductController extends Controller
 		
 		return response()->json(['status' => 'success']);
 	}
+
+	public function deleteIcon($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
+		$product = Product::find($id);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+
+		$data = $product->data_json;
+		$data['icon_file_path'] = '';
+		$product->data_json = $data;
+		if (!$product->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+
+		return response()->json(['status' => 'success']);
+	}
 }

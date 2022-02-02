@@ -297,6 +297,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::post('product', [ProductController::class, 'store']);
 		Route::put('product/{id}', [ProductController::class, 'update']);
 		Route::delete('product/{id}', [ProductController::class, 'delete']);
+		Route::put('product/{id}/icon/delete', [ProductController::class, 'deleteIcon']);
 
 		Route::get('product/add', [ProductController::class, 'add']);
 		Route::get('product/{id}/edit', [ProductController::class, 'edit']);

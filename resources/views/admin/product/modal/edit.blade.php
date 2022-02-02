@@ -1,4 +1,5 @@
 <input type="hidden" id="id" name="id" value="{{ $product->id }}">
+
 <div class="form-group">
 	<label for="name">Наименование</label>
 	<input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" placeholder="Наименование">
@@ -39,7 +40,11 @@
 		<label class="custom-file-label" for="icon_file">Выбрать файл</label>
 	</div>
 	@if($product->data_json && array_key_exists('icon_file_path', $product->data_json) && $product->data_json['icon_file_path'])
-		<img src="/upload/{{ $product->data_json['icon_file_path'] }}" width="150" alt="">
+		<div>
+			<img src="/upload/{{ $product->data_json['icon_file_path'] }}" width="150" alt="">
+			<br>
+			<small>[<a href="javascript:void(0)" class="js-product-icon-delete" data-id="{{ $product->id }}">удалить</a>]</small>
+		</div>
 	@endif
 </div>
 <div class="form-group">
