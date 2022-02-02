@@ -277,7 +277,7 @@ class ProductController extends Controller
 		$product->product_type_id = $this->request->product_type_id;
 		$product->user_id = $this->request->user_id ?? 0;
 		$product->duration = $this->request->duration ?? 0;
-		$data = [];
+		$data = $product->data_json;
 		$data['description'] = $this->request->description ?? null;
 		if ($isIconFileUploaded) {
 			$data['icon_file_path'] = 'product/icon/' . $iconFile->getClientOriginalName();
