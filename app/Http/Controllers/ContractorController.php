@@ -6,13 +6,11 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Score;
 use App\Models\Status;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Validator;
-
 use App\Models\Contractor;
 use App\Models\City;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Validator;
 
 class ContractorController extends Controller
 {

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Location;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
-use App\Models\User;
 
 class UserController extends Controller
 {
@@ -24,7 +24,14 @@ class UserController extends Controller
 	 */
 	public function index()
 	{
+		$cities = City::orderBy('version', 'desc')
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->get();
+
 		return view('admin.user.index', [
+			'cities' => $cities,
 		]);
 	}
 	
@@ -37,11 +44,16 @@ class UserController extends Controller
 			abort(404);
 		}
 
-		$users = User::orderBy('city_id')
-			->orderBy('location_id')
-			->orderBy('lastname')
-			->orderBy('name')
-			->get();
+		$id = $this->request->id ?? 0;
+
+		$users = User::orderBy('lastname')->orderBy('name');
+		if ($this->request->filter_city_id) {
+			$users = $users->where('city_id', $this->request->filter_city_id);
+		}
+		if ($id) {
+			$users = $users->where('id', '<', $id);
+		}
+		$users = $users->limit(20)->get();
 
 		$roles = User::ROLES;
 		

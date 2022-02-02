@@ -21,9 +21,23 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter d-sm-flex">
-						<div class="form-group align-self-end text-right ml-auto">
-							<a href="javascript:void(0)" data-toggle="modal" data-url="/user/add" data-action="/user" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+					<div class="table-filter mb-2">
+						<div class="d-sm-flex">
+							<div class="form-group">
+								<label for="filter_city_id">Город</label>
+								<select class="form-control" id="filter_city_id" name="filter_city_id">
+									<option value="0">Все</option>
+									@foreach($cities ?? [] as $city)
+										@if(!$city->is_active)
+											@continue
+										@endif
+										<option value="{{ $city->id }}">{{ $city->name }}</option>
+									@endforeach
+								</select>
+							</div>
+							<div class="form-group align-self-end ml-auto pl-2">
+								<a href="javascript:void(0)" data-toggle="modal" data-url="/user/add" data-action="/user" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
+							</div>
 						</div>
 					</div>
 					<table id="userTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
@@ -77,15 +91,20 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList() {
+			function getList(loadMore) {
 				var $selector = $('#userTable tbody');
 
-				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
+				var $tr = $('tr.odd[data-id]:last'),
+					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
 
 				$.ajax({
 					url: "{{ route('userList') }}",
 					type: 'GET',
 					dataType: 'json',
+					data: {
+						"filter_city_id": $('#filter_city_id').val(),
+						"id": id
+					},
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
@@ -93,15 +112,22 @@
 						}
 
 						if (result.html) {
-							$selector.html(result.html);
+							if (loadMore) {
+								$selector.append(result.html);
+							} else {
+								$selector.html(result.html);
+							}
+							$(window).data('ajaxready', true);
 						} else {
-							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							if (!id) {
+								$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
+							}
 						}
 					}
 				})
 			}
 
-			getList();
+			getList(false);
 
 			$(document).on('click', '[data-url]', function(e) {
 				e.preventDefault();
@@ -182,10 +208,14 @@
 						}
 
 						$('#modal').modal('hide');
-						getList();
+						getList(false);
 						toastr.success(msg);
 					}
 				});
+			});
+
+			$(document).on('change', '#filter_city_id', function(e) {
+				getList(false);
 			});
 
 			$(document).on('change', '#city_id', function() {
@@ -201,6 +231,28 @@
 				$('#location_id option').hide();
 				$('#location_id option[data-city_id="' + cityId + '"]').show();
 			}
+
+			$.fn.isInViewport = function () {
+				let elementTop = $(this).offset().top;
+				let elementBottom = elementTop + $(this).outerHeight();
+
+				let viewportTop = $(window).scrollTop();
+				let viewportBottom = viewportTop + $(window).height();
+
+				return elementBottom > viewportTop && elementTop < viewportBottom;
+			};
+
+			$(window).on('scroll', function() {
+				if ($(window).data('ajaxready') === false) return;
+
+				var $tr = $('tr.odd[data-id]:last');
+				if (!$tr.length) return;
+
+				if ($tr.isInViewport()) {
+					$(window).data('ajaxready', false);
+					getList(true);
+				}
+			});
 		});
 	</script>
 @stop
