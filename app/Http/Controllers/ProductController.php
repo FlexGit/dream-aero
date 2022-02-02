@@ -328,7 +328,7 @@ class ProductController extends Controller
 		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 
 		$data = $product->data_json;
-		$data['icon_file_path'] = '';
+		unset($data['icon_file_path']);
 		$product->data_json = $data;
 		if (!$product->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
