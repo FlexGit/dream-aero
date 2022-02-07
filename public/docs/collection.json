@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "0c0b0a58-8cf5-4299-ac00-a290dd50f093",
+        "_postman_id": "a6bb7b18-8dd2-41cd-bf9f-b49337746522",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -131,7 +131,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u041f\u0440\u043e\u0444\u0438\u043b\u044c \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u041f\u0440\u043e\u0444\u0438\u043b\u044c \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -341,7 +341,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -447,13 +447,13 @@
                             "path": "api\/password\/reset",
                             "query": [
                                 {
-                                    "key": "contractor_id",
+                                    "key": "contractor_uuid",
                                     "value": "",
                                     "description": "",
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/password\/reset?contractor_id="
+                            "raw": "{{baseUrl}}\/api\/password\/reset?contractor_uuid="
                         },
                         "method": "POST",
                         "header": [
@@ -476,7 +476,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u041f\u0430\u0440\u043e\u043b\u044c \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0438\u0437\u043c\u0435\u043d\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u041f\u0430\u0440\u043e\u043b\u044c \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0438\u0437\u043c\u0435\u043d\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -545,7 +545,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -1123,7 +1123,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0410\u043a\u043a\u0430\u0443\u043d\u0442 \u043a\u043e\u043d\u0442\u0440\u0430\u0433\u0435\u043d\u0442\u0430 \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u043e\u0447\u0438\u0449\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0410\u043a\u043a\u0430\u0443\u043d\u0442 \u043a\u043e\u043d\u0442\u0440\u0430\u0433\u0435\u043d\u0442\u0430 \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u043e\u0447\u0438\u0449\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"eligendi\"}"
+                            "raw": "{\"file_base64\":\"dolore\"}"
                         },
                         "description": ""
                     },
@@ -1189,7 +1189,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0424\u0430\u0439\u043b \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0424\u0430\u0439\u043b \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -1258,7 +1258,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0424\u0430\u0439\u043b \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0443\u0434\u0430\u043b\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u0424\u0430\u0439\u043b \u0443\u0441\u043f\u0435\u0448\u043d\u043e \u0443\u0434\u0430\u043b\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -1558,7 +1558,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u041a\u043e\u0434 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\u041a\u043e\u0434 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u041c\u043e\u0441\u043a\u0432\u0430\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"\u0417\u043e\u043b\u043e\u0442\u043e\u0439\",\n\t\t\t\"is_new\": false\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {

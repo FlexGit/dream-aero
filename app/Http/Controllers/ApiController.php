@@ -248,6 +248,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
@@ -345,6 +346,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
@@ -482,7 +484,7 @@ class ApiController extends Controller
 	 * Password change
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
+	 * @queryParam contractor_uuid int No-example
 	 * @bodyParam password string required Password (md5). No-example
 	 * @bodyParam password_confirmation string required Password confirmation (md5). No-example
 	 * @response scenario=success {
@@ -491,6 +493,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
@@ -520,8 +523,8 @@ class ApiController extends Controller
 	 */
 	public function resetPassword()
 	{
-		$contractorId = $this->request->contractor_id ?? 0;
-		if (!$contractorId) {
+		$contractorUuid = $this->request->contractor_uuid ?? '';
+		if (!$contractorUuid) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
@@ -548,7 +551,7 @@ class ApiController extends Controller
 		$password = $this->request->password;
 
 		$contractor = Contractor::where('is_active', true)
-			->find($contractorId);
+			->where('uuid', $contractorUuid);
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
@@ -576,6 +579,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
@@ -650,6 +654,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
@@ -812,6 +817,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
@@ -892,6 +898,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",
@@ -1023,6 +1030,7 @@ class ApiController extends Controller
 	 * 	"data": {
 	 * 		"contractor": {
 	 * 			"id": 1,
+	 * 			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
 	 * 			"name": "John",
 	 * 			"lastname": "Smith",
 	 * 			"email": "john.smith@gmail.com",

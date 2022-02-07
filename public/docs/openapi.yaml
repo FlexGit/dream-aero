@@ -217,6 +217,7 @@ paths:
                   data:
                     contractor:
                       id: 1
+                      uuid: 23560720-8865-11ec-9359-c58c92371be4
                       name: John
                       lastname: Smith
                       email: john.smith@gmail.com
@@ -245,6 +246,7 @@ paths:
                     example:
                       contractor:
                         id: 1
+                        uuid: 23560720-8865-11ec-9359-c58c92371be4
                         name: John
                         lastname: Smith
                         email: john.smith@gmail.com
@@ -719,7 +721,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t\t\"is_new\": false\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t\t\"is_new\": false\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -995,7 +997,7 @@ paths:
             example: null
         -
           in: query
-          name: contractor_id
+          name: contractor_uuid
           description: ''
           example: null
           required: false
@@ -1030,6 +1032,7 @@ paths:
                   data:
                     contractor:
                       id: 1
+                      uuid: 23560720-8865-11ec-9359-c58c92371be4
                       name: John
                       lastname: Smith
                       email: john.smith@gmail.com
@@ -1058,6 +1061,7 @@ paths:
                     example:
                       contractor:
                         id: 1
+                        uuid: 23560720-8865-11ec-9359-c58c92371be4
                         name: John
                         lastname: Smith
                         email: john.smith@gmail.com
@@ -1226,6 +1230,7 @@ paths:
                   data:
                     contractor:
                       id: 1
+                      uuid: 23560720-8865-11ec-9359-c58c92371be4
                       name: John
                       lastname: Smith
                       email: john.smith@gmail.com
@@ -1254,6 +1259,7 @@ paths:
                     example:
                       contractor:
                         id: 1
+                        uuid: 23560720-8865-11ec-9359-c58c92371be4
                         name: John
                         lastname: Smith
                         email: john.smith@gmail.com
@@ -2705,6 +2711,7 @@ paths:
                   data:
                     contractor:
                       id: 1
+                      uuid: 23560720-8865-11ec-9359-c58c92371be4
                       name: John
                       lastname: Smith
                       email: john.smith@gmail.com
@@ -2733,6 +2740,7 @@ paths:
                     example:
                       contractor:
                         id: 1
+                        uuid: 23560720-8865-11ec-9359-c58c92371be4
                         name: John
                         lastname: Smith
                         email: john.smith@gmail.com
@@ -2883,6 +2891,7 @@ paths:
                   data:
                     contractor:
                       id: 1
+                      uuid: 23560720-8865-11ec-9359-c58c92371be4
                       name: John
                       lastname: Smith
                       email: john.smith@gmail.com
@@ -2911,6 +2920,7 @@ paths:
                     example:
                       contractor:
                         id: 1
+                        uuid: 23560720-8865-11ec-9359-c58c92371be4
                         name: John
                         lastname: Smith
                         email: john.smith@gmail.com
@@ -3019,7 +3029,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: eligendi
+                  example: dolore
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3074,6 +3084,7 @@ paths:
                   data:
                     contractor:
                       id: 1
+                      uuid: 23560720-8865-11ec-9359-c58c92371be4
                       name: John
                       lastname: Smith
                       email: john.smith@gmail.com
@@ -3102,6 +3113,7 @@ paths:
                     example:
                       contractor:
                         id: 1
+                        uuid: 23560720-8865-11ec-9359-c58c92371be4
                         name: John
                         lastname: Smith
                         email: john.smith@gmail.com
@@ -3699,6 +3711,7 @@ paths:
                   data:
                     contractor:
                       id: 1
+                      uuid: 23560720-8865-11ec-9359-c58c92371be4
                       name: John
                       lastname: Smith
                       email: john.smith@gmail.com
@@ -3727,6 +3740,7 @@ paths:
                     example:
                       contractor:
                         id: 1
+                        uuid: 23560720-8865-11ec-9359-c58c92371be4
                         name: John
                         lastname: Smith
                         email: john.smith@gmail.com

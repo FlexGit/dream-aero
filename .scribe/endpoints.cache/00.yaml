@@ -162,6 +162,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
@@ -426,6 +427,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
@@ -561,8 +563,8 @@ endpoints:
         example: null
         type: string
         custom: []
-      contractor_id:
-        name: contractor_id
+      contractor_uuid:
+        name: contractor_uuid
         description: ''
         required: false
         example: null
@@ -593,6 +595,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
@@ -681,6 +684,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
@@ -1385,6 +1389,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
@@ -1462,7 +1467,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: eligendi
+        example: dolore
         type: string
         custom: []
     responses:
@@ -1475,6 +1480,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
@@ -1563,6 +1569,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",
@@ -1932,6 +1939,7 @@ endpoints:
           	"data": {
           		"contractor": {
           			"id": 1,
+          			"uuid": "23560720-8865-11ec-9359-c58c92371be4",
           			"name": "John",
           			"lastname": "Smith",
           			"email": "john.smith@gmail.com",

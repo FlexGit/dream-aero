@@ -241,6 +241,7 @@ class Contractor extends Authenticatable
 
 		return [
 			'id' => $this->id,
+			'uuid' => $this->uuid,
 			'name' => $this->name,
 			'lastname' => $this->lastname,
 			'email' => $this->email,
