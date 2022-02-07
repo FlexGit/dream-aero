@@ -58,11 +58,11 @@
 					<div title="Статус">
 						<i class="fas fa-medal" style="color: {{ array_key_exists('color', $status->data_json ?? []) ? $status->data_json['color'] : 'none' }};"></i> {{ $status->name }}
 					</div>
-				@endif
-				@if($status->discount)
-					<div title="Скидка">
-						<i class="fas fa-user-tag"></i> {{ $status->discount->valueFormatted() }}
-					</div>
+					@if($status->discount)
+						<div title="Скидка">
+							<i class="fas fa-user-tag"></i> {{ $status->discount->valueFormatted() }}
+						</div>
+					@endif
 				@endif
 			</div>
 			<div class="col-12 text-nowrap">
