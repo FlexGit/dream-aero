@@ -1577,7 +1577,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/password/reset?api_key=&amp;token=" \
+    "http://dev.dream-aero.ru/api/password/reset?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1594,7 +1594,6 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 const params = {
     "api_key": "",
-    "token": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1627,7 +1626,6 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'token'=&gt; '',
         ],
         'json' =&gt; [
             'password' =&gt; null,
@@ -1783,9 +1781,9 @@ print_r(json_decode((string) $body));</code></pre></div>
 
             </p>
                     <p>
-                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="token"
+                <b><code>contractor_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="contractor_id"
                data-endpoint="POSTapi-password-reset"
                value=""
                data-component="query" hidden>
@@ -3830,7 +3828,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"quia\"
+    \"file_base64\": \"laborum\"
 }"
 </code></pre></div>
 
@@ -3853,7 +3851,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "quia"
+    "file_base64": "laborum"
 };
 
 fetch(url, {
@@ -3877,7 +3875,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'quia',
+            'file_base64' =&gt; 'laborum',
         ],
     ]
 );
@@ -4044,7 +4042,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="quia"
+               value="laborum"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>

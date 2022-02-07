@@ -559,12 +559,12 @@ endpoints:
         example: null
         type: string
         custom: []
-      token:
-        name: token
+      contractor_id:
+        name: contractor_id
         description: ''
-        required: true
+        required: false
         example: null
-        type: string
+        type: integer
         custom: []
     bodyParameters:
       password:
@@ -1460,7 +1460,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: quia
+        example: laborum
         type: string
         custom: []
     responses:

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "fde544a3-6351-4c5a-9559-77aecda1ea7d",
+        "_postman_id": "377f13e6-5376-460d-a849-9feabf2ce3ee",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -447,13 +447,13 @@
                             "path": "api\/password\/reset",
                             "query": [
                                 {
-                                    "key": "token",
+                                    "key": "contractor_id",
                                     "value": "",
                                     "description": "",
-                                    "disabled": false
+                                    "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/password\/reset?token="
+                            "raw": "{{baseUrl}}\/api\/password\/reset?contractor_id="
                         },
                         "method": "POST",
                         "header": [
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"quia\"}"
+                            "raw": "{\"file_base64\":\"laborum\"}"
                         },
                         "description": ""
                     },
