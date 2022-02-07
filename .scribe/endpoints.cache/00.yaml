@@ -1462,7 +1462,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: distinctio
+        example: quis
         type: string
         custom: []
     responses:

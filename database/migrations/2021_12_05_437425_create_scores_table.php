@@ -18,6 +18,7 @@ class CreateScoresTable extends Migration
 			$table->integer('score')->default(0)->comment('количество баллов');
 			$table->string('type')->nullable()->index()->comment('количество баллов');
 			$table->integer('contractor_id')->default(0)->index()->comment('контрагент');
+			$table->integer('deal_position_id')->default(0)->index()->comment('позиция сделки');
 			$table->integer('event_id')->default(0)->index()->comment('событие');
 			$table->integer('duration')->default(0)->comment('длительность полета');
 			$table->integer('user_id')->default(0)->index()->comment('пользователь');

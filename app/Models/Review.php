@@ -36,6 +36,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Review withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Review withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $reply ответ
+ * @property int $city_id город
+ * @property-read \App\Models\City|null $city
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereReply($value)
  */
 class Review extends Model
 {

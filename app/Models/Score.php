@@ -42,6 +42,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereUserId($value)
  * @property string|null $type количество баллов
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereType($value)
+ * @property int $deal_position_id позиция сделки
+ * @property-read \App\Models\DealPosition|null $position
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereDealPositionId($value)
  */
 class Score extends Model
 {
@@ -50,7 +53,8 @@ class Score extends Model
 	const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'contractor_id' => 'Контрагент',
-		'event_id' => 'Сделка',
+		'deal_position_id' => 'Позиция сделки',
+		'event_id' => 'Событие',
 		'duration' => 'Длительность полета',
 		'user_id' => 'Пользователь',
 		'created_at' => 'Создано',
@@ -58,7 +62,7 @@ class Score extends Model
 		'deleted_at' => 'Удалено',
 	];
 
-	const USED_TYPE = 'user';
+	const USED_TYPE = 'used';
 	const SCORING_TYPE = 'scoring';
 
 	protected $revisionForceDeleteEnabled = true;
@@ -72,6 +76,7 @@ class Score extends Model
 	protected $fillable = [
 		'score',
 		'contractor_id',
+		'deal_position_id',
 		'event_id',
 		'duration',
 		'user_id',
@@ -98,6 +103,11 @@ class Score extends Model
 	public function user()
 	{
 		return $this->hasOne(User::class, 'id', 'user_id');
+	}
+
+	public function position()
+	{
+		return $this->hasOne(DealPosition::class, 'id', 'deal_position_id');
 	}
 
 	public function event()
