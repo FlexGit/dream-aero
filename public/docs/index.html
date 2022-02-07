@@ -1786,8 +1786,8 @@ print_r(json_decode((string) $body));</code></pre></div>
 
             </p>
                     <p>
-                <b><code>contractor_uuid</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
-                <input type="number"
+                <b><code>contractor_uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
                name="contractor_uuid"
                data-endpoint="POSTapi-password-reset"
                value=""
@@ -3835,7 +3835,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"ut\"
+    \"file_base64\": \"animi\"
 }"
 </code></pre></div>
 
@@ -3858,7 +3858,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "ut"
+    "file_base64": "animi"
 };
 
 fetch(url, {
@@ -3882,7 +3882,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'ut',
+            'file_base64' =&gt; 'animi',
         ],
     ]
 );
@@ -4050,7 +4050,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="ut"
+               value="animi"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>

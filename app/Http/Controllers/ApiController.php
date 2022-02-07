@@ -484,7 +484,7 @@ class ApiController extends Controller
 	 * Password change
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_uuid int required No-example
+	 * @queryParam contractor_uuid string required No-example
 	 * @bodyParam password string required Password (md5). No-example
 	 * @bodyParam password_confirmation string required Password confirmation (md5). No-example
 	 * @response scenario=success {

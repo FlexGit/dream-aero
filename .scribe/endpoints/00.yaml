@@ -566,7 +566,7 @@ endpoints:
         description: ''
         required: true
         example: null
-        type: integer
+        type: string
         custom: []
     bodyParameters:
       password:
@@ -1465,7 +1465,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: ut
+        example: animi
         type: string
         custom: []
     responses:

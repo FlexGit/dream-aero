@@ -1002,7 +1002,7 @@ paths:
           example: null
           required: true
           schema:
-            type: integer
+            type: string
             description: ''
             example: null
         -
@@ -3029,7 +3029,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: ut
+                  example: animi
               required:
                 - file_base64
   /api/profile/avatar/delete:
