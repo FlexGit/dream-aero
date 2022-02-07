@@ -1579,7 +1579,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://dev.dream-aero.ru/api/password/reset?api_key=" \
+    "http://dev.dream-aero.ru/api/password/reset?api_key=&amp;contractor_uuid=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1596,6 +1596,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 const params = {
     "api_key": "",
+    "contractor_uuid": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1628,6 +1629,7 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
+            'contractor_uuid'=&gt; '',
         ],
         'json' =&gt; [
             'password' =&gt; null,
@@ -1784,7 +1786,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
             </p>
                     <p>
-                <b><code>contractor_uuid</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <b><code>contractor_uuid</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
                 <input type="number"
                name="contractor_uuid"
                data-endpoint="POSTapi-password-reset"
@@ -3833,7 +3835,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"dolore\"
+    \"file_base64\": \"ut\"
 }"
 </code></pre></div>
 
@@ -3856,7 +3858,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "dolore"
+    "file_base64": "ut"
 };
 
 fetch(url, {
@@ -3880,7 +3882,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'dolore',
+            'file_base64' =&gt; 'ut',
         ],
     ]
 );
@@ -4048,7 +4050,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="dolore"
+               value="ut"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>

@@ -1000,7 +1000,7 @@ paths:
           name: contractor_uuid
           description: ''
           example: null
-          required: false
+          required: true
           schema:
             type: integer
             description: ''
@@ -3029,7 +3029,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: dolore
+                  example: ut
               required:
                 - file_base64
   /api/profile/avatar/delete:

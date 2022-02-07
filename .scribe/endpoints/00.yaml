@@ -564,7 +564,7 @@ endpoints:
       contractor_uuid:
         name: contractor_uuid
         description: ''
-        required: false
+        required: true
         example: null
         type: integer
         custom: []
@@ -1465,7 +1465,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: dolore
+        example: ut
         type: string
         custom: []
     responses:
