@@ -302,11 +302,14 @@ class ApiController extends Controller
 
 		$code = Code::where('code', $codeValue)
 			->where('email', $email)
-			->where('is_reset', false)
 			->where('created_at', '>', Carbon::now()->subSeconds(Contractor::CODE_TTL))
 			->first();
 		if (!$code) {
 			return $this->responseError('Некорректный код. Проверьте данные и повторите попытку снова.', 400);
+		}
+
+		if ($code->is_reset) {
+			return $this->responseError('Код уже был ранее использован.', 400);
 		}
 		
 		$code->is_reset = true;
