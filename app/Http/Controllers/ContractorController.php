@@ -66,7 +66,7 @@ class ContractorController extends Controller
 		if ($id) {
 			$contractors = $contractors->where('id', '<', $id);
 		}
-		$contractors = $contractors->limit(20)->get();
+		$contractors = $contractors->limit(10)->get();
 		
 		$statuses = Status::where('is_active', true)
 			->get();
