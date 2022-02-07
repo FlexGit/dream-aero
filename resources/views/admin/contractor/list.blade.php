@@ -1,10 +1,10 @@
 @foreach ($contractors as $contractor)
 	@php
 		$flightTime = $contractor->getFlightTime();
-		$flightCnt = $contractor->getFlightCount();
+		/*$flightCnt = $contractor->getFlightCount();*/
 		$status = $contractor->getStatus($statuses, $flightTime);
 		$score = $contractor->getScore();
-		//$balance = $contractor->getBalance($statuses);
+		/*$balance = $contractor->getBalance($statuses);*/
 	@endphp
 <tr class="odd" data-id="{{ $contractor->id }}">
 	<td class="align-middle">
@@ -46,12 +46,8 @@
 	<td class="align-middle d-none d-lg-table-cell">
 		<div class="col-12 text-nowrap">
 			<div class="d-inline-block col-6 align-top">
-				<div title="Количество полетов">
-					<i class="fas fa-plane"></i> <span>{{ $flightCnt ?? 0 }}</span>
-					@if($flightTime)
-						<span title="Время налета">({{ $flightTime ? number_format($flightTime, 0, '.', ' ') : 0 }} мин)</span>
-					@endif
-					<small>[<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/score" data-action="/contractor/{{ $contractor->id }}/score" data-method="POST" data-type="score" data-title="Добавление полета" title="Добавить полет">добавить</a>]</small>
+				<div title="Время налета">
+					<i class="fas fa-plane"></i> {{ $flightTime ? number_format($flightTime, 0, '.', ' ') : 0 }} мин
 				</div>
 				<div title="Количество баллов">
 					<i class="far fa-star"></i> {{ $score ? number_format($score, 0, '.', ' ') : 0 }} баллов
@@ -63,11 +59,14 @@
 						<i class="fas fa-medal" style="color: {{ array_key_exists('color', $status->data_json ?? []) ? $status->data_json['color'] : 'none' }};"></i> {{ $status->name }}
 					</div>
 				@endif
-				@if($contractor->discount)
+				@if($status->discount)
 					<div title="Скидка">
-						<i class="fas fa-user-tag"></i> {{ $contractor->discount->valueFormatted() }}
+						<i class="fas fa-user-tag"></i> {{ $status->discount->valueFormatted() }}
 					</div>
 				@endif
+			</div>
+			<div class="col-12 text-nowrap">
+				<small>[<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/score" data-action="/contractor/{{ $contractor->id }}/score" data-method="POST" data-type="score" data-title="Добавление полета" title="Добавить полет">добавить время налёта</a>]</small>
 			</div>
 		</div>
 	</td>
@@ -79,7 +78,7 @@
 				</span>
 		</div>
 	</td>--}}
-	<td class="text-center align-middle d-none d-sm-table-cell">
+	<td class="text-center align-middle d-none d-lg-table-cell">
 		{{ $contractor->is_active ? 'Да' : 'Нет' }}
 	</td>
 	{{--<td class="text-center align-middle">

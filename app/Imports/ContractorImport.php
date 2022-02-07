@@ -6,16 +6,13 @@ use App\Models\City;
 use App\Models\Contractor;
 use App\Models\Score;
 use App\Services\HelpFunctions;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\OnEachRow;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithProgressBar;
 use Maatwebsite\Excel\Row;
-use function PHPUnit\Framework\returnArgument;
 use Throwable;
 
-class ContractorImport implements OnEachRow, /*WithChunkReading, ShouldQueue,*/ WithProgressBar
+class ContractorImport implements OnEachRow, WithProgressBar
 {
 	use Importable;
 
@@ -65,9 +62,4 @@ class ContractorImport implements OnEachRow, /*WithChunkReading, ShouldQueue,*/ 
 			\Log::debug('500 - ' . $e->getMessage() . ' - ' . implode(' | ', $row));
 		}
     }
-
-	/*public function chunkSize(): int
-	{
-		return 5000;
-	}*/
 }

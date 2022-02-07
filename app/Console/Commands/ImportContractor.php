@@ -39,7 +39,7 @@ class ImportContractor extends Command
 	public function handle()
 	{
 		$this->output->title('Starting import');
-		(new ContractorImport)->withOutput($this->output)->import(storage_path('app/public/modx_crmcont2.xlsx'));
+		(new ContractorImport)->withOutput($this->output)->import(storage_path('app/public/modx_crmcont3.xlsx'));
 		$this->output->success('Import successful');
 	}
 }
