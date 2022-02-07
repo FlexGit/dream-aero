@@ -454,6 +454,7 @@ class ApiController extends Controller
 				$score = new Score();
 				$score->score = $promo->discount->value;
 				$score->contractor_id = $contractor->id;
+				$score->type = Score::SCORING_TYPE;
 				$score->save();
 			}
 			
