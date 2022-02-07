@@ -520,9 +520,9 @@ class ApiController extends Controller
 	 */
 	public function resetPassword()
 	{
-		$authToken = $this->request->token ?? '';
-		if (!$authToken) {
-			return $this->responseError('Не передан токен авторизации', 400);
+		$contractorId = $this->request->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
 		}
 		
 		$rules = [
@@ -547,11 +547,6 @@ class ApiController extends Controller
 		
 		$password = $this->request->password;
 
-		$contractorId = $this->request->contractor_id ?? 0;
-		if (!$contractorId) {
-			return $this->responseError('Контрагент не найден', 400);
-		}
-		
 		$contractor = Contractor::where('is_active', true)
 			->find($contractorId);
 		if (!$contractor) {
