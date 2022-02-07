@@ -450,8 +450,8 @@ class ApiController extends Controller
 			// начисляем 500 баллов за регистрацию (если такая акция активна)
 			$promo = Promo::where('alias', 'registration_500_scores')
 				->where('is_active', true)
-				->where('active_from_at', '<=', $date)
-				->where('active_to_at', '>=', $date)
+				/*->where('active_from_at', '<=', $date)
+				->where('active_to_at', '>=', $date)*/
 				->first();
 			if ($promo && $promo->discount && $promo->discount->currency && $promo->discount->currency->alias == Currency::SCORE_ALIAS) {
 				$score = new Score();

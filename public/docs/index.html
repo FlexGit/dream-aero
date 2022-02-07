@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-3.23.0.js"></script>
+    <script src="../docs/js/tryitout-3.22.0.js"></script>
 
-    <script src="../docs/js/theme-default-3.23.0.js"></script>
+    <script src="../docs/js/theme-default-3.22.0.js"></script>
 
 </head>
 
@@ -3830,7 +3830,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"rerum\"
+    \"file_base64\": \"quia\"
 }"
 </code></pre></div>
 
@@ -3853,7 +3853,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "rerum"
+    "file_base64": "quia"
 };
 
 fetch(url, {
@@ -3877,7 +3877,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'rerum',
+            'file_base64' =&gt; 'quia',
         ],
     ]
 );
@@ -4044,7 +4044,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="rerum"
+               value="quia"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
