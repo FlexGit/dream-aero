@@ -551,7 +551,8 @@ class ApiController extends Controller
 		$password = $this->request->password;
 
 		$contractor = Contractor::where('is_active', true)
-			->where('uuid', $contractorUuid);
+			->where('uuid', $contractorUuid)
+			->first();
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}

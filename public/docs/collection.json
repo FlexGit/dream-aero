@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "7602cccf-0cf2-42cb-89f5-a7c6e171ed0b",
+        "_postman_id": "fc3094d1-6a48-4aa1-9cba-f9ead5b29275",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"animi\"}"
+                            "raw": "{\"file_base64\":\"nesciunt\"}"
                         },
                         "description": ""
                     },
