@@ -102,6 +102,16 @@ class AppServiceProvider extends ServiceProvider
 		
 			return true;
 		});
+	
+		Validator::extend('valid_password_confirmation', function($attribute, $value, $parameters, $validator) {
+			$inputs = $validator->getData();
+		
+			if (!HelpFunctions::isValidMd5($inputs['password_confirmation'])) {
+				return false;
+			}
+		
+			return true;
+		});
 
 		Validator::extend('valid_phone', function($attribute, $value, $parameters, $validator) {
 			$inputs = $validator->getData();

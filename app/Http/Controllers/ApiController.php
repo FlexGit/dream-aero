@@ -382,7 +382,7 @@ class ApiController extends Controller
 	{
 		$rules = [
 			'password' => ['required', 'confirmed', 'valid_password'/*, Password::defaults()*/],
-			'password_confirmation' => ['required', 'same:password', 'valid_password'],
+			'password_confirmation' => ['required', 'same:password', 'valid_password_confirmation'],
 			'email' => ['required_without:contractor_uuid', 'email'],
 			'name' => ['required_without:contractor_uuid', 'min:3', 'max:50'],
 			'birthdate' => ['required_without:contractor_uuid', 'date'],
@@ -534,7 +534,7 @@ class ApiController extends Controller
 		
 		$rules = [
 			'password' => ['required', 'valid_password', 'confirmed'/*, Password::defaults()*/],
-			'password_confirmation' => ['valid_password', 'same:password'],
+			'password_confirmation' => ['valid_password_confirmation', 'same:password'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
