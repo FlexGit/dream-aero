@@ -85,7 +85,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
@@ -182,7 +182,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
@@ -292,7 +292,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
@@ -403,7 +403,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
@@ -542,7 +542,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
@@ -712,7 +712,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
@@ -946,7 +946,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
@@ -2122,7 +2122,7 @@ class ApiController extends Controller
 			$validatorErrors = $validator->errors();
 			foreach ($rules as $key => $rule) {
 				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key][] = $error;
+					$errors[$key] = $error;
 				}
 			}
 			return $this->responseError($errors, 400);
