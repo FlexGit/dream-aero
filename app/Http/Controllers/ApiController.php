@@ -98,7 +98,11 @@ class ApiController extends Controller
 			return $this->responseError(['email' => 'Указанный E-mail не найден. Проверьте введенные данные.'], 400);
 		}
 		
-		if ($contractor->password !== $this->request->password) {
+		if (!HelpFunctions::isValidMd5($this->request->password)) {
+			return $this->responseError(['password' => 'Некорректный формат'], 400);
+		}
+		
+		if ($contractor->password != $this->request->password) {
 			return $this->responseError(['password' => 'Пароль указан неверно'], 400);
 		}
 		
@@ -408,6 +412,14 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
+		if (!HelpFunctions::isValidMd5($this->request->password)) {
+			return $this->responseError(['password' => 'Некорректный формат'], 400);
+		}
+		
+		if (!HelpFunctions::isValidMd5($this->request->password_confirmation)) {
+			return $this->responseError(['password_confirmation' => 'Некорректный формат'], 400);
+		}
+		
 		$contractorUuid = $this->request->contractor_uuid;
 		
 		if ($contractorUuid) {
@@ -548,8 +560,6 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
-		$password = $this->request->password;
-
 		$contractor = Contractor::where('is_active', true)
 			->where('uuid', $contractorUuid)
 			->first();
@@ -557,7 +567,15 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 		
-		$contractor->password = $password;
+		if (!HelpFunctions::isValidMd5($this->request->password)) {
+			return $this->responseError(['password' => 'Некорректный формат'], 400);
+		}
+		
+		if (!HelpFunctions::isValidMd5($this->request->password_confirmation)) {
+			return $this->responseError(['password_confirmation' => 'Некорректный формат'], 400);
+		}
+		
+		$contractor->password = $this->request->password;
 		if (!$contractor->save()) {
 			return $this->responseError(null, 500);
 		}
