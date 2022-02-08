@@ -2091,7 +2091,7 @@ class ApiController extends Controller
 			'email' => ['required', 'email'],
 			'product_id' => ['required', 'numeric'],
 			'product_amount' => ['required', 'numeric'],
-			'flight_date' => ['after_or_equal:' . date('Y-m-d'), 'date', 'required_if:is_certificate_purchase,false'],
+			'flight_date' => ['after_or_equal:' . date('Y-m-d'), 'required_if:is_certificate_purchase,false', 'date'],
 			'flight_time' => ['required_if:is_certificate_purchase,false', 'date_format:H:i'],
 			'is_unified' => ['required_if:is_certificate_purchase,true', 'boolean'],
 			'location_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
