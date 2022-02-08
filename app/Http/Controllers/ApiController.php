@@ -73,7 +73,7 @@ class ApiController extends Controller
 	{
 		$rules = [
 			'email' => ['required', 'email'],
-			'password' => ['required', 'string'],
+			'password' => ['required', 'string', 'valid_password'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
@@ -96,10 +96,6 @@ class ApiController extends Controller
 			->first();
 		if (!$contractor) {
 			return $this->responseError(['email' => 'Указанный E-mail не найден. Проверьте введенные данные.'], 400);
-		}
-		
-		if (!HelpFunctions::isValidMd5($this->request->password)) {
-			return $this->responseError(['password' => 'Некорректный формат'], 400);
 		}
 		
 		if ($contractor->password != $this->request->password) {
@@ -385,8 +381,8 @@ class ApiController extends Controller
 	public function register()
 	{
 		$rules = [
-			'password' => ['required', 'confirmed'/*, Password::defaults()*/],
-			'password_confirmation' => ['required', 'same:password'],
+			'password' => ['required', 'valid_password', 'confirmed'/*, Password::defaults()*/],
+			'password_confirmation' => ['required', 'valid_password', 'same:password'],
 			'email' => ['required_without:contractor_uuid', 'email'],
 			'name' => ['required_without:contractor_uuid', 'min:3', 'max:50'],
 			'birthdate' => ['required_without:contractor_uuid', 'date'],
@@ -410,14 +406,6 @@ class ApiController extends Controller
 				}
 			}
 			return $this->responseError($errors, 400);
-		}
-		
-		if (!HelpFunctions::isValidMd5($this->request->password)) {
-			return $this->responseError(['password' => 'Некорректный формат'], 400);
-		}
-		
-		if (!HelpFunctions::isValidMd5($this->request->password_confirmation)) {
-			return $this->responseError(['password_confirmation' => 'Некорректный формат'], 400);
 		}
 		
 		$contractorUuid = $this->request->contractor_uuid;
@@ -541,8 +529,8 @@ class ApiController extends Controller
 		}
 		
 		$rules = [
-			'password' => ['required', 'confirmed'/*, Password::defaults()*/],
-			'password_confirmation' => ['same:password'],
+			'password' => ['required', 'valid_password', 'confirmed'/*, Password::defaults()*/],
+			'password_confirmation' => ['valid_password', 'same:password'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
@@ -565,14 +553,6 @@ class ApiController extends Controller
 			->first();
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
-		}
-		
-		if (!HelpFunctions::isValidMd5($this->request->password)) {
-			return $this->responseError(['password' => 'Некорректный формат'], 400);
-		}
-		
-		if (!HelpFunctions::isValidMd5($this->request->password_confirmation)) {
-			return $this->responseError(['password_confirmation' => 'Некорректный формат'], 400);
 		}
 		
 		$contractor->password = $this->request->password;
