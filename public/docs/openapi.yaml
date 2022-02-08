@@ -692,12 +692,12 @@ paths:
             example: null
         -
           in: query
-          name: contractor_id
+          name: contractor_uuid
           description: ''
           example: null
-          required: false
+          required: true
           schema:
-            type: integer
+            type: string
             description: ''
             example: null
         -
@@ -3029,7 +3029,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: nesciunt
+                  example: labore
               required:
                 - file_base64
   /api/profile/avatar/delete:

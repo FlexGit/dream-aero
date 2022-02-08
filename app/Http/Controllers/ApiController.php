@@ -333,7 +333,7 @@ class ApiController extends Controller
 	 * Registration
 	 *
 	 * @queryParam api_key string required No-example
-	 * @queryParam contractor_id int No-example
+	 * @queryParam contractor_uuid string required No-example
 	 * @bodyParam password string required Password (md5). No-example
 	 * @bodyParam password_confirmation string required Password confirmation (md5). No-example
 	 * @bodyParam email string No-example
@@ -381,13 +381,12 @@ class ApiController extends Controller
 	public function register()
 	{
 		$rules = [
-			'contractor_id' => ['nullable', 'numeric'],
 			'password' => ['required', 'confirmed'/*, Password::defaults()*/],
 			'password_confirmation' => ['required', 'same:password'],
-			'email' => ['required_without:contractor_id', 'email'],
-			'name' => ['required_without:contractor_id', 'min:3', 'max:50'],
-			'birthdate' => ['required_without:contractor_id', 'date'],
-			'city_id' => ['required_without:contractor_id', 'numeric', 'valid_city'],
+			'email' => ['required_without:contractor_uuid', 'email'],
+			'name' => ['required_without:contractor_uuid', 'min:3', 'max:50'],
+			'birthdate' => ['required_without:contractor_uuid', 'date'],
+			'city_id' => ['required_without:contractor_uuid', 'numeric', 'valid_city'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
@@ -409,11 +408,12 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
-		$contractorId = $this->request->contractor_id;
+		$contractorUuid = $this->request->contractor_uuid;
 		
-		if ($contractorId) {
+		if ($contractorUuid) {
 			$contractor = Contractor::where('is_active', true)
-				->find($contractorId);
+				->where('uuid', $contractorUuid)
+				->first();
 			if (!$contractor) {
 				return $this->responseError('Контрагент не найден', 400);
 			}
@@ -447,7 +447,7 @@ class ApiController extends Controller
 			$contractor->last_auth_at = date('Y-m-d H:i:s');
 			$contractor->save();
 
-			$date = date('Y-m-d');
+			//$date = date('Y-m-d');
 
 			// начисляем 500 баллов за регистрацию (если такая акция активна)
 			$promo = Promo::where('alias', 'registration_500_scores')

@@ -365,12 +365,12 @@ endpoints:
         example: null
         type: string
         custom: []
-      contractor_id:
-        name: contractor_id
+      contractor_uuid:
+        name: contractor_uuid
         description: ''
-        required: false
+        required: true
         example: null
-        type: integer
+        type: string
         custom: []
     bodyParameters:
       password:
@@ -1465,7 +1465,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: nesciunt
+        example: labore
         type: string
         custom: []
     responses:
