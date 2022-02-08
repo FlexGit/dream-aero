@@ -15,6 +15,7 @@ class Controller extends BaseController
 		'required' => 'Обязательно для заполнения',
 		'required_with' => 'Обязательно для заполнения',
 		'required_without' => 'Обязательно для заполнения',
+		'required_if' => 'Обязательно для заполнения',
 		'confirmed' => 'Пароли должны совпадать',
 		'same' => 'Пароли должны совпадать',
 		'email' => 'Некорректный формат',
