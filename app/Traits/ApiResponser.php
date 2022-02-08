@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Facades\Log;
+
 trait ApiResponser
 {
 	/**
@@ -11,6 +13,13 @@ trait ApiResponser
 	 */
 	protected function responseSuccess($message = null, $data = null)
 	{
+		if ($message) {
+			Log::channel('api')->info($message);
+		}
+		if ($data) {
+			Log::channel('api')->info($data);
+		}
+		
 		return response()->json([
 			'success' => true,
 			'message' => $message,
@@ -46,6 +55,13 @@ trait ApiResponser
 			}
 		}
 		
+		if ($error) {
+			Log::channel('api')->info($error);
+		}
+		if ($debug) {
+			Log::channel('api')->info($debug);
+		}
+
 		return response()->json([
 			'success' => false,
 			'error' => $error,
