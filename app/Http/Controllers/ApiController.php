@@ -417,6 +417,10 @@ class ApiController extends Controller
 			if (!$contractor) {
 				return $this->responseError('Контрагент не найден', 400);
 			}
+			
+			if ($contractor->password) {
+				return $this->responseError('Контрагент ранее уже был зарегистрирован', 400);
+			}
 		} else {
 			$contractor = Contractor::where('email', $this->request->email)
 				->first();
