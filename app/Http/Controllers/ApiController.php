@@ -381,8 +381,8 @@ class ApiController extends Controller
 	public function register()
 	{
 		$rules = [
-			'password' => ['required', 'valid_password', 'confirmed'/*, Password::defaults()*/],
-			'password_confirmation' => ['required', 'valid_password', 'same:password'],
+			'password' => ['required', 'confirmed', 'valid_password'/*, Password::defaults()*/],
+			'password_confirmation' => ['required', 'same:password', 'valid_password'],
 			'email' => ['required_without:contractor_uuid', 'email'],
 			'name' => ['required_without:contractor_uuid', 'min:3', 'max:50'],
 			'birthdate' => ['required_without:contractor_uuid', 'date'],
