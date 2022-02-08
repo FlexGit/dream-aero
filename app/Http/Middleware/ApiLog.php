@@ -10,7 +10,6 @@ class ApiLog
 {
 	public function handle(Request $request, Closure $next)
 	{
-		Log::info('Incoming request:');
 		Log::channel('api')->info($request);
 		
 		return $next($request);
