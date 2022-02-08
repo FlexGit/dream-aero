@@ -102,6 +102,7 @@ return [
         ],
 
 		'api' => [
+			'driver' => 'single',
 			'path' => storage_path('logs/api.log'),
 		],
     ],
