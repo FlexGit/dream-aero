@@ -28,5 +28,6 @@ class Controller extends BaseController
 		'valid_phone' => 'Некорректный формат',
 		'image' => 'Некорректный тип файла',
 		'mimes' => 'Некорректный тип файла',
+		'after_or_equal' => 'Некорректное значение',
 	];
 }
