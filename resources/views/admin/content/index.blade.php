@@ -21,7 +21,7 @@
 		<div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
 				<li class="breadcrumb-item"><a href="/">Главная</a></li>
-				<li class="breadcrumb-item active">Контент</li>
+				<li class="breadcrumb-item active">{{ $title }}</li>
 			</ol>
 		</div>
 	</div>
