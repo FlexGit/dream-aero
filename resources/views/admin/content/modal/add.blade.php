@@ -34,7 +34,7 @@
 	<textarea class="form-control tinymce" id="detail_text" name="detail_text"></textarea>
 </div>
 <div class="form-group">
-	<label for="photo_preview_file">Фото-превью</label>
+	<label for="photo_preview_file">Фото</label>
 	<div class="custom-file">
 		<input type="file" class="custom-file-input" id="photo_preview_file" name="photo_preview_file">
 		<label class="custom-file-label" for="photo_preview_file">Выбрать файл</label>
@@ -42,8 +42,8 @@
 </div>
 @if($type == app('\App\Models\Content')::GALLERY_TYPE)
 	<div class="form-group">
-		<label for="photo">Видео (Youtube-ссылка)</label>
-		<input type="text" class="form-control" id="photo" name="photo" placeholder="Фото превью">
+		<label for="video_url">Видео (Youtube-ссылка)</label>
+		<input type="text" class="form-control" id="video_url" name="video_url" placeholder="Видео (Youtube-ссылка)">
 	</div>
 @endif
 <div class="form-group">

@@ -414,15 +414,15 @@ return [
 							'icon' => '',
 						],
 						[
-							'text' => 'Галлерея',
+							'text' => 'Галерея',
 							'url'  => '/site/ru/gallery',
 							'icon' => '',
 						],
-						[
+						/*[
 							'text' => 'Отзывы',
 							'url'  => '/site/ru/reviews',
 							'icon' => '',
-						],
+						],*/
 					],
 				],
 				[
@@ -435,15 +435,15 @@ return [
 							'icon' => '',
 						],
 						[
-							'text' => 'Галлерея',
+							'text' => 'Галерея',
 							'url'  => '/site/aero/gellery',
 							'icon' => '',
 						],
-						[
+						/*[
 							'text' => 'Отзывы',
 							'url'  => '/site/aero/reviews',
 							'icon' => '',
-						],
+						],*/
 					],
 				],
 			],

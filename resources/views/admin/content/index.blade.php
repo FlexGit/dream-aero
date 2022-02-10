@@ -49,7 +49,6 @@
 						<thead>
 						<tr>
 							<th class="text-center">Заголовок</th>
-							<th class="text-center d-none d-xl-table-cell">Алиас</th>
 							<th class="text-center d-none d-xl-table-cell">Дата публикации</th>
 							<th class="text-center d-none d-xl-table-cell">Активность</th>
 						</tr>
@@ -183,12 +182,26 @@
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
 					formId = $(this).attr('id'),
-					data = $(this).serializeArray();
+					$photoPreviewFile = $('#photo_preview_file');
+
+				var formData = new FormData($(this)[0]);
+				if ($photoPreviewFile.val()) {
+					formData.append('photo_preview_file', $photoPreviewFile.prop('files')[0]);
+				}
+
+				var realMethod = method;
+				if (method === 'PUT') {
+					formData.append('_method', 'PUT');
+					realMethod = 'POST';
+				}
 
 				$.ajax({
 					url: action,
-					type: method,
-					data: data,
+					type: realMethod,
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
@@ -216,16 +229,17 @@
 				tinymce.init({
 					selector: 'textarea.tinymce',
 					themes: 'sliver',
+					convert_urls: false,
 					relative_urls: false,
 					image_title: true,
 					automatic_uploads: true,
-					images_upload_url: 'site/{{ $version }}/{{ $type }}/image/upload',
+					//images_upload_url: '{{ $type }}/image/upload',
 					file_picker_types: 'image',
-					file_picker_callback: function(cb, value, meta) {
+					/*file_picker_callback: function(cb, value, meta) {
 						var input = document.createElement('input');
 
 						input.setAttribute('type', 'file');
-						input.setAttribute('accept', 'image/*');
+						input.setAttribute('accept', 'image/!*');
 						input.onchange = function() {
 							var file = this.files[0],
 								reader = new FileReader();
@@ -241,6 +255,31 @@
 							};
 						};
 						input.click();
+					},*/
+					images_upload_handler: function (blobInfo, success, failure) {
+						var xhr, formData;
+						xhr = new XMLHttpRequest();
+						xhr.withCredentials = false;
+						xhr.open('POST', '{{ $type }}/image/upload');
+						var token = '{{ csrf_token() }}';
+						xhr.setRequestHeader("X-CSRF-Token", token);
+						xhr.onload = function() {
+							var json;
+							if (xhr.status != 200) {
+								failure('HTTP Error: ' + xhr.status);
+								return;
+							}
+							json = JSON.parse(xhr.responseText);
+
+							if (!json || typeof json.location != 'string') {
+								failure('Invalid JSON: ' + xhr.responseText);
+								return;
+							}
+							success(json.location);
+						};
+						formData = new FormData();
+						formData.append('file', blobInfo.blob(), blobInfo.filename());
+						xhr.send(formData);
 					},
 					language: 'ru_RU',
 					plugins: [
@@ -275,6 +314,10 @@
 				getList(false);
 			});
 
+			$(document).on('keyup', '#title', function(e) {
+				$('#alias').val(transliterate($(this).val()));
+			});
+
 			$.fn.isInViewport = function () {
 				let elementTop = $(this).offset().top;
 				let elementBottom = elementTop + $(this).outerHeight();
@@ -296,6 +339,29 @@
 					getList(true);
 				}
 			});
+
+			function transliterate(str) {
+				var ru = {
+					'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
+					'е': 'e', 'ё': 'e', 'ж': 'j', 'з': 'z', 'и': 'i',
+					'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+					'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+					'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch', 'ш': 'sh',
+					'щ': 'shch', 'ы': 'y', 'э': 'e', 'ю': 'u', 'я': 'ya', ' ': '-'
+				}, n_str = [];
+
+				str = str.replace(/[ъь]+/g, '').replace(/й/g, 'i');
+
+				for (var i = 0; i < str.length; ++i) {
+					n_str.push(
+						ru[str[i]]
+						|| ru[str[i].toLowerCase()] == undefined && str[i]
+						|| ru[str[i].toLowerCase()].toUpperCase()
+					);
+				}
+
+				return n_str.join('').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '');
+			}
 		});
 	</script>
 @stop

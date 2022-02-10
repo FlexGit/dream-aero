@@ -72,6 +72,7 @@ class ContentController extends Controller
 
 		$VIEW = view('admin.content.list', [
 			'contents' => $contents,
+			'version' => $version,
 			'type' => $type,
 		]);
 		
@@ -97,7 +98,7 @@ class ContentController extends Controller
 		}
 
 		$content = Content::where('version', $version)
-			->whetre('parent_id', $parentContent->id)
+			->where('parent_id', $parentContent->id)
 			->find($id);
 		if (!$content) return response()->json(['status' => 'error', 'reason' => 'Материал не найден']);
 
@@ -187,6 +188,7 @@ class ContentController extends Controller
 			'title' => ['required', 'min:3', 'max:250'],
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents'],
 			'published_at' => ['date'],
+			'photo_preview_file' => ['sometimes', 'image', 'max:512', 'mimes:webp,png,jpg,jpeg'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -194,6 +196,7 @@ class ContentController extends Controller
 				'title' => 'Заголовок',
 				'alias' => 'Алиас',
 				'published_at' => 'Дата публикации',
+				'photo_preview_file' => 'Фото-превью',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -203,8 +206,16 @@ class ContentController extends Controller
 		if (!$parentContent) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
 		}
-
-		$data = [];
+		
+		$isFileUploaded = false;
+		if($file = $this->request->file('photo_preview_file')) {
+			$isFileUploaded = $file->move(public_path('upload/content/' . $version . '/' . $type), $file->getClientOriginalName());
+		}
+		
+		$data = [
+			'photo_preview_file_path' => $isFileUploaded ? 'content/' . $version . '/' . $type . '/' . $file->getClientOriginalName() : '',
+			'video_url' => $this->request->video_url ?? '',
+		];
 		
 		$content = new Content();
 		$content->title = $this->request->title;
@@ -249,8 +260,9 @@ class ContentController extends Controller
 
 		$rules = [
 			'title' => ['required', 'min:3', 'max:250'],
-			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents'],
+			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents,alias,' . $id],
 			'published_at' => ['date'],
+			'photo_preview_file' => ['sometimes', 'image', 'max:512', 'mimes:webp,png,jpg,jpeg'],
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
@@ -258,12 +270,21 @@ class ContentController extends Controller
 				'title' => 'Заголовок',
 				'alias' => 'Алиас',
 				'published_at' => 'Дата публикации',
+				'photo_preview_file' => 'Фото-превью',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-
-		$data = [];
+		
+		$isFileUploaded = false;
+		if($file = $this->request->file('photo_preview_file')) {
+			$isFileUploaded = $file->move(public_path('upload/content/' . $version . '/' . $type), $file->getClientOriginalName());
+		}
+		
+		$data = [
+			'photo_preview_file_path' => $isFileUploaded ? 'content/' . $version . '/' . $type . '/' . $file->getClientOriginalName() : '',
+			'video_url' => $this->request->video_url ?? '',
+		];
 
 		$content->title = $this->request->title;
 		$content->alias = $this->request->alias;
@@ -330,13 +351,12 @@ class ContentController extends Controller
 		}
 
 		$file = $this->request->file('file');
-		$path = $file->move(public_path('/upload/content/' . $version . '/' . $type), $file->getClientOriginalName());
+		if (!$file->move(public_path('/upload/content/' . $version . '/' . $type . '/'), $file->getClientOriginalName())) {
+			return response()->json(['status' => 'error', 'reason' => 'Не удалось загрузить файл']);
+		}
 
 		return response()->json([
-			'location' => url('/upload/content/' . $version . '/' . $type . '/') . $file->getClientOriginalName(),
+			'location' => url('/upload/content/' . $version . '/' . $type . '/' . $file->getClientOriginalName()),
 		]);
-
-		/*$imgpath = request()->file('file')->store('uploads', 'public');
-		return response()->json(['location' => "/storage/$imgpath"]);*/
 	}
 }
