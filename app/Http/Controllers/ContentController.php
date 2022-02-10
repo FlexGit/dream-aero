@@ -188,7 +188,7 @@ class ContentController extends Controller
 			'title' => ['required', 'min:3', 'max:250'],
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents'],
 			'published_at' => ['date'],
-			'photo_preview_file' => ['sometimes', 'image', 'max:512', 'mimes:webp,png,jpg,jpeg'],
+			'photo_preview_file' => ['sometimes', 'image', 'max:5120', 'mimes:webp,png,jpg,jpeg'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -262,7 +262,7 @@ class ContentController extends Controller
 			'title' => ['required', 'min:3', 'max:250'],
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents,alias,' . $id],
 			'published_at' => ['date'],
-			'photo_preview_file' => ['sometimes', 'image', 'max:512', 'mimes:webp,png,jpg,jpeg'],
+			'photo_preview_file' => ['sometimes', 'image', 'max:5120', 'mimes:webp,png,jpg,jpeg'],
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
