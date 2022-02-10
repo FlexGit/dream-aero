@@ -44,12 +44,13 @@ class ContentController extends Controller
 			abort(404);
 		}
 
-		$id = $this->request->id ?? 0;
 		$parentContent = HelpFunctions::getEntityByAlias(Content::class, $type);
 		if (!$parentContent) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
 		}
-
+		
+		$id = $this->request->id ?? 0;
+		
 		$contents = Content::orderBy('created_at', 'desc')
 			->where('version', $version)
 			->where('parent_id', $parentContent->id);

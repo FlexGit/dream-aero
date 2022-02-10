@@ -425,7 +425,7 @@ return [
 						],*/
 					],
 				],
-				[
+				/*[
 					'text' => 'dream.aero',
 					'url'  => '#',
 					'submenu' => [
@@ -439,13 +439,13 @@ return [
 							'url'  => '/site/aero/gellery',
 							'icon' => '',
 						],
-						/*[
+						[
 							'text' => 'Отзывы',
 							'url'  => '/site/aero/reviews',
 							'icon' => '',
-						],*/
+						],
 					],
-				],
+				],*/
 			],
 		],
         /*['header' => 'labels'],
