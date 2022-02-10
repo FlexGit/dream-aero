@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
@@ -360,6 +361,18 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 
 		// Wiki
 		Route::get('wiki', [WikiController::class, 'index'])->name('wikiIndex');
+
+		// Контент
+		Route::get('site/{version}/{type}', [ContentController::class, 'index']);
+		Route::get('site/{version}/{type}/list/ajax', [ContentController::class, 'getListAjax']);
+		Route::get('site/{version}/{type}/add', [ContentController::class, 'add']);
+		Route::get('site/{version}/{type}/{id}/edit', [ContentController::class, 'edit']);
+		Route::get('site/{version}/{type}/{id}/delete', [ContentController::class, 'confirm']);
+
+		Route::post('site/{version}/{type}', [ContentController::class, 'store']);
+		Route::put('site/{version}/{type}/{id}', [ContentController::class, 'update']);
+		Route::delete('site/{version}/{type}/{id}', [ContentController::class, 'delete']);
+		Route::post('site/{version}/{type}/image/upload', [ContentController::class, 'imageUpload']);
 	});
 });
 

@@ -399,6 +399,55 @@ return [
 			'label'       => '',
 			'label_color' => '',
 		],*/
+		[
+			'text'    => 'Сайты',
+			'icon'    => 'fas fa-sitemap',
+			'can'	  => 'is_superadmin',
+			'submenu' => [
+				[
+					'text' => 'dream-aero.ru',
+					'url'  => '#',
+					'submenu' => [
+						[
+							'text' => 'Новости',
+							'url'  => '/site/ru/news',
+							'icon' => '',
+						],
+						[
+							'text' => 'Галлерея',
+							'url'  => '/site/ru/gallery',
+							'icon' => '',
+						],
+						[
+							'text' => 'Отзывы',
+							'url'  => '/site/ru/reviews',
+							'icon' => '',
+						],
+					],
+				],
+				[
+					'text' => 'dream.aero',
+					'url'  => '#',
+					'submenu' => [
+						[
+							'text' => 'Новости',
+							'url'  => '/site/aero/news',
+							'icon' => '',
+						],
+						[
+							'text' => 'Галлерея',
+							'url'  => '/site/aero/gellery',
+							'icon' => '',
+						],
+						[
+							'text' => 'Отзывы',
+							'url'  => '/site/aero/reviews',
+							'icon' => '',
+						],
+					],
+				],
+			],
+		],
         /*['header' => 'labels'],
         [
             'text'       => 'important',
