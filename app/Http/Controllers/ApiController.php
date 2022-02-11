@@ -2279,10 +2279,10 @@ class ApiController extends Controller
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
 			$deal->source = Deal::MOB_SOURCE;
-			/*$dealData = [];
-			$dealData['comment'] = $this->request->comment;
-			$dealData['certificate_whom'] = $this->request->certificate_whom;
-			$deal->data_json = $dealData;*/
+			$dealData = [];
+			/*$dealData['comment'] = $this->request->comment;
+			$dealData['certificate_whom'] = $this->request->certificate_whom;*/
+			$deal->data_json = $dealData;
 			$deal->save();
 
 			$position = new DealPosition();
