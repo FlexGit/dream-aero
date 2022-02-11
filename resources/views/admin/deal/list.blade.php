@@ -53,7 +53,7 @@
 					</div>
 				</div>
 			@endif
-			@if(array_key_exists('comment', $deal->data_json) && $deal->data_json['comment'])
+			@if(is_array($deal->data_json) && array_key_exists('comment', $deal->data_json) && $deal->data_json['comment'])
 				<div class="text-left mt-2">
 					<div style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;">
 						<i class="far fa-comment-dots"></i> <i>{{ $deal->data_json['comment'] }}</i>
@@ -202,7 +202,7 @@
 										@endif
 									</a>
 								</div>
-								@if($position->data_json && array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom'])
+								@if(is_array($position->data_json) && array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom'])
 									<div style="line-height: 0.9;">
 										для кого: {{ $position->data_json['certificate_whom'] }}
 									</div>
