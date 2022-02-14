@@ -3021,7 +3021,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: qui
+                  example: vel
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4469,11 +4469,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: quo
+                  example: et
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: vel
+                  example: mollitia
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4481,11 +4481,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 19
+                  example: 12
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 4
+                  example: 18
                 promocode_id:
                   type: string
                   description: ''
@@ -4497,7 +4497,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: consequatur
+                  example: delectus
                 comment:
                   type: string
                   description: ''
@@ -4513,6 +4513,168 @@ paths:
                 - product_id
                 - product_amount
                 - is_certificate_purchase
+  /api/deal/simplified/create:
+    post:
+      summary: 'Deal create simplified'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: token
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Заявка успешно создана\",\n\t\"data\": {\n\t\t\"deal\": {\n\t\t\t\"id\": 1,\n\t\t\t\"number\": \"D2200001\",\n\t\t\t\"status\": \"Создана\",\n\t\t}\n\t}\n}"
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: null
+                phone:
+                  type: string
+                  description: '+71234567890'
+                  example: null
+                email:
+                  type: string
+                  description: ''
+                  example: null
+                product_id:
+                  type: integer
+                  description: ''
+                  example: null
+                product_amount:
+                  type: integer
+                  description: ''
+                  example: null
+              required:
+                - name
+                - phone
+                - email
+                - product_id
+                - product_amount
 tags:
   -
     name: Endpoints

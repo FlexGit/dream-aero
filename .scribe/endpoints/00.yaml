@@ -1459,7 +1459,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: qui
+        example: vel
         type: string
         custom: []
     responses:
@@ -2283,14 +2283,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: quo
+        example: et
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: vel
+        example: mollitia
         type: time
         custom: []
       is_unified:
@@ -2304,14 +2304,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 19
+        example: 12
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 4
+        example: 18
         type: integer
         custom: []
       promocode_id:
@@ -2332,7 +2332,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: consequatur
+        example: delectus
         type: string
         custom: []
       comment:
@@ -2346,6 +2346,113 @@ endpoints:
         name: score
         description: ''
         required: false
+        example: null
+        type: integer
+        custom: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Заявка успешно создана",
+          	"data": {
+          		"deal": {
+          			"id": 1,
+          			"number": "D2200001",
+          			"status": "Создана",
+          		}
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/deal/simplified/create
+    metadata:
+      title: 'Deal create simplified'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+    bodyParameters:
+      name:
+        name: name
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+      phone:
+        name: phone
+        description: '+71234567890'
+        required: true
+        example: null
+        type: string
+        custom: []
+      email:
+        name: email
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+      product_id:
+        name: product_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+        custom: []
+      product_amount:
+        name: product_amount
+        description: ''
+        required: true
         example: null
         type: integer
         custom: []

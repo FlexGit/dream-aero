@@ -157,6 +157,9 @@
                                     <li class="tocify-item level-2" data-unique="endpoints-POSTapi-deal-create">
                         <a href="#endpoints-POSTapi-deal-create">Deal create</a>
                     </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-deal-simplified-create">
+                        <a href="#endpoints-POSTapi-deal-simplified-create">Deal create simplified</a>
+                    </li>
                                                     </ul>
                             </ul>
         
@@ -3831,7 +3834,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"qui\"
+    \"file_base64\": \"vel\"
 }"
 </code></pre></div>
 
@@ -3854,7 +3857,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "qui"
+    "file_base64": "vel"
 };
 
 fetch(url, {
@@ -3878,7 +3881,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'qui',
+            'file_base64' =&gt; 'vel',
         ],
     ]
 );
@@ -4046,7 +4049,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="qui"
+               value="vel"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -5797,11 +5800,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"quo\",
-    \"flight_time\": \"vel\",
-    \"location_id\": 19,
-    \"flight_simulator_id\": 4,
-    \"certificate_whom\": \"consequatur\"
+    \"flight_date\": \"et\",
+    \"flight_time\": \"mollitia\",
+    \"location_id\": 12,
+    \"flight_simulator_id\": 18,
+    \"certificate_whom\": \"delectus\"
 }"
 </code></pre></div>
 
@@ -5830,11 +5833,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "quo",
-    "flight_time": "vel",
-    "location_id": 19,
-    "flight_simulator_id": 4,
-    "certificate_whom": "consequatur"
+    "flight_date": "et",
+    "flight_time": "mollitia",
+    "location_id": 12,
+    "flight_simulator_id": 18,
+    "certificate_whom": "delectus"
 };
 
 fetch(url, {
@@ -5864,11 +5867,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'quo',
-            'flight_time' =&gt; 'vel',
-            'location_id' =&gt; 19,
-            'flight_simulator_id' =&gt; 4,
-            'certificate_whom' =&gt; 'consequatur',
+            'flight_date' =&gt; 'et',
+            'flight_time' =&gt; 'mollitia',
+            'location_id' =&gt; 12,
+            'flight_simulator_id' =&gt; 18,
+            'certificate_whom' =&gt; 'delectus',
         ],
     ]
 );
@@ -6090,7 +6093,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="quo"
+               value="et"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6100,7 +6103,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="vel"
+               value="mollitia"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6131,7 +6134,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="19"
+               value="12"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6141,7 +6144,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
-               value="4"
+               value="18"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6171,7 +6174,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="consequatur"
+               value="delectus"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>
@@ -6191,6 +6194,281 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="score"
                data-endpoint="POSTapi-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
+
+            <h2 id="endpoints-POSTapi-deal-simplified-create">Deal create simplified</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-deal-simplified-create">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://dev.dream-aero.ru/api/deal/simplified/create?api_key=&amp;token=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": null,
+    \"phone\": null,
+    \"email\": null,
+    \"product_id\": null,
+    \"product_amount\": null
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://dev.dream-aero.ru/api/deal/simplified/create"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": null,
+    "phone": null,
+    "email": null,
+    "product_id": null,
+    "product_amount": null
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://dev.dream-aero.ru/api/deal/simplified/create',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+        ],
+        'json' =&gt; [
+            'name' =&gt; null,
+            'phone' =&gt; null,
+            'email' =&gt; null,
+            'product_id' =&gt; null,
+            'product_amount' =&gt; null,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-deal-simplified-create">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Заявка успешно создана&quot;,
+	&quot;data&quot;: {
+		&quot;deal&quot;: {
+			&quot;id&quot;: 1,
+			&quot;number&quot;: &quot;D2200001&quot;,
+			&quot;status&quot;: &quot;Создана&quot;,
+		}
+	}
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-deal-simplified-create" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-deal-simplified-create"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-deal-simplified-create"></code></pre>
+</span>
+<span id="execution-error-POSTapi-deal-simplified-create" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-deal-simplified-create"></code></pre>
+</span>
+<form id="form-POSTapi-deal-simplified-create" data-method="POST"
+      data-path="api/deal/simplified/create"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-deal-simplified-create', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-deal-simplified-create"
+                    onclick="tryItOut('POSTapi-deal-simplified-create');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-deal-simplified-create"
+                    onclick="cancelTryOut('POSTapi-deal-simplified-create');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-deal-simplified-create" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/deal/simplified/create</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="POSTapi-deal-simplified-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="POSTapi-deal-simplified-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="name"
+               data-endpoint="POSTapi-deal-simplified-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>phone</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="phone"
+               data-endpoint="POSTapi-deal-simplified-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>+71234567890</p>
+        </p>
+                <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-deal-simplified-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_id"
+               data-endpoint="POSTapi-deal-simplified-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_amount</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_amount"
+               data-endpoint="POSTapi-deal-simplified-create"
                value=""
                data-component="body" hidden>
     <br>
