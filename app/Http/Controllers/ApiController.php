@@ -2009,6 +2009,7 @@ class ApiController extends Controller
 		$events = Event::/*where('contractor_id', $contractorId)
 				->*/where('event_type', Event::EVENT_TYPE_DEAL)
 				->where('stop_at', '<', Carbon::now())
+				->orderBy('stop_at', 'desc')
 				->whereRelation('deal', 'deals.contractor_id', '=', $contractorId);
 		$eventIds = $events->pluck('id');
 		$events = $events->get();
@@ -2499,6 +2500,7 @@ class ApiController extends Controller
 		$notifications = Notification::where('is_active', true)
 			->whereIn('contractor_id', [$contractor->id, 0])
 			->whereIn('city_id', [$city->id, 0])
+			->orderBy('created_at', 'desc')
 			->get();
 		
 		$data = [];
