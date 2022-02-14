@@ -2168,7 +2168,7 @@ class ApiController extends Controller
 			return $this->responseError('Позиция не найдена', 400);
 		}
 
-		if (!$product->validateFlightDate($flightDateCarbon)) {
+		if ($flightDateCarbon && !$product->validateFlightDate($flightDateCarbon)) {
 			return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
 		}
 
@@ -2580,16 +2580,16 @@ class ApiController extends Controller
 		if (!$notification) {
 			return $this->responseError('Уведомление не найдено', 400);
 		}
-		
-		$data = [
-			'notification' =>  $notification->format(),
-		];
-		
+
 		// после прочтения уведомления снимаем признак того, что оно новое
 		if ($notification->is_new) {
 			$notification->is_new = false;
 			$notification->save();
 		}
+
+		$data = [
+			'notification' =>  $notification->format(),
+		];
 		
 		return $this->responseSuccess(null, $data);
 	}
