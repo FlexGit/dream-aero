@@ -2335,157 +2335,6 @@ class ApiController extends Controller
 	}
 
 	/**
-	 *  Deal create simplified
-	 *
-	 * @queryParam api_key string required No-example
-	 * @queryParam token string required No-example
-	 * @bodyParam name string required No-example
-	 * @bodyParam phone string required +71234567890 No-example
-	 * @bodyParam email string required No-example
-	 * @bodyParam product_id int required No-example
-	 * @bodyParam product_amount int required No-example
-	 * @response scenario=success {
-	 * 	"success": true,
-	 * 	"message": "Заявка успешно создана",
-	 * 	"data": {
-	 * 		"deal": {
-	 * 			"id": 1,
-	 * 			"number": "D2200001",
-	 * 			"status": "Создана",
-	 * 		}
-	 * 	}
-	 * }
-	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
-	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
-	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
-	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
-	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
-	 */
-	public function createDealSimplified()
-	{
-		$authToken = $this->request->token ?? '';
-		if (!$authToken) {
-			return $this->responseError('Не передан токен авторизации', 400);
-		}
-
-		$rules = [
-			'name' => ['required', 'min:3', 'max:50'],
-			'phone' => ['required', 'valid_phone'],
-			'email' => ['required', 'email'],
-			'product_id' => ['required', 'numeric'],
-			'product_amount' => ['required', 'numeric'],
-		];
-		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
-			->setAttributeNames([
-				'name' => 'Имя',
-				'phone' => 'Номер телефона',
-				'email' => 'E-mail',
-				'product_id' => 'Позиция',
-				'product_amount' => 'Стоимость',
-			]);
-		if (!$validator->passes()) {
-			$errors = [];
-			$validatorErrors = $validator->errors();
-			foreach ($rules as $key => $rule) {
-				foreach ($validatorErrors->get($key) ?? [] as $error) {
-					$errors[$key] = $error;
-				}
-			}
-			return $this->responseError($errors, 400);
-		}
-
-		$token = HelpFunctions::validToken($authToken);
-		if (!$token) {
-			return $this->responseError('Токен авторизации не найден', 400);
-		}
-
-		$contractorId = $token->contractor_id ?? 0;
-		if (!$contractorId) {
-			return $this->responseError('Контрагент не найден', 400);
-		}
-
-		$contractor = Contractor::where('is_active', true)
-			->find($contractorId);
-		if (!$contractor) {
-			return $this->responseError('Контрагент не найден', 400);
-		}
-
-		$productId = $this->request->product_id ?? 0;
-		if (!$productId) {
-			return $this->responseError('Не передан ID позиции', 400);
-		}
-
-		$productAmount = $this->request->product_amount ?? 0;
-		if (!$productAmount) {
-			return $this->responseError('Не передана стоимость позиции', 400);
-		}
-
-		$product = Product::find($productId);
-		if (!$product) {
-			return $this->responseError('Позиция не найдена', 400);
-		}
-
-		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
-		// ToDO: сообщение об ошибке, если цена не совпадет с полученной
-
-		$statusesData = HelpFunctions::getStatusesByType();
-
-		if (!array_key_exists(Deal::CREATED_STATUS, $statusesData['deal'])) {
-			return $this->responseError('Статус заявки не найден', 400);
-		}
-
-		try {
-			\DB::beginTransaction();
-
-			// создание сделки
-			$deal = new Deal();
-			$deal->status_id = $statusesData['deal'][Deal::CREATED_STATUS]['id'];
-			$deal->contractor_id = $contractor ? $contractor->id : 0;
-			$deal->name = $this->request->name;
-			$deal->phone = $this->request->phone;
-			$deal->email = $this->request->email;
-			$deal->source = Deal::MOB_SOURCE;
-			$dealData = [];
-			/*$dealData['comment'] = $this->request->comment;
-			$dealData['certificate_whom'] = $this->request->certificate_whom;*/
-			$deal->data_json = $dealData;
-			$deal->save();
-
-			$position = new DealPosition();
-			$position->product_id = $product ? $product->id : 0;
-			$position->duration = $product ? $product->duration : 0;
-			$position->amount = $productAmount ?? 0;
-			$position->is_certificate_purchase = 0;
-			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
-			$position->currency_id = $currency ? $currency->id : 0;
-			$position->source = Deal::MOB_SOURCE;
-			$positionData = [];
-			$position->data_json = $positionData;
-			$position->save();
-
-			$deal->positions()->save($position);
-
-			\DB::commit();
-		} catch (Throwable $e) {
-			\DB::rollback();
-
-			Log::debug($e);
-
-			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
-		}
-
-		//dispatch(new \App\Jobs\SendDealEmail($deal));
-		$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();
-
-		$data = [
-			'deal' => $deal->format(),
-		];
-
-		return $this->responseSuccess('Заявка успешно создана', $data);
-	}
-
-	/**
 	 * Certificate Verify
 	 *
 	 * @queryParam api_key string required No-example
@@ -2739,5 +2588,156 @@ class ApiController extends Controller
 		];
 		
 		return $this->responseSuccess(null, $data);
+	}
+
+	/**
+	 *  Deal create simplified
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @bodyParam name string required No-example
+	 * @bodyParam phone string required +71234567890 No-example
+	 * @bodyParam email string required No-example
+	 * @bodyParam product_id int required No-example
+	 * @bodyParam product_amount int required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "Заявка успешно создана",
+	 * 	"data": {
+	 * 		"deal": {
+	 * 			"id": 1,
+	 * 			"number": "D2200001",
+	 * 			"status": "Создана",
+	 * 		}
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function createDealSimplified()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+
+		$rules = [
+			'name' => ['required', 'min:3', 'max:50'],
+			'phone' => ['required', 'valid_phone'],
+			'email' => ['required', 'email'],
+			'product_id' => ['required', 'numeric'],
+			'product_amount' => ['required', 'numeric'],
+		];
+		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
+			->setAttributeNames([
+				'name' => 'Имя',
+				'phone' => 'Номер телефона',
+				'email' => 'E-mail',
+				'product_id' => 'Позиция',
+				'product_amount' => 'Стоимость',
+			]);
+		if (!$validator->passes()) {
+			$errors = [];
+			$validatorErrors = $validator->errors();
+			foreach ($rules as $key => $rule) {
+				foreach ($validatorErrors->get($key) ?? [] as $error) {
+					$errors[$key] = $error;
+				}
+			}
+			return $this->responseError($errors, 400);
+		}
+
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		$productId = $this->request->product_id ?? 0;
+		if (!$productId) {
+			return $this->responseError('Не передан ID позиции', 400);
+		}
+
+		$productAmount = $this->request->product_amount ?? 0;
+		if (!$productAmount) {
+			return $this->responseError('Не передана стоимость позиции', 400);
+		}
+
+		$product = Product::find($productId);
+		if (!$product) {
+			return $this->responseError('Позиция не найдена', 400);
+		}
+
+		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
+		// ToDO: сообщение об ошибке, если цена не совпадет с полученной
+
+		$statusesData = HelpFunctions::getStatusesByType();
+
+		if (!array_key_exists(Deal::CREATED_STATUS, $statusesData['deal'])) {
+			return $this->responseError('Статус заявки не найден', 400);
+		}
+
+		try {
+			\DB::beginTransaction();
+
+			// создание сделки
+			$deal = new Deal();
+			$deal->status_id = $statusesData['deal'][Deal::CREATED_STATUS]['id'];
+			$deal->contractor_id = $contractor ? $contractor->id : 0;
+			$deal->name = $this->request->name;
+			$deal->phone = $this->request->phone;
+			$deal->email = $this->request->email;
+			$deal->source = Deal::MOB_SOURCE;
+			$dealData = [];
+			/*$dealData['comment'] = $this->request->comment;
+			$dealData['certificate_whom'] = $this->request->certificate_whom;*/
+			$deal->data_json = $dealData;
+			$deal->save();
+
+			$position = new DealPosition();
+			$position->product_id = $product ? $product->id : 0;
+			$position->duration = $product ? $product->duration : 0;
+			$position->amount = $productAmount ?? 0;
+			$position->is_certificate_purchase = 0;
+			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
+			$position->currency_id = $currency ? $currency->id : 0;
+			$position->source = Deal::MOB_SOURCE;
+			$positionData = [];
+			$position->data_json = $positionData;
+			$position->save();
+
+			$deal->positions()->save($position);
+
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+
+			Log::debug($e);
+
+			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
+		}
+
+		//dispatch(new \App\Jobs\SendDealEmail($deal));
+		$job = new \App\Jobs\SendDealEmail($deal);
+		$job->handle();
+
+		$data = [
+			'deal' => $deal->format(),
+		];
+
+		return $this->responseSuccess('Заявка успешно создана', $data);
 	}
 }
