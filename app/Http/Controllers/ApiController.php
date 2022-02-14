@@ -1706,10 +1706,7 @@ class ApiController extends Controller
 	 *				"name": "Акция",
 	 *				"preview_text": null,
 	 *				"detail_text": null,
-	 * 				"discount": {
-						"value": 5,
-	 * 					"is_fixed": false
-	 * 				}
+	 * 				"image_file_path": null
 	 * 			}
 	 *		}
 	 * 	]
@@ -1785,10 +1782,7 @@ class ApiController extends Controller
 	 *			"name": "Акция",
 	 *			"preview_text": null,
 	 *			"detail_text": null,
-	 *			"discount": {
-	 *				"value": 5,
-	 *				"is_fixed": false
-	 *			}
+	 * 			"image_file_path": null
 	 * 		}
 	 * 	}
 	 * }

@@ -88,6 +88,7 @@ class Promo extends Model
 		'active_from_at',
 		'active_to_at',
 		'is_published',
+		'data_json',
 	];
 
 	/**
@@ -103,6 +104,7 @@ class Promo extends Model
 		'active_from_at' => 'datetime:Y-m-d H:i:s',
 		'active_to_at' => 'datetime:Y-m-d H:i:s',
 		'is_published' => 'boolean',
+		'data_json' => 'array',
 	];
 
 	public function city()
@@ -125,6 +127,7 @@ class Promo extends Model
 			'name' => $this->name,
 			'preview_text' => $this->preview_text,
 			'detail_text' => $this->detail_text,
+			'image_file_path' => (is_array($this->data_json) && array_key_exists('image_file_path', $this->data_json)) ? \URL::to('/upload/' . $this->data_json['image_file_path']) : null,
 		];
 	}
 

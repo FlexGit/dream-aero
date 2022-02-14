@@ -2385,9 +2385,7 @@ paths:
                         name: Акция
                         preview_text: null
                         detail_text: null
-                        discount:
-                          value: 5
-                          is_fixed: false
+                        image_file_path: null
                 properties:
                   success:
                     type: boolean
@@ -2404,9 +2402,7 @@ paths:
                           name: Акция
                           preview_text: null
                           detail_text: null
-                          discount:
-                            value: 5
-                            is_fixed: false
+                          image_file_path: null
                     items:
                       type: object
         400:
@@ -2556,9 +2552,7 @@ paths:
                       name: Акция
                       preview_text: null
                       detail_text: null
-                      discount:
-                        value: 5
-                        is_fixed: false
+                      image_file_path: null
                 properties:
                   success:
                     type: boolean
@@ -2574,9 +2568,7 @@ paths:
                         name: Акция
                         preview_text: null
                         detail_text: null
-                        discount:
-                          value: 5
-                          is_fixed: false
+                        image_file_path: null
         400:
           description: 'Bad Request'
           content:
@@ -3029,7 +3021,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: blanditiis
+                  example: repellat
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4477,11 +4469,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: ut
+                  example: in
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: similique
+                  example: in
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4489,11 +4481,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 10
+                  example: 20
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 2
+                  example: 10
                 promocode_id:
                   type: string
                   description: ''
@@ -4505,7 +4497,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: voluptas
+                  example: repellendus
                 comment:
                   type: string
                   description: ''

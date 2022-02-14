@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "419966d6-48ec-405f-be84-5a1c83de11ce",
+        "_postman_id": "1fdb4666-33f1-48e9-a91f-a3a27945c7e6",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -991,7 +991,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"promo\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u0410\u043a\u0446\u0438\u044f\",\n\t\t\t\"preview_text\": null,\n\t\t\t\"detail_text\": null,\n\t\t\t\t\"discount\": {\n\"value\": 5,\n\t\t\t\t\t\"is_fixed\": false\n\t\t\t\t}\n\t\t\t}\n\t}\n\t]\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": [\n\t{\n\t\t\t\"promo\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"\u0410\u043a\u0446\u0438\u044f\",\n\t\t\t\"preview_text\": null,\n\t\t\t\"detail_text\": null,\n\t\t\t\t\"image_file_path\": null\n\t\t\t}\n\t}\n\t]\n}",
                             "name": "success"
                         },
                         {
@@ -1060,7 +1060,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"promo\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"\u0410\u043a\u0446\u0438\u044f\",\n\t\t\"preview_text\": null,\n\t\t\"detail_text\": null,\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\"is_fixed\": false\n\t\t}\n\t\t}\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"promo\": {\n\t\t\"id\": 1,\n\t\t\"name\": \"\u0410\u043a\u0446\u0438\u044f\",\n\t\t\"preview_text\": null,\n\t\t\"detail_text\": null,\n\t\t\t\"image_file_path\": null\n\t\t}\n\t}\n}",
                             "name": "success"
                         },
                         {
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"blanditiis\"}"
+                            "raw": "{\"file_base64\":\"repellat\"}"
                         },
                         "description": ""
                     },
@@ -1829,7 +1829,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"ut\",\"flight_time\":\"similique\",\"location_id\":10,\"flight_simulator_id\":2,\"certificate_whom\":\"voluptas\"}"
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"in\",\"flight_time\":\"in\",\"location_id\":20,\"flight_simulator_id\":10,\"certificate_whom\":\"repellendus\"}"
                         },
                         "description": ""
                     },
