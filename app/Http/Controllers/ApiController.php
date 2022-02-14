@@ -2681,6 +2681,10 @@ class ApiController extends Controller
 			return $this->responseError('Позиция не найдена', 400);
 		}
 
+		if (!in_array($product->alias, ['fly_no_fear'])) {
+			return $this->responseError('Некорректный продукт', 400);
+		}
+
 		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
 		// ToDO: сообщение об ошибке, если цена не совпадет с полученной
 
