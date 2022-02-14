@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "5c0bfb96-64a2-4deb-af50-ee8e262a9985",
+        "_postman_id": "419966d6-48ec-405f-be84-5a1c83de11ce",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"nobis\"}"
+                            "raw": "{\"file_base64\":\"blanditiis\"}"
                         },
                         "description": ""
                     },
@@ -1829,7 +1829,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null}"
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"ut\",\"flight_time\":\"similique\",\"location_id\":10,\"flight_simulator_id\":2,\"certificate_whom\":\"voluptas\"}"
                         },
                         "description": ""
                     },

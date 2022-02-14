@@ -2051,14 +2051,14 @@ class ApiController extends Controller
 	 * @bodyParam product_id int required No-example
 	 * @bodyParam product_amount int required No-example
 	 * @bodyParam is_certificate_purchase bool required No-example
-	 * @bodyParam flight_date date No-example
-	 * @bodyParam flight_time time No-example
-	 * @bodyParam is_unified bool No-example
-	 * @bodyParam location_id int No-example
-	 * @bodyParam flight_simulator_id int No-example
+	 * @bodyParam flight_date date Required for booking
+	 * @bodyParam flight_time time Required for booking
+	 * @bodyParam is_unified bool Required for certificate purchase No-example
+	 * @bodyParam location_id int Required for booking
+	 * @bodyParam flight_simulator_id int Required for booking
 	 * @bodyParam promocode_id string No-example
 	 * @bodyParam certificate_id string No-example
-	 * @bodyParam certificate_whom string For whom certificate. No-example
+	 * @bodyParam certificate_whom string For whom certificate. Required for certificate purchase
 	 * @bodyParam comment string No-example
 	 * @bodyParam score int No-example
 	 * @response scenario=success {

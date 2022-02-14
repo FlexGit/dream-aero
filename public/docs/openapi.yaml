@@ -3029,7 +3029,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: nobis
+                  example: blanditiis
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4476,24 +4476,24 @@ paths:
                   example: null
                 flight_date:
                   type: date
-                  description: ''
-                  example: null
+                  description: 'Required for booking'
+                  example: ut
                 flight_time:
                   type: time
-                  description: ''
-                  example: null
+                  description: 'Required for booking'
+                  example: similique
                 is_unified:
                   type: boolean
-                  description: ''
+                  description: 'Required for certificate purchase'
                   example: null
                 location_id:
                   type: integer
-                  description: ''
-                  example: null
+                  description: 'Required for booking'
+                  example: 10
                 flight_simulator_id:
                   type: integer
-                  description: ''
-                  example: null
+                  description: 'Required for booking'
+                  example: 2
                 promocode_id:
                   type: string
                   description: ''
@@ -4504,8 +4504,8 @@ paths:
                   example: null
                 certificate_whom:
                   type: string
-                  description: 'For whom certificate.'
-                  example: null
+                  description: 'For whom certificate. Required for certificate purchase'
+                  example: voluptas
                 comment:
                   type: string
                   description: ''
