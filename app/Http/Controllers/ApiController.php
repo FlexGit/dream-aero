@@ -2024,10 +2024,8 @@ class ApiController extends Controller
 		foreach ($scores ?? [] as $score) {
 			$scoreData[$score->event_id] = $score->score;
 		}
-		
-		$data = [
-			'flights' => []
-		];
+
+		$data = [];
 		foreach ($events as $event) {
 			$data[] = [
 				'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
