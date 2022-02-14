@@ -124,9 +124,9 @@ class Promo extends Model
 	{
 		return [
 			'id' => $this->id,
-			'name' => $this->name,
-			'preview_text' => $this->preview_text,
-			'detail_text' => $this->detail_text,
+			'name' => $this->name ?? null,
+			'preview_text' => $this->preview_text ?? null,
+			'detail_text' => $this->detail_text ?? null,
 			'image_file_path' => (is_array($this->data_json) && array_key_exists('image_file_path', $this->data_json)) ? \URL::to('/upload/' . $this->data_json['image_file_path']) : null,
 		];
 	}
