@@ -2158,7 +2158,7 @@ class ApiController extends Controller
 		
 		$product = Product::find($productId);
 		if (!$product) {
-			return $this->responseError('Позиция не найдена', 400);
+			return $this->responseError('Продукт не найден', 400);
 		}
 
 		if ($flightDateCarbon && !$product->validateFlightDate($flightDateCarbon)) {
@@ -2398,7 +2398,7 @@ class ApiController extends Controller
 		
 		$product = Product::find($productId);
 		if (!$product) {
-			return $this->responseError('Позиция не найдена', 400);
+			return $this->responseError('Продукт не найден', 400);
 		}
 		
 		$statusesData = HelpFunctions::getStatusesByType();
@@ -2678,7 +2678,7 @@ class ApiController extends Controller
 
 		$product = Product::find($productId);
 		if (!$product) {
-			return $this->responseError('Позиция не найдена', 400);
+			return $this->responseError('Продукт не найден', 400);
 		}
 
 		if (!in_array($product->alias, ['fly_no_fear'])) {
