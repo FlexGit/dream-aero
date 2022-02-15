@@ -1445,7 +1445,7 @@ class ApiController extends Controller
 		
 		$promocodeId = $this->request->promocode_id ?? 0;
 
-		if ($this->request->flight_date && $this->request->flight_time) {
+		/*if ($this->request->flight_date && $this->request->flight_time) {
 			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
 			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
 				return $this->responseError('Некорректная дата и время полета', 400);
@@ -1453,7 +1453,7 @@ class ApiController extends Controller
 			if (!$product->validateFlightDate($flightDateCarbon)) {
 				return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
 			}
-		}
+		}*/
 
 		$locationId = $this->request->location_id ?? 0;
 		if ($locationId) {
