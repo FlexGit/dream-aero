@@ -3021,7 +3021,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: voluptas
+                  example: aut
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3238,26 +3238,6 @@ paths:
           schema:
             type: integer
             description: ''
-            example: null
-        -
-          in: query
-          name: flight_date
-          description: date
-          example: null
-          required: false
-          schema:
-            type: string
-            description: date
-            example: null
-        -
-          in: query
-          name: flight_time
-          description: time
-          example: null
-          required: false
-          schema:
-            type: string
-            description: time
             example: null
         -
           in: query
@@ -4499,11 +4479,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: blanditiis
+                  example: in
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: sed
+                  example: et
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4515,7 +4495,7 @@ paths:
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 10
+                  example: 4
                 promocode_id:
                   type: integer
                   description: ''
@@ -4527,7 +4507,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: id
+                  example: quibusdam
                 comment:
                   type: string
                   description: ''

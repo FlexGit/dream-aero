@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "d883689d-fa09-4dcf-a2a8-c41fdb61afbf",
+        "_postman_id": "3deaf474-4ed9-4bfa-9f0d-b9b4e736c0c6",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"voluptas\"}"
+                            "raw": "{\"file_base64\":\"aut\"}"
                         },
                         "description": ""
                     },
@@ -1313,18 +1313,6 @@
                                     "disabled": false
                                 },
                                 {
-                                    "key": "flight_date",
-                                    "value": "",
-                                    "description": "date",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "flight_time",
-                                    "value": "",
-                                    "description": "time",
-                                    "disabled": true
-                                },
-                                {
                                     "key": "is_unified",
                                     "value": "",
                                     "description": "",
@@ -1349,7 +1337,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/tariff\/price?token=&product_id=&flight_date=&flight_time=&is_unified=&promocode_id=&location_id=&certificate_id="
+                            "raw": "{{baseUrl}}\/api\/tariff\/price?token=&product_id=&is_unified=&promocode_id=&location_id=&certificate_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1847,7 +1835,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"blanditiis\",\"flight_time\":\"sed\",\"location_id\":7,\"flight_simulator_id\":10,\"certificate_whom\":\"id\"}"
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"in\",\"flight_time\":\"et\",\"location_id\":7,\"flight_simulator_id\":4,\"certificate_whom\":\"quibusdam\"}"
                         },
                         "description": ""
                     },
