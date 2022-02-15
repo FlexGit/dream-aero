@@ -1376,6 +1376,7 @@ class ApiController extends Controller
 	 * @queryParam api_key string required No-example
 	 * @queryParam token string required No-example
 	 * @queryParam product_id int required No-example
+	 * @queryParam is_certificate_purchase bool required No-example
 	 * @queryParam is_unified bool No-example
 	 * @queryParam promocode_id int No-example
 	 * @queryParam location_id int No-example
@@ -1441,20 +1442,8 @@ class ApiController extends Controller
 			return $this->responseError('Некорректный тип тарифа', 400);
 		}
 		
-		$promocodeId = $this->request->promocode_id ?? 0;
-
-		/*if ($this->request->flight_date && $this->request->flight_time) {
-			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
-			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
-				return $this->responseError('Некорректная дата и время полета', 400);
-			}
-			if (!$product->validateFlightDate($flightDateCarbon)) {
-				return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
-			}
-		}*/
-
 		$locationId = $this->request->location_id ?? 0;
-		if ($locationId) {
+		if ($locationId && !$this->request->is_certificate_purchase) {
 			$location = Location::where('is_active', true)
 				->find($this->request->location_id);
 			if (!$location) {
@@ -1464,7 +1453,8 @@ class ApiController extends Controller
 
 		$isUnified = $this->request->is_unified ?? false;
 		$certificateId = $this->request->certificate_id ?? 0;
-		
+		$promocodeId = $this->request->promocode_id ?? 0;
+
 		$amount = $product->calcAmount($contractor->id, $cityId, $locationId, 0, 0, $promocodeId, 0, 'api', $certificateId, $isUnified);
 		if ($amount < 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);

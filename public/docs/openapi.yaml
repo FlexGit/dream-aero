@@ -3021,7 +3021,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: aut
+                  example: deleniti
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3237,6 +3237,16 @@ paths:
           required: true
           schema:
             type: integer
+            description: ''
+            example: null
+        -
+          in: query
+          name: is_certificate_purchase
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: boolean
             description: ''
             example: null
         -
@@ -4479,11 +4489,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: in
+                  example: cum
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: et
+                  example: fuga
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4491,11 +4501,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 7
+                  example: 16
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 4
+                  example: 18
                 promocode_id:
                   type: integer
                   description: ''
@@ -4507,7 +4517,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: quibusdam
+                  example: maiores
                 comment:
                   type: string
                   description: ''
