@@ -2123,13 +2123,6 @@ class ApiController extends Controller
 			return $this->responseError($errors, 400);
 		}
 		
-		if ($this->request->flight_date && $this->request->flight_time) {
-			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
-			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
-				return $this->responseError('Некорректная дата и время полета', 400);
-			}
-		}
-		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
 			return $this->responseError('Токен авторизации не найден', 400);
@@ -2150,19 +2143,25 @@ class ApiController extends Controller
 		if (!$productId) {
 			return $this->responseError('Не передан ID позиции', 400);
 		}
-		
+
 		$productAmount = $this->request->product_amount ?? 0;
 		if (!$productAmount) {
 			return $this->responseError('Не передана стоимость позиции', 400);
 		}
-		
+
 		$product = Product::find($productId);
 		if (!$product) {
 			return $this->responseError('Продукт не найден', 400);
 		}
 
-		if ($flightDateCarbon && !$product->validateFlightDate($flightDateCarbon)) {
-			return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+		if ($this->request->flight_date && $this->request->flight_time) {
+			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
+			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
+				return $this->responseError('Некорректная дата и время полета', 400);
+			}
+			if (!$product->validateFlightDate($flightDateCarbon)) {
+				return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+			}
 		}
 
 		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
