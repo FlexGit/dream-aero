@@ -147,6 +147,8 @@ class CityController extends Controller
 		$rules = [
 			'name' => 'required|max:255|unique:cities,name',
 			'alias' => 'required|min:2|max:3|unique:cities,alias',
+			'email' => 'required|email',
+			'phone' => 'required',
 			'version' => ['required'],
 		];
 		
@@ -154,6 +156,8 @@ class CityController extends Controller
 			->setAttributeNames([
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
+				'email' => 'E-mail',
+				'phone' => 'Телефон',
 				'version' => 'Версия',
 			]);
 		if (!$validator->passes()) {
@@ -163,6 +167,8 @@ class CityController extends Controller
 		$city = new City();
 		$city->name = $this->request->name;
 		$city->alias = $this->request->alias;
+		$city->email = $this->request->email;
+		$city->phone = $this->request->phone;
 		$city->version = $this->request->version;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {
@@ -192,6 +198,8 @@ class CityController extends Controller
 		$rules = [
 			'name' => 'required|max:255|unique:cities,name,' . $id,
 			'alias' => 'required|min:2|max:3|unique:cities,alias,' . $id,
+			'email' => 'required|email',
+			'phone' => 'required',
 			'version' => ['required'],
 		];
 		
@@ -199,6 +207,8 @@ class CityController extends Controller
 			->setAttributeNames([
 				'name' => 'Наименование',
 				'alias' => 'Алиас',
+				'email' => 'E-mail',
+				'phone' => 'Телефон',
 				'version' => 'Версия',
 			]);
 		if (!$validator->passes()) {
@@ -207,6 +217,8 @@ class CityController extends Controller
 
 		$city->name = $this->request->name;
 		$city->alias = $this->request->alias;
+		$city->email = $this->request->email;
+		$city->phone = $this->request->phone;
 		$city->version = $this->request->version;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {

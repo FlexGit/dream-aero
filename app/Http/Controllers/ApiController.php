@@ -1750,6 +1750,7 @@ class ApiController extends Controller
 		
 		$promos = Promo::where('is_active', true)
 			->whereIn('city_id', [$city->id, 0])
+			->where('is_published', true)
 			->get();
 		
 		if ($promos->isEmpty()) {

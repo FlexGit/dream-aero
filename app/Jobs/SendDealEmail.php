@@ -70,44 +70,17 @@ class SendDealEmail extends Job implements ShouldQueue {
 		}
 
 		$locationData = $position->location ? $position->location->data_json ?? [] : [];
-		
-		// собираем контакты со всех локаций города на случай, если локации в заказе не было
-		// либо нет данных о конкретном виде связи
-		$cityData = [
-			'phone' => [],
-			'whatsapp' => [],
-			'skype' => [],
-			'email' => [],
-		];
-		if ($position->city && $position->city->locations) {
-			foreach ($position->city->locations as $location) {
-				$locationData = $location->data_json ?? [];
-				if (array_key_exists('phone', $locationData)) {
-					$cityData['phone'][] = $locationData['phone'];
-				}
-				if (array_key_exists('whatsapp', $locationData)) {
-					$cityData['whatsapp'][] = $locationData['whatsapp'];
-				}
-				if (array_key_exists('skype', $locationData)) {
-					$cityData['skype'][] = $locationData['skype'];
-				}
-				if (array_key_exists('email', $locationData)) {
-					$cityData['email'][] = $locationData['email'];
-				}
-			}
+
+		if ($deal->contractor && $deal->contractor->city) {
+			$cityData = [
+				'phone' => $deal->contractor->city->phone ?? '',
+				'email' => $deal->contractor->city->email ?? '',
+			];
 		}
+		if (!$cityData['email']) return;
 
 		$recipients = [];
-		if ($deal->contractor && $deal->contractor->city) {
-			$users = User::where('enable', true)
-				->whereIn('role', [User::ROLE_ADMIN])
-				->where('city_id', $deal->contractor->city->id)
-				->get();
-			foreach ($users ?? [] as $user) {
-				$recipients[] = $user->email;
-			}
-		}
-		if (!$recipients) return;
+		$recipients[] = $cityData['email'];
 		
 		$messageData = [
 			'name' => $position->name,
@@ -123,10 +96,10 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'duration' => $position->duration,
 			'amount' => $position->amount,
 			'score' => $score,
-			'phone' => array_key_exists('phone', $locationData) ? $locationData['phone'] : implode(', ', $cityData['phone']),
-			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : implode(', ', $cityData['whatsapp']),
-			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : implode(', ', $cityData['skype']),
-			'email' => array_key_exists('email', $locationData) ? $locationData['email'] : implode(', ', $cityData['email']),
+			'phone' => array_key_exists('phone', $locationData) ? $locationData['phone'] : $cityData['phone'],
+			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : '',
+			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : '',
+			'email' => array_key_exists('email', $locationData) ? $locationData['email'] : $cityData['email'],
 		];
 		
 		try {

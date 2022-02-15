@@ -97,6 +97,8 @@ class City extends Model
 		'alias',
 		'version',
 		'timezone',
+		'email',
+		'phone',
 		'is_active',
 		'data_json',
 	];

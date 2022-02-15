@@ -13,6 +13,14 @@
 			<td>{{ $city->alias }}</td>
 		</tr>
 		<tr class="odd">
+			<td>E-mail</td>
+			<td>{{ $city->email }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Телефон</td>
+			<td>{{ $city->phone }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Версия</td>
 			<td>{{ $city->version }}</td>
 		</tr>
