@@ -1434,7 +1434,7 @@ class ApiController extends Controller
 			}
 		}
 
-		$product =  Product::where('is_active', true)->find($productId);
+		$product =  Product::find($productId);
 		if (!$product) {
 			return $this->responseError('Тариф не найден', 400);
 		}
