@@ -92,7 +92,7 @@ class LegalEntity extends Model
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
-			'public_offer_file_path' => array_key_exists('public_offer', $data) ? \URL::to('/upload/public_offer/' . $data['public_offer']['name'] . '.' . $data['public_offer']['ext']) : null,
+			'public_offer_file_path' => array_key_exists('public_offer_file_path', $data) ? \URL::to('/upload/public_offer/' . $data['public_offer_file_path']['name'] . '.' . $data['public_offer_file_path']['ext']) : null,
 		];
 	}
 }
