@@ -87,12 +87,10 @@ class LegalEntity extends Model
 	 */
 	public function format()
 	{
-		$data = $this->data_json ?? [];
-		
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
-			'public_offer_file_path' => array_key_exists('public_offer_file_path', $data) ? \URL::to('/upload/public_offer/' . $data['public_offer_file_path']['name'] . '.' . $data['public_offer_file_path']['ext']) : null,
+			'public_offer_file_path' => (is_array($this->data_json) && array_key_exists('public_offer_file_path', $this->data_json)) ? \URL::to('/upload/' . $this->data_json['public_offer_file_path']) : null,
 		];
 	}
 }
