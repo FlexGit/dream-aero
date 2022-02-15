@@ -2324,8 +2324,9 @@ class ApiController extends Controller
 		}
 		
 		//dispatch(new \App\Jobs\SendDealEmail($deal));
-		$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();
+
+		/*$job = new \App\Jobs\SendDealEmail($deal);
+		$job->handle();*/
 		
 		$data = [
 			'deal' => $deal->format(),
@@ -2735,8 +2736,9 @@ class ApiController extends Controller
 		}
 
 		//dispatch(new \App\Jobs\SendDealEmail($deal));
-		$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();
+
+		/*$job = new \App\Jobs\SendDealEmail($deal);
+		$job->handle();*/
 
 		$data = [
 			'deal' => $deal->format(),
