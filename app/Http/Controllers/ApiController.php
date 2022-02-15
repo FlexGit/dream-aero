@@ -1375,10 +1375,13 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam token string required No-example
-	 * @queryParam tariff_id int required No-example
-	 * @queryParam flight_at string No-example
-	 * @queryParam is_unified bool Unified certificate. No-example
+	 * @queryParam product_id int required No-example
+	 * @queryParam flight_date date Required for booking
+	 * @queryParam flight_time time Required for booking
+	 * @queryParam is_unified bool Required for certificate purchase
 	 * @queryParam promocode_id int No-example
+	 * @queryParam location_id int Required for booking
+	 * @queryParam certificate_id int No-example
 	 * @response scenario=success {
 	 * 	"success": true,
 	 * 	"message": "",
@@ -1396,6 +1399,7 @@ class ApiController extends Controller
 	{
 		$authToken = $this->request->token ?? '';
 		if (!$authToken) {
+
 			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
@@ -1444,33 +1448,32 @@ class ApiController extends Controller
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
 		
-		$date = date('Y-m-d');
-		
-		/*if ($this->request->promocode_id) {
-			$promocode = Promocode::whereIn('city_id', [$city->id, 0])
-				->where('is_active', true)
-				->where('active_from_at', '<=', $date)
-				->where('active_to_at', '>=', $date)
-				->find($this->request->promocode_id);
-			if (!$promocode) {
-				return $this->responseError('Промокод не найден', 400);
-			}
-		}*/
 		$promocodeId = $this->request->promocode_id ?? 0;
 
-		$flightAt = $this->request->flight_at ?? date('d.m.Y');
-		$isUnified = $this->request->is_unified ?? false;
-		if ($isUnified) {
-			$cityId = 0;
-		}
-		
-		if (!$tariff->validateFlightDate($flightAt)) {
-			return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+		if ($this->request->flight_date && $this->request->flight_time) {
+			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
+			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
+				return $this->responseError('Некорректная дата и время полета', 400);
+			}
+			if (!$tariff->validateFlightDate($flightDateCarbon)) {
+				return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+			}
 		}
 
-		//$amount = $tariff->calculateProductPrice($contractor, $promocode ?? null, $flightAt, $isUnified);
-		$amount = $tariff->calcAmount($contractor->id, $cityId, 0, 0, 0, $promocodeId, 0, 'api', '');
-		if ($amount <= 0) {
+		$locationId = $this->request->location_id ?? 0;
+		if ($locationId) {
+			$location = Location::where('is_active', true)
+				->find($this->request->location_id);
+			if (!$location) {
+				return $this->responseError('Локация не найдена', 400);
+			}
+		}
+
+		$isUnified = $this->request->is_unified ?? false;
+		$certificateId = $this->request->certificate_id ?? 0;
+		
+		$amount = $tariff->calcAmount($contractor->id, $cityId, $locationId, 0, 0, $promocodeId, 0, 'api', $certificateId, $isUnified);
+		if ($amount < 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
 		
@@ -2051,8 +2054,8 @@ class ApiController extends Controller
 	 * @bodyParam is_unified bool Required for certificate purchase No-example
 	 * @bodyParam location_id int Required for booking
 	 * @bodyParam flight_simulator_id int Required for booking
-	 * @bodyParam promocode_id string No-example
-	 * @bodyParam certificate_id string No-example
+	 * @bodyParam promocode_id int No-example
+	 * @bodyParam certificate_id int No-example
 	 * @bodyParam certificate_whom string For whom certificate. Required for certificate purchase
 	 * @bodyParam comment string No-example
 	 * @bodyParam score int No-example
@@ -2142,12 +2145,12 @@ class ApiController extends Controller
 		
 		$productId = $this->request->product_id ?? 0;
 		if (!$productId) {
-			return $this->responseError('Не передан ID позиции', 400);
+			return $this->responseError('Не передан ID продукта', 400);
 		}
 
 		$productAmount = $this->request->product_amount ?? 0;
 		if (!$productAmount) {
-			return $this->responseError('Не передана стоимость позиции', 400);
+			return $this->responseError('Не передана стоимость продукта', 400);
 		}
 
 		$product = Product::find($productId);

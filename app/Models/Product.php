@@ -249,46 +249,45 @@ class Product extends Model
 
 	/**
 	 * @param $contractorId
-	 * @param $promoId
 	 * @param $cityId
+	 * @param $locationId
 	 * @param $paymentMethodId
+	 * @param $promoId
+	 * @param $promocodeId
 	 * @param $isFree
 	 * @param $source
+	 * @param int $certificateId
 	 * @param bool $isAirlineMilesPurchase
 	 *
 	 * @return float|int
 	 */
-	public function calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, $source, $certificateNumber = '', $isAirlineMilesPurchase = false)
+	public function calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, $source, $certificateId = 0, $isUnified = false, $isAirlineMilesPurchase = false)
 	{
 		if ($isFree) return 0;
 
-		if ($certificateNumber && $locationId) {
+		if ($certificateId && $locationId) {
 			$date = date('Y-m-d');
 			$location = Location::find($locationId);
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			// проверка сертификата на валидность
-			$certificate = Certificate::where('number', $certificateNumber)
-				->whereIn('city_id', [$location->city->id, 0])
+			$certificate = Certificate::whereIn('city_id', [$location->city->id, 0])
 				->where('status_id', $certificateStatus->id)
 				->where('product_id', $this->id)
 				->where(function ($query) use ($date) {
 					$query->where('expire_at', '>=', $date)
 						->orWhereNull('expire_at');
-				})->first();
+				})->find($certificateId);
 			if ($certificate) return 0;
 		}
 
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
 		/*$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;*/
-		$promocode = $promocodeId ? PromoCode::/*whereIsActive(true)
-			->where('actve_from_at', '<=', Carbon::now()->parse('Y-m-d H:i:s'))
-			->where('actve_to_at', '>=', Carbon::now()->parse('Y-m-d H:i:s'))
-			->*/whereRelation('cities', 'cities.id', '=', $cityId)
+		$promocode = $promocodeId ? PromoCode::whereRelation('cities', 'cities.id', '=', $cityId)
 			->find($promocodeId) : null;
 
-		// если это бронирование и город любой, то цены продуктов города Москва
-		if (!$cityId && !$locationId) {
+		// если это покупка сертификата и город любой, то цены продуктов города Москва
+		if ($isUnified && !$locationId) {
 			$mskCity = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 			$cityId = $mskCity->id;
 		}

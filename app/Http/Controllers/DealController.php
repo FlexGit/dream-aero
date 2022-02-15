@@ -827,7 +827,7 @@ class DealController extends Controller
 		$promocodeId = $this->request->promocode_id ?? 0;
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$locationId = $this->request->location_id ?? 0;
-		$certificate = $this->request->certificate ?? '';
+		$certificateNumber = $this->request->certificate ?? '';
 
 		if ($this->request->city_id) {
 			$cityId = $this->request->city_id ?? 0;
@@ -848,7 +848,13 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		$amount = $product->calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, 'admin', $certificate);
+		if ($certificateNumber) {
+			$certificate = Certificate::where('number', $certificateNumber)
+				->first();
+		}
+		$certificateId = $certificate ? $certificate->id : 0;
+
+		$amount = $product->calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, 'admin', $certificateId);
 
 		return response()->json(['status' => 'success', 'amount' => $amount]);
 	}
