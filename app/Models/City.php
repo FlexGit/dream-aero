@@ -47,6 +47,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|City withTrashed()
  * @method static \Illuminate\Database\Query\Builder|City withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $email E-mail
+ * @property string|null $phone телефон
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City wherePhone($value)
  */
 class City extends Model
 {

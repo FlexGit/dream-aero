@@ -7,6 +7,48 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 /*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
+/**
+ * App\Models\Content
+ *
+ * @property int $id
+ * @property string $title заголовок
+ * @property string $alias алиас
+ * @property string|null $preview_text аннотация
+ * @property string|null $detail_text контент
+ * @property int $parent_id родитель
+ * @property string $version версия
+ * @property string|null $meta_title meta Title
+ * @property string|null $meta_description meta Description
+ * @property bool $is_active признак активности
+ * @property array|null $data_json дополнительная информация
+ * @property \datetime|null $published_at дата публикации
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read Content|null $parent
+ * @method static \Illuminate\Database\Eloquent\Builder|Content newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Content newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Content onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Content query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereAlias($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereDetailText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereMetaTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content wherePreviewText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content wherePublishedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereVersion($value)
+ * @method static \Illuminate\Database\Query\Builder|Content withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Content withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Content extends Model
 {
 	use HasFactory, SoftDeletes/*, RevisionableTrait*/;

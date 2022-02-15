@@ -7,6 +7,36 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 /*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
+/**
+ * App\Models\Rating
+ *
+ * @property int $id
+ * @property float $value значение
+ * @property int $count количество голосов
+ * @property int $content_id материал
+ * @property bool $is_active признак активности
+ * @property array|null $data_json дополнительная информация
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read \App\Models\Content|null $content
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Rating onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereContentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereDataJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereValue($value)
+ * @method static \Illuminate\Database\Query\Builder|Rating withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Rating withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Rating extends Model
 {
 	use HasFactory, SoftDeletes/*, RevisionableTrait*/;

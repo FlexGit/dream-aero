@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "95637640-1615-402f-92c7-4dccd4a16d38",
+        "_postman_id": "dc516383-df83-4c2f-bc73-e847ab64cf39",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"vel\"}"
+                            "raw": "{\"file_base64\":\"exercitationem\"}"
                         },
                         "description": ""
                     },
@@ -1307,21 +1307,27 @@
                                     "disabled": false
                                 },
                                 {
-                                    "key": "tariff_id",
+                                    "key": "product_id",
                                     "value": "",
                                     "description": "",
                                     "disabled": false
                                 },
                                 {
-                                    "key": "flight_at",
-                                    "value": "",
-                                    "description": "",
-                                    "disabled": true
+                                    "key": "flight_date",
+                                    "value": "unde",
+                                    "description": "date Required for booking",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "flight_time",
+                                    "value": "id",
+                                    "description": "time Required for booking",
+                                    "disabled": false
                                 },
                                 {
                                     "key": "is_unified",
                                     "value": "",
-                                    "description": "Unified certificate.",
+                                    "description": "Required for certificate purchase",
                                     "disabled": true
                                 },
                                 {
@@ -1329,9 +1335,21 @@
                                     "value": "",
                                     "description": "",
                                     "disabled": true
+                                },
+                                {
+                                    "key": "location_id",
+                                    "value": "3",
+                                    "description": "Required for booking",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "certificate_id",
+                                    "value": "",
+                                    "description": "",
+                                    "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/tariff\/price?token=&tariff_id=&flight_at=&is_unified=&promocode_id="
+                            "raw": "{{baseUrl}}\/api\/tariff\/price?token=&product_id=&flight_date=unde&flight_time=id&is_unified=&promocode_id=&location_id=3&certificate_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1829,7 +1847,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"et\",\"flight_time\":\"mollitia\",\"location_id\":12,\"flight_simulator_id\":18,\"certificate_whom\":\"delectus\"}"
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"omnis\",\"flight_time\":\"impedit\",\"location_id\":7,\"flight_simulator_id\":7,\"certificate_whom\":\"debitis\"}"
                         },
                         "description": ""
                     },
