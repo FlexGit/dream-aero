@@ -1376,7 +1376,7 @@ class ApiController extends Controller
 	 * @queryParam api_key string required No-example
 	 * @queryParam token string required No-example
 	 * @queryParam product_id int required No-example
-	 * @queryParam is_certificate_purchase bool required No-example
+	 * @queryParam is_certificate_purchase bool No-example
 	 * @queryParam is_unified bool No-example
 	 * @queryParam promocode_id int No-example
 	 * @queryParam location_id int No-example

@@ -3834,7 +3834,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"deleniti\"
+    \"file_base64\": \"est\"
 }"
 </code></pre></div>
 
@@ -3857,7 +3857,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "deleniti"
+    "file_base64": "est"
 };
 
 fetch(url, {
@@ -3881,7 +3881,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'deleniti',
+            'file_base64' =&gt; 'est',
         ],
     ]
 );
@@ -4049,7 +4049,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="deleniti"
+               value="est"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4287,7 +4287,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;token=&amp;product_id=&amp;is_certificate_purchase=" \
+    --get "http://dev.dream-aero.ru/api/tariff/price?api_key=&amp;token=&amp;product_id=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -4301,7 +4301,6 @@ const params = {
     "api_key": "",
     "token": "",
     "product_id": "",
-    "is_certificate_purchase": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -4330,7 +4329,6 @@ $response = $client-&gt;get(
             'api_key'=&gt; '',
             'token'=&gt; '',
             'product_id'=&gt; '',
-            'is_certificate_purchase'=&gt; '',
         ],
     ]
 );
@@ -4482,7 +4480,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
             </p>
                     <p>
-                <b><code>is_certificate_purchase</code></b>&nbsp;&nbsp;<small>boolean</small>  &nbsp;
+                <b><code>is_certificate_purchase</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
                 <label data-endpoint="GETapi-tariff-price" hidden>
             <input type="radio" name="is_certificate_purchase"
                    value="1"
@@ -5833,11 +5831,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"cum\",
-    \"flight_time\": \"fuga\",
-    \"location_id\": 16,
-    \"flight_simulator_id\": 18,
-    \"certificate_whom\": \"maiores\"
+    \"flight_date\": \"consequatur\",
+    \"flight_time\": \"est\",
+    \"location_id\": 8,
+    \"flight_simulator_id\": 11,
+    \"certificate_whom\": \"nihil\"
 }"
 </code></pre></div>
 
@@ -5866,11 +5864,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "cum",
-    "flight_time": "fuga",
-    "location_id": 16,
-    "flight_simulator_id": 18,
-    "certificate_whom": "maiores"
+    "flight_date": "consequatur",
+    "flight_time": "est",
+    "location_id": 8,
+    "flight_simulator_id": 11,
+    "certificate_whom": "nihil"
 };
 
 fetch(url, {
@@ -5900,11 +5898,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'cum',
-            'flight_time' =&gt; 'fuga',
-            'location_id' =&gt; 16,
-            'flight_simulator_id' =&gt; 18,
-            'certificate_whom' =&gt; 'maiores',
+            'flight_date' =&gt; 'consequatur',
+            'flight_time' =&gt; 'est',
+            'location_id' =&gt; 8,
+            'flight_simulator_id' =&gt; 11,
+            'certificate_whom' =&gt; 'nihil',
         ],
     ]
 );
@@ -6126,7 +6124,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="cum"
+               value="consequatur"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6136,7 +6134,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="fuga"
+               value="est"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6167,7 +6165,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="16"
+               value="8"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6177,7 +6175,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
-               value="18"
+               value="11"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6207,7 +6205,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="maiores"
+               value="nihil"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>

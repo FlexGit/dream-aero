@@ -1459,7 +1459,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: deleniti
+        example: est
         type: string
         custom: []
     responses:
@@ -1649,7 +1649,7 @@ endpoints:
       is_certificate_purchase:
         name: is_certificate_purchase
         description: ''
-        required: true
+        required: false
         example: null
         type: boolean
         custom: []
@@ -2297,14 +2297,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: cum
+        example: consequatur
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: fuga
+        example: est
         type: time
         custom: []
       is_unified:
@@ -2318,14 +2318,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 16
+        example: 8
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 18
+        example: 11
         type: integer
         custom: []
       promocode_id:
@@ -2346,7 +2346,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: maiores
+        example: nihil
         type: string
         custom: []
       comment:
