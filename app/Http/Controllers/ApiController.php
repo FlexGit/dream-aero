@@ -1403,8 +1403,8 @@ class ApiController extends Controller
 			return $this->responseError('Не передан токен авторизации', 400);
 		}
 		
-		$tariffId = $this->request->tariff_id;
-		if (!$tariffId) {
+		$productId = $this->request->product_id;
+		if (!$productId) {
 			return $this->responseError('Не передан ID тарифа', 400);
 		}
 		
@@ -1433,18 +1433,18 @@ class ApiController extends Controller
 				return $this->responseError('Город не найден', 400);
 			}
 		}
-		
-		$tariff = Product::whereRelation('cities', 'cities.id', '=', $city->id)
-			->find($tariffId);
-		if (!$tariff) {
+
+		$product = Product::whereRelation('cities', 'cities.id', '=', $city->id)
+			->find($productId);
+		if (!$product) {
 			return $this->responseError('Тариф не найден', 400);
 		}
 		
-		if (!$tariff->productType) {
+		if (!$product->productType) {
 			return $this->responseError('Некорректный тип тарифа', 400);
 		}
 		
-		if ($tariff->price <= 0) {
+		if ($product->price <= 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
 		
@@ -1455,7 +1455,7 @@ class ApiController extends Controller
 			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
 				return $this->responseError('Некорректная дата и время полета', 400);
 			}
-			if (!$tariff->validateFlightDate($flightDateCarbon)) {
+			if (!$product->validateFlightDate($flightDateCarbon)) {
 				return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
 			}
 		}
@@ -1472,7 +1472,7 @@ class ApiController extends Controller
 		$isUnified = $this->request->is_unified ?? false;
 		$certificateId = $this->request->certificate_id ?? 0;
 		
-		$amount = $tariff->calcAmount($contractor->id, $cityId, $locationId, 0, 0, $promocodeId, 0, 'api', $certificateId, $isUnified);
+		$amount = $product->calcAmount($contractor->id, $cityId, $locationId, 0, 0, $promocodeId, 0, 'api', $certificateId, $isUnified);
 		if ($amount < 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
