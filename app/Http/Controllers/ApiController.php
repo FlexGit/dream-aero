@@ -1443,7 +1443,7 @@ class ApiController extends Controller
 		}
 		
 		$locationId = $this->request->location_id ?? 0;
-		if ($locationId && !$this->request->is_certificate_purchase) {
+		if ($locationId) {
 			$location = Location::where('is_active', true)
 				->find($this->request->location_id);
 			if (!$location) {
