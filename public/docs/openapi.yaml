@@ -3021,7 +3021,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: exercitationem
+                  example: voluptas
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3242,33 +3242,33 @@ paths:
         -
           in: query
           name: flight_date
-          description: 'date Required for booking'
-          example: unde
+          description: date
+          example: null
           required: false
           schema:
             type: string
-            description: 'date Required for booking'
-            example: unde
+            description: date
+            example: null
         -
           in: query
           name: flight_time
-          description: 'time Required for booking'
-          example: id
+          description: time
+          example: null
           required: false
           schema:
             type: string
-            description: 'time Required for booking'
-            example: id
+            description: time
+            example: null
         -
           in: query
           name: is_unified
-          description: 'Required for certificate purchase'
-          example: false
+          description: ''
+          example: null
           required: false
           schema:
             type: boolean
-            description: 'Required for certificate purchase'
-            example: false
+            description: ''
+            example: null
         -
           in: query
           name: promocode_id
@@ -3282,13 +3282,13 @@ paths:
         -
           in: query
           name: location_id
-          description: 'Required for booking'
-          example: 3
+          description: ''
+          example: null
           required: false
           schema:
             type: integer
-            description: 'Required for booking'
-            example: 3
+            description: ''
+            example: null
         -
           in: query
           name: certificate_id
@@ -4499,11 +4499,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: omnis
+                  example: blanditiis
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: impedit
+                  example: sed
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4515,7 +4515,7 @@ paths:
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 7
+                  example: 10
                 promocode_id:
                   type: integer
                   description: ''
@@ -4527,7 +4527,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: debitis
+                  example: id
                 comment:
                   type: string
                   description: ''

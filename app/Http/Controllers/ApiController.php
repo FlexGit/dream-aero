@@ -1376,11 +1376,11 @@ class ApiController extends Controller
 	 * @queryParam api_key string required No-example
 	 * @queryParam token string required No-example
 	 * @queryParam product_id int required No-example
-	 * @queryParam flight_date date Required for booking
-	 * @queryParam flight_time time Required for booking
-	 * @queryParam is_unified bool Required for certificate purchase
+	 * @queryParam flight_date date No-example
+	 * @queryParam flight_time time No-example
+	 * @queryParam is_unified bool No-example
 	 * @queryParam promocode_id int No-example
-	 * @queryParam location_id int Required for booking
+	 * @queryParam location_id int No-example
 	 * @queryParam certificate_id int No-example
 	 * @response scenario=success {
 	 * 	"success": true,

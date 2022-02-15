@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "dc516383-df83-4c2f-bc73-e847ab64cf39",
+        "_postman_id": "d883689d-fa09-4dcf-a2a8-c41fdb61afbf",
         "description": "Dream Aero API",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1181,7 +1181,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"exercitationem\"}"
+                            "raw": "{\"file_base64\":\"voluptas\"}"
                         },
                         "description": ""
                     },
@@ -1314,20 +1314,20 @@
                                 },
                                 {
                                     "key": "flight_date",
-                                    "value": "unde",
-                                    "description": "date Required for booking",
-                                    "disabled": false
+                                    "value": "",
+                                    "description": "date",
+                                    "disabled": true
                                 },
                                 {
                                     "key": "flight_time",
-                                    "value": "id",
-                                    "description": "time Required for booking",
-                                    "disabled": false
+                                    "value": "",
+                                    "description": "time",
+                                    "disabled": true
                                 },
                                 {
                                     "key": "is_unified",
                                     "value": "",
-                                    "description": "Required for certificate purchase",
+                                    "description": "",
                                     "disabled": true
                                 },
                                 {
@@ -1338,9 +1338,9 @@
                                 },
                                 {
                                     "key": "location_id",
-                                    "value": "3",
-                                    "description": "Required for booking",
-                                    "disabled": false
+                                    "value": "",
+                                    "description": "",
+                                    "disabled": true
                                 },
                                 {
                                     "key": "certificate_id",
@@ -1349,7 +1349,7 @@
                                     "disabled": true
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/tariff\/price?token=&product_id=&flight_date=unde&flight_time=id&is_unified=&promocode_id=&location_id=3&certificate_id="
+                            "raw": "{{baseUrl}}\/api\/tariff\/price?token=&product_id=&flight_date=&flight_time=&is_unified=&promocode_id=&location_id=&certificate_id="
                         },
                         "method": "GET",
                         "header": [
@@ -1847,7 +1847,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"omnis\",\"flight_time\":\"impedit\",\"location_id\":7,\"flight_simulator_id\":7,\"certificate_whom\":\"debitis\"}"
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"blanditiis\",\"flight_time\":\"sed\",\"location_id\":7,\"flight_simulator_id\":10,\"certificate_whom\":\"id\"}"
                         },
                         "description": ""
                     },

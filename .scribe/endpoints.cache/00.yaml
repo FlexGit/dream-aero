@@ -1461,7 +1461,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: exercitationem
+        example: voluptas
         type: string
         custom: []
     responses:
@@ -1650,23 +1650,23 @@ endpoints:
         custom: []
       flight_date:
         name: flight_date
-        description: 'date Required for booking'
+        description: date
         required: false
-        example: unde
+        example: null
         type: string
         custom: []
       flight_time:
         name: flight_time
-        description: 'time Required for booking'
+        description: time
         required: false
-        example: id
+        example: null
         type: string
         custom: []
       is_unified:
         name: is_unified
-        description: 'Required for certificate purchase'
+        description: ''
         required: false
-        example: false
+        example: null
         type: boolean
         custom: []
       promocode_id:
@@ -1678,9 +1678,9 @@ endpoints:
         custom: []
       location_id:
         name: location_id
-        description: 'Required for booking'
+        description: ''
         required: false
-        example: 3
+        example: null
         type: integer
         custom: []
       certificate_id:
@@ -2306,14 +2306,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: omnis
+        example: blanditiis
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: impedit
+        example: sed
         type: time
         custom: []
       is_unified:
@@ -2334,7 +2334,7 @@ endpoints:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 7
+        example: 10
         type: integer
         custom: []
       promocode_id:
@@ -2355,7 +2355,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: debitis
+        example: id
         type: string
         custom: []
       comment:
