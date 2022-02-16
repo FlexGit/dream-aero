@@ -89,7 +89,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject, $deal) {
 				/** @var \Illuminate\Mail\Message $message */
 				$message->subject($subject);
-				$message->priority(2);
+				/*$message->priority(2);*/
 				$message->to($deal->email);
 			});
 
@@ -101,7 +101,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			Mail::send(['html' => "admin.emails.send_deal_admin"], $messageData, function ($message) use ($subject, $recipients) {
 				/** @var \Illuminate\Mail\Message $message */
 				$message->subject($subject);
-				$message->priority(2);
+				/*$message->priority(2);*/
 				$message->to($recipients);
 			});
 

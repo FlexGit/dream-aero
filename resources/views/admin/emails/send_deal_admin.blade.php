@@ -35,5 +35,5 @@
 @endif
 <p>Источник заявки: {{ $source ?? '' }}</p>
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
-<p></p>
+<p></p><p></p>
 <p>Письмо отправлено автоматически.</p>

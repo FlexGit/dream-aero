@@ -1,5 +1,5 @@
 <p>Здравствуйте, {{ $dealName ?? '' }}!</p>
-<p></p>
+<p></p><p></p>
 @if($isCertificatePurchase)
 	<p>Вами или кем-то на Ваше имя оформлена заявка на покупку сертификата.</p>
 	<p>Номер заявки: <b>{{ $dealNumber ?? '' }}</b></p>
@@ -35,11 +35,11 @@
 	<p>Промокод: {{ $promocodeNumber }}</p>
 @endif
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
-<p></p>
+<p></p><p></p>
 <p>Если у Вас возникнут вопросы, мы будем рады Вам помочь! Наши контакты для связи:</p>
 @if($phone) <p>Тел.: {{ $phone }}</p>@endif
 @if($whatsapp) <p>WhatsApp: {{ $whatsapp }}</p>@endif
 @if($skype) <p>Skype: {{ $skype }}</p>@endif
 @if($email) <p>E-mail: {{ $email }}</p>@endif
-<p></p>
+<p></p><p></p>
 <p>Письмо отправлено автоматически.</p>
