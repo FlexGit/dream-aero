@@ -29,16 +29,13 @@ class SendDealEmail extends Job implements ShouldQueue {
 		$position = $deal->positions()->first();
 		if (!$position) return;
 
-		$score = 0;
-		foreach ($deal->positions ?? [] as $position) {
-			\Log::debug($position->type);
-			if ($position->score) {
-				\Log::debug($position->score);
-				\Log::debug($position->score->score);
-			}
-			if (!$position->score || !$position->type != Score::USED_TYPE) continue;
+		$scoreAmount = 0;
+		if ($deal->scores) {
+			foreach ($deal->scores ?? [] as $score) {
+				if ($score->type != Score::USED_TYPE) continue;
 
-			$score += abs($position->score->score);
+				$scoreAmount += $score->score;
+			}
 		}
 
 		$locationData = $position->location ? $position->location->data_json ?? [] : [];
@@ -80,7 +77,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'duration' => $position->duration,
 			'amount' => $position->amount,
 			'currency' => $position->currency ? $position->currency->name : '',
-			'score' => $score,
+			'scoreAmount' => $scoreAmount ?? 0,
 			'phone' => array_key_exists('phone', $locationData) ? $locationData['phone'] : $cityData['phone'],
 			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : '',
 			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : '',

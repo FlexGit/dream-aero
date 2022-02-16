@@ -24,8 +24,8 @@
 <p>Тариф: {{ $productName ?? '' }}
 <p>Длительность полета: {{ $duration ?? '' }} мин</p>
 <p>Стоимость: {{ number_format($amount ?? 0, 0, '.', ' ') }} {{ $currency ?? '' }}</p>
-@if($score)
-	<p>Оплачено баллами: {{ $score }}</p>
+@if($scoreAmount)
+	<p>Оплачено баллами: {{ $scoreAmount }}</p>
 @endif
 @if($promoName)
 	<p>Акция: {{ $promoName }}</p>
@@ -35,5 +35,5 @@
 @endif
 <p>Источник заявки: {{ $source ?? '' }}</p>
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
-<p></p><p></p>
+<br><br>
 <p>Письмо отправлено автоматически.</p>

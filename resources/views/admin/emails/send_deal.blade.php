@@ -1,5 +1,5 @@
 <p>Здравствуйте, {{ $dealName ?? '' }}!</p>
-<p></p><p></p>
+<br><br>
 @if($isCertificatePurchase)
 	<p>Вами или кем-то на Ваше имя оформлена заявка на покупку сертификата.</p>
 	<p>Номер заявки: <b>{{ $dealNumber ?? '' }}</b></p>
@@ -25,8 +25,8 @@
 	@endif
 @endif
 <p>Тариф: <b>{{ $productName }}</b> длительностью <b>{{ $duration ?? '' }} мин</b> и стоимостью <b>{{ number_format($amount ?? 0, 0, '.', ' ') }} {{ $currency ?? '' }}.</b></p>
-@if($score)
-	<p>Оплачено баллами: {{ $score }}</p>
+@if($scoreAmount)
+	<p>Оплачено баллами: {{ $scoreAmount }}</p>
 @endif
 @if($promoName)
 	<p>Акция: {{ $promoName }}</p>
@@ -35,11 +35,11 @@
 	<p>Промокод: {{ $promocodeNumber }}</p>
 @endif
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
-<p></p><p></p>
+<br><br>
 <p>Если у Вас возникнут вопросы, мы будем рады Вам помочь! Наши контакты для связи:</p>
 @if($phone) <p>Тел.: {{ $phone }}</p>@endif
 @if($whatsapp) <p>WhatsApp: {{ $whatsapp }}</p>@endif
 @if($skype) <p>Skype: {{ $skype }}</p>@endif
 @if($email) <p>E-mail: {{ $email }}</p>@endif
-<p></p><p></p>
+<br><br>
 <p>Письмо отправлено автоматически.</p>

@@ -28,15 +28,29 @@
 				от {{ $deal->created_at ? $deal->created_at->format('Y-m-d H:i') : '' }}
 			</div>
 			<div>
-				@if($deal->contractor && $deal->contractor->city)
-					@if($deal->contractor->city->version == app('\App\Models\City')::RU_VERSION)
-						<i class="fas fa-ruble-sign"></i>
-					@elseif($position->currency->alias == app('\App\Models\Currency')::EN_VERSION)
-						<i class="fas fa-dollar-sign"></i>
+				<div class="d-inline-block" title="Сумма сделки">
+					@if($deal->contractor && $deal->contractor->city)
+						@if($deal->contractor->city->version == app('\App\Models\City')::RU_VERSION)
+							<i class="fas fa-ruble-sign"></i>
+						@elseif($position->currency->alias == app('\App\Models\Currency')::EN_VERSION)
+							<i class="fas fa-dollar-sign"></i>
+						@endif
 					@endif
+					{{ number_format($deal->amount(), 0, '.', ' ') }}
+				</div>
+				@if($deal->scores)
+					@php($scoreAmount = 0)
+					@foreach($deal->scores ?? [] as $score)
+						@if($score->type != app('\App\Models\Score')::USED_TYPE)
+							@continue
+						@endif
+						@php($scoreAmount += $score->score)
+					@endforeach
+					<div class="d-inline-block" title="Оплачено баллами">
+						<i class="far fa-star"></i> {{ $scoreAmount ? number_format($scoreAmount, 0, '.', ' ') : 0 }}
+					</div>
 				@endif
-				{{ number_format($deal->amount(), 0, '.', ' ') }}
-				<div class="d-inline-block mt-1">
+				<div class="d-inline-block mt-1" title="Итого к оплате">
 					@if($balance < 0)
 						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ number_format($balance, 0, '.', ' ') }}</span>
 					@elseif($balance > 0)

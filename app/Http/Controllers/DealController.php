@@ -848,11 +848,12 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
+		$certificateId = 0;
 		if ($certificateNumber) {
 			$certificate = Certificate::where('number', $certificateNumber)
 				->first();
+			$certificateId = $certificate ? $certificate->id : 0;
 		}
-		$certificateId = $certificate ? $certificate->id : 0;
 
 		$amount = $product->calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, 'admin', $certificateId);
 

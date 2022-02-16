@@ -258,8 +258,7 @@ class Deal extends Model
 		];
 	}
 
-	public function amount()
-	{
+	public function amount() {
 		$amount = 0;
 		foreach ($this->positions ?? [] as $position) {
 			if ($position->certificate && $position->certificate->status && in_array($position->certificate->status->alias, [Certificate::CANCELED_STATUS, Certificate::RETURNED_STATUS])) continue;
@@ -267,7 +266,16 @@ class Deal extends Model
 			$amount += $position->amount;
 		}
 
-		return $amount;
+		$scoreAmount = 0;
+		if ($this->scores) {
+			foreach ($this->scores ?? [] as $score) {
+				if ($score->type != Score::USED_TYPE) continue;
+
+				$scoreAmount += $score->score;
+			}
+		}
+
+		return ($amount - $scoreAmount);
 	}
 
 	public function billPayedAmount()
