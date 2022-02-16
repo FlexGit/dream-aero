@@ -33,7 +33,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 		foreach ($deal->positions ?? [] as $position) {
 			if (!$position->score || !$position->type != Score::USED_TYPE) continue;
 
-			$score += $position->score->score;
+			$score += abs($position->score->score);
 		}
 
 		$locationData = $position->location ? $position->location->data_json ?? [] : [];

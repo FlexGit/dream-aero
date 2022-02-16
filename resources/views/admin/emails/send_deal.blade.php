@@ -1,95 +1,45 @@
-<div>
-	Здравствуйте, {{ $name ?? '' }}!
-</div>
-
+<p>Здравствуйте, {{ $dealName ?? '' }}!</p>
+<p></p>
 @if($isCertificatePurchase)
-	<div>
-		Вами или кем-то на Ваше имя оформлена заявка на покупку сертификата.
-	</div>
-	<div>
-		Номер заявки: <b>{{ $dealNumber ?? '' }}</b>
-	</div>
-	<div>
-		Номер позиции: <b>{{ $positionNumber ?? '' }}</b>
-	</div>
-	<div>
-		Статус заявки: {{ $statusName ?? '' }}
-	</div>
-	<div>
-		Номер сертификата: {{ $certificateNumber ?? '' }}
-	</div>
-	<div>
-		Срок действия сертификата: @if($certificateExpireAt) {{ Carbon\Carbon::parse($certificateExpireAt)->format('d.m.Y') }} @else бессрочный @endif
-	</div>
-	<div>
-		Город действия сертификата: @if(!$cityName) все города России присутствия Dream Aero @else {{ $cityName }} @endif
-	</div>
+	<p>Вами или кем-то на Ваше имя оформлена заявка на покупку сертификата.</p>
+	<p>Номер заявки: <b>{{ $dealNumber ?? '' }}</b></p>
+	<p>Номер позиции: <b>{{ $positionNumber ?? '' }}</b></p>
+	<p>Статус заявки: {{ $statusName ?? '' }}</p>
+	<p>Номер сертификата: {{ $certificateNumber ?? '' }}</p>
+	<p>Срок действия сертификата: @if($certificateExpireAt) {{ Carbon\Carbon::parse($certificateExpireAt)->format('d.m.Y') }} @else бессрочный @endif</p>
+	<p>Город действия сертификата: @if(!$cityName) все города России присутствия Dream Aero @else {{ $cityName }} @endif</p>
 @else
-	<div>
-		Вами или кем-то на Ваше имя оформлена заявка на бронирование полета на авиатренажере.
-	</div>
+	<p>Вами или кем-то на Ваше имя оформлена заявка на бронирование полета на авиатренажере.</p>
 	@if($certificateNumber)
-		<div>
-			Бронирование полета по сертификату {{ $certificateNumber }}
-		</div>
+		<p>Бронирование полета по сертификату {{ $certificateNumber }}</p>
 	@endif
-	<div>
-		Номер заявки: <b>{{ $dealNumber ?? '' }}</b>
-	</div>
-	<div>
-		Номер позиции: <b>{{ $positionNumber ?? '' }}</b>
-	</div>
-	<div>
-		Статус заявки: {{ $statusName ?? '' }}
-	</div>
-	<div>
-		Желаемая дата и время полета: {{ $flightAt ? Carbon\Carbon::parse($flightAt)->format('d.m.Y H:i') : '' }}
-	</div>
-	<div>
-		Город: {{ $cityName ?? '' }}
-	</div>
-	<div>
-		Локация: {{ $locationName ?? '' }}
-	</div>
-	<div>
-		Адрес локации: {{ $locationAddress ?? '' }}
-	</div>
+	<p>Номер заявки: <b>{{ $dealNumber ?? '' }}</b></p>
+	<p>Номер позиции: <b>{{ $positionNumber ?? '' }}</b></p>
+	<p>Статус заявки: {{ $statusName ?? '' }}</p>
+	<p>Желаемая дата и время полета: {{ $flightAt ? Carbon\Carbon::parse($flightAt)->format('d.m.Y H:i') : '' }}</p>
+	<p>Город: {{ $cityName ?? '' }}</p>
+	<p>Локация: {{ $locationName ?? '' }}</p>
+	<p>Адрес локации: {{ $locationAddress ?? '' }}</p>
 	@if($flightSimulatorName)
-		<div>
-			Авиатренажер: {{ $flightSimulatorName ?? '' }}
-		</div>
+		<p>Авиатренажер: {{ $flightSimulatorName ?? '' }}</p>
 	@endif
 @endif
-<div>
-	Тариф: <b>{{ $productName }}</b> длительностью <b>{{ $duration ?? '' }}</b> мин и стоимостью <b>{{ number_format($amount ?? 0, 0, '.', ' ') }} {{ $currency ?? '' }}.</b>
-</div>
+<p>Тариф: <b>{{ $productName }}</b> длительностью <b>{{ $duration ?? '' }} мин</b> и стоимостью <b>{{ number_format($amount ?? 0, 0, '.', ' ') }} {{ $currency ?? '' }}.</b></p>
 @if($score)
-	<div>
-		Оплачено баллами: {{ $score }}
-	</div>
+	<p>Оплачено баллами: {{ $score }}</p>
 @endif
 @if($promoName)
-	<div>
-		Акция: {{ $promoName }}
-	</div>
+	<p>Акция: {{ $promoName }}</p>
 @endif
 @if($promocodeNumber)
-	<div>
-		Промокод: {{ $promocodeNumber }}
-	</div>
+	<p>Промокод: {{ $promocodeNumber }}</p>
 @endif
-<div>
-	Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}
-</div>
-
-<div>
-	Если у Вас возникнут вопросы, мы будем рады Вам помочь! Наши контакты для связи:
-	<br>
-	@if($phone) Тел.: {{ $phone }} <br>@endif
-	@if($whatsapp) WhatsApp: {{ $whatsapp }} <br>@endif
-	@if($skype) Skype: {{ $skype }} <br>@endif
-	@if($email) E-mail: {{ $email }} <br>@endif
-</div>
-<p>
-	Письмо отправлено автоматически.
-</p>
+<p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
+<p></p>
+<p>Если у Вас возникнут вопросы, мы будем рады Вам помочь! Наши контакты для связи:</p>
+@if($phone) <p>Тел.: {{ $phone }}</p>@endif
+@if($whatsapp) <p>WhatsApp: {{ $whatsapp }}</p>@endif
+@if($skype) <p>Skype: {{ $skype }}</p>@endif
+@if($email) <p>E-mail: {{ $email }}</p>@endif
+<p></p>
+<p>Письмо отправлено автоматически.</p>
