@@ -271,7 +271,7 @@ class Deal extends Model
 			foreach ($this->scores ?? [] as $score) {
 				if ($score->type != Score::USED_TYPE) continue;
 
-				$scoreAmount += $score->score;
+				$scoreAmount += abs($score->score);
 			}
 		}
 

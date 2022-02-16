@@ -44,7 +44,7 @@
 						@if($score->type != app('\App\Models\Score')::USED_TYPE)
 							@continue
 						@endif
-						@php($scoreAmount += $score->score)
+						@php($scoreAmount += abs($score->score))
 					@endforeach
 					<div class="d-inline-block" title="Оплачено баллами">
 						<i class="far fa-star"></i> {{ $scoreAmount ? number_format($scoreAmount, 0, '.', ' ') : 0 }}
