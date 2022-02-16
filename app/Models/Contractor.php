@@ -384,4 +384,12 @@ class Contractor extends Authenticatable
 		
 		return ($billSum - $dealSum);
 	}
+
+	/**
+	 * @return string
+	 */
+	public function fio()
+	{
+		return trim(($this->lastname ?? '') . ' ' . ($this->name ?? ''));
+	}
 }

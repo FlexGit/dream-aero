@@ -3,11 +3,8 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
-/*use App\Services\Locker;
-use App\Services\Semaphore;*/
 use App\Models\Deal;
 use App\Models\Score;
-use App\Models\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,39 +23,9 @@ class SendDealEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		/*$semaphore = Semaphore::getSemaphoreOrNull('SendDealEmail', 1, 0, 50); // 1 слот для одновременной обработки, 0 секунд ждём свою очередь, 50 секунд даём на обработку
-		if (!$semaphore) {
-			// пишем в лог проблему на случай, если попыток было слишком много и всё равно требуется начинать job с нуля
-			if ($this->attempts() >= 5) {
-				\Log::error("Can't execute SendDealEmail for {$this->dealId} -- no semaphore slots left at least 5 times in a row, RELEASED ONCE MORE as a clean copy");
-				return $this->releaseCleanAttempt(5);
-			} else {
-				return $this->releaseAgain($this->attempts() * 3);
-			}
-		}*/
-		
 		$deal = Deal::find($this->dealId);
 		if (!$deal) return;
 		
-		/*$lock = Locker::getLockOrNull("SendDealEmail_{$deal->id}", 15, 100); // 15 секунд ждём лок, 100 секунд даём на обработку
-		if (!$lock) {
-			if ($this->attempts() <= 4) {
-				$this->releaseAgain(10);
-			} else {
-				$this->releaseCleanAttempt(10);
-			}
-			return;
-		}*/
-		
-		// логируем рассылку
-		/*$log = new \Monolog\Logger('deal_send_notifier');
-		try {
-			$log->pushHandler(new \Monolog\Handler\StreamHandler(storage_path('logs/deal_send_notifier.log'), \Monolog\Logger::INFO));
-		} catch (\Exception $e) {
-			\Log::critical('Cannot create log file for deal_send_notifier', [$e->getMessage()]);
-			$log = \Log::getMonolog();
-		}*/
-
 		$position = $deal->positions()->first();
 		if (!$position) return;
 
@@ -81,35 +48,62 @@ class SendDealEmail extends Job implements ShouldQueue {
 
 		$recipients = [];
 		$recipients[] = $cityData['email'];
+		$recipients[] = env('DEV_EMAIL');
 		
 		$messageData = [
-			'name' => $position->name,
-			'number' => $position->number,
+			'contractorFio' => $deal->contractor ? $deal->contractor->fio() : '',
+			'dealName' => $deal->name ?? '',
+			'dealPhone' => $deal->phone ?? '',
+			'dealEmail' => $deal->email ?? '',
+			'dealNumber' => $deal->number ?? '',
+			'positionNumber' => $position->number ?? '',
 			'isCertificatePurchase' => (bool)$position->is_certificate_purchase,
 			'statusName' => $deal->status ? $deal->status->name : '',
 			'certificateNumber' => $position->certificate ? $position->certificate->number : '',
 			'certificateExpireAt' => $position->certificate ? $position->certificate->expire_at : '',
 			'flightAt' => $position->flight_at,
 			'cityName' => $position->city ? $position->city->name : '',
+			'locationName' => $position->location ? $position->location->name : '',
 			'locationAddress' => array_key_exists('address', $locationData) ? $locationData['address'] : '',
+			'flightSimulatorName' => $position->simulator ? $position->simulator->name : '',
+			'promoName' => $position->promo ? $position->promo->name : '',
+			'promocodeNumber' => $position->promocode ? $position->promocode->number : '',
+			'source' => $position->source ? app('\App\Models\Position')::SOURCES[$position->source] : '',
+			'updatedAt' => $deal->updated_at,
 			'productName' => $position->product ? $position->product->name : '',
 			'duration' => $position->duration,
 			'amount' => $position->amount,
+			'currency' => $position->currency ? $position->currency->name : '',
 			'score' => $score,
 			'phone' => array_key_exists('phone', $locationData) ? $locationData['phone'] : $cityData['phone'],
 			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : '',
 			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : '',
 			'email' => array_key_exists('email', $locationData) ? $locationData['email'] : $cityData['email'],
 		];
-		
+
 		try {
 			$subject = $position->is_certificate_purchase ? env('APP_NAME') . ': заявка на покупку сертификата' : env('APP_NAME') . ': заявка на бронирование полета';
-			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject, $deal, $recipients) {
+
+			// клиенту
+			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject, $deal) {
 				/** @var \Illuminate\Mail\Message $message */
 				$message->subject($subject);
 				$message->priority(2);
-				$message->to($recipients); //$deal->email
+				$message->to($deal->email);
 			});
+
+			if (in_array($deal->email, Mail::failures())) {
+				throw new \Exception("Email $deal->email in a failed list");
+			}
+
+			// админу
+			Mail::send(['html' => "admin.emails.send_deal_admin"], $messageData, function ($message) use ($subject, $recipients) {
+				/** @var \Illuminate\Mail\Message $message */
+				$message->subject($subject);
+				$message->priority(2);
+				$message->to($recipients);
+			});
+
 			foreach ($recipients as $recipient) {
 				if (in_array($recipient, Mail::failures())) {
 					throw new \Exception("Email $recipient in a failed list");

@@ -1,20 +1,28 @@
 <div>
-	Здравствуйте, {{ $name ?? '' }}!
+	Контрагент: {{ $contractorFio ?? '' }}!
 </div>
-
+<div>
+	Имя: {{ $dealName ?? '' }}!
+</div>
+<div>
+	Телефон: {{ $dealPhone ?? '' }}!
+</div>
+<div>
+	E-mail: {{ $dealEmail ?? '' }}!
+</div>
+<div>
+	Номер: {{ $dealNumber ?? '' }}!
+</div>
+<div>
+	Номер позиции: {{ $positionNumber ?? '' }}!
+</div>
+<div>
+	Тип заявки: {{ $isCertificatePurchase ? 'покупка сертификата' : 'бронирование' }}!
+</div>
+<div>
+	Статус: {{ $statusName ?? '' }}
+</div>
 @if($isCertificatePurchase)
-	<div>
-		Вами или кем-то на Ваше имя оформлена заявка на покупку сертификата.
-	</div>
-	<div>
-		Номер заявки: <b>{{ $dealNumber ?? '' }}</b>
-	</div>
-	<div>
-		Номер позиции: <b>{{ $positionNumber ?? '' }}</b>
-	</div>
-	<div>
-		Статус заявки: {{ $statusName ?? '' }}
-	</div>
 	<div>
 		Номер сертификата: {{ $certificateNumber ?? '' }}
 	</div>
@@ -25,23 +33,11 @@
 		Город действия сертификата: @if(!$cityName) все города России присутствия Dream Aero @else {{ $cityName }} @endif
 	</div>
 @else
-	<div>
-		Вами или кем-то на Ваше имя оформлена заявка на бронирование полета на авиатренажере.
-	</div>
 	@if($certificateNumber)
 		<div>
-			Бронирование полета по сертификату {{ $certificateNumber }}
+			Бронирование полета по сертификату: {{ $certificateNumber }}
 		</div>
 	@endif
-	<div>
-		Номер заявки: <b>{{ $dealNumber ?? '' }}</b>
-	</div>
-	<div>
-		Номер позиции: <b>{{ $positionNumber ?? '' }}</b>
-	</div>
-	<div>
-		Статус заявки: {{ $statusName ?? '' }}
-	</div>
 	<div>
 		Желаемая дата и время полета: {{ $flightAt ? Carbon\Carbon::parse($flightAt)->format('d.m.Y H:i') : '' }}
 	</div>
@@ -50,9 +46,6 @@
 	</div>
 	<div>
 		Локация: {{ $locationName ?? '' }}
-	</div>
-	<div>
-		Адрес локации: {{ $locationAddress ?? '' }}
 	</div>
 	@if($flightSimulatorName)
 		<div>
@@ -79,17 +72,12 @@
 	</div>
 @endif
 <div>
+	Источник: {{ $source ?? '' }}
+</div>
+<div>
 	Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}
 </div>
 
-<div>
-	Если у Вас возникнут вопросы, мы будем рады Вам помочь! Наши контакты для связи:
-	<br>
-	@if($phone) Тел.: {{ $phone }} <br>@endif
-	@if($whatsapp) WhatsApp: {{ $whatsapp }} <br>@endif
-	@if($skype) Skype: {{ $skype }} <br>@endif
-	@if($email) E-mail: {{ $email }} <br>@endif
-</div>
 <p>
 	Письмо отправлено автоматически.
 </p>
