@@ -68,7 +68,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'flightSimulatorName' => $position->simulator ? $position->simulator->name : '',
 			'promoName' => $position->promo ? $position->promo->name : '',
 			'promocodeNumber' => $position->promocode ? $position->promocode->number : '',
-			'source' => $position->source ? app('\App\Models\Position')::SOURCES[$position->source] : '',
+			'source' => $position->source ? app('\App\Models\DealPosition')::SOURCES[$position->source] : '',
 			'updatedAt' => $deal->updated_at,
 			'productName' => $position->product ? $position->product->name : '',
 			'duration' => $position->duration,
