@@ -1,4 +1,4 @@
-<p>Контрагент: {{ $contractorFio ?? '' }}!</p>
+<p>Контрагент: {{ $contractorFio ?? '' }}</p>
 <p>Имя: {{ $dealName ?? '' }}</p>
 <p>Телефон: {{ $dealPhone ?? '' }}</p>
 <p>E-mail: {{ $dealEmail ?? '' }}</p>
@@ -35,5 +35,5 @@
 @endif
 <p>Источник заявки: {{ $source ?? '' }}</p>
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
-<br><br>
+<br>
 <p>Письмо отправлено автоматически.</p>
