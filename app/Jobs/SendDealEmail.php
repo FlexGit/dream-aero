@@ -31,6 +31,11 @@ class SendDealEmail extends Job implements ShouldQueue {
 
 		$score = 0;
 		foreach ($deal->positions ?? [] as $position) {
+			\Log::debug($position->type);
+			if ($position->score) {
+				\Log::debug($position->score);
+				\Log::debug($position->score->score);
+			}
 			if (!$position->score || !$position->type != Score::USED_TYPE) continue;
 
 			$score += abs($position->score->score);
