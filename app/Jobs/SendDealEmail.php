@@ -44,12 +44,13 @@ class SendDealEmail extends Job implements ShouldQueue {
 				'email' => $deal->contractor->city->email ?? '',
 			];
 		}
-		if (!$cityData['email']) return;
 
 		$recipients = [];
-		$recipients[] = $cityData['email'];
-		$recipients[] = env('DEV_EMAIL');
-		
+		$recipients[] = 'webmanage@inbox.ru';
+		if ($cityData['email']) {
+			$recipients[] = $cityData['email'];
+		}
+
 		$messageData = [
 			'contractorFio' => $deal->contractor ? $deal->contractor->fio() : '',
 			'dealName' => $deal->name ?? '',
