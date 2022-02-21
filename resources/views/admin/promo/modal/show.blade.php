@@ -47,7 +47,7 @@
 		<tr class="odd">
 			<td>Изображение</td>
 			<td>
-				@if(array_key_exists('image_file_path', $promo->data_json) && $promo->data_json['image_file_path'])
+				@if(isset($promo->data_json['image_file_path']) && $promo->data_json['image_file_path'])
 					<img src="/upload/{{ $promo->data_json['image_file_path'] }}" width="150" alt="">
 				@endif
 			</td>
