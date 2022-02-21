@@ -56,3 +56,10 @@
 	<label for="active_to_at">Дата окончания активности</label>
 	<input type="date" class="form-control" id="active_to_at" name="active_to_at" placeholder="Дата окончания активности">
 </div>
+<div class="form-group">
+	<label for="image_file">Изображение</label>
+	<div class="custom-file">
+		<input type="file" class="custom-file-input" id="image_file" name="image_file">
+		<label class="custom-file-label" for="image_file">Выбрать файл</label>
+	</div>
+</div>

@@ -45,6 +45,14 @@
 			<td>{{ \Carbon\Carbon::parse($promo->active_to_at)->format('Y-m-d') }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Изображение</td>
+			<td>
+				@if(array_key_exists('image_file_path', $promo->data_json) && $promo->data_json['image_file_path'])
+					<img src="/upload/{{ $promo->data_json['image_file_path'] }}" width="150" alt="">
+				@endif
+			</td>
+		</tr>
+		<tr class="odd">
 			<td>Дата создания</td>
 			<td>{{ $promo->created_at }}</td>
 		</tr>

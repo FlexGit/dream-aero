@@ -148,12 +148,26 @@
 
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
-					data = $(this).serializeArray();
+					$imageFile = $('#image_file');
+
+				var formData = new FormData($(this)[0]);
+				if ($imageFile.val()) {
+					formData.append('image_file', $imageFile.prop('files')[0]);
+				}
+
+				var realMethod = method;
+				if (method === 'PUT') {
+					formData.append('_method', 'PUT');
+					realMethod = 'POST';
+				}
 
 				$.ajax({
 					url: action,
-					type: method,
-					data: data,
+					type: realMethod,
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
@@ -172,6 +186,29 @@
 						$('#modal').modal('hide');
 						getList();
 						toastr.success(msg);
+					}
+				});
+			});
+
+			$(document).on('click', '.js-image-delete', function(e) {
+				if (!confirm('Вы уверены?')) {
+					return false;
+				}
+
+				$div = $(this).closest('div');
+
+				$.ajax({
+					url: '/promo/' + $(this).data('id') + '/image/delete',
+					type: 'PUT',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						$div.hide();
+						toastr.success('Изображение успешно удалено');
 					}
 				});
 			});

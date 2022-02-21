@@ -314,6 +314,11 @@ class ProductController extends Controller
 		return response()->json(['status' => 'success']);
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function deleteIcon($id)
 	{
 		if (!$this->request->ajax()) {

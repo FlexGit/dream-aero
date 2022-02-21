@@ -176,16 +176,23 @@ class PromoController extends Controller
 
 		$rules = [
 			'name' => ['required', 'max:255'],
+			'image_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Имя',
+				'image_file' => 'Изображение',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
+
+		$isImageFileUploaded = false;
+		if($imageFile = $this->request->file('image_file')) {
+			$isImageFileUploaded = $imageFile->move(public_path('upload/promo'), $imageFile->getClientOriginalName());
+		}
+
 		$promo = new Promo();
 		$promo->name = $this->request->name;
 		$promo->alias = $this->request->alias;
@@ -197,6 +204,11 @@ class PromoController extends Controller
 		$promo->is_active = (bool)$this->request->is_active;
 		$promo->active_from_at = Carbon::parse($this->request->active_from_at)->format('Y-m-d') ?? null;
 		$promo->active_to_at = Carbon::parse($this->request->active_to_at)->format('Y-m-d') ?? null;
+		$data = $promo->data_json;
+		if ($isImageFileUploaded) {
+			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
+		}
+		$promo->data_json = $data;
 		if (!$promo->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -223,14 +235,26 @@ class PromoController extends Controller
 
 		$rules = [
 			'name' => ['required', 'max:255'],
+			'image_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Имя',
+				'image_file' => 'Изображение',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+
+		$isImageFileUploaded = false;
+		if($imageFile = $this->request->file('image_file')) {
+			$isImageFileUploaded = $imageFile->move(public_path('upload/promo'), $imageFile->getClientOriginalName());
+		}
+
+		// удаляем старый файл оферты
+		if ($isImageFileUploaded && $promo->data_json && $promo->data_json['image_file_path'] && is_file(public_path('upload/' . $promo->data_json['image_file_path']))) {
+			unlink(public_path('upload/' . $promo->data_json['image_file_path']));
 		}
 
 		$promo->name = $this->request->name;
@@ -243,6 +267,11 @@ class PromoController extends Controller
 		$promo->is_active = (bool)$this->request->is_active;
 		$promo->active_from_at = Carbon::parse($this->request->active_from_at)->format('Y-m-d') ?? null;
 		$promo->active_to_at = Carbon::parse($this->request->active_to_at)->format('Y-m-d') ?? null;
+		$data = $promo->data_json;
+		if ($isImageFileUploaded) {
+			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
+		}
+		$promo->data_json = $data;
 		if (!$promo->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -266,11 +295,49 @@ class PromoController extends Controller
 
 		$promo = Promo::find($id);
 		if (!$promo) return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
-		
+
+		// удаляем файл изображения
+		if ($promo->data_json && isset($promo->data_json['image_file_path']) && is_file(public_path('upload/' . $promo->data_json['image_file_path']))) {
+			unlink(public_path('upload/' . $promo->data_json['image_file_path']));
+		}
+
 		if (!$promo->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
-		
+
+		return response()->json(['status' => 'success']);
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function deleteImage($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
+		$promo = Promo::find($id);
+		if (!$promo) return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
+
+		// удаляем файл изображения
+		if ($promo->data_json && isset($promo->data_json['image_file_path']) && is_file(public_path('upload/' . $promo->data_json['image_file_path']))) {
+			unlink(public_path('upload/' . $promo->data_json['image_file_path']));
+		}
+
+		$data = $promo->data_json;
+		unset($data['image_file_path']);
+		$promo->data_json = $data;
+		if (!$promo->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+
 		return response()->json(['status' => 'success']);
 	}
 }

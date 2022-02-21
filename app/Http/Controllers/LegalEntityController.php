@@ -220,7 +220,7 @@ class LegalEntityController extends Controller
 		}
 		
 		// удаляем старый файл оферты
-		if ($isFileUploaded && $legalEntity->data_json && array_key_exists('public_offer_file_path', $legalEntity->data_json) && is_file(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']))) {
+		if ($isFileUploaded && $legalEntity->data_json && isset($legalEntity->data_json['public_offer_file_path']) && is_file(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']))) {
 			unlink(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']));
 		}
 
@@ -259,7 +259,7 @@ class LegalEntityController extends Controller
 		}
 		
 		// удаляем файл оферты
-		if ($legalEntity->data_json && array_key_exists('public_offer_file_path', $legalEntity->data_json) && is_file(public_path('upload/public_offer/' . $legalEntity->data_json['public_offer_file_path']))) {
+		if ($legalEntity->data_json && isset($legalEntity->data_json['public_offer_file_path']) && is_file(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']))) {
 			unlink(public_path('upload/' . $legalEntity->data_json['public_offer_file_path']));
 		}
 		

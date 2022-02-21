@@ -354,6 +354,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('promo/{id}/edit', [PromoController::class, 'edit']);
 		Route::get('promo/{id}/delete', [PromoController::class, 'confirm']);
 		Route::get('promo/{id}/show', [PromoController::class, 'show']);
+		Route::put('promo/{id}/image/delete', [PromoController::class, 'deleteImage']);
 
 		// Лог операций
 		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
