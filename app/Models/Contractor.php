@@ -219,12 +219,13 @@ class Contractor extends Authenticatable
 		$avatarFileName = ($avatar && isset($avatar['name'])) ? $avatar['name'] : null;
 		$avatarFileExt = ($avatar && isset($avatar['ext'])) ? $avatar['ext'] : null;
 
-		$base64 = '';
+		//$base64 = '';
+		$avatarFilePath = '';
 		if ($avatarFileName && $avatarFileExt && Storage::disk('private')->exists('contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt)) {
-			$file = storage_path('app/private/contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt);
-			$type = pathinfo($file, PATHINFO_EXTENSION);
+			$avatarFilePath = storage_path('app/private/contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt);
+			/*$type = pathinfo($file, PATHINFO_EXTENSION);
 			$fileData = file_get_contents($file);
-			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);
+			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);*/
 		}
 
 		// все статусы контрагента
@@ -248,7 +249,7 @@ class Contractor extends Authenticatable
 			'phone' => $this->phone,
 			'city' => $this->city ? $this->city->format() : null,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
-			'avatar_file_base64' => $base64 ?: null,
+			'avatar_file_path' => $avatarFilePath ?: null,
 			'score' => $score ?? 0,
 			'status' => $status->name ?? null,
 			'flight_time' => (int)$contractorFlightTime,
