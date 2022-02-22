@@ -3021,7 +3021,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: est
+                  example: quia
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4489,11 +4489,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: consequatur
+                  example: hic
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: est
+                  example: et
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4501,11 +4501,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 8
+                  example: 19
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 11
+                  example: 12
                 promocode_id:
                   type: integer
                   description: ''
@@ -4517,7 +4517,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: nihil
+                  example: cupiditate
                 comment:
                   type: string
                   description: ''
