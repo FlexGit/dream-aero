@@ -1254,19 +1254,19 @@ class ApiController extends Controller
 			return $this->responseError('Город не найден', 400);
 		}
 
-		\Log::debug('!!! ' . $cityId);
-
 		$city = City::where('is_active', true)
 			->find($cityId);
 		if (!$city) {
 			return $this->responseError('Город не найден', 400);
 		}
 
-		\Log::debug('!!! ' . $city->id);
+		\DB::enableQueryLog();
 
 		$tariffs = Product::where('product_type_id', $tariffTypeId)
 			->whereRelation('cities', 'cities.id', '=', $city->id)
 			->get();
+
+		\Log::debug(\DB::getQueryLog());
 		
 		$data = [];
 		foreach ($tariffs ?? [] as $tariff) {
