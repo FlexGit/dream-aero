@@ -1260,18 +1260,14 @@ class ApiController extends Controller
 			return $this->responseError('Город не найден', 400);
 		}
 
-		\DB::enableQueryLog();
-
 		$tariffs = Product::where('product_type_id', $tariffTypeId)
 			->whereRelation('cities', 'cities.id', '=', $city->id)
 			->get();
-
-		\Log::debug(\DB::getQueryLog());
 		
 		$data = [];
 		foreach ($tariffs ?? [] as $tariff) {
 			$data[] = [
-				'tariff' =>  $tariff->format(),
+				'tariff' =>  $tariff->format($city->id),
 			];
 		}
 		
@@ -1368,7 +1364,7 @@ class ApiController extends Controller
 		}
 
 		$data = [
-			'tariff' =>  $tariff->format(),
+			'tariff' =>  $tariff->format($city->id),
 		];
 		
 		return $this->responseSuccess(null, $data);
