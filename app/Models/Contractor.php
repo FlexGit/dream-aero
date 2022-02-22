@@ -213,7 +213,7 @@ class Contractor extends Authenticatable
 	
 	public function format()
 	{
-		$data = $this->data_json ?? [];
+		$data = $this->data_json ? (is_array($this->data_json) ? $this->data_json : json_decode($this->data_json, true)) : [];
 		\Log::debug($data);
 
 		$avatar = isset($data['avatar']) ? $data['avatar'] : null;
