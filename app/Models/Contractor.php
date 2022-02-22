@@ -221,8 +221,10 @@ class Contractor extends Authenticatable
 
 		//$base64 = '';
 		$avatarFilePath = '';
+		\Log::debug($avatar);
 		if ($avatarFileName && $avatarFileExt && Storage::disk('private')->exists('contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt)) {
 			$avatarFilePath = storage_path('app/private/contractor/avatar/' . $avatarFileName . '.' . $avatarFileExt);
+			\Log::debug($avatarFilePath);
 			/*$type = pathinfo($file, PATHINFO_EXTENSION);
 			$fileData = file_get_contents($file);
 			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);*/
