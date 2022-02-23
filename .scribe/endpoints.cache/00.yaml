@@ -848,7 +848,7 @@ endpoints:
           				"is_unified": false,
           			"is_booking_allow": true,
           			"is_certificate_purchase_allow": true,
-          			"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
+          			"icon_file_path": "https://dev.dream-aero.ru/upload/product/icon/clock30.webp",
           			"tariff_type": {
           				"id": 1,
           				"name": "Regular",
@@ -942,7 +942,7 @@ endpoints:
           			"is_unified": false,
           		"is_booking_allow": true,
           		"is_certificate_purchase_allow": true,
-          		"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
+          		"icon_file_path": "https://dev.dream-aero.ru/upload/product/icon/clock30.webp",
           		"tariff_type": {
           			"id": 1,
           			"name": "Regular",
@@ -1454,7 +1454,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: accusamus
+        example: omnis
         type: string
         custom: []
     responses:
@@ -1840,7 +1840,7 @@ endpoints:
           	 				"is_unified": false,
           					"is_booking_allow": true,
           					"is_certificate_purchase_allow": true,
-          					"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
+          					"icon_file_path": "https://dev.dream-aero.ru/upload/product/icon/clock30.webp",
           					"tariff_type": {
           						"id": 1,
           						"name": "Regular",
@@ -2292,14 +2292,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: laboriosam
+        example: voluptatem
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: accusamus
+        example: laboriosam
         type: time
         custom: []
       is_unified:
@@ -2313,14 +2313,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 19
+        example: 16
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 2
+        example: 12
         type: integer
         custom: []
       promocode_id:
@@ -2341,7 +2341,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: rem
+        example: facilis
         type: string
         custom: []
       comment:

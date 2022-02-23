@@ -1188,7 +1188,7 @@ class ApiController extends Controller
 	 * 				"is_unified": false,
 	 *				"is_booking_allow": true,
 	 *				"is_certificate_purchase_allow": true,
-	 *				"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
+	 *				"icon_file_path": "https://dev.dream-aero.ru/upload/product/icon/clock30.webp",
 	 *				"tariff_type": {
 	 *					"id": 1,
 	 *					"name": "Regular",
@@ -1295,7 +1295,7 @@ class ApiController extends Controller
 	 * 			"is_unified": false,
 	 *			"is_booking_allow": true,
 	 *			"is_certificate_purchase_allow": true,
-	 *			"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
+	 *			"icon_file_path": "https://dev.dream-aero.ru/upload/product/icon/clock30.webp",
 	 *			"tariff_type": {
 	 *				"id": 1,
 	 *				"name": "Regular",
@@ -1923,7 +1923,7 @@ class ApiController extends Controller
 	 *		 				"is_unified": false,
 	 *						"is_booking_allow": true,
 	 *						"is_certificate_purchase_allow": true,
-	 *						"icon_file_path": "http://dev.dream-aero.ru/upload/product/icon/clock30.webp",
+	 *						"icon_file_path": "https://dev.dream-aero.ru/upload/product/icon/clock30.webp",
 	 *						"tariff_type": {
 	 *							"id": 1,
 	 *							"name": "Regular",

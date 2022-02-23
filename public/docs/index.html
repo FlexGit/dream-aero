@@ -190,7 +190,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 <blockquote>
 <p>Base URL</p>
 </blockquote>
-<pre><code class="language-yaml">http://dev.dream-aero.ru</code></pre>
+<pre><code class="language-yaml">https://dev.dream-aero.ru</code></pre>
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>To authenticate requests, include a query parameter <strong><code>api_key</code></strong> in the request.</p>
@@ -2293,7 +2293,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 &quot;is_unified&quot;: false,
                 &quot;is_booking_allow&quot;: true,
                 &quot;is_certificate_purchase_allow&quot;: true,
-                &quot;icon_file_path&quot;: &quot;http://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
+                &quot;icon_file_path&quot;: &quot;https://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
                 &quot;tariff_type&quot;: {
                     &quot;id&quot;: 1,
                     &quot;name&quot;: &quot;Regular&quot;,
@@ -2512,7 +2512,7 @@ print_r(json_decode((string) $body));</code></pre></div>
             &quot;is_unified&quot;: false,
             &quot;is_booking_allow&quot;: true,
             &quot;is_certificate_purchase_allow&quot;: true,
-            &quot;icon_file_path&quot;: &quot;http://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
+            &quot;icon_file_path&quot;: &quot;https://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
             &quot;tariff_type&quot;: {
                 &quot;id&quot;: 1,
                 &quot;name&quot;: &quot;Regular&quot;,
@@ -3824,7 +3824,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"accusamus\"
+    \"file_base64\": \"omnis\"
 }"
 </code></pre></div>
 
@@ -3847,7 +3847,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "accusamus"
+    "file_base64": "omnis"
 };
 
 fetch(url, {
@@ -3871,7 +3871,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'accusamus',
+            'file_base64' =&gt; 'omnis',
         ],
     ]
 );
@@ -4039,7 +4039,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="accusamus"
+               value="omnis"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4827,7 +4827,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 	 				&quot;is_unified&quot;: false,
 					&quot;is_booking_allow&quot;: true,
 					&quot;is_certificate_purchase_allow&quot;: true,
-					&quot;icon_file_path&quot;: &quot;http://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
+					&quot;icon_file_path&quot;: &quot;https://dev.dream-aero.ru/upload/product/icon/clock30.webp&quot;,
 					&quot;tariff_type&quot;: {
 						&quot;id&quot;: 1,
 						&quot;name&quot;: &quot;Regular&quot;,
@@ -5821,11 +5821,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"laboriosam\",
-    \"flight_time\": \"accusamus\",
-    \"location_id\": 19,
-    \"flight_simulator_id\": 2,
-    \"certificate_whom\": \"rem\"
+    \"flight_date\": \"voluptatem\",
+    \"flight_time\": \"laboriosam\",
+    \"location_id\": 16,
+    \"flight_simulator_id\": 12,
+    \"certificate_whom\": \"facilis\"
 }"
 </code></pre></div>
 
@@ -5854,11 +5854,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "laboriosam",
-    "flight_time": "accusamus",
-    "location_id": 19,
-    "flight_simulator_id": 2,
-    "certificate_whom": "rem"
+    "flight_date": "voluptatem",
+    "flight_time": "laboriosam",
+    "location_id": 16,
+    "flight_simulator_id": 12,
+    "certificate_whom": "facilis"
 };
 
 fetch(url, {
@@ -5888,11 +5888,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'laboriosam',
-            'flight_time' =&gt; 'accusamus',
-            'location_id' =&gt; 19,
-            'flight_simulator_id' =&gt; 2,
-            'certificate_whom' =&gt; 'rem',
+            'flight_date' =&gt; 'voluptatem',
+            'flight_time' =&gt; 'laboriosam',
+            'location_id' =&gt; 16,
+            'flight_simulator_id' =&gt; 12,
+            'certificate_whom' =&gt; 'facilis',
         ],
     ]
 );
@@ -6114,7 +6114,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="laboriosam"
+               value="voluptatem"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6124,7 +6124,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="accusamus"
+               value="laboriosam"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6155,7 +6155,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="19"
+               value="16"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6165,7 +6165,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
-               value="2"
+               value="12"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6195,7 +6195,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="rem"
+               value="facilis"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>
