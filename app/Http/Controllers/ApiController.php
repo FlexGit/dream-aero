@@ -1447,7 +1447,7 @@ class ApiController extends Controller
 			}
 		}
 
-		$isUnified = $this->request->is_unified ?? false;
+		$isUnified = (bool)$this->request->is_unified;
 		$certificateId = $this->request->certificate_id ?? 0;
 		$promocodeId = $this->request->promocode_id ?? 0;
 
