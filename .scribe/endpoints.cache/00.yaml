@@ -1461,7 +1461,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: quia
+        example: omnis
         type: string
         custom: []
     responses:
@@ -2299,14 +2299,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: hic
+        example: incidunt
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: et
+        example: mollitia
         type: time
         custom: []
       is_unified:
@@ -2320,14 +2320,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 19
+        example: 13
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 12
+        example: 6
         type: integer
         custom: []
       promocode_id:
@@ -2348,7 +2348,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: cupiditate
+        example: dolores
         type: string
         custom: []
       comment:
@@ -2486,6 +2486,79 @@ endpoints:
           			"status": "Создана",
           		}
           	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: api/feedback
+    metadata:
+      title: Feedback
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+    bodyParameters:
+      message:
+        name: message
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "Сообщение успешно отправлено",
+          	"data": null
           }
         headers: []
         description: '200, success'

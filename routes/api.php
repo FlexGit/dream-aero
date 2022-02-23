@@ -50,5 +50,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('certificate/verify', [ApiController::class, 'verifyCertificate']);
 		Route::get('notifications', [ApiController::class, 'getNotifications']);
 		Route::get('notification', [ApiController::class, 'getNotification']);
+		Route::post('feedback', [ApiController::class, 'feedback']);
 	});
 });

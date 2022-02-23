@@ -2732,4 +2732,70 @@ class ApiController extends Controller
 
 		return $this->responseSuccess('Заявка успешно создана', $data);
 	}
+
+	/**
+	 *  Feedback
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @bodyParam message string required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "Сообщение успешно отправлено",
+	 * 	"data": null
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function feedback()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+
+		$rules = [
+			'message' => ['required', 'min:3'],
+		];
+		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
+			->setAttributeNames([
+				'message' => 'Сообщение',
+			]);
+		if (!$validator->passes()) {
+			$errors = [];
+			$validatorErrors = $validator->errors();
+			foreach ($rules as $key => $rule) {
+				foreach ($validatorErrors->get($key) ?? [] as $error) {
+					$errors[$key] = $error;
+				}
+			}
+			return $this->responseError($errors, 400);
+		}
+
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+
+		//dispatch(new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message));
+
+		$job = new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message);
+		$job->handle();
+
+		return $this->responseSuccess('Сообщение успешно отправлено', null);
+	}
 }

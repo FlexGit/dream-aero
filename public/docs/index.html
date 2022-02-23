@@ -160,6 +160,9 @@
                                     <li class="tocify-item level-2" data-unique="endpoints-POSTapi-deal-simplified-create">
                         <a href="#endpoints-POSTapi-deal-simplified-create">Deal create simplified</a>
                     </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-feedback">
+                        <a href="#endpoints-POSTapi-feedback">Feedback</a>
+                    </li>
                                                     </ul>
                             </ul>
         
@@ -172,7 +175,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 22 2022</li>
+        <li>Last updated: February 23 2022</li>
     </ul>
 </div>
 
@@ -3834,7 +3837,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"quia\"
+    \"file_base64\": \"omnis\"
 }"
 </code></pre></div>
 
@@ -3857,7 +3860,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "quia"
+    "file_base64": "omnis"
 };
 
 fetch(url, {
@@ -3881,7 +3884,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'quia',
+            'file_base64' =&gt; 'omnis',
         ],
     ]
 );
@@ -4049,7 +4052,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="quia"
+               value="omnis"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -5831,11 +5834,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"hic\",
-    \"flight_time\": \"et\",
-    \"location_id\": 19,
-    \"flight_simulator_id\": 12,
-    \"certificate_whom\": \"cupiditate\"
+    \"flight_date\": \"incidunt\",
+    \"flight_time\": \"mollitia\",
+    \"location_id\": 13,
+    \"flight_simulator_id\": 6,
+    \"certificate_whom\": \"dolores\"
 }"
 </code></pre></div>
 
@@ -5864,11 +5867,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "hic",
-    "flight_time": "et",
-    "location_id": 19,
-    "flight_simulator_id": 12,
-    "certificate_whom": "cupiditate"
+    "flight_date": "incidunt",
+    "flight_time": "mollitia",
+    "location_id": 13,
+    "flight_simulator_id": 6,
+    "certificate_whom": "dolores"
 };
 
 fetch(url, {
@@ -5898,11 +5901,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'hic',
-            'flight_time' =&gt; 'et',
-            'location_id' =&gt; 19,
-            'flight_simulator_id' =&gt; 12,
-            'certificate_whom' =&gt; 'cupiditate',
+            'flight_date' =&gt; 'incidunt',
+            'flight_time' =&gt; 'mollitia',
+            'location_id' =&gt; 13,
+            'flight_simulator_id' =&gt; 6,
+            'certificate_whom' =&gt; 'dolores',
         ],
     ]
 );
@@ -6124,7 +6127,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="hic"
+               value="incidunt"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6134,7 +6137,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="et"
+               value="mollitia"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6165,7 +6168,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="19"
+               value="13"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6175,7 +6178,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
-               value="12"
+               value="6"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6205,7 +6208,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="cupiditate"
+               value="dolores"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>
@@ -6500,6 +6503,223 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="product_amount"
                data-endpoint="POSTapi-deal-simplified-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
+
+            <h2 id="endpoints-POSTapi-feedback">Feedback</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-feedback">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://dev.dream-aero.ru/api/feedback?api_key=&amp;token=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"message\": null
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://dev.dream-aero.ru/api/feedback"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "message": null
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://dev.dream-aero.ru/api/feedback',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+        ],
+        'json' =&gt; [
+            'message' =&gt; null,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-feedback">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Сообщение успешно отправлено&quot;,
+    &quot;data&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-feedback" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-feedback"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-feedback"></code></pre>
+</span>
+<span id="execution-error-POSTapi-feedback" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-feedback"></code></pre>
+</span>
+<form id="form-POSTapi-feedback" data-method="POST"
+      data-path="api/feedback"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-feedback', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-feedback"
+                    onclick="tryItOut('POSTapi-feedback');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-feedback"
+                    onclick="cancelTryOut('POSTapi-feedback');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-feedback" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/feedback</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="POSTapi-feedback"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="POSTapi-feedback"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>message</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="message"
+               data-endpoint="POSTapi-feedback"
                value=""
                data-component="body" hidden>
     <br>
