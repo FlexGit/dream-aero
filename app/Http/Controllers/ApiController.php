@@ -1263,7 +1263,7 @@ class ApiController extends Controller
 		$data = [];
 		foreach ($tariffs ?? [] as $tariff) {
 			$data[] = [
-				'tariff' =>  $tariff->format($city->id),
+				'tariff' =>  $tariff->format($city->id, $contractor->id),
 			];
 		}
 		
@@ -1360,7 +1360,7 @@ class ApiController extends Controller
 		}
 
 		$data = [
-			'tariff' =>  $tariff->format($city->id),
+			'tariff' =>  $tariff->format($city->id, $contractor->id),
 		];
 		
 		return $this->responseSuccess(null, $data);

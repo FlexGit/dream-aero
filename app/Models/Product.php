@@ -113,23 +113,24 @@ class Product extends Model
 			->withPivot(['price', 'currency_id', 'discount_id', 'is_hit', 'score', 'is_active', 'data_json'])
 			->withTimestamps();
 	}
-
+	
 	/**
-	 * @param $cityId
-	 *
+	 * @param int $cityId
+	 * @param null $contractorId
 	 * @return array
 	 */
-	public function format($cityId = 1)
+	public function format($cityId = 1, $contractorId = null)
 	{
 		$cityProduct = $this->cities()
 			->where('cities_products.is_active', true)
 			->find($cityId);
 		if (!$cityProduct || !$cityProduct->pivot) return [];
-
-		$price = $cityProduct->pivot->price;
+		
+		/*$price = $cityProduct->pivot->price;
 		if ($cityProduct->pivot->discount) {
 			$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
-		}
+		}*/
+		$price = $this->calcAmount($contractorId, $cityId, 0, 0, 0, 0, 0, 'api', 0, 0);
 
 		//$data = $this->data_json ?? [];
 		$pivotData = json_decode($cityProduct->pivot->data_json, true);
