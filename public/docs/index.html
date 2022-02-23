@@ -429,7 +429,6 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": null,
     \"name\": null,
     \"birthdate\": null,
     \"city_id\": null
@@ -455,7 +454,6 @@ const headers = {
 };
 
 let body = {
-    "email": null,
     "name": null,
     "birthdate": null,
     "city_id": null
@@ -482,7 +480,6 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'email' =&gt; null,
             'name' =&gt; null,
             'birthdate' =&gt; null,
             'city_id' =&gt; null,
@@ -649,16 +646,6 @@ print_r(json_decode((string) $body));</code></pre></div>
             </p>
                         <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <p>
-            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
-                <input type="text"
-               name="email"
-               data-endpoint="POSTapi-profile-save"
-               value=""
-               data-component="body" hidden>
-    <br>
-
-        </p>
-                <p>
             <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
                 <input type="text"
                name="name"
@@ -3837,7 +3824,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"omnis\"
+    \"file_base64\": \"veritatis\"
 }"
 </code></pre></div>
 
@@ -3860,7 +3847,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "omnis"
+    "file_base64": "veritatis"
 };
 
 fetch(url, {
@@ -3884,7 +3871,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'omnis',
+            'file_base64' =&gt; 'veritatis',
         ],
     ]
 );
@@ -4052,7 +4039,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="omnis"
+               value="veritatis"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -5834,11 +5821,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"incidunt\",
-    \"flight_time\": \"mollitia\",
-    \"location_id\": 13,
-    \"flight_simulator_id\": 6,
-    \"certificate_whom\": \"dolores\"
+    \"flight_date\": \"id\",
+    \"flight_time\": \"odit\",
+    \"location_id\": 19,
+    \"flight_simulator_id\": 10,
+    \"certificate_whom\": \"tempore\"
 }"
 </code></pre></div>
 
@@ -5867,11 +5854,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "incidunt",
-    "flight_time": "mollitia",
-    "location_id": 13,
-    "flight_simulator_id": 6,
-    "certificate_whom": "dolores"
+    "flight_date": "id",
+    "flight_time": "odit",
+    "location_id": 19,
+    "flight_simulator_id": 10,
+    "certificate_whom": "tempore"
 };
 
 fetch(url, {
@@ -5901,11 +5888,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'incidunt',
-            'flight_time' =&gt; 'mollitia',
-            'location_id' =&gt; 13,
-            'flight_simulator_id' =&gt; 6,
-            'certificate_whom' =&gt; 'dolores',
+            'flight_date' =&gt; 'id',
+            'flight_time' =&gt; 'odit',
+            'location_id' =&gt; 19,
+            'flight_simulator_id' =&gt; 10,
+            'certificate_whom' =&gt; 'tempore',
         ],
     ]
 );
@@ -6127,7 +6114,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="incidunt"
+               value="id"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6137,7 +6124,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="mollitia"
+               value="odit"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6168,7 +6155,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="13"
+               value="19"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6178,7 +6165,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
-               value="6"
+               value="10"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6208,7 +6195,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="dolores"
+               value="tempore"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>

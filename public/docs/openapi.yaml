@@ -352,10 +352,6 @@ paths:
             schema:
               type: object
               properties:
-                email:
-                  type: string
-                  description: ''
-                  example: null
                 name:
                   type: string
                   description: ''
@@ -377,7 +373,6 @@ paths:
                   description: ''
                   example: null
               required:
-                - email
                 - name
                 - birthdate
                 - city_id
@@ -3021,7 +3016,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: omnis
+                  example: veritatis
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4489,11 +4484,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: incidunt
+                  example: id
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: mollitia
+                  example: odit
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4501,11 +4496,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 13
+                  example: 19
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 6
+                  example: 10
                 promocode_id:
                   type: integer
                   description: ''
@@ -4517,7 +4512,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: dolores
+                  example: tempore
                 comment:
                   type: string
                   description: ''

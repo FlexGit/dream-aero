@@ -108,13 +108,6 @@ endpoints:
         type: string
         custom: []
     bodyParameters:
-      email:
-        name: email
-        description: ''
-        required: true
-        example: null
-        type: string
-        custom: []
       name:
         name: name
         description: ''
@@ -1459,7 +1452,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: omnis
+        example: veritatis
         type: string
         custom: []
     responses:
@@ -2297,14 +2290,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: incidunt
+        example: id
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: mollitia
+        example: odit
         type: time
         custom: []
       is_unified:
@@ -2318,14 +2311,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 13
+        example: 19
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 6
+        example: 10
         type: integer
         custom: []
       promocode_id:
@@ -2346,7 +2339,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: dolores
+        example: tempore
         type: string
         custom: []
       comment:
