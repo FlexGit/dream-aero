@@ -645,7 +645,6 @@ class ApiController extends Controller
 	 *
 	 * @queryParam api_key string required No-example
 	 * @queryParam token string required No-example
-	 * @bodyParam email string required No-example
 	 * @bodyParam name string required No-example
 	 * @bodyParam lastname string No-example
 	 * @bodyParam birthdate date required No-example
@@ -695,7 +694,6 @@ class ApiController extends Controller
 		$rules = [
 			'name' => ['required', 'min:3', 'max:50'],
 			'lastname' => ['sometimes', 'required', 'min:3', 'max:50'],
-			'email' => ['required', 'email'],
 			'phone' => ['sometimes', 'required', 'valid_phone'],
 			'birthdate' => ['required', 'date'],
 			'city_id' => ['required', 'numeric', 'valid_city'],
@@ -704,7 +702,6 @@ class ApiController extends Controller
 			->setAttributeNames([
 				'name' => 'Имя',
 				'lastname' => 'Фамилия',
-				'email' => 'E-mail',
 				'phone' => 'Телефон',
 				'birthdate' => 'Дата рождения',
 				'city_id' => 'Город',
@@ -738,7 +735,6 @@ class ApiController extends Controller
 		
 		$contractor->name = $this->request->name;
 		$contractor->lastname = $this->request->lastname ?? null;
-		$contractor->email = $this->request->email;
 		$contractor->phone = $this->request->phone ?? null;
 		$contractor->city_id = $this->request->city_id;
 		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
