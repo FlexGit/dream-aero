@@ -989,8 +989,8 @@ class ApiController extends Controller
 
 		// https://en.wikipedia.org/wiki/Base64#Padding
 		$y = ($strlen - 2 == '=') ? 2 : 1;
-		if ($strlen * 3 / 4 - $y > 1024 * 1024 * 3) {
-			return $this->responseError('Размер файла не должен превышать 3 Мб', 400);
+		if ($strlen * 3 / 4 - $y > 1024 * 1024 * 20) {
+			return $this->responseError('Размер файла не должен превышать 20 Мб', 400);
 		}
 		
 		$fileName =  Str::uuid()->toString();
