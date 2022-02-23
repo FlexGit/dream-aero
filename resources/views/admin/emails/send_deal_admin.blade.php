@@ -36,4 +36,4 @@
 <p>Источник заявки: {{ $source ?? '' }}</p>
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
 <br>
-<p>Письмо отправлено автоматически.</p>
+<p><small>Письмо отправлено автоматически</small></p>

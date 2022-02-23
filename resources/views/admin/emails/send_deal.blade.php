@@ -1,5 +1,4 @@
 <p>Здравствуйте, {{ $dealName ?? '' }}!</p>
-<br>
 @if($isCertificatePurchase)
 	<p>Вами или кем-то на Ваше имя оформлена заявка на покупку сертификата.</p>
 	<p>Номер заявки: <b>{{ $dealNumber ?? '' }}</b></p>
@@ -42,4 +41,4 @@
 @if($skype) <p>Skype: {{ $skype }}</p>@endif
 @if($email) <p>E-mail: {{ $email }}</p>@endif
 <br>
-<p>Письмо отправлено автоматически.</p>
+<p><small>Письмо отправлено автоматически</small></p>

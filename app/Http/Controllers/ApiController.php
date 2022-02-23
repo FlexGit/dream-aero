@@ -2292,7 +2292,7 @@ class ApiController extends Controller
 
 			if ($debitScore) {
 				$score = new Score();
-				$score->score = (- 1 * $debitScore);
+				$score->score = (-1 * $debitScore);
 				$score->contractor_id = $contractor ? $contractor->id : 0;
 				$score->deal_id = $deal->id;
 				$score->deal_position_id = $position->id;
