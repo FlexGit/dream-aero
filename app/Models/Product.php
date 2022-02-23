@@ -321,11 +321,23 @@ class Product extends Model
 
 			return ($amount > 0) ? round($amount) : 0;
 		}
-
+		
 		// скидка контрагента
-		$discount = ($contractor && $contractor->discount) ? $contractor->discount : null;
-		if ($discount) {
-			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+		if ($contractor) {
+			// все статусы контрагента
+			$statuses = Status::where('is_active', true)
+				->where('type', Status::STATUS_TYPE_CONTRACTOR)
+				->get();
+
+			// время налета контрагента
+			$contractorFlightTime = $contractor->getFlightTime();
+
+			// статус контрагента
+			$status = $contractor->getStatus($statuses, $contractorFlightTime ?? 0);
+			
+			if ($status->discount) {
+				$amount = $status->discount->is_fixed ? ($amount - $status->discount->value) : ($amount - $amount * $status->discount->value / 100);
+			}
 		}
 
 		return ($amount > 0) ? round($amount) : 0;
