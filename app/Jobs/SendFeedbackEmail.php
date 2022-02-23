@@ -32,6 +32,8 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
+		\Log::debug('label 0');
+
 		$contractor = Contractor::find($this->contractorId);
 		if (!$contractor) return;
 		
@@ -58,6 +60,8 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 				$message->to($recipients);
 			});
 
+			\Log::debug('label 1');
+
 			foreach ($recipients as $recipient) {
 				if (in_array($recipient, Mail::failures())) {
 					throw new \Exception("Email $recipient in a failed list");
@@ -66,5 +70,7 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 		} catch (\Exception $e) {
 			/*$log->error('ERROR on Deal send ', ['number' => $deal->number, 'email' => $deal->email, 'msg' => $e->getMessage()]);*/
 		}
+
+		\Log::debug('label 2');
 	}
 }
