@@ -263,8 +263,6 @@ class Product extends Model
 	 */
 	public function calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, $source, $certificateId = 0, $isUnified = false, $isAirlineMilesPurchase = false)
 	{
-		\Log::debug($contractorId . ' - ' . $cityId . ' - ' . $isUnified);
-
 		if ($isFree) return 0;
 
 		if ($certificateId && $locationId) {
@@ -294,17 +292,11 @@ class Product extends Model
 			$cityId = $mskCity->id;
 		}
 
-		\Log::debug($cityId);
-
 		$cityProduct = $this->cities()->where('cities_products.is_active', true)->find($cityId);
 		if (!$cityProduct || !$cityProduct->pivot) return 0;
 
-		\Log::debug($cityProduct);
-	
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
-
-		\Log::debug($amount);
 
 		// скидка на продукт
 		$discount = $cityProduct->pivot->discount ?? null;

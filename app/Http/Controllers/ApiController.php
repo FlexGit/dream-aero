@@ -1451,7 +1451,8 @@ class ApiController extends Controller
 		$certificateId = $this->request->certificate_id ?? 0;
 		$promocodeId = $this->request->promocode_id ?? 0;
 
-		\Log::debug($contractor->id . ' - ' . $cityId . ' - ' . $locationId . ' - ' . $certificateId . ' - ' . $isUnified);
+		\Log::debug($this->request->is_unified . ' - ' . (bool)$this->request->is_unified);
+		\Log::debug($this->request);
 
 		$amount = $product->calcAmount($contractor->id, $cityId, $locationId, 0, 0, $promocodeId, 0, 'api', $certificateId, $isUnified);
 		if ($amount < 0) {
