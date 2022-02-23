@@ -20,6 +20,7 @@ class CreateContentsTable extends Migration
 			$table->longText('detail_text')->nullable()->comment('подробно');
 			$table->text('preview_text')->nullable()->comment('превью');
 			$table->integer('parent_id')->default(0)->index()->comment('родитель');
+			$table->integer('city_id')->default(0)->index()->comment('город');
 			$table->string('version', 25)->default('ru')->index()->comment('версия');
 			$table->text('meta_title')->nullable()->comment('meta Title');
 			$table->text('meta_description')->nullable()->comment('meta Description');

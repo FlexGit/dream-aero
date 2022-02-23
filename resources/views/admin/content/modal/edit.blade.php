@@ -1,14 +1,29 @@
 <input type="hidden" id="id" name="id" value="{{ $content->id }}">
 
 <div class="form-group">
-	<label for="title">Заголовок</label>
-	<input type="text" class="form-control" id="title" name="title" value="{{ $content->title }}" placeholder="Заголовок">
+	<label for="title">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя @else Заголовок @endif</label>
+	<input type="text" class="form-control" id="title" name="title" value="{{ $content->title }}" placeholder="@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя @else Заголовок @endif">
 </div>
 <div class="row">
-	<div class="col-7">
+	@if($type == app('\App\Models\Content')::REVIEWS_TYPE)
+		<input type="hidden" id="alias" name="alias" value="{{ $content->alias }}">
+	@else
+		<div class="col-4">
+			<div class="form-group">
+				<label for="alias">Алиас</label>
+				<input type="text" class="form-control" id="alias" name="alias" value="{{ $content->alias }}" placeholder="Алиас">
+			</div>
+		</div>
+	@endif
+	<div class="col-3">
 		<div class="form-group">
-			<label for="alias">Алиас</label>
-			<input type="text" class="form-control" id="alias" name="alias" value="{{ $content->alias }}" placeholder="Алиас">
+			<label for="city_id">Город</label>
+			<select class="form-control" id="city_id" name="city_id">
+				<option value=""></option>
+				@foreach($cities ?? [] as $city)
+					<option value="{{ $city->id }}" @if($city->id == $content->city_id) selected @endif>{{ $city->name }}</option>
+				@endforeach
+			</select>
 		</div>
 	</div>
 	<div class="col-3">
@@ -28,31 +43,33 @@
 	</div>
 </div>
 <div class="form-group">
-	<label for="preview_text">Аннотация</label>
-	<textarea class="form-control" id="preview_text" name="preview_text">{{ $content->preview_text }}</textarea>
+	<label for="preview_text">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Отзыв @else Аннотация @endif</label>
+	<textarea class="form-control tinymce" id="preview_text" name="preview_text" @if($type == app('\App\Models\Content')::REVIEWS_TYPE) rows="10" @endif>{{ $content->preview_text }}</textarea>
 </div>
 <div class="form-group">
-	<label for="detail_text">Подробно</label>
+	<label for="detail_text">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Ответ @else Подробно @endif</label>
 	<textarea class="form-control tinymce" id="detail_text" name="detail_text">{{ $content->detail_text }}</textarea>
 </div>
-<div class="form-group">
-	<label for="photo_preview_file">Фото</label>
-	<div class="custom-file">
-		<input type="file" class="custom-file-input" id="photo_preview_file" name="photo_preview_file">
-		<label class="custom-file-label" for="photo_preview_file">Выбрать файл</label>
-	</div>
-	@if(array_key_exists('photo_preview_file_path', $content->data_json) && $content->data_json['photo_preview_file_path'])
-		<div>
-			<img src="/upload/{{ $content->data_json['photo_preview_file_path'] }}" width="150" alt="">
-			<br>
-			<small>[<a href="javascript:void(0)" class="js-photo-preview-delete" data-id="{{ $content->id }}">удалить</a>]</small>
+@if($type != app('\App\Models\Content')::REVIEWS_TYPE)
+	<div class="form-group">
+		<label for="photo_preview_file">Фото</label>
+		<div class="custom-file">
+			<input type="file" class="custom-file-input" id="photo_preview_file" name="photo_preview_file">
+			<label class="custom-file-label" for="photo_preview_file">Выбрать файл</label>
 		</div>
-	@endif
-</div>
+		@if(isset($content->data_json['photo_preview_file_path']))
+			<div>
+				<img src="/upload/{{ $content->data_json['photo_preview_file_path'] }}" width="150" alt="">
+				<br>
+				<small>[<a href="javascript:void(0)" class="js-photo-preview-delete" data-id="{{ $content->id }}">удалить</a>]</small>
+			</div>
+		@endif
+	</div>
+@endif
 @if($type == app('\App\Models\Content')::GALLERY_TYPE)
 	<div class="form-group">
 		<label for="video_url">Видео (Youtube-ссылка)</label>
-		<input type="text" class="form-control" id="video_url" name="video_url" @if(array_key_exists('video_url', $content->data_json) && $content->data_json['video_url']) value="{{ $content->video_url }}" @endif placeholder="Видео (Youtube-ссылка)">
+		<input type="text" class="form-control" id="video_url" name="video_url" @if(isset($content->data_json['video_url'])) value="{{ $content->data_json['video_url'] }}" @endif placeholder="Видео (Youtube-ссылка)">
 	</div>
 @endif
 <div class="form-group">

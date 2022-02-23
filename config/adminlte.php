@@ -418,11 +418,11 @@ return [
 							'url'  => '/site/ru/gallery',
 							'icon' => '',
 						],
-						/*[
+						[
 							'text' => 'Отзывы',
 							'url'  => '/site/ru/reviews',
 							'icon' => '',
-						],*/
+						],
 					],
 				],
 				/*[

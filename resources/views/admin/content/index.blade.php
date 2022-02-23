@@ -37,7 +37,7 @@
 							<div class="col">
 								<div class="form-group">
 									<label for="search_content">Поиск</label>
-									<input type="text" class="form-control" id="search_content" name="search_content" placeholder="Заголовок, Текст, Алиас">
+									<input type="text" class="form-control" id="search_content" name="search_content" placeholder="@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя, Отзыв, Ответ @else Заголовок, Текст, Алиас @endif">
 								</div>
 							</div>
 							<div class="form-group align-self-end ml-auto pl-2">
@@ -48,9 +48,11 @@
 					<table id="contentTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							<th class="text-center">Заголовок</th>
+							<th class="text-center">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя @else Заголовок @endif</th>
+							<th class="text-center d-none d-lg-table-cell">Город</th>
 							<th class="text-center d-none d-xl-table-cell">Дата публикации</th>
 							<th class="text-center d-none d-xl-table-cell">Активность</th>
+							<th class="text-center d-none d-xl-table-cell"></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -104,7 +106,6 @@
 					type: 'GET',
 					dataType: 'json',
 					data: {
-						"filter_type_id": $('#filter_type_id').val(),
 						"search_content": $('#search_content').val(),
 						"id": id
 					},
@@ -233,29 +234,7 @@
 					relative_urls: false,
 					image_title: true,
 					automatic_uploads: true,
-					//images_upload_url: '{{ $type }}/image/upload',
 					file_picker_types: 'image',
-					/*file_picker_callback: function(cb, value, meta) {
-						var input = document.createElement('input');
-
-						input.setAttribute('type', 'file');
-						input.setAttribute('accept', 'image/!*');
-						input.onchange = function() {
-							var file = this.files[0],
-								reader = new FileReader();
-
-							reader.readAsDataURL(file);
-							reader.onload = function () {
-								var id = 'blobid' + (new Date()).getTime();
-								var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-								var base64 = reader.result.split(',')[1];
-								var blobInfo = blobCache.create(id, file, base64);
-								blobCache.add(blobInfo);
-								cb(blobInfo.blobUri(), { title: file.name });
-							};
-						};
-						input.click();
-					},*/
 					images_upload_handler: function (blobInfo, success, failure) {
 						var xhr, formData;
 						xhr = new XMLHttpRequest();
@@ -302,10 +281,6 @@
 				if ($(e.target).closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root").length) {
 					e.stopImmediatePropagation();
 				}
-			});
-
-			$(document).on('change', '#filter_type_id', function(e) {
-				getList(false);
 			});
 
 			$(document).on('keyup', '#search_content', function(e) {

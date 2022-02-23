@@ -1,12 +1,27 @@
 <div class="form-group">
-	<label for="title">Заголовок</label>
-	<input type="text" class="form-control" id="title" name="title" placeholder="Заголовок">
+	<label for="title">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя @else Заголовок @endif</label>
+	<input type="text" class="form-control" id="title" name="title" placeholder="@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя @else Заголовок @endif">
 </div>
 <div class="row">
-	<div class="col-7">
+	@if($type == app('\App\Models\Content')::REVIEWS_TYPE)
+		<input type="hidden" id="alias" name="alias" value="{{ (string)\Webpatser\Uuid\Uuid::generate() }}">
+	@else
+		<div class="col-4">
+			<div class="form-group">
+				<label for="alias">Алиас</label>
+				<input type="text" class="form-control" id="alias" name="alias" placeholder="Алиас">
+			</div>
+		</div>
+	@endif
+	<div class="col-3">
 		<div class="form-group">
-			<label for="alias">Алиас</label>
-			<input type="text" class="form-control" id="alias" name="alias" placeholder="Алиас">
+			<label for="city_id">Город</label>
+			<select class="form-control" id="city_id" name="city_id">
+				<option value=""></option>
+				@foreach($cities ?? [] as $city)
+					<option value="{{ $city->id }}">{{ $city->name }}</option>
+				@endforeach
+			</select>
 		</div>
 	</div>
 	<div class="col-3">
@@ -26,20 +41,22 @@
 	</div>
 </div>
 <div class="form-group">
-	<label for="preview_text">Аннотация</label>
-	<textarea class="form-control" id="preview_text" name="preview_text"></textarea>
+	<label for="preview_text">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Отзыв @else Аннотация @endif</label>
+	<textarea class="form-control tinymce" id="preview_text" name="preview_text" @if($type == app('\App\Models\Content')::REVIEWS_TYPE) rows="10" @endif></textarea>
 </div>
 <div class="form-group">
-	<label for="detail_text">Подробно</label>
+	<label for="detail_text">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Ответ @else Подробно @endif</label>
 	<textarea class="form-control tinymce" id="detail_text" name="detail_text"></textarea>
 </div>
-<div class="form-group">
-	<label for="photo_preview_file">Фото</label>
-	<div class="custom-file">
-		<input type="file" class="custom-file-input" id="photo_preview_file" name="photo_preview_file">
-		<label class="custom-file-label" for="photo_preview_file">Выбрать файл</label>
+@if($type != app('\App\Models\Content')::REVIEWS_TYPE)
+	<div class="form-group">
+		<label for="photo_preview_file">Фото</label>
+		<div class="custom-file">
+			<input type="file" class="custom-file-input" id="photo_preview_file" name="photo_preview_file">
+			<label class="custom-file-label" for="photo_preview_file">Выбрать файл</label>
+		</div>
 	</div>
-</div>
+@endif
 @if($type == app('\App\Models\Content')::GALLERY_TYPE)
 	<div class="form-group">
 		<label for="video_url">Видео (Youtube-ссылка)</label>

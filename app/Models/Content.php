@@ -86,6 +86,7 @@ class Content extends Model
 		'preview_text',
 		'detail_text',
 		'parent_id',
+		'city_id',
 		'version',
 		'meta_title',
 		'meta_description',
@@ -111,5 +112,10 @@ class Content extends Model
 	public function parent()
 	{
 		return $this->hasOne(Content::class, 'id', 'parent_id');
+	}
+
+	public function city()
+	{
+		return $this->hasOne(City::class, 'id', 'city_id');
 	}
 }

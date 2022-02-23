@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Content;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
@@ -50,26 +51,26 @@ class ContentController extends Controller
 		}
 		
 		$id = $this->request->id ?? 0;
-		
+
 		$contents = Content::orderBy('created_at', 'desc')
 			->where('version', $version)
 			->where('parent_id', $parentContent->id);
-		if ($this->request->filter_type_id) {
-			$contents = $contents->where('parent_id', $this->request->filter_type_id);
-		}
 		if ($this->request->search_content) {
 			$contents = $contents->where(function ($query) {
 				$query->where('title', 'like', '%' . $this->request->search_content . '%')
 					->orWhere('detail_text', 'like', '%' . $this->request->search_content . '%')
 					->orWhere('preview_text', 'like', '%' . $this->request->search_content . '%')
 					->orWhere('alias', 'like', '%' . $this->request->search_content . '%')
+					->orWhereHas('city', function ($q) {
+						return $q->where('cities.name', 'like', '%' . $this->request->search_content . '%');
+					})
 				;
 			});
 		}
 		if ($id) {
 			$contents = $contents->where('id', '<', $id);
 		}
-		$contents = $contents->limit(10)->get();
+		$contents = $contents->limit(20)->get();
 
 		$VIEW = view('admin.content.list', [
 			'contents' => $contents,
@@ -103,10 +104,17 @@ class ContentController extends Controller
 			->find($id);
 		if (!$content) return response()->json(['status' => 'error', 'reason' => 'Материал не найден']);
 
+		$cities = City::where('version', $version)
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->get();
+
 		$VIEW = view('admin.content.modal.edit', [
 			'content' => $content,
 			'version' => $version,
 			'type' => $type,
+			'cities' => $cities,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -129,9 +137,16 @@ class ContentController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
 		}
 
+		$cities = City::where('version', $version)
+			->orderByRaw("FIELD(alias, 'msk') DESC")
+			->orderByRaw("FIELD(alias, 'spb') DESC")
+			->orderBy('name')
+			->get();
+
 		$VIEW = view('admin.content.modal.add', [
 			'version' => $version,
 			'type' => $type,
+			'cities' => $cities,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -190,6 +205,7 @@ class ContentController extends Controller
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents'],
 			'published_at' => ['date'],
 			'photo_preview_file' => ['sometimes', 'image', 'max:5120', 'mimes:webp,png,jpg,jpeg'],
+			'city_id' => ['sometimes', 'numeric', 'min:0', 'not_in:0', 'valid_city'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -198,6 +214,7 @@ class ContentController extends Controller
 				'alias' => 'Алиас',
 				'published_at' => 'Дата публикации',
 				'photo_preview_file' => 'Фото-превью',
+				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -224,6 +241,7 @@ class ContentController extends Controller
 		$content->preview_text = $this->request->preview_text;
 		$content->detail_text = $this->request->detail_text;
 		$content->parent_id = $parentContent->id;
+		$content->city_id = $this->request->city_id;
 		$content->version = $version;
 		$content->meta_title = $this->request->meta_title;
 		$content->meta_description = $this->request->meta_description;
@@ -264,6 +282,7 @@ class ContentController extends Controller
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents,alias,' . $id],
 			'published_at' => ['date'],
 			'photo_preview_file' => ['sometimes', 'image', 'max:5120', 'mimes:webp,png,jpg,jpeg'],
+			'city_id' => ['sometimes', 'numeric', 'min:0', 'not_in:0', 'valid_city'],
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
@@ -272,6 +291,7 @@ class ContentController extends Controller
 				'alias' => 'Алиас',
 				'published_at' => 'Дата публикации',
 				'photo_preview_file' => 'Фото-превью',
+				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -292,6 +312,7 @@ class ContentController extends Controller
 		$content->preview_text = $this->request->preview_text;
 		$content->detail_text = $this->request->detail_text;
 		$content->parent_id = $parentContent->id;
+		$content->city_id = $this->request->city_id;
 		$content->version = $version;
 		$content->meta_title = $this->request->meta_title;
 		$content->meta_description = $this->request->meta_description;
