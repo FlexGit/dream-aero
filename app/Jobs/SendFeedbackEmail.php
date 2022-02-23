@@ -17,15 +17,15 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 	protected $email;
 	protected $phone;
 	protected $city;
-	protected $message;
+	protected $messageText;
 
-	public function __construct(Contractor $contractor, $message) {
+	public function __construct(Contractor $contractor, $messageText) {
 		$this->contractorId = $contractor->id;
 		$this->fio = $contractor->fio();
 		$this->email = $contractor->email;
 		$this->phone = $contractor->phone;
 		$this->city = $contractor->city ? $contractor->city->name : '';
-		$this->message = $message;
+		$this->messageText = $messageText;
 	}
 	
 	/**
@@ -46,7 +46,7 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 			'email' => $this->email ?? '',
 			'phone' => $this->phone ?? '',
 			'city' => $this->city ?? '',
-			'message' => $this->message ?? '',
+			'messageText' => $this->messageText ?? '',
 			'source' => 'mob',
 		];
 
