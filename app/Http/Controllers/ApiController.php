@@ -1451,8 +1451,6 @@ class ApiController extends Controller
 		$certificateId = $this->request->certificate_id ?? 0;
 		$promocodeId = $this->request->promocode_id ?? 0;
 
-		\Log::debug($isUnified);
-
 		$amount = $product->calcAmount($contractor->id, $cityId, $locationId, 0, 0, $promocodeId, 0, 'api', $certificateId, $isUnified);
 		if ($amount < 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
@@ -2184,8 +2182,11 @@ class ApiController extends Controller
 		if (!array_key_exists(Deal::CREATED_STATUS, $statusesData['deal'])) {
 			return $this->responseError('Статус заявки не найден', 400);
 		}
-		
-		if ($this->request->certificate_id && !$this->request->is_certificate_purchase) {
+
+		$isCertificatePurchase = filter_var($this->request->is_certificate_purchase, FILTER_VALIDATE_BOOLEAN);
+		$isUnified = filter_var($this->request->is_unified, FILTER_VALIDATE_BOOLEAN);
+
+		if ($this->request->certificate_id && !$isCertificatePurchase) {
 			if (!array_key_exists(Certificate::CREATED_STATUS, $statusesData['certificate'])) {
 				return $this->responseError('Статус сертификата не найден', 400);
 			}
@@ -2233,7 +2234,7 @@ class ApiController extends Controller
 			\DB::beginTransaction();
 			
 			// создание сертификата
-			if ($this->request->is_certificate_purchase) {
+			if ($isCertificatePurchase) {
 				$certificate = new Certificate();
 				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
 				$certificate->city_id = $city ? $city->id : 0;
@@ -2243,7 +2244,7 @@ class ApiController extends Controller
 			}
 			
 			// если это бронирование по ранее купленному сертификату, то регистрируем сертификат
-			if ($this->request->certificate_id && !$this->request->is_certificate_purchase) {
+			if ($this->request->certificate_id && !$isCertificatePurchase) {
 				$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
 				$certificate->save();
 			}
@@ -2268,14 +2269,14 @@ class ApiController extends Controller
 			$position->duration = $product ? $product->duration : 0;
 			$position->amount = $productAmount ?? 0;
 			$position->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
-			$position->is_certificate_purchase = (bool)$this->request->is_certificate_purchase;
-			if (!$this->request->is_certificate_purchase) {
+			$position->is_certificate_purchase = $isCertificatePurchase;
+			if (!$isCertificatePurchase) {
 				$position->city_id =  $city ? $city->id : 0;
 				$position->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
 				$position->flight_simulator_id = $simulator ? $simulator->id : 0;
 				$position->flight_at = $flightDateCarbon->format('Y-m-d H:i');
 			} else {
-				$position->city_id = (!$this->request->is_unified && $city) ? $city->id : 0;
+				$position->city_id = (!$isUnified && $city) ? $city->id : 0;
 			}
 			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 			$position->currency_id = $currency ? $currency->id : 0;
