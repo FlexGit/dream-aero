@@ -112,6 +112,6 @@ class Discount extends Model
 	}
 	
 	public function valueFormatted() {
-		return number_format($this->value, 0, '.', ' ') . ' ' . ($this->is_fixed ? ($this->currency ? $this->currency->name : '') : '%');
+		return number_format($this->value, 0, '.', ' ') . ($this->is_fixed ? ($this->currency ? ' ' . $this->currency->name : '') : '%');
 	}
 }
