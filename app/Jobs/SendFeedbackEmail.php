@@ -50,7 +50,7 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 			'source' => 'mob',
 		];
 
-		try {
+		/*try {*/
 			$subject = env('APP_NAME') . ': сообщение обратной связи';
 
 			Mail::send(['html' => "admin.emails.send_feedback"], $messageData, function ($message) use ($subject, $recipients) {
@@ -62,14 +62,13 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 
 			\Log::debug('label 1');
 
-			foreach ($recipients as $recipient) {
+			/*foreach ($recipients as $recipient) {
 				if (in_array($recipient, Mail::failures())) {
 					throw new \Exception("Email $recipient in a failed list");
 				}
-			}
-		} catch (\Exception $e) {
-			/*$log->error('ERROR on Deal send ', ['number' => $deal->number, 'email' => $deal->email, 'msg' => $e->getMessage()]);*/
-		}
+			}*/
+		/*} catch (\Exception $e) {
+		}*/
 
 		\Log::debug('label 2');
 	}
