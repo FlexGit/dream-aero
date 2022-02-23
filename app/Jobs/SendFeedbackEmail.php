@@ -32,8 +32,6 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		\Log::debug('label 0');
-
 		$contractor = Contractor::find($this->contractorId);
 		if (!$contractor) return;
 		
@@ -50,26 +48,13 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 			'source' => 'mob',
 		];
 
-		/*try {*/
-			$subject = env('APP_NAME') . ': сообщение обратной связи';
+		$subject = env('APP_NAME') . ': сообщение обратной связи';
 
-			Mail::send(['html' => "admin.emails.send_feedback"], $messageData, function ($message) use ($subject, $recipients) {
-				/** @var \Illuminate\Mail\Message $message */
-				$message->subject($subject);
-				/*$message->priority(2);*/
-				$message->to($recipients);
-			});
-
-			\Log::debug('label 1');
-
-			/*foreach ($recipients as $recipient) {
-				if (in_array($recipient, Mail::failures())) {
-					throw new \Exception("Email $recipient in a failed list");
-				}
-			}*/
-		/*} catch (\Exception $e) {
-		}*/
-
-		\Log::debug('label 2');
+		Mail::send(['html' => "admin.emails.send_feedback"], $messageData, function ($message) use ($subject, $recipients) {
+			/** @var \Illuminate\Mail\Message $message */
+			$message->subject($subject);
+			/*$message->priority(2);*/
+			$message->to($recipients);
+		});
 	}
 }
