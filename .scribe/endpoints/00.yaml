@@ -74,6 +74,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -198,6 +203,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -258,6 +268,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -331,6 +346,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -467,6 +487,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -527,6 +552,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -631,6 +661,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -715,6 +750,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -784,6 +824,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -880,6 +925,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -973,6 +1023,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -1031,6 +1086,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -1114,6 +1174,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -1182,6 +1247,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -1253,6 +1323,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -1329,6 +1404,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -1414,6 +1494,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -1452,7 +1537,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: omnis
+        example: quam
         type: string
         custom: []
     responses:
@@ -1509,6 +1594,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -1598,6 +1688,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -1709,6 +1804,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -1779,6 +1879,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -1887,6 +1992,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -1983,6 +2093,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -2061,6 +2176,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -2132,6 +2252,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -2209,6 +2334,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -2290,14 +2420,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: voluptatem
+        example: ullam
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: laboriosam
+        example: exercitationem
         type: time
         custom: []
       is_unified:
@@ -2311,14 +2441,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 16
+        example: 18
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 12
+        example: 5
         type: integer
         custom: []
       promocode_id:
@@ -2339,7 +2469,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: facilis
+        example: et
         type: string
         custom: []
       comment:
@@ -2393,6 +2523,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
@@ -2501,6 +2636,11 @@ endpoints:
         headers: []
         description: '405, Method Not Allowed'
       -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
         headers: []
@@ -2573,6 +2713,11 @@ endpoints:
         content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
         headers: []
         description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
       -
         status: 500
         content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'

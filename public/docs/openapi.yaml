@@ -143,6 +143,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -323,6 +343,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -496,6 +536,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -648,6 +708,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -774,6 +854,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -950,6 +1050,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -1130,6 +1250,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -1331,6 +1471,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -1484,6 +1644,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -1685,6 +1865,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -1879,6 +2079,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -2019,6 +2239,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -2145,6 +2385,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -2299,6 +2559,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -2457,6 +2737,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -2621,6 +2921,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -2804,6 +3124,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -2984,6 +3324,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -3016,7 +3376,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: omnis
+                  example: quam
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3174,6 +3534,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -3366,6 +3746,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -3505,6 +3905,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -3631,6 +4051,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -3824,6 +4264,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -3970,6 +4430,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -4130,6 +4610,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -4299,6 +4799,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -4428,6 +4948,26 @@ paths:
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
         500:
           description: 'Internal Server Error'
           content:
@@ -4484,11 +5024,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: voluptatem
+                  example: ullam
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: laboriosam
+                  example: exercitationem
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4496,11 +5036,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 16
+                  example: 18
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 12
+                  example: 5
                 promocode_id:
                   type: integer
                   description: ''
@@ -4512,7 +5052,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: facilis
+                  example: et
                 comment:
                   type: string
                   description: ''
@@ -4632,6 +5172,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
@@ -4807,6 +5367,26 @@ paths:
                   error:
                     type: string
                     example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
                   debug:
                     type: string
                     example: '<app_url>/api/<method>'
