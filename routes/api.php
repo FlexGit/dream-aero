@@ -21,16 +21,13 @@ use App\Http\Controllers\ApiController;
 });*/
 
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
-	Route::group(['middleware' => [/*'throttle:api_unauth', */'apikey', 'apilog']], function () {
+	Route::group(['middleware' => ['apikey', 'apilog']], function () {
 		Route::post('login', [ApiController::class, 'login']);
-		Route::post('register', [ApiController::class, 'register']);
-		Route::post('code/send', [ApiController::class, 'sendCode']);
-		Route::post('password/reset', [ApiController::class, 'resetPassword']);
-		Route::get('code/verify', [ApiController::class, 'verifyCode']);
-	});
-
-	Route::group(['middleware' => [/*'throttle:api_auth', */'apikey', 'apilog']], function () {
 		Route::post('logout', [ApiController::class, 'logout']);
+		Route::post('code/send', [ApiController::class, 'sendCode']);
+		Route::get('code/verify', [ApiController::class, 'verifyCode']);
+		Route::post('register', [ApiController::class, 'register']);
+		Route::post('password/reset', [ApiController::class, 'resetPassword']);
 		Route::get('profile', [ApiController::class, 'getProfile']);
 		Route::post('profile/save', [ApiController::class, 'saveProfile']);
 		Route::post('profile/delete', [ApiController::class, 'deleteProfile']);
