@@ -307,37 +307,40 @@ class Product extends Model
 			return ($amount > 0) ? round($amount) : 0;
 		}
 
-		// сидка по промокоду
-		$discount = ($promocode && $promocode->discount) ? $promocode->discount : null;
-		if ($discount) {
-			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+		// скидка по промокоду/акции/клиента действует только для типов тарифов Regular и Ultimate
+		if ($this->productType && in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
+			// сидка по промокоду
+			$discount = ($promocode && $promocode->discount) ? $promocode->discount : null;
+			if ($discount) {
+				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-			return ($amount > 0) ? round($amount) : 0;
-		}
+				return ($amount > 0) ? round($amount) : 0;
+			}
 
-		// скидка по акции
-		$discount = ($promo && $promo->discount) ? $promo->discount : null;
-		if ($discount) {
-			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+			// скидка по акции
+			$discount = ($promo && $promo->discount) ? $promo->discount : null;
+			if ($discount) {
+				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-			return ($amount > 0) ? round($amount) : 0;
-		}
-		
-		// скидка контрагента
-		if ($contractor) {
-			// все статусы контрагента
-			$statuses = Status::where('is_active', true)
-				->where('type', Status::STATUS_TYPE_CONTRACTOR)
-				->get();
+				return ($amount > 0) ? round($amount) : 0;
+			}
 
-			// время налета контрагента
-			$contractorFlightTime = $contractor->getFlightTime();
+			// скидка контрагента
+			if ($contractor) {
+				// все статусы контрагента
+				$statuses = Status::where('is_active', true)
+					->where('type', Status::STATUS_TYPE_CONTRACTOR)
+					->get();
 
-			// статус контрагента
-			$status = $contractor->getStatus($statuses, $contractorFlightTime ?? 0);
-			
-			if ($status->discount) {
-				$amount = $status->discount->is_fixed ? ($amount - $status->discount->value) : ($amount - $amount * $status->discount->value / 100);
+				// время налета контрагента
+				$contractorFlightTime = $contractor->getFlightTime();
+
+				// статус контрагента
+				$status = $contractor->getStatus($statuses, $contractorFlightTime ?? 0);
+
+				if ($status->discount) {
+					$amount = $status->discount->is_fixed ? ($amount - $status->discount->value) : ($amount - $amount * $status->discount->value / 100);
+				}
 			}
 		}
 
