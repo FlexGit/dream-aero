@@ -199,7 +199,7 @@ class UserController extends Controller
 		$rules = [
 			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
-			'middlename' => ['required', 'max:255'],
+			/*'middlename' => ['required', 'max:255'],*/
 			'email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL'],
 			'role' => ['required'],
 			'photo_file' => 'sometimes|image|max:512',
@@ -209,7 +209,7 @@ class UserController extends Controller
 			->setAttributeNames([
 				'lastname' => 'Фамилия',
 				'name' => 'Имя',
-				'middlename' => 'Отчество',
+				/*'middlename' => 'Отчество',*/
 				'email' => 'E-mail',
 				'role' => 'Роль',
 				'photo_file' => 'Фото',
@@ -226,7 +226,7 @@ class UserController extends Controller
 		$user = new User();
 		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
-		$user->middlename = $this->request->middlename;
+		$user->middlename = $this->request->middlename ?? '';
 		$user->email = $this->request->email;
 		$user->password = '';
 		$user->role = $this->request->role;
@@ -265,7 +265,7 @@ class UserController extends Controller
 		$rules = [
 			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
-			'middlename' => ['required', 'max:255'],
+			/*'middlename' => ['required', 'max:255'],*/
 			'email' => ['required', 'email', 'unique:users,email,' . $id . ',id,deleted_at,NULL'],
 			'role' => ['required'],
 			'photo_file' => 'sometimes|image|max:512',
@@ -275,7 +275,7 @@ class UserController extends Controller
 			->setAttributeNames([
 				'lastname' => 'Фамилия',
 				'name' => 'Имя',
-				'middlename' => 'Отчество',
+				/*'middlename' => 'Отчество',*/
 				'email' => 'E-mail',
 				'role' => 'Роль',
 				'photo_file' => 'Фото',
@@ -291,7 +291,7 @@ class UserController extends Controller
 
 		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
-		$user->middlename = $this->request->middlename;
+		$user->middlename = $this->request->middlename ?? '';
 		$user->email = $this->request->email;
 		$user->role = $this->request->role;
 		$user->city_id = $this->request->city_id ?? 0;
