@@ -49,6 +49,9 @@ trait ApiResponser
 				case 400:
 					$error = 'Некорректный запрос';
 				break;
+				case 429:
+					$error = 'Слишком много попыток. Попробуйте позже';
+				break;
 				default:
 					$error = 'Неизвестная ошибка';
 				break;
