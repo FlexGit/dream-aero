@@ -979,8 +979,9 @@ class ApiController extends Controller
 		
 		$data = $contractor->data_json ? json_decode($contractor->data_json, true) : [];
 		
-		if (array_key_exists('avatar', $data)) {
-			return $this->responseError('Файл уже существует', 400);
+		$oldFileName = '';
+		if (array_key_exists('avatar', $data) && isset($data['avatar']['name']) && isset($data['avatar']['ext'])) {
+			$oldFileName = $data['avatar']['name'] . '.' . $data['avatar']['ext'];
 		}
 		
 		$replace = substr($this->request->file_base64, 0, strpos($this->request->file_base64, ',') + 1);
@@ -1020,6 +1021,10 @@ class ApiController extends Controller
 		
 		if (!$contractor->save()) {
 			return $this->responseError(null, 500);
+		}
+		
+		if ($oldFileName && Storage::exists('contractor/avatar/' . $oldFileName)) {
+			Storage::delete('contractor/avatar/' . $oldFileName);
 		}
 		
 		$data = [
@@ -1098,11 +1103,17 @@ class ApiController extends Controller
 			return $this->responseError('Файл не найден', 400);
 		}
 		
+		$oldFileName = (isset($data['avatar']['name']) && isset($data['avatar']['ext'])) ? $data['avatar']['name'] . '.' . $data['avatar']['ext'] : '';
+		
 		unset($data['avatar']);
 		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
 		
 		if (!$contractor->save()) {
 			return $this->responseError(null, 500);
+		}
+		
+		if ($oldFileName && Storage::exists('contractor/avatar/' . $oldFileName)) {
+			Storage::delete('contractor/avatar/' . $oldFileName);
 		}
 		
 		$data = [
