@@ -2679,7 +2679,16 @@ class ApiController extends Controller
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
 		}
-
+		
+		$cityId = $contractor->city_id ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
 		$productId = $this->request->product_id ?? 0;
 		if (!$productId) {
 			return $this->responseError('Не передан ID позиции', 400);
@@ -2729,7 +2738,8 @@ class ApiController extends Controller
 			$position->product_id = $product ? $product->id : 0;
 			$position->duration = $product ? $product->duration : 0;
 			$position->amount = $productAmount ?? 0;
-			$position->is_certificate_purchase = 0;
+			$position->is_certificate_purchase = 1;
+			$position->city_id = $city ? $city->id : 0;
 			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 			$position->currency_id = $currency ? $currency->id : 0;
 			$position->source = Deal::MOB_SOURCE;
