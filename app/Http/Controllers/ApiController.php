@@ -2695,7 +2695,7 @@ class ApiController extends Controller
 			return $this->responseError('Продукт не найден', 400);
 		}
 
-		if (!in_array($product->alias, ['fly_no_fear'])) {
+		if ($product->productType && in_array($product->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
 			return $this->responseError('Некорректный продукт', 400);
 		}
 
