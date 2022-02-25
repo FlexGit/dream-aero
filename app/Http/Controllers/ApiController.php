@@ -1106,7 +1106,7 @@ class ApiController extends Controller
 		$oldFileName = (isset($data['avatar']['name']) && isset($data['avatar']['ext'])) ? $data['avatar']['name'] . '.' . $data['avatar']['ext'] : '';
 		
 		unset($data['avatar']);
-		$contractor->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
+		$contractor->data_json = $data;
 		
 		if (!$contractor->save()) {
 			return $this->responseError(null, 500);
