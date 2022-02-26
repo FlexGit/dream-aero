@@ -2601,7 +2601,7 @@ class ApiController extends Controller
 			$position->currency_id = $currency ? $currency->id : 0;
 			$position->source = Deal::MOB_SOURCE;
 			$positionData = [];
-			$positionData['comment'] = ($this->request->certificate_number ? 'Бронирование по сертификату: ' . $this->request->certificate_number : '') . $this->request->comment;
+			$positionData['comment'] = ($this->request->certificate_number ? 'Бронирование по сертификату: ' . $this->request->certificate_number . '. ' : '') . $this->request->comment;
 			$positionData['certificate_whom'] = $this->request->certificate_whom;
 			$position->data_json = $positionData;
 			$position->save();
