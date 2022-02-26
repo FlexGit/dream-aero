@@ -11,9 +11,9 @@
 	<p>Срок действия сертификата: @if($certificateExpireAt) {{ Carbon\Carbon::parse($certificateExpireAt)->format('d.m.Y') }} @else бессрочный @endif</p>
 	<p>Город действия сертификата: @if(!$cityName) все города России присутствия Dream Aero @else {{ $cityName }} @endif</p>
 @else
-	@if($certificateNumber)
+	{{--@if($certificateNumber)
 		<p>Бронирование полета по сертификату: {{ $certificateNumber }}</p>
-	@endif
+	@endif--}}
 	<p>Желаемая дата и время полета: {{ $flightAt ? Carbon\Carbon::parse($flightAt)->format('d.m.Y H:i') : '' }}</p>
 	<p>Город: {{ $cityName ?? '' }}</p>
 	<p>Локация: {{ $locationName ?? '' }}</p>
@@ -32,6 +32,9 @@
 @endif
 @if($promocodeNumber)
 	<p>Промокод: {{ $promocodeNumber }}</p>
+@endif
+@if($comment)
+	<p>Дополнительная информация: {{ $comment }}</p>
 @endif
 <p>Источник заявки: {{ $source ?? '' }}</p>
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>

@@ -82,6 +82,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : '',
 			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : '',
 			'email' => array_key_exists('email', $locationData) ? $locationData['email'] : $cityData['email'],
+			'comment' => (array_key_exists('comment', $position->data_json) ? $position->data_json['comment'] : '') . (array_key_exists('certificate_whom', $position->data_json) ? '. Сертификат для: ' . $position->data_json['certificate_whom'] : ''),
 		];
 
 		try {
