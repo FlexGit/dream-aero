@@ -163,6 +163,9 @@
                                     <li class="tocify-item level-2" data-unique="endpoints-POSTapi-feedback">
                         <a href="#endpoints-POSTapi-feedback">Feedback</a>
                     </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v2-deal-create">
+                        <a href="#endpoints-POSTapi-v2-deal-create">Deal create V2</a>
+                    </li>
                                                     </ul>
                             </ul>
         
@@ -175,7 +178,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 25 2022</li>
+        <li>Last updated: February 26 2022</li>
     </ul>
 </div>
 
@@ -4011,7 +4014,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"quam\"
+    \"file_base64\": \"quisquam\"
 }"
 </code></pre></div>
 
@@ -4034,7 +4037,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "quam"
+    "file_base64": "quisquam"
 };
 
 fetch(url, {
@@ -4058,7 +4061,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'quam',
+            'file_base64' =&gt; 'quisquam',
         ],
     ]
 );
@@ -4237,7 +4240,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="quam"
+               value="quisquam"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -6107,11 +6110,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"ullam\",
-    \"flight_time\": \"exercitationem\",
-    \"location_id\": 18,
-    \"flight_simulator_id\": 5,
-    \"certificate_whom\": \"et\"
+    \"flight_date\": \"doloremque\",
+    \"flight_time\": \"ratione\",
+    \"location_id\": 19,
+    \"flight_simulator_id\": 10,
+    \"certificate_whom\": \"in\"
 }"
 </code></pre></div>
 
@@ -6140,11 +6143,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "ullam",
-    "flight_time": "exercitationem",
-    "location_id": 18,
-    "flight_simulator_id": 5,
-    "certificate_whom": "et"
+    "flight_date": "doloremque",
+    "flight_time": "ratione",
+    "location_id": 19,
+    "flight_simulator_id": 10,
+    "certificate_whom": "in"
 };
 
 fetch(url, {
@@ -6174,11 +6177,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'ullam',
-            'flight_time' =&gt; 'exercitationem',
-            'location_id' =&gt; 18,
-            'flight_simulator_id' =&gt; 5,
-            'certificate_whom' =&gt; 'et',
+            'flight_date' =&gt; 'doloremque',
+            'flight_time' =&gt; 'ratione',
+            'location_id' =&gt; 19,
+            'flight_simulator_id' =&gt; 10,
+            'certificate_whom' =&gt; 'in',
         ],
     ]
 );
@@ -6411,7 +6414,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="ullam"
+               value="doloremque"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6421,7 +6424,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="exercitationem"
+               value="ratione"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6452,7 +6455,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="18"
+               value="19"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6462,7 +6465,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
-               value="5"
+               value="10"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6492,7 +6495,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="et"
+               value="in"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>
@@ -7026,6 +7029,442 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="message"
                data-endpoint="POSTapi-feedback"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+        </form>
+
+            <h2 id="endpoints-POSTapi-v2-deal-create">Deal create V2</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-v2-deal-create">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "https://dev.dream-aero.ru/api/v2/deal/create?api_key=&amp;token=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"name\": null,
+    \"phone\": null,
+    \"email\": null,
+    \"product_id\": null,
+    \"product_amount\": null,
+    \"is_certificate_purchase\": null,
+    \"flight_date\": \"sit\",
+    \"flight_time\": \"aut\",
+    \"location_id\": 19,
+    \"flight_simulator_id\": 2,
+    \"certificate_whom\": \"eveniet\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://dev.dream-aero.ru/api/v2/deal/create"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": null,
+    "phone": null,
+    "email": null,
+    "product_id": null,
+    "product_amount": null,
+    "is_certificate_purchase": null,
+    "flight_date": "sit",
+    "flight_time": "aut",
+    "location_id": 19,
+    "flight_simulator_id": 2,
+    "certificate_whom": "eveniet"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'https://dev.dream-aero.ru/api/v2/deal/create',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+        ],
+        'json' =&gt; [
+            'name' =&gt; null,
+            'phone' =&gt; null,
+            'email' =&gt; null,
+            'product_id' =&gt; null,
+            'product_amount' =&gt; null,
+            'is_certificate_purchase' =&gt; null,
+            'flight_date' =&gt; 'sit',
+            'flight_time' =&gt; 'aut',
+            'location_id' =&gt; 19,
+            'flight_simulator_id' =&gt; 2,
+            'certificate_whom' =&gt; 'eveniet',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v2-deal-create">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Заявка успешно создана&quot;,
+	&quot;data&quot;: {
+		&quot;deal&quot;: {
+			&quot;id&quot;: 1,
+			&quot;number&quot;: &quot;D2200001&quot;,
+			&quot;status&quot;: &quot;Создана&quot;,
+		}
+	}
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (429, Too Many Attempts):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Слишком много попыток. Попробуйте позже&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v2-deal-create" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v2-deal-create"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v2-deal-create"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v2-deal-create" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v2-deal-create"></code></pre>
+</span>
+<form id="form-POSTapi-v2-deal-create" data-method="POST"
+      data-path="api/v2/deal/create"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v2-deal-create', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v2-deal-create"
+                    onclick="tryItOut('POSTapi-v2-deal-create');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v2-deal-create"
+                    onclick="cancelTryOut('POSTapi-v2-deal-create');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v2-deal-create" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v2/deal/create</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                        <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>name</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="name"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>phone</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="phone"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+<p>+71234567890</p>
+        </p>
+                <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_id"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>product_amount</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_amount"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>is_certificate_purchase</code></b>&nbsp;&nbsp;<small>boolean</small>  &nbsp;
+                <label data-endpoint="POSTapi-v2-deal-create" hidden>
+            <input type="radio" name="is_certificate_purchase"
+                   value="true"
+                   data-endpoint="POSTapi-v2-deal-create"
+                   data-component="body"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-v2-deal-create" hidden>
+            <input type="radio" name="is_certificate_purchase"
+                   value="false"
+                   data-endpoint="POSTapi-v2-deal-create"
+                   data-component="body"
+            >
+            <code>false</code>
+        </label>
+    <br>
+
+        </p>
+                <p>
+            <b><code>flight_date</code></b>&nbsp;&nbsp;<small>date</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="flight_date"
+               data-endpoint="POSTapi-v2-deal-create"
+               value="sit"
+               data-component="body" hidden>
+    <br>
+<p>Required for booking</p>
+        </p>
+                <p>
+            <b><code>flight_time</code></b>&nbsp;&nbsp;<small>time</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="flight_time"
+               data-endpoint="POSTapi-v2-deal-create"
+               value="aut"
+               data-component="body" hidden>
+    <br>
+<p>Required for booking</p>
+        </p>
+                <p>
+            <b><code>is_unified</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
+                <label data-endpoint="POSTapi-v2-deal-create" hidden>
+            <input type="radio" name="is_unified"
+                   value="true"
+                   data-endpoint="POSTapi-v2-deal-create"
+                   data-component="body"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-v2-deal-create" hidden>
+            <input type="radio" name="is_unified"
+                   value="false"
+                   data-endpoint="POSTapi-v2-deal-create"
+                   data-component="body"
+            >
+            <code>false</code>
+        </label>
+    <br>
+<p>Required for certificate purchase</p>
+        </p>
+                <p>
+            <b><code>location_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="location_id"
+               data-endpoint="POSTapi-v2-deal-create"
+               value="19"
+               data-component="body" hidden>
+    <br>
+<p>Required for booking</p>
+        </p>
+                <p>
+            <b><code>flight_simulator_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="flight_simulator_id"
+               data-endpoint="POSTapi-v2-deal-create"
+               value="2"
+               data-component="body" hidden>
+    <br>
+<p>Required for booking</p>
+        </p>
+                <p>
+            <b><code>promocode_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="promocode_id"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>certificate_number</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="certificate_number"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>certificate_whom</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="certificate_whom"
+               data-endpoint="POSTapi-v2-deal-create"
+               value="eveniet"
+               data-component="body" hidden>
+    <br>
+<p>For whom certificate. Required for certificate purchase</p>
+        </p>
+                <p>
+            <b><code>comment</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
+                <input type="text"
+               name="comment"
+               data-endpoint="POSTapi-v2-deal-create"
+               value=""
+               data-component="body" hidden>
+    <br>
+
+        </p>
+                <p>
+            <b><code>score</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="score"
+               data-endpoint="POSTapi-v2-deal-create"
                value=""
                data-component="body" hidden>
     <br>

@@ -2171,8 +2171,11 @@ class ApiController extends Controller
 		if (!$product) {
 			return $this->responseError('Продукт не найден', 400);
 		}
+		
+		$isCertificatePurchase = filter_var($this->request->is_certificate_purchase, FILTER_VALIDATE_BOOLEAN);
+		$isUnified = filter_var($this->request->is_unified, FILTER_VALIDATE_BOOLEAN);
 
-		if ($this->request->flight_date && $this->request->flight_time) {
+		if (!$isCertificatePurchase && $this->request->flight_date && $this->request->flight_time) {
 			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
 			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
 				return $this->responseError('Некорректная дата и время полета', 400);
@@ -2185,7 +2188,7 @@ class ApiController extends Controller
 		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
 		// ToDO: сообщение об ошибке, если цена не совпадет с полученной
 		
-		if ($this->request->location_id) {
+		if (!$isCertificatePurchase && $this->request->location_id) {
 			$location = Location::where('is_active', true)
 				->find($this->request->location_id);
 			if (!$location) {
@@ -2202,7 +2205,7 @@ class ApiController extends Controller
 			}
 		}
 
-		if ($this->request->flight_simulator_id) {
+		if (!$isCertificatePurchase && $this->request->flight_simulator_id) {
 			$simulator = FlightSimulator::where('is_active', true)
 				->find($this->request->flight_simulator_id);
 			if (!$location) {
@@ -2217,9 +2220,6 @@ class ApiController extends Controller
 		if (!array_key_exists(Deal::CREATED_STATUS, $statusesData['deal'])) {
 			return $this->responseError('Статус заявки не найден', 400);
 		}
-
-		$isCertificatePurchase = filter_var($this->request->is_certificate_purchase, FILTER_VALIDATE_BOOLEAN);
-		$isUnified = filter_var($this->request->is_unified, FILTER_VALIDATE_BOOLEAN);
 
 		if ($this->request->certificate_id && !$isCertificatePurchase) {
 			if (!array_key_exists(Certificate::CREATED_STATUS, $statusesData['certificate'])) {
@@ -2279,10 +2279,10 @@ class ApiController extends Controller
 			}
 			
 			// если это бронирование по ранее купленному сертификату, то регистрируем сертификат
-			if ($this->request->certificate_id && !$isCertificatePurchase) {
+			/*if ($this->request->certificate_id && !$isCertificatePurchase) {
 				$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
 				$certificate->save();
-			}
+			}*/
 			
 			// создание сделки
 			$deal = new Deal();
@@ -2354,7 +2354,291 @@ class ApiController extends Controller
 		
 		return $this->responseSuccess('Заявка успешно создана', $data);
 	}
-
+	
+	/**
+	 * Deal create V2
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @bodyParam name string required No-example
+	 * @bodyParam phone string required +71234567890 No-example
+	 * @bodyParam email string required No-example
+	 * @bodyParam product_id int required No-example
+	 * @bodyParam product_amount int required No-example
+	 * @bodyParam is_certificate_purchase bool required No-example
+	 * @bodyParam flight_date date Required for booking
+	 * @bodyParam flight_time time Required for booking
+	 * @bodyParam is_unified bool Required for certificate purchase No-example
+	 * @bodyParam location_id int Required for booking
+	 * @bodyParam flight_simulator_id int Required for booking
+	 * @bodyParam promocode_id int No-example
+	 * @bodyParam certificate_number string No-example
+	 * @bodyParam certificate_whom string For whom certificate. Required for certificate purchase
+	 * @bodyParam comment string No-example
+	 * @bodyParam score int No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "Заявка успешно создана",
+	 * 	"data": {
+	 * 		"deal": {
+	 * 			"id": 1,
+	 * 			"number": "D2200001",
+	 * 			"status": "Создана",
+	 * 		}
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=429 scenario="Too Many Attempts" {"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function createDealV2()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$rules = [
+			'is_certificate_purchase' => ['required', 'boolean'],
+			'name' => ['required', 'min:3', 'max:50'],
+			'phone' => ['required', 'valid_phone'],
+			'email' => ['required', 'email'],
+			'product_id' => ['required', 'numeric'],
+			'product_amount' => ['required', 'numeric'],
+			'flight_date' => ['after_or_equal:' . date('Y-m-d'), 'required_if:is_certificate_purchase,false', 'date'],
+			'flight_time' => ['required_if:is_certificate_purchase,false', 'date_format:H:i'],
+			'is_unified' => ['required_if:is_certificate_purchase,true', 'boolean'],
+			'location_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
+			'flight_simulator_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
+			'promocode_id' => ['sometimes', 'required', 'numeric'],
+			'certificate_whom' => ['required_if:is_certificate_purchase,true', 'min:3', 'max:50'],
+		];
+		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
+			->setAttributeNames([
+				'is_certificate_purchase' => 'Покупка сертификата',
+				'name' => 'Имя',
+				'phone' => 'Номер телефона',
+				'email' => 'E-mail',
+				'product_id' => 'Позиция',
+				'product_amount' => 'Стоимость',
+				'flight_date' => 'Дата полета',
+				'flight_time' => 'Время полета',
+				'is_unified' => 'Единый сертификат',
+				'location_id' => 'Локация',
+				'flight_simulator_id' => 'Авиатренажер',
+				'promocode_id' => 'Промокод',
+				'certificate_whom' => 'Для кого сертификат',
+			]);
+		if (!$validator->passes()) {
+			$errors = [];
+			$validatorErrors = $validator->errors();
+			foreach ($rules as $key => $rule) {
+				foreach ($validatorErrors->get($key) ?? [] as $error) {
+					$errors[$key] = $error;
+				}
+			}
+			return $this->responseError($errors, 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$productId = $this->request->product_id ?? 0;
+		if (!$productId) {
+			return $this->responseError('Не передан ID продукта', 400);
+		}
+		
+		$productAmount = $this->request->product_amount ?? 0;
+		if (!$productAmount) {
+			return $this->responseError('Не передана стоимость продукта', 400);
+		}
+		
+		$product = Product::find($productId);
+		if (!$product) {
+			return $this->responseError('Продукт не найден', 400);
+		}
+		
+		$isCertificatePurchase = filter_var($this->request->is_certificate_purchase, FILTER_VALIDATE_BOOLEAN);
+		$isUnified = filter_var($this->request->is_unified, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$isCertificatePurchase && $this->request->flight_date && $this->request->flight_time) {
+			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
+			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
+				return $this->responseError('Некорректная дата и время полета', 400);
+			}
+			if (!$product->validateFlightDate($flightDateCarbon)) {
+				return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+			}
+		}
+		
+		// ToDo: пересчет стоимости позиции с учетом текущего ценообразования
+		// ToDO: сообщение об ошибке, если цена не совпадет с полученной
+		
+		if (!$isCertificatePurchase && $this->request->location_id) {
+			$location = Location::where('is_active', true)
+				->find($this->request->location_id);
+			if (!$location) {
+				return $this->responseError('Локация не найдена', 400);
+			}
+		}
+		
+		$cityId = $contractor->city_id ?? 0;
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
+		if (!$isCertificatePurchase && $this->request->flight_simulator_id) {
+			$simulator = FlightSimulator::where('is_active', true)
+				->find($this->request->flight_simulator_id);
+			if (!$location) {
+				return $this->responseError('Авиатренажер не найден', 400);
+			}
+		}
+		
+		$date = date('Y-m-d');
+		
+		$statusesData = HelpFunctions::getStatusesByType();
+		
+		if (!array_key_exists(Deal::CREATED_STATUS, $statusesData['deal'])) {
+			return $this->responseError('Статус заявки не найден', 400);
+		}
+		
+		if ($this->request->promocode_id) {
+			$promocode = Promocode::/*whereIn('city_id', [$city->id, 0])
+				->*/whereRelation('cities', 'cities.id', '=', $cityId)
+				->where('is_active', true)
+				->where(function ($query) use ($date) {
+					$query->where('active_from_at', '<=', $date)
+						->orWhereNull('active_from_at');
+				})
+				->where(function ($query) use ($date) {
+					$query->where('active_to_at', '>=', $date)
+						->orWhereNull('active_to_at');
+				})
+				->find($this->request->promocode_id);
+			if (!$promocode) {
+				return $this->responseError('Промокод не найден', 400);
+			}
+		}
+		
+		$debitScore = (int)$this->request->score ?? 0;
+		if ($debitScore > 0) {
+			$actualScore = $contractor->getScore();
+			if ($actualScore < $debitScore) {
+				return $this->responseError('Превышен лимит на количество баллов для списания', 400);
+			}
+		}
+		
+		try {
+			\DB::beginTransaction();
+			
+			// создание сертификата
+			if ($isCertificatePurchase) {
+				$certificate = new Certificate();
+				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
+				$certificate->city_id = $city ? $city->id : 0;
+				$certificate->product_id = $product ? $product->id : 0;
+				$certificate->expire_at = Carbon::now()->addYear()->format('Y-m-d H:i:s');
+				$certificate->save();
+			}
+			
+			// если это бронирование по ранее купленному сертификату, то регистрируем сертификат
+			/*if ($this->request->certificate_id && !$isCertificatePurchase) {
+				$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
+				$certificate->save();
+			}*/
+			
+			// создание сделки
+			$deal = new Deal();
+			$deal->status_id = $statusesData['deal'][Deal::CREATED_STATUS]['id'];
+			$deal->contractor_id = $contractor ? $contractor->id : 0;
+			$deal->name = $this->request->name;
+			$deal->phone = $this->request->phone;
+			$deal->email = $this->request->email;
+			$deal->source = Deal::MOB_SOURCE;
+			$dealData = [];
+			/*$dealData['comment'] = $this->request->comment;
+			$dealData['certificate_whom'] = $this->request->certificate_whom;*/
+			$deal->data_json = $dealData;
+			$deal->save();
+			
+			$position = new DealPosition();
+			$position->product_id = $product ? $product->id : 0;
+			/*$position->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;*/
+			$position->duration = $product ? $product->duration : 0;
+			$position->amount = $productAmount ?? 0;
+			$position->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
+			$position->is_certificate_purchase = $isCertificatePurchase;
+			if (!$isCertificatePurchase) {
+				$position->city_id =  $city ? $city->id : 0;
+				$position->location_id = (isset($location) && $location instanceof Location) ? $location->id : 0;
+				$position->flight_simulator_id = $simulator ? $simulator->id : 0;
+				$position->flight_at = $flightDateCarbon->format('Y-m-d H:i');
+			} else {
+				$position->city_id = (!$isUnified && $city) ? $city->id : 0;
+			}
+			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
+			$position->currency_id = $currency ? $currency->id : 0;
+			$position->source = Deal::MOB_SOURCE;
+			$positionData = [];
+			$positionData['comment'] = ($this->request->certificate_number ? 'Бронирование по сертификату: ' . $this->request->certificate_number : '') . $this->request->comment;
+			$positionData['certificate_whom'] = $this->request->certificate_whom;
+			$position->data_json = $positionData;
+			$position->save();
+			
+			$deal->positions()->save($position);
+			
+			if ($debitScore) {
+				$score = new Score();
+				$score->score = (-1 * $debitScore);
+				$score->contractor_id = $contractor ? $contractor->id : 0;
+				$score->deal_id = $deal->id;
+				$score->deal_position_id = $position->id;
+				$score->type = Score::USED_TYPE;
+				$score->save();
+			}
+			
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			Log::debug($e);
+			
+			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
+		}
+		
+		//dispatch(new \App\Jobs\SendDealEmail($deal));
+		
+		$job = new \App\Jobs\SendDealEmail($deal);
+		$job->handle();
+		
+		$data = [
+			'deal' => $deal->format(),
+		];
+		
+		return $this->responseSuccess('Заявка успешно создана', $data);
+	}
+	
 	/**
 	 * Certificate Verify
 	 *
