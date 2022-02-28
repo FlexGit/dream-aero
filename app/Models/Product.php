@@ -233,17 +233,17 @@ class Product extends Model
 	{
 		$alias = $this->productType->alias ?? null;
 		if (!$alias) return false;
-		
+
 		$weekDay = date('N', strtotime($flightAt));
 		
 		// Regular доступен для заказа только в будни
 		if (in_array($weekDay, [1, 2, 3, 4, 5]) && $alias == ProductType::REGULAR_ALIAS) return true;
 
 		// Ultimate доступен для заказа только в выходные
-		if (in_array($weekDay, [6, 7]) && $alias == ProductType::ULTIMATE_ALIAS) return true;
+		//if (in_array($weekDay, [6, 7]) && $alias == ProductType::ULTIMATE_ALIAS) return true;
 		
 		// Остальные тарифы доступны для заказа в любые дни
-		if (!in_array($alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) return true;
+		if ($alias != ProductType::REGULAR_ALIAS) return true;
 		
 		return false;
 	}
