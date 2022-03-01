@@ -12,7 +12,7 @@
 							@if($productType->alias == app('\App\Models\ProductType')::COURSES_ALIAS && !in_array($product->alias, ['platinum_150']))
 								@continue
 							@endif
-							<option value="{{ $product->id }}">{{ $product->name }}</option>
+							<option value="{{ $product->id }}" data-duration="{{ $product->duration }}">{{ $product->name }}</option>
 						@endforeach
 					</optgroup>
 				@endforeach
@@ -20,3 +20,17 @@
 		</div>
 	</div>
 </div>
+
+@if(request()->user()->isSuperAdmin())
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<label for="is_minus_score">Отнять баллы и время налета</label>
+				<div class="custom-control custom-switch">
+					<input type="checkbox" class="custom-control-input" id="is_minus_score" name="is_minus_score" value="1">
+					<label class="custom-control-label" for="is_minus_score">Да</label>
+				</div>
+			</div>
+		</div>
+	</div>
+@endif

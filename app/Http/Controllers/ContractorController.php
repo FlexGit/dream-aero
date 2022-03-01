@@ -347,9 +347,9 @@ class ContractorController extends Controller
 		}
 
 		$score = new Score();
-		$score->score = $cityProduct->pivot->score;
+		$score->score = $this->request->is_minus_score ? (-1 * $cityProduct->pivot->score) : $cityProduct->pivot->score;
 		$score->contractor_id = $contractor->id;
-		$score->duration = $product->duration;
+		$score->duration = $this->request->is_minus_score ? (-1 * $product->duration) : $product->duration;
 		$score->user_id = $this->request->user()->id;
 		if (!$score->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
