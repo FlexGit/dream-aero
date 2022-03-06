@@ -166,6 +166,9 @@
                                     <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v2-deal-create">
                         <a href="#endpoints-POSTapi-v2-deal-create">Deal create V2</a>
                     </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-v2-tariff-price">
+                        <a href="#endpoints-GETapi-v2-tariff-price">Tariff Amount V2</a>
+                    </li>
                                                     </ul>
                             </ul>
         
@@ -178,7 +181,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 26 2022</li>
+        <li>Last updated: March 6 2022</li>
     </ul>
 </div>
 
@@ -4014,7 +4017,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"quisquam\"
+    \"file_base64\": \"est\"
 }"
 </code></pre></div>
 
@@ -4037,7 +4040,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "quisquam"
+    "file_base64": "est"
 };
 
 fetch(url, {
@@ -4061,7 +4064,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'quisquam',
+            'file_base64' =&gt; 'est',
         ],
     ]
 );
@@ -4240,7 +4243,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="quisquam"
+               value="est"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -6110,11 +6113,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"doloremque\",
-    \"flight_time\": \"ratione\",
-    \"location_id\": 19,
-    \"flight_simulator_id\": 10,
-    \"certificate_whom\": \"in\"
+    \"flight_date\": \"at\",
+    \"flight_time\": \"fuga\",
+    \"location_id\": 9,
+    \"flight_simulator_id\": 18,
+    \"certificate_whom\": \"dolor\"
 }"
 </code></pre></div>
 
@@ -6143,11 +6146,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "doloremque",
-    "flight_time": "ratione",
-    "location_id": 19,
-    "flight_simulator_id": 10,
-    "certificate_whom": "in"
+    "flight_date": "at",
+    "flight_time": "fuga",
+    "location_id": 9,
+    "flight_simulator_id": 18,
+    "certificate_whom": "dolor"
 };
 
 fetch(url, {
@@ -6177,11 +6180,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'doloremque',
-            'flight_time' =&gt; 'ratione',
-            'location_id' =&gt; 19,
-            'flight_simulator_id' =&gt; 10,
-            'certificate_whom' =&gt; 'in',
+            'flight_date' =&gt; 'at',
+            'flight_time' =&gt; 'fuga',
+            'location_id' =&gt; 9,
+            'flight_simulator_id' =&gt; 18,
+            'certificate_whom' =&gt; 'dolor',
         ],
     ]
 );
@@ -6414,7 +6417,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="doloremque"
+               value="at"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6424,7 +6427,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="ratione"
+               value="fuga"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6455,7 +6458,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="19"
+               value="9"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6465,7 +6468,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-deal-create"
-               value="10"
+               value="18"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6495,7 +6498,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="in"
+               value="dolor"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>
@@ -7060,11 +7063,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"sit\",
-    \"flight_time\": \"aut\",
-    \"location_id\": 19,
-    \"flight_simulator_id\": 2,
-    \"certificate_whom\": \"eveniet\"
+    \"flight_date\": \"nam\",
+    \"flight_time\": \"ab\",
+    \"location_id\": 16,
+    \"flight_simulator_id\": 16,
+    \"certificate_whom\": \"quod\"
 }"
 </code></pre></div>
 
@@ -7093,11 +7096,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "sit",
-    "flight_time": "aut",
-    "location_id": 19,
-    "flight_simulator_id": 2,
-    "certificate_whom": "eveniet"
+    "flight_date": "nam",
+    "flight_time": "ab",
+    "location_id": 16,
+    "flight_simulator_id": 16,
+    "certificate_whom": "quod"
 };
 
 fetch(url, {
@@ -7127,11 +7130,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'sit',
-            'flight_time' =&gt; 'aut',
-            'location_id' =&gt; 19,
-            'flight_simulator_id' =&gt; 2,
-            'certificate_whom' =&gt; 'eveniet',
+            'flight_date' =&gt; 'nam',
+            'flight_time' =&gt; 'ab',
+            'location_id' =&gt; 16,
+            'flight_simulator_id' =&gt; 16,
+            'certificate_whom' =&gt; 'quod',
         ],
     ]
 );
@@ -7364,7 +7367,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-v2-deal-create"
-               value="sit"
+               value="nam"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7374,7 +7377,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-v2-deal-create"
-               value="aut"
+               value="ab"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7405,7 +7408,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-v2-deal-create"
-               value="19"
+               value="16"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7415,7 +7418,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-v2-deal-create"
-               value="2"
+               value="16"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7445,7 +7448,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-v2-deal-create"
-               value="eveniet"
+               value="quod"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>
@@ -7471,6 +7474,307 @@ print_r(json_decode((string) $body));</code></pre></div>
 
         </p>
         </form>
+
+            <h2 id="endpoints-GETapi-v2-tariff-price">Tariff Amount V2</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-GETapi-v2-tariff-price">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://dev.dream-aero.ru/api/v2/tariff/price?api_key=&amp;token=&amp;product_id=" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://dev.dream-aero.ru/api/v2/tariff/price"
+);
+
+const params = {
+    "api_key": "",
+    "token": "",
+    "product_id": "",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'https://dev.dream-aero.ru/api/v2/tariff/price',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'api_key'=&gt; '',
+            'token'=&gt; '',
+            'product_id'=&gt; '',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v2-tariff-price">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;&quot;,
+	&quot;data&quot;: {
+		&quot;amount&quot;: 5500,
+	}
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: {
+        &quot;email&quot;: &quot;Обязательно для заполнения&quot;
+    },
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400, Bad Request):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Некорректный Api-ключ&quot;,
+    &quot;debug&quot;: null
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, Resource Not Found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Ресурс не найден&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (405, Method Not Allowed):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Метод не разрешен&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (429, Too Many Attempts):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Слишком много попыток. Попробуйте позже&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (500, Internal Server Error):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">{
+    &quot;success&quot;: false,
+    &quot;error&quot;: &quot;Внутренняя ошибка&quot;,
+    &quot;debug&quot;: &quot;&lt;app_url&gt;/api/&lt;method&gt;&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v2-tariff-price" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v2-tariff-price"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v2-tariff-price"></code></pre>
+</span>
+<span id="execution-error-GETapi-v2-tariff-price" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v2-tariff-price"></code></pre>
+</span>
+<form id="form-GETapi-v2-tariff-price" data-method="GET"
+      data-path="api/v2/tariff/price"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v2-tariff-price', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v2-tariff-price"
+                    onclick="tryItOut('GETapi-v2-tariff-price');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v2-tariff-price"
+                    onclick="cancelTryOut('GETapi-v2-tariff-price');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v2-tariff-price" hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v2/tariff/price</code></b>
+        </p>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                    <p>
+                <b><code>api_key</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="api_key"
+               data-endpoint="GETapi-v2-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>token</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="token"
+               data-endpoint="GETapi-v2-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>product_id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="product_id"
+               data-endpoint="GETapi-v2-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>is_certificate_purchase</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
+                <label data-endpoint="GETapi-v2-tariff-price" hidden>
+            <input type="radio" name="is_certificate_purchase"
+                   value="1"
+                   data-endpoint="GETapi-v2-tariff-price"
+                   data-component="query"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="GETapi-v2-tariff-price" hidden>
+            <input type="radio" name="is_certificate_purchase"
+                   value="0"
+                   data-endpoint="GETapi-v2-tariff-price"
+                   data-component="query"
+            >
+            <code>false</code>
+        </label>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>is_unified</code></b>&nbsp;&nbsp;<small>boolean</small>     <i>optional</i> &nbsp;
+                <label data-endpoint="GETapi-v2-tariff-price" hidden>
+            <input type="radio" name="is_unified"
+                   value="1"
+                   data-endpoint="GETapi-v2-tariff-price"
+                   data-component="query"
+            >
+            <code>true</code>
+        </label>
+        <label data-endpoint="GETapi-v2-tariff-price" hidden>
+            <input type="radio" name="is_unified"
+                   value="0"
+                   data-endpoint="GETapi-v2-tariff-price"
+                   data-component="query"
+            >
+            <code>false</code>
+        </label>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>promocode_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="promocode_id"
+               data-endpoint="GETapi-v2-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>location_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="location_id"
+               data-endpoint="GETapi-v2-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>certificate_id</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="certificate_id"
+               data-endpoint="GETapi-v2-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                    <p>
+                <b><code>score</code></b>&nbsp;&nbsp;<small>integer</small>     <i>optional</i> &nbsp;
+                <input type="number"
+               name="score"
+               data-endpoint="GETapi-v2-tariff-price"
+               value=""
+               data-component="query" hidden>
+    <br>
+
+            </p>
+                </form>
 
     
 

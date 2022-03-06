@@ -1539,7 +1539,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: quisquam
+        example: est
         type: string
         custom: []
     responses:
@@ -2422,14 +2422,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: doloremque
+        example: at
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: ratione
+        example: fuga
         type: time
         custom: []
       is_unified:
@@ -2443,14 +2443,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 19
+        example: 9
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 10
+        example: 18
         type: integer
         custom: []
       promocode_id:
@@ -2471,7 +2471,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: in
+        example: dolor
         type: string
         custom: []
       comment:
@@ -2801,14 +2801,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: sit
+        example: nam
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: aut
+        example: ab
         type: time
         custom: []
       is_unified:
@@ -2822,14 +2822,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 19
+        example: 16
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 2
+        example: 16
         type: integer
         custom: []
       promocode_id:
@@ -2850,7 +2850,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: eveniet
+        example: quod
         type: string
         custom: []
       comment:
@@ -2880,6 +2880,128 @@ endpoints:
           			"number": "D2200001",
           			"status": "Создана",
           		}
+          	}
+          }
+        headers: []
+        description: '200, success'
+      -
+        status: 400
+        content: '{"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 400
+        content: '{"success": false, "error": "Некорректный Api-ключ", "debug": null}'
+        headers: []
+        description: '400, Bad Request'
+      -
+        status: 404
+        content: '{"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '404, Resource Not Found'
+      -
+        status: 405
+        content: '{"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '405, Method Not Allowed'
+      -
+        status: 429
+        content: '{"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '429, Too Many Attempts'
+      -
+        status: 500
+        content: '{"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}'
+        headers: []
+        description: '500, Internal Server Error'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v2/tariff/price
+    metadata:
+      title: 'Tariff Amount V2'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters:
+      api_key:
+        name: api_key
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+      token:
+        name: token
+        description: ''
+        required: true
+        example: null
+        type: string
+        custom: []
+      product_id:
+        name: product_id
+        description: ''
+        required: true
+        example: null
+        type: integer
+        custom: []
+      is_certificate_purchase:
+        name: is_certificate_purchase
+        description: ''
+        required: false
+        example: null
+        type: boolean
+        custom: []
+      is_unified:
+        name: is_unified
+        description: ''
+        required: false
+        example: null
+        type: boolean
+        custom: []
+      promocode_id:
+        name: promocode_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+        custom: []
+      location_id:
+        name: location_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+        custom: []
+      certificate_id:
+        name: certificate_id
+        description: ''
+        required: false
+        example: null
+        type: integer
+        custom: []
+      score:
+        name: score
+        description: ''
+        required: false
+        example: null
+        type: integer
+        custom: []
+    bodyParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+          	"success": true,
+          	"message": "",
+          	"data": {
+          		"amount": 5500,
           	}
           }
         headers: []

@@ -783,7 +783,12 @@ class DealController extends Controller
 			$deal->email = $this->request->email ?? '';
 			$deal->data_json = $data;
 			$deal->save();
-			
+
+			// если сделку отменяют, а по ней было списание баллов, то начисляем баллы обратно
+			/*if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+
+			}*/
+
 			/*if (in_array($deal->status->alias, [Deal::CANCELED_STATUS]) && $deal->certificate && $deal->is_certificate_purchase) {
 				$certificateStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Certificate::CANCELED_STATUS);
 				if ($certificateStatus) {
@@ -855,7 +860,7 @@ class DealController extends Controller
 			$certificateId = $certificate ? $certificate->id : 0;
 		}
 
-		$amount = $product->calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, 'admin', $certificateId);
+		$amount = $product->calcAmount($contractorId, $cityId, 'admin', $isFree, $locationId, $paymentMethodId, $promoId, $promocodeId, $certificateId);
 
 		return response()->json(['status' => 'success', 'amount' => $amount]);
 	}

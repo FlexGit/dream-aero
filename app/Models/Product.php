@@ -130,7 +130,7 @@ class Product extends Model
 		if ($cityProduct->pivot->discount) {
 			$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
 		}*/
-		$price = $this->calcAmount($contractorId, $cityId, 0, 0, 0, 0, 0, 'api', 0, 0);
+		$price = $this->calcAmount($contractorId, $cityId);
 
 		//$data = $this->data_json ?? [];
 		$pivotData = json_decode($cityProduct->pivot->data_json, true);
@@ -251,18 +251,20 @@ class Product extends Model
 	/**
 	 * @param $contractorId
 	 * @param $cityId
-	 * @param $locationId
-	 * @param $paymentMethodId
-	 * @param $promoId
-	 * @param $promocodeId
-	 * @param $isFree
-	 * @param $source
+	 * @param string $source
+	 * @param bool $isFree
+	 * @param int $locationId
+	 * @param int $paymentMethodId
+	 * @param int $promoId
+	 * @param int $promocodeId
 	 * @param int $certificateId
+	 * @param bool $isUnified
 	 * @param bool $isAirlineMilesPurchase
+	 * @param int $score
 	 *
 	 * @return float|int
 	 */
-	public function calcAmount($contractorId, $cityId, $locationId, $paymentMethodId, $promoId, $promocodeId, $isFree, $source, $certificateId = 0, $isUnified = false, $isAirlineMilesPurchase = false)
+	public function calcAmount($contractorId, $cityId, $source = 'api', $isFree = false, $locationId = 0, $paymentMethodId = 0, $promoId = 0, $promocodeId = 0, $certificateId = 0, $isUnified = false, $isAirlineMilesPurchase = false, $score = 0)
 	{
 		if ($isFree) return 0;
 
@@ -298,6 +300,12 @@ class Product extends Model
 
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
+
+		// если указаны баллы на списание
+		if ($score > 0) {
+			$amount -= $score;
+			if ($amount <= 0) return 0;
+		}
 
 		// скидка на продукт
 		$discount = $cityProduct->pivot->discount ?? null;
