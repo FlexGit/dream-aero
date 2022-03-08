@@ -272,11 +272,11 @@ class PromoController extends Controller
 			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
 		}
 		$promo->data_json = $data;
+		\DB::connection()->enableQueryLog();
 		if (!$promo->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
-		\Log::debug($promo);
-		\Log::debug($promo->fresh());
+		\Log::debug(\DB::getQueryLog());
 
 		return response()->json(['status' => 'success']);
 	}
