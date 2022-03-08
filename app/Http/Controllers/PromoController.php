@@ -229,7 +229,8 @@ class PromoController extends Controller
 		if (!$this->request->user()->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
-		
+
+		\DB::connection()->enableQueryLog();
 		$promo = Promo::find($id);
 		if (!$promo) return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 
@@ -272,7 +273,6 @@ class PromoController extends Controller
 			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
 		}
 		$promo->data_json = $data;
-		\DB::connection()->enableQueryLog();
 		if (!$promo->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
