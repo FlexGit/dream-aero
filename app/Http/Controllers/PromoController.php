@@ -257,8 +257,6 @@ class PromoController extends Controller
 			unlink(public_path('upload/' . $promo->data_json['image_file_path']));
 		}
 
-		\Log::debug($this->request->active_from_at);
-
 		$promo->name = $this->request->name;
 		$promo->alias = $this->request->alias;
 		$promo->discount_id = $this->request->discount_id ?? 0;
@@ -274,7 +272,9 @@ class PromoController extends Controller
 			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
 		}
 		$promo->data_json = $data;
+		\Log::debug($promo);
 		if (!$promo->save()) {
+			\Log::debug($promo);
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
