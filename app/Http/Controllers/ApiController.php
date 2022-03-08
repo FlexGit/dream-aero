@@ -1679,9 +1679,9 @@ class ApiController extends Controller
 			->latest()
 			->get();
 		
-		if ($promos->isEmpty()) {
+		/*if ($promos->isEmpty()) {
 			return $this->responseError('Акции не найдены', 400);
-		}
+		}*/
 		
 		$data = [];
 		/** @var Promo[] $promo */
