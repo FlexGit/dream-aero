@@ -230,7 +230,6 @@ class PromoController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
-		\DB::connection()->enableQueryLog();
 		$promo = Promo::find($id);
 		if (!$promo) return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 
@@ -276,7 +275,6 @@ class PromoController extends Controller
 		if (!$promo->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
-		\Log::debug(\DB::getQueryLog());
 
 		return response()->json(['status' => 'success']);
 	}

@@ -52,11 +52,11 @@
 </div>
 <div class="form-group">
 	<label for="active_from_at">Дата начала активности</label>
-	<input type="date" class="form-control" id="active_from_at" name="active_from_at" value="{{ \Carbon\Carbon::parse($promo->active_from_at)->format('Y-m-d') }}" placeholder="Дата начала активности">
+	<input type="date" class="form-control" id="active_from_at" name="active_from_at" value="{{ $promo->active_from_at ? \Carbon\Carbon::parse($promo->active_from_at)->format('Y-m-d') : '' }}" placeholder="Дата начала активности">
 </div>
 <div class="form-group">
 	<label for="active_to_at">Дата окончания активности</label>
-	<input type="date" class="form-control" id="active_to_at" name="active_to_at" value="{{ \Carbon\Carbon::parse($promo->active_to_at)->format('Y-m-d') }}" placeholder="Дата окончания активности">
+	<input type="date" class="form-control" id="active_to_at" name="active_to_at" value="{{ $promo->active_to_at ? \Carbon\Carbon::parse($promo->active_to_at)->format('Y-m-d') : '' }}" placeholder="Дата окончания активности">
 </div>
 <div class="form-group">
 	<label for="image_file">Изображение</label>
