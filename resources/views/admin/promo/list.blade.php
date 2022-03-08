@@ -8,8 +8,8 @@
 	<td class="text-center d-none d-xl-table-cell">{{ $promo->city ? $promo->city->name : '' }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $promo->is_published ? 'Да' : 'Нет' }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $promo->is_active ? 'Да' : 'Нет' }}</td>
-	<td class="text-center d-none d-xl-table-cell">{{ \Carbon\Carbon::parse($promo->active_from_at)->format('Y-m-d') }}</td>
-	<td class="text-center d-none d-xl-table-cell">{{ \Carbon\Carbon::parse($promo->active_to_at)->format('Y-m-d') }}</td>
+	<td class="text-center d-none d-xl-table-cell">{{ $promo->active_from_at ? \Carbon\Carbon::parse($promo->active_from_at)->format('Y-m-d') : '' }}</td>
+	<td class="text-center d-none d-xl-table-cell">{{ $promo->active_to_at ? \Carbon\Carbon::parse($promo->active_to_at)->format('Y-m-d') : '' }}</td>
 	<td class="text-center align-middle">
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/promo/{{ $promo->id }}/edit" data-action="/promo/{{ $promo->id }}" data-method="PUT" data-title="Редактирование">
 			<i class="fa fa-edit" aria-hidden="true"></i>

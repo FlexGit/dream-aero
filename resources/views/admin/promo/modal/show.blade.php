@@ -38,11 +38,11 @@
 		</tr>
 		<tr class="odd">
 			<td>Дата начала активности</td>
-			<td>{{ \Carbon\Carbon::parse($promo->active_from_at)->format('Y-m-d') }}</td>
+			<td>{{ $promo->active_from_at ? \Carbon\Carbon::parse($promo->active_from_at)->format('Y-m-d') : '' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Дата окончания активности</td>
-			<td>{{ \Carbon\Carbon::parse($promo->active_to_at)->format('Y-m-d') }}</td>
+			<td>{{ $promo->active_to_at ? \Carbon\Carbon::parse($promo->active_to_at)->format('Y-m-d') : '' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Изображение</td>
