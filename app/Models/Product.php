@@ -339,11 +339,11 @@ class Product extends Model
 				->where('is_published', true)
 				->whereIn('city_id', [$cityId, 0])
 				->where(function ($query) use ($date) {
-					$query->where('active_from_at', '>=', $date)
+					$query->where('active_from_at', '<=', $date)
 						->orWhereNull('active_from_at');
 				})
 				->where(function ($query) use ($date) {
-					$query->where('active_to_at', '<=', $date)
+					$query->where('active_to_at', '>=', $date)
 						->orWhereNull('active_to_at');
 				})
 				->latest()->first();
