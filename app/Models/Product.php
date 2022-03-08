@@ -334,8 +334,9 @@ class Product extends Model
 			}
 
 			$date = date('Y-m-d');
-			// если есть активные акции, применяем наиболее позднюю по дате создания
+			// если есть активные акции для публикации, применяем наиболее позднюю по дате создания
 			$promo = Promo::where('is_active', true)
+				->where('is_published', true)
 				->where(function ($query) use ($date) {
 					$query->where('active_from_at', '>=', $date)
 						->orWhereNull('active_to_at');
