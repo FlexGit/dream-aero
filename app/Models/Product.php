@@ -334,10 +334,12 @@ class Product extends Model
 			}
 
 			$date = date('Y-m-d');
-			// если есть активные акции для публикации, применяем наиболее позднюю по дате создания
-			$promo = Promo::where('is_active', true)
+
+			// акция ДР
+			$birthdayPromo = Promo::where('is_active', true)
 				->where('is_published', true)
 				->where('discount_id', '!=', 0)
+				->where('alias', Promo::BIRTHDAY_ALIAS)
 				->whereIn('city_id', [$cityId, 0])
 				->where(function ($query) use ($date) {
 					$query->where('active_from_at', '<=', $date)
@@ -347,7 +349,33 @@ class Product extends Model
 					$query->where('active_to_at', '>=', $date)
 						->orWhereNull('active_to_at');
 				})
-				->latest()->first();
+				->latest()
+				->first();
+			if (Carbon::parse($contractor->birthdate)->format('Y-m-d') == $date) {
+				$discount = ($birthdayPromo && $birthdayPromo->discount) ? $birthdayPromo->discount : null;
+				if ($discount) {
+					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+
+					return ($amount > 0) ? round($amount) : 0;
+				}
+			}
+
+			// если есть активные акции для публикации, применяем наиболее позднюю по дате создания
+			$promo = Promo::where('is_active', true)
+				->where('is_published', true)
+				->where('discount_id', '!=', 0)
+				->where('alias', '!=', Promo::BIRTHDAY_ALIAS)
+				->whereIn('city_id', [$cityId, 0])
+				->where(function ($query) use ($date) {
+					$query->where('active_from_at', '<=', $date)
+						->orWhereNull('active_from_at');
+				})
+				->where(function ($query) use ($date) {
+					$query->where('active_to_at', '>=', $date)
+						->orWhereNull('active_to_at');
+				})
+				->latest()
+				->first();
 			$discount = ($promo && $promo->discount) ? $promo->discount : null;
 			if ($discount) {
 				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
