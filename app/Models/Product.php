@@ -335,6 +335,8 @@ class Product extends Model
 
 			$date = date('Y-m-d');
 
+			$amounts = [];
+
 			// акция ДР
 			if ($contractor) {
 				$birthdayPromo = Promo::where('is_active', true)
@@ -352,18 +354,18 @@ class Product extends Model
 					})
 					->latest()
 					->first();
-				if (Carbon::parse($contractor->birthdate)->format('m-d') == Carbon::parse($date)->format('m-d')) {
-					$discount = ($birthdayPromo && $birthdayPromo->discount) ? $birthdayPromo->discount : null;
-					if ($discount) {
-						$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+				if ($contractor->birthdate && Carbon::parse($contractor->birthdate)->format('m-d') == Carbon::parse($date)->format('m-d')) {
+					$birthdayDiscount = ($birthdayPromo && $birthdayPromo->discount) ? $birthdayPromo->discount : null;
+					if ($birthdayDiscount) {
+						$amount = $birthdayDiscount->is_fixed ? ($amount - $birthdayDiscount->value) : ($amount - $amount * $birthdayDiscount->value / 100);
 
-						return ($amount > 0) ? round($amount) : 0;
+						$amounts[] = ($amount > 0) ? round($amount) : 0;
 					}
 				}
 			}
 
-			// если есть активные акции для публикации, применяем наиболее позднюю по дате создания
-			$promo = Promo::where('is_active', true)
+			// активные акции для публикации со скидкой
+			$promos = Promo::where('is_active', true)
 				->where('is_published', true)
 				->where('discount_id', '!=', 0)
 				->where('alias', '!=', Promo::BIRTHDAY_ALIAS)
@@ -377,12 +379,20 @@ class Product extends Model
 						->orWhereNull('active_to_at');
 				})
 				->latest()
-				->first();
-			$discount = ($promo && $promo->discount) ? $promo->discount : null;
-			if ($discount) {
-				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+				->get();
+			foreach ($promos as $promo) {
+				$discount = ($promo && $promo->discount) ? $promo->discount : null;
+				if ($discount) {
+					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-				return ($amount > 0) ? round($amount) : 0;
+					$amounts[] = ($amount > 0) ? round($amount) : 0;
+				}
+			}
+
+			if ($amounts) {
+				// применяем с наибольшей скидкой
+				rsort($amounts);
+				return array_shift($amounts);
 			}
 
 			// скидка контрагента
