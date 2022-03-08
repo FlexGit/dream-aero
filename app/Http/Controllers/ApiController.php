@@ -2027,6 +2027,14 @@ class ApiController extends Controller
 			return $this->responseError('Некорректный тип тарифа', 400);
 		}
 
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return $this->responseError('Тариф не найден', 400);
+		}
+
+		// базовая стоимость продукта
+		$baseAmount = $cityProduct->pivot->price;
+
 		$locationId = $this->request->location_id ?? 0;
 		if ($locationId) {
 			$location = Location::where('is_active', true)
@@ -2047,6 +2055,7 @@ class ApiController extends Controller
 
 		$data = [
 			'amount' => $amount,
+			'baseAmount' => $baseAmount,
 		];
 
 		return $this->responseSuccess(null, $data);
