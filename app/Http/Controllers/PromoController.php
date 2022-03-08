@@ -257,6 +257,8 @@ class PromoController extends Controller
 			unlink(public_path('upload/' . $promo->data_json['image_file_path']));
 		}
 
+		\Log::debug($this->request->active_from_at);
+
 		$promo->name = $this->request->name;
 		$promo->alias = $this->request->alias;
 		$promo->discount_id = $this->request->discount_id ?? 0;
