@@ -68,9 +68,11 @@ class Promo extends Model
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
-	];
+	];*/
 
-	protected $revisionForceDeleteEnabled = true;
+	const BIRTHDAY_ALIAS = 'birthday';
+
+	/*protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;*/
 	
 	/**
