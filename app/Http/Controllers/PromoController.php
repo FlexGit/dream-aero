@@ -202,8 +202,8 @@ class PromoController extends Controller
 		$promo->detail_text = $this->request->detail_text ?? '';
 		$promo->is_published = (bool)$this->request->is_published;
 		$promo->is_active = (bool)$this->request->is_active;
-		$promo->active_from_at = Carbon::parse($this->request->active_from_at)->format('Y-m-d') ?? null;
-		$promo->active_to_at = Carbon::parse($this->request->active_to_at)->format('Y-m-d') ?? null;
+		$promo->active_from_at = $this->request->active_from_at ? Carbon::parse($this->request->active_from_at)->format('Y-m-d') : null;
+		$promo->active_to_at = $this->request->active_to_at ? Carbon::parse($this->request->active_to_at)->format('Y-m-d') : null;
 		$data = $promo->data_json;
 		if ($isImageFileUploaded) {
 			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
@@ -265,8 +265,8 @@ class PromoController extends Controller
 		$promo->detail_text = $this->request->detail_text ?? '';
 		$promo->is_published = (bool)$this->request->is_published;
 		$promo->is_active = (bool)$this->request->is_active;
-		$promo->active_from_at = Carbon::parse($this->request->active_from_at)->format('Y-m-d') ?? null;
-		$promo->active_to_at = Carbon::parse($this->request->active_to_at)->format('Y-m-d') ?? null;
+		$promo->active_from_at = $this->request->active_from_at ? Carbon::parse($this->request->active_from_at)->format('Y-m-d') : null;
+		$promo->active_to_at = $this->request->active_to_at ? Carbon::parse($this->request->active_to_at)->format('Y-m-d') : null;
 		$data = $promo->data_json;
 		if ($isImageFileUploaded) {
 			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
