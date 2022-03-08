@@ -1662,10 +1662,20 @@ class ApiController extends Controller
 				return $this->responseError('Город не найден', 400);
 			}
 		}
-		
+
+		$date = date('Y-m-d');
+
 		$promos = Promo::where('is_active', true)
 			->whereIn('city_id', [$city->id, 0])
 			->where('is_published', true)
+			->where(function ($query) use ($date) {
+				$query->where('active_from_at', '<=', $date)
+					->orWhereNull('active_from_at');
+			})
+			->where(function ($query) use ($date) {
+				$query->where('active_to_at', '>=', $date)
+					->orWhereNull('active_to_at');
+			})
 			->latest()
 			->get();
 		
