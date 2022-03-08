@@ -337,6 +337,7 @@ class Product extends Model
 			// если есть активные акции для публикации, применяем наиболее позднюю по дате создания
 			$promo = Promo::where('is_active', true)
 				->where('is_published', true)
+				->where('discount_id', '!=', 0)
 				->whereIn('city_id', [$cityId, 0])
 				->where(function ($query) use ($date) {
 					$query->where('active_from_at', '<=', $date)
