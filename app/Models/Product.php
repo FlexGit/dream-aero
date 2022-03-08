@@ -301,8 +301,8 @@ class Product extends Model
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
 
-		// если указаны баллы на списание
-		if ($score > 0) {
+		// если указаны баллы на списание (только для мобилки)
+		if ($score > 0 && $source == Deal::MOB_SOURCE) {
 			$amount -= $score;
 			if ($amount <= 0) return 0;
 		}
@@ -325,7 +325,22 @@ class Product extends Model
 				return ($amount > 0) ? round($amount) : 0;
 			}
 
-			// скидка по акции
+			// скидка по указанной акции
+			$discount = ($promo && $promo->discount) ? $promo->discount : null;
+			if ($discount) {
+				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+
+				return ($amount > 0) ? round($amount) : 0;
+			}
+
+			$date = date('Y-m-d');
+			// если есть активные акции, применяем наиболее позднюю по дате создания
+			$promo = Promo::where('is_active', true)
+				->where(function ($query) use ($date) {
+					$query->where('active_from_at', '>=', $date)
+						->orWhereNull('active_to_at');
+				})
+				->latest()->first();
 			$discount = ($promo && $promo->discount) ? $promo->discount : null;
 			if ($discount) {
 				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
