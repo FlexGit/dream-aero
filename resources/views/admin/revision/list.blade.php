@@ -8,7 +8,7 @@
 			<div>
 				{{ $revision['object'] }}
 			</div>
-			@if($linkedObject)
+			@if($revision['linkedObject'])
 				<div>
 					{{ $revision['linkedObject'] }}
 				</div>
