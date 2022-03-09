@@ -8,7 +8,7 @@
 			{{ $revision['object'] }}
 		</td>
 		<td class="align-middle d-none d-md-table-cell">
-			{{ $revision['linkedObject'] }}
+			{!! $revision['linkedObject'] !!}
 		</td>
 		<td class="align-middle d-none d-md-table-cell">
 			{{ \App\Services\HelpFunctions::getModelAttributeName($revision['entity'], $revision['key']) }}
