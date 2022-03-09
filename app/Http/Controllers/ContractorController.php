@@ -352,6 +352,7 @@ class ContractorController extends Controller
 		$score->contractor_id = $contractor->id;
 		$score->duration = $this->request->is_minus_score ? (-1 * $product->duration) : $product->duration;
 		$score->user_id = $this->request->user()->id;
+		$score->type = Score::SCORING_TYPE;
 		if (!$score->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
