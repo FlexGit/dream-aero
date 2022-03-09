@@ -125,6 +125,7 @@ class RevisionController extends Controller
 					$object = $model->value;
 				} else if ($model->score) {
 					$object = $model->score;
+					$linkedObject = $model->contractor ? $model->contractor->fio() : '';
 				} else if ($model->title) {
 					$object = $model->title;
 				} else if ($model->name) {
@@ -166,6 +167,7 @@ class RevisionController extends Controller
 				'revisionable_type' => array_key_exists($revisionableType, self::ENTITIES) ? self::ENTITIES[$revisionableType] : $revisionableType,
 				'revisionable_id' => $revision->revisionable_id,
 				'object' => $object,
+				'linkedObject' => $linkedObject ?? '',
 				'user' => $revision->user,
 				'key' => $revision->key,
 				'old_value' => $oldValue ?: $revision->old_value,
