@@ -125,7 +125,7 @@ class RevisionController extends Controller
 					$object = $model->value;
 				} else if ($model->score) {
 					$object = $model->score;
-					$linkedObject = $model->contractor ? ($model->contractor->fio() . ' <small>[' . $model->contractor->id . ']</small>') : '';
+					$linkedObject = $model->contractor ? ($model->contractor->fio() . ' [' . $model->contractor->id . ']') : '';
 				} else if ($model->title) {
 					$object = $model->title;
 				} else if ($model->name) {
