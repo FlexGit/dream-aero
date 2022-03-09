@@ -29,9 +29,11 @@
 				</div>
 			</div>
 			<div class="d-inline-block col-6 align-top ml-3">
-				<div title="Телефон" class="text-wrap">
-					<i class="fas fa-mobile-alt"></i> {{ implode(', ', explode(',', $contractor->phone)) }}
-				</div>
+				@if($contractor->phone)
+					<div title="Телефон" class="text-wrap">
+						<i class="fas fa-mobile-alt"></i> {{ implode(', ', explode(',', $contractor->phone)) }}
+					</div>
+				@endif
 				<div title="E-mail">
 					<i class="far fa-envelope"></i> {{ $contractor->email }}
 				</div>

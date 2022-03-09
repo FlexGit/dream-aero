@@ -453,9 +453,6 @@ class ApiController extends Controller
 			$token->setToken($contractor);
 			$token->save();
 
-			/*$contractor->last_auth_at = date('Y-m-d H:i:s');
-			$contractor->save();*/
-
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();

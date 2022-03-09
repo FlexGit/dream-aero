@@ -53,8 +53,8 @@ class ContractorController extends Controller
 		$contractors = Contractor::orderBy('created_at', 'desc');
 		if ($this->request->filter_city_id) {
 			$contractors = $contractors->where('city_id', $this->request->filter_city_id);
-		} elseif ($this->request->user()->city) {
-			$contractors = $contractors->whereIn('city_id', [$this->request->user()->city->id, 0]);
+		/*} elseif ($this->request->user()->city) {
+			$contractors = $contractors->whereIn('city_id', [$this->request->user()->city->id, 0]);*/
 		}
 		if ($this->request->search_contractor) {
 			$contractors = $contractors->where(function ($query) {
@@ -250,9 +250,9 @@ class ContractorController extends Controller
 			//->where("email", "LIKE", "%{$q}%")
 			->orderBy('name')
 			->orderBy('lastname');
-		if ($this->request->user()->city) {
+		/*if ($this->request->user()->city) {
 			$contractors = $contractors->whereIn('id', [$this->request->user()->city->id, 0]);
-		}
+		}*/
 		$contractors = $contractors->get();
 		
 		$suggestions = [];
