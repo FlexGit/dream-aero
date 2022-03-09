@@ -95,7 +95,7 @@ class Token extends Model
 
 			// начисляем 500 баллов за первый вход (если соответствующая акция активна)
 			if ($contractor->id == 70665) {
-				\Log::debug($contractor->tokens_count);
+				\Log::debug($contractor->id . ' - ' . $contractor->tokens_count);
 			}
 			if ($contractor->tokens_count == 1) {
 				$promo = Promo::where('alias', 'registration_500_scores')
