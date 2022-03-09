@@ -388,7 +388,6 @@ class Product extends Model
 					$amounts[] = ($amount > 0) ? round($amount) : 0;
 				}
 			}
-			\Log::debug($amounts);
 
 			if ($amounts) {
 				// применяем с наибольшей скидкой
