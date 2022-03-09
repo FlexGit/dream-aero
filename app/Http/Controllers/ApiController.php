@@ -453,25 +453,9 @@ class ApiController extends Controller
 			$token->setToken($contractor);
 			$token->save();
 
-			$contractor->last_auth_at = date('Y-m-d H:i:s');
-			$contractor->save();
+			/*$contractor->last_auth_at = date('Y-m-d H:i:s');
+			$contractor->save();*/
 
-			//$date = date('Y-m-d');
-
-			// начисляем 500 баллов за регистрацию (если такая акция активна)
-			$promo = Promo::where('alias', 'registration_500_scores')
-				->where('is_active', true)
-				/*->where('active_from_at', '<=', $date)
-				->where('active_to_at', '>=', $date)*/
-				->first();
-			if ($promo && $promo->discount && $promo->discount->currency && $promo->discount->currency->alias == Currency::SCORE_ALIAS) {
-				$score = new Score();
-				$score->score = $promo->discount->value;
-				$score->contractor_id = $contractor->id;
-				$score->type = Score::SCORING_TYPE;
-				$score->save();
-			}
-			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();

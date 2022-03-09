@@ -92,6 +92,19 @@ class Token extends Model
 				$contractor->last_auth_at = new Carbon('now');
 				$contractor->save();
 			}
+			if ($contractor->tokens_count == 1) {
+				// начисляем 500 баллов за первый вход (если соответствующая акция активна)
+				$promo = Promo::where('alias', 'registration_500_scores')
+					->where('is_active', true)
+					->first();
+				if ($promo && $promo->discount && $promo->discount->currency && $promo->discount->currency->alias == Currency::SCORE_ALIAS) {
+					$score = new Score();
+					$score->score = $promo->discount->value;
+					$score->contractor_id = $contractor->id;
+					$score->type = Score::SCORING_TYPE;
+					$score->save();
+				}
+			}
 			return true;
 		});
 	}
