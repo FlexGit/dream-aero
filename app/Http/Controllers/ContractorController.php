@@ -59,6 +59,7 @@ class ContractorController extends Controller
 		if ($this->request->search_contractor) {
 			$contractors = $contractors->where(function ($query) {
 				$query->where('name', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('lastname', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%');
 			});
