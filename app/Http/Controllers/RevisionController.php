@@ -116,7 +116,7 @@ class RevisionController extends Controller
 			$model = $revision->revisionable_type::find($revision->revisionable_id);
 			//if (!$model) continue;
 			
-			$object = '';
+			$object = $linkedObject = '';
 
 			if ($model) {
 				if ($model->number) {
