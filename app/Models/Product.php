@@ -339,7 +339,6 @@ class Product extends Model
 
 			// акция ДР
 			if ($contractor) {
-				\Log::debug('!!! ' . $contractor->birthdate);
 				$birthdayPromo = Promo::where('is_active', true)
 					->where('is_published', true)
 					->where('discount_id', '!=', 0)
@@ -389,6 +388,7 @@ class Product extends Model
 					$amounts[] = ($amount > 0) ? round($amount) : 0;
 				}
 			}
+			\Log::debug($amounts);
 
 			if ($amounts) {
 				// применяем с наибольшей скидкой
