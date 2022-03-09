@@ -5,16 +5,12 @@
 	<tr class="odd" data-id="{{ $revision['id'] }}">
 		<td class="align-middle">{{ $revision['revisionable_type'] }}</td>
 		<td class="align-middle d-none d-sm-table-cell">
-			<div>
-				{{ $revision['object'] }}
-			</div>
-			@if($revision['linkedObject'])
-				<div>
-					{{ $revision['linkedObject'] }}
-				</div>
-			@endif
+			{{ $revision['object'] }}
 		</td>
-		<td class="align-middle d-none d-sm-table-cell">
+		<td class="align-middle d-none d-md-table-cell">
+			{{ $revision['linkedObject'] }}
+		</td>
+		<td class="align-middle d-none d-md-table-cell">
 			{{ \App\Services\HelpFunctions::getModelAttributeName($revision['entity'], $revision['key']) }}
 		</td>
 		<td class="d-none align-middle d-md-table-cell">

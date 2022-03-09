@@ -40,8 +40,9 @@
 						<thead>
 						<tr class="text-center">
 							<th class="align-middle">Сущность</th>
-							<th class="align-middle text-nowrap d-none d-sm-table-cell">Объект</th>
-							<th class="align-middle d-none d-sm-table-cell">Атрибут</th>
+							<th class="align-middle d-none d-sm-table-cell">Объект</th>
+							<th class="align-middle d-none d-md-table-cell">Связанный объект</th>
+							<th class="align-middle d-none d-md-table-cell">Атрибут</th>
 							<th class="align-middle d-none d-md-table-cell">Было</th>
 							<th class="align-middle d-none d-md-table-cell">Стало</th>
 							<th class="align-middle d-none d-md-table-cell">Пользователь</th>
