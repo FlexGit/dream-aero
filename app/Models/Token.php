@@ -94,7 +94,7 @@ class Token extends Model
 			}
 
 			// начисляем 500 баллов за первый вход (если соответствующая акция активна)
-			if ($contractor->tokens->count() == 1) {
+			if ($contractor->tokens()->withTrashed()->count() == 1) {
 				$promo = Promo::where('alias', 'registration_500_scores')
 					->where('is_active', true)
 					->first();
