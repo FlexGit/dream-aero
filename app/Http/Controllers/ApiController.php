@@ -390,7 +390,7 @@ class ApiController extends Controller
 			'password_confirmation' => ['required', 'same:password', 'valid_password_confirmation'],
 			'email' => ['required_without:contractor_uuid', 'email'],
 			'name' => ['required_without:contractor_uuid', 'min:3', 'max:50'],
-			'birthdate' => ['required_without:contractor_uuid', 'date'],
+			'birthdate' => ['sometimes', 'required_without:contractor_uuid', 'date'],
 			'city_id' => ['required_without:contractor_uuid', 'numeric', 'valid_city'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
@@ -437,7 +437,9 @@ class ApiController extends Controller
 			$contractor->name = $this->request->name;
 			$contractor->email = $this->request->email;
 			$contractor->city_id = $this->request->city_id;
-			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+			if ($this->request->birthdate) {
+				$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+			}
 			$contractor->source = Contractor::MOB_SOURCE;
 		}
 		
@@ -684,7 +686,7 @@ class ApiController extends Controller
 			'name' => ['required', 'min:3', 'max:50'],
 			'lastname' => ['sometimes', 'required', 'min:3', 'max:50'],
 			'phone' => ['sometimes', 'required', 'valid_phone'],
-			'birthdate' => ['required', 'date'],
+			'birthdate' => ['sometimes', 'required', 'date'],
 			'city_id' => ['required', 'numeric', 'valid_city'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
@@ -726,7 +728,9 @@ class ApiController extends Controller
 		$contractor->lastname = $this->request->lastname ?? null;
 		$contractor->phone = $this->request->phone ?? null;
 		$contractor->city_id = $this->request->city_id;
-		$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+		if ($this->request->birthdate) {
+			$contractor->birthdate = Carbon::parse($this->request->birthdate)->format('Y-m-d');
+		}
 		
 		if (!$contractor->save()) {
 			return $this->responseError(null, 500);
