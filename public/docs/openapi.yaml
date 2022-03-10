@@ -414,7 +414,6 @@ paths:
                   example: null
               required:
                 - name
-                - birthdate
                 - city_id
   /api/profile/delete:
     post:
@@ -3376,7 +3375,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: est
+                  example: molestiae
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -5024,11 +5023,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: at
+                  example: facilis
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: fuga
+                  example: autem
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -5036,11 +5035,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 9
+                  example: 20
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 18
+                  example: 20
                 promocode_id:
                   type: integer
                   description: ''
@@ -5052,7 +5051,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: dolor
+                  example: quidem
                 comment:
                   type: string
                   description: ''
@@ -5608,11 +5607,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: nam
+                  example: quas
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: ab
+                  example: sit
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -5620,11 +5619,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 16
+                  example: 19
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 16
+                  example: 19
                 promocode_id:
                   type: integer
                   description: ''
@@ -5636,7 +5635,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: quod
+                  example: excepturi
                 comment:
                   type: string
                   description: ''
@@ -5765,10 +5764,27 @@ paths:
         200:
           description: success
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": \"\",\n\t\"data\": {\n\t\t\"amount\": 5500,\n\t}\n}"
+                type: object
+                example:
+                  success: true
+                  message: ''
+                  data:
+                    amount: 5500
+                    baseAmount: 6300
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    example:
+                      amount: 5500
+                      baseAmount: 6300
         400:
           description: 'Bad Request'
           content:

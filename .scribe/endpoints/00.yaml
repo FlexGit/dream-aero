@@ -130,7 +130,7 @@ endpoints:
       birthdate:
         name: birthdate
         description: ''
-        required: true
+        required: false
         example: null
         type: date
         custom: []
@@ -1537,7 +1537,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: est
+        example: molestiae
         type: string
         custom: []
     responses:
@@ -2420,14 +2420,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: at
+        example: facilis
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: fuga
+        example: autem
         type: time
         custom: []
       is_unified:
@@ -2441,14 +2441,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 9
+        example: 20
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 18
+        example: 20
         type: integer
         custom: []
       promocode_id:
@@ -2469,7 +2469,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: dolor
+        example: quidem
         type: string
         custom: []
       comment:
@@ -2799,14 +2799,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: nam
+        example: quas
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: ab
+        example: sit
         type: time
         custom: []
       is_unified:
@@ -2820,14 +2820,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 16
+        example: 19
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 16
+        example: 19
         type: integer
         custom: []
       promocode_id:
@@ -2848,7 +2848,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: quod
+        example: excepturi
         type: string
         custom: []
       comment:
@@ -3000,6 +3000,7 @@ endpoints:
           	"message": "",
           	"data": {
           		"amount": 5500,
+          		"baseAmount": 6300
           	}
           }
         headers: []

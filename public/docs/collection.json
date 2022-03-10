@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Dream Aero",
-        "_postman_id": "373ff3bb-9b9a-4f60-85ad-1e2266069688",
+        "_postman_id": "e6c165cd-a759-42b2-b9a4-55b9ac342865",
         "description": "Dream Aero API v1",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -129,7 +129,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"birthdate\":null,\"city_id\":null}"
+                            "raw": "{\"name\":null,\"city_id\":null}"
                         },
                         "description": ""
                     },
@@ -1283,7 +1283,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"file_base64\":\"est\"}"
+                            "raw": "{\"file_base64\":\"molestiae\"}"
                         },
                         "description": ""
                     },
@@ -1997,7 +1997,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"at\",\"flight_time\":\"fuga\",\"location_id\":9,\"flight_simulator_id\":18,\"certificate_whom\":\"dolor\"}"
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"facilis\",\"flight_time\":\"autem\",\"location_id\":20,\"flight_simulator_id\":20,\"certificate_whom\":\"quidem\"}"
                         },
                         "description": ""
                     },
@@ -2231,7 +2231,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"nam\",\"flight_time\":\"ab\",\"location_id\":16,\"flight_simulator_id\":16,\"certificate_whom\":\"quod\"}"
+                            "raw": "{\"name\":null,\"phone\":null,\"email\":null,\"product_id\":null,\"product_amount\":null,\"is_certificate_purchase\":null,\"flight_date\":\"quas\",\"flight_time\":\"sit\",\"location_id\":19,\"flight_simulator_id\":19,\"certificate_whom\":\"excepturi\"}"
                         },
                         "description": ""
                     },
@@ -2356,7 +2356,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\",\n\t\"data\": {\n\t\t\"amount\": 5500,\n\t}\n}",
+                            "body": "{\n\t\"success\": true,\n\t\"message\": \"\",\n\t\"data\": {\n\t\t\"amount\": 5500,\n\t\t\"baseAmount\": 6300\n\t}\n}",
                             "name": "success"
                         },
                         {
