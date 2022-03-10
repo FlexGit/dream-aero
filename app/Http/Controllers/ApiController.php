@@ -637,7 +637,7 @@ class ApiController extends Controller
 	 * @queryParam token string required No-example
 	 * @bodyParam name string required No-example
 	 * @bodyParam lastname string No-example
-	 * @bodyParam birthdate date required No-example
+	 * @bodyParam birthdate date No-example
 	 * @bodyParam phone string +71234567890 No-example
 	 * @bodyParam city_id int required No-example
 	 * @response scenario=success {
