@@ -2140,10 +2140,14 @@ class ApiController extends Controller
 			}
 		}
 
+		$isCertificatePurchase = filter_var($this->request->is_certificate_purchase, FILTER_VALIDATE_BOOLEAN);
 		$isUnified = filter_var($this->request->is_unified, FILTER_VALIDATE_BOOLEAN);
 		$certificateId = $this->request->certificate_id ?? 0;
 		$promocodeId = $this->request->promocode_id ?? 0;
 		$score = $this->request->score ?? 0;
+		if ($isCertificatePurchase) {
+			$score = 0;
+		}
 
 		$amount = $product->calcAmount($contractor->id, $cityId, 'api', false, $locationId, 0, 0, $promocodeId, $certificateId, $isUnified, false, $score);
 		if ($amount < 0) {
@@ -2649,6 +2653,10 @@ class ApiController extends Controller
 		}
 		
 		$debitScore = (int)$this->request->score ?? 0;
+		if ($isCertificatePurchase) {
+			$debitScore = 0;
+		}
+
 		if ($debitScore > 0) {
 			$actualScore = $contractor->getScore();
 			if ($actualScore < $debitScore) {
