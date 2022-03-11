@@ -10,8 +10,9 @@ class ApiLog
 {
 	public function handle(Request $request, Closure $next)
 	{
-		//Log::channel('api')->info($request);
-		
+		Log::channel('api')->info($_SERVER['REMOTE_ADDR']);
+		Log::channel('api')->info($request);
+
 		return $next($request);
 	}
 }

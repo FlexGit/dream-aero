@@ -1143,8 +1143,8 @@ class ApiController extends Controller
 	 */
 	public function getTariffTypes()
 	{
-		\Log::debug($_SERVER['REMOTE_ADDR']);
-		\Log::debug($this->request);
+		//\Log::debug($_SERVER['REMOTE_ADDR']);
+		//\Log::debug($this->request);
 
 		$authToken = $this->request->token ?? '';
 		if (!$authToken) {

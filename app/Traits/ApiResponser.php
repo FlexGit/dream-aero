@@ -13,12 +13,12 @@ trait ApiResponser
 	 */
 	protected function responseSuccess($message = null, $data = null)
 	{
-		if ($message) {
+		/*if ($message) {
 			Log::channel('api')->info($message);
 		}
 		if ($data) {
 			Log::channel('api')->info($data);
-		}
+		}*/
 		
 		return response()->json([
 			'success' => true,
@@ -57,12 +57,13 @@ trait ApiResponser
 				break;
 			}
 		}
-		
+
+		Log::channel('api')->error($_SERVER['REMOTE_ADDR']);
 		if ($error) {
-			Log::channel('api')->info($error);
+			Log::channel('api')->error($error);
 		}
 		if ($debug) {
-			Log::channel('api')->info($debug);
+			Log::channel('api')->debug($debug);
 		}
 
 		return response()->json([
