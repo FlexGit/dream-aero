@@ -1143,6 +1143,8 @@ class ApiController extends Controller
 	 */
 	public function getTariffTypes()
 	{
+		\Log::debug($this->request);
+
 		$authToken = $this->request->token ?? '';
 		if (!$authToken) {
 			return $this->responseError('Не передан токен авторизации', 400);
