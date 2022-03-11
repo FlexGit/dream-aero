@@ -543,6 +543,7 @@ class ApiController extends Controller
 		
 		$contractor = Contractor::where('is_active', true)
 			->where('uuid', $contractorUuid)
+			->whereNotNull('password')
 			->first();
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
