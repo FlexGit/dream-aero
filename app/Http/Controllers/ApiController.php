@@ -606,6 +606,8 @@ class ApiController extends Controller
 		if (!$authToken) {
 			return $this->responseError('Не передан токен авторизации', 400);
 		}
+
+		\Log::debug('токен - ' . $authToken);
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
