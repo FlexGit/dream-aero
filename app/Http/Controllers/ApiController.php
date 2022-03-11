@@ -1150,7 +1150,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			\Log::debug('getTariffTypes() - ' . $authToken);
+			\Log::debug('getTariffTypes() - ' . $authToken . ' - ' . $this->request->token);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
