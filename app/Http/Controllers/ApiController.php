@@ -143,6 +143,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('logout() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -712,6 +713,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('saveProfile() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -770,6 +772,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('deleteProfile() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -849,6 +852,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('resetProfile() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -950,6 +954,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('saveAvatar() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1070,6 +1075,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('deleteAvatar() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1144,6 +1150,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getTariffTypes() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -1230,6 +1237,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getTariffs() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -1342,6 +1350,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getTariff() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1466,6 +1475,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getLocations() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1542,6 +1552,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getLegalEntities() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1627,6 +1638,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getPromos() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1715,6 +1727,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getPromo() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -1781,6 +1794,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('verifyPromocode() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1902,6 +1916,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getFlights() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1991,6 +2006,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getTariffPrice() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -2091,6 +2107,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getTariffPriceV2() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -2255,6 +2272,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('createDeal() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -2557,6 +2575,7 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('createDealV2() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -2818,6 +2837,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('createDealSimplified() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -2957,6 +2977,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('verifyCertificate() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -3058,6 +3079,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getNotifications() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -3137,6 +3159,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('getNotification() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
@@ -3226,6 +3249,7 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
+			\Log::debug('feedback() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
