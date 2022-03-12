@@ -386,6 +386,9 @@ class ApiController extends Controller
 	 */
 	public function register()
 	{
+		\Log::debug($_SERVER['REMOTE_ADDR']);
+		\Log::debug($this->request);
+
 		$rules = [
 			'password' => ['required', 'confirmed', 'valid_password'/*, Password::defaults()*/],
 			'password_confirmation' => ['required', 'same:password', 'valid_password_confirmation'],
