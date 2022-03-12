@@ -21,7 +21,7 @@
 	</div>
 </div>
 
-@if(request()->user()->isSuperAdmin())
+{{--@if(request()->user()->isSuperAdmin())--}}
 	<div class="row">
 		<div class="col">
 			<div class="form-group">
@@ -33,4 +33,5 @@
 			</div>
 		</div>
 	</div>
-@endif
+{{--
+@endif--}}
