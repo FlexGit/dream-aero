@@ -201,7 +201,7 @@ class ContractorController extends Controller
 		$rules = [
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
-			'phone' => 'sometimes|required|valid_phone',
+			'phone' => 'sometimes|valid_phone',
 			'city_id' => 'required|numeric|min:0|not_in:0|valid_city',
 		];
 		
