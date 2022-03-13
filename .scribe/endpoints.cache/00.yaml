@@ -178,7 +178,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           	}
           }
@@ -383,7 +382,7 @@ endpoints:
       contractor_uuid:
         name: contractor_uuid
         description: ''
-        required: true
+        required: false
         example: null
         type: string
         custom: []
@@ -458,7 +457,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           		"token": {
           			"token": "6136d60c36e6925bf98dea7e05d5f5c8",
@@ -636,7 +634,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           	}
           }
@@ -730,7 +727,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           	}
           }
@@ -1474,7 +1470,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           	}
           }
@@ -1539,7 +1534,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: molestiae
+        example: iure
         type: string
         custom: []
     responses:
@@ -1570,7 +1565,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           	}
           }
@@ -1664,7 +1658,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           	}
           }
@@ -2068,7 +2061,6 @@ endpoints:
           			"flight_time": 100,
           			"score": 10000,
           			"status": "Золотой",
-          			"is_new": false
           		}
           	}
           }
@@ -2422,14 +2414,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: facilis
+        example: nam
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: autem
+        example: architecto
         type: time
         custom: []
       is_unified:
@@ -2443,7 +2435,7 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 20
+        example: 16
         type: integer
         custom: []
       flight_simulator_id:
@@ -2471,7 +2463,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: quidem
+        example: asperiores
         type: string
         custom: []
       comment:
@@ -2801,14 +2793,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: quas
+        example: commodi
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: sit
+        example: laudantium
         type: time
         custom: []
       is_unified:
@@ -2822,14 +2814,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 19
+        example: 17
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 19
+        example: 14
         type: integer
         custom: []
       promocode_id:
@@ -2850,7 +2842,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: excepturi
+        example: dignissimos
         type: string
         custom: []
       comment:

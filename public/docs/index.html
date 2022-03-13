@@ -181,7 +181,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: March 10 2022</li>
+        <li>Last updated: March 13 2022</li>
     </ul>
 </div>
 
@@ -512,32 +512,31 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Профиль успешно сохранен&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
-            },
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_new&quot;: false
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Профиль успешно сохранен&quot;,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;
+		},
+		&quot;discount&quot;: {
+			&quot;value&quot;: 5,
+				&quot;is_fixed&quot;: false
+		},
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -1143,7 +1142,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "https://dev.dream-aero.ru/api/register?api_key=&amp;contractor_uuid=" \
+    "https://dev.dream-aero.ru/api/register?api_key=" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -1160,7 +1159,6 @@ print_r(json_decode((string) $body));</code></pre></div>
 
 const params = {
     "api_key": "",
-    "contractor_uuid": "",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1193,7 +1191,6 @@ $response = $client-&gt;post(
         ],
         'query' =&gt; [
             'api_key'=&gt; '',
-            'contractor_uuid'=&gt; '',
         ],
         'json' =&gt; [
             'password' =&gt; null,
@@ -1236,7 +1233,6 @@ print_r(json_decode((string) $body));</code></pre></div>
 			&quot;flight_time&quot;: 100,
 			&quot;score&quot;: 10000,
 			&quot;status&quot;: &quot;Золотой&quot;,
-			&quot;is_new&quot;: false
 		}
 		&quot;token&quot;: {
 			&quot;token&quot;: &quot;6136d60c36e6925bf98dea7e05d5f5c8&quot;,
@@ -1365,7 +1361,7 @@ print_r(json_decode((string) $body));</code></pre></div>
 
             </p>
                     <p>
-                <b><code>contractor_uuid</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <b><code>contractor_uuid</code></b>&nbsp;&nbsp;<small>string</small>     <i>optional</i> &nbsp;
                 <input type="text"
                name="contractor_uuid"
                data-endpoint="POSTapi-register"
@@ -1713,32 +1709,31 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Пароль успешно изменен&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
-            },
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_new&quot;: false
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Пароль успешно изменен&quot;,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;
+		},
+		&quot;discount&quot;: {
+			&quot;value&quot;: 5,
+				&quot;is_fixed&quot;: false
+		},
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -1962,32 +1957,31 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: null,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
-            },
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_new&quot;: false
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: null,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;
+		},
+		&quot;discount&quot;: {
+			&quot;value&quot;: 5,
+				&quot;is_fixed&quot;: false
+		},
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -3850,32 +3844,31 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Аккаунт контрагента успешно очищен&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
-            },
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_new&quot;: false
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Аккаунт контрагента успешно очищен&quot;,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;
+		},
+		&quot;discount&quot;: {
+			&quot;value&quot;: 5,
+				&quot;is_fixed&quot;: false
+		},
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -4014,7 +4007,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"file_base64\": \"molestiae\"
+    \"file_base64\": \"iure\"
 }"
 </code></pre></div>
 
@@ -4037,7 +4030,7 @@ const headers = {
 };
 
 let body = {
-    "file_base64": "molestiae"
+    "file_base64": "iure"
 };
 
 fetch(url, {
@@ -4061,7 +4054,7 @@ $response = $client-&gt;post(
             'token'=&gt; '',
         ],
         'json' =&gt; [
-            'file_base64' =&gt; 'molestiae',
+            'file_base64' =&gt; 'iure',
         ],
     ]
 );
@@ -4077,32 +4070,31 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Файл успешно сохранен&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
-            },
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_new&quot;: false
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Файл успешно сохранен&quot;,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;
+		},
+		&quot;discount&quot;: {
+			&quot;value&quot;: 5,
+				&quot;is_fixed&quot;: false
+		},
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -4240,7 +4232,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="file_base64"
                data-endpoint="POSTapi-profile-avatar-save"
-               value="molestiae"
+               value="iure"
                data-component="body" hidden>
     <br>
 <p>data:image/jpeg;base64,/9j/7gAhQWR...</p>
@@ -4316,32 +4308,31 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Файл успешно удален&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
-            },
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_new&quot;: false
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Файл успешно удален&quot;,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;
+		},
+		&quot;discount&quot;: {
+			&quot;value&quot;: 5,
+				&quot;is_fixed&quot;: false
+		},
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -5282,32 +5273,31 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Код подтвержден&quot;,
-    &quot;data&quot;: {
-        &quot;contractor&quot;: {
-            &quot;id&quot;: 1,
-            &quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
-            &quot;name&quot;: &quot;John&quot;,
-            &quot;lastname&quot;: &quot;Smith&quot;,
-            &quot;email&quot;: &quot;john.smith@gmail.com&quot;,
-            &quot;phone&quot;: null,
-            &quot;city&quot;: {
-                &quot;id&quot;: 1,
-                &quot;name&quot;: &quot;Москва&quot;
-            },
-            &quot;discount&quot;: {
-                &quot;value&quot;: 5,
-                &quot;is_fixed&quot;: false
-            },
-            &quot;birthdate&quot;: &quot;1990-01-01&quot;,
-            &quot;avatar_file_base64&quot;: null,
-            &quot;flight_time&quot;: 100,
-            &quot;score&quot;: 10000,
-            &quot;status&quot;: &quot;Золотой&quot;,
-            &quot;is_new&quot;: false
-        }
-    }
+	&quot;success&quot;: true,
+	&quot;message&quot;: &quot;Код подтвержден&quot;,
+	&quot;data&quot;: {
+		&quot;contractor&quot;: {
+			&quot;id&quot;: 1,
+			&quot;uuid&quot;: &quot;23560720-8865-11ec-9359-c58c92371be4&quot;,
+			&quot;name&quot;: &quot;John&quot;,
+			&quot;lastname&quot;: &quot;Smith&quot;,
+			&quot;email&quot;: &quot;john.smith@gmail.com&quot;,
+			&quot;phone&quot;: null,
+			&quot;city&quot;: {
+			&quot;id&quot;: 1,
+			&quot;name&quot;: &quot;Москва&quot;
+		},
+		&quot;discount&quot;: {
+			&quot;value&quot;: 5,
+				&quot;is_fixed&quot;: false
+		},
+		&quot;birthdate&quot;: &quot;1990-01-01&quot;,
+			&quot;avatar_file_base64&quot;: null,
+			&quot;flight_time&quot;: 100,
+			&quot;score&quot;: 10000,
+			&quot;status&quot;: &quot;Золотой&quot;,
+		}
+	}
 }</code>
  </pre>
             <blockquote>
@@ -6110,11 +6100,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"facilis\",
-    \"flight_time\": \"autem\",
-    \"location_id\": 20,
+    \"flight_date\": \"nam\",
+    \"flight_time\": \"architecto\",
+    \"location_id\": 16,
     \"flight_simulator_id\": 20,
-    \"certificate_whom\": \"quidem\"
+    \"certificate_whom\": \"asperiores\"
 }"
 </code></pre></div>
 
@@ -6143,11 +6133,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "facilis",
-    "flight_time": "autem",
-    "location_id": 20,
+    "flight_date": "nam",
+    "flight_time": "architecto",
+    "location_id": 16,
     "flight_simulator_id": 20,
-    "certificate_whom": "quidem"
+    "certificate_whom": "asperiores"
 };
 
 fetch(url, {
@@ -6177,11 +6167,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'facilis',
-            'flight_time' =&gt; 'autem',
-            'location_id' =&gt; 20,
+            'flight_date' =&gt; 'nam',
+            'flight_time' =&gt; 'architecto',
+            'location_id' =&gt; 16,
             'flight_simulator_id' =&gt; 20,
-            'certificate_whom' =&gt; 'quidem',
+            'certificate_whom' =&gt; 'asperiores',
         ],
     ]
 );
@@ -6414,7 +6404,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-deal-create"
-               value="facilis"
+               value="nam"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6424,7 +6414,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-deal-create"
-               value="autem"
+               value="architecto"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6455,7 +6445,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-deal-create"
-               value="20"
+               value="16"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -6495,7 +6485,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-deal-create"
-               value="quidem"
+               value="asperiores"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>
@@ -7060,11 +7050,11 @@ print_r(json_decode((string) $body));</code></pre></div>
     \"product_id\": null,
     \"product_amount\": null,
     \"is_certificate_purchase\": null,
-    \"flight_date\": \"quas\",
-    \"flight_time\": \"sit\",
-    \"location_id\": 19,
-    \"flight_simulator_id\": 19,
-    \"certificate_whom\": \"excepturi\"
+    \"flight_date\": \"commodi\",
+    \"flight_time\": \"laudantium\",
+    \"location_id\": 17,
+    \"flight_simulator_id\": 14,
+    \"certificate_whom\": \"dignissimos\"
 }"
 </code></pre></div>
 
@@ -7093,11 +7083,11 @@ let body = {
     "product_id": null,
     "product_amount": null,
     "is_certificate_purchase": null,
-    "flight_date": "quas",
-    "flight_time": "sit",
-    "location_id": 19,
-    "flight_simulator_id": 19,
-    "certificate_whom": "excepturi"
+    "flight_date": "commodi",
+    "flight_time": "laudantium",
+    "location_id": 17,
+    "flight_simulator_id": 14,
+    "certificate_whom": "dignissimos"
 };
 
 fetch(url, {
@@ -7127,11 +7117,11 @@ $response = $client-&gt;post(
             'product_id' =&gt; null,
             'product_amount' =&gt; null,
             'is_certificate_purchase' =&gt; null,
-            'flight_date' =&gt; 'quas',
-            'flight_time' =&gt; 'sit',
-            'location_id' =&gt; 19,
-            'flight_simulator_id' =&gt; 19,
-            'certificate_whom' =&gt; 'excepturi',
+            'flight_date' =&gt; 'commodi',
+            'flight_time' =&gt; 'laudantium',
+            'location_id' =&gt; 17,
+            'flight_simulator_id' =&gt; 14,
+            'certificate_whom' =&gt; 'dignissimos',
         ],
     ]
 );
@@ -7364,7 +7354,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_date"
                data-endpoint="POSTapi-v2-deal-create"
-               value="quas"
+               value="commodi"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7374,7 +7364,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="flight_time"
                data-endpoint="POSTapi-v2-deal-create"
-               value="sit"
+               value="laudantium"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7405,7 +7395,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="location_id"
                data-endpoint="POSTapi-v2-deal-create"
-               value="19"
+               value="17"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7415,7 +7405,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="number"
                name="flight_simulator_id"
                data-endpoint="POSTapi-v2-deal-create"
-               value="19"
+               value="14"
                data-component="body" hidden>
     <br>
 <p>Required for booking</p>
@@ -7445,7 +7435,7 @@ print_r(json_decode((string) $body));</code></pre></div>
                 <input type="text"
                name="certificate_whom"
                data-endpoint="POSTapi-v2-deal-create"
-               value="excepturi"
+               value="dignissimos"
                data-component="body" hidden>
     <br>
 <p>For whom certificate. Required for certificate purchase</p>

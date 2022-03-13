@@ -270,7 +270,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -369,7 +368,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 		"token": {
 	 * 			"token": "6136d60c36e6925bf98dea7e05d5f5c8",
@@ -507,7 +505,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -594,7 +591,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -670,7 +666,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -836,7 +831,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -919,7 +913,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }
@@ -1058,7 +1051,6 @@ class ApiController extends Controller
 	 * 			"flight_time": 100,
 	 * 			"score": 10000,
 	 * 			"status": "Золотой",
-	 * 			"is_new": false
 	 * 		}
 	 * 	}
 	 * }

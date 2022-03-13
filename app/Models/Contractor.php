@@ -253,7 +253,7 @@ class Contractor extends Authenticatable
 			'status' => $status->name ?? null,
 			'flight_time' => (int)$contractorFlightTime,
 			'discount' => $status->discount ? $status->discount->valueFormatted() : '0%',
-			'is_new' => $this->password ? true : false,
+			/*'is_new' => $this->password ? true : false,*/
 		];
 	}
 	

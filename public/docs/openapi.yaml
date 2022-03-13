@@ -228,61 +228,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: 'Профиль успешно сохранен'
-                  data:
-                    contractor:
-                      id: 1
-                      uuid: 23560720-8865-11ec-9359-c58c92371be4
-                      name: John
-                      lastname: Smith
-                      email: john.smith@gmail.com
-                      phone: null
-                      city:
-                        id: 1
-                        name: Москва
-                      discount:
-                        value: 5
-                        is_fixed: false
-                      birthdate: '1990-01-01'
-                      avatar_file_base64: null
-                      flight_time: 100
-                      score: 10000
-                      status: Золотой
-                      is_new: false
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Профиль успешно сохранен'
-                  data:
-                    type: object
-                    example:
-                      contractor:
-                        id: 1
-                        uuid: 23560720-8865-11ec-9359-c58c92371be4
-                        name: John
-                        lastname: Smith
-                        email: john.smith@gmail.com
-                        phone: null
-                        city:
-                          id: 1
-                          name: Москва
-                        discount:
-                          value: 5
-                          is_fixed: false
-                        birthdate: '1990-01-01'
-                        avatar_file_base64: null
-                        flight_time: 100
-                        score: 10000
-                        status: Золотой
-                        is_new: false
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Профиль успешно сохранен\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -769,7 +718,7 @@ paths:
           name: contractor_uuid
           description: ''
           example: null
-          required: true
+          required: false
           schema:
             type: string
             description: ''
@@ -795,7 +744,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t\t\"is_new\": false\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}"
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t\t\"token\": {\n\t\t\t\"token\": \"6136d60c36e6925bf98dea7e05d5f5c8\",\n\t\t\t\"expire_at\": null\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -1137,61 +1086,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: 'Пароль успешно изменен'
-                  data:
-                    contractor:
-                      id: 1
-                      uuid: 23560720-8865-11ec-9359-c58c92371be4
-                      name: John
-                      lastname: Smith
-                      email: john.smith@gmail.com
-                      phone: null
-                      city:
-                        id: 1
-                        name: Москва
-                      discount:
-                        value: 5
-                        is_fixed: false
-                      birthdate: '1990-01-01'
-                      avatar_file_base64: null
-                      flight_time: 100
-                      score: 10000
-                      status: Золотой
-                      is_new: false
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Пароль успешно изменен'
-                  data:
-                    type: object
-                    example:
-                      contractor:
-                        id: 1
-                        uuid: 23560720-8865-11ec-9359-c58c92371be4
-                        name: John
-                        lastname: Smith
-                        email: john.smith@gmail.com
-                        phone: null
-                        city:
-                          id: 1
-                          name: Москва
-                        discount:
-                          value: 5
-                          is_fixed: false
-                        birthdate: '1990-01-01'
-                        avatar_file_base64: null
-                        flight_time: 100
-                        score: 10000
-                        status: Золотой
-                        is_new: false
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Пароль успешно изменен\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -1355,61 +1253,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: null
-                  data:
-                    contractor:
-                      id: 1
-                      uuid: 23560720-8865-11ec-9359-c58c92371be4
-                      name: John
-                      lastname: Smith
-                      email: john.smith@gmail.com
-                      phone: null
-                      city:
-                        id: 1
-                        name: Москва
-                      discount:
-                        value: 5
-                        is_fixed: false
-                      birthdate: '1990-01-01'
-                      avatar_file_base64: null
-                      flight_time: 100
-                      score: 10000
-                      status: Золотой
-                      is_new: false
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: null
-                  data:
-                    type: object
-                    example:
-                      contractor:
-                        id: 1
-                        uuid: 23560720-8865-11ec-9359-c58c92371be4
-                        name: John
-                        lastname: Smith
-                        email: john.smith@gmail.com
-                        phone: null
-                        city:
-                          id: 1
-                          name: Москва
-                        discount:
-                          value: 5
-                          is_fixed: false
-                        birthdate: '1990-01-01'
-                        avatar_file_base64: null
-                        flight_time: 100
-                        score: 10000
-                        status: Золотой
-                        is_new: false
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": null,\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -3008,61 +2855,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: 'Аккаунт контрагента успешно очищен'
-                  data:
-                    contractor:
-                      id: 1
-                      uuid: 23560720-8865-11ec-9359-c58c92371be4
-                      name: John
-                      lastname: Smith
-                      email: john.smith@gmail.com
-                      phone: null
-                      city:
-                        id: 1
-                        name: Москва
-                      discount:
-                        value: 5
-                        is_fixed: false
-                      birthdate: '1990-01-01'
-                      avatar_file_base64: null
-                      flight_time: 100
-                      score: 10000
-                      status: Золотой
-                      is_new: false
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Аккаунт контрагента успешно очищен'
-                  data:
-                    type: object
-                    example:
-                      contractor:
-                        id: 1
-                        uuid: 23560720-8865-11ec-9359-c58c92371be4
-                        name: John
-                        lastname: Smith
-                        email: john.smith@gmail.com
-                        phone: null
-                        city:
-                          id: 1
-                          name: Москва
-                        discount:
-                          value: 5
-                          is_fixed: false
-                        birthdate: '1990-01-01'
-                        avatar_file_base64: null
-                        flight_time: 100
-                        score: 10000
-                        status: Золотой
-                        is_new: false
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Аккаунт контрагента успешно очищен\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -3208,61 +3004,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: 'Файл успешно сохранен'
-                  data:
-                    contractor:
-                      id: 1
-                      uuid: 23560720-8865-11ec-9359-c58c92371be4
-                      name: John
-                      lastname: Smith
-                      email: john.smith@gmail.com
-                      phone: null
-                      city:
-                        id: 1
-                        name: Москва
-                      discount:
-                        value: 5
-                        is_fixed: false
-                      birthdate: '1990-01-01'
-                      avatar_file_base64: null
-                      flight_time: 100
-                      score: 10000
-                      status: Золотой
-                      is_new: false
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Файл успешно сохранен'
-                  data:
-                    type: object
-                    example:
-                      contractor:
-                        id: 1
-                        uuid: 23560720-8865-11ec-9359-c58c92371be4
-                        name: John
-                        lastname: Smith
-                        email: john.smith@gmail.com
-                        phone: null
-                        city:
-                          id: 1
-                          name: Москва
-                        discount:
-                          value: 5
-                          is_fixed: false
-                        birthdate: '1990-01-01'
-                        avatar_file_base64: null
-                        flight_time: 100
-                        score: 10000
-                        status: Золотой
-                        is_new: false
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Файл успешно сохранен\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -3375,7 +3120,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: molestiae
+                  example: iure
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -3421,61 +3166,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: 'Файл успешно удален'
-                  data:
-                    contractor:
-                      id: 1
-                      uuid: 23560720-8865-11ec-9359-c58c92371be4
-                      name: John
-                      lastname: Smith
-                      email: john.smith@gmail.com
-                      phone: null
-                      city:
-                        id: 1
-                        name: Москва
-                      discount:
-                        value: 5
-                        is_fixed: false
-                      birthdate: '1990-01-01'
-                      avatar_file_base64: null
-                      flight_time: 100
-                      score: 10000
-                      status: Золотой
-                      is_new: false
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Файл успешно удален'
-                  data:
-                    type: object
-                    example:
-                      contractor:
-                        id: 1
-                        uuid: 23560720-8865-11ec-9359-c58c92371be4
-                        name: John
-                        lastname: Smith
-                        email: john.smith@gmail.com
-                        phone: null
-                        city:
-                          id: 1
-                          name: Москва
-                        discount:
-                          value: 5
-                          is_fixed: false
-                        birthdate: '1990-01-01'
-                        avatar_file_base64: null
-                        flight_time: 100
-                        score: 10000
-                        status: Золотой
-                        is_new: false
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Файл успешно удален\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -4148,61 +3842,10 @@ paths:
         200:
           description: success
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  success: true
-                  message: 'Код подтвержден'
-                  data:
-                    contractor:
-                      id: 1
-                      uuid: 23560720-8865-11ec-9359-c58c92371be4
-                      name: John
-                      lastname: Smith
-                      email: john.smith@gmail.com
-                      phone: null
-                      city:
-                        id: 1
-                        name: Москва
-                      discount:
-                        value: 5
-                        is_fixed: false
-                      birthdate: '1990-01-01'
-                      avatar_file_base64: null
-                      flight_time: 100
-                      score: 10000
-                      status: Золотой
-                      is_new: false
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: 'Код подтвержден'
-                  data:
-                    type: object
-                    example:
-                      contractor:
-                        id: 1
-                        uuid: 23560720-8865-11ec-9359-c58c92371be4
-                        name: John
-                        lastname: Smith
-                        email: john.smith@gmail.com
-                        phone: null
-                        city:
-                          id: 1
-                          name: Москва
-                        discount:
-                          value: 5
-                          is_fixed: false
-                        birthdate: '1990-01-01'
-                        avatar_file_base64: null
-                        flight_time: 100
-                        score: 10000
-                        status: Золотой
-                        is_new: false
+                type: string
+                example: "{\n\t\"success\": true,\n\t\"message\": \"Код подтвержден\",\n\t\"data\": {\n\t\t\"contractor\": {\n\t\t\t\"id\": 1,\n\t\t\t\"uuid\": \"23560720-8865-11ec-9359-c58c92371be4\",\n\t\t\t\"name\": \"John\",\n\t\t\t\"lastname\": \"Smith\",\n\t\t\t\"email\": \"john.smith@gmail.com\",\n\t\t\t\"phone\": null,\n\t\t\t\"city\": {\n\t\t\t\"id\": 1,\n\t\t\t\"name\": \"Москва\"\n\t\t},\n\t\t\"discount\": {\n\t\t\t\"value\": 5,\n\t\t\t\t\"is_fixed\": false\n\t\t},\n\t\t\"birthdate\": \"1990-01-01\",\n\t\t\t\"avatar_file_base64\": null,\n\t\t\t\"flight_time\": 100,\n\t\t\t\"score\": 10000,\n\t\t\t\"status\": \"Золотой\",\n\t\t}\n\t}\n}"
         400:
           description: 'Bad Request'
           content:
@@ -5023,11 +4666,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: facilis
+                  example: nam
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: autem
+                  example: architecto
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -5035,7 +4678,7 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 20
+                  example: 16
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
@@ -5051,7 +4694,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: quidem
+                  example: asperiores
                 comment:
                   type: string
                   description: ''
@@ -5607,11 +5250,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: quas
+                  example: commodi
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: sit
+                  example: laudantium
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -5619,11 +5262,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 19
+                  example: 17
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 19
+                  example: 14
                 promocode_id:
                   type: integer
                   description: ''
@@ -5635,7 +5278,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: excepturi
+                  example: dignissimos
                 comment:
                   type: string
                   description: ''
