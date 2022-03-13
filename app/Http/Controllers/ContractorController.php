@@ -147,7 +147,7 @@ class ContractorController extends Controller
 		$rules = [
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
-			'phone' => 'required|valid_phone',
+			'phone' => 'sometimes|required|valid_phone',
 			'city_id' => 'required|numeric|min:0|not_in:0|valid_city',
 		];
 		
@@ -170,7 +170,7 @@ class ContractorController extends Controller
 		$contractor->name = $this->request->name;
 		$contractor->lastname = $this->request->lastname;
 		$contractor->email = $this->request->email;
-		$contractor->phone = $this->request->phone;
+		$contractor->phone = $this->request->phone ?? '';
 		$contractor->city_id = $this->request->city_id;
 		$contractor->birthdate = $birthdate ? Carbon::parse($birthdate)->format('Y-m-d') : null;
 		$contractor->source = Contractor::ADMIN_SOURCE;
@@ -201,7 +201,7 @@ class ContractorController extends Controller
 		$rules = [
 			'name' => 'required|min:3|max:50',
 			'email' => 'required|email|unique_email',
-			'phone' => 'required|valid_phone',
+			'phone' => 'sometimes|required|valid_phone',
 			'city_id' => 'required|numeric|min:0|not_in:0|valid_city',
 		];
 		
@@ -223,7 +223,7 @@ class ContractorController extends Controller
 		$contractor->name = $this->request->name;
 		$contractor->lastname = $this->request->lastname;
 		$contractor->email = $this->request->email;
-		$contractor->phone = $this->request->phone;
+		$contractor->phone = $this->request->phone ?? '';
 		$contractor->city_id = $this->request->city_id;
 		$contractor->birthdate = $birthdate ? Carbon::parse($birthdate)->format('Y-m-d') : null;
 		$contractor->is_active = (bool)$this->request->is_active;
