@@ -215,7 +215,7 @@ class Contractor extends Authenticatable
 	{
 		$data = $this->data_json ? (is_array($this->data_json) ? $this->data_json : json_decode($this->data_json, true)) : [];
 
-		/*$avatar = isset($data['avatar']) ? $data['avatar'] : null;
+		$avatar = isset($data['avatar']) ? $data['avatar'] : null;
 		$avatarFileName = ($avatar && isset($avatar['name'])) ? $avatar['name'] : null;
 		$avatarFileExt = ($avatar && isset($avatar['ext'])) ? $avatar['ext'] : null;
 
@@ -225,7 +225,7 @@ class Contractor extends Authenticatable
 			$type = pathinfo($file, PATHINFO_EXTENSION);
 			$fileData = file_get_contents($file);
 			$base64 = 'data:image/' . $type . ';base64,' . base64_encode($fileData);
-		}*/
+		}
 
 		// все статусы контрагента
 		$statuses = Status::where('is_active', true)
@@ -248,7 +248,7 @@ class Contractor extends Authenticatable
 			'phone' => $this->phone,
 			'city' => $this->city ? $this->city->format() : null,
 			'birthdate' => $this->birthdate ? $this->birthdate->format('Y-m-d') : null,
-			'avatar_file_base64' => /*$base64 ?: */null,
+			'avatar_file_base64' => $base64 ?: null,
 			'score' => $score ?? 0,
 			'status' => $status->name ?? null,
 			'flight_time' => (int)$contractorFlightTime,

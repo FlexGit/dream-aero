@@ -2542,7 +2542,7 @@ class ApiController extends Controller
 			'location_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
 			'flight_simulator_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
 			'promocode_id' => ['sometimes', 'required', 'numeric'],
-			'certificate_whom' => ['required_if:is_certificate_purchase,true', 'min:3', 'max:50'],
+			/*'certificate_whom' => ['required_if:is_certificate_purchase,true', 'min:3', 'max:50'],*/
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
@@ -2558,7 +2558,7 @@ class ApiController extends Controller
 				'location_id' => 'Локация',
 				'flight_simulator_id' => 'Авиатренажер',
 				'promocode_id' => 'Промокод',
-				'certificate_whom' => 'Для кого сертификат',
+				/*'certificate_whom' => 'Для кого сертификат',*/
 			]);
 		if (!$validator->passes()) {
 			$errors = [];
