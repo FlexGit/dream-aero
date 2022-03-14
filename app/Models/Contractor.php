@@ -276,7 +276,9 @@ class Contractor extends Authenticatable
 		$result = array_filter($flightTimes, function($item) use ($contractorFlightTime) {
 			return $item <= $contractorFlightTime;
 		});
-		if (!$result) return null;
+		if (!$result) {
+			$result[] = $flightTimes[count($flightTimes) - 1];
+		};
 
 		$flightTime = array_shift($result);
 
@@ -289,7 +291,6 @@ class Contractor extends Authenticatable
 				break;
 			}
 		}
-
 		foreach ($statuses ?? [] as $status) {
 			if ($status->id == $statusId) {
 				return $status;

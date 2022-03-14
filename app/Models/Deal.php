@@ -172,10 +172,10 @@ class Deal extends Model
 	public static function boot() {
 		parent::boot();
 		
-		Deal::created(function (Deal $deal) {
+		/*Deal::created(function (Deal $deal) {
 			$deal->number = $deal->generateNumber();
 			$deal->save();
-		});
+		});*/
 
 		Deal::saved(function (Deal $deal) {
 			if (!$deal->user_id && $deal->source == Deal::ADMIN_SOURCE) {
