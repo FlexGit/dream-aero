@@ -40,7 +40,7 @@ class ImportFlight extends Command
 	public function handle()
 	{
 		$this->output->title('Starting import');
-		(new FlightImport)->withOutput($this->output)->import(storage_path('app/public/modx_flights1.xlsx'));
+		(new FlightImport)->withOutput($this->output)->import(storage_path('app/public/modx_flights3.xlsx'));
 		$this->output->success('Import successful');
 	}
 }
