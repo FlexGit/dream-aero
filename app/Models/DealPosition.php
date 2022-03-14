@@ -168,10 +168,10 @@ class DealPosition extends Model
 	public static function boot() {
 		parent::boot();
 
-		/*DealPosition::created(function (DealPosition $dealPosition) {
+		DealPosition::created(function (DealPosition $dealPosition) {
 			$dealPosition->number = $dealPosition->generateNumber();
 			$dealPosition->save();
-		});*/
+		});
 
 		DealPosition::saved(function (DealPosition $dealPosition) {
 			if (!$dealPosition->user_id && $dealPosition->source == Deal::ADMIN_SOURCE) {
