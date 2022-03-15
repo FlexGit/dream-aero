@@ -81,7 +81,7 @@
 						<td class="text-center">{{ $score->score ?? 0 }}</td>
 						<td class="text-center">{{ app('\App\Models\Score')::TYPES[$score->type] }}</td>
 						<td class="text-center">{{ $score->deal ? $score->deal->number : '' }}</td>
-						<td class="text-center">{{ $score->user->fio() }}</td>
+						<td class="text-center">{{ $score->user ? $score->user->fio() : '' }}</td>
 					</tr>
 				@endforeach
 				</tbody>
