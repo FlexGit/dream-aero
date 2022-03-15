@@ -76,7 +76,7 @@
 			@endif
 			<div class="d-flex justify-content-between mt-2">
 				<div>
-					{{ \App\Models\Deal::SOURCES[$deal->source] }}
+					{{ isset(\App\Models\Deal::SOURCES[$deal->source]) ? \App\Models\Deal::SOURCES[$deal->source] : '' }}
 				</div>
 				<div>
 					@if($deal->user)
