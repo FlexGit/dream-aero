@@ -1673,7 +1673,8 @@ class ApiController extends Controller
 				$query->where('active_to_at', '>=', $date)
 					->orWhereNull('active_to_at');
 			})
-			->latest()
+			->orderByDesc('active_from_at')
+			->orderByDesc('created_at')
 			->get();
 		
 		/*if ($promos->isEmpty()) {
@@ -1818,6 +1819,7 @@ class ApiController extends Controller
 
 		$date = date('Y-m-d');
 		
+		\DB::connection()->enableQueryLog();
 		$promocode = Promocode::where('number', $number)
 			/*->whereIn('city_id', [$city->id, 0])*/
 			->whereRelation('cities', 'cities.id', '=', $cityId)
@@ -1831,6 +1833,7 @@ class ApiController extends Controller
 					->orWhereNull('active_to_at');
 			})
 			->first();
+		\Log::debug(\DB::getQueryLog());
 		if (!$promocode) {
 			return $this->responseError('Промокод не найден', 400);
 		}
