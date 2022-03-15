@@ -55,13 +55,14 @@ class FlightImport implements OnEachRow, WithProgressBar
 	
 		if (!$cityProduct->pivot->score) {
 			\Log::info('CityProduct score does not exist for city: ' . $cityId . ' and product:' . $product->id);
+			return null;
 		}
 	
 		try {
 			\DB::beginTransaction();
 			
 			$contractor = Contractor::where('email', trim(mb_strtolower($row[2])))->first();
-			if (!$contractor) {
+			/*if (!$contractor) {
 				$contractor = new Contractor();
 				$contractor->name = trim(mb_strtolower($row[3]));
 				$contractor->phone = preg_replace('/[^0-9,]/', '', trim($row[4]));
@@ -84,10 +85,10 @@ class FlightImport implements OnEachRow, WithProgressBar
 					$certificate->updated_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
 					$certificate->save();
 				}
-			}
+			}*/
 			
 			$deal = Deal::where('number', trim($row[0]))->first();
-			if ($deal) \DB::rollback();
+			/*if ($deal) \DB::rollback();
 			
 			$deal = new Deal();
 			$deal->number = trim($row[0]);
@@ -98,9 +99,10 @@ class FlightImport implements OnEachRow, WithProgressBar
 			$deal->email = trim(mb_strtolower($row[2]));
 			$deal->created_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
 			$deal->updated_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
-			$deal->save();
+			$deal->save();*/
 			
-			$dealPosition = new DealPosition();
+			$dealPosition = DealPosition::where('number', trim($row[0]))->first();
+			/*$dealPosition = new DealPosition();
 			$dealPosition->number = trim($row[0]);
 			$dealPosition->deal_id = $deal->id;
 			$dealPosition->product_id = $product->id;
@@ -114,9 +116,16 @@ class FlightImport implements OnEachRow, WithProgressBar
 			$dealPosition->flight_at = Carbon::parse(trim($row[10]))->format('Y-m-d H:i:s');
 			$dealPosition->created_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
 			$dealPosition->updated_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
-			$dealPosition->save();
+			$dealPosition->save();*/
 			
-			$event = new Event();
+			$event = Event::where('deal_id', $deal->id)
+				->where('deal_position_id', $dealPosition->id)
+				->where('contractor_id', $contractor->id)
+				->where('city_id', $cityId)
+				->where('location_id', $locationId)
+				->where('start_at', Carbon::parse(trim($row[10]))->format('Y-m-d H:i:s'))
+				->first();
+			/*$event = new Event();
 			$event->event_type = Event::EVENT_TYPE_DEAL;
 			$event->contractor_id = $contractor->id;
 			$event->deal_id = $deal->id;
@@ -130,19 +139,44 @@ class FlightImport implements OnEachRow, WithProgressBar
 			$event->is_repeated_flight = (trim($row[12]) == 'Есть') ? true : false;
 			$event->created_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
 			$event->updated_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
-			$event->save();
+			$event->save();*/
 
-			if (Carbon::parse(trim($row[1]))->gt(Carbon::parse('2021-03-09 00:00:00')) && Carbon::parse(trim($row[1]))->lt(Carbon::parse('2022-03-09 23:59:59'))) {
-				$score = new Score();
-				$score->score = $cityProduct->pivot->score;
-				$score->type = Score::SCORING_TYPE;
-				$score->contractor_id = $contractor->id;
-				$score->deal_id = $deal->id;
-				$score->deal_position_id = $dealPosition->id;
-				$score->event_id = $event->id;
-				$score->created_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
-				$score->updated_at = Carbon::parse(trim($row[1]))->format('Y-m-d H:i:s');
-				$score->save();
+			if (!$contractor) {
+				\Log::info('No valid contractor ' . trim($row[0]));
+				\DB::rollback();
+			}
+			if (!$deal) {
+				\Log::info('No valid deal ' . trim($row[0]));
+				\DB::rollback();
+			}
+			if (!$dealPosition) {
+				\Log::info('No valid dealPosition ' . trim($row[0]));
+				\DB::rollback();
+			}
+			if (!$event) {
+				\Log::info('No valid event ' . trim($row[0]));
+				\DB::rollback();
+			}
+			
+			if (Carbon::parse(trim($row[10]))->gt(Carbon::parse('2021-03-09 00:00:00')) && Carbon::parse(trim($row[10]))->lt(Carbon::parse('2022-03-09 23:59:59'))) {
+				$score = Score::where('score', $cityProduct->pivot->score)
+					->where('contractor_id', $contractor->id)
+					->where('deal_id', $deal->id)
+					->where('deal_position_id', $dealPosition->id)
+					->where('event_id', $event->id)
+					->first();
+				if (!$score) {
+					$score = new Score();
+					$score->score = $cityProduct->pivot->score;
+					$score->type = Score::SCORING_TYPE;
+					$score->contractor_id = $contractor->id;
+					$score->deal_id = $deal->id;
+					$score->deal_position_id = $dealPosition->id;
+					$score->event_id = $event->id;
+					$score->created_at = Carbon::parse(trim($row[10]))->format('Y-m-d H:i:s');
+					$score->updated_at = Carbon::parse(trim($row[10]))->format('Y-m-d H:i:s');
+					$score->save();
+				}
 			}
 
 			\DB::commit();
