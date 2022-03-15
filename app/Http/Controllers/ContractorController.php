@@ -288,9 +288,14 @@ class ContractorController extends Controller
 			->whereIn('alias', [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS, ProductType::COURSES_ALIAS])
 			->orderBy('name')
 			->get();
+		
+		$scores = Score::where('contractor_id', $contractorId)
+			->latest()
+			->get();
 
 		$VIEW = view('admin.contractor.modal.add_score', [
 			'productTypes' => $productTypes,
+			'scores' => $scores,
 			'contractorId' => $contractorId,
 		]);
 

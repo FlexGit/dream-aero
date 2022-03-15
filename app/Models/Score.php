@@ -64,7 +64,11 @@ class Score extends Model
 
 	const USED_TYPE = 'used';
 	const SCORING_TYPE = 'scoring';
-
+	const TYPES = [
+		self::USED_TYPE => 'списание',
+		self::SCORING_TYPE => 'начисление',
+	];
+	
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
 	
@@ -103,6 +107,11 @@ class Score extends Model
 	public function user()
 	{
 		return $this->hasOne(User::class, 'id', 'user_id');
+	}
+	
+	public function deal()
+	{
+		return $this->hasOne(Deal::class, 'id', 'deal_id');
 	}
 
 	public function position()

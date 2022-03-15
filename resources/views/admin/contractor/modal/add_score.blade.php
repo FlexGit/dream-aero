@@ -58,3 +58,34 @@
 		</div>
 	</div>
 </div>
+
+@if(!$scores->isEmpty())
+	<hr>
+	<div class="row">
+		<div class="col">
+			<label>История</label>
+			<table class="table table-hover table-sm table-bordered table-striped">
+				<thead>
+				<tr>
+					<th>Дата</th>
+					<th>Баллы</th>
+					<th>Операция</th>
+					<th>Сделка</th>
+					<th>Пользователь</th>
+				</tr>
+				</thead>
+				<tbody>
+				@foreach($scores as $score)
+					<tr>
+						<td class="text-center">{{ $score->created_at }}</td>
+						<td class="text-center">{{ $score->score ?? 0 }}</td>
+						<td class="text-center">{{ app('\App\Models\Score')::TYPES[$score->type] }}</td>
+						<td class="text-center">{{ $score->deal ? $score->deal->number : '' }}</td>
+						<td class="text-center">{{ $score->user->fio() }}</td>
+					</tr>
+				@endforeach
+				</tbody>
+			</table>
+		</div>
+	</div>
+@endif
