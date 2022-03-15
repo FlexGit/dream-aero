@@ -21,17 +21,40 @@
 	</div>
 </div>
 
-{{--@if(request()->user()->isSuperAdmin())--}}
-	<div class="row">
-		<div class="col">
-			<div class="form-group">
-				<label for="is_minus_score">Отнять баллы и время налета</label>
-				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="is_minus_score" name="is_minus_score" value="1">
-					<label class="custom-control-label" for="is_minus_score">Да</label>
-				</div>
+<div class="row">
+	<div class="col-4">
+		<div class="form-group">
+			<div class="custom-control">
+				<input type="radio" class="custom-control-input" id="operation_plus" name="operation_type" value="plus" checked>
+				<label class="custom-control-label" for="operation_plus">Прибавить</label>
 			</div>
 		</div>
 	</div>
-{{--
-@endif--}}
+	<div class="col-4">
+		<div class="form-group">
+			<div class="custom-control">
+				<input type="radio" class="custom-control-input" id="operation_minus" name="operation_type" value="minus">
+				<label class="custom-control-label" for="operation_minus">Отнять</label>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-4">
+		<div class="form-group">
+			<div class="custom-control custom-switch">
+				<input type="checkbox" class="custom-control-input" id="is_minus_score" name="is_minus_score" value="1" checked>
+				<label class="custom-control-label" for="is_minus_score">Баллы</label>
+			</div>
+		</div>
+	</div>
+	<div class="col-8">
+		<div class="form-group">
+			<div class="custom-control custom-switch">
+				<input type="checkbox" class="custom-control-input" id="is_minus_flight_time" name="is_minus_flight_time" value="1" checked>
+				<label class="custom-control-label" for="is_minus_flight_time">Время налета</label>
+			</div>
+		</div>
+	</div>
+</div>

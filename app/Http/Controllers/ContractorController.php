@@ -346,11 +346,32 @@ class ContractorController extends Controller
 		if (!$cityProduct->pivot->score) {
 			return response()->json(['status' => 'error', 'reason' => 'Баллы для продукта ' . $product->name . ' и города ' . $contractor->city->name . ' не указаны']);
 		}
+		
+		$scoreValue = $flightTime = 0;
+		if ($this->request->operation_type == 'minus') {
+			if ($this->request->is_minus_score) {
+				$scoreValue = -1 * $cityProduct->pivot->score;
+			}
+			if ($this->request->is_minus_flight_time) {
+				$flightTime = -1 * $product->duration;
+			}
+		} else {
+			if ($this->request->is_minus_score) {
+				$scoreValue = $cityProduct->pivot->score;
+			}
+			if ($this->request->is_minus_flight_time) {
+				$flightTime = $product->duration;
+			}
+		}
+		
+		if (!$scoreValue && !$flightTime) {
+			return response()->json(['status' => 'error', 'reason' => 'Необходимо выбрать баллы или время налета']);
+		}
 
 		$score = new Score();
-		$score->score = $this->request->is_minus_score ? (-1 * $cityProduct->pivot->score) : $cityProduct->pivot->score;
 		$score->contractor_id = $contractor->id;
-		$score->duration = $this->request->is_minus_score ? (-1 * $product->duration) : $product->duration;
+		$score->score = $scoreValue ?? 0;
+		$score->duration = $flightTime ?? 0;
 		$score->user_id = $this->request->user()->id;
 		$score->type = Score::SCORING_TYPE;
 		if (!$score->save()) {
