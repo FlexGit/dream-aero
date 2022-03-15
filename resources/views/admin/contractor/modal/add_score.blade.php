@@ -67,12 +67,12 @@
 			<table class="table table-hover table-sm table-bordered table-striped">
 				<thead>
 				<tr>
-					<th>Дата</th>
-					<th>Операция</th>
-					<th>Баллы</th>
-					<th class="nowrap">Время налета, мин</th>
-					<th>Сделка</th>
-					<th>Пользователь</th>
+					<th class="align-middle">Дата</th>
+					<th class="align-middle">Операция</th>
+					<th class="align-middle">Баллы</th>
+					<th class="align-middle">Время<br>налета,<br>мин</th>
+					<th class="align-middle">Сделка</th>
+					<th class="align-middle">Пользователь</th>
 				</tr>
 				</thead>
 				<tbody>
