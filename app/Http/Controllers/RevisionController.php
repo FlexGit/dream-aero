@@ -13,7 +13,7 @@ class RevisionController extends Controller
 	const ENTITIES = [
 		'Contractor' => 'Контрагент',
 		'Deal' => 'Сделка',
-		'Score' => 'Баллы',
+		/*'Score' => 'Баллы',*/
 		'Bill' => 'Счет',
 		'Certificate' => 'Сертификат',
 		'Event' => 'Событие',
@@ -81,9 +81,9 @@ class RevisionController extends Controller
 			/*case 'discounts':
 				$field = 'value';
 			break;*/
-			case 'scores':
+			/*case 'scores':
 				$field = 'score';
-			break;
+			break;*/
 			case 'events':
 				$field = 'start_at';
 			break;
@@ -123,9 +123,9 @@ class RevisionController extends Controller
 					$object = $model->number;
 				} else if ($model->value) {
 					$object = $model->value;
-				} else if ($model->score) {
+				/*} else if ($model->score) {
 					$object = $model->score;
-					$linkedObject = $model->contractor ? ($model->contractor->fio() . ' <small>[' . $model->contractor->id . ']</small>') : '';
+					$linkedObject = $model->contractor ? ($model->contractor->fio() . ' <small>[' . $model->contractor->id . ']</small>') : '';*/
 				} else if ($model->title) {
 					$object = $model->title;
 				} else if ($model->name) {
@@ -149,8 +149,8 @@ class RevisionController extends Controller
 						$newValue = $model->number;
 					} elseif ($model->value) {
 						$newValue = $model->value;
-					} elseif ($model->score) {
-						$newValue = $model->score;
+					/*} elseif ($model->score) {
+						$newValue = $model->score;*/
 					} elseif ($model->title) {
 						$newValue = $model->title;
 					} else {

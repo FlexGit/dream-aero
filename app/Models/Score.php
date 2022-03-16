@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use \Venturecraft\Revisionable\RevisionableTrait;
+/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Score
@@ -48,9 +48,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Score extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
-	const ATTRIBUTES = [
+	/*const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'contractor_id' => 'Контрагент',
 		'deal_position_id' => 'Позиция сделки',
@@ -60,7 +60,7 @@ class Score extends Model
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
-	];
+	];*/
 
 	const USED_TYPE = 'used';
 	const SCORING_TYPE = 'scoring';
@@ -69,8 +69,8 @@ class Score extends Model
 		self::SCORING_TYPE => 'начисление',
 	];
 	
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
+	/*protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.
