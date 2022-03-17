@@ -181,7 +181,8 @@ class NotificationController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
-		$notification = Notification::find($id);
+		$notification = Notification::where('is_active', true)
+			->find($id);
 		if (!$notification) return response()->json(['status' => 'error', 'reason' => 'Уведомление не найдено']);
 		
 		$contractorCount = 0;
