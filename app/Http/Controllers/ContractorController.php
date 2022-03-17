@@ -28,7 +28,7 @@ class ContractorController extends Controller
 	 */
 	public function index()
 	{
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -50,7 +50,8 @@ class ContractorController extends Controller
 		
 		$id = $this->request->id ?? 0;
 		
-		$contractors = Contractor::orderBy('created_at', 'desc');
+		$contractors = Contractor::whereRelation('city', 'version', '=', env('VERSION'))
+			->orderBy('created_at', 'desc');
 		if ($this->request->filter_city_id) {
 			$contractors = $contractors->where('city_id', $this->request->filter_city_id);
 		/*} elseif ($this->request->user()->city) {
@@ -93,7 +94,7 @@ class ContractorController extends Controller
 		$contractor = Contractor::find($id);
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрганет не найден']);
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name');
@@ -119,7 +120,7 @@ class ContractorController extends Controller
 			abort(404);
 		}
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name');
@@ -240,7 +241,8 @@ class ContractorController extends Controller
 		$q = $this->request->post('query');
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		$contractors = Contractor::where('is_active', true)
+		$contractors = Contractor::where('version', env('VERSION'))
+			->where('is_active', true)
 			->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")
 					->orWhere("lastname", "LIKE", "%{$q}%")

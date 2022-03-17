@@ -2,38 +2,39 @@
 
 @section('content')
 	<div style="height: 92vh;overflow: auto;">
-	<div id="calendars-container" style="display: flex;/*height: 90vh;*/">
-		@foreach($cities ?? [] as $city)
-			@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
-				@continue
-			@endif
-
-			@php
-				$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
-			@endphp
-
-			@foreach($city->locations ?? [] as $location)
-				@if (in_array($location->alias, ['west']))
+		<div id="calendars-container" style="display: flex;">
+			@foreach($cities ?? [] as $city)
+				{{--@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
 					@continue
-				@endif
+				@endif--}}
 
 				@php
-					$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
+					// для Мск и Сбп название города не выводим города
+					$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
 				@endphp
 
-				@foreach($location->simulators ?? [] as $simulator)
+				@foreach($city->locations ?? [] as $location)
 					@php
-						$simulatorName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $simulator->alias : '';
+						if ($user->location && $user->location->id != $location->id) {
+							continue;
+						}
+						// только для Мск и Сбп выводим название локации
+						$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
 					@endphp
 
-					<div class="calendar-container" style="width: 100%;min-width: 500px;">
-						<div style="position: sticky;z-index: 3;">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
-						<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" class="calendar"></div>
-					</div>
+					@foreach($location->simulators ?? [] as $simulator)
+						@php
+							$simulatorName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $simulator->alias : '';
+						@endphp
+
+						<div class="calendar-container" style="width: 100%;min-width: 500px;">
+							<div class="text-center">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
+							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" class="calendar"></div>
+						</div>
+					@endforeach
 				@endforeach
 			@endforeach
-		@endforeach
-	</div>
+		</div>
 	</div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -59,6 +60,15 @@
 @stop
 
 @section('right-sidebar')
+	<div class="m-2">
+		<div class="form-group">
+			<select class="form-control" id="calendar-view-type">
+				<option value="timeGridDay">День</option>
+				<option value="timeGridWeek">Неделя</option>
+			</select>
+		</div>
+	</div>
+
 	<div id="datepicker" data-date="{{ date('d.m.Y') }}"></div>
 
 	<div class="m-2 pl-4 pr-3">
@@ -67,20 +77,19 @@
 		</div>
 		<div>
 			@foreach($cities ?? [] as $city)
-				@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
+				{{--@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
 					@continue
-				@endif
+				@endif--}}
 
 				@php
 					$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
 				@endphp
 
 				@foreach($city->locations ?? [] as $location)
-					@if (in_array($location->alias, ['west']))
-						@continue
-					@endif
-
 					@php
+						if ($user->location && $user->location->id != $location->id) {
+							continue;
+						}
 						$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
 					@endphp
 
@@ -91,7 +100,7 @@
 
 						<div>
 							<div class="form-check form-check-inline" style="line-height: 0.9em;">
-								<input class="form-check-input align-top calendar-checkbox" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" value="1" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">
+								<input class="form-check-input align-top calendar-checkbox" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" value="1" checked data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">
 								<label for="location-{{ $location->id }}-{{ $simulator->id }}" class="form-check-label small font-weight-light">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</label>
 							</div>
 						</div>
@@ -106,7 +115,6 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	{{--<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">--}}
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
@@ -120,17 +128,21 @@
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	{{--<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>--}}
 	<script src="{{ asset('js/admin/moment.min.js') }}"></script>
 	<script src="{{ asset('js/admin/moment-timezone-with-data.min.js') }}"></script>
 	<script src="{{ asset('js/admin/bootstrap-datepicker.min.js') }}"></script>
 	<script src="{{ asset('js/admin/bootstrap-datepicker.ru.min.js') }}"></script>
-	<script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
+	<script src="{{ asset('js/admin/popper.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function(){
 			/*var timeZone = $('#time_zone').val();*/
+
+			var $calendarViewType = $('#calendar-view-type'),
+				calendarViewType = localStorage.getItem($calendarViewType.attr('id'));
+			if (!calendarViewType) calendarViewType = 'timeGridDay';
+			$calendarViewType.val(calendarViewType);
 
 			var date = new Date();
 			var d = date.getDate(),
@@ -140,14 +152,10 @@
 			var calendars = document.getElementsByClassName('calendar');
 			var calendarArr = [];
 			for (let calendarEl of calendars) {
-				//console.log($(calendarEl).attr('id'));
 				var calendar = new FullCalendar.Calendar(calendarEl, {
-					/*height: 900,*/
-					/*contentHeight: '120vh',*/
-					/*expandRows: true,*/
 					aspectRatio: 0.5,
 					stickyHeaderDates: true,
-					initialView: 'timeGridWeek',
+					initialView: calendarViewType,
 					locale: 'ru',
 					editable: true,
 					selectable: true,
@@ -155,11 +163,12 @@
 					headerToolbar: {
 						left: /*'title'*/'',
 						center: '',
-						right: /*'prev,next today timeGridDay,timeGridWeek,dayGridMonth*/'',
+						right: /*'prev,next today *//*'timeGridDay,timeGridWeek'*//*dayGridMonth*/''
 					},
 					dayHeaderFormat: {
 						weekday: 'short',
-						day: 'numeric'
+						day: 'numeric',
+						month: 'numeric'
 					},
 					themeSystem: 'standard',
 					slotMinTime: '09:00:00',
@@ -387,8 +396,9 @@
 					}*/
 				});
 				calendar.render();
-
-				calendarArr[$(calendarEl).data('location_id')] = [];
+				if (typeof calendarArr[$(calendarEl).data('location_id')] === 'undefined') {
+					calendarArr[$(calendarEl).data('location_id')] = [];
+				}
 				calendarArr[$(calendarEl).data('location_id')][$(calendarEl).data('simulator_id')] = calendar;
 			}
 
@@ -564,15 +574,14 @@
 				}
 			});
 
+			// contol sidebar datepicker
 			$('#datepicker').datepicker({
 				language: 'ru'
 			}).on('changeDate', function(e) {
-				var date = new Date(e.date);
-				date.setDate(date.getDate() + 1);
-
 				calendarArr.forEach(function (element) {
 					element.forEach(function (calendar) {
-						calendar.gotoDate(date);
+						calendar.gotoDate(e.date);
+						calendar.refetchEvents();
 					});
 				});
 			});
@@ -606,6 +615,7 @@
 				}
 			});
 
+			// select locations from control sidebar
 			$(document).on('change', '.calendar-checkbox', function(e) {
 				var id = $(this).attr('id'),
 					cityId = $(this).data('city_id'),
@@ -622,6 +632,19 @@
 				} else {
 					$calendarContainer.hide();
 				}
+			});
+
+			// select calendar view type
+			$(document).on('change', '#calendar-view-type', function(e) {
+				var calendarViewType = $(this).val();
+
+				localStorage.setItem($(this).attr('id'), calendarViewType);
+
+				calendarArr.forEach(function (element) {
+					element.forEach(function (calendar) {
+						calendar.changeView(calendarViewType);
+					});
+				});
 			});
 
 			/*$(document).on('shown.lte.pushmenu', function() {

@@ -41,7 +41,7 @@ class DealController extends Controller
 	 */
 	public function index()
 	{
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -81,9 +81,8 @@ class DealController extends Controller
 		
 		$id = $this->request->id ?? 0;
 
-		//\DB::connection()->enableQueryLog();
-
-		$deals = Deal::orderBy('id', 'desc');
+		$deals = Deal::whereRelation('city', 'version', '=', env('VERSION'))
+			->orderBy('id', 'desc');
 		if ($this->request->filter_status_id) {
 			$deals = $deals->where(function ($query) {
 				$query->whereIn('status_id', $this->request->filter_status_id)
@@ -138,9 +137,6 @@ class DealController extends Controller
 		}
 		$deals = $deals->limit(20)->get();
 
-		//$queries = \DB::getQueryLog();
-		//\Log::debug($queries);
-
 		$VIEW = view('admin.deal.list', ['deals' => $deals]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -155,7 +151,7 @@ class DealController extends Controller
 			abort(404);
 		}
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -206,7 +202,7 @@ class DealController extends Controller
 			abort(404);
 		}
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -259,7 +255,7 @@ class DealController extends Controller
 			abort(404);
 		}
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')

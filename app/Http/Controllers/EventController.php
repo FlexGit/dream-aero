@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -41,7 +42,9 @@ class EventController extends Controller
 			return redirect('/contractor');
 		}
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = $user->city
+			? new Collection([$user->city])
+			: City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -58,7 +61,9 @@ class EventController extends Controller
 	 */
 	public function getListAjax()
 	{
-		$locations = Location::with('simulators')
+		$locations = Location::where('is_active', true)
+			->whereRelation('city', 'version', '=', env('VERSION'))
+			->with('simulators')
 			->get();
 		$locationData = [];
 		foreach ($locations as $location) {
@@ -72,8 +77,6 @@ class EventController extends Controller
 		$cityId = $this->request->city_id ?? 0;
 		$locationId = $this->request->location_id ?? 0;
 		$simulatorId = $this->request->simulator_id ?? 0;
-		
-		//\Log::debug($cityId . ' - ' . $locationId . ' - ' . $simulatorId);
 		
 		$events = Event::whereDate('start_at', '>=', $startAt)
 			->where(function ($query) use ($stopAt) {
@@ -89,7 +92,9 @@ class EventController extends Controller
 		if ($simulatorId) {
 			$events = $events->where('flight_simulator_id', $simulatorId);
 		}
-		$events = $events->with(['dealPosition', 'user'])
+		$events = $events
+			->whereRelation('city', 'version', '=', env('VERSION'))
+			->with(['dealPosition', 'user'])
 			->get();
 
 		//\Log::debug($events);
@@ -192,7 +197,7 @@ class EventController extends Controller
 		$position = DealPosition::find($positionId);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -223,11 +228,10 @@ class EventController extends Controller
 			->whereNotIn('alias', ['services'])
 			->get();
 
-		$cities = City::orderBy('version', 'desc')
+		$cities = City::where('version', env('VERSION'))
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
-			->whereNotIn('alias', ['uae'])
 			->get();
 
 		$VIEW = view('admin.event.modal.edit', [
@@ -414,14 +418,4 @@ class EventController extends Controller
 
 		return response()->json(['status' => 'success']);
 	}
-
-	/*public function clear()
-	{
-		if (!$this->request->user()->isSuperAdmin()) {
-			redirect(route('eventIndex'));
-		}
-
-		Deal::where('user_id', 0)
-			->delete();
-	}*/
 }
