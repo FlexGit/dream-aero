@@ -3190,9 +3190,11 @@ class ApiController extends Controller
 		}
 
 		// после прочтения уведомления снимаем признак того, что оно новое
-		if ($notification->is_new) {
-			$notification->is_new = false;
-			$notification->save();
+		if ($notification->pivot->is_new) {
+			$data = [
+				'is_new' => true,
+			];
+			$contractor->notifications()->updateExistingPivot($notificationId, $data);
 		}
 
 		$data = [
