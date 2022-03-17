@@ -2,5 +2,5 @@
 <input type="hidden" id="operation" name="operation" value="send">
 
 <div class="form-group">
-	<label>Вы уверены, что хотите отправить уведомление "{{ $notification->title }}"?</label>
+	<label>Уведомление "{{ $notification->title }}" будет отправлено {{ $contractorCount }} контрагенту(ам). Вы уверены?</label>
 </div>

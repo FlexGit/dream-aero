@@ -116,9 +116,28 @@ class NotificationController extends Controller
 
 		$notification = Notification::find($id);
 		if (!$notification) return response()->json(['status' => 'error', 'reason' => 'Уведомление не найдено']);
+		
+		$contractorCountSent = $contractorCountNotSent = 0;
+		$contractors = Contractor::where('is_active', true)
+			->whereNotNull('last_auth_at')
+			->orderBy('id');
+		if ($notification->city_id) {
+			$contractors = $contractors->where('city_id', $notification->city_id);
+		}
+		$contractors = $contractors->get();
+		foreach ($contractors as $contractor) {
+			$notificationContractor = $notification->contractors->find($contractor->id);
+			if ($notificationContractor) {
+				++ $contractorCountSent;
+			} else {
+				++ $contractorCountNotSent;
+			}
+		}
 
 		$VIEW = view('admin.notification.modal.show', [
 			'notification' => $notification,
+			'contractorCountSent' => $contractorCountSent,
+			'contractorCountNotSent' => $contractorCountNotSent,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -165,8 +184,24 @@ class NotificationController extends Controller
 		$notification = Notification::find($id);
 		if (!$notification) return response()->json(['status' => 'error', 'reason' => 'Уведомление не найдено']);
 		
+		$contractorCount = 0;
+		$contractors = Contractor::where('is_active', true)
+			->whereNotNull('last_auth_at')
+			->orderBy('id');
+		if ($notification->city_id) {
+			$contractors = $contractors->where('city_id', $notification->city_id);
+		}
+		$contractors = $contractors->get();
+		foreach ($contractors as $contractor) {
+			$notificationContractor = $notification->contractors->find($contractor->id);
+			if ($notificationContractor) continue;
+			
+			++ $contractorCount;
+		}
+		
 		$VIEW = view('admin.notification.modal.send', [
 			'notification' => $notification,
+			'contractorCount' => $contractorCount,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);

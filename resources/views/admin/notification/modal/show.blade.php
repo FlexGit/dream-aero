@@ -36,5 +36,13 @@
 			<td>Дата последнего изменения</td>
 			<td>{{ $notification->updated_at }}</td>
 		</tr>
+		<tr class="odd">
+			<td>Отправлено контрагентам</td>
+			<td>{{ $contractorCountSent }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Может быть отправлено контрагентам</td>
+			<td>{{ $contractorCountNotSent }}</td>
+		</tr>
 	</tbody>
 </table>
