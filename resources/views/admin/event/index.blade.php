@@ -10,7 +10,7 @@
 
 				@php
 					// для Мск и Сбп название города не выводим города
-					$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
+					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
 				@endphp
 
 				@foreach($city->locations ?? [] as $location)
@@ -19,12 +19,12 @@
 							continue;
 						}
 						// только для Мск и Сбп выводим название локации
-						$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
+						$locationName = ($city->locations->count() > 1) ? $location->name : '';
 					@endphp
 
 					@foreach($location->simulators ?? [] as $simulator)
 						@php
-							$simulatorName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $simulator->alias : '';
+							$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
 						@endphp
 
 						<div class="calendar-container" style="width: 100%;min-width: 500px;">
@@ -82,7 +82,7 @@
 				@endif--}}
 
 				@php
-					$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
+					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
 				@endphp
 
 				@foreach($city->locations ?? [] as $location)
@@ -90,12 +90,12 @@
 						if ($user->location && $user->location->id != $location->id) {
 							continue;
 						}
-						$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
+						$locationName = ($city->locations->count() > 1) ? $location->name : '';
 					@endphp
 
 					@foreach($location->simulators ?? [] as $simulator)
 						@php
-							$simulatorName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $simulator->alias : '';
+							$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
 						@endphp
 
 						<div>
