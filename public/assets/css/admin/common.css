@@ -96,3 +96,6 @@ input[readonly]{
 .table-no-filter, .table-no-filter thead {
 	top: 100px;
 }
+.fc-day-sat, .fc-day-sun {
+	background-color: #e7ffe7 !important;
+}

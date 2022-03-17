@@ -1,9 +1,40 @@
 @extends('admin.layouts.master')
 
 @section('content')
-	{{--<input type="hidden" id="time_zone" name="time_zone" value="Europe/Moscow">--}}
+	<div style="height: 92vh;overflow: auto;">
+	<div id="calendars-container" style="display: flex;/*height: 90vh;*/">
+		@foreach($cities ?? [] as $city)
+			@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
+				@continue
+			@endif
 
-	<div id="calendar"></div>
+			@php
+				$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
+			@endphp
+
+			@foreach($city->locations ?? [] as $location)
+				@if (in_array($location->alias, ['west']))
+					@continue
+				@endif
+
+				@php
+					$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
+				@endphp
+
+				@foreach($location->simulators ?? [] as $simulator)
+					@php
+						$simulatorName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $simulator->alias : '';
+					@endphp
+
+					<div class="calendar-container" style="width: 100%;min-width: 500px;">
+						<div style="position: sticky;z-index: 3;">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
+						<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" class="calendar"></div>
+					</div>
+				@endforeach
+			@endforeach
+		@endforeach
+	</div>
+	</div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
@@ -36,6 +67,10 @@
 		</div>
 		<div>
 			@foreach($cities ?? [] as $city)
+				@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
+					@continue
+				@endif
+
 				@php
 					$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
 				@endphp
@@ -56,7 +91,7 @@
 
 						<div>
 							<div class="form-check form-check-inline" style="line-height: 0.9em;">
-								<input class="form-check-input align-top" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" name="location-{{ $location->id }}-{{ $simulator->id }}" value="1" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
+								<input class="form-check-input align-top calendar-checkbox" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" value="1" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">
 								<label for="location-{{ $location->id }}-{{ $simulator->id }}" class="form-check-label small font-weight-light">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</label>
 							</div>
 						</div>
@@ -76,6 +111,11 @@
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css') }}">
+	<style>
+		body {
+			overflow: hidden;
+		}
+	</style>
 @stop
 
 @section('js')
@@ -88,7 +128,6 @@
 	<script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
-	<script src="{{ asset('js/admin/event.js') }}"></script>
 	<script>
 		$(function(){
 			/*var timeZone = $('#time_zone').val();*/
@@ -98,9 +137,15 @@
 				m = date.getMonth(),
 				y = date.getFullYear();
 
-			/*document.addEventListener('DOMContentLoaded', function() {*/
-				var calendarEl = document.getElementById('calendar');
+			var calendars = document.getElementsByClassName('calendar');
+			var calendarArr = [];
+			for (let calendarEl of calendars) {
+				//console.log($(calendarEl).attr('id'));
 				var calendar = new FullCalendar.Calendar(calendarEl, {
+					/*height: 900,*/
+					/*contentHeight: '120vh',*/
+					/*expandRows: true,*/
+					aspectRatio: 0.5,
 					stickyHeaderDates: true,
 					initialView: 'timeGridWeek',
 					locale: 'ru',
@@ -108,9 +153,13 @@
 					selectable: true,
 					droppable: true,
 					headerToolbar: {
-						left  : 'title',
+						left: /*'title'*/'',
 						center: '',
-						right : 'prev,next today timeGridDay,timeGridWeek,dayGridMonth',
+						right: /*'prev,next today timeGridDay,timeGridWeek,dayGridMonth*/'',
+					},
+					dayHeaderFormat: {
+						weekday: 'short',
+						day: 'numeric'
 					},
 					themeSystem: 'standard',
 					slotMinTime: '09:00:00',
@@ -132,10 +181,16 @@
 					events: {
 						url: '{{ route('eventList') }}',
 						method: 'GET',
-						/*extraParams: {
-						},*/
-						failure: function() {
-							toastr.error('Ошибка при загрузке событий!');
+						extraParams: function() {
+							return {
+								city_id: $(calendarEl).data('city_id'),
+								location_id: $(calendarEl).data('location_id'),
+								simulator_id: $(calendarEl).data('simulator_id')
+							};
+						},
+						failure: function (e) {
+							//console.log(e);
+							//toastr.error('Ошибка при загрузке событий!');
 						}
 					},
 					/*eventOverlap: false,*/
@@ -161,7 +216,7 @@
 								'source': 'calendar',
 								'flight_at': moment($(info.date)[0])/*.utc()*/.format('YYYY-MM-DD HH:mm'),
 							},
-							success: function(result) {
+							success: function (result) {
 								if (result.status === 'error') {
 									toastr.error(result.reason);
 									return null;
@@ -203,7 +258,7 @@
 							url: url,
 							type: 'GET',
 							dataType: 'json',
-							success: function(result) {
+							success: function (result) {
 								if (result.status === 'error') {
 									toastr.error(result.reason);
 									return null;
@@ -238,7 +293,7 @@
 								'start_at': moment(start).utc().format('YYYY-MM-DD HH:mm'),
 								'stop_at': moment(end).utc().format('YYYY-MM-DD HH:mm'),
 							},
-							success: function(result) {
+							success: function (result) {
 								if (result.status !== 'success') {
 									toastr.error(result.reason);
 									info.revert();
@@ -264,7 +319,7 @@
 								'start_at': moment(start).utc().format('YYYY-MM-DD HH:mm'),
 								'stop_at': moment(end).utc().format('YYYY-MM-DD HH:mm'),
 							},
-							success: function(result) {
+							success: function (result) {
 								if (result.status !== 'success') {
 									toastr.error(result.reason);
 									info.revert();
@@ -287,10 +342,10 @@
 						var content = '<div class="fc-event-main">' +
 							'<div class="fc-event-main-frame" data-toggle="modal" data-id="' + id + '" data-title="' + title + '">' +
 							(!allDay ? '<div class="fc-event-time"><div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div>' + moment(start).utc().format('H:mm') + ' - ' + moment(end).utc().format('H:mm') + '</div>' : '') +
-									'<div class="fc-event-title-container">' +
-										'<div class="fc-event-title fc-sticky">' + title + '</div>' +
-									'</div>' +
-								'</div>' +
+							'<div class="fc-event-title-container">' +
+							'<div class="fc-event-title fc-sticky">' + title + '</div>' +
+							'</div>' +
+							'</div>' +
 							'</div>' +
 							'<a href="javascript:void(0)" id="event-close-' + id + '" data-id="' + id + '" data-title="' + title + '" class="event-close-btn">×</a>';
 
@@ -298,11 +353,11 @@
 							html: content
 						};
 					},
-					eventMouseEnter: function(info) {
+					eventMouseEnter: function (info) {
 						var comments = info.event.extendedProps.comments,
 							data = '';
 
-						$.each(comments, function(index, value) {
+						$.each(comments, function (index, value) {
 							data += '<div class="comment">' + value['name'] + '</div>' +
 								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + moment(value['date']).utc().format('DD.MM.YYYY H:mm:ss') + '</div>'
 						});
@@ -315,11 +370,11 @@
 							html: true
 						}).tooltip('show');
 					},
-					eventMouseLeave: function(info) {
+					eventMouseLeave: function (info) {
 						$(info.el).tooltip('hide');
 					},
-					eventDataTransform: function(event) {
-						if(event.allDay) {
+					eventDataTransform: function (event) {
+						if (event.allDay) {
 							//event.end = moment(event.end).utc().add(1, 'days')
 						}
 						return event;
@@ -332,7 +387,10 @@
 					}*/
 				});
 				calendar.render();
-			/*});*/
+
+				calendarArr[$(calendarEl).data('location_id')] = [];
+				calendarArr[$(calendarEl).data('location_id')][$(calendarEl).data('simulator_id')] = calendar;
+			}
 
 			$(document).on('click', '[data-widget="pushmenu"]', function() {
 				$(window).trigger('resize');
@@ -375,7 +433,12 @@
 
 						$('#modal').modal('hide');
 						toastr.success(msg);
-						calendar.refetchEvents();
+
+						calendarArr.forEach(function (element) {
+							element.forEach(function (calendar) {
+								calendar.refetchEvents();
+							});
+						});
 					}
 				});
 			});
@@ -506,7 +569,59 @@
 			}).on('changeDate', function(e) {
 				var date = new Date(e.date);
 				date.setDate(date.getDate() + 1);
-				calendar.gotoDate(date);
+
+				calendarArr.forEach(function (element) {
+					element.forEach(function (calendar) {
+						calendar.gotoDate(date);
+					});
+				});
+			});
+
+			// Control Sidebar
+			let controlSidebar = localStorage.getItem('control-sidebar');
+			if (controlSidebar == 'expanded') {
+				$('.control-sidebar').ControlSidebar('show');
+			} else {
+				$('.control-sidebar').ControlSidebar('collapse');
+			}
+			$(document).on('collapsed.lte.controlsidebar', '[data-widget="control-sidebar"]', function(e) {
+				localStorage.setItem('control-sidebar', 'collapsed');
+			});
+			$(document).on('expanded.lte.controlsidebar', '[data-widget="control-sidebar"]', function(e) {
+				localStorage.setItem('control-sidebar', 'expanded');
+			});
+
+			// Calendar checkboxes
+			$('.calendar-checkbox').each(function() {
+				var id = $(this).attr('id'),
+					$calendarContainer = $('.calendar[data-city_id="' + $(this).data('city_id') + '"][data-location_id="' + $(this).data('location_id') + '"][data-simulator_id="' + $(this).data('simulator_id') + '"]').closest('.calendar-container'),
+					isChecked = localStorage.getItem(id);
+
+				if (isChecked == 1 || isChecked == null) {
+					$(this).prop('checked', true);
+					$calendarContainer.show();
+				} else {
+					$(this).prop('checked', false);
+					$calendarContainer.hide();
+				}
+			});
+
+			$(document).on('change', '.calendar-checkbox', function(e) {
+				var id = $(this).attr('id'),
+					cityId = $(this).data('city_id'),
+					locationId = $(this).data('location_id'),
+					simulatorId = $(this).data('simulator_id'),
+					$calendarContainer = $('.calendar[data-city_id="' + cityId + '"][data-location_id="' + locationId + '"][data-simulator_id="' + simulatorId + '"]').closest('.calendar-container'),
+					isChecked = $(this).is(':checked') ? 1 : 0;
+
+				localStorage.setItem(id, isChecked);
+
+				if (isChecked) {
+					$calendarContainer.show();
+					calendarArr[locationId][simulatorId].refetchEvents();
+				} else {
+					$calendarContainer.hide();
+				}
 			});
 
 			/*$(document).on('shown.lte.pushmenu', function() {

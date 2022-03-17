@@ -8,7 +8,6 @@ use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\FlightSimulator;
 use App\Models\Location;
-
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Services\HelpFunctions;
@@ -35,8 +34,10 @@ class EventController extends Controller
 	 */
 	public function index()
 	{
+		$user = \Auth::user();
+		
 		// Временный редирект для админов
-		if (!\Auth::user()->isSuperAdmin()) {
+		if (!$user->isSuperAdmin()) {
 			return redirect('/contractor');
 		}
 
@@ -48,6 +49,7 @@ class EventController extends Controller
 		
 		return view('admin.event.index', [
 			'cities' => $cities,
+			'user' => $user,
 		]);
 	}
 	
@@ -67,14 +69,31 @@ class EventController extends Controller
 
 		$startAt = $this->request->start ?? '';
 		$stopAt = $this->request->end ?? '';
+		$cityId = $this->request->city_id ?? 0;
+		$locationId = $this->request->location_id ?? 0;
+		$simulatorId = $this->request->simulator_id ?? 0;
+		
+		//\Log::debug($cityId . ' - ' . $locationId . ' - ' . $simulatorId);
+		
 		$events = Event::whereDate('start_at', '>=', $startAt)
 			->where(function ($query) use ($stopAt) {
 				$query->whereDate('stop_at', '<=', $stopAt)
 					->orWhereNull('stop_at');
-			})
-			->with(['dealPosition', 'user'])
+			});
+		if ($cityId) {
+			$events = $events->where('city_id', $cityId);
+		}
+		if ($locationId) {
+			$events = $events->where('location_id', $locationId);
+		}
+		if ($simulatorId) {
+			$events = $events->where('flight_simulator_id', $simulatorId);
+		}
+		$events = $events->with(['dealPosition', 'user'])
 			->get();
 
+		//\Log::debug($events);
+		
 		$eventData = [];
 		foreach ($events as $event) {
 			$data = isset($locationData[$event->location_id][$event->flight_simulator_id]) ? $locationData[$event->location_id][$event->flight_simulator_id] : [];

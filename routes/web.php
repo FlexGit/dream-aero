@@ -3,6 +3,7 @@
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
@@ -355,7 +356,22 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('promo/{id}/delete', [PromoController::class, 'confirm']);
 		Route::get('promo/{id}/show', [PromoController::class, 'show']);
 		Route::put('promo/{id}/image/delete', [PromoController::class, 'deleteImage']);
-
+		
+		// Уведомления
+		Route::get('notification', [NotificationController::class, 'index'])->name('notificationIndex');
+		Route::get('notification/list/ajax', [NotificationController::class, 'getListAjax'])->name('notificationList');
+		
+		Route::post('notification', [NotificationController::class, 'store']);
+		Route::put('notification/{id}', [NotificationController::class, 'update']);
+		Route::delete('notification/{id}', [NotificationController::class, 'delete']);
+		Route::post('notification/{id}/send', [NotificationController::class, 'send']);
+		
+		Route::get('notification/add', [NotificationController::class, 'add']);
+		Route::get('notification/{id}/edit', [NotificationController::class, 'edit']);
+		Route::get('notification/{id}/delete', [NotificationController::class, 'confirm']);
+		Route::get('notification/{id}/show', [NotificationController::class, 'show']);
+		Route::get('notification/{id}/send', [NotificationController::class, 'confirmSend']);
+		
 		// Лог операций
 		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
 		Route::get('log/{entity?}/{object_id?}', [RevisionController::class, 'index'])->name('revisionIndex');

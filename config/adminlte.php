@@ -373,6 +373,14 @@ return [
 			'label_color' => '',
 		],*/
 		[
+			'text'        => 'Уведомления',
+			'url'         => '/notification',
+			'icon'        => 'fas fa-fw fa-bell',
+			'can'	  	  => 'is_superadmin',
+			'label'       => '',
+			'label_color' => '',
+		],
+		[
 			'text'        => 'Лог операций',
 			'url'         => '/log',
 			'icon'        => 'fas fa-fw fa-history',
