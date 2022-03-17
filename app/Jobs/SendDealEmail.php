@@ -48,7 +48,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 		}
 
 		$recipients = [];
-		$recipients[] = 'webmanage@inbox.ru';
+		//$recipients[] = 'webmanage@inbox.ru';
 		if ($cityData['email']) {
 			$recipients[] = $cityData['email'];
 		}

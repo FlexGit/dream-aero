@@ -193,7 +193,7 @@
 							//toastr.error('Ошибка при загрузке событий!');
 						}
 					},
-					/*eventOverlap: false,*/
+					eventOverlap: false,
 					dateClick: function (info) {
 						var action = '/deal/booking',
 							method = 'POST',
