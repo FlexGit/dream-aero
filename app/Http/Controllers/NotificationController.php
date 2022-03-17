@@ -304,7 +304,9 @@ class NotificationController extends Controller
 		if (!$notification->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
-
+		
+		$notification->contractors()->sync([]);
+		
 		return response()->json(['status' => 'success']);
 	}
 	
