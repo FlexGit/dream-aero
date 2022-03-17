@@ -46,6 +46,7 @@
 							<th class="text-center">ФИО</th>
 							<th class="text-center d-none d-sm-table-cell">E-mail</th>
 							<th class="text-center d-none d-md-table-cell">Роль</th>
+							<th class="text-center d-none d-lg-table-cell">Версия</th>
 							<th class="text-center d-none d-lg-table-cell">Город</th>
 							<th class="text-center d-none d-xl-table-cell">Локация</th>
 							<th class="text-center d-none d-xl-table-cell">Активность</th>

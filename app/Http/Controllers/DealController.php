@@ -41,7 +41,9 @@ class DealController extends Controller
 	 */
 	public function index()
 	{
-		$cities = City::where('version', env('VERSION'))
+		$user = \Auth::user();
+		
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -79,9 +81,11 @@ class DealController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
 		$id = $this->request->id ?? 0;
-
-		$deals = Deal::whereRelation('city', 'version', '=', env('VERSION'))
+		
+		$deals = Deal::whereRelation('city', 'version', '=', $user->version)
 			->orderBy('id', 'desc');
 		if ($this->request->filter_status_id) {
 			$deals = $deals->where(function ($query) {
@@ -150,8 +154,10 @@ class DealController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$cities = City::where('version', env('VERSION'))
+		
+		$user = \Auth::user();
+		
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -201,8 +207,10 @@ class DealController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$cities = City::where('version', env('VERSION'))
+		
+		$user = \Auth::user();
+		
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -254,8 +262,10 @@ class DealController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$cities = City::where('version', env('VERSION'))
+		
+		$user = \Auth::user();
+		
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')

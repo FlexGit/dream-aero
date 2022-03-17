@@ -5,6 +5,7 @@
 	</td>
 	<td class="text-center d-none d-sm-table-cell">{{ $user->email }}</td>
 	<td class="text-center d-none d-md-table-cell">{{ isset($roles[$user->role]) ? $roles[$user->role] : '' }}</td>
+	<td class="text-center d-none d-lg-table-cell">{{ $user->version }}</td>
 	<td class="text-center d-none d-lg-table-cell">{{ $user->city ? $user->city->name : 'Любой' }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $user->location ? $user->location->name : 'Любая' }}</td>
 	<td class="text-center d-none d-xl-table-cell">{{ $user->enable ? 'Да' : 'Нет' }}</td>

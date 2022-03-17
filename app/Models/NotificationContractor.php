@@ -5,6 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+/**
+ * App\Models\NotificationContractor
+ *
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|NotificationContractor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NotificationContractor newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NotificationContractor query()
+ * @mixin \Eloquent
+ */
 class NotificationContractor extends Pivot
 {
 	use HasFactory;

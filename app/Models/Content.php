@@ -48,6 +48,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Content withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Content withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\City|null $city
  */
 class Content extends Model
 {

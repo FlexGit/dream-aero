@@ -8,7 +8,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\User
@@ -61,10 +60,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDataJson($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMiddlename($value)
+ * @property string $version
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereVersion($value)
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, SoftDeletes, Notifiable/*, RevisionableTrait*/;
+    use HasApiTokens, HasFactory, SoftDeletes, Notifiable;
 
     const ROLE_SUPERADMIN = 'superadmin';
     const ROLE_ADMIN = 'admin';
@@ -75,22 +76,6 @@ class User extends Authenticatable
 		self::ROLE_PILOT => 'Пилот',
 	];
  
-	/*const ATTRIBUTES = [
-		'name' => 'Имя',
-		'email' => 'E-mail',
-		'email_verified_at' => 'E-mail подтвержден',
-		'password' => 'Пароль',
-		'city_id' => 'Город',
-		'location_id' => 'Локация',
-		'role' => 'Роль',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
-	
 	/**
      * The attributes that are mass assignable.
      *
@@ -101,6 +86,7 @@ class User extends Authenticatable
         'email',
         'password',
 		'role',
+		'version',
 		'enable',
     ];
 

@@ -43,6 +43,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Notification withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Notification withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\City|null $city
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Contractor[] $contractors
+ * @property-read int|null $contractors_count
  */
 class Notification extends Model
 {

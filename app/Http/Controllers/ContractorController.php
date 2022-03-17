@@ -28,7 +28,9 @@ class ContractorController extends Controller
 	 */
 	public function index()
 	{
-		$cities = City::where('version', env('VERSION'))
+		$user = \Auth::user();
+		
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -48,9 +50,11 @@ class ContractorController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
 		$id = $this->request->id ?? 0;
 		
-		$contractors = Contractor::whereRelation('city', 'version', '=', env('VERSION'))
+		$contractors = Contractor::whereRelation('city', 'version', '=', $user->version)
 			->orderBy('created_at', 'desc');
 		if ($this->request->filter_city_id) {
 			$contractors = $contractors->where('city_id', $this->request->filter_city_id);
@@ -91,10 +95,12 @@ class ContractorController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
 		$contractor = Contractor::find($id);
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрганет не найден']);
 
-		$cities = City::where('version', env('VERSION'))
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name');
@@ -119,8 +125,10 @@ class ContractorController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$cities = City::where('version', env('VERSION'))
+		
+		$user = \Auth::user();
+		
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name');
@@ -241,7 +249,9 @@ class ContractorController extends Controller
 		$q = $this->request->post('query');
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		$contractors = Contractor::where('version', env('VERSION'))
+		$user = \Auth::user();
+		
+		$contractors = Contractor::where('version', $user->version)
 			->where('is_active', true)
 			->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")

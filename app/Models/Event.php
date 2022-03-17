@@ -68,6 +68,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read \App\Models\DealPosition|null $dealPosition
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDealPositionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereEmployeeId($value)
+ * @property int $contractor_id Контрагент
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereContractorId($value)
  */
 class Event extends Model
 {

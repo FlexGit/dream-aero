@@ -44,7 +44,7 @@ class EventController extends Controller
 
 		$cities = $user->city
 			? new Collection([$user->city])
-			: City::where('version', env('VERSION'))
+			: City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -61,8 +61,10 @@ class EventController extends Controller
 	 */
 	public function getListAjax()
 	{
+		$user = \Auth::user();
+		
 		$locations = Location::where('is_active', true)
-			->whereRelation('city', 'version', '=', env('VERSION'))
+			->whereRelation('city', 'version', '=', $user->version)
 			->with('simulators')
 			->get();
 		$locationData = [];
@@ -93,7 +95,7 @@ class EventController extends Controller
 			$events = $events->where('flight_simulator_id', $simulatorId);
 		}
 		$events = $events
-			->whereRelation('city', 'version', '=', env('VERSION'))
+			->whereRelation('city', 'version', '=', $user->version)
 			->with(['dealPosition', 'user'])
 			->get();
 
@@ -193,11 +195,13 @@ class EventController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
+		
+		$user = \Auth::user();
 
 		$position = DealPosition::find($positionId);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
 
-		$cities = City::where('version', env('VERSION'))
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
@@ -220,7 +224,9 @@ class EventController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$user = \Auth::user();
+		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 
@@ -228,7 +234,7 @@ class EventController extends Controller
 			->whereNotIn('alias', ['services'])
 			->get();
 
-		$cities = City::where('version', env('VERSION'))
+		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
