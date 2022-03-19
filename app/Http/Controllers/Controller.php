@@ -25,7 +25,7 @@ class Controller extends BaseController
 		'numeric' => 'Должно быть числом',
 		'digits' => 'Должно быть :digits цифры',
 		'valid_city' => 'Город не найден или доступ запрещен',
-		'valid_phone' => 'Некорректный формат',
+		'valid_phone' => 'Некорректный формат (+71234567890)',
 		'valid_password' => 'Некорректный формат',
 		'valid_password_confirmation' => 'Некорректный формат',
 		'image' => 'Некорректный тип файла',
