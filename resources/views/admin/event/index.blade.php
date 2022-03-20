@@ -27,7 +27,7 @@
 							$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
 						@endphp
 
-						<div class="calendar-container" style="width: 100%;min-width: 500px;">
+						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}" style="width: 100%;min-width: 500px;">
 							<div class="text-center">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
 							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" class="calendar"></div>
 						</div>
@@ -60,12 +60,17 @@
 @stop
 
 @section('right-sidebar')
-	<div class="m-2">
+	<div class="d-flex justify-content-between m-2">
 		<div class="form-group">
 			<select class="form-control" id="calendar-view-type">
 				<option value="timeGridDay">День</option>
 				<option value="timeGridWeek">Неделя</option>
 			</select>
+		</div>
+		<div>
+			<button type="button" class="btn btn-info btn-sm js-calendar-prev"><i class="fas fa-angle-left"></i></button>
+			<button type="button" class="btn btn-info btn-sm js-calendar-today"><i class="far fa-dot-circle"></i></button>
+			<button type="button" class="btn btn-info btn-sm js-calendar-next"><i class="fas fa-angle-right"></i></button>
 		</div>
 	</div>
 
@@ -118,7 +123,7 @@
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=1') }}">
 	<style>
 		body {
 			overflow: hidden;
@@ -257,7 +262,7 @@
 						$(info.el).tooltip('hide');
 
 						$modalDialog.find('form').attr('id', type);
-						$modalDialog.removeClass('modal-lg');
+						//$modalDialog.removeClass('modal-lg');
 
 						var $submit = $('button[type="submit"]');
 
@@ -350,9 +355,9 @@
 
 						var content = '<div class="fc-event-main">' +
 							'<div class="fc-event-main-frame" data-toggle="modal" data-id="' + id + '" data-title="' + title + '">' +
-							(!allDay ? '<div class="fc-event-time"><div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div>' + moment(start).utc().format('H:mm') + ' - ' + moment(end).utc().format('H:mm') + '</div>' : '') +
+							(!allDay ? '<div class="fc-event-time">' + moment(start).utc().format('H:mm') + ' - ' + moment(end).utc().format('H:mm') + '<div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div></div>' : '') +
 							'<div class="fc-event-title-container">' +
-							'<div class="fc-event-title fc-sticky">' + title + '</div>' +
+							'<div class="fc-event-title fc-sticky" style="font-size: 11px;">' + title + '</div>' +
 							'</div>' +
 							'</div>' +
 							'</div>' +
@@ -444,9 +449,11 @@
 						$('#modal').modal('hide');
 						toastr.success(msg);
 
-						calendarArr.forEach(function (element) {
-							element.forEach(function (calendar) {
-								calendar.refetchEvents();
+						calendarArr.forEach(function (element, locationId) {
+							element.forEach(function (calendar, simulatorId) {
+								if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+									calendar.refetchEvents();
+								}
 							});
 						});
 					}
@@ -548,7 +555,10 @@
 				e.stopImmediatePropagation();
 
 				var id = $(this).data('id'),
-					title = $(this).data('title');
+					title = $(this).data('title'),
+					$calendarContainer = $(this).closest('.calendar-container'),
+					locationId = $calendarContainer.data('location-id'),
+					simulatorId = $calendarContainer.data('simulator-id');
 
 				var listEvent = calendar.getEvents();
 				if(confirm('Вы уверены, что хотите удалить событие "' + title + '" ?')) {
@@ -562,26 +572,33 @@
 								return;
 							}
 
-							toastr.success('Событие успешно удалено');
-
 							listEvent.forEach(event => {
 								if (event._def.publicId == id) {
 									event.remove();
 								}
 							});
+
+							//calendarArr[locationId][simulatorId].gotoDate(e.date);
+							calendarArr[locationId][simulatorId].refetchEvents();
+
+							toastr.success('Событие успешно удалено');
 						}
 					});
 				}
 			});
 
+			var $datepicker = $('#datepicker');
+
 			// contol sidebar datepicker
-			$('#datepicker').datepicker({
+			$datepicker.datepicker({
 				language: 'ru'
 			}).on('changeDate', function(e) {
-				calendarArr.forEach(function (element) {
-					element.forEach(function (calendar) {
-						calendar.gotoDate(e.date);
-						calendar.refetchEvents();
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.gotoDate(e.date);
+							calendar.refetchEvents();
+						}
 					});
 				});
 			});
@@ -640,10 +657,115 @@
 
 				localStorage.setItem($(this).attr('id'), calendarViewType);
 
-				calendarArr.forEach(function (element) {
-					element.forEach(function (calendar) {
-						calendar.changeView(calendarViewType);
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.changeView(calendarViewType);
+						}
 					});
+				});
+
+				var firstDay = new Date(calendar.view.activeStart);
+
+				$datepicker.data('date', firstDay.toLocaleDateString());
+				$datepicker.datepicker('setDate', firstDay);
+			});
+
+			$(document).on('click', '.js-calendar-prev', function() {
+				var dt = moment($datepicker.data('date'), 'DD.MM.YYYY'),
+					days = ($('#calendar-view-type').val() === 'timeGridWeek') ? 7 : 1,
+					dtNew = dt.subtract(days, 'd');
+
+				$datepicker.data('date', dtNew.format('DD.MM.YYYY'));
+				$datepicker.datepicker('update', dtNew.toDate());
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.prev();
+						}
+					});
+				});
+			});
+
+			$(document).on('click', '.js-calendar-next', function() {
+				var dt = moment($datepicker.data('date'), 'DD.MM.YYYY'),
+					days = ($('#calendar-view-type').val() === 'timeGridWeek') ? 7 : 1,
+					dtNew = dt.add(days, 'd');
+
+				$datepicker.data('date', dtNew.format('DD.MM.YYYY'));
+				$datepicker.datepicker('update', dtNew.toDate());
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.next();
+						}
+					});
+				});
+			});
+
+			$(document).on('click', '.js-calendar-today', function() {
+				var dt = moment();
+
+				$datepicker.data('date', dt.format('DD.MM.YYYY'));
+				$datepicker.datepicker('update', dt.toDate());
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.today();
+						}
+					});
+				});
+			});
+
+			$(document).on('click', '.js-comment-edit', function(e) {
+				var commentId = $(this).data('comment-id'),
+					$form = $(this).closest('form'),
+					$comment = $form.find('textarea#comment'),
+					$commentText = $form.find('.comment-text[data-comment-id="' + commentId + '"]');
+
+				if ($(this).hasClass('fa-edit')) {
+					$(this).css('color', 'orange');
+					$commentText.css('color', 'orange');
+					$comment.val($commentText.text());
+					$('#comment_id').val(commentId);
+					$(this).removeClass('far').removeClass('fa-edit').addClass('fas').addClass('fa-times-circle');
+				} else {
+					$(this).css('color', '#212529');
+					$commentText.css('color', '#212529');
+					$comment.val('');
+					$('#comment_id').val('');
+					$(this).addClass('far').addClass('fa-edit').removeClass('fas').removeClass('fa-times-circle');
+				}
+			});
+
+			$(document).on('click', '.js-comment-remove', function(e) {
+				if (!confirm($(this).data('confirm-text'))) return null;
+
+				var eventId = $(this).closest('form').find('#id').val();
+				commentId = $(this).data('comment-id');
+
+				$.ajax({
+					url: '/event/' + eventId + '/comment/' + commentId + '/remove',
+					type: 'DELETE',
+					success: function (result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						toastr.success(result.msg);
+
+						calendarArr.forEach(function (element, locationId) {
+							element.forEach(function (calendar, simulatorId) {
+								if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+									calendar.refetchEvents();
+								}
+							});
+						});
+					}
 				});
 			});
 

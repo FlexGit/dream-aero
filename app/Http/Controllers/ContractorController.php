@@ -251,14 +251,14 @@ class ContractorController extends Controller
 		
 		$user = \Auth::user();
 		
-		$contractors = Contractor::where('version', $user->version)
-			->where('is_active', true)
+		$contractors = Contractor::where('is_active', true)
 			->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")
 					->orWhere("lastname", "LIKE", "%{$q}%")
 					->orWhere("email", "LIKE", "%{$q}%")
 					->orWhere("phone", "LIKE", "%{$q}%");
 			})
+			->whereRelation('city', 'version', '=', $user->version)
 			//->where("email", "LIKE", "%{$q}%")
 			->orderBy('name')
 			->orderBy('lastname');

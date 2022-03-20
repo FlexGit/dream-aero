@@ -127,6 +127,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('event/list/ajax', [EventController::class, 'getListAjax'])->name('eventList');
 		Route::post('event', [EventController::class, 'store'])->name('store-event');
 		Route::put('event/{id}', [EventController::class, 'update'])->name('update-event');
+		Route::delete('event/{id}/comment/{comment_id}/remove', [EventController::class, 'deleteComment'])->name('delete-comment');
 		Route::delete('event/{id}', [EventController::class, 'delete'])->name('delete-event');
 
 		Route::get('event/{position_id}/add', [EventController::class, 'add'])->name('add-event');

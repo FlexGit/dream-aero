@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Deal;
 use App\Models\DealPosition;
 use App\Models\Event;
+use App\Models\EventComment;
 use App\Models\FlightSimulator;
 use App\Models\Location;
 use App\Models\Product;
@@ -14,6 +15,7 @@ use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use PhpParser\Comment;
 use Validator;
 
 class EventController extends Controller
@@ -112,8 +114,9 @@ class EventController extends Controller
 				case 'deal':
 					$balance = ($event->position && $event->position->deal) ? $event->position->deal->balance() : 0;
 					$title = $event->deal->contractor->name . ' ' . HelpFunctions::formatPhone($event->deal->contractor->phone) . ' ' . $event->dealPosition->product->name;
+					$allDay = false;
 					if ($event->extra_time) {
-						$title .= ' (+' . $event->extra_time . ')';
+						$title .= '(+' . $event->extra_time . ')';
 					}
 					if ($data) {
 						if ($balance < 0 && isset($data['deal_notpaid'])) {
@@ -164,7 +167,7 @@ class EventController extends Controller
 			foreach ($event->comments ?? [] as $comment) {
 				$commentData[] = [
 					'name' => $comment->name,
-					'user' => $comment->updated_by ? $comment->updatedUser->name : $comment->createdUser->name,
+					'user' => $comment->updated_by ? $comment->updatedUser->fio() : $comment->createdUser->fio(),
 					'date' => $comment->updated_at,
 					'wasUpdated' => ($comment->created_at != $comment->updated_at) ? 'изменено' : 'создано',
 				];
@@ -229,7 +232,18 @@ class EventController extends Controller
 		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
-
+		
+		$commentData = [];
+		foreach ($event->comments as $comment) {
+			$commentData[] = [
+				'id' => $comment->id,
+				'name' => $comment->name,
+				'user' => $comment->updated_by ? $comment->updatedUser->fio() : $comment->createdUser->fio(),
+				'date' => $comment->updated_at->format('d.m.Y H:i'),
+				'wasUpdated' => ($comment->created_at != $comment->updated_at) ? 'изменено' : 'создано',
+			];
+		}
+		
 		$productTypes = ProductType::orderBy('name')
 			->whereNotIn('alias', ['services'])
 			->get();
@@ -242,6 +256,7 @@ class EventController extends Controller
 
 		$VIEW = view('admin.event.modal.edit', [
 			'event' => $event,
+			'comments' => $commentData,
 			'productTypes' => $productTypes,
 			'cities' => $cities,
 		]);
@@ -292,27 +307,53 @@ class EventController extends Controller
 		if (!$simulator = $position->simulator) {
 			return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		}
+		
+		try {
+			\DB::beginTransaction();
 
-		$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
-		$stopAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
+			$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
+			$stopAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
+	
+			if (!$product->validateFlightDate($startAt)) {
+				return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
+			}
+			
+			$data = [
+				'pilot_assessment' => $this->request->pilot_assessment ?? '',
+				'admin_assessment' => $this->request->admin_assessment ?? '',
+			];
+	
+			$event = new Event();
+			$event->event_type = Event::EVENT_TYPE_DEAL;
+			$event->deal_id = $position->deal ? $position->deal->id : 0;
+			$event->deal_position_id = $position->id ?? 0;
+			$event->city_id = $city ? $city->id : 0;
+			$event->location_id = $location ? $location->id : 0;
+			$event->flight_simulator_id = $simulator ? $simulator->id : 0;
+			$event->start_at = $startAt;
+			$event->stop_at = $stopAt;
+			$event->extra_time = (int)$this->request->extra_time;
+			$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
+			$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
+			$event->data_json = $data;
+			$event->save();
+			
+			$commentText = $this->request->comment ?? '';
+			if ($commentText) {
+				$user = \Auth::user();
 
-		if (!$product->validateFlightDate($startAt)) {
-			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
-		}
+				$event->comments()->create([
+					'name' => $commentText,
+					'created_by' => $user->id ?? 0,
+				]);
+			}
 
-		$event = new Event();
-		$event->event_type = Event::EVENT_TYPE_DEAL;
-		$event->deal_id = $position->deal ? $position->deal->id : 0;
-		$event->deal_position_id = $position->id ?? 0;
-		$event->city_id = $city ? $city->id : 0;
-		$event->location_id = $location ? $location->id : 0;
-		$event->flight_simulator_id = $simulator ? $simulator->id : 0;
-		$event->start_at = $startAt;
-		$event->stop_at = $stopAt;
-		$event->extra_time = (int)$this->request->extra_time;
-		$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
-		$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
-		if (!$event->save()) {
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			\Log::debug('500 - Event Update: ' . $e->getMessage());
+			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 
@@ -373,6 +414,11 @@ class EventController extends Controller
 				if (!$product->validateFlightDate($startAt)) {
 					return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
 				}
+				
+				$data = [
+					'pilot_assessment' => $this->request->pilot_assessment ?? '',
+					'admin_assessment' => $this->request->admin_assessment ?? '',
+				];
 
 				$event->city_id = $city ? $city->id : 0;
 				$event->location_id = $location ? $location->id : 0;
@@ -390,7 +436,29 @@ class EventController extends Controller
 			}
 			$event->start_at = $startAt;
 			$event->stop_at = $stopAt;
+			$event->data_json = $data;
 			$event->save();
+			
+			$commentId = $this->request->comment_id ?? 0;
+			$commentText = $this->request->comment ?? '';
+			$user = \Auth::user();
+			if ($commentText) {
+				if ($commentId) {
+					$comment = $event->comments->find($commentId);
+					if (!$comment) {
+						return response()->json(['status' => 'error', 'reason' => 'Комментарий не найден']);
+					}
+					$comment->name = $commentText;
+					$comment->updated_by = $user->id ?? 0;
+					$comment->save();
+				}
+				else {
+					$event->comments()->create([
+						'name' => $commentText,
+						'created_by' => $user->id ?? 0,
+					]);
+				}
+			}
 
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -423,5 +491,24 @@ class EventController extends Controller
 		}
 
 		return response()->json(['status' => 'success']);
+	}
+	
+	public function deleteComment($id, $commentId)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$event = Event::find($id);
+		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
+		
+		$comment = $event->comments->find($commentId);
+		if (!$comment) return response()->json(['status' => 'error', 'reason' => 'Комментарий не найден']);
+		
+		if (!$comment->delete()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		return response()->json(['status' => 'success', 'msg' => 'Комментарий успешно удален']);
 	}
 }

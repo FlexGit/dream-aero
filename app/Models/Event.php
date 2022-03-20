@@ -145,7 +145,16 @@ class Event extends Model
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
 		'data_json' => 'array',
 	];
-
+	
+	public static function boot()
+	{
+		parent::boot();
+		
+		Event::deleting(function (Event $event) {
+			$event->comments()->delete();
+		});
+	}
+	
 	public function city()
 	{
 		return $this->belongsTo(City::class, 'city_id', 'id');
@@ -179,6 +188,6 @@ class Event extends Model
 	public function comments()
 	{
 		return $this->hasMany(EventComment::class, 'event_id', 'id')
-			->orderByDesc('id');
+			->latest();
 	}
 }
