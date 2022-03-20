@@ -85,8 +85,11 @@ class DealController extends Controller
 		
 		$id = $this->request->id ?? 0;
 		
-		$deals = Deal::whereRelation('city', 'version', '=', $user->version)
-			->orderBy('id', 'desc');
+		$deals = Deal::whereHas('contractor', function ($query) use ($user) {
+			$query->whereHas('city', function ($query) use ($user) {
+				$query->where('version', $user->version);
+			});
+		})->orderBy('id', 'desc');
 		if ($this->request->filter_status_id) {
 			$deals = $deals->where(function ($query) {
 				$query->whereIn('status_id', $this->request->filter_status_id)
