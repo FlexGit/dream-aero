@@ -419,7 +419,7 @@
 
 			setTimeout(function() {
 				$('.calendar-title').removeClass('hidden');
-			}, 300);
+			}, 100);
 
 			$(document).on('click', '[data-widget="pushmenu"]', function() {
 				$(window).trigger('resize');
