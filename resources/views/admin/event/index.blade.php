@@ -1,13 +1,9 @@
 @extends('admin.layouts.master')
 
 @section('content')
-	<div style="height: 92vh;overflow: auto;">
-		<div id="calendars-container" style="display: flex;">
+	<div class="calendars-wrapper">
+		<div class="calendars-container">
 			@foreach($cities ?? [] as $city)
-				{{--@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
-					@continue
-				@endif--}}
-
 				@php
 					// для Мск и Сбп название города не выводим города
 					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
@@ -27,7 +23,7 @@
 							$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
 						@endphp
 
-						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}" style="width: 100%;min-width: 500px;">
+						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
 							<div class="text-center">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
 							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" class="calendar"></div>
 						</div>
@@ -104,7 +100,7 @@
 						@endphp
 
 						<div>
-							<div class="form-check form-check-inline" style="line-height: 0.9em;">
+							<div class="form-check form-check-inline">
 								<input class="form-check-input align-top calendar-checkbox" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" value="1" checked data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">
 								<label for="location-{{ $location->id }}-{{ $simulator->id }}" class="form-check-label small font-weight-light">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</label>
 							</div>
@@ -124,11 +120,6 @@
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=1') }}">
-	<style>
-		body {
-			overflow: hidden;
-		}
-	</style>
 @stop
 
 @section('js')
@@ -376,7 +367,7 @@
 							'<div class="fc-event-main-frame" data-toggle="modal" data-id="' + id + '" data-title="' + title + '">' +
 							(!allDay ? '<div class="fc-event-time">' + moment(start).utc().format('H:mm') + ' - ' + moment(end).utc().format('H:mm') + '<div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div></div>' : '') +
 							'<div class="fc-event-title-container">' +
-							'<div class="fc-event-title fc-sticky" style="font-size: 11px;">' + title + '</div>' +
+							'<div class="fc-event-title fc-sticky">' + title + '</div>' +
 							'</div>' +
 							'</div>' +
 							'</div>' +

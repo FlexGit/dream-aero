@@ -489,6 +489,8 @@ class EventController extends Controller
 		
 		$userId = $this->request->user_id ?? 0;
 
+		//\Log::debug($this->request);
+		
 		switch ($event->event_type) {
 			case Event::EVENT_TYPE_DEAL:
 				$position = DealPosition::find($event->deal_position_id);
@@ -509,8 +511,6 @@ class EventController extends Controller
 				$shiftUser = 'shift_' . $this->request->shift_user;
 				$startAt = Carbon::parse($event->start_at)->format('Y-m-d') . ' ' . $this->request->start_at_time;
 				$stopAt = Carbon::parse($event->stop_at)->format('Y-m-d') . ' ' . $this->request->stop_at_time;
-
-				//\Log::debug($this->request);
 
 				if (Carbon::parse($startAt)->gte(Carbon::parse($stopAt))) {
 					return response()->json(['status' => 'error', 'reason' => 'Время окончания смены должно быть больше времени начала']);
@@ -578,10 +578,18 @@ class EventController extends Controller
 					}
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
-					$event->city_id = $city->id;
-					$event->location_id = $location->id;
-					$event->flight_simulator_id = $simulator->id;
-					$event->data_json = $data;
+					if (isset($city)) {
+						$event->city_id = $city->id;
+					}
+					if (isset($location)) {
+						$event->location_id = $location->id;
+					}
+					if (isset($simulator)) {
+						$event->flight_simulator_id = $simulator->id;
+					}
+					if (isset($data)) {
+						$event->data_json = $data;
+					}
 					$event->save();
 					
 					$commentId = $this->request->comment_id ?? 0;

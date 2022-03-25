@@ -55,6 +55,12 @@ td.fc-daygrid-day {
 .fc-event-title {
 	color: #000;
 }
+.fc-event-title.fc-sticky {
+	font-size: 11px;
+}
+.form-check.form-check-inline {
+	line-height: 0.9em;
+}
 .event-close-btn {
 	position: absolute;
 	top: 0;
@@ -100,4 +106,18 @@ td.fc-daygrid-day {
 }
 .fa-edit, .fa-times-circle, .fa-trash-alt {
 	cursor: pointer;
+}
+.calendars-wrapper {
+	height: 92vh;
+	overflow: auto;
+}
+.calendars-container {
+	display: flex;
+}
+.calendar-container {
+	width: 100%;
+	min-width: 490px;
+}
+body {
+	overflow: hidden;
 }
