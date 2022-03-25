@@ -22,6 +22,7 @@ class CreateEventsTable extends Migration
 			$table->integer('city_id')->default(0)->index()->comment('город, в котором будет осуществлен полет');
 			$table->integer('location_id')->default(0)->index()->comment('локация, на которой будет осуществлен полет');
 			$table->integer('flight_simulator_id')->default(0)->index()->comment('авиатренажер, на котором будет осуществлен полет');
+			$table->integer('user_id')->default(0)->index()->comment('пользователь');
 			$table->timestamp('start_at')->nullable()->comment('дата и время начала события');
 			$table->timestamp('stop_at')->nullable()->comment('дата и время окончания события');
 			$table->integer('extra_time')->default(0)->comment('дополнительное время');
