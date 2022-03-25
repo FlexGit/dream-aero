@@ -24,7 +24,7 @@
 						@endphp
 
 						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
-							<div class="text-center">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
+							<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
 							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" class="calendar"></div>
 						</div>
 					@endforeach
@@ -416,6 +416,10 @@
 				}
 				calendarArr[$(calendarEl).data('location_id')][$(calendarEl).data('simulator_id')] = calendar;
 			}
+
+			setTimeout(function() {
+				$('.calendar-title').removeClass('hidden');
+			}, 300);
 
 			$(document).on('click', '[data-widget="pushmenu"]', function() {
 				$(window).trigger('resize');
