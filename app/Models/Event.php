@@ -64,10 +64,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Event withoutTrashed()
  * @mixin \Eloquent
  * @property int $deal_position_id
- * @property int $employee_id сотрудник
  * @property-read \App\Models\DealPosition|null $dealPosition
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereDealPositionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Event whereEmployeeId($value)
  * @property int $contractor_id Контрагент
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereContractorId($value)
  */
@@ -99,15 +97,14 @@ class Event extends Model
 	const EVENT_SOURCE_CALENDAR = 'calendar';
 
 	const EVENT_TYPE_DEAL = 'deal';
-
 	const EVENT_TYPE_DEAL_PAID = 'deal_paid';
-	const EVENT_TYPE_DEAL_NOT_PAID = 'deal_notpaid';
+	//const EVENT_TYPE_DEAL_NOT_PAID = 'deal_notpaid';
 	const EVENT_TYPE_NOTE = 'note';
 	const EVENT_TYPE_SHIFT_ADMIN = 'shift_admin';
 	const EVENT_TYPE_SHIFT_PILOT = 'shift_pilot';
 	const EVENT_TYPES = [
+		self::EVENT_TYPE_DEAL => 'Сделка не оплачена',
 		self::EVENT_TYPE_DEAL_PAID => 'Сделка оплачена',
-		self::EVENT_TYPE_DEAL_NOT_PAID => 'Сделка не оплачена',
 		self::EVENT_TYPE_NOTE => 'Уведомление',
 		self::EVENT_TYPE_SHIFT_ADMIN => 'Смена администратора',
 		self::EVENT_TYPE_SHIFT_PILOT => 'Смена пилота',
@@ -155,6 +152,11 @@ class Event extends Model
 		});
 	}
 	
+	public function contractor()
+	{
+		return $this->belongsTo(Contractor::class, 'contractor_id', 'id');
+	}
+
 	public function city()
 	{
 		return $this->belongsTo(City::class, 'city_id', 'id');

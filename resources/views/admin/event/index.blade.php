@@ -61,7 +61,7 @@
 
 @section('right-sidebar')
 	<div class="d-flex justify-content-between m-2">
-		<div class="form-group">
+		<div class="form-group mb-0">
 			<select class="form-control" id="calendar-view-type">
 				<option value="timeGridDay">День</option>
 				<option value="timeGridWeek">Неделя</option>
@@ -207,20 +207,25 @@
 							//toastr.error('Ошибка при загрузке событий!');
 						}
 					},
-					eventOverlap: false,
+					eventOverlap: true,
 					dateClick: function (info) {
-						var action = '/deal/booking',
+						var action = info.allDay ? '/event' : '/deal/booking',
 							method = 'POST',
 							type = 'deal',
+							$calendar = $(info.dayEl).closest('.calendar'),
+							cityId = $calendar.data('city_id'),
+							locationId = $calendar.data('location_id'),
+							simulatorId = $calendar.data('simulator_id'),
+							url = info.allDay ? '/event/0/add/shift' : '/deal/booking/add',
 							$modalDialog = $('.modal').find('.modal-dialog');
 
 						$modalDialog.find('form').attr('id', type);
 						$modalDialog.addClass('modal-lg');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
-
+						//console.log(info);
 						$.ajax({
-							url: '/deal/booking/add',
+							url: url,
 							type: 'GET',
 							dataType: 'json',
 							data: {
@@ -229,6 +234,10 @@
 								'type': type,
 								'source': 'calendar',
 								'flight_at': moment($(info.date)[0])/*.utc()*/.format('YYYY-MM-DD HH:mm'),
+								'city_id': cityId,
+								'location_id': locationId,
+								'simulator_id': simulatorId,
+								'event_date': moment(info.dateStr).format('YYYY-MM-DD'),
 							},
 							success: function (result) {
 								if (result.status === 'error') {
@@ -238,7 +247,7 @@
 
 								$('#modal form').attr('action', action).attr('method', method);
 
-								$('#modal .modal-title').text('Новая сделка на бронирование');
+								$('#modal .modal-title').text(info.allDay ? 'Новая смена на ' + moment(info.dateStr).format('YYYY-MM-DD') : 'Новая сделка на бронирование на ' + moment(info.dateStr).format('YYYY-MM-DD HH:mm'));
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
@@ -253,7 +262,8 @@
 							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end,
-							url = 'event/' + id + '/edit',
+							allDay = $(info.event)[0]._def.allDay,
+							url = 'event/' + id + '/edit/' + allDay,
 							action = '/event/' + id,
 							method = 'PUT',
 							type = $(this).data('type'),
@@ -268,6 +278,7 @@
 
 						$('.modal .modal-title, .modal .modal-body').empty();
 
+						console.log(url);
 						$.ajax({
 							url: url,
 							type: 'GET',
@@ -284,12 +295,21 @@
 								} else {
 									$submit.addClass('hidden');
 								}
-								$('#modal .modal-title').text('Событие ' + title);
+								$('#modal .modal-title').text((allDay ? 'Смена' : 'Событие') + ' "' + title + '"');
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
 						});
 					},
+					/*eventLeave: function(info) {
+						console.log('event left!', $(info.draggedEl).closest('.calendar').data());
+					},
+					eventReceive: function(info) {
+						console.log('event received!', info);
+					},*/
+					/*eventAdd: function(info) {
+						console.log('event add!', info);
+					},*/
 					eventDrop: function (info) {
 						var id = $(info.event)[0]._def.publicId,
 							/*title = $(info.event)[0]._def.title,*/
@@ -298,8 +318,9 @@
 
 						$(info.el).tooltip('hide');
 
+						//console.log($(info.event)[0]._def.extendedProps);
 						$.ajax({
-							url: '/event/' + id,
+							url: '/event/drag_drop/' + id,
 							type: 'PUT',
 							dataType: 'json',
 							data: {
@@ -343,8 +364,6 @@
 						});
 					},
 					eventContent: function (info) {
-						//console.log($(info.event)[0]._def);
-
 						var id = $(info.event)[0]._def.publicId,
 							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
@@ -429,26 +448,6 @@
 							return;
 						}
 
-						var msg = '';
-						if (formId === 'deal') {
-							msg = 'Сделка успешно ';
-							if (method === 'POST') {
-								msg += 'создана';
-							} else if (method === 'PUT') {
-								msg += 'сохранена';
-							}
-						} else if (formId === 'event') {
-							msg = 'Событие успешно ';
-							if (method === 'POST') {
-								msg += 'создано';
-							} else if (method === 'PUT') {
-								msg += 'сохранено';
-							}
-						}
-
-						$('#modal').modal('hide');
-						toastr.success(msg);
-
 						calendarArr.forEach(function (element, locationId) {
 							element.forEach(function (calendar, simulatorId) {
 								if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
@@ -456,6 +455,9 @@
 								}
 							});
 						});
+
+						$('#modal').modal('hide');
+						toastr.success('Событие успешно ' + ((method === 'POST') ? 'создано' : 'сохранено'));
 					}
 				});
 			});
@@ -561,7 +563,7 @@
 					simulatorId = $calendarContainer.data('simulator-id');
 
 				var listEvent = calendar.getEvents();
-				if(confirm('Вы уверены, что хотите удалить событие "' + title + '" ?')) {
+				if(confirm('Вы уверены, что хотите удалить "' + title + '" ?')) {
 					$.ajax({
 						url: '/event/' + id,
 						type: 'DELETE',
@@ -767,6 +769,15 @@
 						});
 					}
 				});
+			});
+
+			$(document).on('click', 'input[name="shift_user"]', function(e) {
+				var $form = $(this).closest('form'),
+					role = $(this).val();
+
+				$form.find('#user_id option[data-role]').addClass('hidden');
+				$form.find('#user_id option[data-role="' + role + '"]').removeClass('hidden');
+				$form.find('#user_id').val('');
 			});
 
 			/*$(document).on('shown.lte.pushmenu', function() {
