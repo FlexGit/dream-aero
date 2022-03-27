@@ -225,13 +225,19 @@ class DealController extends Controller
 			->orderBy('name')
 			->get();
 
-		$promos = Promo::where('is_active', true)
-			->orderBy('name')
-			->get();
+		$promos = Promo::where('is_active', true);
+		if(!$user->isSuperAdmin()) {
+			$promos = $promos->whereIn('city_id', [$user->city_id, 0]);
+		}
+		$promos = $promos->orderBy('name')->get();
 
-		$promocodes = Promocode::where('is_active', true)
-			->orderBy('number')
-			->get();
+		$promocodes = Promocode::where('is_active', true);
+		if(!$user->isSuperAdmin()) {
+			$promocodes = $promocodes->whereHas('cities', function($query) use ($user) {
+				$query->whereIn('cities.id', [$user->city_id, 0]);
+			});
+		}
+		$promocodes = $promocodes->orderBy('number')->get();
 
 		/*$discounts = Discount::where('is_active', true)
 			->orderBy('is_fixed')
@@ -252,6 +258,9 @@ class DealController extends Controller
 			'contractor' => $contractor ?? null,
 			'source' => $this->request->source ?? '',
 			'flightAt' => $this->request->flight_at ?? '',
+			'user' => $user,
+			'locationId' => $this->request->location_id ?? 0,
+			'simulatorId' => $this->request->simulator_id ?? 0,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -462,37 +471,63 @@ class DealController extends Controller
 			abort(404);
 		}
 
-		$rules = [
-			'name' => 'required|min:3|max:50',
-			'email' => 'required|email|unique_email',
-			'phone' => 'required|valid_phone',
-			'product_id' => 'required|numeric|min:0|not_in:0',
-			'location_id' => 'required|numeric|min:0|not_in:0',
-			'flight_date_at' => 'required|date',
-			'flight_time_at' => 'required',
-		];
-
-		$validator = Validator::make($this->request->all(), $rules)
-			->setAttributeNames([
-				'name' => 'Имя',
-				'email' => 'E-mail',
-				'phone' => 'Телефон',
-				'product_id' => 'Продукт',
-				'location_id' => 'Локация',
-				'flight_date_at' => 'Желаемая дата полета',
-				'flight_time_at' => 'Желаемая время полета',
-			]);
+		\Log::debug($this->request);
+		
+		switch ($this->request->event_type) {
+			case Event::EVENT_TYPE_DEAL:
+			case Event::EVENT_TYPE_TEST_FLIGHT:
+				$rules = [
+					'name' => 'required|min:3|max:50',
+					'email' => 'required|email|unique_email',
+					'phone' => 'required', //|valid_phone
+					'product_id' => 'required|numeric|min:0|not_in:0',
+					'location_id' => 'required|numeric|min:0|not_in:0',
+					'flight_date_at' => 'required|date',
+					'flight_time_at' => 'required',
+				];
+				
+				$validator = Validator::make($this->request->all(), $rules)
+					->setAttributeNames([
+						'name' => 'Имя',
+						'email' => 'E-mail',
+						'phone' => 'Телефон',
+						'product_id' => 'Продукт',
+						'location_id' => 'Локация',
+						'flight_date_at' => 'Дата',
+						'flight_time_at' => 'Время',
+					]);
+			break;
+			case Event::EVENT_TYPE_BREAK:
+			case Event::EVENT_TYPE_CLEANING:
+				$rules = [
+					'location_id' => 'required|numeric|min:0|not_in:0',
+					'flight_date_at' => 'required|date',
+					'flight_time_at' => 'required',
+					'duration' => 'required|numeric|min:0|not_in:0',
+				];
+				
+				$validator = Validator::make($this->request->all(), $rules)
+					->setAttributeNames([
+						'location_id' => 'Локация',
+						'flight_date_at' => 'Дата',
+						'flight_time_at' => 'Время',
+						'duration' => 'Длительность',
+					]);
+			break;
+		}
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 
-		$product = Product::find($this->request->product_id);
-		if (!$product) {
-			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
-		}
+		if ($this->request->product_id) {
+			$product = Product::find($this->request->product_id);
+			if (!$product) {
+				return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+			}
 
-		if (!$product->validateFlightDate($this->request->flight_date_at . ' ' . $this->request->flight_time_at)) {
-			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
+			if (!$product->validateFlightDate($this->request->flight_date_at . ' ' . $this->request->flight_time_at)) {
+				return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
+			}
 		}
 
 		$location = Location::find($this->request->location_id);
@@ -549,81 +584,94 @@ class DealController extends Controller
 		try {
 			\DB::beginTransaction();
 
-			if ($this->request->contractor_id) {
-				$contractor = Contractor::find($this->request->contractor_id);
-				if (!$contractor) {
-					return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+			switch ($this->request->event_type) {
+				case Event::EVENT_TYPE_DEAL:
+				case Event::EVENT_TYPE_TEST_FLIGHT:
+					if ($this->request->contractor_id) {
+						$contractor = Contractor::find($this->request->contractor_id);
+						if (!$contractor) {
+							return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+						}
+					}
+					else {
+						$contractor = new Contractor();
+						$contractor->name = $this->request->name ?? '';
+						$contractor->email = $this->request->email ?? '';
+						$contractor->phone = $this->request->phone ?? '';
+						$contractor->city_id = ($location && $location->city) ? $location->city->id : 0;
+						$contractor->source = Contractor::ADMIN_SOURCE;
+						$contractor->user_id = $this->request->user()->id;
+						$contractor->save();
+					}
+					
+					$deal = new Deal();
+					$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+					$deal->status_id = $dealStatus ? $dealStatus->id : 0;
+					$deal->contractor_id = $contractor ? $contractor->id : $this->request->contractor_id;
+					$deal->name = $this->request->name ?? '';
+					$deal->phone = $this->request->phone ?? '';
+					$deal->email = $this->request->email ?? '';
+					$deal->source = Deal::ADMIN_SOURCE;
+					$deal->user_id = $this->request->user()->id;
+					$deal->data_json = $data;
+					$deal->save();
+					
+					$position = new DealPosition();
+					$position->product_id = $product ? $product->id : 0;
+					$position->certificate_id = ($this->request->certificate && $certificate) ? $certificate->id : 0;
+					$position->duration = $product ? $product->duration : 0;
+					$position->amount = $this->request->amount;
+					$position->city_id = ($location && $location->city) ? $location->city->id : 0;
+					$position->location_id = $location ? $location->id : 0;
+					$position->flight_simulator_id = $simulator ? $simulator->id : 0;
+					$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
+					$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
+					$position->flight_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
+					$position->source = Deal::ADMIN_SOURCE;
+					$position->user_id = $this->request->user()->id;
+					$position->data_json = $data;
+					$position->save();
+					
+					$deal->positions()->save($position);
+					
+					// если сделка на бронирование по сертификату, то регистрируем сертификат
+					if ($this->request->certificate && $certificate) {
+						$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::REGISTERED_STATUS);
+						$certificate->status_id = $certificateStatus->id;
+						$certificate->save();
+					}
+				
+				// если сделка создается из календаря, создаем сразу и событие
+				if ($this->request->source == 'calendar') {
+					$event = new Event();
+					$event->event_type = $this->request->event_type;
+					$event->contractor_id = $contractor->id ?? 0;
+					$event->deal_id = $deal->id ?? 0;
+					$event->deal_position_id = $position->id ?? 0;
+					$event->city_id = ($location && $location->city) ? $location->city->id : 0;
+					$event->location_id = $location ? $location->id : 0;
+					$event->flight_simulator_id = $simulator ? $simulator->id : 0;
+					$event->start_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
+					$event->stop_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
+					$event->extra_time = (int)$this->request->extra_time;
+					$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
+					$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
+					$event->save();
+					
+					$position->event()->save($event);
 				}
-			} else {
-				$contractor = new Contractor();
-				$contractor->name = $this->request->name ?? '';
-				$contractor->email = $this->request->email ?? '';
-				$contractor->phone = $this->request->phone ?? '';
-				$contractor->city_id = ($location && $location->city) ? $location->city->id : 0;
-				$contractor->source = Contractor::ADMIN_SOURCE;
-				$contractor->user_id = $this->request->user()->id;
-				$contractor->save();
-			}
-
-			$deal = new Deal();
-			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
-			$deal->status_id = $dealStatus ? $dealStatus->id : 0;
-			$deal->contractor_id = $contractor ? $contractor->id : $this->request->contractor_id;
-			$deal->name = $this->request->name ?? '';
-			$deal->phone = $this->request->phone ?? '';
-			$deal->email = $this->request->email ?? '';
-			$deal->source = Deal::ADMIN_SOURCE;
-			$deal->user_id = $this->request->user()->id;
-			$deal->data_json = $data;
-			$deal->save();
-
-			$position = new DealPosition();
-			$position->product_id = $product ? $product->id : 0;
-			$position->certificate_id = ($this->request->certificate && $certificate) ? $certificate->id : 0;
-			$position->duration = $product ? $product->duration : 0;
-			$position->amount = $this->request->amount;
-			$position->city_id = ($location && $location->city) ? $location->city->id : 0;
-			$position->location_id = $location ? $location->id : 0;
-			$position->flight_simulator_id = $simulator ? $simulator->id : 0;
-			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
-			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
-			$position->flight_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
-			$position->source = Deal::ADMIN_SOURCE;
-			$position->user_id = $this->request->user()->id;
-			$position->data_json = $data;
-			$position->save();
-
-			$deal->positions()->save($position);
-
-			// если сделка на бронирование по сертификату, то регистрируем сертификат
-			if ($this->request->certificate && $certificate) {
-				$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::REGISTERED_STATUS);
-				$certificate->status_id = $certificateStatus->id;
-				$certificate->save();
-			}
-
-			\Log::debug($this->request->source);
-
-			// если сделка создается из календаря, создаем сразу и событие
-			if ($this->request->source == 'calendar') {
-				$startAt = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
-				$stopAt = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
-
-				$event = new Event();
-				$event->event_type = Event::EVENT_TYPE_DEAL;
-				$event->deal_id = $deal->id ?? 0;
-				$event->deal_position_id = $position->id ?? 0;
-				$event->city_id = ($location && $location->city) ? $location->city->id : 0;
-				$event->location_id = $location ? $location->id : 0;
-				$event->flight_simulator_id = $simulator ? $simulator->id : 0;
-				$event->start_at = $startAt;
-				$event->stop_at = $stopAt;
-				$event->extra_time = (int)$this->request->extra_time;
-				$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
-				$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
-				$event->save();
-
-				$position->event()->save($event);
+				break;
+				case Event::EVENT_TYPE_BREAK:
+				case Event::EVENT_TYPE_CLEANING:
+					$event = new Event();
+					$event->event_type = $this->request->event_type;
+					$event->city_id = ($location && $location->city) ? $location->city->id : 0;
+					$event->location_id = $location ? $location->id : 0;
+					$event->flight_simulator_id = $simulator ? $simulator->id : 0;
+					$event->start_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
+					$event->stop_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->addMinutes($this->request->duration ?? 0)->format('Y-m-d H:i');
+					$event->save();
+				break;
 			}
 
 			\DB::commit();

@@ -56,7 +56,10 @@ td.fc-daygrid-day {
 	color: #000;
 }
 .fc-event-title.fc-sticky {
-	font-size: 11px;
+	font-size: 12px;
+}
+.fc-timegrid-event .fc-event-time {
+	margin-bottom: 0 !important;
 }
 .form-check.form-check-inline {
 	line-height: 0.9em;

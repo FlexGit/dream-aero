@@ -41,9 +41,9 @@ class EventController extends Controller
 		$user = \Auth::user();
 		
 		// Временный редирект для админов
-		if (!$user->isSuperAdmin()) {
+		/*if (!$user->isSuperAdmin()) {
 			return redirect('/contractor');
-		}
+		}*/
 
 		$cities = $user->city
 			? new Collection([$user->city])
@@ -112,10 +112,14 @@ class EventController extends Controller
 			$allDay = false;
 			
 			switch ($event->event_type) {
-				case 'deal':
+				case Event::EVENT_TYPE_DEAL:
 					$balance = ($event->deal) ? $event->deal->balance() : 0;
-					$title = $event->contractor ? $event->contractor->name . ' ' . HelpFunctions::formatPhone($event->deal->contractor->phone) . ' ' . $event->dealPosition->product->name : 'неизвестно';
+					
+					$title = $event->contractor ? $event->contractor->name . ' ' . HelpFunctions::formatPhone($event->contractor->phone) : '';
+					$title .= ($event->dealPosition && $event->dealPosition->product) ? ' ' . $event->dealPosition->product->name : '';
+					
 					$allDay = false;
+					
 					if ($event->extra_time) {
 						$title .= '(+' . $event->extra_time . ')';
 					}
@@ -123,39 +127,39 @@ class EventController extends Controller
 						$color = ($balance >= 0) ? $data['deal_paid'] : $data['deal'];
 					}
 				break;
-				case 'shift_admin':
+				case Event::EVENT_TYPE_SHIFT_ADMIN:
 					$title = $event->user->fio();
 					$allDay = true;
 					if ($data && isset($data['shift_admin'])) {
 						$color = $data['shift_admin'];
 					}
 				break;
-				case 'shift_pilot':
+				case Event::EVENT_TYPE_SHIFT_PILOT:
 					$title = $event->user->fio();
 					$allDay = true;
 					if ($data && isset($data['shift_pilot'])) {
 						$color = $data['shift_pilot'];
 					}
 				break;
-				case 'cleaning':
-					$title = 'Уборка';
+				case Event::EVENT_TYPE_CLEANING:
+					$title = Event::EVENT_TYPES[Event::EVENT_TYPE_CLEANING];
 					$allDay = false;
-					if ($data && isset($data['note'])) {
-						$color = $data['note'];
+					if ($data && isset($data[Event::EVENT_TYPE_CLEANING])) {
+						$color = $data[Event::EVENT_TYPE_CLEANING];
 					}
 				break;
-				case 'break':
-					$title = 'Перерыв';
+				case Event::EVENT_TYPE_BREAK:
+					$title = Event::EVENT_TYPES[Event::EVENT_TYPE_BREAK];
 					$allDay = false;
-					if ($data && isset($data['note'])) {
-						$color = $data['note'];
+					if ($data && isset($data[Event::EVENT_TYPE_BREAK])) {
+						$color = $data[Event::EVENT_TYPE_BREAK];
 					}
 				break;
-				case 'test_flight':
-					$title = 'Тестовый полет';
+				case Event::EVENT_TYPE_TEST_FLIGHT:
+					$title = Event::EVENT_TYPES[Event::EVENT_TYPE_TEST_FLIGHT];
 					$allDay = false;
-					if ($data && isset($data['note'])) {
-						$color = $data['note'];
+					if ($data && isset($data[Event::EVENT_TYPE_TEST_FLIGHT])) {
+						$color = $data[Event::EVENT_TYPE_TEST_FLIGHT];
 					}
 				break;
 			}
@@ -300,9 +304,10 @@ class EventController extends Controller
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
-
+	
 	/**
 	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Throwable
 	 */
 	public function store()
 	{
@@ -463,7 +468,12 @@ class EventController extends Controller
 
 		return response()->json(['status' => 'success']);
 	}
-
+	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Throwable
+	 */
 	public function update($id)
 	{
 		if (!$this->request->ajax()) {
@@ -489,7 +499,7 @@ class EventController extends Controller
 		
 		$userId = $this->request->user_id ?? 0;
 
-		//\Log::debug($this->request);
+		\Log::debug($this->request);
 		
 		switch ($event->event_type) {
 			case Event::EVENT_TYPE_DEAL:
@@ -516,13 +526,11 @@ class EventController extends Controller
 					return response()->json(['status' => 'error', 'reason' => 'Время окончания смены должно быть больше времени начала']);
 				}
 	
-				//\DB::connection()->enableQueryLog();
 				$existingEvent = Event::where('event_type', $shiftUser)
 					->where('start_at', '<', Carbon::parse($stopAt)->format('Y-m-d H:i'))
 					->where('stop_at', '>', Carbon::parse($startAt)->format('Y-m-d H:i'))
 					->where('id', '<>', $event->id)
 					->first();
-				//\Log::debug(\DB::getQueryLog());
 				if ($existingEvent) {
 					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . $existingEvent->user->fio()]);
 				}
@@ -556,19 +564,17 @@ class EventController extends Controller
 							return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
 						}
 						
-						$data = [
-							'pilot_assessment' => $this->request->pilot_assessment ?? '',
-							'admin_assessment' => $this->request->admin_assessment ?? '',
-						];
-						
 						$event->city_id = $city ? $city->id : 0;
 						$event->location_id = $location ? $location->id : 0;
 						$event->flight_simulator_id = $simulator ? $simulator->id : 0;
 						$event->extra_time = (int)$this->request->extra_time;
 						$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
 						$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
-					}
-					else if ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
+						$event->pilot_assessment = (int)$this->request->pilot_assessment;
+						$event->admin_assessment = (int)$this->request->admin_assessment;
+						$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;
+						$event->simulator_down_at = $this->request->simulator_down_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_down_at)->format('Y-m-d H:i') : null;
+					} else if ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at)->subMinutes($event->extra_time ?? 0)->format('Y-m-d H:i');
 						
@@ -613,6 +619,17 @@ class EventController extends Controller
 						}
 					}
 				break;
+				case Event::EVENT_TYPE_BREAK:
+				case Event::EVENT_TYPE_CLEANING:
+				case Event::EVENT_TYPE_TEST_FLIGHT:
+					if ($this->request->start_at && $this->request->stop_at) {
+						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
+						$stopAt = Carbon::parse($this->request->stop_at)->format('Y-m-d H:i');
+						$event->start_at = $startAt;
+						$event->stop_at = $stopAt;
+						$event->save();
+					}
+				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:
 				case Event::EVENT_TYPE_SHIFT_PILOT:
 					$event->start_at = Carbon::parse($event->start_at)->format('Y-m-d') . ' ' . $this->request->start_at_time;
@@ -634,17 +651,25 @@ class EventController extends Controller
 		return response()->json(['status' => 'success']);
 	}
 	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Throwable
+	 */
 	public function dragDrop($id)
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
 		
+		\Log::debug($this->request);
+		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
 		switch ($event->event_type) {
 			case Event::EVENT_TYPE_DEAL:
+			case Event::EVENT_TYPE_TEST_FLIGHT:
 				$position = DealPosition::find($event->deal_position_id);
 				if (!$position) {
 					return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
@@ -663,17 +688,11 @@ class EventController extends Controller
 				$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d') . ' ' . Carbon::parse($event->start_at)->format('H:i');
 				$stopAt = Carbon::parse($this->request->start_at)->format('Y-m-d') . ' ' . Carbon::parse($event->stop_at)->format('H:i');
 
-				/*\Log::debug($this->request);
-				\Log::debug($startAt);
-				\Log::debug($stopAt);*/
-
-				//\DB::connection()->enableQueryLog();
 				$existingEvent = Event::where('event_type', $event->event_type)
 					->where('start_at', '<', Carbon::parse($stopAt)->format('Y-m-d H:i'))
 					->where('stop_at', '>', Carbon::parse($startAt)->format('Y-m-d H:i'))
 					->where('id', '<>', $event->id)
 					->first();
-				//\Log::debug(\DB::getQueryLog());
 				if ($existingEvent) {
 					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . $existingEvent->user->fio()]);
 				}
@@ -685,6 +704,7 @@ class EventController extends Controller
 			
 			switch ($event->event_type) {
 				case Event::EVENT_TYPE_DEAL:
+				case Event::EVENT_TYPE_TEST_FLIGHT:
 					if ($this->request->source == Event::EVENT_SOURCE_DEAL) {
 						$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
@@ -700,6 +720,14 @@ class EventController extends Controller
 							return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
 						}
 					}
+					$event->start_at = $startAt;
+					$event->stop_at = $stopAt;
+					$event->save();
+				break;
+				case Event::EVENT_TYPE_BREAK:
+				case Event::EVENT_TYPE_CLEANING:
+					$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
+					$stopAt = Carbon::parse($this->request->stop_at)->format('Y-m-d H:i');
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
 					$event->save();
@@ -723,10 +751,9 @@ class EventController extends Controller
 		
 		return response()->json(['status' => 'success']);
 	}
-
+	
 	/**
 	 * @param $id
-	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function delete($id)
@@ -745,6 +772,11 @@ class EventController extends Controller
 		return response()->json(['status' => 'success']);
 	}
 	
+	/**
+	 * @param $id
+	 * @param $commentId
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function deleteComment($id, $commentId)
 	{
 		if (!$this->request->ajax()) {

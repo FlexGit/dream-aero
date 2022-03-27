@@ -238,7 +238,7 @@
 
 								$('#modal form').attr('action', action).attr('method', method);
 
-								$('#modal .modal-title').text(info.allDay ? 'Новая смена на ' + moment(info.dateStr).format('YYYY-MM-DD') : 'Новая сделка на бронирование на ' + moment(info.dateStr).format('YYYY-MM-DD HH:mm'));
+								$('#modal .modal-title').text(info.allDay ? 'Новая смена на ' + moment(info.dateStr).format('YYYY-MM-DD') : 'Новое событие на ' + moment(info.dateStr).format('YYYY-MM-DD HH:mm'));
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
@@ -260,6 +260,8 @@
 							type = $(this).data('type'),
 							$modalDialog = $('.modal').find('.modal-dialog');
 
+						if ($.inArray(title, ['Тестовый полет', 'Уборка', 'Перерыв']) !== -1) return;
+
 						$(info.el).tooltip('hide');
 
 						$modalDialog.find('form').attr('id', type);
@@ -269,7 +271,8 @@
 
 						$('.modal .modal-title, .modal .modal-body').empty();
 
-						console.log(url);
+						//console.log(title);
+
 						$.ajax({
 							url: url,
 							type: 'GET',
@@ -773,6 +776,56 @@
 				$form.find('#user_id option[data-role]').addClass('hidden');
 				$form.find('#user_id option[data-role="' + role + '"]').removeClass('hidden');
 				$form.find('#user_id').val('');
+			});
+
+			$(document).on('change', 'input[name="event_type"]', function(e) {
+				var value = $(this).filter(':checked').val(),
+					$form = $(this).closest('form');
+
+				console.log(value);
+
+				switch (value) {
+					case 'test_flight':
+						$form.find('#email').closest('.row').show();
+						$form.find('#product_id').closest('.row').show();
+						$form.find('#comment').closest('.row').show();
+						$form.find('#extra_time').closest('.row').show();
+						$form.find('#duration').closest('.js-duration').addClass('hidden');
+
+						$form.find('#certificate').val('').prop('disabled', true);
+						$form.find('#promo_id').val(0).prop('disabled', true);
+						$form.find('#promocode_id').val(0).prop('disabled', true);
+						$form.find('#extra_time').val(0).prop('disabled', true);
+						$form.find('#is_repeated_flight').val(0).prop('disabled', true);
+						$form.find('#is_unexpected_flight').val(0).prop('disabled', true);
+						$form.find('#is_free').prop('checked', true).prop('disabled', true);
+						$form.find('#amount-text h1').text('0');
+						break;
+					case 'break':
+					case 'cleaning':
+						$form.find('#email').closest('.row').hide();
+						$form.find('#product_id').closest('.row').hide();
+						$form.find('#comment').closest('.row').hide();
+						$form.find('#extra_time').closest('.row').hide();
+						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						break;
+					case 'deal':
+						$form.find('#email').closest('.row').show();
+						$form.find('#product_id').closest('.row').show();
+						$form.find('#comment').closest('.row').show();
+						$form.find('#extra_time').closest('.row').show();
+						$form.find('#duration').closest('.js-duration').addClass('hidden');
+
+						$form.find('#certificate').val('').prop('disabled', false);
+						$form.find('#promo_id').val(0).prop('disabled', false);
+						$form.find('#promocode_id').val(0).prop('disabled', false);
+						$form.find('#extra_time').val(0).prop('disabled', false);
+						$form.find('#is_repeated_flight').val(0).prop('disabled', false);
+						$form.find('#is_unexpected_flight').val(0).prop('disabled', false);
+						$form.find('#is_free').prop('checked', false).prop('disabled', false);
+						//$form.find('#amount-text h1').text('0');
+						break;
+				}
 			});
 
 			/*$(document).on('shown.lte.pushmenu', function() {

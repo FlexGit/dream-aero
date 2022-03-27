@@ -1,9 +1,45 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="contractor_id" name="contractor_id">
 <input type="hidden" id="amount" name="amount">
-<input type="hidden" id="flight_simulator_id" name="flight_simulator_id">
+<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">
+<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
 <input type="hidden" id="source" name="source" value="{{ $source ?? '' }}">
 
+<div class="row">
+	<div class="col-3">
+		<div class="form-group">
+			<div class="custom-control">
+				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" checked>
+				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}">Бронирование</label>
+			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="form-group">
+			<div class="custom-control">
+				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}">
+				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}">Перерыв</label>
+			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="form-group">
+			<div class="custom-control">
+				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}">
+				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}">Уборка кабины</label>
+			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="form-group">
+			<div class="custom-control">
+				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">
+				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">Тестовый полет</label>
+			</div>
+		</div>
+	</div>
+</div>
+<hr>
 <div class="row">
 	<div class="col">
 		<div class="form-group">
@@ -38,7 +74,7 @@
 		<div class="form-group">
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
-				<option></option>
+				<option value="0"></option>
 				@foreach($productTypes ?? [] as $productType)
 					<optgroup label="{{ $productType->name }}">
 						@foreach($productType->products ?? [] as $product)
@@ -51,9 +87,15 @@
 	</div>
 	<div class="col">
 		<div class="form-group">
+			<label for="certificate">Сертификат</label>
+			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Сертификат">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
 			<label for="promo_id">Акция</label>
 			<select class="form-control" id="promo_id" name="promo_id">
-				<option value=""></option>
+				<option value="0"></option>
 				@foreach($promos ?? [] as $promo)
 					<option value="{{ $promo->id }}">{{ $promo->name }}</option>
 				@endforeach
@@ -64,7 +106,7 @@
 		<div class="form-group">
 			<label for="promocode_id">Промокод</label>
 			<select class="form-control" id="promocode_id" name="promocode_id">
-				<option value=""></option>
+				<option value="0"></option>
 				@foreach($promocodes ?? [] as $promocode)
 					<option value="{{ $promocode->id }}">{{ $promocode->valueFormatted() }}</option>
 				@endforeach
@@ -73,70 +115,82 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col">
-		<div class="form-group">
-			<label for="location_id">Локация</label>
-			<select class="form-control" id="location_id" name="location_id">
-				<option value="0"></option>
-				@foreach($cities ?? [] as $city)
-					<optgroup label="{{ $city->name }}">
-						@foreach($city->locations ?? [] as $location)
-							@foreach($location->simulators ?? [] as $simulator)
-								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+	{{--@if($user->isSuperAdmin())
+		<div class="col">
+			<div class="form-group">
+				<label for="location_id">Локация</label>
+				<select class="form-control" id="location_id" name="location_id">
+					<option value="0"></option>
+					@foreach($cities ?? [] as $city)
+						<optgroup label="{{ $city->name }}">
+							@foreach($city->locations ?? [] as $location)
+								@foreach($location->simulators ?? [] as $simulator)
+									<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+								@endforeach
 							@endforeach
-						@endforeach
-					</optgroup>
-				@endforeach
-			</select>
+						</optgroup>
+					@endforeach
+				</select>
+			</div>
 		</div>
-	</div>
-	<div class="col">
+	@endif--}}
+	<div class="col-6">
 		<div class="form-group">
-			<label for="flight_date_at">Желаемая дата и время полета</label>
+			<label for="flight_date_at">Дата и время</label>
 			<div class="d-flex">
 				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at" value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->format('Y-m-d') : '' }}">
 				<input type="time" class="form-control ml-2" id="flight_time_at" name="flight_time_at" value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->format('H:i') : '' }}">
 			</div>
 		</div>
 	</div>
-	<div class="col">
+	<div class="col-3 js-duration hidden">
 		<div class="form-group">
-			<label for="certificate">Сертификат</label>
-			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Сертификат">
+			<label for="duration">Длительность</label>
+			<select class="form-control" id="duration" name="duration">
+				<option value="0">---</option>
+				<option value="15">15 мин</option>
+				<option value="30">30 мин</option>
+				<option value="60">60 мин</option>
+				<option value="90">90 мин</option>
+				<option value="120">120 мин</option>
+				<option value="180">180 мин</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-6">
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					<label for="extra_time">Доп. время</label>
+					<select class="form-control" id="extra_time" name="extra_time">
+						<option value="0">---</option>
+						<option value="15">15 мин</option>
+					</select>
+				</div>
+			</div>
+			@if($source)
+				<div class="col">
+					<div class="form-group">
+						<label for="is_repeated_flight">Повторный</label>
+						<select class="form-control" id="is_repeated_flight" name="is_repeated_flight">
+							<option value="0" selected>Нет</option>
+							<option value="1">Да</option>
+						</select>
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group">
+						<label for="is_unexpected_flight">Спонтанный</label>
+						<select class="form-control" id="is_unexpected_flight" name="is_unexpected_flight">
+							<option value="0" selected>Нет</option>
+							<option value="1">Да</option>
+						</select>
+					</div>
+				</div>
+			@endif
 		</div>
 	</div>
 </div>
-@if($source)
-	<div class="row">
-		<div class="col">
-			<div class="form-group">
-				<label for="extra_time">Доп. минуты</label>
-				<select class="form-control" id="extra_time" name="extra_time">
-					<option value="0"></option>
-					<option value="15">15</option>
-				</select>
-			</div>
-		</div>
-		<div class="col">
-			<div class="form-group">
-				<label for="is_repeated_flight">Повторный полет</label>
-				<select class="form-control" id="is_repeated_flight" name="is_repeated_flight">
-					<option value="0" selected>Нет</option>
-					<option value="1">Да</option>
-				</select>
-			</div>
-		</div>
-		<div class="col">
-			<div class="form-group">
-				<label for="is_unexpected_flight">Спонтанный полет</label>
-				<select class="form-control" id="is_unexpected_flight" name="is_unexpected_flight">
-					<option value="0" selected>Нет</option>
-					<option value="1">Да</option>
-				</select>
-			</div>
-		</div>
-	</div>
-@endif
 <div class="row">
 	<div class="col-8">
 		<label for="comment">Комментарий</label>
