@@ -25,7 +25,7 @@
 
 						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
 							<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
-							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" class="calendar"></div>
+							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-timezone="{{ $city->timezone }}" class="calendar"></div>
 						</div>
 					@endforeach
 				@endforeach
@@ -148,6 +148,8 @@
 			var calendars = document.getElementsByClassName('calendar');
 			var calendarArr = [];
 			for (let calendarEl of calendars) {
+				var timezone = $(calendarEl).data('timezone') ? $(calendarEl).data('timezone') : 'Europe/Moscow';
+
 				var calendar = new FullCalendar.Calendar(calendarEl, {
 					aspectRatio: 0.5,
 					stickyHeaderDates: true,
@@ -172,8 +174,9 @@
 					slotDuration: '00:15',
 					slotLabelInterval: '01:00',
 					nowIndicator: true,
+					now: convertUTCDateToLocalDate(Date.now(), timezone),
 					/*timeZone: 'local',*/
-					/*timeZone: 'Europe/Moscow',*/
+					/*timeZone: 'America/New_York',*/
 					dayMaxEvents: true,
 					firstDay: 1,
 					allDayText: 'Смена',
@@ -840,6 +843,11 @@
 
 				$form.trigger('reset');
 			});*/
+
+			function convertUTCDateToLocalDate(date, timeZone) {
+				date = new Date(date);
+				return new Date(date.toLocaleString('en-US', {timeZone: timeZone}));
+			}
 		});
 	</script>
 @stop
