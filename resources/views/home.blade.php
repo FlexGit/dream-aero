@@ -18,8 +18,8 @@
 			</div>
 			<h1 class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.3s" data-wow-iteration="1">Испытай себя в роли пилота авиалайнера</h1>
 			<span class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.9s" data-wow-iteration="1">Рады представить Вам тренажеры знаменитого авиалайнера Boeing 737 NG и Airbus A320 на динамической платформе в Москве.</span>
-			<a href="{{ url('#editform') }}" class="fly button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-formname="tpl.bronform" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>забронировать</i></a>
-			<a href="{{ url('#editform') }}" class="give button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-formname="tpl.main_payonline" data-wow-delay="1.6s" data-wow-duration="2s" data-wow-iteration="1"><i>подарить полет</i></a>
+			<a href="{{ url('#popup') }}" class="fly button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-formname="tpl.bronform" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>забронировать</i></a>
+			<a href="{{ url('#popup-certificate') }}" class="give button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-formname="tpl.main_payonline" data-wow-delay="1.6s" data-wow-duration="2s" data-wow-iteration="1"><i>подарить полет</i></a>
 		</div>
 		<div class="scroll-down">
 			<a class="scrollTo" href="#about">
@@ -80,7 +80,7 @@
 					</a>
 				</li>
 			</ul>
-			<a href="{{ url('#editform') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form_open" data-formname="tpl.bronform"><i>забронировать полет</i></a>
+			<a href="{{ url('#popup-booking') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form_open" data-formname="tpl.bronform"><i>забронировать полет</i></a>
 		</div>
 	</div>
 
@@ -210,28 +210,28 @@
 		<div class="container">
 			<h2 class="block-title">Отзывы</h2>
 			<div class="reviews-carousel owl-carousel">
-				@foreach($reviews as $review)
-				<div class="item">
-					<div class="row">
-						<div class="col-md-8">
-							<div class="reviews-item">
-								<div class="reviews-body wow">
-									<p class="reviews-text">
-										{{ $review['comment'] }}
-									</p>
+				@foreach($reviews ?? [] as $review)
+					<div class="item">
+						<div class="row">
+							<div class="col-md-8">
+								<div class="reviews-item">
+									<div class="reviews-body wow">
+										<p class="reviews-text">
+											{{ $review['preview_text'] }}
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="reviews-author wow">
+									<span class="reviews-name">{{ $review['title'] }}{{ $review->city ? ' | ' . $review->city->name : '' }}</span>
+									<span class="reviews-sent">Отправлено: {{ $review['created_at'] }}</span>
+									<button type="button" class="reviews-prev"></button>
+									<button type="button" class="reviews-next"></button>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<div class="reviews-author wow">
-								<span class="reviews-name">{{ $review['name'] }} | {{-- $review->location->city['name'] --}}</span>
-								<span class="reviews-sent">Отправлено: {{ $review['created_at'] }}</span>
-								<button type="button" class="reviews-prev"></button>
-								<button type="button" class="reviews-next"></button>
-							</div>
-						</div>
 					</div>
-				</div>
 				@endforeach
 			</div>
 			<div class="col-md-8">
@@ -270,13 +270,272 @@
 
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
 @endpush
 
 @push('scripts')
 	<script src="{{ asset('js/owl.carousel.js') }}"></script>
-	<script src="{{ asset('js/mainonly.js') }}"></script>
+	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
+	<script src="{{ asset('js/mainonly.js?' . time()) }}"></script>
 	<script>
 		$(function() {
+			$.datetimepicker.setLocale('ru', {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit'
+			});
+
+			$(document).on('click', '.js-review-send', function (e) {
+				var $form = $(this).closest('form');
+
+				$('.popup-error, .popup-success').remove();
+
+				$.ajax({
+					url: '/review/create',
+					type: 'POST',
+					data: {
+						'name': $form.find('[name="name"]').val(),
+						'body': $form.find('[name="body"]').val(),
+						'consent': $form.find('[name="consent"]:checked').val(),
+					},
+					dataType: 'json',
+					success: function(result) {
+						if (result.status !== 'success') {
+							$.each(result.errors, function(index, value) {
+								$form.find('[name="' + index + '"]').before('<p class="popup-error" style="color: red;">' + value + '</p>');
+							});
+							return;
+						}
+
+						$('form')[0].reset();
+
+						if (result.message) {
+							$.magnificPopup.open({
+								items: {
+									src: "#popup-welcome"
+								},
+								type: 'inline',
+								preloader: false,
+								removalDelay: 300,
+								mainClass: 'mfp-fade',
+								callbacks: {
+									open: function() {
+										$.magnificPopup.instance.close = function() {
+											// Do whatever else you need to do here
+											var confirmed = confirm("Вы уверены?");
+											if(!confirmed) {
+												return;
+											}
+
+											// Call the original close method to close the popup
+											$.magnificPopup.proto.close.call(this);
+										};
+									}
+								}
+							});
+						}
+					}
+				});
+			});
+
+			$('.popup-with-form').magnificPopup({
+				type: 'inline',
+				preloader: false,
+				/*focus: '#name',*/
+				removalDelay: 300,
+				mainClass: 'mfp-fade',
+				callbacks: {
+					/*beforeOpen: function() {
+						if ($(window).width() < 700) {
+							this.st.focus = false;
+						} else {
+							this.st.focus = '#name';
+						}
+					},*/
+					open: function() {
+						$.magnificPopup.instance.close = function() {
+							$('form')[0].reset();
+							// Call the original close method to close the popup
+							$.magnificPopup.proto.close.call(this);
+						};
+
+						$.ajax({
+							type: 'GET',
+							url: '/modal/booking',
+							success: function(result) {
+								if (result.status != 'success') {
+									return;
+								}
+
+								$('#popup').html(result.html).find('select').niceSelect();
+
+								calcAmount();
+
+								$('.datetimepicker').datetimepicker({
+									format: 'd.m.Y H:i',
+									step: 30,
+									dayOfWeekStart: 1,
+									minDate: 0,
+									minTime: '10:00',
+									maxTime: '23:00',
+									lang: 'ru',
+									lazyInit: true,
+									scrollInput: false,
+									scrollTime: false,
+									scrollMonth: false,
+									validateOnBlur: false,
+									onChangeDateTime: function (value) {
+										value.setHours(value.getHours() + Math.round(value.getMinutes()/60));
+										value.setMinutes(0, 0, 0);
+
+										console.log(value.toLocaleString());
+										$('#flight_date').val(value.toLocaleString());
+
+										calcAmount();
+									},
+								});
+							}
+						});
+					}
+				}
+			});
+
+			$(document).on('change', '.switch_box input[name="has_certificate"]', function() {
+				var $popup = $(this).closest('.popup');
+
+				if ($(this).is(':checked')) {
+					$popup.find('#certificate_number').show();
+					$popup.find('#total-amount, .have_promo').hide();
+				} else {
+					$popup.find('#certificate_number').hide();
+					$popup.find('#total-amount, .have_promo').show();
+				}
+			});
+
+			$(document).on('change', '.switch_box input[name="has_promocode"]', function() {
+				var $popup = $(this).closest('.popup');
+
+				if ($(this).is(':checked')) {
+					$popup.find('#promocode').show().focus();
+					$popup.find('.js-promocode-btn').show();
+					$popup.find('.promocode_note').show();
+				} else {
+					$('.js-promocode-remove').trigger('click');
+					$popup.find('#promocode').hide();
+					$popup.find('.js-promocode-btn').hide();
+					$popup.find('.promocode_note').hide();
+				}
+			});
+
+			$(document).on('click', '.js-promocode-btn', function() {
+				var $promocodeApplyBtn = $(this),
+					$promocodeContainer = $promocodeApplyBtn.closest('.promocode_container'),
+					$promocode = $promocodeContainer.find('#promocode'),
+					$promocodeRemoveBtn = $promocodeContainer.find('.js-promocode-remove'),
+					$fieldset = $promocodeApplyBtn.closest('fieldset'),
+					$product = $fieldset.find('#product'),
+					$errorMsg = $promocodeContainer.find('.text-error'),
+					$successMsg = $promocodeContainer.find('.text-success'),
+					$promocodeUuid = $fieldset.find('#promocode_uuid');
+
+				$errorMsg.remove();
+				$successMsg.remove();
+
+				if (!$promocode.val().length) return;
+				if ($product.val() === null) {
+					$promocode.after('<p class="text-error text-small">' + $promocode.data('no-product-error') + '</p>');
+					return;
+				}
+
+				$.ajax({
+					url: '/promocode/verify',
+					type: 'POST',
+					data: {
+						'promocode': $promocode.val(),
+					},
+					dataType: 'json',
+					success: function (result) {
+						if (result.status !== 'success') {
+							$promocode.after('<p class="text-error text-small">' + result.reason + '</p>');
+							return;
+						}
+
+						$promocode.after('<p class="text-success text-small">' + result.message + '</p>');
+						$promocodeUuid.val(result.uuid);
+						$promocode.attr('disabled', true);
+						$promocodeApplyBtn.hide();
+						$promocodeRemoveBtn.show();
+
+						calcAmount();
+					}
+				});
+			});
+
+			$(document).on('click', '.js-promocode-remove', function() {
+				var $promocodeRemoveBtn = $(this),
+					$promocodeContainer = $promocodeRemoveBtn.closest('.promocode_container'),
+					$promocodeApplyBtn = $promocodeContainer.find('.js-promocode-btn'),
+					$promocode = $promocodeContainer.find('#promocode'),
+					$fieldset = $promocodeRemoveBtn.closest('fieldset'),
+					$promocodeUuid = $fieldset.find('#promocode_uuid'),
+					$errorMsg = $promocodeContainer.find('.text-error'),
+					$successMsg = $promocodeContainer.find('.text-success');
+
+				$errorMsg.remove();
+				$successMsg.remove();
+				$promocodeRemoveBtn.hide();
+				$promocodeApplyBtn.show();
+				$promocode.val('');
+				$promocodeUuid.val('');
+				$promocode.attr('disabled', false);
+
+				calcAmount();
+			});
+
+			$(document).on('change', '#product', function() {
+				calcAmount();
+			});
+
+			function calcAmount() {
+				var $popup = $('#popup'),
+					productId = $popup.find('#product').find(':selected').data('product-id'),
+					promocodeUuid = $popup.find('#promocode_uuid').val(),
+					locationId = $popup.find('input[name="locationSimulator"]:checked').data('location-id'),
+					simulatorId = $popup.find('input[name="locationSimulator"]:checked').data('simulator-id'),
+					flightDate = $popup.find('#flight_date').val(),
+					cityId = $('#city_id').val(),
+					$amount = $popup.find('.js-amount'),
+					amount = 0;
+
+				$.ajax({
+					type: 'GET',
+					url: '/deal/product/calc',
+					data: {
+						product_id: productId,
+						promocode_uuid: promocodeUuid,
+						location_id: locationId,
+						simulator_id: simulatorId,
+						city_id: cityId,
+						source: 'web',
+					},
+					dataType: 'json',
+					success: function(result) {
+						//console.log(result);
+						if (result.status != 'success') {
+							return;
+						}
+
+						if (result.amount != result.baseAmount) {
+							amount = '<span class="strikethrough">' + result.baseAmount + '</span>' + result.amount;
+						} else if (result.amount) {
+							amount = result.amount;
+						}
+						$amount.html(amount);
+
+						//$('#popup').html(result.html).find('select').niceSelect();
+					}
+				});
+			}
 		});
 	</script>
 @endpush

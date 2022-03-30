@@ -3,6 +3,7 @@
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
@@ -125,11 +126,13 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('/', [EventController::class, 'index'])->name('eventIndex');
 		Route::get('event/list/ajax', [EventController::class, 'getListAjax'])->name('eventList');
 		Route::post('event', [EventController::class, 'store'])->name('store-event');
+		Route::put('event/drag_drop/{id}', [EventController::class, 'dragDrop'])->name('drag-drop-event');
 		Route::put('event/{id}', [EventController::class, 'update'])->name('update-event');
+		Route::delete('event/{id}/comment/{comment_id}/remove', [EventController::class, 'deleteComment'])->name('delete-comment');
 		Route::delete('event/{id}', [EventController::class, 'delete'])->name('delete-event');
 
-		Route::get('event/{position_id}/add', [EventController::class, 'add'])->name('add-event');
-		Route::get('event/{id}/edit', [EventController::class, 'edit'])->name('edit-event');
+		Route::get('event/{position_id}/add/{event_type?}', [EventController::class, 'add'])->name('add-event');
+		Route::get('event/{id}/edit/{is_shift?}', [EventController::class, 'edit'])->name('edit-event');
 		Route::get('event/{id}/show', [EventController::class, 'show'])->name('show-event');
 
 		// Сделки
@@ -144,8 +147,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('deal/booking/add', [DealController::class, 'addBooking']);
 		Route::get('deal/product/add', [DealController::class, 'addProduct']);
 		Route::get('deal/{id}/edit', [DealController::class, 'edit']);
-
-		Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
 
 		// Позиции сделки
 		Route::post('deal_position/certificate', [PositionController::class, 'storeCertificate']);
@@ -356,6 +357,21 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('promo/{id}/show', [PromoController::class, 'show']);
 		Route::put('promo/{id}/image/delete', [PromoController::class, 'deleteImage']);
 
+		// Уведомления
+		Route::get('notification', [NotificationController::class, 'index'])->name('notificationIndex');
+		Route::get('notification/list/ajax', [NotificationController::class, 'getListAjax'])->name('notificationList');
+
+		Route::post('notification', [NotificationController::class, 'store']);
+		Route::put('notification/{id}', [NotificationController::class, 'update']);
+		Route::delete('notification/{id}', [NotificationController::class, 'delete']);
+		Route::post('notification/{id}/send', [NotificationController::class, 'send']);
+
+		Route::get('notification/add', [NotificationController::class, 'add']);
+		Route::get('notification/{id}/edit', [NotificationController::class, 'edit']);
+		Route::get('notification/{id}/delete', [NotificationController::class, 'confirm']);
+		Route::get('notification/{id}/show', [NotificationController::class, 'show']);
+		Route::get('notification/{id}/send', [NotificationController::class, 'confirmSend']);
+
 		// Лог операций
 		Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
 		Route::get('log/{entity?}/{object_id?}', [RevisionController::class, 'index'])->name('revisionIndex');
@@ -383,6 +399,12 @@ Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 	Route::get('podarit-polet', [MainController::class, 'giftFlight']);
 	Route::get('variantyi-poleta', [MainController::class, 'flightTypes']);
 	Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction']);
+	Route::get('oferta-dreamaero', [MainController::class, 'oferta']);
+
+	Route::get('modal/booking', [MainController::class, 'getBookingFormAjax']);
+	Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
+
+	Route::post('review/create', [MainController::class, 'reviewCreate']);
 
 	Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
 	Route::get('city/change', [MainController::class, 'changeCity']);
@@ -399,6 +421,8 @@ Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 Route::domain(env('DOMAIN_EN', 'dream.aero'))->group(function () {
 	Route::get('/', [MainController::class, 'en/home']);
 });
+
+Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
 
 Route::fallback(function () {
 	abort(404);

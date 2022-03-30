@@ -5,24 +5,30 @@
 
 {{--<script src="{{ asset('js/jquery.lazy.min.js') }}"></script>--}}
 <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
-{{--<script src="{{ asset('js/jquery.nice-select.js') }}"></script>--}}
+<script src="{{ asset('js/jquery.nice-select.js') }}"></script>
 {{--<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>--}}
-<script src="{{ asset('js/owl.carousel.js') }}"></script>
+{{--<script src="{{ asset('js/owl.carousel.js') }}"></script>--}}
 {{--<script src="{{ asset('js/scrollspeed.js') }}"></script>--}}
-<script src="{{ asset('js/main.js?v=3') }}"></script>
+<script src="{{ asset('js/main.js?v=' . time()) }}"></script>
 
 {{--<script src="{{ asset('js/tabs.js') }}"></script>--}}
 {{--<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>--}}
 {{--<script src="{{ asset('js/jquery.fancybox.pack.js?v=2.1.7') }}"></script>
 <script src="{{ asset('js/jsprice.js?v=2.6.2') }}"></script>--}}
 
-<script src="{{ asset('js/mainonly.js') }}"></script>
+{{--<script src="{{ asset('js/mainonly.js?v=' . time()) }}"></script>--}}
 {{--<script src="{{ asset('js/select2.min.js') }}"></script>--}}
 <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
 
 <script>
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+
 	$(window).on("load", function() {
 		setInterval(function(){
 			$("div").removeClass("conthide");

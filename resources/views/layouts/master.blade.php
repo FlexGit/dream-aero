@@ -13,6 +13,8 @@
 	<meta name="google-site-verification" content="BHdHLHHg2mdgdi0sHcNT9Ng5yp2zThE-tl1tXxZZiGk" />
 	<meta name="yandex-verification" content="26119517b8383ec4" />
 
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+
 	<!-- Facebook Pixel Code -->
 	{{--<script>
 		!function(f,b,e,v,n,t,s)

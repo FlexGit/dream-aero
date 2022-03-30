@@ -96,6 +96,18 @@ class HelpFunctions {
 	}
 
 	/**
+	 * @param $entity
+	 * @param $uuid
+	 *
+	 * @return mixed
+	 */
+	public static function getEntityByUuid($entity, $uuid)
+	{
+		return app($entity)::where('uuid', $uuid)
+			->first();
+	}
+
+	/**
 	 * @param $authToken
 	 * @return mixed
 	 */

@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Currency;
+use App\Models\Promocode;
 use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\City;
-use App\Models\Review;
+use App\Models\Content;
 use App\Models\Location;
 use App\Models\FlightSimulator;
 use App\Models\ProductType;
 use App\Models\Product;
 use App\Models\User;
+use Validator;
 
 class MainController extends Controller
 {
@@ -31,27 +34,100 @@ class MainController extends Controller
 	 */
 	public function home($cityAlias)
 	{
-		//dump($cityAlias);exit;
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
+		// "Наша команда"
 		$users = User::where('enable', true)
 			->whereIn('city_id', [$city->id, 0])
 			->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
 			->orderBy('name')
 			->get();
-		
-		$reviews = Review::where('is_active', true)
-			/*->whereIn('city_id', [$city->id, 0])*/
-			->latest()
-			->limit(10)
-			->get();
-		
+
+		// Отзывы
+		$reviewParentContent = HelpFunctions::getEntityByAlias(Content::class, Content::REVIEWS_TYPE);
+		if ($reviewParentContent) {
+			$reviews = Content::where('is_active', true)
+				->where('version', Content::VERSION_RU)
+				->where('parent_id', $reviewParentContent->id)
+				->orderByDesc('created_at')
+				->limit(10)
+				->get();
+		}
+
 		return view('home', [
 			'users' => $users,
 			'reviews' => $reviews,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
+	}
+
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function getBookingFormAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		// Продукты "Regular"
+		$products = $city->products()
+			->whereHas('productType', function ($query) {
+				return $query->where('alias', ProductType::REGULAR_ALIAS);
+			})
+			->orderBy('duration')
+			->get();
+
+		// Локации
+		$locations = $city->locations;
+
+		$VIEW = view('modal.booking', [
+			'city' => $city,
+			'products' => $products,
+			'locations' => $locations,
+		]);
+
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
+	public function promocodeVerify()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$number = $this->request->promocode ?? '';
+		if (!$number) {
+			return response()->json(['status' => 'error', 'reason' => 'Не передан промокод']);
+		}
+
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		$date = date('Y-m-d');
+
+		$promocode = Promocode::where('number', $number)
+			/*->whereIn('city_id', [$city->id, 0])*/
+			->whereRelation('cities', 'cities.id', '=', $city->id)
+			->where('is_active', true)
+			->where(function ($query) use ($date) {
+				$query->where('active_from_at', '<=', $date)
+					->orWhereNull('active_from_at');
+			})
+			->where(function ($query) use ($date) {
+				$query->where('active_to_at', '>=', $date)
+					->orWhereNull('active_to_at');
+			})
+			->first();
+		if (!$promocode) {
+			return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+		}
+
+		return response()->json(['status' => 'success', 'message' => 'Промокод применен', 'uuid' => $promocode->uuid]);
 	}
 	
 	/**
@@ -60,7 +136,6 @@ class MainController extends Controller
 	public function about()
 	{
 		$cityAlias = $this->request->session()->get('cityAlias');
-
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
 		$flightSimulatorTypes = FlightSimulator::get();
@@ -266,5 +341,61 @@ class MainController extends Controller
 		$this->request->session()->put('cityAlias', $cityAlias);
 		
 		return response()->json(['status' => 'success', 'cityAlias' => $cityAlias]);
+	}
+
+	public function reviewCreate()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$rules = [
+			'name' => 'required|min:3|max:50',
+			'body' => 'required|min:3',
+			'consent' => 'required',
+		];
+
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'name' => 'Имя',
+				'body' => 'Текст отзыва',
+				'consent' => 'Согласие на обработку персональых данных',
+			]);
+		if (!$validator->passes()) {
+			$errors = [];
+			$validatorErrors = $validator->errors();
+			foreach ($rules as $key => $rule) {
+				foreach ($validatorErrors->get($key) ?? [] as $error) {
+					$errors[$key] = $error;
+				}
+			}
+			return response()->json(['status' => 'error', 'errors' => $errors]);
+		}
+
+		$reviewParentContent = HelpFunctions::getEntityByAlias(Content::class, Content::REVIEWS_TYPE);
+		if (!$reviewParentContent) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		$name = trim(strip_tags($this->request->name));
+		$body = trim(strip_tags($this->request->body));
+
+		$content = new Content();
+		$content->title = $name ?? '';
+		$content->alias = (string)\Webpatser\Uuid\Uuid::generate();
+		$content->preview_text = $body ?? '';
+		$content->parent_id = $reviewParentContent->id;
+		$content->city_id = $city->id;
+		$content->meta_title = 'Отзыв от клиента ' . $name . ' из города ' . $city->name . ' от ' . Carbon::now()->format('d.m.Y');
+		$content->meta_description = 'Отзыв от клиента ' . $name . ' из города ' . $city->name . ' от ' . Carbon::now()->format('d.m.Y');
+		$content->is_active = 0;
+		if (!$content->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+
+		return response()->json(['status' => 'success', 'message' => 'Спасибо за Ваш отзыв!']);
 	}
 }

@@ -73,6 +73,7 @@ class Promocode extends Model
 		'is_active',
 		'active_from_at',
 		'active_to_at',
+		'uuid',
 		'data_json',
 	];
 
@@ -90,6 +91,16 @@ class Promocode extends Model
 		'is_active' => 'boolean',
 		'data_json' => 'array',
 	];
+
+	public static function boot()
+	{
+		parent::boot();
+
+		Promocode::created(function (Promocode $promocode) {
+			$promocode->uuid = $promocode->generateUuid();
+			$promocode->save();
+		});
+	}
 
 	public function discount()
 	{
@@ -117,5 +128,14 @@ class Promocode extends Model
 		$value .= $this->discount ? ' (-' . $this->discount->valueFormatted() . ')' : '';
 
 		return  $value;
+	}
+
+	/**
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function generateUuid()
+	{
+		return (string)\Webpatser\Uuid\Uuid::generate();
 	}
 }

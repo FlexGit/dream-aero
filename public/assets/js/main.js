@@ -1,3 +1,9 @@
+$.ajaxSetup({
+	headers: {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	}
+});
+
 $(document).ready(function(){
 	function newContent(target, virtid, click = false) {
 		virtid = virtid.replace('#','');
@@ -93,7 +99,7 @@ $(document).ready(function(){
 
 	$('.airbo').append('dfdf');
 
-	/*$('select').niceSelect();*/
+	$('select').niceSelect();
 
 	$objWindow = $(window);
 
@@ -128,7 +134,7 @@ $(document).ready(function(){
 		$('.main-menu').slideToggle(300);
 	});
 
-	$('#form_submit').click(function() {
+	/*$('#form_submit').click(function() {
     	if (CheckForm('#payform')) {
         	var dealid = getUrlParameter('id');
          	$.ajax({
@@ -141,9 +147,9 @@ $(document).ready(function(){
      			}
     		});
         }
-	});
+	});*/
 
-	$('body').on('click','.promoblock .rugs-button', function () {
+	/*$('body').on('click','.promoblock .rugs-button', function () {
     	$('#err_mess').remove();
 
     	$.ajax({
@@ -165,9 +171,9 @@ $(document).ready(function(){
         		TotalPrice();
        		}
     	});
-    });
+    });*/
     
-    $("body").on("click", ".aerbonus_btns #charge", function(){
+    /*$("body").on("click", ".aerbonus_btns #charge", function(){
         if ($('#total-amount .strikethrough').length){
             price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
             $('#total-amount').html('Стоимость: '+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+' руб');
@@ -206,31 +212,20 @@ $(document).ready(function(){
     $("body").on("click", ".aerbonus_btns li", function(){
         $('.aerbonus_btns li').removeClass('active');
 	    $(this).addClass('active');
-	});
+	});*/
 
-    $("body").on("click", ".have_promo", function(){
+    $(document).on('click', '.have_promo', function() {
 	    $(this).hide();
 	    $('.aeroflotbonus').hide();
 	    $(".promoblock").show();
 	});
 	
-	$("body").on("change", ".switch_box .have_sert", function(){
-	    if ($(this).prop('checked')===false){
-	         $('#sernum').hide();
-	         $('#total-amount,.have_promo').show();
-	    }
-	   else{
-	       $('#sernum').show();
-	       $('#total-amount,.have_promo').hide();
-	       
-	   }
+
+	$(document).on('dp.change',' #datetimepicker', function () {
+        /*getbrontarif();*/
 	});
 
-	$('body').on('dp.change',' #datetimepicker', function () {
-        getbrontarif();
-	});
-
-	$("body").on("click", "#mainbronform button", function(){
+	/*$("body").on("click", "#mainbronform button", function(){
 	    if (CheckForm('#mainbronform')){
 	    var fd = $("#mainbronform").serialize()+'&clcity='+$('#current_city').text()+'&contextalias='+$('#current_city').attr('data-context')+'&action=submitform&type=bron';
 	    $.ajax({
@@ -247,9 +242,9 @@ $(document).ready(function(){
 	    });
 	    return false;
 	    }
-	});
+	});*/
 
-	$("body").on("click", "#mainsertform button", function(){
+	/*$("body").on("click", "#mainsertform button", function(){
 	   if ($('#tarif').val()=='')
 	       $('.notarif').html('<b>Выберите тариф</b>');
 	   else
@@ -284,9 +279,9 @@ $(document).ready(function(){
 	   
 	    }
 	     return false;
-	});
+	});*/
 
-	$("body").on("click", "._1nZS", function(){
+	/*$("body").on("click", "._1nZS", function(){
 	    $(".promoblock").hide();
 	    $('#err_mess').remove();
 	    $('.promoblock input').val("");
@@ -301,16 +296,16 @@ $(document).ready(function(){
 	    $('.aeroflotbonus').show();
 	    $(".have_promo").show();
     	        
-	});
+	});*/
 
-	$("body").on("click", ".have_aerocard", function(){
+	/*$("body").on("click", ".have_aerocard", function(){
 	    $(this).hide();
 	     $( "._1nZS" ).trigger( "click" );
 	    $(".aerocard").show();
     	        
-	});
+	});*/
 
-	$("body").on("input", "#bonus_mils", function(){
+	/*$("body").on("input", "#bonus_mils", function(){
 	    mils=$(this).val().replace(/\D+/g,"");
 	    console.log(mils+' '+$(this).attr("data-max")+' '+$(this).attr("data-min"));
 	    if (parseInt(mils)>parseInt($(this).attr("data-max")))
@@ -324,35 +319,18 @@ $(document).ready(function(){
             price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
             $('#total-amount').html('Стоимость: <b class="strikethrough">'+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+'</b>'+String((price-$(this).val())).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+' руб');
         }
-	});
+	});*/
 
-	$("body").on("click", "._1nZsS", function(){
+	/*$("body").on("click", "._1nZsS", function(){
 	    
 	    $(".aerocard").hide();
 	    $(".have_aerocard").show();
     	        
-	});
+	});*/
 
 	$('.popup-close').click(function(e){
 		e.preventDefault();
 		$.magnificPopup.close();
-	});
-
-	$('.popup-with-form').magnificPopup({
-		type: 'inline',
-		preloader: false,
-		focus: '#name',
-		removalDelay: 300,
-		mainClass: 'mfp-fade',
-		callbacks: {
-			beforeOpen: function() {
-				if ($(window).width() < 700) {
-					this.st.focus = false;
-				} else {
-					this.st.focus = '#name';
-				}
-			}
-		}
 	});
 
 	/*$(document).on('af_complete',function(event,response){
@@ -404,11 +382,11 @@ function bodyPadding(){
 	var header=$('.header');var headerHeight=$(header).outerHeight();$('body').css('padding-top',headerHeight);
 }
 
-function onlinepay(ID){
+/*function onlinepay(ID){
 	if(CheckForm('form#'+ID)){var form=document.getElementById(ID);form.action="https://www.payanyway.ru/assistant.htm";document.getElementById('MNT_DESCRIPTION').value=document.getElementById('MNT_TRANSACTION_ID').value+" ("+document.getElementById('on-resname').value+")";form.submit();}
-}
+}*/
 
-function CheckForm(ID){
+/*function CheckForm(ID){
     $('.error.checkinput').remove();
     $('.error.checkcheckbox').remove();
     var reqcount=0;
@@ -423,9 +401,9 @@ function CheckForm(ID){
             if($(this).val()=='')reqcount++;
     });
             if(reqcount>0){return false;}
-            else{return true;}}
+            else{return true;}}*/
 
-function getbrontarif(){
+/*function getbrontarif(){
     var eventDate=$('#datetimepicker').val();
     if ($("#tarif_time").length)
         var eventTrafic=$("#tarif_time").find('option:selected').val();
@@ -458,9 +436,9 @@ function getbrontarif(){
         $('#total-amount').text('Выберите дату полета для расчета стоимости');
     else if(!eventTrafic)
         $('#total-amount').text('Выберите продолжительность полета для расчета стоимости');
-}
+}*/
 
-function bonus4use(){
+/*function bonus4use(){
      $.ajax({
        type:'post',//тип запроса: get,post либо head
        url:'/admin/dealajax',//url адрес файла обработчика
@@ -486,17 +464,17 @@ function bonus4use(){
             $('#bonus_info').html('<p class="error">Произошла ошибка. Повторите, пожалуйста, попытку позже</p>');
        }
 	    });
-}
+}*/
 
-function calculate_mils(){
+/*function calculate_mils(){
     if ($('#total-amount .strikethrough').length) 
         price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
      else
         price=parseInt($('#total-amount').text().replace(/\D+/g,""));
     return Math.floor(price/50);
-}
+}*/
 
-function TotalPrice(){
+/*function TotalPrice(){
     $('#submibtn').hide();
      $.ajax({
        type:'post',//тип запроса: get,post либо head
@@ -533,7 +511,7 @@ function TotalPrice(){
         $('#submibtn').show();
      }
     });
-}
+}*/
 
 function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),

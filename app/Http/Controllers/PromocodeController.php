@@ -187,7 +187,7 @@ class PromocodeController extends Controller
 			'number' => [
 				'required',
 				'max:255',
-				'unique:promocodes,number',
+				/*'unique:promocodes,number',*/
 			],
 			'city_id' => [
 				'required',
@@ -253,7 +253,7 @@ class PromocodeController extends Controller
 			'number' => [
 				'required',
 				'max:255',
-				'unique:promocodes,number,' . $id,
+				/*'unique:promocodes,number,' . $id,*/
 			],
 			'city_id' => [
 				'required',

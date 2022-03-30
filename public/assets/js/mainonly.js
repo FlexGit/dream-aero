@@ -3,7 +3,7 @@ $(function(){
     $('#varsL img').height($('#varsR').height());
     $teamer = 0;
 
-    $('.popup-mainpay input').click(function() {
+    /*$('.popup-mainpay input').click(function() {
         if (this.id == 'clemail'){
             $(this).css("margin-bottom","0px");
             $('.popup-mainpay #podskazka').show();
@@ -11,9 +11,9 @@ $(function(){
             $(this).css("margin-bottom","24px");
             $('.popup-mainpay #podskazka').hide();
         }
-    });
+    });*/
 
-    $('#main-bronsert #rtitle').change(function() {
+    /*$('#main-bronsert #rtitle').change(function() {
         var txt4price = getbronprice();
         if (txt4price[1]) {
             document.getElementById('price-popup').innerHTML = txt4price[1];
@@ -21,7 +21,7 @@ $(function(){
         $('#pop-price').val(txt4price[1].replace("Стоимость",""));
         $('#type-time').val($(this).val() + ' мин');
         //promoprice('bron');
-    });
+    });*/
 
     $(".team .owl-carousel").owlCarousel({
         items:4,
@@ -59,7 +59,11 @@ $(function(){
         reviewsCarousel.trigger('prev.owl.carousel');
     });
 
-    $('.form_open').click(function() {
+    $('.reviews-next').click(function(){
+        reviewsCarousel.trigger('next.owl.carousel');
+    });
+
+    /*$('.form_open').click(function() {
         $.ajax({
             url: '/admin/dealajax',
             type: 'POST',
@@ -73,20 +77,20 @@ $(function(){
                 $('#editform').html(data);
             }
         });
-    });
+    });*/
 
-    $('body').on('change',' #tarif_time', function() {
+    /*$('body').on('change',' #tarif_time', function() {
         getbrontarif();
-    });
+    });*/
 
-    $('body').on('change',' #selectproduct', function() {
+    /*$('body').on('change',' #selectproduct', function() {
         selected = $(this).find('option:selected');
         $('#tarif_type').val(selected.attr("data-type"));
         $('#tarif').val(selected.val());
         TotalPrice();
-    });
+    });*/
 
-    $('#deliverych').change(function(){
+    /*$('#deliverych').change(function(){
         if ($(this).is(":checked")) {
             $('#deliveryinput').show();
             $("#deliadd").prop('required',true);
@@ -103,14 +107,10 @@ $(function(){
             document.getElementById('deliaddtxt').innerHTML = '';
             $("#deliadd").val('');
         }
-    });
-
-    $('.reviews-next').click(function(){
-        reviewsCarousel.trigger('next.owl.carousel');
-    })
+    });*/
 });
 
-function mainbron(type) {
+/*function mainbron(type) {
     if (type == 'paytab') {
         $('#main-bronsert #sernum').attr('required',true);
         $('#main-bronsert #sernum').show();
@@ -125,4 +125,4 @@ function mainbron(type) {
         $('#main-bronsert #aktext').show();
         stitle = $('#main-bronsert #serttitle').val().replace("Запись по сертификату","Бронирование полета");$('#main-bronsert #serttitle').val(stitle);
     }
-}
+}*/

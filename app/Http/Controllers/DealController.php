@@ -830,9 +830,11 @@ class DealController extends Controller
 		$contractorId = $this->request->contractor_id ?? 0;
 		$promoId = $this->request->promo_id ?? 0;
 		$promocodeId = $this->request->promocode_id ?? 0;
+		$promocodeUuid = $this->request->promocode_uuid ?? '';
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$locationId = $this->request->location_id ?? 0;
 		$certificateNumber = $this->request->certificate ?? '';
+		$source = $this->request->source ?? 'admin';
 
 		if ($this->request->city_id) {
 			$cityId = $this->request->city_id ?? 0;
@@ -853,6 +855,21 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+
+		// базовая стоимость продукта
+		$baseAmount = $cityProduct->pivot->price;
+
+		if ($promocodeUuid) {
+			$promocode = HelpFunctions::getEntityByUuid(Promocode::class, $promocodeUuid);
+			if ($promocode) {
+				$promocodeId = $promocode->id;
+			}
+		}
+
 		$certificateId = 0;
 		if ($certificateNumber) {
 			$certificate = Certificate::where('number', $certificateNumber)
@@ -860,8 +877,8 @@ class DealController extends Controller
 			$certificateId = $certificate ? $certificate->id : 0;
 		}
 
-		$amount = $product->calcAmount($contractorId, $cityId, 'admin', $isFree, $locationId, $paymentMethodId, $promoId, $promocodeId, $certificateId);
+		$amount = $product->calcAmount($contractorId, $cityId, $source, $isFree, $locationId, $paymentMethodId, $promoId, $promocodeId, $certificateId);
 
-		return response()->json(['status' => 'success', 'amount' => $amount]);
+		return response()->json(['status' => 'success', 'amount' => $amount, 'baseAmount' => $baseAmount]);
 	}
 }

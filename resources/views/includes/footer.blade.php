@@ -60,6 +60,7 @@
 			</span>
 		</div>
 	</div>
+	<input type="hidden" id="city_id" name="city_id" value="{{ $city ? $city->id : 1 }}">
 
 	{{--<script async type="text/javascript">
 		(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter46672077 = new Ya.Metrika({ id:46672077, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
@@ -80,93 +81,6 @@
 	<script async type="text/javascript">
 		VK.Widgets.CommunityMessages("vk_community_messages", 65405270, {widgetPosition: "left",disableExpandChatSound: "1",disableNewMessagesSound: "1",tooltipButtonText: "Есть вопрос?"});
 	</script>--}}
-
-	<div class="mfp-hide popup ajax_form" id="editform">
-		<div style="text-align: center;">
-			<img src="{{ url('assets/img/planes.gif') }}" alt="">
-		</div>
-	</div>
-	<div id="main-bronsert" class="mfp-hide popup bronsert ajax_form">
-		<input id="brontab" type="radio" name="tabs" checked onclick="mainbron('brontab')">
-		<label for="brontab">Забронировать время</label>
-		<input id="paytab" type="radio" name="tabs" onclick="mainbron('paytab')">
-		<label for="paytab">У меня есть сертификат</label>
-		<form method="post" class="ajax_form">
-			<input name="TITLE" id="serttitle" value="Бронирование полета г. Москва" type="hidden">
-			<p class="popup-description">Заполните пару полей и наш менеджер свяжется с вами, чтобы подтвердить бронь</p>
-			<fieldset>
-				<select required class="popup-input" id="rtitle">
-					<option value="" disabled selected>Выберите продолжительность полета *</option>
-					<option value='30' >30 мин</option>
-					<option value='60'>60 мин</option>
-					<option value='90'>90 мин</option>
-					<option value='120'>120 мин</option>
-					<option value='180'>180 мин</option>
-				</select>
-				<input class="popup-input"  id="sernum" name="Номер_сертификата" type="text" placeholder="Номер сертификата *" style="display:none;">
-				<ul class="popup-list-inputs">
-					<li class="list">
-						<input class="popup-input" id="reservation-name" name="Имя" type="text" placeholder="КАК ВАС ЗОВУТ?">
-					</li>
-					<li class="list">
-						<input class="popup-input" id="phone3" required name="Телефон" type="phone" placeholder="номер вашего телефона*" required>
-					</li>
-					<li class="list">
-						<input class="popup-input" name="Email"  type="email" placeholder="ВАШ E-MAIL" required>
-					</li>
-					<li class="list">
-						<input class="popup-input" id="datetimepicker" required name="Желаемая дата полета" autocomplete="off" type="text" placeholder="желаемая дата полета" value=''>
-					</li>
-				</ul>
-				<div style="display: none">
-					<input id="type-time" name="Продолжительность">
-					<input id="type-fly" name="Тип">
-					<input id="pop-price" name="Стоимость" type="text">
-					<input id="pop-idprod" name="Id товара для CRM" type="text">
-				</div>
-
-				<div id="brontrk">
-					<label class="cont">ТРК Афимолл Сити<br/>(Boeing 737)
-						<input type="radio" checked="checked" value="ТРК Афимолл Сити (Boeing 737)" name="Торговый_центр">
-						<span class="checkmark"></span>
-					</label>
-					<label class="cont">ТРК Афимолл Сити<br/>(Airbus A320)
-						<input type="radio" value="ТРК Афимолл Сити (Airbus A320)" name="Торговый_центр">
-						<span class="checkmark"></span>
-					</label><br/>
-					<label class="cont">ТРК VEGAS Кунцево<br/>(Boeing 737)
-						<input type="radio" name="Торговый_центр" value="ТРК VEGAS Кунцево (Boeing 737)">
-						<span class="checkmark"></span>
-					</label>
-					<label class="cont">ТРЦ Columbus<br/>(Boeing 737)
-						<input type="radio" name="Торговый_центр" value="ТРЦ Columbus (Boeing 737)">
-						<span class="checkmark"></span>
-					</label>
-				</div><br/>
-				<input id="pop-sale" type="hidden" value="0">
-
-				<span class="nice-select-label city">Ваш город: <b>Москва</b></span>
-
-				<input style="display: none" type="text" name="Город" id="brcity" value="Москва">
-				<p id="price-popup"></p>
-				<div class="promoall" id="promo-res"></div>
-
-				<div class="block">
-					<input style="display: none" name="Оформить подарочный сертификат на полет" id="sert" value="Да" type="checkbox">
-				</div>
-
-				<div class="block">
-					<input type="checkbox" required>
-					<span class="nice-select-label">Я согласен с <a href="oferta-dreamaero.pdf" target="_blank">условиями публичной оферты</a></span>
-				</div>
-
-				<input type="text" name="workemail" value="" class="field"/>
-				<button type="submit" onclick="yaCounter46672077.reachGoal('SendOrder'); gtag_report_conversion();fbq('track', 'Purchase', {value: 200,currency: 'rub',});return true;" class="popup-submit button-pipaluk button-pipaluk-orange"><i>Отправить</i></button>
-			</fieldset>
-
-			<input type="hidden" name="af_action" value="9b50a0de8b0766e7a1df550706b0d064" />
-		</form>
-	</div>
 </footer>
 
 <div class="go-up"></div>
@@ -185,8 +99,13 @@
 	</div>
 </div>
 
+<div class="mfp-hide popup ajax_form" id="popup">
+	<div style="text-align: center;">
+		<img src="{{ url('assets/img/planes.gif') }}" alt="">
+	</div>
+</div>
 
-<form method="post" id="popup-mainpay" class="mfp-hide popup popup-mainpay ajax_form">
+<form id="popup-certificate" class="mfp-hide popup {{--popup-mainpay--}} ajax_form">
 	<p class="popup-description">Приобрести сертификат на полет<br/> в один клик</p>
 
 	<input type='hidden' name='MNT_ID' id='MNT_ID' value="44741905">
@@ -226,17 +145,15 @@
 				<input class="popup-input" id="on-resname" required name="reservation-name" type="text" placeholder="КАК ВАС ЗОВУТ? *">
 			</li>
 			<li class="list">
-				<input class="popup-input" id="on-phone" required name="reservation-phone" type="tel" placeholder="номер вашего телефона*" required>
+				<input class="popup-input" id="on-phone" name="reservation-phone" type="tel" placeholder="номер вашего телефона*" required>
 			</li>
 			<li class="list">
 				<input class="popup-input" id="on-name4sert" name="name4sert" type="text" placeholder="Для кого сертификат (Имя)">
 			</li>
-
 			<li class="list">
 				<input class="popup-input" name="clemail" id="clemail" type="email" placeholder="ВАШ E-MAIL *" required>
 				<i id="podskazka" style="display: none;font-size: 11px;color: grey;">На Ваш email будет выслан сертификат.</i>
 			</li>
-
 		</ul>
 
 		<div style="display: none;">
@@ -248,10 +165,6 @@
 
 		<div class="promoall" id="promo-sert"></div>
 		<span class="nice-select-label city">Ваш город: <b>Москва</b></span>
-
-		<input type="hidden" name="clcity" id="delcity" value="Москва">
-		<input type="hidden" name="sert" value="Yes">
-		<input type="hidden" name="adminloc" id="adminloc" value="VEGAS">
 
 		<p id="on-price-popup"></p>
 		<p></p>
@@ -275,15 +188,12 @@
 			</div>
 		</div>
 	</fieldset>
-
 	<input type="text" name="workemail" value="" class="field"/>
-
 	<button type="submit" onclick="yaCounter46672077.reachGoal('SendOrder'); gtag_report_conversion();fbq('track', 'Purchase', {value: 200,currency: 'rub',});return true;" id="submibtn" class="popup-submit button-pipaluk button-pipaluk-orange" style="width: 60%;"><i>Оплатить</i></button>
-
-	<input type="hidden" name="af_action" value="1143c14e91471395b12a5db59bd11ed3" />
+	{{--<input type="hidden" name="af_action" value="1143c14e91471395b12a5db59bd11ed3" />--}}
 </form>
 
-<form method="post" id="popup-review" class="mfp-hide popup popup-review ajax_form">
+<form id="popup-review" class="mfp-hide popup popup-review ajax_form">
 	<p class="popup-title">
 		ОСТАЛИСЬ ПОД ВПЕЧАТЛЕНИЕМ?
 	</p>
@@ -291,22 +201,22 @@
 		Оставьте свой отзыв и мы опубликуем его на сайте!
 	</p>
 	<fieldset>
-		<input class="popup-input" id="review-name" name="Имя" type="text" placeholder="КАК ВАС ЗОВУТ?*" required>
-		<textarea class="popup-area" id="review-body" name="Отзыв" placeholder="текст отзыва"></textarea>
-		<select name="ТРЦ">
+		<input class="popup-input" id="name" name="name" type="text" placeholder="КАК ВАС ЗОВУТ?*" required>
+		<textarea class="popup-area" id="body" name="body" placeholder="текст отзыва"></textarea>
+		{{--<select name="ТРЦ">
 			<option value="ТРК Афимолл Сити">ТРК Афимолл Сити</option>
 			<option value="ТРК VEGAS Кунцево">ТРК VEGAS Кунцево</option>
-		</select>
-		<input class="popup-input" id="review-date" name="Дата и время полета" type="text" placeholder="Дата и время полета" required>
+		</select>--}}
+		{{--<input class="popup-input" id="review-date" name="Дата и время полета" type="text" placeholder="Дата и время полета" required>--}}
 		<div class="block">
-			<input type="checkbox" required>
-			<span class="nice-select-label"><a href="/conditions#personal">я согласен на обработку моих данных</a></span>
+			<input type="checkbox" id="review-consent" name="consent" value="1" required>
+			<span class="nice-select-label">{{--<a href="/conditions#personal">--}}я согласен на обработку моих данных{{--</a>--}}</span>
 		</div>
-		<input type="text" name="workemail" value="" class="field"/>
-		<input type="hidden" name="Город" value="Москва" class="field"/>
-		<button type="submit" class="popup-submit button-pipaluk button-pipaluk-orange"><i>отправить</i></button>
+		{{--<input type="text" name="workemail" value="" class="field"/>
+		<input type="hidden" name="Город" value="Москва" class="field"/>--}}
+		<button type="button" class="popup-submit button-pipaluk button-pipaluk-orange js-review-send"><i>отправить</i></button>
 	</fieldset>
-	<input type="hidden" name="af_action" value="346506d709f864ac2c2d116232d084f5" />
+	{{--<input type="hidden" name="af_action" value="346506d709f864ac2c2d116232d084f5" />--}}
 </form>
 
 <div id="popup-welcome" class="mfp-hide popup popup-welcome">
@@ -330,10 +240,8 @@
 	<input type="tel" required id="phone1" name="Телефон" placeholder="номер вашего телефона*" class="popup-input">
 	<div class="block">
 		<input type="checkbox" required>
-		<span class="nice-select-label"><a href="/conditions#personal">я согласен на обработку моих данных</a></span>
+		<span class="nice-select-label">{{--<a href="/conditions#personal">--}}я согласен на обработку моих данных{{--</a>--}}</span>
 	</div>
 	<input type="text" name="workemail" value="" class="field"/>
 	<button type="submit" class="popup-submit button-pipaluk button-pipaluk-orange"><i>Отправить</i></button>
-
-	<input type="hidden" name="af_action" value="c883c1c4b852145d084ce34d335c6ac9" />
 </form>

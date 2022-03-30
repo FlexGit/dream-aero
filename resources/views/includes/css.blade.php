@@ -1,6 +1,6 @@
 {{--<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />--}}
 <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet" type="text/css" />
+{{--<link href="{{ asset('css/owl.carousel.css') }}" rel="stylesheet" type="text/css" />--}}
 {{--<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('css/jquery.fancybox.css?v=2.1.7') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('css/pricestyle.css?v=1') }}" rel="stylesheet" type="text/css" />
@@ -81,6 +81,74 @@
 	.dropdown-menu {
 		top: auto;
 		left: auto;
+	}
+	.grecaptcha-badge {
+		visibility: hidden !important;
+	}
+	.nice-select {
+		height: 28px;
+		color: #828285 !important;;
+		padding-left: 8px;
+		padding-right: 20px;
+		/*overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;*/
+		line-height: 28px;
+		border: 0 !important;
+		border-radius: 0 !important;
+		border-bottom: 2px solid #828285 !important;
+	}
+	.popup-description {
+		margin-top: 0;
+	}
+	.col-md-6 {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.consent-container {
+		margin-top: 20px;
+	}
+	.promocode_container {
+		margin-top: 20px;
+	}
+	.cont {
+		margin-bottom: 7px;
+		padding-top: 3px;
+	}
+	.popup .nice-select {
+		padding-left: 10px;
+	}
+	.popup .popup-small-button {
+		margin: 1px 0 0 5px;
+		padding: 0;
+		width: 90px;
+		height: 24px;
+		font-size: 12px;
+	}
+	.text-error {
+		color: red;
+	}
+	.text-success {
+		color: green;
+	}
+	.text-small {
+		font-size: 12px;
+	}
+	.button-pipaluk-grey:after {
+		background-color: #bbb !important;
+	}
+	.close-btn {
+		margin: 3px 0 0 2px;
+		cursor: pointer;
+	}
+	.pl-10 {
+		padding-left: 10px;
+	}
+	.pr-10 {
+		padding-right: 10px;
+	}
+	.pt-3 {
+		padding-top: 3px;
 	}
 </style>
 
