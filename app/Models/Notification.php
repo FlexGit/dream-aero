@@ -43,6 +43,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Notification withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Notification withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\City|null $city
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Contractor[] $contractors
+ * @property-read int|null $contractors_count
  */
 class Notification extends Model
 {
@@ -73,8 +76,6 @@ class Notification extends Model
 		'title',
 		'description',
 		'city_id',
-		'contractor_id',
-		'is_new',
 		'is_active',
 		'data_json',
 	];
@@ -90,17 +91,19 @@ class Notification extends Model
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
 		'data_json' => 'array',
 		'is_active' => 'boolean',
-		'is_new' => 'boolean',
 	];
 	
-	public function status()
+	public function city()
 	{
-		return $this->hasOne('App\Models\Status', 'id', 'status_id');
+		return $this->hasOne('App\Models\City', 'id', 'city_id');
 	}
 	
-	public function deal()
+	public function contractors()
 	{
-		return $this->hasOne('App\Models\Deal', 'id', 'deal_id');
+		return $this->belongsToMany(Contractor::class, 'notifications_contractors', 'notification_id', 'contractor_id')
+			->using(NotificationContractor::class)
+			->withPivot(['is_new'])
+			->withTimestamps();
 	}
 	
 	/**
@@ -114,9 +117,9 @@ class Notification extends Model
 			'id' => $this->id,
 			'title' => $this->title,
 			'description' => $this->description,
-			'is_new' => (bool)$this->is_new,
-			'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
-			'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
+			'is_new' => (bool)$this->pivot->is_new,
+			'created_at' => $this->pivot->created_at ? $this->pivot->created_at->format('Y-m-d H:i:s') : null,
+			'updated_at' => $this->pivot->updated_at ? $this->pivot->updated_at->format('Y-m-d H:i:s') : null,
 		];
 	}
 }

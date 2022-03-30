@@ -202,6 +202,14 @@ class Contractor extends Authenticatable
 		return $this->hasOne(User::class, 'id', 'user_id');
 	}
 	
+	public function notifications()
+	{
+		return $this->belongsToMany(Notification::class, 'notifications_contractors', 'contractor_id', 'notification_id')
+			->using(NotificationContractor::class)
+			->withPivot(['is_new'])
+			->withTimestamps();
+	}
+	
 	/**
 	 * @return string
 	 * @throws \Exception

@@ -25,6 +25,10 @@
 			<td>{{ isset($roles[$user->role]) ? $roles[$user->role] : '' }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Версия</td>
+			<td>{{ $user->version }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Город</td>
 			<td>{{ $user->city ? $user->city->name : 'Любой' }}</td>
 		</tr>

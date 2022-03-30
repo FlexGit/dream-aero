@@ -1,9 +1,37 @@
 @extends('admin.layouts.master')
 
 @section('content')
-	{{--<input type="hidden" id="time_zone" name="time_zone" value="Europe/Moscow">--}}
+	<div class="calendars-wrapper">
+		<div class="calendars-container">
+			@foreach($cities ?? [] as $city)
+				@php
+					// для Мск и Сбп название города не выводим города
+					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
+				@endphp
 
-	<div id="calendar"></div>
+				@foreach($city->locations ?? [] as $location)
+					@php
+						if ($user->location && $user->location->id != $location->id) {
+							continue;
+						}
+						// только для Мск и Сбп выводим название локации
+						$locationName = ($city->locations->count() > 1) ? $location->name : '';
+					@endphp
+
+					@foreach($location->simulators ?? [] as $simulator)
+						@php
+							$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
+						@endphp
+
+						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
+							<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
+							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-timezone="{{ $city->timezone }}" class="calendar"></div>
+						</div>
+					@endforeach
+				@endforeach
+			@endforeach
+		</div>
+	</div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
@@ -28,6 +56,20 @@
 @stop
 
 @section('right-sidebar')
+	<div class="d-flex justify-content-between m-2">
+		<div class="form-group mb-0">
+			<select class="form-control" id="calendar-view-type">
+				<option value="timeGridDay">День</option>
+				<option value="timeGridWeek">Неделя</option>
+			</select>
+		</div>
+		<div>
+			<button type="button" class="btn btn-info btn-sm js-calendar-prev"><i class="fas fa-angle-left"></i></button>
+			<button type="button" class="btn btn-info btn-sm js-calendar-today"><i class="far fa-dot-circle"></i></button>
+			<button type="button" class="btn btn-info btn-sm js-calendar-next"><i class="fas fa-angle-right"></i></button>
+		</div>
+	</div>
+
 	<div id="datepicker" data-date="{{ date('d.m.Y') }}"></div>
 
 	<div class="m-2 pl-4 pr-3">
@@ -36,27 +78,30 @@
 		</div>
 		<div>
 			@foreach($cities ?? [] as $city)
+				{{--@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
+					@continue
+				@endif--}}
+
 				@php
-					$cityName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? '' : $city->name;
+					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
 				@endphp
 
 				@foreach($city->locations ?? [] as $location)
-					@if (in_array($location->alias, ['west']))
-						@continue
-					@endif
-
 					@php
-						$locationName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $location->name : '';
+						if ($user->location && $user->location->id != $location->id) {
+							continue;
+						}
+						$locationName = ($city->locations->count() > 1) ? $location->name : '';
 					@endphp
 
 					@foreach($location->simulators ?? [] as $simulator)
 						@php
-							$simulatorName = in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS]) ? $simulator->alias : '';
+							$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
 						@endphp
 
 						<div>
-							<div class="form-check form-check-inline" style="line-height: 0.9em;">
-								<input class="form-check-input align-top" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" name="location-{{ $location->id }}-{{ $simulator->id }}" value="1" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input align-top calendar-checkbox" type="checkbox" id="location-{{ $location->id }}-{{ $simulator->id }}" value="1" checked data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">
 								<label for="location-{{ $location->id }}-{{ $simulator->id }}" class="form-check-label small font-weight-light">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</label>
 							</div>
 						</div>
@@ -71,46 +116,57 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	{{--<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">--}}
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=1') }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	{{--<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>--}}
 	<script src="{{ asset('js/admin/moment.min.js') }}"></script>
 	<script src="{{ asset('js/admin/moment-timezone-with-data.min.js') }}"></script>
 	<script src="{{ asset('js/admin/bootstrap-datepicker.min.js') }}"></script>
 	<script src="{{ asset('js/admin/bootstrap-datepicker.ru.min.js') }}"></script>
-	<script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
+	<script src="{{ asset('js/admin/popper.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
-	<script src="{{ asset('js/admin/event.js') }}"></script>
 	<script>
 		$(function(){
 			/*var timeZone = $('#time_zone').val();*/
+
+			var $calendarViewType = $('#calendar-view-type'),
+				calendarViewType = localStorage.getItem($calendarViewType.attr('id'));
+			if (!calendarViewType) calendarViewType = 'timeGridDay';
+			$calendarViewType.val(calendarViewType);
 
 			var date = new Date();
 			var d = date.getDate(),
 				m = date.getMonth(),
 				y = date.getFullYear();
 
-			/*document.addEventListener('DOMContentLoaded', function() {*/
-				var calendarEl = document.getElementById('calendar');
+			var calendars = document.getElementsByClassName('calendar');
+			var calendarArr = [];
+			for (let calendarEl of calendars) {
+				var timezone = $(calendarEl).data('timezone') ? $(calendarEl).data('timezone') : 'Europe/Moscow';
+
 				var calendar = new FullCalendar.Calendar(calendarEl, {
+					aspectRatio: 0.5,
 					stickyHeaderDates: true,
-					initialView: 'timeGridWeek',
+					initialView: calendarViewType,
 					locale: 'ru',
 					editable: true,
 					selectable: true,
 					droppable: true,
 					headerToolbar: {
-						left  : 'title',
+						left: /*'title'*/'',
 						center: '',
-						right : 'prev,next today timeGridDay,timeGridWeek,dayGridMonth',
+						right: /*'prev,next today *//*'timeGridDay,timeGridWeek'*//*dayGridMonth*/''
+					},
+					dayHeaderFormat: {
+						weekday: 'short',
+						day: 'numeric',
+						month: 'numeric'
 					},
 					themeSystem: 'standard',
 					slotMinTime: '09:00:00',
@@ -118,8 +174,9 @@
 					slotDuration: '00:15',
 					slotLabelInterval: '01:00',
 					nowIndicator: true,
+					now: convertUTCDateToLocalDate(Date.now(), timezone),
 					/*timeZone: 'local',*/
-					/*timeZone: 'Europe/Moscow',*/
+					/*timeZone: 'America/New_York',*/
 					dayMaxEvents: true,
 					firstDay: 1,
 					allDayText: 'Смена',
@@ -132,26 +189,37 @@
 					events: {
 						url: '{{ route('eventList') }}',
 						method: 'GET',
-						/*extraParams: {
-						},*/
-						failure: function() {
-							toastr.error('Ошибка при загрузке событий!');
+						extraParams: function() {
+							return {
+								city_id: $(calendarEl).data('city_id'),
+								location_id: $(calendarEl).data('location_id'),
+								simulator_id: $(calendarEl).data('simulator_id')
+							};
+						},
+						failure: function (e) {
+							//console.log(e);
+							//toastr.error('Ошибка при загрузке событий!');
 						}
 					},
-					eventOverlap: false,
+					eventOverlap: true,
 					dateClick: function (info) {
-						var action = '/deal/booking',
+						var action = info.allDay ? '/event' : '/deal/booking',
 							method = 'POST',
 							type = 'deal',
+							$calendar = $(info.dayEl).closest('.calendar'),
+							cityId = $calendar.data('city_id'),
+							locationId = $calendar.data('location_id'),
+							simulatorId = $calendar.data('simulator_id'),
+							url = info.allDay ? '/event/0/add/shift' : '/deal/booking/add',
 							$modalDialog = $('.modal').find('.modal-dialog');
 
 						$modalDialog.find('form').attr('id', type);
 						$modalDialog.addClass('modal-lg');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
-
+						//console.log(info);
 						$.ajax({
-							url: '/deal/booking/add',
+							url: url,
 							type: 'GET',
 							dataType: 'json',
 							data: {
@@ -160,8 +228,12 @@
 								'type': type,
 								'source': 'calendar',
 								'flight_at': moment($(info.date)[0])/*.utc()*/.format('YYYY-MM-DD HH:mm'),
+								'city_id': cityId,
+								'location_id': locationId,
+								'simulator_id': simulatorId,
+								'event_date': moment(info.dateStr).format('YYYY-MM-DD'),
 							},
-							success: function(result) {
+							success: function (result) {
 								if (result.status === 'error') {
 									toastr.error(result.reason);
 									return null;
@@ -169,7 +241,7 @@
 
 								$('#modal form').attr('action', action).attr('method', method);
 
-								$('#modal .modal-title').text('Новая сделка на бронирование');
+								$('#modal .modal-title').text(info.allDay ? 'Новая смена на ' + moment(info.dateStr).format('YYYY-MM-DD') : 'Новое событие на ' + moment(info.dateStr).format('YYYY-MM-DD HH:mm'));
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
@@ -184,26 +256,31 @@
 							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end,
-							url = 'event/' + id + '/edit',
+							allDay = $(info.event)[0]._def.allDay,
+							url = 'event/' + id + '/edit/' + allDay,
 							action = '/event/' + id,
 							method = 'PUT',
 							type = $(this).data('type'),
 							$modalDialog = $('.modal').find('.modal-dialog');
 
+						if ($.inArray(title, ['Тестовый полет', 'Уборка', 'Перерыв']) !== -1) return;
+
 						$(info.el).tooltip('hide');
 
 						$modalDialog.find('form').attr('id', type);
-						$modalDialog.removeClass('modal-lg');
+						//$modalDialog.removeClass('modal-lg');
 
 						var $submit = $('button[type="submit"]');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
 
+						//console.log(title);
+
 						$.ajax({
 							url: url,
 							type: 'GET',
 							dataType: 'json',
-							success: function(result) {
+							success: function (result) {
 								if (result.status === 'error') {
 									toastr.error(result.reason);
 									return null;
@@ -215,12 +292,21 @@
 								} else {
 									$submit.addClass('hidden');
 								}
-								$('#modal .modal-title').text('Событие ' + title);
+								$('#modal .modal-title').text((allDay ? 'Смена' : 'Событие') + ' "' + title + '"');
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
 						});
 					},
+					/*eventLeave: function(info) {
+						console.log('event left!', $(info.draggedEl).closest('.calendar').data());
+					},
+					eventReceive: function(info) {
+						console.log('event received!', info);
+					},*/
+					/*eventAdd: function(info) {
+						console.log('event add!', info);
+					},*/
 					eventDrop: function (info) {
 						var id = $(info.event)[0]._def.publicId,
 							/*title = $(info.event)[0]._def.title,*/
@@ -229,8 +315,9 @@
 
 						$(info.el).tooltip('hide');
 
+						//console.log($(info.event)[0]._def.extendedProps);
 						$.ajax({
-							url: '/event/' + id,
+							url: '/event/drag_drop/' + id,
 							type: 'PUT',
 							dataType: 'json',
 							data: {
@@ -238,7 +325,7 @@
 								'start_at': moment(start).utc().format('YYYY-MM-DD HH:mm'),
 								'stop_at': moment(end).utc().format('YYYY-MM-DD HH:mm'),
 							},
-							success: function(result) {
+							success: function (result) {
 								if (result.status !== 'success') {
 									toastr.error(result.reason);
 									info.revert();
@@ -264,7 +351,7 @@
 								'start_at': moment(start).utc().format('YYYY-MM-DD HH:mm'),
 								'stop_at': moment(end).utc().format('YYYY-MM-DD HH:mm'),
 							},
-							success: function(result) {
+							success: function (result) {
 								if (result.status !== 'success') {
 									toastr.error(result.reason);
 									info.revert();
@@ -274,8 +361,6 @@
 						});
 					},
 					eventContent: function (info) {
-						//console.log($(info.event)[0]._def);
-
 						var id = $(info.event)[0]._def.publicId,
 							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
@@ -286,11 +371,11 @@
 
 						var content = '<div class="fc-event-main">' +
 							'<div class="fc-event-main-frame" data-toggle="modal" data-id="' + id + '" data-title="' + title + '">' +
-							(!allDay ? '<div class="fc-event-time"><div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div>' + moment(start).utc().format('H:mm') + ' - ' + moment(end).utc().format('H:mm') + '</div>' : '') +
-									'<div class="fc-event-title-container">' +
-										'<div class="fc-event-title fc-sticky">' + title + '</div>' +
-									'</div>' +
-								'</div>' +
+							(!allDay ? '<div class="fc-event-time">' + moment(start).utc().format('H:mm') + ' - ' + moment(end).utc().format('H:mm') + '<div class="fc-icons">' + (notificationType ? '<i class="material-icons" title="Уведомлен">' + notificationType + '</i>' : '') + (comments.length ? '<i class="material-icons" title="Комментарий">bookmark_border</i>' : '') + '</div></div>' : '') +
+							'<div class="fc-event-title-container">' +
+							'<div class="fc-event-title fc-sticky">' + title + '</div>' +
+							'</div>' +
+							'</div>' +
 							'</div>' +
 							'<a href="javascript:void(0)" id="event-close-' + id + '" data-id="' + id + '" data-title="' + title + '" class="event-close-btn">×</a>';
 
@@ -298,11 +383,11 @@
 							html: content
 						};
 					},
-					eventMouseEnter: function(info) {
+					eventMouseEnter: function (info) {
 						var comments = info.event.extendedProps.comments,
 							data = '';
 
-						$.each(comments, function(index, value) {
+						$.each(comments, function (index, value) {
 							data += '<div class="comment">' + value['name'] + '</div>' +
 								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + moment(value['date']).utc().format('DD.MM.YYYY H:mm:ss') + '</div>'
 						});
@@ -315,11 +400,11 @@
 							html: true
 						}).tooltip('show');
 					},
-					eventMouseLeave: function(info) {
+					eventMouseLeave: function (info) {
 						$(info.el).tooltip('hide');
 					},
-					eventDataTransform: function(event) {
-						if(event.allDay) {
+					eventDataTransform: function (event) {
+						if (event.allDay) {
 							//event.end = moment(event.end).utc().add(1, 'days')
 						}
 						return event;
@@ -332,7 +417,15 @@
 					}*/
 				});
 				calendar.render();
-			/*});*/
+				if (typeof calendarArr[$(calendarEl).data('location_id')] === 'undefined') {
+					calendarArr[$(calendarEl).data('location_id')] = [];
+				}
+				calendarArr[$(calendarEl).data('location_id')][$(calendarEl).data('simulator_id')] = calendar;
+			}
+
+			setTimeout(function() {
+				$('.calendar-title').removeClass('hidden');
+			}, 100);
 
 			$(document).on('click', '[data-widget="pushmenu"]', function() {
 				$(window).trigger('resize');
@@ -356,26 +449,16 @@
 							return;
 						}
 
-						var msg = '';
-						if (formId === 'deal') {
-							msg = 'Сделка успешно ';
-							if (method === 'POST') {
-								msg += 'создана';
-							} else if (method === 'PUT') {
-								msg += 'сохранена';
-							}
-						} else if (formId === 'event') {
-							msg = 'Событие успешно ';
-							if (method === 'POST') {
-								msg += 'создано';
-							} else if (method === 'PUT') {
-								msg += 'сохранено';
-							}
-						}
+						calendarArr.forEach(function (element, locationId) {
+							element.forEach(function (calendar, simulatorId) {
+								if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+									calendar.refetchEvents();
+								}
+							});
+						});
 
 						$('#modal').modal('hide');
-						toastr.success(msg);
-						calendar.refetchEvents();
+						toastr.success('Событие успешно ' + ((method === 'POST') ? 'создано' : 'сохранено'));
 					}
 				});
 			});
@@ -475,10 +558,13 @@
 				e.stopImmediatePropagation();
 
 				var id = $(this).data('id'),
-					title = $(this).data('title');
+					title = $(this).data('title'),
+					$calendarContainer = $(this).closest('.calendar-container'),
+					locationId = $calendarContainer.data('location-id'),
+					simulatorId = $calendarContainer.data('simulator-id');
 
 				var listEvent = calendar.getEvents();
-				if(confirm('Вы уверены, что хотите удалить событие "' + title + '" ?')) {
+				if(confirm('Вы уверены, что хотите удалить "' + title + '" ?')) {
 					$.ajax({
 						url: '/event/' + id,
 						type: 'DELETE',
@@ -489,24 +575,260 @@
 								return;
 							}
 
-							toastr.success('Событие успешно удалено');
-
 							listEvent.forEach(event => {
 								if (event._def.publicId == id) {
 									event.remove();
 								}
 							});
+
+							//calendarArr[locationId][simulatorId].gotoDate(e.date);
+							calendarArr[locationId][simulatorId].refetchEvents();
+
+							toastr.success('Событие успешно удалено');
 						}
 					});
 				}
 			});
 
-			$('#datepicker').datepicker({
+			var $datepicker = $('#datepicker');
+
+			// contol sidebar datepicker
+			$datepicker.datepicker({
 				language: 'ru'
 			}).on('changeDate', function(e) {
-				var date = new Date(e.date);
-				date.setDate(date.getDate() + 1);
-				calendar.gotoDate(date);
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.gotoDate(e.date);
+							calendar.refetchEvents();
+						}
+					});
+				});
+			});
+
+			// Control Sidebar
+			let controlSidebar = localStorage.getItem('control-sidebar');
+			if (controlSidebar == 'expanded') {
+				$('.control-sidebar').ControlSidebar('show');
+			} else {
+				$('.control-sidebar').ControlSidebar('collapse');
+			}
+			$(document).on('collapsed.lte.controlsidebar', '[data-widget="control-sidebar"]', function(e) {
+				localStorage.setItem('control-sidebar', 'collapsed');
+			});
+			$(document).on('expanded.lte.controlsidebar', '[data-widget="control-sidebar"]', function(e) {
+				localStorage.setItem('control-sidebar', 'expanded');
+			});
+
+			// Calendar checkboxes
+			$('.calendar-checkbox').each(function() {
+				var id = $(this).attr('id'),
+					$calendarContainer = $('.calendar[data-city_id="' + $(this).data('city_id') + '"][data-location_id="' + $(this).data('location_id') + '"][data-simulator_id="' + $(this).data('simulator_id') + '"]').closest('.calendar-container'),
+					isChecked = localStorage.getItem(id);
+
+				if (isChecked == 1 || isChecked == null) {
+					$(this).prop('checked', true);
+					$calendarContainer.show();
+				} else {
+					$(this).prop('checked', false);
+					$calendarContainer.hide();
+				}
+			});
+
+			// select locations from control sidebar
+			$(document).on('change', '.calendar-checkbox', function(e) {
+				var id = $(this).attr('id'),
+					cityId = $(this).data('city_id'),
+					locationId = $(this).data('location_id'),
+					simulatorId = $(this).data('simulator_id'),
+					$calendarContainer = $('.calendar[data-city_id="' + cityId + '"][data-location_id="' + locationId + '"][data-simulator_id="' + simulatorId + '"]').closest('.calendar-container'),
+					isChecked = $(this).is(':checked') ? 1 : 0;
+
+				localStorage.setItem(id, isChecked);
+
+				if (isChecked) {
+					$calendarContainer.show();
+					calendarArr[locationId][simulatorId].refetchEvents();
+				} else {
+					$calendarContainer.hide();
+				}
+			});
+
+			// select calendar view type
+			$(document).on('change', '#calendar-view-type', function(e) {
+				var calendarViewType = $(this).val();
+
+				localStorage.setItem($(this).attr('id'), calendarViewType);
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.changeView(calendarViewType);
+						}
+					});
+				});
+
+				var firstDay = new Date(calendar.view.activeStart);
+
+				$datepicker.data('date', firstDay.toLocaleDateString());
+				$datepicker.datepicker('setDate', firstDay);
+			});
+
+			$(document).on('click', '.js-calendar-prev', function() {
+				var dt = moment($datepicker.data('date'), 'DD.MM.YYYY'),
+					days = ($('#calendar-view-type').val() === 'timeGridWeek') ? 7 : 1,
+					dtNew = dt.subtract(days, 'd');
+
+				$datepicker.data('date', dtNew.format('DD.MM.YYYY'));
+				$datepicker.datepicker('update', dtNew.toDate());
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.prev();
+						}
+					});
+				});
+			});
+
+			$(document).on('click', '.js-calendar-next', function() {
+				var dt = moment($datepicker.data('date'), 'DD.MM.YYYY'),
+					days = ($('#calendar-view-type').val() === 'timeGridWeek') ? 7 : 1,
+					dtNew = dt.add(days, 'd');
+
+				$datepicker.data('date', dtNew.format('DD.MM.YYYY'));
+				$datepicker.datepicker('update', dtNew.toDate());
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.next();
+						}
+					});
+				});
+			});
+
+			$(document).on('click', '.js-calendar-today', function() {
+				var dt = moment();
+
+				$datepicker.data('date', dt.format('DD.MM.YYYY'));
+				$datepicker.datepicker('update', dt.toDate());
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.today();
+						}
+					});
+				});
+			});
+
+			$(document).on('click', '.js-comment-edit', function(e) {
+				var commentId = $(this).data('comment-id'),
+					$form = $(this).closest('form'),
+					$comment = $form.find('textarea#comment'),
+					$commentText = $form.find('.comment-text[data-comment-id="' + commentId + '"]');
+
+				if ($(this).hasClass('fa-edit')) {
+					$(this).css('color', 'orange');
+					$commentText.css('color', 'orange');
+					$comment.val($commentText.text());
+					$('#comment_id').val(commentId);
+					$(this).removeClass('far').removeClass('fa-edit').addClass('fas').addClass('fa-times-circle');
+				} else {
+					$(this).css('color', '#212529');
+					$commentText.css('color', '#212529');
+					$comment.val('');
+					$('#comment_id').val('');
+					$(this).addClass('far').addClass('fa-edit').removeClass('fas').removeClass('fa-times-circle');
+				}
+			});
+
+			$(document).on('click', '.js-comment-remove', function(e) {
+				if (!confirm($(this).data('confirm-text'))) return null;
+
+				var eventId = $(this).closest('form').find('#id').val();
+				commentId = $(this).data('comment-id');
+
+				$.ajax({
+					url: '/event/' + eventId + '/comment/' + commentId + '/remove',
+					type: 'DELETE',
+					success: function (result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						toastr.success(result.msg);
+
+						calendarArr.forEach(function (element, locationId) {
+							element.forEach(function (calendar, simulatorId) {
+								if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+									calendar.refetchEvents();
+								}
+							});
+						});
+					}
+				});
+			});
+
+			$(document).on('click', 'input[name="shift_user"]', function(e) {
+				var $form = $(this).closest('form'),
+					role = $(this).val();
+
+				$form.find('#user_id option[data-role]').addClass('hidden');
+				$form.find('#user_id option[data-role="' + role + '"]').removeClass('hidden');
+				$form.find('#user_id').val('');
+			});
+
+			$(document).on('change', 'input[name="event_type"]', function(e) {
+				var value = $(this).filter(':checked').val(),
+					$form = $(this).closest('form');
+
+				console.log(value);
+
+				switch (value) {
+					case 'test_flight':
+						$form.find('#email').closest('.row').show();
+						$form.find('#product_id').closest('.row').show();
+						$form.find('#comment').closest('.row').show();
+						$form.find('#extra_time').closest('.row').show();
+						$form.find('#duration').closest('.js-duration').addClass('hidden');
+
+						$form.find('#certificate').val('').prop('disabled', true);
+						$form.find('#promo_id').val(0).prop('disabled', true);
+						$form.find('#promocode_id').val(0).prop('disabled', true);
+						$form.find('#extra_time').val(0).prop('disabled', true);
+						$form.find('#is_repeated_flight').val(0).prop('disabled', true);
+						$form.find('#is_unexpected_flight').val(0).prop('disabled', true);
+						$form.find('#is_free').prop('checked', true).prop('disabled', true);
+						$form.find('#amount-text h1').text('0');
+						break;
+					case 'break':
+					case 'cleaning':
+						$form.find('#email').closest('.row').hide();
+						$form.find('#product_id').closest('.row').hide();
+						$form.find('#comment').closest('.row').hide();
+						$form.find('#extra_time').closest('.row').hide();
+						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						break;
+					case 'deal':
+						$form.find('#email').closest('.row').show();
+						$form.find('#product_id').closest('.row').show();
+						$form.find('#comment').closest('.row').show();
+						$form.find('#extra_time').closest('.row').show();
+						$form.find('#duration').closest('.js-duration').addClass('hidden');
+
+						$form.find('#certificate').val('').prop('disabled', false);
+						$form.find('#promo_id').val(0).prop('disabled', false);
+						$form.find('#promocode_id').val(0).prop('disabled', false);
+						$form.find('#extra_time').val(0).prop('disabled', false);
+						$form.find('#is_repeated_flight').val(0).prop('disabled', false);
+						$form.find('#is_unexpected_flight').val(0).prop('disabled', false);
+						$form.find('#is_free').prop('checked', false).prop('disabled', false);
+						//$form.find('#amount-text h1').text('0');
+						break;
+				}
 			});
 
 			/*$(document).on('shown.lte.pushmenu', function() {
@@ -521,6 +843,11 @@
 
 				$form.trigger('reset');
 			});*/
+
+			function convertUTCDateToLocalDate(date, timeZone) {
+				date = new Date(date);
+				return new Date(date.toLocaleString('en-US', {timeZone: timeZone}));
+			}
 		});
 	</script>
 @stop

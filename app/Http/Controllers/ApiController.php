@@ -2172,7 +2172,13 @@ class ApiController extends Controller
 		if ($amount < 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
-
+		
+		// если указаны баллы на списание (только для мобилки)
+		if ($score > 0) {
+			$amount -= $score;
+			if ($amount < 0) $amount = 0;
+		}
+		
 		$data = [
 			'amount' => $amount,
 			'baseAmount' => $baseAmount,
@@ -3103,13 +3109,11 @@ class ApiController extends Controller
 				return $this->responseError('Город не найден', 400);
 			}
 		}
-
-		$notifications = Notification::where('is_active', true)
-			->whereIn('contractor_id', [$contractor->id, 0])
-			->whereIn('city_id', [$city->id, 0])
-			->latest()
-			->get();
-
+		
+		$notifications = $contractor->notifications
+			->where('is_active', true)
+			->sortByDesc('created_at');
+		
 		$data = [];
 		foreach ($notifications ?? [] as $notification) {
 			$data[] = [
@@ -3183,19 +3187,20 @@ class ApiController extends Controller
 				return $this->responseError('Город не найден', 400);
 			}
 		}
-
-		$notification = Notification::where('is_active', true)
-			->whereIn('contractor_id', [$contractor->id, 0])
-			->whereIn('city_id', [$city->id, 0])
+		
+		$notification = $contractor->notifications
+			->where('is_active', true)
 			->find($notificationId);
 		if (!$notification) {
 			return $this->responseError('Уведомление не найдено', 400);
 		}
 
 		// после прочтения уведомления снимаем признак того, что оно новое
-		if ($notification->is_new) {
-			$notification->is_new = false;
-			$notification->save();
+		if ($notification->pivot->is_new) {
+			$data = [
+				'is_new' => false,
+			];
+			$contractor->notifications()->updateExistingPivot($notification->id, $data);
 		}
 
 		$data = [

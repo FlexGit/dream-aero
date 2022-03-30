@@ -360,7 +360,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		// Уведомления
 		Route::get('notification', [NotificationController::class, 'index'])->name('notificationIndex');
 		Route::get('notification/list/ajax', [NotificationController::class, 'getListAjax'])->name('notificationList');
-
+		
 		Route::post('notification', [NotificationController::class, 'store']);
 		Route::put('notification/{id}', [NotificationController::class, 'update']);
 		Route::delete('notification/{id}', [NotificationController::class, 'delete']);

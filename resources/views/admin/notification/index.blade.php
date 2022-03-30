@@ -4,13 +4,13 @@
 	<div class="row mb-2">
 		<div class="col-sm-6">
 			<h1 class="m-0 text-dark">
-				Пользователи
+				Уведомления
 			</h1>
 		</div>
 		<div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
 				<li class="breadcrumb-item"><a href="/">Главная</a></li>
-				<li class="breadcrumb-item active">Пользователи</li>
+				<li class="breadcrumb-item active">Уведомления</li>
 			</ol>
 		</div>
 	</div>
@@ -21,34 +21,16 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter mb-2">
-						<div class="d-sm-flex">
-							<div class="form-group">
-								<label for="filter_city_id">Город</label>
-								<select class="form-control" id="filter_city_id" name="filter_city_id">
-									<option value="0">Все</option>
-									@foreach($cities ?? [] as $city)
-										@if(!$city->is_active)
-											@continue
-										@endif
-										<option value="{{ $city->id }}">{{ $city->name }}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group align-self-end ml-auto pl-2">
-								<a href="javascript:void(0)" data-toggle="modal" data-url="/user/add" data-action="/user" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
-							</div>
+					<div class="table-filter d-sm-flex">
+						<div class="form-group align-self-end text-right ml-auto">
+							<a href="javascript:void(0)" data-toggle="modal" data-url="/notification/add" data-action="/notification" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
 						</div>
 					</div>
-					<table id="userTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
+					<table id="notificationTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 						<tr>
-							<th class="text-center">ФИО</th>
-							<th class="text-center d-none d-sm-table-cell">E-mail</th>
-							<th class="text-center d-none d-md-table-cell">Роль</th>
-							<th class="text-center d-none d-lg-table-cell">Версия</th>
-							<th class="text-center d-none d-lg-table-cell">Город</th>
-							<th class="text-center d-none d-xl-table-cell">Локация</th>
+							<th class="text-center">Заголовок</th>
+							<th class="text-center d-none d-xl-table-cell">Город</th>
 							<th class="text-center d-none d-xl-table-cell">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
@@ -70,7 +52,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="user">
+				<form id="notification">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -92,20 +74,15 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList(loadMore) {
-				var $selector = $('#userTable tbody');
+			function getList() {
+				var $selector = $('#notificationTable tbody');
 
-				var $tr = $('tr.odd[data-id]:last'),
-					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
+				$selector.html('<tr><td colspan="30" class="text-center">Загрузка данных...</td></tr>');
 
 				$.ajax({
-					url: "{{ route('userList') }}",
+					url: "{{ route('notificationList') }}",
 					type: 'GET',
 					dataType: 'json',
-					data: {
-						"filter_city_id": $('#filter_city_id').val(),
-						"id": id
-					},
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
@@ -113,22 +90,15 @@
 						}
 
 						if (result.html) {
-							if (loadMore) {
-								$selector.append(result.html);
-							} else {
-								$selector.html(result.html);
-							}
-							$(window).data('ajaxready', true);
+							$selector.html(result.html);
 						} else {
-							if (!id) {
-								$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
-							}
+							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
 						}
 					}
 				})
 			}
 
-			getList(false);
+			getList();
 
 			$(document).on('click', '[data-url]', function(e) {
 				e.preventDefault();
@@ -168,17 +138,14 @@
 				});
 			});
 
-			$(document).on('submit', '#user', function(e) {
+			$(document).on('submit', '#notification', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
-					$photoFile = $('#photo_file');
+					operation = $(this).find('#operation').val();
 
 				var formData = new FormData($(this)[0]);
-				if ($photoFile.val()) {
-					formData.append('photo_file', $photoFile.prop('files')[0]);
-				}
 
 				var realMethod = method;
 				if (method === 'PUT') {
@@ -199,61 +166,46 @@
 							return;
 						}
 
-						var msg = 'Пользователь успешно ';
-						if (method === 'POST') {
-							msg += 'добавлен';
+						var msg = 'Уведомление успешно ';
+						if (operation === 'send') {
+							msg += 'отправлено';
+						} else if (method === 'POST') {
+							msg += 'добавлено';
 						} else if (method === 'PUT') {
-							msg += 'сохранен';
+							msg += 'сохранено';
 						} else if (method === 'DELETE') {
-							msg += 'удален';
+							msg += 'удалено';
 						}
 
 						$('#modal').modal('hide');
-						getList(false);
+						getList();
 						toastr.success(msg);
 					}
 				});
 			});
 
-			$(document).on('change', '#filter_city_id', function(e) {
-				getList(false);
-			});
-
-			$(document).on('change', '#city_id', function() {
-				$('#location_id').val('');
-				getLocation($(this).val());
-			});
-
-			$(document).on('show.bs.modal', '#modal', function(e) {
-				getLocation($('#city_id').val());
-			});
-
-			function getLocation(cityId) {
-				$('#location_id option').hide();
-				$('#location_id option[data-city_id="' + cityId + '"]').show();
-			}
-
-			$.fn.isInViewport = function () {
-				let elementTop = $(this).offset().top;
-				let elementBottom = elementTop + $(this).outerHeight();
-
-				let viewportTop = $(window).scrollTop();
-				let viewportBottom = viewportTop + $(window).height();
-
-				return elementBottom > viewportTop && elementTop < viewportBottom;
-			};
-
-			$(window).on('scroll', function() {
-				if ($(window).data('ajaxready') === false) return;
-
-				var $tr = $('tr.odd[data-id]:last');
-				if (!$tr.length) return;
-
-				if ($tr.isInViewport()) {
-					$(window).data('ajaxready', false);
-					getList(true);
+			/*$(document).on('click', '.js-image-delete', function(e) {
+				if (!confirm('Вы уверены?')) {
+					return false;
 				}
-			});
+
+				$div = $(this).closest('div');
+
+				$.ajax({
+					url: '/promo/' + $(this).data('id') + '/image/delete',
+					type: 'PUT',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						$div.hide();
+						toastr.success('Изображение успешно удалено');
+					}
+				});
+			});*/
 		});
 	</script>
 @stop

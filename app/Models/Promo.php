@@ -49,6 +49,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property string|null $alias
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereAlias($value)
+ * @property array|null $data_json дополнительная информация
+ * @method static \Illuminate\Database\Eloquent\Builder|Promo whereDataJson($value)
  */
 class Promo extends Model
 {

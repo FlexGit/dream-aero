@@ -43,14 +43,26 @@ table.fc-scrollgrid tbody {
 	height: 0.3em !important;
 	border-bottom: 0 !important;
 }
+td.fc-daygrid-day {
+	height: 55px !important;
+}
 .fc-scroller.fc-scroller-liquid-absolute {
 	overflow: hidden !important;
 }
 .fc-event-time {
-	color: #fff;
+	color: #000;
 }
 .fc-event-title {
 	color: #000;
+}
+.fc-event-title.fc-sticky {
+	font-size: 12px;
+}
+.fc-timegrid-event .fc-event-time {
+	margin-bottom: 0 !important;
+}
+.form-check.form-check-inline {
+	line-height: 0.9em;
 }
 .event-close-btn {
 	position: absolute;
@@ -69,7 +81,7 @@ table.fc-scrollgrid tbody {
 	font-size: 14px !important;
 	margin-right: 5px;
 	cursor: default;
-	color: lightgreen;
+	color: green;
 }
 .material-icons:hover {
 	color: darkorange;
@@ -94,4 +106,21 @@ table.fc-scrollgrid tbody {
 	padding-bottom: 10px;
 	font-size: 11px;
 	text-align: right;
+}
+.fa-edit, .fa-times-circle, .fa-trash-alt {
+	cursor: pointer;
+}
+.calendars-wrapper {
+	height: 92vh;
+	overflow: auto;
+}
+.calendars-container {
+	display: flex;
+}
+.calendar-container {
+	width: 100%;
+	min-width: 490px;
+}
+body {
+	overflow: hidden;
 }

@@ -301,12 +301,6 @@ class Product extends Model
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
 
-		// если указаны баллы на списание (только для мобилки)
-		if ($score > 0 && $source == Deal::MOB_SOURCE) {
-			$amount -= $score;
-			if ($amount <= 0) return 0;
-		}
-
 		// скидка на продукт
 		$discount = $cityProduct->pivot->discount ?? null;
 		if ($discount) {

@@ -230,6 +230,7 @@ class UserController extends Controller
 		$user->email = $this->request->email;
 		$user->password = '';
 		$user->role = $this->request->role;
+		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
 		$user->enable = $this->request->enable;
@@ -294,6 +295,7 @@ class UserController extends Controller
 		$user->middlename = $this->request->middlename ?? '';
 		$user->email = $this->request->email;
 		$user->role = $this->request->role;
+		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
 		$user->enable = $this->request->enable;

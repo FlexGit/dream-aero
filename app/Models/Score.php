@@ -45,6 +45,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $deal_position_id позиция сделки
  * @property-read \App\Models\DealPosition|null $position
  * @method static \Illuminate\Database\Eloquent\Builder|Score whereDealPositionId($value)
+ * @property int $deal_id
+ * @property-read \App\Models\Deal|null $deal
+ * @method static \Illuminate\Database\Eloquent\Builder|Score whereDealId($value)
  */
 class Score extends Model
 {

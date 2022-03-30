@@ -26,6 +26,14 @@
 	</select>
 </div>
 <div class="form-group">
+	<label for="version">Версия</label>
+	<select class="form-control" id="version" name="version">
+		@foreach(app('\App\Models\City')::VERSIONS ?? [] as $version)
+			<option value="{{ $version }}" @if($version == $user->version) selected @endif>{{ $version }}</option>
+		@endforeach
+	</select>
+</div>
+<div class="form-group">
 	<label for="city_id">Город</label>
 	<select class="form-control" id="city_id" name="city_id">
 		<option></option>
