@@ -37,7 +37,6 @@ class PayAnyWayService {
 					new MessageFormatter('{req_body} - {res_body}')
 				)
 			);
-			\Log::debug($payAccountNumber);
 			
 			$client = new Client(
 				[
@@ -45,7 +44,18 @@ class PayAnyWayService {
 					'handler' => $stack,
 				]
 			);
+
 			\Log::debug($payAccountNumber);
+			\Log::debug(number_format($bill->amount, 2, '.', ''));
+			\Log::debug($bill->number);
+			\Log::debug(self::CURRENCY_CODE);
+			\Log::debug(self::TEST_MODE);
+			\Log::debug('Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->alias : 'RUB'));
+			\Log::debug($bill->contractor->uuid);
+			\Log::debug(md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE));
+			\Log::debug(route('successPay'));
+			\Log::debug(route('failPay'));
+			\Log::debug(route('home'));
 			
 			$params = [
 				'MNT_ID' => $payAccountNumber,
