@@ -29,6 +29,7 @@ class PayAnyWayService {
 	 * @throws \GuzzleHttp\Exception\GuzzleException
 	 */
 	public static function sendPayRequest($payAccountNumber, Bill $bill) {
+		\Log::debug($payAccountNumber);
 		try {
 			$stack = HandlerStack::create();
 			$stack->push(
