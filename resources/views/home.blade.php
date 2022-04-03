@@ -367,7 +367,13 @@
 									return;
 								}
 
-								$('#popup').html(result.html).find('select').niceSelect();
+								var $popup = $('#popup');
+
+								$popup.html(result.html).find('select').niceSelect();
+
+								//var productTypeAlias = $popup.find('#product').find(':selected').data('product-type-alias'),
+									//weekDays = (productTypeAlias == 'regular') ? [0, 6] : [],
+									//holidays = $popup.find('#holidays').val();
 
 								calcAmount();
 
@@ -384,15 +390,17 @@
 									scrollTime: false,
 									scrollMonth: false,
 									validateOnBlur: false,
-									onChangeDateTime: function (value) {
-										value.setHours(value.getHours() + Math.round(value.getMinutes()/60));
-										value.setMinutes(0, 0, 0);
+									onChangeDateTime: function(value) {
+										//value.setHours(value.getHours() + Math.round(value.getMinutes()/30) - 1);
+										value.setSeconds(0);
 
-										console.log(value.toLocaleString());
 										$('#flight_date').val(value.toLocaleString());
 
 										calcAmount();
 									},
+									//disabledWeekDays: weekDays,
+									//disabledDates: holidays,
+									formatDate: 'd.m.Y',
 								});
 							}
 						});
@@ -496,15 +504,111 @@
 				calcAmount();
 			});
 
+			$(document).on('keyup', '#certificate_number', function() {
+				console.log(111);
+				calcAmount();
+			});
+
+			$(document).on('change', 'input[name="consent"]', function() {
+				var $popup = $(this).closest('.popup'),
+					$btn = $popup.find('.js-booking-btn');
+
+				if ($(this).is(':checked')) {
+					$btn.removeClass('button-pipaluk-grey')
+						.addClass('button-pipaluk-orange')
+						.prop('disabled', false);
+				} else {
+					$btn.removeClass('button-pipaluk-orange')
+						.addClass('button-pipaluk-grey')
+						.prop('disabled', true);
+				}
+			});
+
+			$(document).on('click', '.js-booking-btn', function() {
+				var $popup = $(this).closest('.popup'),
+					productId = $popup.find('#product').val(),
+					name = $popup.find('#name').val(),
+					email = $popup.find('#email').val(),
+					phone = $popup.find('#phone').val(),
+					flightAt = $popup.find('#flight_date').val(),
+					flightDateAt = flightAt.substring(0, flightAt.indexOf(',')),
+					flightTimeAt = flightAt.substring(flightAt.indexOf(',') + 2),
+					locationId = $popup.find('input[name="locationSimulator"]:checked').data('location-id'),
+					simulatorId = $popup.find('input[name="locationSimulator"]:checked').data('simulator-id'),
+					certificate = $popup.find('#certificate_number').val(),
+					duration = $popup.find('#product').find(':selected').data('product-duration'),
+					amount = $popup.find('#amount').val(),
+					promocode_uuid = $popup.find('#promocode_uuid').val(),
+					$alertSuccess = $popup.find('.alert-success'),
+					$alertError = $popup.find('.alert-danger');
+
+				var data = {
+					'source': '{{ app('\App\Models\Deal')::WEB_SOURCE }}',
+					'event_type': '{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}',
+					'name': name,
+					'email': email,
+					'phone': phone,
+					'product_id': productId ? parseInt(productId) : 0,
+					'city_id': parseInt('{{ $city->id }}'),
+					'location_id': locationId ? parseInt(locationId) : 0,
+					'flight_date_at': flightDateAt,
+					'flight_time_at': flightTimeAt,
+					'flight_simulator_id': simulatorId ? parseInt(simulatorId) : 0,
+					'certificate': certificate,
+					'amount': amount ? parseInt(amount) : 0,
+					'duration': duration,
+					'promocode_uuid': promocode_uuid,
+				};
+
+				$.ajax({
+					url: '{{ route('dealBookingStore') }}',
+					type: 'POST',
+					data: data,
+					dataType: 'json',
+					success: function (result) {
+						console.log(result);
+
+						$alertSuccess.addClass('hidden');
+						$alertError.text('').addClass('hidden');
+						$('.field-error').removeClass('field-error');
+
+						if (result.status !== 'success') {
+							if (result.reason) {
+								$alertError.text(result.reason).removeClass('hidden');
+							}
+							if (result.errors) {
+								const entries = Object.entries(result.errors);
+								entries.forEach(function (item, key) {
+									//$('#' + item[0]).after('<p class="text-error text-small">' + item[1].join(' ') + '</p>');
+									var fieldId = (item[0] === 'flight_date_at') ? 'flight_date' : item[0];
+									$('#' + fieldId).addClass('field-error');
+								});
+							}
+							return;
+						}
+
+						/*yaCounter46672077.reachGoal('SendOrder');
+						gtag_report_conversion();
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+
+						$alertSuccess.removeClass('hidden');
+						$popup.find('#name, #email, #phone, #flight_date').val('');
+						$popup.find('input[name="has_promocode"], input[name="has_certificate"]').prop('checked', false);
+					}
+				});
+			});
+
 			function calcAmount() {
 				var $popup = $('#popup'),
-					productId = $popup.find('#product').find(':selected').data('product-id'),
+					productId = $popup.find('#product').val(),
 					promocodeUuid = $popup.find('#promocode_uuid').val(),
 					locationId = $popup.find('input[name="locationSimulator"]:checked').data('location-id'),
 					simulatorId = $popup.find('input[name="locationSimulator"]:checked').data('simulator-id'),
 					flightDate = $popup.find('#flight_date').val(),
+					certificate = $popup.find('#certificate_number').val(),
 					cityId = $('#city_id').val(),
-					$amount = $popup.find('.js-amount'),
+					$amount = $popup.find('#amount'),
+					$amountContainer = $popup.find('.js-amount'),
 					amount = 0;
 
 				$.ajax({
@@ -516,11 +620,13 @@
 						location_id: locationId,
 						simulator_id: simulatorId,
 						city_id: cityId,
+						flight_date: flightDate,
+						certificate: certificate,
 						source: 'web',
 					},
 					dataType: 'json',
 					success: function(result) {
-						//console.log(result);
+						console.log(result);
 						if (result.status != 'success') {
 							return;
 						}
@@ -530,7 +636,8 @@
 						} else if (result.amount) {
 							amount = result.amount;
 						}
-						$amount.html(amount);
+						$amount.val(result.amount);
+						$amountContainer.html(amount);
 
 						//$('#popup').html(result.html).find('select').niceSelect();
 					}

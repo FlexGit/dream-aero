@@ -81,7 +81,10 @@
 											@endforeach
 
 											{{--Platinum--}}
-											@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::PLATINUM_ALIAS)] ?? [] as $productAlias => $product)
+											@foreach($products[mb_strtoupper(app('\App\Models\ProductType')::COURSES_ALIAS)] ?? [] as $productAlias => $product)
+												@if ($productAlias != app('\App\Models\ProductType')::PLATINUM_ALIAS)
+													@continue
+												@endif
 												<div class="block-price">
 													@if($product['is_hit'])
 														<span>хит продаж</span>

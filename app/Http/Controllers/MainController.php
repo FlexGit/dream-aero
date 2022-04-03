@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Currency;
+use App\Models\Deal;
 use App\Models\Promocode;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
@@ -84,11 +85,15 @@ class MainController extends Controller
 
 		// Локации
 		$locations = $city->locations;
+		
+		// Праздники
+		$holidays = Deal::HOLIDAYS;
 
 		$VIEW = view('modal.booking', [
 			'city' => $city,
 			'products' => $products,
 			'locations' => $locations,
+			'holidays' => $holidays,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -111,7 +116,6 @@ class MainController extends Controller
 		$date = date('Y-m-d');
 
 		$promocode = Promocode::where('number', $number)
-			/*->whereIn('city_id', [$city->id, 0])*/
 			->whereRelation('cities', 'cities.id', '=', $city->id)
 			->where('is_active', true)
 			->where(function ($query) use ($date) {

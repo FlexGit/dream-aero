@@ -138,8 +138,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		// Сделки
 		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
 		Route::get('deal/list/ajax', [DealController::class, 'getListAjax'])->name('dealList');
-		Route::post('deal/certificate', [DealController::class, 'storeCertificate']);
-		Route::post('deal/booking', [DealController::class, 'storeBooking']);
 		Route::post('deal/product', [DealController::class, 'storeProduct']);
 		Route::put('deal/{id}', [DealController::class, 'update']);
 
@@ -423,6 +421,8 @@ Route::domain(env('DOMAIN_EN', 'dream.aero'))->group(function () {
 });
 
 Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
+Route::post('deal/certificate', [DealController::class, 'storeCertificate'])->name('dealCertificateStore');
+Route::post('deal/booking', [DealController::class, 'storeBooking'])->name('dealBookingStore');
 
 Route::fallback(function () {
 	abort(404);

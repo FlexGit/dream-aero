@@ -104,10 +104,12 @@ class Contractor extends Authenticatable
 	CONST CODE_TTL = 5 * 60;
 	
 	const ADMIN_SOURCE = 'admin';
+	const CALENDAR_SOURCE = 'calendar';
 	const WEB_SOURCE = 'web';
 	const MOB_SOURCE = 'api';
 	const SOURCES = [
 		self::ADMIN_SOURCE => 'Админка',
+		self::CALENDAR_SOURCE => 'Календарь',
 		self::WEB_SOURCE => 'Web',
 		self::MOB_SOURCE => 'Mob',
 	];
