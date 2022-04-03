@@ -438,4 +438,14 @@ class MainController extends Controller
 	{
 		return PayAnyWayService::checkPayCallback($this->request) ? 'SUCCESS' : 'FAIL';
 	}
+	
+	public function paymentSuccess()
+	{
+	
+	}
+	
+	public function paymentFail()
+	{
+	
+	}
 }

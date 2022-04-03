@@ -53,8 +53,8 @@ class PayAnyWayService {
 			\Log::debug('Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->name : 'руб'));
 			\Log::debug($bill->contractor->uuid);
 			\Log::debug(md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE));
-			\Log::debug(route('paymentSuccess'));
-			\Log::debug(route('paymentFail'));
+			\Log::debug(route('home')); //paymentSuccess
+			\Log::debug(route('home')); //paymentFail
 			\Log::debug(route('home'));
 			
 			$params = [
@@ -66,8 +66,8 @@ class PayAnyWayService {
 				'MNT_DESCRIPTION' => 'Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->alias : 'RUB'),
 				'MNT_SUBSCRIBER_ID' => $bill->contractor->uuid,
 				'MNT_SIGNATURE' => md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE),
-				'MNT_SUCCESS_URL' => route('successPay'),
-				'MNT_FAIL_URL' => route('failPay'),
+				'MNT_SUCCESS_URL' => route('home'), //paymentSuccess
+				'MNT_FAIL_URL' => route('home'), //paymentFail
 				'MNT_RETURN_URL' => route('home'),
 			];
 			
