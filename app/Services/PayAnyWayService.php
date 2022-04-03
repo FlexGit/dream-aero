@@ -62,6 +62,7 @@ class PayAnyWayService {
 			];
 			
 			\Log::debug($params);
+			\Log::debug($payAccountNumber);
 			
 			$result = $client->post(self::PAY_REQUEST_URL, [
 				'form_params' => $params,
