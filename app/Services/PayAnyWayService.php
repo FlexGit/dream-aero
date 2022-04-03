@@ -50,11 +50,11 @@ class PayAnyWayService {
 			\Log::debug($bill->number);
 			\Log::debug(self::CURRENCY_CODE);
 			\Log::debug(self::TEST_MODE);
-			\Log::debug('Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->alias : 'RUB'));
+			\Log::debug('Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->name : 'руб'));
 			\Log::debug($bill->contractor->uuid);
 			\Log::debug(md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE));
-			\Log::debug(route('successPay'));
-			\Log::debug(route('failPay'));
+			\Log::debug(route('paymentSuccess'));
+			\Log::debug(route('paymentFail'));
 			\Log::debug(route('home'));
 			
 			$params = [
