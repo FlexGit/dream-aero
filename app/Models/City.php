@@ -103,6 +103,8 @@ class City extends Model
 		'timezone',
 		'email',
 		'phone',
+		'sort',
+		'pay_account_number',
 		'is_active',
 		'data_json',
 	];
