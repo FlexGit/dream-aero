@@ -49,6 +49,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Content withoutTrashed()
  * @mixin \Eloquent
  * @property-read \App\Models\City|null $city
+ * @property int $city_id город
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereCityId($value)
  */
 class Content extends Model
 {

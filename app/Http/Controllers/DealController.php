@@ -392,7 +392,7 @@ class DealController extends Controller
 			}
 		}
 		
-		$city = Product::find($this->request->city_id);
+		$city = City::find($this->request->city_id);
 		if (!$city) {
 			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 		}

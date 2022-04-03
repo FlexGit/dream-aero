@@ -42,6 +42,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Promocode withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Promocode withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $uuid uuid
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereUuid($value)
  */
 class Promocode extends Model
 {
