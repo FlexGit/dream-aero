@@ -20,11 +20,10 @@ class CreateCitiesTable extends Migration
 			$table->string('alias', 50)->comment('алиас');
 			$table->string('version', 25)->default('ru')->index()->comment('версия');
 			$table->string('timezone', 50)->nullable()->comment('временная зона');
-			$table->string('email')->nullable()->comment('e-mail');
-			$table->string('phone')->nullable()->comment('телефон');
 			$table->integer('sort')->default(0)->comment('сортировка');
+			$table->string('pay_account_number')->nullable()->comment('номер счета платежной системы');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
-			$table->text('data_json')->nullable()->comment('дополнительная информация: часовой пояс');
+			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();
         });

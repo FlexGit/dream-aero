@@ -399,7 +399,8 @@ Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 	Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction']);
 	Route::get('oferta-dreamaero', [MainController::class, 'oferta']);
 
-	Route::get('modal/booking', [MainController::class, 'getBookingFormAjax']);
+	Route::get('modal/booking', [MainController::class, 'getBookingModal']);
+	Route::get('modal/certificate', [MainController::class, 'getCertificateModal']);
 	Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
 
 	Route::post('review/create', [MainController::class, 'reviewCreate']);
@@ -408,9 +409,12 @@ Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 	Route::get('city/change', [MainController::class, 'changeCity']);
 
 	Route::get('pay/{uuid}', [MainController::class, 'payLink']);
-
+	Route::get('payment/callback', [MainController::class, 'paymentCallback']);
+	Route::get('payment/success', [MainController::class, 'paymentSuccess']);
+	Route::get('payment/fail', [MainController::class, 'paymentFail']);
+	
 	Route::group(['middleware' => ['citycheck']], function () {
-		Route::get('{alias?}', [MainController::class, 'home']);
+		Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 		Route::get('{alias?}/price', [MainController::class, 'price']);
 		Route::get('{alias?}/contacts', [MainController::class, 'contacts']);
 	});

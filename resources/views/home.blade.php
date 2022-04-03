@@ -18,8 +18,8 @@
 			</div>
 			<h1 class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.3s" data-wow-iteration="1">Испытай себя в роли пилота авиалайнера</h1>
 			<span class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.9s" data-wow-iteration="1">Рады представить Вам тренажеры знаменитого авиалайнера Boeing 737 NG и Airbus A320 на динамической платформе в Москве.</span>
-			<a href="{{ url('#popup') }}" class="fly button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-formname="tpl.bronform" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>забронировать</i></a>
-			<a href="{{ url('#popup-certificate') }}" class="give button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-formname="tpl.main_payonline" data-wow-delay="1.6s" data-wow-duration="2s" data-wow-iteration="1"><i>подарить полет</i></a>
+			<a href="{{ url('#popup') }}" class="fly button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>забронировать</i></a>
+			<a href="{{ url('#popup') }}" class="give button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="certificate" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>подарить полет</i></a>
 		</div>
 		<div class="scroll-down">
 			<a class="scrollTo" href="#about">
@@ -80,7 +80,7 @@
 					</a>
 				</li>
 			</ul>
-			<a href="{{ url('#popup-booking') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form_open" data-formname="tpl.bronform"><i>забронировать полет</i></a>
+			<a href="{{ url('#popup-booking') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form_open" data-modal="booking"><i>забронировать полет</i></a>
 		</div>
 	</div>
 
@@ -237,7 +237,7 @@
 			<div class="col-md-8">
 			</div>
 			<div class="col-md-4">
-				<a class="button button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#popup-review') }}"><i>Оставить отзыв</i></a>
+				<a class="button button-pipaluk button-pipaluk-orange popup-with-form" data-modal="review" href="{{ url('#popup-review') }}"><i>Оставить отзыв</i></a>
 				<a class="button main-all-review button-pipaluk button-pipaluk-orange" href="{{ url('reviews') }}"><i>Показать все отзывы</i></a>
 			</div>
 		</div>
@@ -345,13 +345,6 @@
 				removalDelay: 300,
 				mainClass: 'mfp-fade',
 				callbacks: {
-					/*beforeOpen: function() {
-						if ($(window).width() < 700) {
-							this.st.focus = false;
-						} else {
-							this.st.focus = '#name';
-						}
-					},*/
 					open: function() {
 						$.magnificPopup.instance.close = function() {
 							$('form')[0].reset();
@@ -359,51 +352,76 @@
 							$.magnificPopup.proto.close.call(this);
 						};
 
-						$.ajax({
-							type: 'GET',
-							url: '/modal/booking',
-							success: function(result) {
-								if (result.status != 'success') {
-									return;
-								}
+						var mp = $.magnificPopup.instance,
+							t = $(mp.currItem.el[0]);
 
-								var $popup = $('#popup');
+						switch (t.data('modal')) {
+							case 'booking':
+								$.ajax({
+									type: 'GET',
+									url: '/modal/booking',
+									success: function (result) {
+										if (result.status != 'success') {
+											return;
+										}
 
-								$popup.html(result.html).find('select').niceSelect();
+										var $popup = $('#popup');
 
-								//var productTypeAlias = $popup.find('#product').find(':selected').data('product-type-alias'),
-									//weekDays = (productTypeAlias == 'regular') ? [0, 6] : [],
-									//holidays = $popup.find('#holidays').val();
+										$popup.html(result.html).find('select').niceSelect();
 
-								calcAmount();
-
-								$('.datetimepicker').datetimepicker({
-									format: 'd.m.Y H:i',
-									step: 30,
-									dayOfWeekStart: 1,
-									minDate: 0,
-									minTime: '10:00',
-									maxTime: '23:00',
-									lang: 'ru',
-									lazyInit: true,
-									scrollInput: false,
-									scrollTime: false,
-									scrollMonth: false,
-									validateOnBlur: false,
-									onChangeDateTime: function(value) {
-										//value.setHours(value.getHours() + Math.round(value.getMinutes()/30) - 1);
-										value.setSeconds(0);
-
-										$('#flight_date').val(value.toLocaleString());
+										//var productTypeAlias = $popup.find('#product').find(':selected').data('product-type-alias'),
+										//weekDays = (productTypeAlias == 'regular') ? [0, 6] : [],
+										//holidays = $popup.find('#holidays').val();
 
 										calcAmount();
-									},
-									//disabledWeekDays: weekDays,
-									//disabledDates: holidays,
-									formatDate: 'd.m.Y',
+
+										$('.datetimepicker').datetimepicker({
+											format: 'd.m.Y H:i',
+											step: 30,
+											dayOfWeekStart: 1,
+											minDate: 0,
+											minTime: '10:00',
+											maxTime: '23:00',
+											lang: 'ru',
+											lazyInit: true,
+											scrollInput: false,
+											scrollTime: false,
+											scrollMonth: false,
+											validateOnBlur: false,
+											onChangeDateTime: function (value) {
+												//value.setHours(value.getHours() + Math.round(value.getMinutes()/30) - 1);
+												value.setSeconds(0);
+
+												$('#flight_date').val(value.toLocaleString());
+
+												calcAmount();
+											},
+											//disabledWeekDays: weekDays,
+											//disabledDates: holidays,
+											formatDate: 'd.m.Y',
+										});
+									}
 								});
-							}
-						});
+							break;
+
+							case 'certificate':
+								$.ajax({
+									type: 'GET',
+									url: '/modal/certificate',
+									success: function (result) {
+										if (result.status != 'success') {
+											return;
+										}
+
+										var $popup = $('#popup');
+
+										$popup.html(result.html).find('select').niceSelect();
+
+										calcAmount();
+									}
+								});
+							break;
+						}
 					}
 				}
 			});
@@ -505,13 +523,12 @@
 			});
 
 			$(document).on('keyup', '#certificate_number', function() {
-				console.log(111);
 				calcAmount();
 			});
 
 			$(document).on('change', 'input[name="consent"]', function() {
 				var $popup = $(this).closest('.popup'),
-					$btn = $popup.find('.js-booking-btn');
+					$btn = $popup.find('.js-booking-btn, .js-certificate-btn');
 
 				if ($(this).is(':checked')) {
 					$btn.removeClass('button-pipaluk-grey')
@@ -593,7 +610,72 @@
 
 						$alertSuccess.removeClass('hidden');
 						$popup.find('#name, #email, #phone, #flight_date').val('');
-						$popup.find('input[name="has_promocode"], input[name="has_certificate"]').prop('checked', false);
+					}
+				});
+			});
+
+			$(document).on('click', '.js-certificate-btn', function() {
+				var $popup = $(this).closest('.popup'),
+					productId = $popup.find('#product').val(),
+					name = $popup.find('#name').val(),
+					email = $popup.find('#email').val(),
+					phone = $popup.find('#phone').val(),
+					certificate_whom = $popup.find('#certificate_whom').val(),
+					is_unified = $popup.find('#is_unified').is(':checked') ? 1 : 0,
+					duration = $popup.find('#product').find(':selected').data('product-duration'),
+					amount = $popup.find('#amount').val(),
+					promocode_uuid = $popup.find('#promocode_uuid').val(),
+					$alertSuccess = $popup.find('.alert-success'),
+					$alertError = $popup.find('.alert-danger');
+
+				var data = {
+					'source': '{{ app('\App\Models\Deal')::WEB_SOURCE }}',
+					'event_type': '{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}',
+					'name': name,
+					'email': email,
+					'phone': phone,
+					'product_id': productId ? parseInt(productId) : 0,
+					'city_id': parseInt('{{ $city->id }}'),
+					'certificate_whom': certificate_whom,
+					'is_unified': is_unified ? is_unified : 0,
+					'duration': duration,
+					'amount': amount ? parseInt(amount) : 0,
+					'promocode_uuid': promocode_uuid,
+				};
+
+				$.ajax({
+					url: '{{ route('dealCertificateStore') }}',
+					type: 'POST',
+					data: data,
+					dataType: 'json',
+					success: function (result) {
+						console.log(result);
+
+						$alertSuccess.addClass('hidden');
+						$alertError.text('').addClass('hidden');
+						$('.field-error').removeClass('field-error');
+
+						if (result.status !== 'success') {
+							if (result.reason) {
+								$alertError.text(result.reason).removeClass('hidden');
+							}
+							if (result.errors) {
+								const entries = Object.entries(result.errors);
+								entries.forEach(function (item, key) {
+									//$('#' + item[0]).after('<p class="text-error text-small">' + item[1].join(' ') + '</p>');
+									var fieldId = /*(item[0] === 'flight_date_at') ? 'flight_date' : */item[0];
+									$('#' + fieldId).addClass('field-error');
+								});
+							}
+							return;
+						}
+
+						/*yaCounter46672077.reachGoal('SendOrder');
+						gtag_report_conversion();
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+
+						$alertSuccess.removeClass('hidden');
+						$popup.find('#name, #email, #phone, #certificate_whom').val('');
 					}
 				});
 			});

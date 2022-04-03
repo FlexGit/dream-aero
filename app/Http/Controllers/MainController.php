@@ -6,6 +6,7 @@ use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\Promocode;
 use App\Services\HelpFunctions;
+use App\Services\PayAnyWayService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\City;
@@ -66,7 +67,7 @@ class MainController extends Controller
 	/**
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getBookingFormAjax()
+	public function getBookingModal()
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -96,6 +97,31 @@ class MainController extends Controller
 			'holidays' => $holidays,
 		]);
 
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function getCertificateModal()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		$products = $city->products()
+			->orderBy('product_type_id')
+			->orderBy('duration')
+			->get();
+		
+		$VIEW = view('modal.certificate', [
+			'city' => $city,
+			'products' => $products,
+		]);
+		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 
@@ -401,5 +427,15 @@ class MainController extends Controller
 		}
 
 		return response()->json(['status' => 'success', 'message' => 'Спасибо за Ваш отзыв!']);
+	}
+	
+	/**
+	 * Ответ на уведомление об оплате от сервиса Монета
+	 *
+	 * @return string
+	 */
+	public function paymentCallback()
+	{
+		return PayAnyWayService::checkPayCallback($this->request) ? 'SUCCESS' : 'FAIL';
 	}
 }

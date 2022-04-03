@@ -287,8 +287,8 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 		}
 
-		$payAccountId = $city->pay_account_id ?? 0;
-		if (!$payAccountId) {
+		$payAccountNumber = $city->pay_account_number ?? '';
+		if (!$payAccountNumber) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректный номер счета платежной системы']);
 		}
 
@@ -307,7 +307,7 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Счет не привязан ни к одной сделке']);
 		}
 
-		$result = PayAnyWayService::sendPayRequest($payAccountId, $bill);
+		$result = PayAnyWayService::sendPayRequest($payAccountNumber, $bill);
 
 		return $result;
 	}

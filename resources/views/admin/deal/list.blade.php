@@ -186,21 +186,19 @@
 									@endif
 								@endif
 							</div>
-							<div>
-								<i class="fas fa-map-marker-alt"></i>
-								@if($position->city)
-									{{ $position->city->name }}
-									@if($position->location)
-										{{ $position->location->name }}
-									@endif
-									@if($position->simulator)
-										{{ $position->simulator->name }}
-									@endif
-								@else
-									Любой город
-								@endif
-							</div>
 							@if(!$position->is_certificate_purchase)
+								@if($position->city)
+									<div>
+										<i class="fas fa-map-marker-alt"></i>
+										{{ $position->city->name }}
+										@if($position->location)
+											{{ $position->location->name }}
+										@endif
+										@if($position->simulator)
+											{{ $position->simulator->name }}
+										@endif
+									</div>
+								@endif
 								<div>
 									<i class="far fa-calendar-alt" title="Желаемое время полета"></i> {{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d H:i') }}
 								</div>
@@ -216,6 +214,16 @@
 										@endif
 									</a>
 								</div>
+								@if($position->is_certificate_purchase)
+									<div>
+										<i class="fas fa-map-marker-alt"></i>
+										@if($position->certificate->city)
+											{{ $position->certificate->city->name }}
+										@else
+											Любой город
+										@endif
+									</div>
+								@endif
 								@if(is_array($position->data_json) && array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom'])
 									<div style="line-height: 0.9;">
 										для кого: {{ $position->data_json['certificate_whom'] }}

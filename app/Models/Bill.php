@@ -90,6 +90,11 @@ class Bill extends Model
 		self::PAYED_STATUS,
 	];
 	
+	const CASH_PAYMENT_METHOD = 'cash';
+	const CARD_PAYMENT_METHOD = 'card';
+	const BANK_PAYMENT_METHOD = 'bank';
+	const ONLINE_PAYMENT_METHOD = 'online';
+	
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
 	protected $dontKeepRevisionOf = ['uuid', 'data_json'];

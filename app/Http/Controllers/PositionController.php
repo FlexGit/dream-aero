@@ -467,7 +467,7 @@ class PositionController extends Controller
 		}
 
 		if (!$product->validateFlightDate($this->request->flight_date_at . ' ' . $this->request->flight_time_at)) {
-			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
+			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
 		}
 
 		$location = Location::find($this->request->location_id);
@@ -779,7 +779,7 @@ class PositionController extends Controller
 		}
 
 		if (!$product->validateFlightDate($this->request->flight_date_at . ' ' . $this->request->flight_time_at)) {
-			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата полета для выбранного продукта']);
+			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
 		}
 
 		$location = Location::find($this->request->location_id);
