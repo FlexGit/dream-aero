@@ -521,6 +521,7 @@ class DealController extends Controller
 			
 			$deal->bills()->save($bill);
 			
+			\Log::debug($city->name . ' - ' . $city->pay_account_number);
 			if ($city->pay_account_number) {
 				$result = PayAnyWayService::sendPayRequest($city->pay_account_number, $bill);
 			}
