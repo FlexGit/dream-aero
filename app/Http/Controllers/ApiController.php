@@ -2318,7 +2318,7 @@ class ApiController extends Controller
 				return $this->responseError('Некорректная дата и время полета', 400);
 			}
 			if (!$product->validateFlightDate($flightDateCarbon)) {
-				return $this->responseError('Выберите будний день', 400);
+				return $this->responseError('Для бронирования полета по тарифу Regular доступны только будние дени', 400);
 			}
 		}
 
@@ -2621,7 +2621,7 @@ class ApiController extends Controller
 				return $this->responseError('Некорректная дата и время полета', 400);
 			}
 			if (!$product->validateFlightDate($flightDateCarbon)) {
-				return $this->responseError('Некорректная дата полета для выбранного тарифа', 400);
+				return $this->responseError('Для бронирования полета по тарифу Regular доступны только будние дени', 400);
 			}
 		}
 		
