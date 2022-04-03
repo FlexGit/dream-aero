@@ -2315,7 +2315,7 @@ class ApiController extends Controller
 		if (!$isCertificatePurchase && $this->request->flight_date && $this->request->flight_time) {
 			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
 			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
-				return $this->responseError('Некорректная дата и время полета', 400);
+				return $this->responseError('Выбранная дата и время полета уже в прошлом', 400);
 			}
 			if (!$product->validateFlightDate($flightDateCarbon)) {
 				return $this->responseError('Для бронирования полета по тарифу Regular доступны только будние дни', 400);
@@ -2618,7 +2618,7 @@ class ApiController extends Controller
 		if (!$isCertificatePurchase && $this->request->flight_date && $this->request->flight_time) {
 			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
 			if ($flightDateCarbon->timestamp <= Carbon::now()->timestamp) {
-				return $this->responseError('Некорректная дата и время полета', 400);
+				return $this->responseError('Выбранная дата и время полета уже в прошлом', 400);
 			}
 			if (!$product->validateFlightDate($flightDateCarbon)) {
 				return $this->responseError('Для бронирования полета по тарифу Regular доступны только будние дни', 400);
