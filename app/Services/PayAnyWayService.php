@@ -31,7 +31,7 @@ class PayAnyWayService {
 		$params = [
 			'url' => self::BASE_URL . self::PAY_REQUEST_URL,
 			'MNT_ID' => $payAccountNumber,
-			'MNT_AMOUNT' => /*number_format($bill->amount, 2, '.', '')*/100,
+			'MNT_AMOUNT' => number_format($bill->amount, 2, '.', ''),
 			'MNT_TRANSACTION_ID' => $bill->number,
 			'MNT_CURRENCY_CODE' => self::CURRENCY_CODE,
 			'MNT_TEST_MODE' => self::TEST_MODE,
