@@ -397,7 +397,7 @@ class PositionController extends Controller
 			$certificate->status_id = $certificateStatus ? $certificateStatus->id : 0;
 			$certificate->city_id = $this->request->city_id ?? 0;
 			$certificate->product_id = $product ? $product->id : 0;
-			$certificate->expire_at = Carbon::parse($this->request->certificate_expire_at)->addYear()->format('Y-m-d H:i:s');
+			$certificate->expire_at = Carbon::parse($this->request->certificate_expire_at)->addMonths(6)->format('Y-m-d H:i:s');
 			$certificate->save();
 			
 			$position = new DealPosition();

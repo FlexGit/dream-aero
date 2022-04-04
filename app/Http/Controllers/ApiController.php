@@ -2411,7 +2411,7 @@ class ApiController extends Controller
 				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
 				$certificate->city_id = $city ? $city->id : 0;
 				$certificate->product_id = $product ? $product->id : 0;
-				$certificate->expire_at = Carbon::now()->addYear()->format('Y-m-d H:i:s');
+				$certificate->expire_at = Carbon::now()->addMonths(6)->format('Y-m-d H:i:s');
 				$certificate->save();
 			}
 			
@@ -2700,7 +2700,7 @@ class ApiController extends Controller
 				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
 				$certificate->city_id = $city ? $city->id : 0;
 				$certificate->product_id = $product ? $product->id : 0;
-				$certificate->expire_at = Carbon::now()->addYear()->format('Y-m-d H:i:s');
+				$certificate->expire_at = Carbon::now()->addMonths(6)->format('Y-m-d H:i:s');
 				$certificate->save();
 			}
 			
