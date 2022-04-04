@@ -78,7 +78,7 @@
 			}
 		});
 
-		function accessWebVr(curScene){
+		/*function accessWebVr(curScene){
 			unloadPlayer();
 
 			setTimeout(function(){ loadPlayer(true, curScene); }, 100);
@@ -114,8 +114,6 @@
 
 				});
 			}
-			//apply focus on the visit if not embedded into an iframe
-			/*			if(top.location === self.location){	kpanotour.Focus.applyFocus(); }*/
 		}
 		function unloadPlayer(){
 			if(jQuery('#krpanoSWFObject')){
@@ -131,7 +129,7 @@
 				}
 			}
 			return false;
-		}
+		}*/
 	</script>
 </head>
 <body>
@@ -158,16 +156,10 @@
 	<script type="text/javascript" src="/assets/airbus/indexdata/index.js"></script>
 	<script type="text/javascript">
 		embedpano({
-			swf:"/assets/airbus/indexdata/index.swf"
-			,target:"panoDIV"
-			,passQueryParameters:true
+			swf: "/assets/airbus/indexdata/index.swf",
+			target: "panoDIV",
+			passQueryParameters: true
 		});
-
-		if (isVRModeRequested()){
-			accessWebVr();
-		} else {
-			accessStdVr();
-		}
 	</script>
 </body>
 </html>

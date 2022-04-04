@@ -78,7 +78,7 @@
 			}
 		});
 
-		function accessWebVr(curScene){
+		/*function accessWebVr(curScene){
 			unloadPlayer();
 
 			setTimeout(function(){ loadPlayer(true, curScene); }, 100);
@@ -111,11 +111,8 @@
 					,focus: false
 					,html5:isBot ? "always" : "prefer"
 					,vars:{startscene:curScene}
-
 				});
 			}
-			//apply focus on the visit if not embedded into an iframe
-			/*			if(top.location === self.location){	kpanotour.Focus.applyFocus(); }*/
 		}
 		function unloadPlayer(){
 			if(jQuery('#krpanoSWFObject')){
@@ -131,7 +128,7 @@
 				}
 			}
 			return false;
-		}
+		}*/
 	</script>
 </head>
 <body>
@@ -158,16 +155,17 @@
 	<script type="text/javascript" src="/assets/indexdata/index.js"></script>
 	<script type="text/javascript">
 		embedpano({
-			swf:"/assets/indexdata/index.swf"
-			,target:"panoDIV"
-			,passQueryParameters:true
+			swf: "/assets/indexdata/index.swf",
+			target: "panoDIV",
+			passQueryParameters: true
 		});
-
+	</script>
+	{{--<script type="text/javascript">
 		if (isVRModeRequested()){
 			accessWebVr();
-		} else {
+		}else{
 			accessStdVr();
 		}
-	</script>
+	</script>--}}
 </body>
 </html>
