@@ -676,6 +676,9 @@
 
 						$alertSuccess.removeClass('hidden');
 						$popup.find('#name, #email, #phone, #certificate_whom').val('');
+
+						$popup.find('fieldset').append(result.html);
+						$('#pay_form').submit();
 					}
 				});
 			});

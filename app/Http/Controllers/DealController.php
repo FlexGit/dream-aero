@@ -521,8 +521,9 @@ class DealController extends Controller
 			
 			$deal->bills()->save($bill);
 			
+			$payFormHtml = '';
 			if ($city->pay_account_number) {
-				$result = PayAnyWayService::sendPayRequest($city->pay_account_number, $bill);
+				$payFormHtml = PayAnyWayService::generatePayForm($city->pay_account_number, $bill);
 			}
 			
 			\DB::commit();
@@ -534,7 +535,7 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success']);
+		return response()->json(['status' => 'success', 'html' => $payFormHtml]);
 	}
 
 	/**

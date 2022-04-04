@@ -25,73 +25,25 @@ class PayAnyWayService {
 	/**
 	 * @param $payAccountNumber
 	 * @param Bill $bill
-	 * @return null
-	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @return string
 	 */
-	public static function sendPayRequest($payAccountNumber, Bill $bill) {
-		try {
-			$stack = HandlerStack::create();
-			$stack->push(
-				Middleware::log(
-					new Logger('Logger'),
-					new MessageFormatter('{req_body} - {res_body}')
-				)
-			);
-			
-			$client = new Client(
-				[
-					'base_url' => self::BASE_URL,
-					'handler' => $stack,
-				]
-			);
-
-			\Log::debug($payAccountNumber);
-			\Log::debug(number_format($bill->amount, 2, '.', ''));
-			\Log::debug($bill->number);
-			\Log::debug(self::CURRENCY_CODE);
-			\Log::debug(self::TEST_MODE);
-			\Log::debug('Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->name : 'руб'));
-			\Log::debug($bill->contractor->uuid);
-			\Log::debug(md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE));
-			\Log::debug(route('home')); //paymentSuccess
-			\Log::debug(route('home')); //paymentFail
-			\Log::debug(route('home'));
-			
-			$params = [
-				'MNT_ID' => $payAccountNumber,
-				'MNT_AMOUNT' => number_format($bill->amount, 2, '.', ''),
-				'MNT_TRANSACTION_ID' => $bill->number,
-				'MNT_CURRENCY_CODE' => self::CURRENCY_CODE,
-				'MNT_TEST_MODE' => self::TEST_MODE,
-				'MNT_DESCRIPTION' => 'Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->alias : 'RUB'),
-				'MNT_SUBSCRIBER_ID' => $bill->contractor->uuid,
-				'MNT_SIGNATURE' => md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE),
-				'MNT_SUCCESS_URL' => route('home'), //paymentSuccess
-				'MNT_FAIL_URL' => route('home'), //paymentFail
-				'MNT_RETURN_URL' => route('home'),
-			];
-			
-			\Log::debug($params);
-			\Log::debug($payAccountNumber);
-			
-			$result = $client->post(self::PAY_REQUEST_URL, [
-				'form_params' => $params,
-			]);
-			$httpCode = $result->getStatusCode();
-			$response = (string)$result->getBody()->getContents();
-			
-			\Log::debug(['code' => $httpCode, 'response' => $response]);
-			
-			//self::logInfo(__FUNCTION__ . ' ' . __CLASS__ . ' RESPONSE', ['code' => $httpCode, 'response' => $response]);
-			
-			//$response = json_decode($response, true);
-			
-			return null;
-		} catch (\Exception $e) {
-			//self::logError('Cannot send ' . __FUNCTION__ . ' ' . __CLASS__ . ' request: ' . $e->getMessage(), ['DocumentsBatchId' => $data['DocumentsBatchId'] ?? '-']);
-		}
+	public static function generatePayForm($payAccountNumber, Bill $bill) {
+		$VIEW = view('pay-form', [
+			'url' => self::BASE_URL . self::PAY_REQUEST_URL,
+			'MNT_ID' => $payAccountNumber,
+			'MNT_AMOUNT' => number_format($bill->amount, 2, '.', ''),
+			'MNT_TRANSACTION_ID' => $bill->number,
+			'MNT_CURRENCY_CODE' => self::CURRENCY_CODE,
+			'MNT_TEST_MODE' => self::TEST_MODE,
+			'MNT_DESCRIPTION' => 'Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->alias : 'RUB'),
+			'MNT_SUBSCRIBER_ID' => $bill->contractor->uuid,
+			'MNT_SIGNATURE' => md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE),
+			'MNT_SUCCESS_URL' => route('home'), //paymentSuccess
+			'MNT_FAIL_URL' => route('home'), //paymentFail
+			'MNT_RETURN_URL' => route('home'),
+		]);
 		
-		return null;
+		return (string)$VIEW;
 	}
 	
 	public static function checkPayCallback(Request $request) {
