@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="ru_project_title"><![CDATA[Boing737]]></data>
+
+
+
+  <data name="ru_pano114_title"><![CDATA[P1_]]></data>
+
+
+  <data name="ru_pano37_title"><![CDATA[P2_]]></data>
+  <data name="ru_spotpolygon39_tooltip"><![CDATA[Панель управления режимами полета и автопилот]]></data>
+  <data name="ru_spotpolygon40_tooltip"><![CDATA[Ручки открывания боковых форточек]]></data>
+  <data name="ru_spotpolygon41_tooltip"><![CDATA[Ручки открывания боковых форточек]]></data>
+  <data name="ru_spotpolygon42_tooltip"><![CDATA[Основные пилотажные приборы командира]]></data>
+  <data name="ru_spotpolygon43_tooltip"><![CDATA[Резервные приборы]]></data>
+  <data name="ru_spotpolygon44_tooltip"><![CDATA[Прибор контроля режима работы двигателей]]></data>
+  <data name="ru_spotpolygon45_tooltip"><![CDATA[Рычаг управления уборкой/выпуском шасси]]></data>
+  <data name="ru_spotpolygon47_tooltip"><![CDATA[Штурвал КВС]]></data>
+  <data name="ru_spotpolygon48_tooltip"><![CDATA[Пульты бортового компьютера]]></data>
+  <data name="ru_spotpolygon46_tooltip"><![CDATA[Основные пилотажные приборы второго пилота]]></data>
+  <data name="ru_spotpolygon70_tooltip"><![CDATA[Штурвал второго пилота]]></data>
+  <data name="ru_spotpolygon71_tooltip"><![CDATA[Кислородная маска КВС]]></data>
+  <data name="ru_spotpolygon72_tooltip"><![CDATA[Рычаги управления двигателями и механизацией крыла, колеса триммера]]></data>
+  <data name="ru_spotpolygon73_tooltip"><![CDATA[Панель пожаротушения двигателей и APU]]></data>
+  <data name="ru_spotpolygon74_tooltip"><![CDATA[Управление радиосистемами, метеорадаром]]></data>
+  <data name="ru_spotpolygon75_tooltip"><![CDATA[Кислородная маска второго пилота]]></data>
+  <data name="ru_spotpolygon76_tooltip"><![CDATA[Панель управления топливной системой]]></data>
+  <data name="ru_spotpolygon77_tooltip"><![CDATA[Панель управления системами вывода информации]]></data>
+  <data name="ru_spotpolygon78_tooltip"><![CDATA[Панель управления дополнительными органами управления]]></data>
+  <data name="ru_spotpolygon79_tooltip"><![CDATA[Панель управления электросистемой]]></data>
+  <data name="ru_spotpolygon80_tooltip"><![CDATA[Панель управления подсветкой, табло «Пристегнуть ремни» и «Не курить»]]></data>
+  <data name="ru_spotpolygon81_tooltip"><![CDATA[Управление стеклоочистителями]]></data>
+  <data name="ru_spotpolygon82_tooltip"><![CDATA[Панель управления противообледенительной системой]]></data>
+  <data name="ru_spotpolygon83_tooltip"><![CDATA[Панель управления гидросистемой и табло контроля закрытия дверей]]></data>
+  <data name="ru_spotpolygon84_tooltip"><![CDATA[Контроль давления в салоне самолета]]></data>
+  <data name="ru_spotpolygon85_tooltip"><![CDATA[Панель управления воздушной системой и кондиционированием]]></data>
+  <data name="ru_spotpolygon86_tooltip"><![CDATA[Управление наружным освещением]]></data>
+  <data name="ru_spotpolygon87_tooltip"><![CDATA[Управление APU и зажиганием двигателей]]></data>
+  <data name="ru_spotpolygon88_tooltip"><![CDATA[Управление наружным опознавательным освещением]]></data>
+  <data name="ru_spotpolygon89_tooltip"><![CDATA[Табло контроля выхода механизации крыла (предкрылков)]]></data>
+  <data name="ru_spotpolygon90_tooltip"><![CDATA[Панель управления навигационной системой]]></data>
+  <data name="ru_spotpolygon91_tooltip"><![CDATA[Управление электроникой двигателей, кислородной системой, тестовые кнопки]]></data>
+
+
+
+
+
+
+
+
+  <data name="ru_vr_setup_hmd0"><![CDATA[SELECT YOUR HMD]]></data>
+  <data name="ru_vr_setup_advanced"><![CDATA[ADVANCED SETTINGS]]></data>
+  <data name="ru_vr_setup_title"><![CDATA[WEB VR SETTINGS]]></data>
+  <data name="ru_vr_setup_dvn1"><![CDATA[Device:]]></data>
+  <data name="ru_vr_setup_siz1"><![CDATA[Screen size:]]></data>
+  <data name="ru_vr_setup_ipd1"><![CDATA[IPD:]]></data>
+  <data name="ru_vr_setup_hmd1"><![CDATA[HMD:]]></data>
+  <data name="ru_vr_setup_hmd3"><![CDATA[Customize]]></data>
+  <data name="ru_vr_setup_cal"><![CDATA[Calibrate gyroscope]]></data>
+  <data name="ru_vr_setup_sav"><![CDATA[SAVE]]></data>
+  <data name="ru_vr_setup_rst"><![CDATA[RESET]]></data>
+  <data name="ru_vr_setup_simple"><![CDATA[SIMPLE]]></data>
+  <data name="ru_vr_setup_cls"><![CDATA[CLOSE]]></data>
+  <data name="ru_vr_setup_m31"><![CDATA[HMD SETTINGS]]></data>
+  <data name="ru_vr_setup_fov1"><![CDATA[FOV:]]></data>
+  <data name="ru_vr_setup_dst1"><![CDATA[Distortion:]]></data>
+  <data name="ru_vr_setup_d2tx"><![CDATA[Distortion 2:]]></data>
+  <data name="ru_vr_setup_vig1"><![CDATA[Vignette:]]></data>
+  <data name="ru_vr_setup_cac1"><![CDATA[Chromatic aberration:]]></data>
+  <data name="ru_vr_setup_olp1"><![CDATA[Overlap:]]></data>
+  <data name="ru_vr_setup_m35"><![CDATA[RETURN]]></data>
+  <data name="ru_vr_setup_cb1"><![CDATA[GYROSCOPE]]></data>
+  <data name="ru_vr_setup_cb2"><![CDATA[Place the device on a flat and[br]stable surface and tab CALIBRATE[br]to correct a gyroscope drifting.]]></data>
+  <data name="ru_vr_setup_cb3"><![CDATA[CALIBRATE]]></data>
+  <data name="ru_vr_setup_cb4"><![CDATA[RESET]]></data>
+  <data name="ru_vr_setup_cb5"><![CDATA[RETURN]]></data>
+  <data name="ru_vr_setup_cb6"><![CDATA[Calibrating...]]></data>
+  <data name="ru_vr_setup_cb7"><![CDATA[Successful calibration]]></data>
+  <data name="ru_vr_setup_cb8"><![CDATA[Calibration failed]]></data>
+  <data name="ru_vr_setup_unavailable"><![CDATA[VR mode[br]is unavailable on your device]]></data>
+
+
+
+
+
+
+
+
+
+</krpano>

@@ -50,17 +50,6 @@
 			disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 		});
 
-		/*promo = getUrlParameter('promo');
-		type = getUrlParameter('type');
-
-		if (type){
-			if(type === 'sert') {
-				$(".give").trigger("click");
-			} else {
-				$(".fly").trigger("click");
-			}
-		}*/
-
 		$(document).on('click', '#city', function(e) {
 			e.preventDefault();
 
@@ -71,7 +60,7 @@
 				type: 'GET',
 				dataType: 'json',
 				success: function(result) {
-					console.log(result);
+					//console.log(result);
 					//$('#modal .modal-title').text(title);
 					$('#city_modal .modal-body').html(result.html);
 					//$('#city_modal').modal('show');

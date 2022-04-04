@@ -28,21 +28,25 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-		<div class="col-md-6 pr-10 pt-3">
-			<div>
-				<span>Выберите продолжительность полета</span>
+		@if(!empty($products))
+			<div class="col-md-6 pr-10 pt-3">
+				<div>
+					<span>Выберите продолжительность полета</span>
+				</div>
 			</div>
-		</div>
-		<div class="col-md-6 pl-10">
-			<div style="width: 100%;">
-				<select id="product" name="product" class="popup-input">
-					@foreach($products as $product)
-						<option value="{{ $product->id }}" data-product-type-alias="{{ $product->productType ? $product->productType->alias : '' }}" data-product-duration="{{ $product->duration }}">{{ $product->duration }} мин</option>
-					@endforeach
-				</select>
+			<div class="col-md-6 pl-10">
+				<div style="width: 100%;">
+					<select id="product" name="product" class="popup-input">
+						@foreach($products as $product)
+							<option value="{{ $product->id }}" data-product-type-alias="{{ $product->productType ? $product->productType->alias : '' }}" data-product-duration="{{ $product->duration }}">{{ $product->duration }} мин</option>
+						@endforeach
+					</select>
+				</div>
 			</div>
-		</div>
-		<div class="clearfix"></div>
+			<div class="clearfix"></div>
+		@else
+			<input type="hidden" id="product" name="product" value="{{ $product->id }}">
+		@endif
 		<input type="text" id="certificate_number" name="certificate_number" class="popup-input" placeholder="Номер сертификата" style="display: none;">
 		<div class="col-md-6 pr-10">
 			<div>
@@ -51,13 +55,13 @@
 		</div>
 		<div class="col-md-6 pl-10">
 			<div>
-				<input type="tel" id="phone" name="phone" class="popup-input" placeholder="Телефон">
+				<input type="tel" id="phone" name="phone" class="popup-input" placeholder="Ваш Телефон">
 			</div>
 		</div>
 		<div class="clearfix"></div>
 		<div class="col-md-6 pr-10">
 			<div>
-				<input type="email" id="email" name="email" class="popup-input" placeholder="E-mail">
+				<input type="email" id="email" name="email" class="popup-input" placeholder="Ваш E-mail">
 			</div>
 		</div>
 		<div class="col-md-6 pl-10">
@@ -127,3 +131,4 @@
 	</fieldset>
 </div>
 
+<button title="Close (Esc)" type="button" class="mfp-close">×</button>

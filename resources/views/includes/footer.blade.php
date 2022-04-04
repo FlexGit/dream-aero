@@ -99,13 +99,13 @@
 	</div>
 </div>
 
-<div class="mfp-hide popup ajax_form" id="popup">
+<div class="mfp-hide popup ajax_form" id="popup" style="display: none;">
 	<div style="text-align: center;">
 		<img src="{{ url('assets/img/planes.gif') }}" alt="">
 	</div>
 </div>
 
-<form id="popup-certificate" class="mfp-hide popup {{--popup-mainpay--}} ajax_form">
+{{--<form id="popup-certificate" class="mfp-hide popup --}}{{--popup-mainpay--}}{{-- ajax_form">
 	<p class="popup-description">Приобрести сертификат на полет<br/> в один клик</p>
 
 	<input type='hidden' name='MNT_ID' id='MNT_ID' value="44741905">
@@ -190,8 +190,8 @@
 	</fieldset>
 	<input type="text" name="workemail" value="" class="field"/>
 	<button type="submit" onclick="yaCounter46672077.reachGoal('SendOrder'); gtag_report_conversion();fbq('track', 'Purchase', {value: 200,currency: 'rub',});return true;" id="submibtn" class="popup-submit button-pipaluk button-pipaluk-orange" style="width: 60%;"><i>Оплатить</i></button>
-	{{--<input type="hidden" name="af_action" value="1143c14e91471395b12a5db59bd11ed3" />--}}
-</form>
+	--}}{{--<input type="hidden" name="af_action" value="1143c14e91471395b12a5db59bd11ed3" />--}}{{--
+</form>--}}
 
 <form id="popup-review" class="mfp-hide popup popup-review ajax_form">
 	<p class="popup-title">

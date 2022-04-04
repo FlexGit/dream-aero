@@ -76,7 +76,7 @@
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
 													</div>
-													<a class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="{{ url('#online-reservation') }}" data-type="{{ mb_strtoupper($productType->alias) }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
+													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form_open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
 												</div>
 											@endforeach
 
@@ -99,7 +99,7 @@
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
 													</div>
-													<a class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="{{ url('#online-reservation') }}" data-type="{{ mb_strtoupper($productType->alias) }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
+													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
 													<p class="h4plat" style="display: none;">
 														Развлекательный курс по лучшим аэропортам мира, 30 минут теории и два часа незабываемых полетов. Срок действия сертификата 1 год. Акции и скидки на тариф не распространяются
 														<br>
@@ -124,7 +124,7 @@
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
 													</div>
-													<a class="bron button-pipaluk button-pipaluk-orange popup-with-form onlineres" href="{{ url('#online-reservation') }}" data-type="{{ mb_strtoupper($productType->alias) }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
+													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? 'бронь' : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? 'сертификат' : '' }}</i></a>
 													<p class="h4plat" style="display: none;">
 														Сертификат на Vip полет с Денисом Оканем. <b>Полеты в Москве</b>.
 														<br>
@@ -246,7 +246,7 @@
 									<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
 								@endif
 								<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ $product['currency'] }}</p>
-								<a class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#online-reservation') }}"><i>заказать</i></a>
+								<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}"><i>заказать</i></a>
 							</div>
 						@endif
 					</div>
@@ -362,22 +362,30 @@
 
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/pricestyle.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
 @endpush
 
 @push('scripts')
+	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
 	<script>
 		$(function(){
-			var date = new Date(), utc;
+			/*var date = new Date(), utc;
 			utc = 3;
-			date.setHours( date.getHours() + utc, date.getMinutes() + date.getTimezoneOffset()  );
+			date.setHours( date.getHours() + utc, date.getMinutes() + date.getTimezoneOffset()  );*/
 
-			$('#datetimepicker').datetimepicker({
+			/*$('#datetimepicker').datetimepicker({
 				locale: 'ru',
 				sideBySide: true,
 				stepping: 30,
 				minDate: date,
 				useCurrent: false,
 				disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+			});*/
+
+			$.datetimepicker.setLocale('ru', {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit'
 			});
 
 			$(document).on('click', 'ul.tabs__caption li:not(.active)', function(e) {
@@ -395,6 +403,415 @@
 			$(document).on('mouseleave', '.block-price', function(e) {
 				$(this).find('.h4plat').hide();
 			});
+
+			$('.popup-with-form').magnificPopup({
+				type: 'inline',
+				preloader: false,
+				/*focus: '#name',*/
+				removalDelay: 300,
+				mainClass: 'mfp-fade',
+				callbacks: {
+					open: function() {
+						$.magnificPopup.instance.close = function() {
+							$('form')[0].reset();
+							$('#popup').hide();
+							// Call the original close method to close the popup
+							$.magnificPopup.proto.close.call(this);
+						};
+
+						var mp = $.magnificPopup.instance,
+							t = $(mp.currItem.el[0]);
+
+						$.ajax({
+							type: 'GET',
+							url: '/modal/certificate-booking/' + t.data('product-alias'),
+							success: function (result) {
+								if (result.status != 'success') {
+									return;
+								}
+
+								var $popup = $('#popup');
+
+								$popup.html(result.html);
+
+								certificateForm(t.data('product-alias'));
+							}
+						});
+					}
+				}
+			});
+
+			function certificateForm(productAlias) {
+				$.ajax({
+					type: 'GET',
+					url: '/modal/certificate/' + productAlias,
+					success: function (result) {
+						if (result.status != 'success') {
+							return;
+						}
+
+						var $popup = $('#popup');
+
+						$popup.find('.form-container').html(result.html).find('select').niceSelect();
+
+						calcAmount();
+
+						$popup.show();
+					}
+				});
+			}
+
+			function bookingForm(productAlias, productTypeAlias) {
+				$.ajax({
+					type: 'GET',
+					url: '/modal/booking/' + productAlias,
+					success: function (result) {
+						if (result.status != 'success') {
+							return;
+						}
+
+						var $popup = $('#popup');
+
+						$popup.find('.form-container').html(result.html).find('select').niceSelect();
+
+						var weekDays = (productTypeAlias == '{{ app('\App\Models\ProductType')::REGULAR_ALIAS }}') ? [0, 6] : [],
+							holidays = (productTypeAlias == '{{ app('\App\Models\ProductType')::REGULAR_ALIAS }}') ? $popup.find('#holidays').val() : '';
+
+						calcAmount();
+
+						$popup.show();
+
+						$('.datetimepicker').datetimepicker({
+							format: 'd.m.Y H:i',
+							step: 30,
+							dayOfWeekStart: 1,
+							minDate: 0,
+							minTime: '10:00',
+							maxTime: '23:00',
+							lang: 'ru',
+							lazyInit: true,
+							scrollInput: false,
+							scrollTime: false,
+							scrollMonth: false,
+							validateOnBlur: false,
+							onChangeDateTime: function (value) {
+								value.setSeconds(0);
+								$('#flight_date').val(value.toLocaleString());
+								calcAmount();
+							},
+							disabledWeekDays: weekDays,
+							disabledDates: holidays,
+							formatDate: 'd.m.Y',
+						});
+					}
+				});
+			}
+
+			$(document).on('click', '.button-tab[data-modal]', function() {
+				if ($(this).data('modal') == 'certificate') {
+					certificateForm($(this).data('product-alias'));
+				} else if ($(this).data('modal') == 'booking') {
+					bookingForm($(this).data('product-alias'), $(this).data('product-type-alias'));
+				}
+			});
+
+			$(document).on('change', '.switch_box input[name="has_certificate"]', function() {
+				var $popup = $(this).closest('.popup');
+
+				if ($(this).is(':checked')) {
+					$popup.find('#certificate_number').show();
+					$popup.find('#total-amount, .have_promo').hide();
+				} else {
+					$popup.find('#certificate_number').hide();
+					$popup.find('#total-amount, .have_promo').show();
+				}
+			});
+
+			$(document).on('change', '.switch_box input[name="has_promocode"]', function() {
+				var $popup = $(this).closest('.popup');
+
+				if ($(this).is(':checked')) {
+					$popup.find('#promocode').show().focus();
+					$popup.find('.js-promocode-btn').show();
+					$popup.find('.promocode_note').show();
+				} else {
+					$('.js-promocode-remove').trigger('click');
+					$popup.find('#promocode').hide();
+					$popup.find('.js-promocode-btn').hide();
+					$popup.find('.promocode_note').hide();
+				}
+			});
+
+			$(document).on('click', '.js-promocode-btn', function() {
+				var $promocodeApplyBtn = $(this),
+					$promocodeContainer = $promocodeApplyBtn.closest('.promocode_container'),
+					$promocode = $promocodeContainer.find('#promocode'),
+					$promocodeRemoveBtn = $promocodeContainer.find('.js-promocode-remove'),
+					$fieldset = $promocodeApplyBtn.closest('fieldset'),
+					$product = $fieldset.find('#product'),
+					$errorMsg = $promocodeContainer.find('.text-error'),
+					$successMsg = $promocodeContainer.find('.text-success'),
+					$promocodeUuid = $fieldset.find('#promocode_uuid');
+
+				$errorMsg.remove();
+				$successMsg.remove();
+
+				if (!$promocode.val().length) return;
+				if ($product.val() === null) {
+					$promocode.after('<p class="text-error text-small">' + $promocode.data('no-product-error') + '</p>');
+					return;
+				}
+
+				$.ajax({
+					url: '/promocode/verify',
+					type: 'POST',
+					data: {
+						'promocode': $promocode.val(),
+					},
+					dataType: 'json',
+					success: function (result) {
+						if (result.status !== 'success') {
+							$promocode.after('<p class="text-error text-small">' + result.reason + '</p>');
+							return;
+						}
+
+						$promocode.after('<p class="text-success text-small">' + result.message + '</p>');
+						$promocodeUuid.val(result.uuid);
+						$promocode.attr('disabled', true);
+						$promocodeApplyBtn.hide();
+						$promocodeRemoveBtn.show();
+
+						calcAmount();
+					}
+				});
+			});
+
+			$(document).on('click', '.js-promocode-remove', function() {
+				var $promocodeRemoveBtn = $(this),
+					$promocodeContainer = $promocodeRemoveBtn.closest('.promocode_container'),
+					$promocodeApplyBtn = $promocodeContainer.find('.js-promocode-btn'),
+					$promocode = $promocodeContainer.find('#promocode'),
+					$fieldset = $promocodeRemoveBtn.closest('fieldset'),
+					$promocodeUuid = $fieldset.find('#promocode_uuid'),
+					$errorMsg = $promocodeContainer.find('.text-error'),
+					$successMsg = $promocodeContainer.find('.text-success');
+
+				$errorMsg.remove();
+				$successMsg.remove();
+				$promocodeRemoveBtn.hide();
+				$promocodeApplyBtn.show();
+				$promocode.val('');
+				$promocodeUuid.val('');
+				$promocode.attr('disabled', false);
+
+				calcAmount();
+			});
+
+			$(document).on('change', '#product', function() {
+				calcAmount();
+			});
+
+			$(document).on('keyup', '#certificate_number', function() {
+				calcAmount();
+			});
+
+			$(document).on('change', 'input[name="consent"]', function() {
+				var $popup = $(this).closest('.popup'),
+					$btn = $popup.find('.js-booking-btn, .js-certificate-btn');
+
+				if ($(this).is(':checked')) {
+					$btn.removeClass('button-pipaluk-grey')
+						.addClass('button-pipaluk-orange')
+						.prop('disabled', false);
+				} else {
+					$btn.removeClass('button-pipaluk-orange')
+						.addClass('button-pipaluk-grey')
+						.prop('disabled', true);
+				}
+			});
+
+			$(document).on('click', '.js-booking-btn', function() {
+				var $popup = $(this).closest('.popup'),
+					productId = $popup.find('#product').val(),
+					name = $popup.find('#name').val(),
+					email = $popup.find('#email').val(),
+					phone = $popup.find('#phone').val(),
+					flightAt = $popup.find('#flight_date').val(),
+					flightDateAt = flightAt.substring(0, flightAt.indexOf(',')),
+					flightTimeAt = flightAt.substring(flightAt.indexOf(',') + 2),
+					locationId = $popup.find('input[name="locationSimulator"]:checked').data('location-id'),
+					simulatorId = $popup.find('input[name="locationSimulator"]:checked').data('simulator-id'),
+					certificate = $popup.find('#certificate_number').val(),
+					duration = $popup.find('#product').find(':selected').data('product-duration'),
+					amount = $popup.find('#amount').val(),
+					promocode_uuid = $popup.find('#promocode_uuid').val(),
+					$alertSuccess = $popup.find('.alert-success'),
+					$alertError = $popup.find('.alert-danger');
+
+				var data = {
+					'source': '{{ app('\App\Models\Deal')::WEB_SOURCE }}',
+					'event_type': '{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}',
+					'name': name,
+					'email': email,
+					'phone': phone,
+					'product_id': productId ? parseInt(productId) : 0,
+					'city_id': parseInt('{{ $city->id }}'),
+					'location_id': locationId ? parseInt(locationId) : 0,
+					'flight_date_at': flightDateAt,
+					'flight_time_at': flightTimeAt,
+					'flight_simulator_id': simulatorId ? parseInt(simulatorId) : 0,
+					'certificate': certificate,
+					'amount': amount ? parseInt(amount) : 0,
+					'duration': duration,
+					'promocode_uuid': promocode_uuid,
+				};
+
+				$.ajax({
+					url: '{{ route('dealBookingStore') }}',
+					type: 'POST',
+					data: data,
+					dataType: 'json',
+					success: function (result) {
+						$alertSuccess.addClass('hidden');
+						$alertError.text('').addClass('hidden');
+						$('.field-error').removeClass('field-error');
+
+						if (result.status !== 'success') {
+							if (result.reason) {
+								$alertError.text(result.reason).removeClass('hidden');
+							}
+							if (result.errors) {
+								const entries = Object.entries(result.errors);
+								entries.forEach(function (item, key) {
+									//$('#' + item[0]).after('<p class="text-error text-small">' + item[1].join(' ') + '</p>');
+									var fieldId = (item[0] === 'flight_date_at') ? 'flight_date' : item[0];
+									$('#' + fieldId).addClass('field-error');
+								});
+							}
+							return;
+						}
+
+						/*yaCounter46672077.reachGoal('SendOrder');
+						gtag_report_conversion();
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+
+						$alertSuccess.removeClass('hidden');
+						$popup.find('#name, #email, #phone, #flight_date').val('');
+					}
+				});
+			});
+
+			$(document).on('click', '.js-certificate-btn', function() {
+				var $popup = $(this).closest('.popup'),
+					productId = $popup.find('#product').val(),
+					name = $popup.find('#name').val(),
+					email = $popup.find('#email').val(),
+					phone = $popup.find('#phone').val(),
+					certificate_whom = $popup.find('#certificate_whom').val(),
+					is_unified = $popup.find('#is_unified').is(':checked') ? 1 : 0,
+					duration = $popup.find('#product').find(':selected').data('product-duration'),
+					amount = $popup.find('#amount').val(),
+					promocode_uuid = $popup.find('#promocode_uuid').val(),
+					$alertSuccess = $popup.find('.alert-success'),
+					$alertError = $popup.find('.alert-danger');
+
+				var data = {
+					'source': '{{ app('\App\Models\Deal')::WEB_SOURCE }}',
+					'event_type': '{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}',
+					'name': name,
+					'email': email,
+					'phone': phone,
+					'product_id': productId ? parseInt(productId) : 0,
+					'city_id': parseInt('{{ $city->id }}'),
+					'certificate_whom': certificate_whom,
+					'is_unified': is_unified ? is_unified : 0,
+					'duration': duration,
+					'amount': amount ? parseInt(amount) : 0,
+					'promocode_uuid': promocode_uuid,
+				};
+
+				$.ajax({
+					url: '{{ route('dealCertificateStore') }}',
+					type: 'POST',
+					data: data,
+					dataType: 'json',
+					success: function (result) {
+						$alertSuccess.addClass('hidden');
+						$alertError.text('').addClass('hidden');
+						$('.field-error').removeClass('field-error');
+
+						if (result.status !== 'success') {
+							if (result.reason) {
+								$alertError.text(result.reason).removeClass('hidden');
+							}
+							if (result.errors) {
+								const entries = Object.entries(result.errors);
+								entries.forEach(function (item, key) {
+									//$('#' + item[0]).after('<p class="text-error text-small">' + item[1].join(' ') + '</p>');
+									var fieldId = /*(item[0] === 'flight_date_at') ? 'flight_date' : */item[0];
+									$('#' + fieldId).addClass('field-error');
+								});
+							}
+							return;
+						}
+
+						/*yaCounter46672077.reachGoal('SendOrder');
+						gtag_report_conversion();
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+
+						$alertSuccess.removeClass('hidden');
+						$popup.find('#name, #email, #phone, #certificate_whom').val('');
+
+						$popup.find('fieldset').append(result.html);
+						$('#pay_form').submit();
+					}
+				});
+			});
+
+			function calcAmount() {
+				var $popup = $('#popup'),
+					productId = $popup.find('#product').val(),
+					promocodeUuid = $popup.find('#promocode_uuid').val(),
+					locationId = $popup.find('input[name="locationSimulator"]:checked').data('location-id'),
+					simulatorId = $popup.find('input[name="locationSimulator"]:checked').data('simulator-id'),
+					flightDate = $popup.find('#flight_date').val(),
+					certificate = $popup.find('#certificate_number').val(),
+					cityId = $('#city_id').val(),
+					$amount = $popup.find('#amount'),
+					$amountContainer = $popup.find('.js-amount'),
+					amount = 0;
+
+				$.ajax({
+					type: 'GET',
+					url: '/deal/product/calc',
+					data: {
+						product_id: productId,
+						promocode_uuid: promocodeUuid,
+						location_id: locationId,
+						simulator_id: simulatorId,
+						city_id: cityId,
+						flight_date: flightDate,
+						certificate: certificate,
+						source: 'web',
+					},
+					dataType: 'json',
+					success: function(result) {
+						if (result.status != 'success') {
+							return;
+						}
+
+						if (result.amount != result.baseAmount) {
+							amount = '<span class="strikethrough">' + result.baseAmount + '</span>' + result.amount;
+						} else if (result.amount) {
+							amount = result.amount;
+						}
+						$amount.val(result.amount);
+						$amountContainer.html(amount);
+
+						//$('#popup').html(result.html).find('select').niceSelect();
+					}
+				});
+			}
 		});
 	</script>
 @endpush

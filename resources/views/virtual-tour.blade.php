@@ -4,15 +4,80 @@
 	<div class="breadcrumbs container"><a href="/">Главная</a> <span>Виртуальный тур</span></div>
 
 	<div class="virb">
-		<a id="virttourboeing" onclick="newContent('tourDIV','virttourboeing',true);return false;" class="button button-pipaluk button-pipaluk-orange "><i>Boeing 737</i></a>
-		<a id="virttourair"  onclick="newContent('tourDIV','virttourair',true);return false;" class="button button-pipaluk button-pipaluk-orange "><i>AIRBUS A320</i></a>
+		<a id="virttourboeing" class="button button-pipaluk button-pipaluk-orange "><i>Boeing 737</i></a>
+		<a id="virttourair" class="button button-pipaluk button-pipaluk-orange "><i>AIRBUS A320</i></a>
 	</div>
 
 	<div id="tourDIV"></div>
 @endsection
 
-<script>
-	$(function(){
-		newContent('tourDIV','first');
-	});
-</script>
+@push('scripts')
+	<script>
+		$(function(){
+			newContent('tourDIV', 'virttourboeing');
+
+			$(document).on('click', '#virttourboeing', function() {
+				newContent('tourDIV', 'virttourboeing', true);
+				return false;
+			});
+
+			$(document).on('click', '#virttourair', function() {
+				newContent('tourDIV', 'virttourair', true);
+				return false;
+			});
+
+			function newContent(target, virtid, click = false) {
+				if(virtid === 'first'){
+					virtid = window.location.hash;
+				}
+
+				virtid = virtid.replace('#','');
+
+				var link = '';
+
+				if(virtid === 'virttourboeing') {
+					$('#virttourair').removeClass("active");
+					link = '/boeing-virttour';
+				} else if(virtid === 'virttourair') {
+					$('#virttourboeing').removeClass('active');
+					if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+						link = '/airbus-virttour-mobile';
+					} else {
+						link = '/desktop';
+					}
+				}
+
+				//console.log(virtid + ' - ' + link);
+
+				/*$('#' + target).load(link, {
+					action: 'getContent',
+					_token: $('meta[name="csrf-token"]').attr('content')
+				});
+
+				virtid = virtid.replace('#','');
+				$('#' + virtid).addClass('active');
+				if(click) {
+					window.location.hash = '#' + virtid;
+				}*/
+
+				$.ajax({
+					url: link,
+					type: 'POST',
+					data: {"_token": $('meta[name="csrf-token"]').attr('content')},
+					success: function (result) {
+						//console.log(result);
+						$('#' + target).html(result);
+
+						$('#krpanoSWFObject').find('div').css('position', 'relative');
+
+						virtid = virtid.replace('#','');
+						$('#' + virtid).addClass('active');
+						if(click) {
+							window.location.hash = '#' + virtid;
+						}
+					}
+				});
+			}
+		});
+	</script>
+@endpush

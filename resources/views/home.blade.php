@@ -348,6 +348,7 @@
 					open: function() {
 						$.magnificPopup.instance.close = function() {
 							$('form')[0].reset();
+							$('#popup').hide();
 							// Call the original close method to close the popup
 							$.magnificPopup.proto.close.call(this);
 						};
@@ -374,6 +375,8 @@
 										//holidays = $popup.find('#holidays').val();
 
 										calcAmount();
+
+										$popup.show();
 
 										$('.datetimepicker').datetimepicker({
 											format: 'd.m.Y H:i',
@@ -418,6 +421,8 @@
 										$popup.html(result.html).find('select').niceSelect();
 
 										calcAmount();
+
+										$popup.show();
 									}
 								});
 							break;
@@ -711,7 +716,6 @@
 					},
 					dataType: 'json',
 					success: function(result) {
-						console.log(result);
 						if (result.status != 'success') {
 							return;
 						}

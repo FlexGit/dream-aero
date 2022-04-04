@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="en_project_title"><![CDATA[AirBus320]]></data>
+
+
+
+  <data name="en_pano36_title"><![CDATA[1p]]></data>
+
+
+  <data name="en_pano37_title"><![CDATA[2p]]></data>
+
+
+  <data name="en_pano38_title"><![CDATA[3p]]></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</krpano>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano version="1.18.3">
+
+    
+  <!-- Spot Style - Default Point Spot Style 1 -->
+  <style name="IconDefaultPointSpotStyle1"
+         url="%FIRSTXML%/spots/hotspot_image_sequence_user_defaultpoint0.png"
+         visible="false"
+         frame="0"
+         lastframe="18"
+         framewidth="66"
+         frameheight="66"
+         stopspotsequence="false"
+         crop="0|0|66|66"
+         onloaded="startspotanimation(0.1);if(scene[get(xml.scene)].planar,if(zoom,set(zoom, false);););"
+         zoom="true"
+         
+         alpha="0.8"
+         onhover="onhoverIconDefaultPointSpotStyle1"
+         onover="onoverIconDefaultPointSpotStyle1"
+         onout="onoutIconDefaultPointSpotStyle1"
+         />
+  <action name="onhoverIconDefaultPointSpotStyle1">
+    showtooltip('hotspot');
+  </action>
+  <action name="onoverIconDefaultPointSpotStyle1">
+tween(scale, 1.2);
+tween(alpha, 1);
+
+  </action>
+  <action name="onoutIconDefaultPointSpotStyle1">
+    hideTooltip();
+tween(scale, 1);
+tween(alpha, 0.8);
+
+  </action>
+
+
+
+  
+  <!-- Spot Style - Default Polygon Spot Style 1 -->
+  <style name="PolygonDefaultPolygonSpotStyle1"
+           visible="false"
+           bordercolor="0xf0c528"
+           fillcolor="0xffe06e"
+           borderwidth="3"
+           borderalpha="0.0"
+           fillalpha="0.0"
+           capture="false"
+           onhover="onhoverPolygonDefaultPolygonSpotStyle1"
+           onover="onoverPolygonDefaultPolygonSpotStyle1"
+           onout="onoutPolygonDefaultPolygonSpotStyle1"
+           />
+  <action name="onhoverPolygonDefaultPolygonSpotStyle1">
+    showTooltip('hotspot');
+  </action>
+
+  <action name="onoverPolygonDefaultPolygonSpotStyle1">
+    set(borderwidth, 3);pauseautorotation(forcehotspot);
+
+  </action>
+
+  <action name="onoutPolygonDefaultPolygonSpotStyle1">
+
+    set(borderwidth, 3);
+    hideTooltip();resumeautorotation(forcehotspot);
+
+  </action>
+
+
+
+</krpano>

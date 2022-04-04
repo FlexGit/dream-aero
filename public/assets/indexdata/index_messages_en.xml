@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="en_project_title"><![CDATA[AirBus320]]></data>
+
+
+
+  <data name="en_pano36_title"><![CDATA[1p]]></data>
+
+
+  <data name="en_pano37_title"><![CDATA[2p]]></data>
+
+
+  <data name="en_pano38_title"><![CDATA[3p]]></data>
+  <data name="en_spotpolygon68_tooltip"><![CDATA[Сайдстик КВС]]></data>
+  <data name="en_spotpolygon69_tooltip"><![CDATA[Педали КВС]]></data>
+  <data name="en_spotpolygon70_tooltip"><![CDATA[MCDU пульт бортового компьютера]]></data>
+  <data name="en_spotpolygon71_tooltip"><![CDATA[Управление радиосистемами и микрофоном КВС]]></data>
+  <data name="en_spotpolygon72_tooltip"><![CDATA[Рычаг управления спойлерами]]></data>
+  <data name="en_spotpolygon73_tooltip"><![CDATA[Пульт контроля доступа в кабину]]></data>
+  <data name="en_spotpolygon74_tooltip"><![CDATA[Стояночный тормоз, аварийный выпуск шасси, триммер руля направления]]></data>
+  <data name="en_spotpolygon75_tooltip"><![CDATA[Пульт запуска двигателей]]></data>
+  <data name="en_spotpolygon76_tooltip"><![CDATA[Блок РУД (рычаги управления двигателями), колеса триммера]]></data>
+  <data name="en_spotpolygon77_tooltip"><![CDATA[Пульт управления многофункциональным экраном контроля всех систем самолета]]></data>
+  <data name="en_spotpolygon78_tooltip"><![CDATA[MCDU пульт бортового компьютера]]></data>
+  <data name="en_spotpolygon79_tooltip"><![CDATA[Управление радиосистемами и микрофоном второго пилота]]></data>
+  <data name="en_spotpolygon80_tooltip"><![CDATA[Рычаг управления закрылками]]></data>
+  <data name="en_spotpolygon81_tooltip"><![CDATA[Педали второго пилота]]></data>
+  <data name="en_spotpolygon82_tooltip"><![CDATA[Сайдстик второго пилота]]></data>
+  <data name="en_spotpolygon83_tooltip"><![CDATA[Управление освещением, ВСУ, системой противообледенения]]></data>
+  <data name="en_spotpolygon84_tooltip"><![CDATA[Панель кондиционирования и регулировки давления воздуха]]></data>
+  <data name="en_spotpolygon85_tooltip"><![CDATA[Панель электросистемы]]></data>
+  <data name="en_spotpolygon86_tooltip"><![CDATA[Панель топливной и гидравлической систем]]></data>
+  <data name="en_spotpolygon87_tooltip"><![CDATA[Панель пожаротушения]]></data>
+  <data name="en_spotpolygon88_tooltip"><![CDATA[EFIS панель управления навигационным дисплеем КВС]]></data>
+  <data name="en_spotpolygon89_tooltip"><![CDATA[FCU панель управления автопилотом]]></data>
+  <data name="en_spotpolygon90_tooltip"><![CDATA[EFIS панель управления навигационным дисплеем второго пилота]]></data>
+  <data name="en_spotpolygon91_tooltip"><![CDATA[Основные пилотажные приборы второго пилота]]></data>
+  <data name="en_spotpolygon92_tooltip"><![CDATA[Управление яркостью приборов второго пилота]]></data>
+  <data name="en_spotpolygon93_tooltip"><![CDATA[Экран контроля двигателей и состояния самолета]]></data>
+  <data name="en_spotpolygon94_tooltip"><![CDATA[Многофункциональный экрана контроля всех систем самолета]]></data>
+  <data name="en_spotpolygon95_tooltip"><![CDATA[Индикация выпуска шасси и управление автоматическим торможением]]></data>
+  <data name="en_spotpolygon96_tooltip"><![CDATA[Часы]]></data>
+  <data name="en_spotpolygon97_tooltip"><![CDATA[Рычаг выпуска-уборки шасси]]></data>
+  <data name="en_spotpolygon98_tooltip"><![CDATA[Контроль давления в тормозах]]></data>
+  <data name="en_spotpolygon99_tooltip"><![CDATA[Резервные приборы]]></data>
+  <data name="en_spotpolygon100_tooltip"><![CDATA[Основные пилотажные приборы КВС]]></data>
+  <data name="en_spotpolygon101_tooltip"><![CDATA[Управление яркостью приборов КВС]]></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</krpano>

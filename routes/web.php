@@ -394,13 +394,25 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 	Route::get('o-trenazhere', [MainController::class, 'about']);
 	Route::get('virtualt', [MainController::class, 'virtualTour']);
+	
+	Route::get('boeing-virttour', [MainController::class, 'virtualTourBoeing']);
+	Route::post('boeing-virttour', [MainController::class, 'virtualTourBoeing']);
+	Route::get('desktop', [MainController::class, 'virtualTourAirbus']);
+	Route::post('desktop', [MainController::class, 'virtualTourAirbus']);
+	Route::get('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile']);
+	Route::post('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile']);
+	
 	Route::get('podarit-polet', [MainController::class, 'giftFlight']);
 	Route::get('variantyi-poleta', [MainController::class, 'flightTypes']);
 	Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction']);
 	Route::get('oferta-dreamaero', [MainController::class, 'oferta']);
-
-	Route::get('modal/booking', [MainController::class, 'getBookingModal']);
-	Route::get('modal/certificate', [MainController::class, 'getCertificateModal']);
+	Route::get('rules-dreamaero', [MainController::class, 'rules']);
+	Route::get('how-to-pay', [MainController::class, 'howToPay']);
+	
+	Route::get('modal/booking/{product_alias?}', [MainController::class, 'getBookingModal']);
+	Route::get('modal/certificate/{product_alias?}', [MainController::class, 'getCertificateModal']);
+	Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
+	
 	Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
 
 	Route::post('review/create', [MainController::class, 'reviewCreate']);
