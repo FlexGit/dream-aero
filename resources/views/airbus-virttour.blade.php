@@ -6,11 +6,13 @@
 	<link rel="image_src" href="/assets/airbus/indexdata/thumbnail.jpg" />
 	<!-- <meta name="directory" content="PATH/"></meta> -->
 	<!-- <link rel="target_url" href="index.html" /> -->
+
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<style type="text/css">
 		@-ms-viewport { width: device-width; }
+
 		* { padding: 0; margin: 0; }
 		html { height: 100%; }
 		body { height: 100%; }
@@ -99,13 +101,10 @@
 					,vars:{skipintro:true,norotation:true,startscene:curScene}
 				});
 			} else {
-
 				var isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
 				embedpano({
 					id:"krpanoSWFObject"
-
 					,swf:"/assets/airbus/indexdata/index.swf"
-
 					,target:"panoDIV"
 					,passQueryParameters:true
 					,bgcolor:"#000000"

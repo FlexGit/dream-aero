@@ -33,10 +33,7 @@
 			-o-user-select: none;
 			user-select: none;
 		}
-
-
 	</style>
-
 
 	<style type="text/css">
 		div#panoDIV.cursorMoveMode {
@@ -52,7 +49,6 @@
 	</style>
 
 	<script type="text/javascript">
-
 		function readDeviceOrientation() {
 			// window.innerHeight is not supported by IE
 			var winH = window.innerHeight ? window.innerHeight : jQuery(window).height();
@@ -105,13 +101,10 @@
 					,vars:{skipintro:true,norotation:true,startscene:curScene}
 				});
 			} else {
-
 				var isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
 				embedpano({
 					id:"krpanoSWFObject"
-
 					,swf:"/assets/indexdata/index.swf"
-
 					,target:"panoDIV"
 					,passQueryParameters:true
 					,bgcolor:"#000000"
@@ -164,11 +157,18 @@
 
 	<script type="text/javascript" src="/assets/indexdata/index.js"></script>
 	<script type="text/javascript">
+		embedpano({
+			swf:"/assets/indexdata/index.swf"
+			,target:"panoDIV"
+			,passQueryParameters:true
+		});
+	</script>
+	{{--<script type="text/javascript">
 		if (isVRModeRequested()){
 			accessWebVr();
 		}else{
 			accessStdVr();
 		}
-	</script>
+	</script>--}}
 </body>
 </html>

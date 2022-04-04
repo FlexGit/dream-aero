@@ -68,7 +68,7 @@
 						//console.log(result);
 						$('#' + target).html(result);
 
-						$('#krpanoSWFObject').find('div').css('position', 'relative');
+						$('#krpanoSWFObject').find('div').css({'position':'relative', 'height':'400px'});
 
 						virtid = virtid.replace('#','');
 						$('#' + virtid).addClass('active');
