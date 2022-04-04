@@ -162,6 +162,12 @@
 			,target:"panoDIV"
 			,passQueryParameters:true
 		});
+
+		if (isVRModeRequested()){
+			accessWebVr();
+		} else {
+			accessStdVr();
+		}
 	</script>
 </body>
 </html>
