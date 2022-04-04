@@ -28,7 +28,7 @@ class PayAnyWayService {
 	 * @return string
 	 */
 	public static function generatePayForm($payAccountNumber, Bill $bill) {
-		$VIEW = view('pay-form', [
+		$params = [
 			'url' => self::BASE_URL . self::PAY_REQUEST_URL,
 			'MNT_ID' => $payAccountNumber,
 			'MNT_AMOUNT' => number_format($bill->amount, 2, '.', ''),
@@ -37,11 +37,14 @@ class PayAnyWayService {
 			'MNT_TEST_MODE' => self::TEST_MODE,
 			'MNT_DESCRIPTION' => 'Оплата по счету ' . $bill->number . ' на сумму ' . $bill->amount . ' ' . ($bill->currency ? $bill->currency->alias : 'RUB'),
 			'MNT_SUBSCRIBER_ID' => $bill->contractor->uuid,
-			'MNT_SIGNATURE' => md5($payAccountNumber . $bill->number . $bill->amount . self::CURRENCY_CODE . $bill->contractor->uuid . self::TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE),
 			'MNT_SUCCESS_URL' => route('home'), //paymentSuccess
 			'MNT_FAIL_URL' => route('home'), //paymentFail
 			'MNT_RETURN_URL' => route('home'),
-		]);
+		];
+		
+		$params['MNT_SIGNATURE'] = md5($params['MNT_ID'] . $params['MNT_TRANSACTION_ID'] . $params['MNT_AMOUNT'] . $params['MNT_CURRENCY_CODE'] . $params['MNT_SUBSCRIBER_ID'] . $params['MNT_TEST_MODE'] . self::DATA_INTEGRITY_CHECK_CODE);
+		
+		$VIEW = view('pay-form', $params);
 		
 		return (string)$VIEW;
 	}
