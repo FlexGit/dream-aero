@@ -409,7 +409,7 @@ Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 	Route::get('city/change', [MainController::class, 'changeCity']);
 
 	Route::get('pay/{uuid}', [MainController::class, 'payLink']);
-	Route::get('payment/callback', [MainController::class, 'paymentCallback']);
+	Route::post('payment/callback', [MainController::class, 'paymentCallback']);
 	Route::get('payment/success', [MainController::class, 'paymentSuccess']);
 	Route::get('payment/fail', [MainController::class, 'paymentFail']);
 	
