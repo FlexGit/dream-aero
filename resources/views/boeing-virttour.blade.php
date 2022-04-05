@@ -3,7 +3,7 @@
 	<meta name="medium" content="mult" />
 	<meta name="video_height" content="480"></meta>
 	<meta name="video_width" content="640"></meta>
-	<link rel="image_src" href="/assets/indexdata/thumbnail.jpg" />
+	<link rel="image_src" href="{{ asset('indexdata/thumbnail.jpg') }}" />
 	<!-- <meta name="directory" content="PATH/"></meta> -->
 	<!-- <link rel="target_url" href="index.html" /> -->
 
@@ -38,13 +38,13 @@
 	<style type="text/css">
 		div#panoDIV.cursorMoveMode {
 			cursor: move;
-			cursor: url(/assets/indexdata/graphics/cursors_move_html5.cur), move;
+			cursor: url({{ asset('indexdata/graphics/cursors_move_html5.cur') }}), move;
 		}
 		div#panoDIV.cursorDragMode {
 			cursor: grab;
 			cursor: -moz-grab;
 			cursor: -webkit-grab;
-			cursor: url(/assets/indexdata/graphics/cursors_drag_html5.cur), default;
+			cursor: url({{ asset('indexdata/graphics/cursors_drag_html5.cur') }}), default;
 		}
 	</style>
 
@@ -77,69 +77,17 @@
 				setTimeout(function(){readDeviceOrientation();},10);
 			}
 		});
-
-		/*function accessWebVr(curScene){
-			unloadPlayer();
-
-			setTimeout(function(){ loadPlayer(true, curScene); }, 100);
-		}
-		function accessStdVr(curScene){
-			unloadPlayer();
-
-			setTimeout(function(){ loadPlayer(false, curScene); }, 100);
-		}
-		function loadPlayer(isWebVr, curScene) {
-			if (isWebVr) {
-				embedpano({
-					id:"krpanoSWFObject"
-					,xml:"/assets/indexdata/index_vr.xml"
-					,target:"panoDIV"
-					,passQueryParameters:true
-					,bgcolor:"#000000"
-					,html5:"only+webgl"
-					,focus: false
-					,vars:{skipintro:true,norotation:true,startscene:curScene}
-				});
-			} else {
-				var isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
-				embedpano({
-					id:"krpanoSWFObject"
-					,swf:"/assets/indexdata/index.swf"
-					,target:"panoDIV"
-					,passQueryParameters:true
-					,bgcolor:"#000000"
-					,focus: false
-					,html5:isBot ? "always" : "prefer"
-					,vars:{startscene:curScene}
-				});
-			}
-		}
-		function unloadPlayer(){
-			if(jQuery('#krpanoSWFObject')){
-				removepano('krpanoSWFObject');
-			}
-		}
-		function isVRModeRequested() {
-			var querystr = window.location.search.substring(1);
-			var params = querystr.split('&');
-			for (var i=0; i<params.length; i++){
-				if (params[i].toLowerCase() == "vr"){
-					return true;
-				}
-			}
-			return false;
-		}*/
 	</script>
 </head>
 <body>
 	<div id="panoDIV">
 		<noscript>
-			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="100%" height="100%" id="/assets/indexdata/index">
-				<param name="movie" value="/assets/indexdata/index.swf"/>
+			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="100%" height="100%" id="{{ asset('indexdata/index') }}">
+				<param name="movie" value="{{ asset('indexdata/index.swf') }}"/>
 				<param name="allowFullScreen" value="true"/>
 				<!--[if !IE]>-->
-				<object type="application/x-shockwave-flash" data="/assets/indexdata/index.swf" width="100%" height="100%">
-					<param name="movie" value="/assets/indexdata/index.swf"/>
+				<object type="application/x-shockwave-flash" data="{{ asset('indexdata/index.swf') }}" width="100%" height="100%">
+					<param name="movie" value="{{ asset('indexdata/index.swf') }}"/>
 					<param name="allowFullScreen" value="true"/>
 					<!--<![endif]-->
 					<a href="http://www.adobe.com/go/getflash">
@@ -152,20 +100,13 @@
 		</noscript>
 	</div>
 
-	<script type="text/javascript" src="/assets/indexdata/index.js"></script>
+	<script type="text/javascript" src="{{ asset('indexdata/index.js') }}"></script>
 	<script type="text/javascript">
 		embedpano({
-			swf: "/assets/indexdata/index.swf",
+			swf: "{{ asset('indexdata/index.swf') }}",
 			target: "panoDIV",
 			passQueryParameters: true
 		});
 	</script>
-	{{--<script type="text/javascript">
-		if (isVRModeRequested()){
-			accessWebVr();
-		}else{
-			accessStdVr();
-		}
-	</script>--}}
 </body>
 </html>
