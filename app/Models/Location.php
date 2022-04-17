@@ -50,6 +50,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FlightSimulator[] $simulators
  * @property-read int|null $simulators_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Location whereNameEn($value)
  */
 class Location extends Model
 {

@@ -53,6 +53,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|City wherePhone($value)
  * @property string|null $pay_account_number
  * @method static \Illuminate\Database\Eloquent\Builder|City wherePayAccountNumber($value)
+ * @property string $name_en
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereNameEn($value)
  */
 class City extends Model
 {

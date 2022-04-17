@@ -51,6 +51,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\City|null $city
  * @property int $city_id город
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereCityId($value)
+ * @property float $rating_value
+ * @property int $rating_count
+ * @property string|null $rating_ips
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereRatingCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereRatingIps($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereRatingValue($value)
  */
 class Content extends Model
 {
@@ -90,6 +96,9 @@ class Content extends Model
 		'detail_text',
 		'parent_id',
 		'city_id',
+		'rating_value',
+		'rating_count',
+		'rating_ips',
 		'version',
 		'meta_title',
 		'meta_description',

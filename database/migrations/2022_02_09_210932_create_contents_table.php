@@ -21,6 +21,9 @@ class CreateContentsTable extends Migration
 			$table->text('preview_text')->nullable()->comment('превью');
 			$table->integer('parent_id')->default(0)->index()->comment('родитель');
 			$table->integer('city_id')->default(0)->index()->comment('город');
+			$table->float('rating_value')->default(0)->comment('значение рейтинга');
+			$table->integer('rating_count')->default(0)->comment('количество проголосовавших');
+			$table->longText('rating_ips')->nullable()->comment('ip проголосовавших');
 			$table->string('version', 25)->default('ru')->index()->comment('версия');
 			$table->text('meta_title')->nullable()->comment('meta Title');
 			$table->text('meta_description')->nullable()->comment('meta Description');
