@@ -3120,7 +3120,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: eveniet
+                  example: possimus
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4666,11 +4666,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: quas
+                  example: laudantium
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: accusamus
+                  example: est
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4678,11 +4678,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 8
+                  example: 1
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 1
+                  example: 6
                 promocode_id:
                   type: integer
                   description: ''
@@ -4694,7 +4694,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: beatae
+                  example: corrupti
                 comment:
                   type: string
                   description: ''
@@ -5250,11 +5250,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: natus
+                  example: est
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: assumenda
+                  example: ratione
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -5262,11 +5262,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 14
+                  example: 11
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 6
+                  example: 17
                 promocode_id:
                   type: integer
                   description: ''
@@ -5278,7 +5278,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: aliquam
+                  example: eum
                 comment:
                   type: string
                   description: ''

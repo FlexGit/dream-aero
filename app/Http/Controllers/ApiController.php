@@ -391,7 +391,7 @@ class ApiController extends Controller
 			'password' => ['required', 'confirmed', 'valid_password'/*, Password::defaults()*/],
 			'password_confirmation' => ['required', 'same:password', 'valid_password_confirmation'],
 			'email' => ['required_without:contractor_uuid', 'email'],
-			'name' => ['required_without:contractor_uuid', 'min:3', 'max:50'],
+			'name' => ['required_without:contractor_uuid'],
 			'birthdate' => ['sometimes', 'required_without:contractor_uuid', 'date'],
 			'city_id' => ['required_without:contractor_uuid', 'numeric', 'valid_city'],
 		];
@@ -684,8 +684,8 @@ class ApiController extends Controller
 		}
 		
 		$rules = [
-			'name' => ['required', 'min:3', 'max:50'],
-			'lastname' => ['sometimes', 'required', 'min:3', 'max:50'],
+			'name' => ['required'],
+			'lastname' => ['sometimes', 'required'],
 			'phone' => ['sometimes', 'required', 'valid_phone'],
 			'birthdate' => ['sometimes', 'required', 'date'],
 			'city_id' => ['required', 'numeric', 'valid_city'],
@@ -2186,6 +2186,136 @@ class ApiController extends Controller
 
 		return $this->responseSuccess(null, $data);
 	}
+	
+	/**
+	 * Tariff Amount V3
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @queryParam product_id int required No-example
+	 * @queryParam is_certificate_purchase bool No-example
+	 * @queryParam is_unified bool No-example
+	 * @queryParam promocode_id int No-example
+	 * @queryParam location_id int No-example
+	 * @queryParam certificate_id int No-example
+	 * @queryParam score int No-example
+	 * @queryParam flight_date string No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "",
+	 * 	"data": {
+	 * 		"amount": 5500,
+	 * 		"baseAmount": 6300
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=429 scenario="Too Many Attempts" {"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function getTariffPriceV3()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$productId = $this->request->product_id;
+		if (!$productId) {
+			return $this->responseError('Не передан ID тарифа', 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			//\Log::debug('getTariffPriceV2() - ' . $authToken);
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$cityId = $contractor->city_id ?? 0;
+		
+		if ($cityId) {
+			$city = City::where('is_active', true)
+				->find($cityId);
+			if (!$city) {
+				return $this->responseError('Город не найден', 400);
+			}
+		}
+		
+		$product =  Product::find($productId);
+		if (!$product) {
+			return $this->responseError('Тариф не найден', 400);
+		}
+		
+		$flightDate = $this->request->flight_date ?? '';
+		
+		// Если дата - выходный день или праздник, меняем Regular на Ultimate
+		if ($flightDate && (in_array(date('w', strtotime(Carbon::parse($flightDate)->format('d.m.Y'))), [0, 6]) || in_array(Carbon::parse($flightDate)->format('d.m.Y'), Deal::HOLIDAYS))) {
+			$product = Product::where('alias', ProductType::ULTIMATE_ALIAS . '_' . $product->duration)
+				->first();
+		}
+		
+		if (!$product->productType) {
+			return $this->responseError('Некорректный тип тарифа', 400);
+		}
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return $this->responseError('Тариф не найден', 400);
+		}
+		
+		// базовая стоимость продукта
+		$baseAmount = $cityProduct->pivot->price;
+		
+		$locationId = $this->request->location_id ?? 0;
+		if ($locationId) {
+			$location = Location::where('is_active', true)
+				->find($this->request->location_id);
+			if (!$location) {
+				return $this->responseError('Локация не найдена', 400);
+			}
+		}
+		
+		$isCertificatePurchase = filter_var($this->request->is_certificate_purchase, FILTER_VALIDATE_BOOLEAN);
+		$isUnified = filter_var($this->request->is_unified, FILTER_VALIDATE_BOOLEAN);
+		$certificateId = $this->request->certificate_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
+		$score = $this->request->score ?? 0;
+		if ($isCertificatePurchase) {
+			$score = 0;
+		}
+		
+		$amount = $product->calcAmount($contractor->id, $cityId, 'api', false, $locationId, 0, 0, $promocodeId, $certificateId, $isUnified, false, $score);
+		if ($amount < 0) {
+			return $this->responseError('Некорректная стоимость тарифа', 400);
+		}
+		
+		// если указаны баллы на списание (только для мобилки)
+		if ($score > 0) {
+			$amount -= $score;
+			if ($amount < 0) $amount = 0;
+		}
+		
+		$data = [
+			'amount' => $amount,
+			'baseAmount' => $baseAmount,
+		];
+		
+		return $this->responseSuccess(null, $data);
+	}
 
 	/**
 	 * Deal create
@@ -2235,7 +2365,7 @@ class ApiController extends Controller
 		
 		$rules = [
 			'is_certificate_purchase' => ['required', 'boolean'],
-			'name' => ['required', 'min:3', 'max:50'],
+			'name' => ['required'],
 			'phone' => ['required', 'valid_phone'],
 			'email' => ['required', 'email'],
 			'product_id' => ['required', 'numeric'],
@@ -2247,7 +2377,7 @@ class ApiController extends Controller
 			'flight_simulator_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
 			'promocode_id' => ['sometimes', 'required', 'numeric'],
 			'certificate_id' => ['sometimes', 'required_if:is_certificate_purchase,false', 'numeric'],
-			'certificate_whom' => ['required_if:is_certificate_purchase,true', 'min:3', 'max:50'],
+			'certificate_whom' => ['required_if:is_certificate_purchase,true'],
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
@@ -2541,7 +2671,7 @@ class ApiController extends Controller
 		
 		$rules = [
 			'is_certificate_purchase' => ['required', 'boolean'],
-			'name' => ['required', 'min:3', 'max:50'],
+			'name' => ['required'],
 			'phone' => ['required', 'valid_phone'],
 			'email' => ['required', 'email'],
 			'product_id' => ['required', 'numeric'],
@@ -2552,7 +2682,7 @@ class ApiController extends Controller
 			'location_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
 			'flight_simulator_id' => ['required_if:is_certificate_purchase,false', 'numeric'],
 			'promocode_id' => ['sometimes', 'required', 'numeric'],
-			/*'certificate_whom' => ['required_if:is_certificate_purchase,true', 'min:3', 'max:50'],*/
+			/*'certificate_whom' => ['required_if:is_certificate_purchase,true'],*/
 		];
 		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
 			->setAttributeNames([
@@ -2819,7 +2949,7 @@ class ApiController extends Controller
 		}
 
 		$rules = [
-			'name' => ['required', 'min:3', 'max:50'],
+			'name' => ['required'],
 			'phone' => ['required', 'valid_phone'],
 			'email' => ['required', 'email'],
 			'product_id' => ['required', 'numeric'],

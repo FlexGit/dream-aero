@@ -2,11 +2,16 @@
 	<div class="container">
 		<div class="footer-menu">
 			<a href="{{ url('/') }}" class="logo">
-				<img src="{{ asset('img/logo-footer.webp') }}" alt="logo">
+				@if (App::isLocale('en'))
+					<img src="{{ asset('img/logo-eng-footer.png') }}" alt="logo">
+				@else
+					<img src="{{ asset('img/logo-footer.webp') }}" alt="logo">
+				@endif
 			</a>
 			<div class="social">
-				<a href="https://www.facebook.com/dreamaero/"  target="_block"><div class="icon-fb"></div></a>
+				{{--<a href="https://www.facebook.com/dreamaero/"  target="_block"><div class="icon-fb"></div></a>--}}
 				<a href="https://vk.com/dream.aero" target="_block"><div class="icon-vk"></div></a>
+				<a href="https://t.me/dreamaero" target="_block"><div class="icon-telegram"></div></a>
 				<a href="https://www.instagram.com/dream.aero/" target="_block"><div class="icon-inst"></div></a>
 				<a href="https://www.youtube.com/channel/UC3huC7ltIlfkNMsz8Jt4qnw" target="_block"><div class="icon-yout"></div></a>
 			</div>
@@ -14,53 +19,58 @@
 		<div class="footer-menu">
 			<ul>
 				<li class="first">
-					<a href="{{ url('o-trenazhere') }}">О тренажере</a>
+					<a href="{{ url('o-trenazhere') }}">@lang('main.нижнее-меню.о-тренажере')</a>
 				</li>
 				<li>
-					<a href="{{ url('podarit-polet') }}">Подарить полет</a>
+					<a href="{{ url('podarit-polet') }}">@lang('main.нижнее-меню.подарить-полет')</a>
 				</li>
 				<li>
-					<a href="{{ url('variantyi-poleta') }}">Варианты полета</a>
+					<a href="{{ url('variantyi-poleta') }}">@lang('main.нижнее-меню.варианты-полета')</a>
+				</li>
+				@if(App::isLocale('ru'))
+					<li>
+						<a href="{{ url('news') }}">@lang('main.нижнее-меню.новости')</a>
+					</li>
+				@endif
+				<li>
+					<a href="{{ url('instruktazh') }}">@lang('main.нижнее-меню.инструктаж')</a>
 				</li>
 				<li>
-					<a href="{{ url('news') }}">Новости</a>
+					<a href="{{ url('price') }}">@lang('main.нижнее-меню.цены')</a>
 				</li>
 				<li>
-					<a href="{{ url('instruktazh') }}">Инструктаж</a>
+					<a href="{{ url('galereya') }}">@lang('main.нижнее-меню.галерея')</a>
+				</li>
+				@if(App::isLocale('ru'))
+					<li>
+						<a href="{{ url('reviews') }}">@lang('main.нижнее-меню.отзывы')</a>
+					</li>
+				@endif
+				<li>
+					<a href="{{ url('contacts') }}">@lang('main.нижнее-меню.контакты')</a>
 				</li>
 				<li>
-					<a href="{{ url('price') }}">Цены</a></li>
-				<li>
-					<a href="{{ url('galereya') }}">Галерея</a>
-				</li>
-				<li>
-					<a href="{{ url('reviews') }}">Отзывы</a>
-				</li>
-				<li>
-					<a href="{{ url('contacts') }}">Контакты</a>
-				</li>
-				<li>
-					<a href="{{ url('pravila') }}">Правила</a>
+					<a href="{{ url('pravila') }}">@lang('main.нижнее-меню.правила')</a>
 				</li>
 				<li class="last">
-					<a href="{{ asset('docs/OFERTA_DREAMAERO_KM_2021.pdf') }}" target=_blank>Публичная оферта</a>
+					<a href="{{ url('oferta-dreamaero') }}" target=_blank>@lang('main.нижнее-меню.публичная-оферта')</a>
 				</li>
 			</ul>
-			<div class="advert" style="font-size: 13px;">Копирование любых материалов сайта запрещено</div>
+			<div class="advert" style="font-size: 13px;">@lang('main.нижнее-меню.копирование-материалов')</div>
 		</div>
 		<div class="footer-menu">
 			<span>
 				<a href="https://www.rossiya-airlines.com/" target="_blank">
 					<img style="width: 172px;margin:0 15px 15px 15px;" src="{{ asset('img/logo-white.webp') }}" alt="">
 				</a>
-				<p style="color: white;margin-top: -5px;font-size: 9px">В партнерстве с Авиакомпанией "Россия"</p>
+				<p style="color: white;margin-top: -5px;font-size: 9px">@lang('main.нижнее-меню.в-партнерстве-с-компанией-россия')</p>
 				<p class="advert" style="margin: 0;text-align: right;margin-top: 45px;">
-					Реклама и сотрудничество: <a href="mailto:ads@dream-aero.com">ads@dream-aero.com</a>
+					@lang('main.нижнее-меню.реклама-и-сотрудничество:') <a href="mailto:ads@dream-aero.com">ads@dream-aero.com</a>
 				</p>
 			</span>
 		</div>
 	</div>
-	<input type="hidden" id="city_id" name="city_id" value="{{ $city ? $city->id : 1 }}">
+	<input type="hidden" id="city_id" name="city_id" value="{{ Request::get('cityId') ?? 1 }}">
 
 	{{--<script async type="text/javascript">
 		(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter46672077 = new Ya.Metrika({ id:46672077, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
@@ -100,126 +110,12 @@
 </div>
 
 <div class="mfp-hide popup ajax_form" id="popup" style="display: none;">
-	<div style="text-align: center;">
+	{{--<div style="text-align: center;">
 		<img src="{{ url('assets/img/planes.gif') }}" alt="">
-	</div>
+	</div>--}}
 </div>
 
-{{--<form id="popup-certificate" class="mfp-hide popup --}}{{--popup-mainpay--}}{{-- ajax_form">
-	<p class="popup-description">Приобрести сертификат на полет<br/> в один клик</p>
-
-	<input type='hidden' name='MNT_ID' id='MNT_ID' value="44741905">
-	<input type='hidden' id="MTRANSID" name="MTRANSID" value="veg">
-	<input type='hidden' name='MNT_TRANSACTION_ID' id="MNT_TRANSACTION_ID" value="veg">
-	<input type='hidden' name='MNT_CURRENCY_CODE' value='RUB'>
-	<input type='hidden' name='MNT_TEST_MODE' value='0'>
-	<input type='hidden' name='MNT_DESCRIPTION'  id='MNT_DESCRIPTION'>
-	<input type='hidden' name='paymentSystem.unitId' value='card'>
-	<input type='hidden' name='MNT_AMOUNT' id='MNT_AMOUNT' value='0'>
-
-	<fieldset>
-		<input id="on-sale" value="0" type="hidden">
-		<select class='popup-input' id='selectprice'>
-			<option value disabled selected>Выберите вариант полета</option>
-			<option value='standart' disabled>Regular (будние дни)</option>
-			<option data-type='Regular' data-time='30' data-price='5500' data-crm='711' value='R30'>30 мин (5 500р)</option>
-			<option data-type='Regular' data-time='60' data-price='9500' data-crm='712' value='R60'>60 мин (9 500р)</option>
-			<option data-type='Regular' data-time='90' data-price='13900' data-crm='713' value='R90'>90 мин (13 900р)</option>
-			<option data-type='Regular' data-time='120' data-price='17900' data-crm='714' value='R120'>120 мин (17 900р)</option>
-			<option data-type='Regular' data-time='180' data-price='24900' data-crm='715' value='R180'>180 мин (24 900р)</option>
-			<option value='holidays' disabled>Ultimate (любой день, включая выходные и праздничные)</option>
-			<option data-type='Ultimate' data-time='30' data-price='6500' data-crm='717' value='U30'>30 мин (6 500р)</option>
-			<option data-type='Ultimate' data-time='60' data-price='11500' data-crm='718' value='U60'>60 мин (11 500р)</option>
-			<option data-type='Ultimate' data-time='90' data-price='16700' data-crm='719' value='U90'>90 мин (16 700р)</option>
-			<option data-type='Ultimate' data-time='120' data-price='21500' data-crm='720' value='U120'>120 мин (21 500р)</option>
-			<option data-type='Ultimate' data-time='180' data-price='30500' data-crm='721' value='U180'>180 мин (30 500р)</option>
-			<option value='PLATINUM' disabled>PLATINUM</option>
-			<option data-type='Platinum' data-time='150' data-price='25500' data-crm='716' value='P150'>150 мин (25 500р)</option>
-			<option value='kurs' disabled>КУРС ПИЛОТА</option>
-			<option data-type='basic' data-price='43500' value='Basic'>Basic (43 500р)</option>
-			<option data-type='expert' data-price='59500' value='Expert'>Expert (59 500р)</option>
-		</select>
-
-		<ul class="popup-list-inputs">
-			<li class="list">
-				<input class="popup-input" id="on-resname" required name="reservation-name" type="text" placeholder="КАК ВАС ЗОВУТ? *">
-			</li>
-			<li class="list">
-				<input class="popup-input" id="on-phone" name="reservation-phone" type="tel" placeholder="номер вашего телефона*" required>
-			</li>
-			<li class="list">
-				<input class="popup-input" id="on-name4sert" name="name4sert" type="text" placeholder="Для кого сертификат (Имя)">
-			</li>
-			<li class="list">
-				<input class="popup-input" name="clemail" id="clemail" type="email" placeholder="ВАШ E-MAIL *" required>
-				<i id="podskazka" style="display: none;font-size: 11px;color: grey;">На Ваш email будет выслан сертификат.</i>
-			</li>
-		</ul>
-
-		<div style="display: none;">
-			<input id="on-type" name="FType">
-			<input id="on-time" name="FTime">
-			<input id="on-price" name="tprice" type="text">
-			<input id="on-idprod" name="on-idprod" type="text">
-		</div>
-
-		<div class="promoall" id="promo-sert"></div>
-		<span class="nice-select-label city">Ваш город: <b>Москва</b></span>
-
-		<p id="on-price-popup"></p>
-		<p></p>
-		<div class="block">
-			<div class="nice-select-label">
-				<input type="checkbox" id="pravila" required>
-				Я согласен с <a href="/pravila" target="_blank">правилами</a> пользования сертификатом такими как: <br/>
-				<div style="font-size: 14px;margin-left: 20px">
-					<span class="ny_rule">
-						Сертификат будет действовать с 01.01.2021 (срок действия 6 месяцец);
-					</span>
-					<span style="font-weight: bold;" id="sertrules">
-						сертификат действует 6 месяцев со дня покупки;
-					</span>
-					<br/>
-					в кабине может присутствовать три человека;<br/>
-					дети до 8 лет не допускаются к полёту; <br/>
-					беременные женщины к полёту не допускаются и другими.<br/>
-					А также с <a href="oferta-dreamaero.pdf" target="_blank">условиями публичной оферты</a>
-				</div>
-			</div>
-		</div>
-	</fieldset>
-	<input type="text" name="workemail" value="" class="field"/>
-	<button type="submit" onclick="yaCounter46672077.reachGoal('SendOrder'); gtag_report_conversion();fbq('track', 'Purchase', {value: 200,currency: 'rub',});return true;" id="submibtn" class="popup-submit button-pipaluk button-pipaluk-orange" style="width: 60%;"><i>Оплатить</i></button>
-	--}}{{--<input type="hidden" name="af_action" value="1143c14e91471395b12a5db59bd11ed3" />--}}{{--
-</form>--}}
-
-<form id="popup-review" class="mfp-hide popup popup-review ajax_form">
-	<p class="popup-title">
-		ОСТАЛИСЬ ПОД ВПЕЧАТЛЕНИЕМ?
-	</p>
-	<p class="popup-description">
-		Оставьте свой отзыв и мы опубликуем его на сайте!
-	</p>
-	<fieldset>
-		<input class="popup-input" id="name" name="name" type="text" placeholder="КАК ВАС ЗОВУТ?*" required>
-		<textarea class="popup-area" id="body" name="body" placeholder="текст отзыва"></textarea>
-		{{--<select name="ТРЦ">
-			<option value="ТРК Афимолл Сити">ТРК Афимолл Сити</option>
-			<option value="ТРК VEGAS Кунцево">ТРК VEGAS Кунцево</option>
-		</select>--}}
-		{{--<input class="popup-input" id="review-date" name="Дата и время полета" type="text" placeholder="Дата и время полета" required>--}}
-		<div class="block">
-			<input type="checkbox" id="review-consent" name="consent" value="1" required>
-			<span class="nice-select-label">{{--<a href="/conditions#personal">--}}я согласен на обработку моих данных{{--</a>--}}</span>
-		</div>
-		{{--<input type="text" name="workemail" value="" class="field"/>
-		<input type="hidden" name="Город" value="Москва" class="field"/>--}}
-		<button type="button" class="popup-submit button-pipaluk button-pipaluk-orange js-review-send"><i>отправить</i></button>
-	</fieldset>
-	{{--<input type="hidden" name="af_action" value="346506d709f864ac2c2d116232d084f5" />--}}
-</form>
-
-<div id="popup-welcome" class="mfp-hide popup popup-welcome">
+{{--<div id="popup-welcome" class="mfp-hide popup popup-welcome">
 	<p class="popup-title">спасибо за заявку!</p>
 	<p class="popup-description">
 		Мы скоро свяжемся с вами
@@ -231,17 +127,4 @@
 	<p class="popup-description">
 		Переводим на страницу оплаты
 	</p>
-</form>
-
-<form method="post" id="popup-call-back" class="mfp-hide popup popup-call-back ajax_form">
-	<h2>ЗАКАЗАТЬ ОБРАТНЫЙ ЗВОНОК</h2>
-	<span>Заполните пару полей и мы свяжемся с вами в ближайшее время</span>
-	<input type="text" name="Имя" placeholder="КАК ВАС ЗОВУТ?*" class="popup-input">
-	<input type="tel" required id="phone1" name="Телефон" placeholder="номер вашего телефона*" class="popup-input">
-	<div class="block">
-		<input type="checkbox" required>
-		<span class="nice-select-label">{{--<a href="/conditions#personal">--}}я согласен на обработку моих данных{{--</a>--}}</span>
-	</div>
-	<input type="text" name="workemail" value="" class="field"/>
-	<button type="submit" class="popup-submit button-pipaluk button-pipaluk-orange"><i>Отправить</i></button>
-</form>
+</form>--}}

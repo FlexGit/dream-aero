@@ -333,3 +333,49 @@ function getUrlParameter(sParam) {
         }
     }
 }
+
+function calcAmount() {
+	var $popup = $('#popup'),
+		productId = $popup.find('#product').val(),
+		promocodeUuid = $popup.find('#promocode_uuid').val(),
+		locationId = $popup.find('input[name="locationSimulator"]:checked').data('location-id'),
+		simulatorId = $popup.find('input[name="locationSimulator"]:checked').data('simulator-id'),
+		flightDate = $popup.find('#flight_date').val(),
+		certificate = $popup.find('#certificate_number').val(),
+		cityId = $('#city_id').val(),
+		$amount = $popup.find('#amount'),
+		$amountContainer = $popup.find('.js-amount'),
+		amount = 0;
+
+	var data = {
+		product_id: productId,
+		promocode_uuid: promocodeUuid,
+		location_id: locationId,
+		simulator_id: simulatorId,
+		city_id: cityId,
+		flight_date: flightDate,
+		certificate: certificate,
+		source: 'web',
+	};
+	console.log(data);
+
+	$.ajax({
+		type: 'GET',
+		url: '/deal/product/calc',
+		data: data,
+		dataType: 'json',
+		success: function(result) {
+			if (result.status != 'success') {
+				return;
+			}
+
+			if (result.amount != result.baseAmount) {
+				amount = '<span class="strikethrough">' + result.baseAmount + '</span>' + result.amount;
+			} else if (result.amount) {
+				amount = result.amount;
+			}
+			$amount.val(result.amount);
+			$amountContainer.html(amount);
+		}
+	});
+}

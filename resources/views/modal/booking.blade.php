@@ -130,5 +130,3 @@
 		<input type="hidden" id="holidays" value="{{ json_encode($holidays) }}">
 	</fieldset>
 </div>
-
-<button title="Close (Esc)" type="button" class="mfp-close">×</button>

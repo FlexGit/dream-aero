@@ -101,10 +101,10 @@
 	.popup-description {
 		margin-top: 0;
 	}
-	.col-md-6 {
+	/*.col-md-6 {
 		padding-left: 0;
 		padding-right: 0;
-	}
+	}*/
 	.consent-container {
 		margin-top: 20px;
 	}

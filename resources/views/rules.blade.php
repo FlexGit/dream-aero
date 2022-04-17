@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="breadcrumbs container"><a href="/">Главная</a> <span>Правила</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">Главная</a> <span>Правила</span></div>
 
 	<article class="article">
 		<div class="container">
@@ -43,13 +43,13 @@
 						<p>- Скидка 20% «В День Рождения» действует в течение семи дней, в День Рождения, а также 3 дня до и 3 дня после. При себе необходимо иметь паспорт или любой другой документ, удостоверяющий личность. Для детей &nbsp;– &nbsp;свидетельство о рождении. &nbsp;В случае переноса полета на другой день, к которому невозможно применить данную акцию, скидка не распространяется. Необходимо будет внести доплату в размере предоставленной скидки. Скидка не действует на покупку Сертификата.</p>
 						<p><a name="personal"></a></p>
 						<p>- В случае отмены или изменения времени полета &nbsp;Заказчика по вине компании Dream Aero, Исполнитель обязуется провести полет в полном объеме без уменьшения времени.</p>
-						<p>- При бронировании полета в обязательном порядке ознакомиться&nbsp;<a style="display: inline;" href="/oferta-dreamaero" target="_blank" rel="noopener noreferrer">с публичной офертой</a>&nbsp;авиатренажера Dream Aero.</p>
+						<p>- При бронировании полета в обязательном порядке ознакомиться&nbsp;<a style="display: inline;" href="{{ url('oferta-dreamaero') }}" target="_blank" rel="noopener noreferrer">с публичной офертой</a>&nbsp;авиатренажера Dream Aero.</p>
 						<p>- Заказчику необходимо предъявить сертификат, подтверждающий полет &nbsp;при &nbsp;посещении авиатренажера Dream Aero.</p>
 						<p>- Использовать сертификат допускается только один раз. Запрещается разделять полет по одному сертификату на несколько посещений (не распространяется на курс пилота).</p>
 						<p><strong>&nbsp;</strong></p>
 						<p><strong>&nbsp;</strong></p>
-						<p>Полный текст <a style="display: inline;" href="/oferta-dreamaero" target="_blank" rel="noopener noreferrer">публичной оферты</a></p>
-						<p>Также Вы можете ознакомиться с доступными <a style="display: inline;" href="/how-to-pay" target="_blank" rel="noopener noreferrer">способами оплаты</a></p>
+						<p>Полный текст <a style="display: inline;" href="{{ url('oferta-dreamaero') }}" target="_blank" rel="noopener noreferrer">публичной оферты</a></p>
+						<p>Также Вы можете ознакомиться с доступными <a style="display: inline;" href="{{ url('how-to-pay') }}" target="_blank" rel="noopener noreferrer">способами оплаты</a></p>
 					</div>
 				</div>
 			</div>

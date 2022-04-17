@@ -9,6 +9,10 @@
 			<td>{{ $location->name }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Наименование (англ.)</td>
+			<td>{{ $location->name_en }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Алиас</td>
 			<td>{{ $location->alias }}</td>
 		</tr>

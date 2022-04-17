@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * App\Models\Location
  *
  * @property int $id
- * @property string $name наименование локации
+ * @property string $name наименование
+ * @property string $name_en наименование (англ.)
  * @property string $alias alias
  * @property int $legal_entity_id юр.лицо, на которое оформлена локация
  * @property int $city_id город, в котором находится локация
@@ -85,6 +86,7 @@ class Location extends Model
 	 */
 	protected $fillable = [
 		'name',
+		'name_en',
 		'alias',
 		'legal_entity_id',
 		'city_id',

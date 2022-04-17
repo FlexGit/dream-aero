@@ -205,7 +205,6 @@ class ContentController extends Controller
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents'],
 			'published_at' => ['date'],
 			'photo_preview_file' => ['sometimes', 'image', 'max:5120', 'mimes:webp,png,jpg,jpeg'],
-			'city_id' => ['sometimes', 'numeric', 'min:0', 'not_in:0', 'valid_city'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -214,7 +213,6 @@ class ContentController extends Controller
 				'alias' => 'Алиас',
 				'published_at' => 'Дата публикации',
 				'photo_preview_file' => 'Фото-превью',
-				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -225,15 +223,13 @@ class ContentController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
 		}
 		
-		$isFileUploaded = false;
+		$data = [];
 		if($file = $this->request->file('photo_preview_file')) {
 			$isFileUploaded = $file->move(public_path('upload/content/' . $version . '/' . $type), $file->getClientOriginalName());
+			if ($isFileUploaded) {
+				$data['photo_preview_file_path'] = $isFileUploaded ? 'content/' . $version . '/' . $type . '/' . $file->getClientOriginalName() : '';
+			}
 		}
-		
-		$data = [
-			'photo_preview_file_path' => $isFileUploaded ? 'content/' . $version . '/' . $type . '/' . $file->getClientOriginalName() : '',
-			'video_url' => $this->request->video_url ?? '',
-		];
 		
 		$content = new Content();
 		$content->title = $this->request->title;
@@ -241,7 +237,7 @@ class ContentController extends Controller
 		$content->preview_text = $this->request->preview_text;
 		$content->detail_text = $this->request->detail_text;
 		$content->parent_id = $parentContent->id;
-		$content->city_id = $this->request->city_id;
+		$content->city_id = $this->request->city_id ?? 0;
 		$content->version = $version;
 		$content->meta_title = $this->request->meta_title;
 		$content->meta_description = $this->request->meta_description;
@@ -282,7 +278,6 @@ class ContentController extends Controller
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents,alias,' . $id],
 			'published_at' => ['date'],
 			'photo_preview_file' => ['sometimes', 'image', 'max:5120', 'mimes:webp,png,jpg,jpeg'],
-			'city_id' => ['sometimes', 'numeric', 'min:0', 'not_in:0', 'valid_city'],
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
@@ -291,33 +286,32 @@ class ContentController extends Controller
 				'alias' => 'Алиас',
 				'published_at' => 'Дата публикации',
 				'photo_preview_file' => 'Фото-превью',
-				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$isFileUploaded = false;
+		$data = [];
 		if($file = $this->request->file('photo_preview_file')) {
 			$isFileUploaded = $file->move(public_path('upload/content/' . $version . '/' . $type), $file->getClientOriginalName());
+			if ($isFileUploaded) {
+				$data['photo_preview_file_path'] = $isFileUploaded ? 'content/' . $version . '/' . $type . '/' . $file->getClientOriginalName() : '';
+			}
 		}
 		
-		$data = [
-			'photo_preview_file_path' => $isFileUploaded ? 'content/' . $version . '/' . $type . '/' . $file->getClientOriginalName() : '',
-			'video_url' => $this->request->video_url ?? '',
-		];
-
 		$content->title = $this->request->title;
 		$content->alias = $this->request->alias;
 		$content->preview_text = $this->request->preview_text;
 		$content->detail_text = $this->request->detail_text;
 		$content->parent_id = $parentContent->id;
-		$content->city_id = $this->request->city_id;
+		$content->city_id = $this->request->city_id ?? 0;
 		$content->version = $version;
 		$content->meta_title = $this->request->meta_title;
 		$content->meta_description = $this->request->meta_description;
 		$content->is_active = (bool)$this->request->is_active;
-		$content->data_json = $data;
+		if ($data) {
+			$content->data_json = $data;
+		}
 		$content->published_at = $this->request->published_at;
 		if (!$content->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-		@if(!empty($products))
+		@if($products)
 			<div class="col-md-6 pr-10 pt-3">
 				<div>
 					<span>Выберите вариант полета</span>
@@ -31,12 +31,12 @@
 				<div style="width: 100%;">
 					<select id="product" name="product" class="popup-input">
 						@php($productTypeName = '')
-						@foreach($products as $product)
-							@if($product->productType && (in_array($product->productType->alias, [app('\App\Models\ProductType')::VIP_ALIAS, app('\App\Models\ProductType')::SERVICES_ALIAS])))
+						@foreach($products as $productItem)
+							@if($productItem->productType && (in_array($productItem->productType->alias, [app('\App\Models\ProductType')::VIP_ALIAS, app('\App\Models\ProductType')::SERVICES_ALIAS])))
 								@continue
 							@endif
-							@if($product->productType->name != $productTypeName)
-								@switch ($product->productType->alias)
+							@if($productItem->productType->name != $productTypeName)
+								@switch ($productItem->productType->alias)
 									@case(app('\App\Models\ProductType')::REGULAR_ALIAS)
 										@php($productTypeDescription = '(будние дни)')
 									@break
@@ -46,10 +46,10 @@
 									@default
 										@php($productTypeDescription = '')
 								@endswitch
-								<option disabled>{{ $product->productType->name }} {{ $productTypeDescription }}</option>
+								<option disabled>{{ $productItem->productType->name }} {{ $productTypeDescription }}</option>
 							@endif
-							<option value="{{ $product->id }}" data-product-type-alias="{{ $product->productType ? $product->productType->alias : '' }}" data-product-duration="{{ $product->duration }}">{{ $product->name }}</option>
-							@php($productTypeName = $product->productType->name)
+							<option value="{{ $productItem->id }}" data-product-type-alias="{{ $productItem->productType ? $productItem->productType->alias : '' }}" data-product-duration="{{ $productItem->duration }}">{{ $productItem->name }}</option>
+							@php($productTypeName = $productItem->productType->name)
 						@endforeach
 					</select>
 				</div>
@@ -90,7 +90,7 @@
 			</div>
 		@endif
 		<div class="clearfix"></div>
-		@if($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS]))
+		@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS])) || !$product)
 			<div class="promocode_container">
 				<div style="display: flex;">
 					<div class="switch_box" style="margin-bottom: 10px;">
@@ -150,5 +150,3 @@
 		<input type="hidden" id="promocode_uuid">
 	</fieldset>
 </div>
-
-<button title="Close (Esc)" type="button" class="mfp-close">×</button>

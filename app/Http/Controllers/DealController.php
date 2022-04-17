@@ -372,7 +372,7 @@ class DealController extends Controller
 			}
 		} else {
 			$rules = [
-				'name' => 'required|min:3|max:50',
+				'name' => 'required',
 				'email' => 'required|email|unique_email',
 				'phone' => 'required|valid_phone',
 				'product_id' => 'required|numeric|min:0|not_in:0',
@@ -577,7 +577,7 @@ class DealController extends Controller
 				case Event::EVENT_TYPE_DEAL:
 				case Event::EVENT_TYPE_TEST_FLIGHT:
 					$rules = [
-						'name' => 'required|min:3|max:50',
+						'name' => 'required',
 						'email' => 'required|email|unique_email',
 						'phone' => 'required', //|valid_phone
 						'product_id' => 'required|numeric|min:0|not_in:0',
@@ -828,7 +828,7 @@ class DealController extends Controller
 		}
 
 		$rules = [
-			'name' => 'required|min:3|max:50',
+			'name' => 'required',
 			'email' => 'required|email|unique_email',
 			'phone' => 'required|valid_phone',
 			'product_id' => 'required|numeric|min:0|not_in:0',
@@ -941,7 +941,7 @@ class DealController extends Controller
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
 		$rules = [
-			'name' => 'required|min:3|max:50',
+			'name' => 'required',
 			'email' => 'required|email',
 			'phone' => 'required|valid_phone',
 			'status_id' => 'required|numeric|min:0|not_in:0',
@@ -1045,7 +1045,6 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		// если есть дата, значит расчет с сайта.
 		// Если дата - выходный день или праздник, меняем Regular на Ultimate
 		if ($flightDate && (in_array(date('w', strtotime(Carbon::parse($flightDate)->format('d.m.Y'))), [0, 6]) || in_array(Carbon::parse($flightDate)->format('d.m.Y'), Deal::HOLIDAYS))) {
 			$product = Product::where('alias', ProductType::ULTIMATE_ALIAS . '_' . $product->duration)

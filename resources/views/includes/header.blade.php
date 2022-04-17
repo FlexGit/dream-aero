@@ -1,66 +1,94 @@
+@php
+	$urlEn = url('//' . env('DOMAIN_EN', 'en.dream-aero.ru'));
+	if (Request::segment(1)) {
+		$urlEn .= '/' . Request::segment(1);
+	}
+	if (Request::segment(2)) {
+		$urlEn .= '/' . Request::segment(2);
+	}
+
+	$urlRu = url('//' . env('DOMAIN_RU', 'dream-aero.ru'));
+	if (Request::segment(1)) {
+		$urlRu .= '/' . Request::segment(1);
+	}
+	if (Request::segment(2)) {
+		$urlRu .= '/' . Request::segment(2);
+	}
+@endphp
 <header class="header">
 	<div class="flexy_row">
 		<div>
-			<a href="{{ url(($cityAlias && $city) ? $city->alias : '/') }}" class="logo">
-				<img src="{{ asset('img/logo-new.webp') }}" alt="logo"></a>
+			<a href="{{ url(Request::session()->get('cityAlias') ?? '/') }}" class="logo">
+				@if (App::isLocale('en'))
+					<img src="{{ asset('img/logo-eng.png') }}" alt="logo">
+				@else
+					<img src="{{ asset('img/logo-new.webp') }}" alt="logo">
+				@endif
+			</a>
 		</div>
 		<div class="main-menu">
 			<ul>
 				<li class="first active" id="mob">
-					<a href="{{ url(($cityAlias && $city) ? $city->alias : '/') }}">Главная</a>
+					<a href="{{ url(Request::session()->get('cityAlias') ?? '/') }}">@lang('main.верхнее-меню.главная')</a>
 				</li>
 				<ul>
-					<li class="first dropdownf"><a href="{{ url('o-trenazhere') }}">О тренажере</a>
+					<li class="first dropdownf"><a href="{{ url('o-trenazhere') }}">@lang('main.верхнее-меню.о-тренажере')</a>
 						<ul class="dropdown-menu">
 							<li class="first">
-								<a href="{{ url('virtualt/#virttourboeing') }}">Виртуальный тур B737</a>
+								<a href="{{ url('virtualt/#virttourboeing') }}">@lang('main.верхнее-меню.виртуальный-тур-b737')</a>
 							</li>
 							<li class="last">
-								<a href="{{ url('virtualt/#virttourair') }}">Виртуальный тур A320</a>
+								<a href="{{ url('virtualt/#virttourair') }}">@lang('main.верхнее-меню.виртуальный-тур-a320')</a>
 							</li>
 						</ul>
 					</li>
 					<li>
-						<a href="{{ url('podarit-polet') }}">Подарить полет</a>
+						<a href="{{ url('podarit-polet') }}">@lang('main.верхнее-меню.подарить-полет')</a>
 					</li>
 					<li>
-						<a href="{{ url('variantyi-poleta') }}">Варианты полета</a>
+						<a href="{{ url('variantyi-poleta') }}">@lang('main.верхнее-меню.варианты-полета')</a>
 					</li>
-					<li>
-						<a href="{{ url('news') }}" >Новости</a>
-					</li>
+					@if(App::isLocale('ru'))
+						<li>
+							<a href="{{ url('news') }}" >@lang('main.верхнее-меню.новости')</a>
+						</li>
+					@endif
 					<li class="dropdownf">
-						<a href="{{ url('instruktazh') }}">Инструктаж</a>
+						<a href="{{ url('instruktazh') }}">@lang('main.верхнее-меню.инструктаж')</a>
 						<ul class="dropdown-menu">
 							<li class="first">
-								<a href="{{ url('instruktazh/airbus-a320') }}">Airbus A320</a>
-							</li>
-							<li class="last">
 								<a href="{{ url('instruktazh/boeing-737-ng') }}">Boeing 737 NG</a>
 							</li>
-						</ul>
-					</li>
-					<li class="dropdownf">
-						<a href="{{ url(($cityAlias && $city) ? $city->alias . '/price' : 'price') }}">Цены</a>
-						<ul class="dropdown-menu">
-							<li class="first">
-								<a href="{{ url('vse-akcii') }}">Акции</a>
+							<li class="last">
+								<a href="{{ url('instruktazh/airbus-a320') }}">Airbus A320</a>
 							</li>
 						</ul>
 					</li>
 					<li class="dropdownf">
-						<a href="{{ url('galereya') }}">Галерея</a>
+						<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/price' : 'price') }}">@lang('main.верхнее-меню.цены')</a>
+						@if(App::isLocale('ru'))
+							<ul class="dropdown-menu">
+								<li class="first">
+									<a href="{{ url('vse-akcii') }}">@lang('main.верхнее-меню.акции')</a>
+								</li>
+							</ul>
+						@endif
+					</li>
+					<li class="dropdownf">
+						<a href="{{ url('galereya') }}">@lang('main.верхнее-меню.галерея')</a>
 						<ul class="dropdown-menu">
 							<li class="first">
-								<a href="{{ url('galereya/#ourguestes') }}">Наши гости</a>
+								<a href="{{ url('galereya/#ourguestes') }}">@lang('main.верхнее-меню.наши-гости')</a>
 							</li>
 						</ul>
 					</li>
-					<li>
-						<a href="{{ url('reviews') }}">Отзывы</a>
-					</li>
+					@if(App::isLocale('ru'))
+						<li>
+							<a href="{{ url('reviews') }}">@lang('main.верхнее-меню.отзывы')</a>
+						</li>
+					@endif
 					<li class="last">
-						<a href="{{ url(($cityAlias && $city) ? $city->alias . '/contacts' : 'contacts') }}">Контакты</a>
+						<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/contacts' : 'contacts') }}">@lang('main.верхнее-меню.контакты')</a>
 					</li>
 				</ul>
 			</ul>
@@ -68,7 +96,7 @@
 		<div class="flexy_column nav">
 			<div class="item">
 				<p class="gl-current-select" id="city" data-toggle="modal" data-target="#city_modal">
-					{{ $city->name }}
+					{{ Request::session()->get('cityName') }}
 				</p>
 			</div>
 			<div>
@@ -77,7 +105,11 @@
 						+7 (495) 532-87-37
 					</a>
 				</span>
-				<a id="langlink" href="{{ url('//en.dream-aero.ru') }}">En</a>
+				@if (App::isLocale('ru'))
+					<a id="langlink" href="{{ $urlEn }}">En</a>
+				@else
+					<a id="langlink" href="{{ $urlRu }}">Ru</a>
+				@endif
 			</div>
 		</div>
 		<div class="mobile-burger">

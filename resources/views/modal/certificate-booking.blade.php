@@ -11,3 +11,5 @@
 </div>
 
 <div class="form-container"></div>
+
+<button title="Close (Esc)" type="button" class="mfp-close">×</button>

@@ -5,6 +5,10 @@
 	<input type="text" class="form-control form-control-sm" id="name" name="name" value="{{ $location->name }}" placeholder="Наименование">
 </div>
 <div class="form-group">
+	<label for="name_en">Наименование (англ.)</label>
+	<input type="text" class="form-control form-control-sm" id="name_en" name="name_en" value="{{ $location->name_en }}" placeholder="Наименование (англ.)">
+</div>
+<div class="form-group">
 	<label for="alias">Алиас</label>
 	<input type="text" class="form-control form-control-sm" id="alias" name="alias" value="{{ $location->alias }}" placeholder="Алиас">
 </div>
@@ -73,8 +77,16 @@
 	<textarea class="form-control form-control-sm" id="address" name="address" rows="2">{{ array_key_exists('address', $location->data_json) ? $location->data_json['address'] : '' }}</textarea>
 </div>
 <div class="form-group">
+	<label for="address_en">Адрес (англ.)</label>
+	<textarea class="form-control form-control-sm" id="address_en" name="address_en" rows="2">{{ array_key_exists('address_en', $location->data_json) ? $location->data_json['address_en'] : '' }}</textarea>
+</div>
+<div class="form-group">
 	<label for="working_hours">Часы работы</label>
 	<textarea class="form-control form-control-sm" id="working_hours" name="working_hours" rows="2">{{ array_key_exists('working_hours', $location->data_json) ? $location->data_json['working_hours'] : '' }}</textarea>
+</div>
+<div class="form-group">
+	<label for="working_hours_en">Часы работы (англ.)</label>
+	<textarea class="form-control form-control-sm" id="working_hours_en" name="working_hours_en" rows="2">{{ array_key_exists('working_hours_en', $location->data_json) ? $location->data_json['working_hours_en'] : '' }}</textarea>
 </div>
 <div class="form-group">
 	<label for="phone">Телефон</label>

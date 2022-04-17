@@ -1,20 +1,20 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="breadcrumbs container"><a href="/">Главная</a> <span>О тренажере</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.o-trenazhere.title')</span></div>
 
 	<div class="about simul" id="about">
 		<div class="container">
-			<h2 class="block-title">О тренажере</h2>
+			<h2 class="block-title">@lang('main.o-trenazhere.title')</h2>
 			<div class="gallery-button-top">
 				<div class="button-free">
 					<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" style="padding: 10px;margin: 0 0 35px 36%;" data-wow-delay="1.6s" data-wow-duration="2s" data-wow-iteration="1">
-						<i>Забронировать</i>
+						<i>@lang('main.o-trenazhere.забронировать')</i>
 					</a>
 				</div>
 			</div>
 			<div class="text-block wow fadeInRight simul" data-wow-delay="0.5s" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-delay: 0.5s;animation-name: fadeInRight;margin-top: 0;">
-				<p>Компания Dream Aero предлагает вам отправиться &laquo;в полёт&raquo; на динамическом авиатренажере&nbsp;пассажирского авиалайнера. Наш тренажер практически по всем параметрам соответствует требованиям Doc 9625 ICAO FSTD Type VII, то есть аналогичен авиатренажерам высшей степени соответствия реальности, которые используются при профессиональном обучении пилотов.</p>
+				<p>@lang('main.o-trenazhere.компания-предлагает-вам-отправиться-в-полет')</p>
 			</div>
 		</div>
 		<div class="image wow fadeInLeft" data-wow-delay="1s" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-delay: 1s;animation-name: fadeInLeft;">
@@ -30,24 +30,23 @@
 			<div class="article-content">
 				<div class="row">
 					<div class="col-md-12 about-simulator">
-						<p>Авиасимулятор&nbsp;в точности воспроизводит нюансы управления воздушным судном в условиях реального полёта. Человек, впервые оказавшийся за штурвалом летательного аппарата, вряд ли справится с полётом в сложных метеоусловиях, но сумеет выполнить базовые элементы полётного задания, такие как взлёт, посадка, перелёт. Особенно, если рядом будет находиться опытный инструктор.</p>
-						<p>Большое количество компьютерных программ-авиасимуляторов не идут ни в какое сравнение с нашим авиатренажёром, ни в части визуализации ни в программном обеспечении.&nbsp;</p>
-						<div id="tvyouframe">
+						@lang('main.o-trenazhere.авиасимулятор-в-точности-воспроизводит-нюансы-управления')
+						<div id="tvyouframe" style="margin-top: 20px;">
 							<div id="youtuber">
 								<iframe src="https://www.youtube.com/embed/lifbJ-35Obg?rel=0&autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="youvideo"></iframe>
 							</div>
 						</div>
 						<br>
 						<br>
-						<h2>Какие тренажеры мы предлагаем</h2>
+						<h2>@lang('main.o-trenazhere.какие-тренажеры-мы-предлагаем')</h2>
 						<br>
 						<div style="display: flex;justify-content: space-between;">
 							@foreach($flightSimulators as $flightSimulator)
 								<div>
-									<h4 style="font-size: 24px;margin-bottom: 40px;">Авиатренажерный центр {{ $flightSimulator->name }}</h4>
+									<h4 style="font-size: 24px;margin-bottom: 40px;">@lang('main.o-trenazhere.авиатренажерный-центр') {{ $flightSimulator->name }}</h4>
 									<ul>
 									@foreach($flightSimulator->locations as $location)
-										@if ($location->city && $location->city->version != $city->version)
+										@if ($location->city && $location->city->version != Request::get('cityVersion'))
 											@continue
 										@endif
 										<li>
@@ -62,7 +61,7 @@
 														<i class="fa fa-skype" aria-hidden="true" style="margin-left: 20px;"></i> <a href="skype:{{ $location->data_json['skype'] }}">{{ $location->data_json['skype'] }}</a>
 													@endif
 													<br>
-													<i class="fa fa-calendar-check-o" aria-hidden="true"></i> График работы
+													<i class="fa fa-calendar-check-o" aria-hidden="true"></i> @lang('main.o-trenazhere.график-работы')
 													<br>
 													<div style="padding-left: 18px;">
 														{!! $location->data_json['working_hours'] !!}
@@ -77,23 +76,23 @@
 							@endforeach
 						</div>
 
-						<h2>ЧТО МЫ ПРЕДЛАГАЕМ?</h2>
+						<h2>@lang('main.o-trenazhere.что-мы-предлагаем')</h2>
 
 						<div class="offer" style="background-image: url({{ asset('img/Blok_1.png') }});background-position: top; background-size: cover;">
 							<img src="{{ asset('img/facts-ico3.png') }}" alt="">
-							<p class="bold">Профессиональную поддержку опытного пилота-инструктора.</p>
+							<p class="bold">@lang('main.o-trenazhere.профессиональную-поддержку-опытного-пилота-инструктора')</p>
 						</div>
 						<div class="offer" style="background-image: url({{ asset('img/Blok_2.png') }});background-position: top; background-size: cover;">
 							<img src="{{ asset('img/facts-ico1.png') }}" alt="">
-							<p class="bold">Погружение в реальный мир авиационной техники.</p>
+							<p class="bold">@lang('main.o-trenazhere.погружение-в-реальный-мир-авиационной-техники')</p>
 						</div>
 						<div class="offer" style="background-image: url({{ asset('img/Blok_3.png') }});background-position: top; background-size: cover;">
 							<img src="{{ asset('img/facts-ico2.png') }}" alt="">
-							<p class="bold">Эффективную борьбу с приступами паники, характерные для аэрофобии.</p>
+							<p class="bold">@lang('main.o-trenazhere.эффективную-борьбу-с-приступами-паники')</p>
 						</div>
 						<div class="offer" style="background-image: url({{ asset('img/Blok_4.png') }});background-position: top; background-size: cover;">
 							<img src="{{ asset('img/facts-ico4.png') }}" alt="">
-							<p class="bold">Взрывные эмоции и впечатления, сравнимые с реальными ощущениями.</p>
+							<p class="bold">@lang('main.o-trenazhere.взрывные-эмоции-и-впечатления')</p>
 						</div>
 
 						<div class="astabs" style="display: flex;justify-content: space-around;margin: 50px 0;">
@@ -102,87 +101,77 @@
 						</div>
 
 						<section id="content-astab1">
-							<h2>СЕМЕЙСТВО САМОЛЁТОВ BOEING 737 NG</h2>
+							<h2>@lang('main.o-trenazhere.семейство-самолетов-boeing-737-ng')</h2>
 							<p><img src="{{ asset('img/B737_NG.jpg') }}" alt="" width="100%" /></p>
 							<blockquote>
-								<p>Boeing 737 &mdash; самый популярный в мире узкофюзеляжный реактивный магистральный самолёт. Это самый массовый пассажирский авилайнер за всю историю пассажирского авиастроения.</p>
+								<p>@lang('main.o-trenazhere.boeing-737-самый-популярный')</p>
 							</blockquote>
-							<p>Boeing 737 считаются самыми популярными и распространенными в мире реактивными самолётами. За всю историю пассажирского самолётостроения больше всего было построено именно узкофюзеляжных магистральных самолётов Боинг.</p>
-							<p><a name="_GoBack"></a>16 апреля 2014 года воздушный океан принял в свои объятия восьмитысячный летательный аппарат этой марки. Самый первый Боинг поднялся в небо в 1967 году.</p>
-							<h2 class="western">Три поколения Boeing 737</h2>
+							<p>@lang('main.o-trenazhere.boeing-737-ng-считаются-самыми-популярными')</p>
+							<h2 class="western">@lang('main.o-trenazhere.три-поколения-boeing-737')</h2>
 							<ul>
-								<li><span lang="en-GB">Original</span>&nbsp;включают в себя модификации 100 и 200.</li>
-								<li>Поколение&nbsp;<span lang="en-GB">Classic</span>&nbsp;представлено модификациями 300, 400, 500.&lt;</li>
-								<li><span lang="en-GB">Next Generation</span><span lang="en-US">&nbsp;</span>или<span lang="en-US">&nbsp;</span><span lang="en-GB">Boeing NG</span><span lang="en-US">&nbsp;&ndash;&nbsp;</span>это<span lang="en-US">&nbsp;</span>модификации<span lang="en-US">&nbsp;600, 700, 800, 900.</span></li>
+								<li>@lang('main.o-trenazhere.original')</li>
+								<li>@lang('main.o-trenazhere.classic')</li>
+								<li>@lang('main.o-trenazhere.next-generation')</li>
 							</ul>
-							<p>Начиная с 1984 года, все модели семейства&nbsp;<span lang="en-GB">Boeing</span>&nbsp;737&nbsp;<span lang="en-GB">Classic</span>&nbsp;имеют репутацию безопасных и супернадёжных авиалайнеров. Репутация обусловила высокую популярность и продаваемость всех машин этого семейства.</p>
-							<p>Конкуренция с более высокотехнологичным&nbsp;<span lang="en-GB">Airbus</span>&nbsp;320 подталкивает Боинг к усовершенствованиям летательных аппаратов. На самолётах&nbsp;<span lang="en-GB">Boeing</span>&nbsp;<span lang="en-GB">NG</span>&nbsp;устанавливаются цифровые кокпиты, крылья и хвостовое оперение удлинены на пять с половиной метров, усовершенствована конструкция двигателей.</p>
-							<p>Салон для пассажиров разработан на основе салонов &laquo;757&raquo; и &laquo;767&raquo;. В целом самолёты семейства 737&nbsp;<span lang="en-GB">Boeing</span>&nbsp;<span lang="en-GB">NG</span>&nbsp;представляют собой модифицированную и улучшенную серию&nbsp;<span lang="en-GB">Classic</span>&nbsp;737.</p>
-							<p>Схемы и функциональность систем жизнеобеспечения самолёта не изменились, но преобразования существенно улучшают взлётно-посадочные характеристики машины и значительно сокращают расход топлива.</p>
-							<h3>ТЕХНИЧЕСКИЕ ДАННЫЕ СЕМЕЙСТВА САМОЛЕТОВ BOEING 737 NG</h3>
+							@lang('main.o-trenazhere.начиная-с-1984-года')
+							<h3>@lang('main.o-trenazhere.технические-данные')</h3>
 							<div class="table">
 								<div class="tr">
-									<p>Максимум взлётной массы</p>
-									<p>66 — 83,13 т</p>
+									<p>@lang('main.o-trenazhere.максимум-взлётной-массы')</p>
+									<p>66 — 83,13 @lang('main.o-trenazhere.tons')</p>
 								</div><div class="tr">
-									<p>Наибольшая дальность</p>
-									<p>5,648 — 5,925 км</p>
+									<p>@lang('main.o-trenazhere.наибольшая-дальность')</p>
+									<p>5,648 — 5,925 @lang('main.o-trenazhere.km')</p>
 								</div><div class="tr">
-									<p>Крейсерская скорость</p>
-									<p>0.785 M</p>
+									<p>@lang('main.o-trenazhere.крейсерская-скорость')</p>
+									<p>0.785 @lang('main.o-trenazhere.M')</p>
 								</div><div class="tr">
-									<p>Размах крыла</p>
-									<p>34.3 м</p>
+									<p>@lang('main.o-trenazhere.размах-крыла')</p>
+									<p>34.3 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>С законцовками</p>
-									<p>35.8 м</p>
+									<p>@lang('main.o-trenazhere.с-законцовками')</p>
+									<p>35.8 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>Длина аппарата</p>
-									<p>31.2 — 42.1 м</p>
+									<p>@lang('main.o-trenazhere.длина-аппарата')</p>
+									<p>31.2 — 42.1 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>Высота по хвостовому оперению</p>
-									<p>12.6 м</p>
+									<p>@lang('main.o-trenazhere.высота-по-хвостовому-оперению')</p>
+									<p>12.6 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>Ширина пассажирской кабины</p>
-									<p>3.53 м</p>
+									<p>@lang('main.o-trenazhere.ширина-пассажирской-кабины')</p>
+									<p>3.53 @lang('main.o-trenazhere.m')</p>
 								</div>
 							</div>
 						</section>
 						<section id="content-astab2" style="display: none;">
-							<h2>СЕМЕЙСТВО САМОЛЁТОВ AIRBUS A320</h2>
-							<blockquote>
-								<p>Airbus A320 &mdash; семейство узкофюзеляжных самолётов для авиалиний малой и средней протяжённости, разработанных европейским консорциумом &laquo;Airbus S.A.S&raquo;. Выпущенный в 1988 году, он стал первым пассажирским самолётом, на котором была применена электродистанционная система управления</p>
-							</blockquote>
-							<p>Главным конкурентом для семейства A320 являются самолёты семейства Bombardier СS 300 и Boeing 737NG. Boeing 757 конкурирует с A321, обладая несколько большей дальностью и несколько большей пассажировместимостью, однако его производство было прекращено в 2005 году. Для моделей A318 и A319 соперничающими моделями могут быть устаревшие модификации, такие как снятый с производства Boeing 717.</p>
-							<p>Советский ТУ-154, обладая близкими параметрами, тратит на перевозку каждого пассажира больше керосина даже в последней модификации ТУ-154М, и потому не выдерживает коммерческой конкуренции. Более новая модель Туполева &mdash; 204/214 &mdash; в целом сопоставима с А321 по коммерческой эффективности, однако выпущена в незначительном количестве (менее ста машин) и к настоящему времени фактически снята с производства, поэтому также не может рассматриваться в качестве серьезного конкурента.</p>
-							<p>A320 &mdash; это узкофюзеляжный самолёт с одним центральным проходом в салоне, четырьмя пассажирскими входами и четырьмя аварийными выходами. В Airbus A320 могут максимально разместиться 180 пассажиров. В типичной 2-классовой компоновке 2+2 в бизнес-классе и 3+3 кресла в экономклассе) в салоне размещаются до 150 пассажиров. В грузовом отсеке могут поместиться семь контейнеров AKH &mdash; три в передней части, четыре в задней. A320 является моделью-основоположницей семьи A320.</p>
-							<p>Крейсерская скорость 910 км/час. Средняя дальность полёта 4600 км. В зависимости от комплектации салона, с дополнительным топливным баком способен преодолевать расстояние в 5500 км.</p>
-							<h3>ТЕХНИЧЕСКИЕ ДАННЫЕ СЕМЕЙСТВА САМОЛЕТОВ AIRBUS A320</h3>
+							<h2>@lang('main.o-trenazhere.семейство-пассажирской-airbus-a320')</h2>
+							@lang('main.o-trenazhere.airbus-a320-семейство-узкофюзеляжных-самолётов')
+							<h3>@lang('main.o-trenazhere.технические-данные-семейства-самолетов-airbus-a320')</h3>
 							<div class="table">
 								<div class="tr">
-									<p>Максимум взлётной массы</p>
-									<p>66 — 83,13 т</p>
+									<p>@lang('main.o-trenazhere.максимум-взлётной-массы')</p>
+									<p>66 — 83,13 @lang('main.o-trenazhere.tons')</p>
 								</div><div class="tr">
-									<p>Наибольшая дальность</p>
-									<p>5,648 — 5,925 км</p>
+									<p>@lang('main.o-trenazhere.наибольшая-дальность')</p>
+									<p>5,648 — 5,925 @lang('main.o-trenazhere.km')</p>
 								</div><div class="tr">
-									<p>Крейсерская скорость</p>
-									<p>0.785 M</p>
+									<p>@lang('main.o-trenazhere.крейсерская-скорость')</p>
+									<p>0.785 @lang('main.o-trenazhere.M')</p>
 								</div><div class="tr">
-									<p>Размах крыла</p>
-									<p>34.3 м</p>
+									<p>@lang('main.o-trenazhere.размах-крыла')</p>
+									<p>34.3 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>С законцовками</p>
-									<p>35.8 м</p>
+									<p>@lang('main.o-trenazhere.с-законцовками')</p>
+									<p>35.8 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>Длина аппарата</p>
-									<p>31.2 — 42.1 м</p>
+									<p>@lang('main.o-trenazhere.длина-аппарата')</p>
+									<p>31.2 — 42.1 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>Высота по хвостовому оперению</p>
-									<p>12.6 м</p>
+									<p>@lang('main.o-trenazhere.высота-по-хвостовому-оперению')</p>
+									<p>12.6 @lang('main.o-trenazhere.m')</p>
 								</div><div class="tr">
-									<p>Ширина пассажирской кабины</p>
-									<p>3.53 м</p>
+									<p>@lang('main.o-trenazhere.ширина-пассажирской-кабины')</p>
+									<p>3.53 @lang('main.o-trenazhere.m')</p>
 								</div>
 							</div>
 						</section>
@@ -194,34 +183,39 @@
 		</div>
 	</article>
 
-	<div class="questions">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-7">
-					<h2>У ВАС ОСТАЛИСЬ ВОПРОСЫ?</h2>
-					<span>Напишите менеджеру компании <b>Дрим Аэро</b>, уточните нюансы будущего <b>занятия на авиатренажёре</b> и закажите сертификат билета, позволяющего «поднять в небо» воздушное судно людям, которые никогда не сидели за штурвалом самолёта, а только мечтали о профессии пилота.</span>
-					<img src="{{ asset('img/plane1.png') }}" alt="" width="100%" height="auto">
-				</div>
-				<div class="col-md-5">
-					<div class="form wow fadeInRight" data-wow-duration="2s">
-						<form class="ajax_form" action="#" method="post">
-							<input type="text" name="Имя" placeholder="КАК ВАС ЗОВУТ?">
-							<input type="email" name="E-mail" placeholder="ВАШ E-MAIL" required>
-							<textarea name="Вопрос" placeholder="ВВЕДИТЕ СООБЩЕНИЕ" required></textarea>
-							<input type="text" name="workemail" value="" class="field"/>
-							<button type="submit" class="button-pipaluk button-pipaluk-white"><i>ОТПРАВИТЬ</i></button>
-							<input type="hidden" name="af_action" value="e35dccbdaee05fe36ce48625a4aaba9b" />
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	@include('forms.feedback')
 @endsection
 
 @push('css')
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
+	<style>
+		.about-simulator p,
+		.about-simulator ul li {
+			color: #515050;
+			font-size: 19px;
+			margin: 0 0 25px;
+		}
+		.about-simulator h2 {
+			font-weight: 600;
+			padding: 90px 0 60px;
+		}
+		.about-simulator .bold {
+			font-weight: 600;
+			margin-top: 35px;
+			color: black;
+		}
+		.about-simulator h3 {
+			text-align: center;
+			margin-top: 100px;
+			margin-bottom: 0;
+			background: #f04915;
+			color: white;
+			padding: 20px;
+			text-transform: uppercase;
+			font-size: 20px;
+		}
+	</style>
 @endpush
 
 @push('scripts')
@@ -477,7 +471,7 @@
 					'email': email,
 					'phone': phone,
 					'product_id': productId ? parseInt(productId) : 0,
-					'city_id': parseInt('{{ $city->id }}'),
+					'city_id': parseInt('{{ Request::get('cityId') }}'),
 					'location_id': locationId ? parseInt(locationId) : 0,
 					'flight_date_at': flightDateAt,
 					'flight_time_at': flightTimeAt,
@@ -524,51 +518,6 @@
 					}
 				});
 			});
-
-			function calcAmount() {
-				var $popup = $('#popup'),
-					productId = $popup.find('#product').val(),
-					promocodeUuid = $popup.find('#promocode_uuid').val(),
-					locationId = $popup.find('input[name="locationSimulator"]:checked').data('location-id'),
-					simulatorId = $popup.find('input[name="locationSimulator"]:checked').data('simulator-id'),
-					flightDate = $popup.find('#flight_date').val(),
-					certificate = $popup.find('#certificate_number').val(),
-					cityId = $('#city_id').val(),
-					$amount = $popup.find('#amount'),
-					$amountContainer = $popup.find('.js-amount'),
-					amount = 0;
-
-				$.ajax({
-					type: 'GET',
-					url: '/deal/product/calc',
-					data: {
-						product_id: productId,
-						promocode_uuid: promocodeUuid,
-						location_id: locationId,
-						simulator_id: simulatorId,
-						city_id: cityId,
-						flight_date: flightDate,
-						certificate: certificate,
-						source: 'web',
-					},
-					dataType: 'json',
-					success: function(result) {
-						if (result.status != 'success') {
-							return;
-						}
-
-						if (result.amount != result.baseAmount) {
-							amount = '<span class="strikethrough">' + result.baseAmount + '</span>' + result.amount;
-						} else if (result.amount) {
-							amount = result.amount;
-						}
-						$amount.val(result.amount);
-						$amountContainer.html(amount);
-
-						//$('#popup').html(result.html).find('select').niceSelect();
-					}
-				});
-			}
 		});
 	</script>
 @endpush

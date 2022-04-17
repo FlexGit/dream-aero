@@ -1,11 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="breadcrumbs container"><a href="{{ url(($cityAlias && $city) ? $city->alias : '/') }}">Главная</a> <span>Инструктаж</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.instruction.title')</span></div>
 
 	<article class="article">
 		<div class="container">
-			<h1 class="article-title">Инструктаж</h1>
+			<h1 class="article-title">@lang('main.instruction.title')</h1>
 			<div class="article-content">
 				<div class="row">
 					<div class="col-md-12">

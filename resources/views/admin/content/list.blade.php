@@ -4,7 +4,7 @@
 		{{--<a href="javascript:void(0)" data-toggle="modal" data-url="/content/{{ $content->id }}/edit" data-action="/content/{{ $content->id }}" data-method="PUT" data-type="content" data-title="Редактирование" title="Редактировать">--}}{{ $content->title }}{{--</a>--}}
 	</td>
 	<td class="text-center align-middle d-none d-lg-table-cell">
-		{{ $content->city ? $content->city->name : '' }}
+		{{ $content->city ? $content->city->name : 'Любой' }}
 	</td>
 	<td class="text-center align-middle d-none d-xl-table-cell">
 		{{ $content->published_at ? $content->published_at->format('Y-m-d') : '' }}

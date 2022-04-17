@@ -1,15 +1,15 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="breadcrumbs container"><a href="/">Главная</a> <span>Способы оплаты</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.how-to-pay.title')</span></div>
 
 	<article class="article">
 		<div class="container">
-			<h1 class="article-title">Способы оплаты</h1>
+			<h1 class="article-title">@lang('main.how-to-pay.title')</h1>
 			<div class="article-content">
 				<div class="row">
 					<div class="item">
-						<p>Воспользуйтесь <a style="display: inline;" href="http://payanyway.ru/info/w/ru/public/w/payment-methods/index.html" target="_blank" rel="noopener noreferrer">подробными инструкциями</a> по каждому из способов оплаты</p>
+						<p>Воспользуйтесь <a href="http://payanyway.ru/info/w/ru/public/w/payment-methods/index.html" target="_blank" rel="noopener noreferrer">подробными инструкциями</a> по каждому из способов оплаты</p>
 						<p><strong style="line-height: 1.5;">Банковские карты</strong></p>
 						<table border="0" cellspacing="0" cellpadding="0">
 							<tbody>
@@ -62,14 +62,12 @@
 							</tr>
 							</tbody>
 						</table>
-						<p><strong>Банковские сервисы</strong></p>
-						<p>Системы онлайн-банкинга «Сбербанк ОнЛ@йн», «Альфа-Клик», «Промсвязьбанк», «Русский Стандарт», «Faktura.ru». <br>Банковским или почтовым переводом.</p>
+						<p><strong>Банковские сервисы</strong><br>Системы онлайн-банкинга «Сбербанк ОнЛ@йн», «Альфа-Клик», «Промсвязьбанк», «Русский Стандарт», «Faktura.ru». <br>Банковским или почтовым переводом.</p>
 						<p><img src="https://www.moneta.ru/info/public/requirements/bank.png" alt=""></p>
-						<p><strong>Платёжные терминалы</strong></p>
-						<p>Элекснет, ОПЛАТА.РУ, Федеральная система Город, Московский кредитный банк, Форвард Мобайл, НКО «ЛИДЕР».</p>
+						<p><strong>Платёжные терминалы</strong><br>Элекснет, ОПЛАТА.РУ, Федеральная система Город, Московский кредитный банк, Форвард Мобайл, НКО «ЛИДЕР».</p>
 						<p><img src="https://www.moneta.ru/info/public/requirements/terminal.png" alt=""></p>
 						<p>&nbsp;</p>
-						<p><strong>Сервис приёма оплаты предоставлен&nbsp;<a style="display: inline;" href="http://payanyway.ru/">PayAnyWay</a>.</strong></p>
+						<p><strong>Сервис приёма оплаты предоставлен <a href="http://payanyway.ru/">PayAnyWay</a>.</strong></p>
 						<p>&nbsp;</p>
 						<p><strong style="line-height: 1.5;">Возникли вопросы по оплате?</strong></p>
 						<p>Телефон: +7 (812) 937-84-17<br>Skype:&nbsp;<a style="display: inline;" href="skype:dream.aero?chat">dream.aero</a><br> E-mail: <a style="display: inline;" href="mailto:info@dream-aero.com">info@dream-aero.com</a></p>

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="breadcrumbs container"><a href="/">Главная</a> <span>Виртуальный тур</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.virtual-tour.title')</span></div>
 
 	<div class="virb">
 		<a id="virttourboeing" class="button button-pipaluk button-pipaluk-orange "><i>Boeing 737</i></a>

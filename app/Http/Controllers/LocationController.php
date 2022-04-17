@@ -192,24 +192,30 @@ class LocationController extends Controller
 
 		$rules = [
 			'name' => 'required|max:255|unique:locations,name',
+			'name_en' => 'required|max:255|unique:locations,name_en',
 			'alias' => 'required|min:2|max:25|unique:locations,alias',
 			'legal_entity_id' => 'required|integer',
 			'city_id' => 'required|integer',
 			'address' => 'required',
+			'address_en' => 'required',
 			'working_hours' => 'required',
+			'working_hours_en' => 'required',
 			'phone' => 'required',
 			'email' => 'required|email',
-			'scheme_file' => 'sometimes|image|max:512|mimes:webp',
+			'scheme_file' => 'sometimes|image|max:512|mimes:jpg,jpeg,png,webp',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
+				'name_en' => 'Наименование (англ.)',
 				'alias' => 'Алиас',
 				'legal_entity_id' => 'Юр.лицо',
 				'city_id' => 'Город',
 				'address' => 'Адрес',
+				'address_en' => 'Адрес (англ.)',
 				'working_hours' => 'Часы работы',
+				'working_hours_en' => 'Часы работы (англ.)',
 				'phone' => 'Телефон',
 				'email' => 'E-mail',
 				'scheme_file' => 'План-схема',
@@ -225,13 +231,16 @@ class LocationController extends Controller
 
 		$location = new Location();
 		$location->name = $this->request->name;
+		$location->name_en = $this->request->name_en;
 		$location->alias = $this->request->alias;
 		$location->is_active = $this->request->is_active;
 		$location->legal_entity_id = $this->request->legal_entity_id;
 		$location->city_id = $this->request->city_id;
 		$location->data_json = [
 			'address' => $this->request->address,
+			'address_en' => $this->request->address_en,
 			'working_hours' => $this->request->working_hours,
+			'working_hours_en' => $this->request->working_hours_en,
 			'phone' => $this->request->phone,
 			'email' => $this->request->email,
 			'map_link' => $this->request->map_link,
@@ -265,24 +274,29 @@ class LocationController extends Controller
 		
 		$rules = [
 			'name' => 'required|max:255|unique:locations,name,' . $id,
+			'name_en' => 'required|max:255|unique:locations,name_en,' . $id,
 			'alias' => 'required|min:2|max:25|unique:locations,alias,' . $id,
 			'legal_entity_id' => 'required|integer',
 			'city_id' => 'required|integer',
 			'address' => 'required',
+			'address_en' => 'required',
 			'working_hours' => 'required',
+			'working_hours_en' => 'required',
 			'phone' => 'required',
 			'email' => 'required|email',
-			'scheme_file' => 'sometimes|image|max:1024|mimes:webp',
+			'scheme_file' => 'sometimes|image|max:1024|mimes:jpg,jpeg,png,webp',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Наименование',
+				'name_en' => 'Наименование (англ.)',
 				'alias' => 'Алиас',
 				'legal_entity_id' => 'Юр.лицо',
 				'city_id' => 'Город',
 				'address' => 'Адрес',
-				'working_hours' => 'Часы работы',
+				'address_en' => 'Адрес (англ.)',
+				'working_hours_en' => 'Часы работы (англ.)',
 				'phone' => 'Телефон',
 				'email' => 'E-mail',
 				'scheme_file' => 'План-схема',
@@ -297,13 +311,16 @@ class LocationController extends Controller
 		}
 			
 		$location->name = $this->request->name;
+		$location->name_en = $this->request->name_en;
 		$location->alias = $this->request->alias;
 		$location->is_active = $this->request->is_active;
 		$location->legal_entity_id = $this->request->legal_entity_id;
 		$location->city_id = $this->request->city_id;
 		$location->data_json = [
 			'address' => $this->request->address,
+			'address_en' => $this->request->address_en,
 			'working_hours' => $this->request->working_hours,
+			'working_hours_en' => $this->request->working_hours_en,
 			'phone' => $this->request->phone,
 			'email' => $this->request->email,
 			'map_link' => $this->request->map_link,

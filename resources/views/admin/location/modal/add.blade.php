@@ -4,6 +4,10 @@
 	<input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="Наименование">
 </div>
 <div class="form-group">
+	<label for="name_en">Наименование (англ.)</label>
+	<input type="text" class="form-control form-control-sm" id="name_en" name="name_en" placeholder="Наименование (англ.)">
+</div>
+<div class="form-group">
 	<label for="alias">Алиас</label>
 	<input type="text" class="form-control form-control-sm" id="alias" name="alias" placeholder="Алиас">
 </div>
@@ -30,8 +34,16 @@
 	<textarea class="form-control form-control-sm" id="address" name="address" rows="2"></textarea>
 </div>
 <div class="form-group">
+	<label for="address_en">Адрес (англ.)</label>
+	<textarea class="form-control form-control-sm" id="address_en" name="address_en" rows="2"></textarea>
+</div>
+<div class="form-group">
 	<label for="working_hours">Часы работы</label>
 	<input type="text" class="form-control form-control-sm" id="working_hours" name="working_hours" placeholder="Часы работы">
+</div>
+<div class="form-group">
+	<label for="working_hours_en">Часы работы (англ.)</label>
+	<input type="text" class="form-control form-control-sm" id="working_hours_en" name="working_hours_en" placeholder="Часы работы (англ.)">
 </div>
 <div class="form-group">
 	<label for="phone">Телефон</label>

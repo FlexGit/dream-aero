@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
 		'apikey' => \App\Http\Middleware\ApiKey::class,
 		'apilog' => \App\Http\Middleware\ApiLog::class,
 		'citycheck' => \App\Http\Middleware\CityCheck::class,
+		'setlanguage' => \App\Http\Middleware\SetLanguage::class,
     ];
 }

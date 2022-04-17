@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="breadcrumbs container"><a href="/">Главная</a> <span>Публичная оферта</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">Главная</a> <span>Публичная оферта</span></div>
 
 	<article class="article">
 		<div class="container">

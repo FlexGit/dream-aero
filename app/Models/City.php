@@ -70,6 +70,22 @@ class City extends Model
 	const KHV_ALIAS = 'khv';
 	/*const UAE_ALIAS = 'uae';*/
 	const DC_ALIAS = 'dc';
+	
+	const RU_ALIASES = [
+		self::MSK_ALIAS,
+		self::SPB_ALIAS,
+		self::VRN_ALIAS,
+		self::KZN_ALIAS,
+		self::KRD_ALIAS,
+		self::NNV_ALIAS,
+		self::SAM_ALIAS,
+		self::EKB_ALIAS,
+		self::NSK_ALIAS,
+		self::KHV_ALIAS,
+	];
+	const EN_ALIASES = [
+		self::DC_ALIAS,
+	];
 
 	const RU_VERSION = 'ru';
 	const EN_VERSION = 'en';
