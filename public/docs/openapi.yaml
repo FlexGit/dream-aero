@@ -3120,7 +3120,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: possimus
+                  example: at
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4666,11 +4666,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: laudantium
+                  example: quia
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: est
+                  example: et
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4678,11 +4678,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 1
+                  example: 10
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 6
+                  example: 8
                 promocode_id:
                   type: integer
                   description: ''
@@ -4694,7 +4694,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: corrupti
+                  example: voluptas
                 comment:
                   type: string
                   description: ''
@@ -5250,11 +5250,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: est
+                  example: earum
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: ratione
+                  example: et
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -5262,11 +5262,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 11
+                  example: 3
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 17
+                  example: 9
                 promocode_id:
                   type: integer
                   description: ''
@@ -5278,7 +5278,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: eum
+                  example: voluptas
                 comment:
                   type: string
                   description: ''
@@ -5387,6 +5387,252 @@ paths:
           required: false
           schema:
             type: integer
+            description: ''
+            example: null
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  message: ''
+                  data:
+                    amount: 5500
+                    baseAmount: 6300
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    example:
+                      amount: 5500
+                      baseAmount: 6300
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Некорректный Api-ключ'
+                  debug: null
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Некорректный Api-ключ'
+                  debug:
+                    type: string
+                    example: null
+        404:
+          description: 'Resource Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Ресурс не найден'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Ресурс не найден'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        405:
+          description: 'Method Not Allowed'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Метод не разрешен'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Метод не разрешен'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        429:
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Слишком много попыток. Попробуйте позже'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Слишком много попыток. Попробуйте позже'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+        500:
+          description: 'Internal Server Error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  error: 'Внутренняя ошибка'
+                  debug: '<app_url>/api/<method>'
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: 'Внутренняя ошибка'
+                  debug:
+                    type: string
+                    example: '<app_url>/api/<method>'
+      tags:
+        - Endpoints
+  /api/v3/tariff/price:
+    get:
+      summary: 'Tariff Amount V3'
+      description: ''
+      parameters:
+        -
+          in: query
+          name: api_key
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: token
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: string
+            description: ''
+            example: null
+        -
+          in: query
+          name: product_id
+          description: ''
+          example: null
+          required: true
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: query
+          name: is_certificate_purchase
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: boolean
+            description: ''
+            example: null
+        -
+          in: query
+          name: is_unified
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: boolean
+            description: ''
+            example: null
+        -
+          in: query
+          name: promocode_id
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: query
+          name: location_id
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: query
+          name: certificate_id
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: query
+          name: score
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: integer
+            description: ''
+            example: null
+        -
+          in: query
+          name: flight_date
+          description: ''
+          example: null
+          required: false
+          schema:
+            type: string
             description: ''
             example: null
         -
