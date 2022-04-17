@@ -592,6 +592,38 @@ class MainController extends Controller
 	
 	public function setRating()
 	{
-		\Log::debug($this->request);
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$contentId = $this->request->content_id ?? 0;
+		$value = $this->request->value ?? 0;
+		
+		if (!$contentId || !$value) {
+			return response()->json(['status' => 'error']);
+		}
+		
+		$content = Content::find($contentId);
+		if (!$content) {
+			return response()->json(['status' => 'error']);
+		}
+		
+		$ips = $content->rating_ips;
+		if (in_array($_SERVER['REMOTE_ADDR'], $ips)) {
+			return response()->json(['status' => 'error']);
+		}
+		
+		$ratingValue = $content->rating_value;
+		$ratingCount = $content->rating_count;
+		$ips[] = $_SERVER['REMOTE_ADDR'];
+
+		$content->rating_value = round(($ratingValue * $ratingCount + $value) / ($ratingCount + 1), 1);
+		$content->rating_count = $ratingCount + 1;
+		$content->rating_ips = $ips;
+		if (!$content->save()) {
+			return response()->json(['status' => 'error']);
+		}
+		
+		return response()->json(['status' => 'success', 'rating_value' => $content->rating_value, 'rating_count' => $content->rating_count]);
 	}
 }

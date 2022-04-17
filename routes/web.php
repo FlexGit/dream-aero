@@ -483,8 +483,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('payment/success', [MainController::class, 'paymentSuccess'])->name('payment');
 			Route::get('payment/fail', [MainController::class, 'paymentFail'])->name('payment');
 			
-			Route::get('news', [MainController::class, 'getNews'])->name('news');
-			Route::get('news/{alias?}', [MainController::class, 'getSingleNews'])->name('news');
+			Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
+			Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
 			
 			Route::get('vse-akcii', [MainController::class, 'getPromos'])->name('vse-akcii');
 			Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromo'])->name('vse-akcii');

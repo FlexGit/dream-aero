@@ -118,6 +118,7 @@ class Content extends Model
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
 		'published_at' => 'datetime:Y-m-d H:i:s',
 		'data_json' => 'array',
+		'rating_ips' => 'array',
 		'is_active' => 'boolean',
 	];
 

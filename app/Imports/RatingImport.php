@@ -25,8 +25,6 @@ class RatingImport implements OnEachRow, WithProgressBar
 
 		if ($rowIndex == 1) return null;
 
-		//\DB::connection()->enableQueryLog();
-		
 		$content = Content::where('alias', trim($row[0]))
 			->where('parent_id', 1)
 			->first();
@@ -34,9 +32,7 @@ class RatingImport implements OnEachRow, WithProgressBar
 		
 		$content->rating_value = trim($row[1]);
 		$content->rating_count = trim($row[2]);
-		$content->rating_ips = trim($row[3]);
+		$content->rating_ips = unserialize(trim($row[3]));
 		$content->save();
-		
-		//\Log::debug(\DB::getQueryLog());
     }
 }
