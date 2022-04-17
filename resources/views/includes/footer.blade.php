@@ -1,7 +1,7 @@
 <footer class="footer">
 	<div class="container">
 		<div class="footer-menu">
-			<a href="{{ url('/') }}" class="logo">
+			<a href="{{ url(Request::session()->get('cityAlias') ?? '/') }}" class="logo">
 				@if (App::isLocale('en'))
 					<img src="{{ asset('img/logo-eng-footer.png') }}" alt="logo">
 				@else
@@ -36,7 +36,7 @@
 					<a href="{{ url('instruktazh') }}">@lang('main.нижнее-меню.инструктаж')</a>
 				</li>
 				<li>
-					<a href="{{ url('price') }}">@lang('main.нижнее-меню.цены')</a>
+					<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/price' : 'price') }}">@lang('main.нижнее-меню.цены')</a>
 				</li>
 				<li>
 					<a href="{{ url('galereya') }}">@lang('main.нижнее-меню.галерея')</a>
@@ -47,7 +47,7 @@
 					</li>
 				@endif
 				<li>
-					<a href="{{ url('contacts') }}">@lang('main.нижнее-меню.контакты')</a>
+					<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/contacts' : 'contacts') }}">@lang('main.нижнее-меню.контакты')</a>
 				</li>
 				<li>
 					<a href="{{ url('pravila') }}">@lang('main.нижнее-меню.правила')</a>

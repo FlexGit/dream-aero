@@ -444,7 +444,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('modal/review', [MainController::class, 'getReviewModal']);
 			Route::get('modal/scheme', [MainController::class, 'getSchemeModal']);
 		
-			Route::get('{alias}', [MainController::class, 'home'])->name('home');
+			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
 		});
@@ -500,16 +500,16 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('modal/review', [MainController::class, 'getReviewModal']);
 			Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
 		
-			Route::get('{alias}', [MainController::class, 'home'])->name('home');
+			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
 		});
 	});
-	
-	Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
-	Route::post('deal/certificate', [DealController::class, 'storeCertificate'])->name('dealCertificateStore');
-	Route::post('deal/booking', [DealController::class, 'storeBooking'])->name('dealBookingStore');
 });
+
+Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
+Route::post('deal/certificate', [DealController::class, 'storeCertificate'])->name('dealCertificateStore');
+Route::post('deal/booking', [DealController::class, 'storeBooking'])->name('dealBookingStore');
 
 Route::fallback(function () {
 	abort(404);

@@ -57,7 +57,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class City extends Model
 {
 	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
-
+	
+	const DEFAULT_CITY_NAME = 'Москва';
+	const DEFAULT_CITY_NAME_EN = 'Moscow';
+	
 	const MSK_ALIAS = 'msk';
 	const SPB_ALIAS = 'spb';
 	const VRN_ALIAS = 'vrn';

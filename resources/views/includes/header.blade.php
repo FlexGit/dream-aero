@@ -96,7 +96,13 @@
 		<div class="flexy_column nav">
 			<div class="item">
 				<p class="gl-current-select" id="city" data-toggle="modal" data-target="#city_modal">
-					{{ Request::session()->get('cityName') }}
+					@if(Request::session()->get('cityName'))
+						{{ Request::session()->get('cityName') }}
+					@elseif(App::isLocale('en'))
+						{{ app('\App\Models\City')::DEFAULT_CITY_NAME_EN }}
+					@else
+						{{ app('\App\Models\City')::DEFAULT_CITY_NAME }}
+					@endif
 				</p>
 			</div>
 			<div>

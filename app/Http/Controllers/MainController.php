@@ -34,9 +34,13 @@ class MainController extends Controller
 	 * @param null $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function home()
+	public function home($cityAlias = null)
 	{
-		$cityAlias = $this->request->session()->get('cityAlias');
+		if ($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) {
+			abort(404);
+		}
+		
+		//$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		// "Наша команда"
@@ -388,6 +392,7 @@ class MainController extends Controller
 		
 		$this->request->session()->put('cityId', $city->id);
 		$this->request->session()->put('cityAlias', $city->alias);
+		$this->request->session()->put('cityVersion', $city->version);
 		$this->request->session()->put('cityName', $cityName);
 		
 		return response()->json(['status' => 'success', 'cityAlias' => $city->alias]);
