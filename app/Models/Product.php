@@ -234,18 +234,18 @@ class Product extends Model
 		$alias = $this->productType->alias ?? null;
 		if (!$alias) return false;
 
-		$weekDay = date('N', strtotime($flightAt));
+		$flightAt = Carbon::parse($flightAt)->format('d.m.Y');
 		
-		// Regular доступен для заказа только в будни
-		if (in_array($weekDay, [1, 2, 3, 4, 5]) && $alias == ProductType::REGULAR_ALIAS) return true;
+		//$weekDay = date('N', strtotime($flightAt));
 
-		// Ultimate доступен для заказа только в выходные
-		//if (in_array($weekDay, [6, 7]) && $alias == ProductType::ULTIMATE_ALIAS) return true;
+		// Regular доступен для заказа только в будни
+		//if (in_array($weekDay, [1, 2, 3, 4, 5]) && $alias == ProductType::REGULAR_ALIAS) return true;
+		if ($alias == ProductType::REGULAR_ALIAS
+			&& (in_array(date('w', strtotime($flightAt)), [0, 6])
+				|| in_array($flightAt, Deal::HOLIDAYS))
+		) return false;
 		
-		// Остальные тарифы доступны для заказа в любые дни
-		if ($alias != ProductType::REGULAR_ALIAS) return true;
-		
-		return false;
+		return true;
 	}
 
 	/**
