@@ -114,7 +114,7 @@
 													</p>
 													<p class="time">{{ $product['duration'] }} @lang('main.price.мин')</p>
 													@if($product['icon_file_path'])
-														<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
+														<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="" width="132">
 													@endif
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</p>
