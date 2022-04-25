@@ -20,8 +20,6 @@ class PayAnyWayService {
 	const CURRENCY_CODE = 'RUB';
 	const DATA_INTEGRITY_CHECK_CODE = 'Jr#47%Hdk';
 	
-	//private static $log = null;
-	
 	/**
 	 * @param $payAccountNumber
 	 * @param Bill $bill

@@ -112,8 +112,8 @@ ul.tabs2__caption li.active{background:#FF8200;color:white;}
 }
 }
 .h4plat{
-        position: absolute;
-    z-index: 99999;
+    position: absolute;
+    z-index: 999;
     background-color: rgb(246, 246, 248);
     padding: 0px 20px;
     width: 100%;

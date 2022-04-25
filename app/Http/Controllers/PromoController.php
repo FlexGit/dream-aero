@@ -176,12 +176,14 @@ class PromoController extends Controller
 
 		$rules = [
 			'name' => ['required', 'max:255'],
+			'alias' => ['required', 'max:255'],
 			'image_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Имя',
+				'alias' => 'Алиас',
 				'image_file' => 'Изображение',
 			]);
 		if (!$validator->passes()) {
@@ -202,6 +204,8 @@ class PromoController extends Controller
 		$promo->detail_text = $this->request->detail_text ?? '';
 		$promo->is_published = (bool)$this->request->is_published;
 		$promo->is_active = (bool)$this->request->is_active;
+		$promo->meta_title = $this->request->meta_title;
+		$promo->meta_description = $this->request->meta_description;
 		$promo->active_from_at = $this->request->active_from_at ? Carbon::parse($this->request->active_from_at)->format('Y-m-d') : null;
 		$promo->active_to_at = $this->request->active_to_at ? Carbon::parse($this->request->active_to_at)->format('Y-m-d') : null;
 		$data = $promo->data_json;
@@ -235,12 +239,14 @@ class PromoController extends Controller
 
 		$rules = [
 			'name' => ['required', 'max:255'],
+			'alias' => ['required', 'max:255'],
 			'image_file' => 'sometimes|image|max:512',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Имя',
+				'alias' => 'Алиас',
 				'image_file' => 'Изображение',
 			]);
 		if (!$validator->passes()) {
@@ -265,6 +271,8 @@ class PromoController extends Controller
 		$promo->detail_text = $this->request->detail_text ?? '';
 		$promo->is_published = (bool)$this->request->is_published;
 		$promo->is_active = (bool)$this->request->is_active;
+		$promo->meta_title = $this->request->meta_title;
+		$promo->meta_description = $this->request->meta_description;
 		$promo->active_from_at = $this->request->active_from_at ? Carbon::parse($this->request->active_from_at)->format('Y-m-d') : null;
 		$promo->active_to_at = $this->request->active_to_at ? Carbon::parse($this->request->active_to_at)->format('Y-m-d') : null;
 		$data = $promo->data_json;
@@ -339,5 +347,19 @@ class PromoController extends Controller
 		}
 
 		return response()->json(['status' => 'success']);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function imageUpload() {
+		$file = $this->request->file('file');
+		if (!$file->move(public_path('/upload/promo/'), $file->getClientOriginalName())) {
+			return response()->json(['status' => 'error', 'reason' => 'Не удалось загрузить файл']);
+		}
+		
+		return response()->json([
+			'location' => url('/upload/promo/' . $file->getClientOriginalName()),
+		]);
 	}
 }

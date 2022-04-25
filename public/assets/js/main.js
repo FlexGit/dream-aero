@@ -357,7 +357,8 @@ function calcAmount() {
 		certificate: certificate,
 		source: 'web',
 	};
-	console.log(data);
+
+	//console.log(data);
 
 	$.ajax({
 		type: 'GET',

@@ -1,17 +1,29 @@
-<form id="popup-review" class="mfp-hide popup popup-review ajax_form">
+<form id="popup-review" class="popup popup-review ajax_form">
 	<p class="popup-title">
-		ОСТАЛИСЬ ПОД ВПЕЧАТЛЕНИЕМ?
+		@lang('main.modal-review.остались-под-впечатлением')
 	</p>
 	<p class="popup-description">
-		Оставьте свой отзыв и мы опубликуем его на сайте!
+		@lang('main.modal-review.оставьте-свой-отзыв')
 	</p>
 	<fieldset>
-		<input type="text" id="name" name="name" class="popup-input" placeholder="КАК ВАС ЗОВУТ?*" required>
-		<textarea id="body" name="body" class="popup-area" placeholder="текст отзыва"></textarea>
-		<div class="block">
-			<input type="checkbox" id="consent" name="consent" value="1" required>
-			<span class="nice-select-label">я согласен на обработку моих данных</span>
+		<input type="text" id="name" name="name" class="popup-input" placeholder="@lang('main.modal-review.ваше-имя')" required>
+		<textarea id="body" name="body" class="popup-area" placeholder="@lang('main.modal-review.текст-отзыва')"></textarea>
+
+		<div class="consent-container">
+			<label class="cont">
+				@lang('main.modal-callback.я-согласен-на-обработку-моих-данных')
+				<input type="checkbox" name="consent" value="1">
+				<span class="checkmark" style="padding-bottom: 0;"></span>
+			</label>
 		</div>
-		<button type="button" class="popup-submit button-pipaluk button-pipaluk-orange js-review-send"><i>отправить</i></button>
+
+		<div style="margin-top: 10px;">
+			<div class="alert alert-success hidden" role="alert">
+				@lang('main.modal-review.отзыв-успешно-отправлен')
+			</div>
+			<div class="alert alert-danger hidden" role="alert"></div>
+		</div>
+
+		<button type="button" class="popup-submit button-pipaluk button-pipaluk-grey js-review-btn" disabled><i>@lang('main.common.отправить')</i></button>
 	</fieldset>
 </form>

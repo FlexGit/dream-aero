@@ -6,6 +6,10 @@
 		$title = 'Галерея';
 	} elseif($type == app('\App\Models\Content')::REVIEWS_TYPE) {
 		$title = 'Отзывы';
+	} elseif($type == app('\App\Models\Content')::GUESTS_TYPE) {
+		$title = 'Гости';
+	} elseif($type == app('\App\Models\Content')::PAGES_TYPE) {
+		$title = 'Страницы';
 	}
 @endphp
 
@@ -50,8 +54,10 @@
 						<tr>
 							<th class="text-center">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя @else Заголовок @endif</th>
 							<th class="text-center d-none d-lg-table-cell">Город</th>
-							<th class="text-center d-none d-xl-table-cell">Дата публикации</th>
-							<th class="text-center d-none d-xl-table-cell">Активность</th>
+							@if($type != app('\App\Models\Content')::PAGES_TYPE) {
+								<th class="text-center d-none d-xl-table-cell">Дата публикации</th>
+								<th class="text-center d-none d-xl-table-cell">Активность</th>
+							@endif
 							<th class="text-center d-none d-xl-table-cell"></th>
 						</tr>
 						</thead>

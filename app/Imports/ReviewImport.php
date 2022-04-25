@@ -31,24 +31,21 @@ class ReviewImport implements OnEachRow, WithProgressBar
 		try {
 			\DB::beginTransaction();
 
-			$city = HelpFunctions::getEntityByAlias(City::class, trim($row[1]));
-			$cityId = $city ? $city->id : 0;
-
 			$parent = HelpFunctions::getEntityByAlias(Content::class, 'reviews');
 			$parentId = $parent ? $parent->id : 0;
-
+			
 			$content = new Content();
 			$content->title = trim($row[0]);
 			$content->alias = (string)\Webpatser\Uuid\Uuid::generate();
-			$content->preview_text = trim($row[2]);
-			$content->detail_text = trim($row[3]);
+			$content->preview_text = trim($row[1]);
+			$content->detail_text = trim($row[2]);
 			$content->parent_id = $parentId;
-			$content->city_id = $cityId;
-			$content->created_at = $row[4] ? Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])) : Carbon::now();
-			$content->updated_at = $row[5] ? Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5])) : Carbon::now();
-			$content->published_at = $row[4] ? Carbon::parse(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])) : Carbon::now();
-			$content->meta_title = 'Отзыв от клиента ' . trim($row[0]) . ($city ? ' из города ' . $city->name : '') . ' от ' . Carbon::parse($content->created_at)->format('d.m.Y');
-			$content->meta_description = 'Отзыв от клиента ' . trim($row[0]) . ($city ? ' из города ' . $city->name : '') . ' от ' . Carbon::parse($content->created_at)->format('d.m.Y');
+			$content->city_id = 0;
+			$content->created_at = $row[3] ? gmdate('Y-m-d H:i:s', $row[3]) : Carbon::now();
+			$content->updated_at = $row[4] ? gmdate('Y-m-d H:i:s', $row[4]) : Carbon::now();
+			$content->published_at = $row[5] ? gmdate('Y-m-d H:i:s', $row[5]) : Carbon::now();
+			$content->meta_title = 'Отзыв от клиента ' . trim($row[0]) . ' от ' . Carbon::parse($content->created_at)->format('d.m.Y');
+			$content->meta_description = 'Отзыв от клиента ' . trim($row[0]) . ' от ' . Carbon::parse($content->created_at)->format('d.m.Y');
 			$content->save();
 
 			\DB::commit();

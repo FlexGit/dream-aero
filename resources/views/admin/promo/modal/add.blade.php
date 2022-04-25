@@ -1,5 +1,3 @@
-<input type="hidden" id="id" name="id">
-
 <div class="form-group">
 	<label for="name">Наименование</label>
 	<input type="text" class="form-control" id="name" name="name" placeholder="Наименование">
@@ -32,7 +30,7 @@
 </div>
 <div class="form-group">
 	<label for="detail_text">Подробное описание</label>
-	<textarea class="form-control" id="detail_text" name="detail_text" rows="5"></textarea>
+	<textarea class="form-control tinymce" id="detail_text" name="detail_text" rows="5"></textarea>
 </div>
 <div class="form-group">
 	<label for="is_published">Для публикации</label>
@@ -62,4 +60,12 @@
 		<input type="file" class="custom-file-input" id="image_file" name="image_file">
 		<label class="custom-file-label" for="image_file">Выбрать файл</label>
 	</div>
+</div>
+<div class="form-group">
+	<label for="meta_title">Meta Title</label>
+	<input type="text" class="form-control" id="meta_title" name="meta_title" placeholder="Meta Title">
+</div>
+<div class="form-group">
+	<label for="meta_description">Meta Description</label>
+	<textarea class="form-control" id="meta_description" name="meta_description"></textarea>
 </div>

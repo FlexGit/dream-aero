@@ -112,9 +112,9 @@
 							[{{ $bill->paymentMethod->name }}]
 							@if ($bill->paymentMethod->alias == app('\App\Models\PaymentMethod')::ONLINE_ALIAS)
 								@if ($bill->link_sent_at)
-									<a href="javascript:void(0)" class="js-sent-pay-link ml-2" data-id="{{ $bill->id }}" title="Ссылка на оплату отправлена {{ $bill->link_sent_at }}"><i class="far fa-envelope-open"></i></a>
+									<a href="javascript:void(0)" class="js-send-pay-link ml-2" data-id="{{ $bill->id }}" title="Ссылка на оплату отправлена {{ $bill->link_sent_at }}"><i class="far fa-envelope-open"></i></a>
 								@else
-									<a href="javascript:void(0)" class="js-sent-pay-link ml-2" data-id="{{ $bill->id }}" title="Ссылка на оплату пока не отправлена"><i class="far fa-envelope"></i></a>
+									<a href="javascript:void(0)" class="js-send-pay-link ml-2" data-id="{{ $bill->id }}" title="Ссылка на оплату пока не отправлена"><i class="far fa-envelope"></i></a>
 								@endif
 							@endif
 						@endif
@@ -211,6 +211,11 @@
 											{{ $position->certificate->number }}
 										@else
 											без номера
+										@endif
+										@if ($position->certificate_sent_at)
+											<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат отправлен {{ $position->certificate_sent_at }}"><i class="far fa-envelope-open"></i></a>
+										@else
+											<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат пока не отправлен"><i class="far fa-envelope"></i></a>
 										@endif
 									</a>
 								</div>

@@ -23,7 +23,6 @@ use App\Http\Controllers\DealController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\PromocodeController;
 use App\Http\Controllers\StatusController;
-use App\Http\Controllers\PayController;
 use App\Http\Controllers\WikiController;
 use App\Http\Controllers\RevisionController;
 
@@ -33,7 +32,6 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 
 /*
@@ -49,7 +47,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 
 //Auth::routes(['register' => false]);
 
-Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
+Route::group(['middleware' => ['setlanguage']], function () {
+	Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	// Авторизация
 	/*Route::get('/register', [RegisteredUserController::class, 'create'])
 		->middleware('guest')
@@ -178,13 +177,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('bill/{id}/edit', [BillController::class, 'edit']);
 
 		Route::post('bill/paylink/send', [BillController::class, 'sendPayLink'])->name('sendPayLink');
-
-		// Payments
-		/*Route::get('pay/request/{id}/{city_id}', [PayController::class, 'sendPayRequest'])->name('sendPayRequest');
-		Route::get('pay/success', [PayController::class, 'paySuccess'])->name('successPay');
-		Route::get('pay/fail', [PayController::class, 'payFail'])->name('failPay');
-		Route::get('pay/return', [PayController::class, 'payReturn'])->name('returnPay');
-		Route::get('pay/callback', [PayController::class, 'payCallback'])->name('callbackPay');*/
+		Route::post('certificate/send', [CertificateController::class, 'sendCertificate'])->name('sendCertificate');
 
 		// Скидки
 		Route::get('discount', [DiscountController::class, 'index'])->name('discountIndex');
@@ -217,12 +210,16 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('pricing/list/ajax', [PricingController::class, 'getListAjax'])->name('pricingList');
 
 		Route::put('pricing/{city_id}/{product_id}', [PricingController::class, 'update']);
+		Route::delete('pricing/{city_id}/{product_id}/certificate_template/delete', [PricingController::class, 'deleteCertificateTemplate']);
 		Route::delete('pricing/{city_id}/{product_id}', [PricingController::class, 'delete']);
 
 		Route::get('pricing/{city_id}/{product_id}/edit', [PricingController::class, 'edit']);
 		Route::get('pricing/{city_id}/{product_id}/delete', [PricingController::class, 'confirm']);
 		Route::get('pricing/{city_id}/{product_id}/show', [PricingController::class, 'show']);
-
+		
+		Route::get('certificate/template/{city_id}/{product_id}/download', [PricingController::class, 'getCertificateTemplateFile'])->name('downloadCertificateTemplateFile');
+		Route::post('certificate/template/{city_id}/{product_id}/delete', [PricingController::class, 'deleteCertificateTemplateFile']);
+		
 		// Города
 		Route::get('city', [CityController::class, 'index'])->name('cityIndex');
 		Route::get('city/list/ajax', [CityController::class, 'getListAjax'])->name('cityList');
@@ -354,6 +351,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('promo/{id}/delete', [PromoController::class, 'confirm']);
 		Route::get('promo/{id}/show', [PromoController::class, 'show']);
 		Route::put('promo/{id}/image/delete', [PromoController::class, 'deleteImage']);
+		Route::post('promo/image/upload', [PromoController::class, 'imageUpload']);
 
 		// Уведомления
 		Route::get('notification', [NotificationController::class, 'index'])->name('notificationIndex');
@@ -391,7 +389,6 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	});
 });
 
-Route::group(['middleware' => ['setlanguage']], function () {
 	Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 		Route::group(['middleware' => ['citycheck']], function () {
 			Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
@@ -409,9 +406,11 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
 			Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
 			Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
+			Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
 			Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
 			
 			Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
+			Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
 			
 			Route::get('lechenie-aerofobii', [MainController::class, 'flyFear'])->name('lechenie-aerofobii');
 			
@@ -430,8 +429,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
 			Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
 			
-			Route::get('vse-akcii', [MainController::class, 'getPromos'])->name('vse-akcii');
-			Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromo'])->name('vse-akcii');
+			Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromos'])->name('vse-akcii');
 			
 			Route::get('galereya', [MainController::class, 'getGallery'])->name('galereya');
 			
@@ -442,11 +440,16 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
 			Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
 			Route::get('modal/review', [MainController::class, 'getReviewModal']);
-			Route::get('modal/scheme', [MainController::class, 'getSchemeModal']);
-		
+			Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
+			Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
+			Route::get('modal/vip', [MainController::class, 'getVipFlightModal']);
+			
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
+			
+			Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
+			Route::post('question', [MainController::class, 'question'])->name('questionStore');
 		});
 	});
 	
@@ -466,8 +469,12 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('variantyi-poleta', [MainController::class, 'flightTypes'])->name('variantyi-poleta');
 			Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
 			Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
+			Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
 			Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
 			Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
+			
+			Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
+			Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
 			
 			Route::get('lechenie-aerofobii', [MainController::class, 'flyFear'])->name('lechenie-aerofobii');
 			
@@ -486,8 +493,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
 			Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
 			
-			Route::get('vse-akcii', [MainController::class, 'getPromos'])->name('vse-akcii');
-			Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromo'])->name('vse-akcii');
+			Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromos'])->name('vse-akcii');
 			
 			Route::get('galereya', [MainController::class, 'getGallery'])->name('galereya');
 			
@@ -499,18 +505,23 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
 			Route::get('modal/review', [MainController::class, 'getReviewModal']);
 			Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
-		
+			Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
+			
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
+			
+			Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
+			Route::post('question', [MainController::class, 'question'])->name('questionStore');
 		});
 	});
-});
 
-Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
-Route::post('deal/certificate', [DealController::class, 'storeCertificate'])->name('dealCertificateStore');
-Route::post('deal/booking', [DealController::class, 'storeBooking'])->name('dealBookingStore');
+	Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
+	Route::post('deal/certificate', [DealController::class, 'storeCertificate'])->name('dealCertificateStore');
+	Route::post('deal/booking', [DealController::class, 'storeBooking'])->name('dealBookingStore');
+	Route::get('certificate/{uuid}/generate', [CertificateController::class, 'generateCertificate']);
 
-Route::fallback(function () {
-	abort(404);
+	Route::fallback(function () {
+		abort(404);
+	});
 });

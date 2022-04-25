@@ -28,6 +28,8 @@ class CreatePromosTable extends Migration
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->timestamp('active_from_at')->nullable()->comment('дата начала активности');
 			$table->timestamp('active_to_at')->nullable()->comment('дата окончания активности');
+			$table->text('meta_title')->nullable()->comment('meta title');
+			$table->text('meta_description')->nullable()->comment('meta description');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();

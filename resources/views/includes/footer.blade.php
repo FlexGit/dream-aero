@@ -27,11 +27,9 @@
 				<li>
 					<a href="{{ url('variantyi-poleta') }}">@lang('main.нижнее-меню.варианты-полета')</a>
 				</li>
-				@if(App::isLocale('ru'))
-					<li>
-						<a href="{{ url('news') }}">@lang('main.нижнее-меню.новости')</a>
-					</li>
-				@endif
+				<li>
+					<a href="{{ url('news') }}">@lang('main.нижнее-меню.новости')</a>
+				</li>
 				<li>
 					<a href="{{ url('instruktazh') }}">@lang('main.нижнее-меню.инструктаж')</a>
 				</li>
@@ -41,11 +39,9 @@
 				<li>
 					<a href="{{ url('galereya') }}">@lang('main.нижнее-меню.галерея')</a>
 				</li>
-				@if(App::isLocale('ru'))
-					<li>
-						<a href="{{ url('reviews') }}">@lang('main.нижнее-меню.отзывы')</a>
-					</li>
-				@endif
+				<li>
+					<a href="{{ url('reviews') }}">@lang('main.нижнее-меню.отзывы')</a>
+				</li>
 				<li>
 					<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/contacts' : 'contacts') }}">@lang('main.нижнее-меню.контакты')</a>
 				</li>
@@ -59,7 +55,7 @@
 			<div class="advert" style="font-size: 13px;">@lang('main.нижнее-меню.копирование-материалов')</div>
 		</div>
 		<div class="footer-menu">
-			<span>
+			<span {{ App::isLocale('en') ? 'style=margin-left:0;' : '' }}>
 				<a href="https://www.rossiya-airlines.com/" target="_blank">
 					<img style="width: 172px;margin:0 15px 15px 15px;" src="{{ asset('img/logo-white.webp') }}" alt="">
 				</a>
@@ -72,7 +68,7 @@
 	</div>
 	<input type="hidden" id="city_id" name="city_id" value="{{ Request::get('cityId') ?? 1 }}">
 
-	{{--<script async type="text/javascript">
+	<script async type="text/javascript">
 		(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter46672077 = new Ya.Metrika({ id:46672077, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
 	</script>
 	<script type="text/javascript">
@@ -90,7 +86,10 @@
 	<div class="lazy" id="vk_community_messages"></div>
 	<script async type="text/javascript">
 		VK.Widgets.CommunityMessages("vk_community_messages", 65405270, {widgetPosition: "left",disableExpandChatSound: "1",disableNewMessagesSound: "1",tooltipButtonText: "Есть вопрос?"});
-	</script>--}}
+	</script>
+	<script async type="text/javascript">
+		!function(){var e={"token":"{{ $city->phone }}","position":"right","bottomSpacing":"20","callToActionMessage":"","displayOn":"mobile","subtitle":"","message":{"name":"Dream Aero","content":"Здравствуйте, чем мы можем помочь?"}},t=document.location.protocol+"//bothelp.io",o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=t+"/widget-folder/widget-whatsapp-chat.js",o.onload=function(){BhWidgetWhatsappChat.init(e)};var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(o,n)}();
+	</script>
 </footer>
 
 <div class="go-up"></div>
@@ -110,21 +109,6 @@
 </div>
 
 <div class="mfp-hide popup ajax_form" id="popup" style="display: none;">
-	{{--<div style="text-align: center;">
-		<img src="{{ url('assets/img/planes.gif') }}" alt="">
-	</div>--}}
+	<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+	<div class="popup-container"></div>
 </div>
-
-{{--<div id="popup-welcome" class="mfp-hide popup popup-welcome">
-	<p class="popup-title">спасибо за заявку!</p>
-	<p class="popup-description">
-		Мы скоро свяжемся с вами
-	</p>
-</div>
-
-<form id="online-welcome" class="mfp-hide popup popup-welcome">
-	<p class="popup-title">спасибо за заявку!</p>
-	<p class="popup-description">
-		Переводим на страницу оплаты
-	</p>
-</form>--}}

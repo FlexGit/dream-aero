@@ -39,7 +39,7 @@ class ImportReview extends Command
 	public function handle()
 	{
 		$this->output->title('Starting import');
-		(new ReviewImport)->withOutput($this->output)->import(storage_path('app/public/review.xlsx'));
+		(new ReviewImport)->withOutput($this->output)->import(storage_path('app/public/modx_reviews.xlsx'));
 		$this->output->success('Import successful');
 	}
 }

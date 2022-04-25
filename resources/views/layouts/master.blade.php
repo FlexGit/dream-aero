@@ -2,8 +2,9 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
 	<title>
-        {{ config('app.name') }}
+		@yield('title')
 	</title>
+	<meta name="desctiption" content="@yield('description')">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -16,7 +17,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<!-- Facebook Pixel Code -->
-	{{--<script>
+	<script>
 		!function(f,b,e,v,n,t,s)
 		{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 			n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -28,19 +29,19 @@
 		fbq('init', '654707288770397');
 		fbq('track', 'PageView');
 	</script>
-	<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=654707288770397&ev=PageView&noscript=1" alt="" /></noscript>--}}
+	<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=654707288770397&ev=PageView&noscript=1" alt="" /></noscript>
 	<!-- End Facebook Pixel Code -->
 
-	{{--<script>
+	<script>
 		(function() {
 			var ta = document.createElement('script'); ta.type = 'text/javascript'; ta.async = true;
 			ta.src = 'https://analytics.tiktok.com/i18n/pixel/sdk.js?sdkid=BTQQPEORQH54JI5RFPN0';
 			var s = document.getElementsByTagName('script')[0];
 			s.parentNode.insertBefore(ta, s);
 		})();
-	</script>--}}
+	</script>
 
-	{{--<script async src="https://www.googletagmanager.com/gtag/js?id=AW-952284596"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=AW-952284596"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
@@ -60,7 +61,7 @@
 			});
 			return false;
 		}
-	</script>--}}
+	</script>
 
 	<!-- CSS -->
 	@include('includes.css')

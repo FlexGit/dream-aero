@@ -98,7 +98,21 @@ class City extends Model
 		self::RU_VERSION,
 		self::EN_VERSION,
 	];
-
+	
+	const IN_CITIES = [
+		self::MSK_ALIAS => 'Москве',
+		self::SPB_ALIAS => 'Санкт-Петербурге',
+		self::VRN_ALIAS => 'Воронеже',
+		self::KZN_ALIAS => 'Казани',
+		self::KRD_ALIAS => 'Краснодаре',
+		self::NNV_ALIAS => 'Нижнем Новгороде',
+		self::SAM_ALIAS => 'Самаре',
+		self::EKB_ALIAS => 'Екатеринбурге',
+		self::NSK_ALIAS => 'Новосибириске',
+		self::KHV_ALIAS => 'Хабаровске',
+		self::DC_ALIAS => 'Washington DC',
+	];
+	
 	/*const ATTRIBUTES = [
 		'name' => 'Наименование',
 		'alias' => 'Алиас',
@@ -174,5 +188,11 @@ class City extends Model
 			'id' => $this->id,
 			'name' => $this->name,
 		];
+	}
+
+	public function phoneFormatted()
+	{
+		$phoneCleared = preg_replace( '/[^0-9]/', '', $this->phone);
+		return '+' . mb_substr($phoneCleared, 0, 1) . ' (' . mb_substr($phoneCleared, 1, 3) . ') ' . mb_substr($phoneCleared, 4, 3) . '-' . mb_substr($phoneCleared, 7, 2) . '-' . mb_substr($phoneCleared, 9, 2);
 	}
 }

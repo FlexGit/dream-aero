@@ -70,6 +70,10 @@ class Product extends Model
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;*/
 	
+	const BASIC_ALIAS = 'basic';
+	const ADVANCED_ALIAS = 'advanced';
+	const EXPERT_ALIAS = 'expert';
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *

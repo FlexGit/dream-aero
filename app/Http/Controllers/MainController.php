@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Deal;
 use App\Models\LegalEntity;
+use App\Models\PaymentMethod;
+use App\Models\Promo;
 use App\Models\Promocode;
+use App\Models\Status;
 use App\Services\HelpFunctions;
 use App\Services\PayAnyWayService;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\Content;
@@ -40,7 +45,6 @@ class MainController extends Controller
 			abort(404);
 		}
 		
-		//$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		// "Наша команда"
@@ -60,10 +64,13 @@ class MainController extends Controller
 				->limit(10)
 				->get();
 		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'home_' . $city->alias);
 
 		return view('home', [
 			'users' => $users,
 			'reviews' => $reviews,
+			'page' => $page ?? new Content,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -172,7 +179,7 @@ class MainController extends Controller
 
 		$number = $this->request->promocode ?? '';
 		if (!$number) {
-			return response()->json(['status' => 'error', 'reason' => 'Не передан промокод']);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.не-передан-промокод')]);
 		}
 
 		$cityAlias = $this->request->session()->get('cityAlias');
@@ -193,10 +200,10 @@ class MainController extends Controller
 			})
 			->first();
 		if (!$promocode) {
-			return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.промокод-не-найден')]);
 		}
 
-		return response()->json(['status' => 'success', 'message' => 'Промокод применен', 'uuid' => $promocode->uuid]);
+		return response()->json(['status' => 'success', 'message' => trans('main.modal-booking.промокод-применен'), 'uuid' => $promocode->uuid]);
 	}
 	
 	/**
@@ -204,11 +211,19 @@ class MainController extends Controller
 	 */
 	public function about()
 	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
 		$flightSimulators = FlightSimulator::where('is_active', true)
 			->get();
-
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'about');
+		
 		return view('about', [
 			'flightSimulators' => $flightSimulators,
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
 		]);
 	}
 	
@@ -217,7 +232,16 @@ class MainController extends Controller
 	 */
 	public function virtualTour()
 	{
-		return view('virtual-tour');
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'virtual-tour');
+		
+		return view('virtual-tour', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
 	}
 	
 	/**
@@ -249,7 +273,16 @@ class MainController extends Controller
 	 */
 	public function giftFlight()
 	{
-		return view('gift-flight');
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'virtual-tour');
+		
+		return view('gift-flight', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
 	}
 
 	/**
@@ -257,7 +290,16 @@ class MainController extends Controller
 	 */
 	public function flightTypes()
 	{
-		return view('flight-types');
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'variantyi-poleta');
+		
+		return view('flight-types', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
 	}
 
 	/**
@@ -267,42 +309,73 @@ class MainController extends Controller
 	 */
 	public function instruction($simulator = null)
 	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
 		if ($simulator && $simulator == 'boeing-737-ng') {
-			return view('instruction-737-ng');
+			return view('instruction-737-ng', [
+				'page' => $page ?? new Content,
+				'city' => $city,
+				'cityAlias' => $cityAlias,
+			]);
 		}
 
 		if ($simulator && $simulator == 'airbus-a320') {
-			return view('instruction-a320');
+			return view('instruction-a320', [
+				'page' => $page ?? new Content,
+				'city' => $city,
+				'cityAlias' => $cityAlias,
+			]);
 		}
-
-		return view('instruction');
-	}
-	
-	/**
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-	 */
-	public function contacts()
-	{
-		$cityId = $this->request->session()->get('cityId') ?? 1;
 		
-		$locations = Location::where('is_active', true)
-			->where('city_id', $cityId)
-			->orderByRaw("FIELD(alias, 'afi') DESC")
-			->orderByRaw("FIELD(alias, 'veg') DESC")
-			->orderBy('name')
-			->get();
-
-		return view('contacts', [
-			'locations' => $locations,
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'instruction');
+		
+		return view('instruction', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
 		]);
 	}
 	
 	/**
+	 * @param null $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function price()
+	public function contacts($cityAlias = null)
 	{
-		$cityAlias = $this->request->session()->get('cityAlias');
+		if ($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) {
+			abort(404);
+		}
+		
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		$locations = Location::where('is_active', true)
+			->where('city_id', $city->id)
+			->orderByRaw("FIELD(alias, 'afi') DESC")
+			->orderByRaw("FIELD(alias, 'veg') DESC")
+			->orderBy('name')
+			->get();
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'contacts_' . $city->alias);
+		
+		return view('contacts', [
+			'locations' => $locations,
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+	
+	/**
+	 * @param null $cityAlias
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function price($cityAlias = null)
+	{
+		if ($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) {
+			abort(404);
+		}
+		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		$productTypes = ProductType::where('is_active', true)
@@ -350,9 +423,12 @@ class MainController extends Controller
 			}
 		}
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'prices_' . $city->alias);
+		
 		return view('price', [
 			'productTypes' => $productTypes,
 			'products' => $products,
+			'page' => $page ?? new Content,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -411,14 +487,12 @@ class MainController extends Controller
 		$rules = [
 			'name' => 'required',
 			'body' => 'required|min:3',
-			'consent' => 'required',
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => 'Имя',
 				'body' => 'Текст отзыва',
-				'consent' => 'Согласие на обработку персональых данных',
 			]);
 		if (!$validator->passes()) {
 			$errors = [];
@@ -433,7 +507,7 @@ class MainController extends Controller
 
 		$reviewParentContent = HelpFunctions::getEntityByAlias(Content::class, Content::REVIEWS_TYPE);
 		if (!$reviewParentContent) {
-			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.повторите-позже')]);
 		}
 
 		$cityAlias = $this->request->session()->get('cityAlias');
@@ -452,10 +526,13 @@ class MainController extends Controller
 		$content->meta_description = 'Отзыв от клиента ' . $name . ' из города ' . $city->name . ' от ' . Carbon::now()->format('d.m.Y');
 		$content->is_active = 0;
 		if (!$content->save()) {
-			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.повторите-позже')]);
 		}
-
-		return response()->json(['status' => 'success', 'message' => 'Спасибо за Ваш отзыв!']);
+		
+		$job = new \App\Jobs\SendReviewEmail($name, $body);
+		$job->handle();
+		
+		return response()->json(['status' => 'success']);
 	}
 	
 	/**
@@ -497,10 +574,13 @@ class MainController extends Controller
 			->where('is_active', true)
 			->get();
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'oferta');
+		
 		return view('oferta', [
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'legalEntities' => $legalEntities,
+			'page' => $page ?? new Content,
 		]);
 	}
 	
@@ -512,9 +592,12 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'rules');
+		
 		return view('rules', [
 			'city' => $city,
 			'cityAlias' => $cityAlias,
+			'page' => $page ?? new Content,
 		]);
 	}
 	
@@ -526,9 +609,12 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'how-to-pay');
+		
 		return view('how-to-pay', [
 			'city' => $city,
 			'cityAlias' => $cityAlias,
+			'page' => $page ?? new Content,
 		]);
 	}
 	
@@ -582,14 +668,20 @@ class MainController extends Controller
 				->latest()
 				->get();
 			
+			$page = HelpFunctions::getEntityByAlias(Content::class, 'news');
+			
 			return view('news-list', [
 				'news' => $news,
 				'city' => $city,
 				'cityAlias' => $cityAlias,
+				'page' => $page ?? new Content,
 			]);
 		}
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function setRating()
 	{
 		if (!$this->request->ajax()) {
@@ -625,5 +717,393 @@ class MainController extends Controller
 		}
 		
 		return response()->json(['status' => 'success', 'rating_value' => $content->rating_value, 'rating_count' => $content->rating_count]);
+	}
+	
+	/**
+	 * @param null $alias
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function getPromos($alias = null)
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		$date = date('Y-m-d');
+		
+		if ($alias) {
+			$promo = Promo::where('alias', $alias)
+				->where('is_active', true)
+				->where('is_published', true)
+				->whereIn('city_id', [$city->id, 0])
+				->where(function ($query) use ($date) {
+					$query->where('active_from_at', '<=', $date)
+						->orWhereNull('active_from_at');
+				})
+				->where(function ($query) use ($date) {
+					$query->where('active_to_at', '>=', $date)
+						->orWhereNull('active_to_at');
+				})
+				->first();
+			
+			if (!$promo) {
+				abort(404);
+			}
+			
+			return view('promos-detail', [
+				'promo' => $promo,
+				'city' => $city,
+				'cityAlias' => $cityAlias,
+			]);
+		} else {
+			$promos = Promo::where('is_active', true)
+				->where('is_published', true)
+				->whereIn('city_id', [$city->id, 0])
+				->where(function ($query) use ($date) {
+					$query->where('active_from_at', '<=', $date)
+						->orWhereNull('active_from_at');
+				})
+				->where(function ($query) use ($date) {
+					$query->where('active_to_at', '>=', $date)
+						->orWhereNull('active_to_at');
+				})
+				->latest()
+				->get();
+			
+			$page = HelpFunctions::getEntityByAlias(Content::class, 'promos');
+			
+			return view('promos-list', [
+				'promos' => $promos,
+				'city' => $city,
+				'cityAlias' => $cityAlias,
+				'page' => $page ?? new Content,
+			]);
+		}
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function getGallery()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
+		$parentGallery = HelpFunctions::getEntityByAlias(Content::class, 'gallery');
+		
+		$gallery = Content::where('parent_id', $parentGallery->id)
+			->where('is_active', true)
+			->whereIn('city_id', [$city->id, 0])
+			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->latest()
+			->get();
+		
+		$parentGuests = HelpFunctions::getEntityByAlias(Content::class, 'guests');
+		
+		$guests = Content::where('parent_id', $parentGuests->id)
+			->where('is_active', true)
+			->whereIn('city_id', [$city->id, 0])
+			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->latest()
+			->get();
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'gallery');
+		
+		return view('gallery', [
+			'gallery' => $gallery,
+			'guests' => $guests,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+			'page' => $page ?? new Content,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function getReviews()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		$parentReviews = HelpFunctions::getEntityByAlias(Content::class, 'reviews');
+		
+		$reviews = Content::where('parent_id', $parentReviews->id)
+			->where('is_active', true)
+			->whereIn('city_id', [$city->id, 0])
+			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->latest()
+			->get();
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'reviews');
+		
+		return view('reviews-list', [
+			'reviews' => $reviews,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+			'page' => $page ?? new Content,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function getVipFlightModal()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$productAlias = $this->request->product_alias ?? '';
+		if (!$productAlias) {
+			return response()->json(['status' => 'error']);
+		}
+		
+		$cityId = 1;
+		
+		$product = Product::where('alias', $productAlias)
+			->first();
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return response()->json(['status' => 'error']);
+		}
+
+		$amount = $product->calcAmount(0, $cityId, 'web');
+		
+		$VIEW = view('modal.vip', [
+			'product' => $product,
+			'amount' => $amount,
+			'cityId' => $cityId,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function getCallbackModal()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$VIEW = view('modal.callback');
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function getReviewModal()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$VIEW = view('modal.review');
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function callback()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$rules = [
+			'name' => 'required',
+			'phone' => 'required',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'name' => trans('main.modal-booking.имя'),
+				'phone' => trans('main.modal-booking.телефон'),
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
+		}
+		
+		$name = trim(strip_tags($this->request->name));
+		$phone = trim(strip_tags($this->request->phone));
+		
+		$job = new \App\Jobs\SendCallbackEmail($name, $phone);
+		$job->handle();
+		
+		return response()->json(['status' => 'success']);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function question()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$rules = [
+			'name' => 'required',
+			'email' => 'required|email',
+			'body' => 'required',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'name' => trans('main.form-feedback.имя'),
+				'email' => trans('main.form-feedback.email'),
+				'body' => trans('main.form-feedback.текст'),
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
+		}
+		
+		$name = trim(strip_tags($this->request->name));
+		$email = trim(strip_tags($this->request->email));
+		$body = trim(strip_tags($this->request->body));
+		
+		$job = new \App\Jobs\SendQuestionEmail($name, $email, $body);
+		$job->handle();
+		
+		return response()->json(['status' => 'success']);
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function vipFlight()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		$productTypes = ProductType::where('is_active', true)
+			->where('alias', ProductType::VIP_ALIAS)
+			->where('version', $city->version)
+			->orderBy('name')
+			->get();
+		
+		$cityProducts = $city->products;
+		
+		$products = [];
+		foreach ($productTypes as $productType) {
+			$products[mb_strtoupper($productType->alias)] = [];
+			
+			foreach ($productType->products ?? [] as $product) {
+				foreach ($cityProducts ?? [] as $cityProduct) {
+					if ($product->id != $cityProduct->id) continue;
+					
+					$price = $cityProduct->pivot->price;
+					if ($cityProduct->pivot->discount) {
+						$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
+					}
+					
+					$pivotData = json_decode($cityProduct->pivot->data_json, true);
+					
+					$products[mb_strtoupper($productType->alias)][$product->alias] = [
+						'id' => $product->id,
+						'name' => $product->name,
+						'alias' => $product->alias,
+						'duration' => $product->duration,
+						'price' => round($price),
+						'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
+						'is_hit' => (bool)$cityProduct->pivot->is_hit,
+						'is_booking_allow' => false,
+						'is_certificate_purchase_allow' => false,
+						'icon_file_path' => (is_array($product->data_json) && array_key_exists('icon_file_path', $product->data_json)) ? $product->data_json['icon_file_path'] : '',
+						'user' => [
+							'fio' => $product->user ? $product->user->fio() : '',
+							'instagram' => ($product->user && array_key_exists('instagram', $product->user->data_json)) ? $product->user->data_json['instagram'] : '',
+						],
+					];
+					
+					if (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) {
+						$products[mb_strtoupper($productType->alias)][$product->alias]['is_booking_allow'] = true;
+					}
+					if (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) {
+						$products[mb_strtoupper($productType->alias)][$product->alias]['is_certificate_purchase_allow'] = true;
+					}
+				}
+			}
+		}
+
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'vip');
+		
+		return view('vipflight', [
+			'page' => $page ?? new Content,
+			'products' => $products,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function certificateForm()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		$products = $city->products()
+			->orderBy('product_type_id')
+			->orderBy('duration')
+			->get();
+		
+		return view('certificate-form', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'product' => '',
+			'products' => $products ?? [],
+		]);
+	}
+	
+	/**
+	 * @param $uuid
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function payLink($uuid)
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		if (!$city->pay_account_number) {
+			return view('pay', [
+				'page' => $page ?? new Content,
+				'city' => $city,
+				'html' => '',
+				'error' => trans('main.pay.не-указан-номер-счета')
+			]);
+		}
+		
+		$paymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, PaymentMethod::ONLINE_ALIAS);
+		$status = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+		
+		$bill = Bill::where('uuid', $uuid)
+			->where('payment_method_id', $paymentMethod->id)
+			->where('status_id', $status->id)
+			->whereNull('payed_at')
+			->first();
+		if (!$bill) {
+			return view('pay', [
+				'page' => $page ?? new Content,
+				'city' => $city,
+				'html' => '',
+				'error' => trans('main.pay.счет-не-найден')
+			]);
+		}
+
+		$payFormHtml = PayAnyWayService::generatePayForm($city->pay_account_number, $bill);
+		
+		return view('pay', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'html' => $payFormHtml ?? '',
+			'error' => ''
+		]);
 	}
 }

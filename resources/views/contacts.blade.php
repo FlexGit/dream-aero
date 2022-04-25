@@ -1,5 +1,10 @@
 @extends('layouts.master')
 
+@section('title')
+	{{ App::isLocale('en') ? $page->meta_title_en : $page->meta_title }}
+@stop
+@section('description', App::isLocale('en') ? $page->meta_description_en : $page->meta_description)
+
 @section('content')
 	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.contacts.title')</span></div>
 
@@ -71,10 +76,10 @@
 						</ul>
 
 						@if (array_key_exists('scheme_file_path', $location->data_json) && $location->data_json['scheme_file_path'])
-							<a class="popup-with-form contacts-button button-pipaluk button-pipaluk-white" href="javascript:void(0)" data-modal="scheme" data-alias="{{ $location->id }}"><i>@lang('main.contacts.как-нас-найти')</i></a>
+							<a href="javascript: void(0)" class="contacts-button button-pipaluk button-pipaluk-white popup-with-form" data-popup-type="scheme" data-alias="{{ $location->id }}"><i>@lang('main.contacts.как-нас-найти')</i></a>
 						@endif
 
-						<a class="popup-with-form contacts-button button-pipaluk button-pipaluk-white" href="{{ url('#popup-call-back') }}"><i>@lang('main.contacts.заказать-звонок')</i></a>
+						<a href="javascript: void(0)" class="contacts-button button-pipaluk button-pipaluk-white popup-with-form" data-popup-type="callback"><i>@lang('main.contacts.заказать-звонок')</i></a>
 						<br/>
 					</div>
 				</div>
@@ -86,43 +91,89 @@
 
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/contactstyle.css') }}">
+	<style>
+		.popup-map {
+			max-width: 930px;
+			padding: 55px 106px 50px;
+		}
+		.popup-map img {
+			max-width: 100%;
+			height: inherit;
+		}
+		@media screen and (max-width: 767px) {
+			.map {
+				float: none;
+				width: 100%;
+				min-height: 300px;
+			}
+		}
+		@media screen and (max-width: 767px) {
+			.contacts-inner {
+				min-height: auto;
+				float: none;
+				width: 100%;
+				padding-top: 30px;
+				padding-bottom: 30px;
+				padding-left: 15px;
+			}
+		}
+	</style>
 @endpush
 
 @push('scripts')
 	<script>
 		$(function() {
-			$('.popup-with-form').magnificPopup({
-				type: 'inline',
-				preloader: false,
-				removalDelay: 300,
-				mainClass: 'mfp-fade',
-				callbacks: {
-					open: function() {
-						$.magnificPopup.instance.close = function() {
-							//$('#popup').hide();
-							$.magnificPopup.proto.close.call(this);
-						};
-
-						var mp = $.magnificPopup.instance,
-							t = $(mp.currItem.el[0]);
-
-						$.ajax({
-							type: 'GET',
-							url: '/modal/' + t.data('modal') + '/' + t.data('alias'),
-							success: function (result) {
-								console.log(result);
-								if (result.status != 'success') {
-									return;
-								}
-
-								var $popup = $('#popup');
-
-								$popup.html(result.html);
-							}
-						});
-					}
-				}
+			$(document).on('click', '.popup-with-form', function(e) {
+				popup($(this));
 			});
+
+			function popup($el) {
+				$.magnificPopup.open({
+					items: {
+						src: '#popup'
+					},
+					type: 'inline',
+					preloader: false,
+					removalDelay: 300,
+					mainClass: 'mfp-fade',
+					callbacks: {
+						open: function () {
+							$.magnificPopup.instance.close = function () {
+								$.magnificPopup.proto.close.call(this);
+							};
+
+							var $popup = $('#popup');
+
+							$popup.hide();
+
+							var url = '';
+
+							switch ($el.data('popup-type')) {
+								case 'scheme':
+									url = '/modal/scheme/' + $el.data('alias');
+									break;
+								case 'callback':
+									url = '/modal/callback';
+									break;
+							}
+
+							$.ajax({
+								type: 'GET',
+								url: url,
+								success: function (result) {
+									if (result.status != 'success') {
+										return;
+									}
+
+									$popup.addClass('popup-map');
+									$popup.find('.popup-container').html(result.html);
+									$popup.show();
+								}
+							});
+						}
+					}
+				});
+			}
 		});
 	</script>
 @endpush

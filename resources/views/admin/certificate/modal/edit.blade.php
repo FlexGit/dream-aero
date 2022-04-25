@@ -19,3 +19,13 @@
 		@endforeach
 	</select>
 </div>
+<div class="form-group">
+	<label for="file">Файл</label>
+	&nbsp;&nbsp;[
+	@if(file_exists(storage_path('app/private/certificate/' . $certificate->uuid . '.jpg')))
+		<a href="{{ storage_path('app/private/certificate/' . $certificate->uuid . '.jpg') }}" target="_blank">скачать</a>
+	@else
+		не найден
+	@endif
+	]
+</div>

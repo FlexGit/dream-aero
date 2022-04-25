@@ -1,5 +1,10 @@
 @extends('layouts.master')
 
+@section('title')
+	{{ App::isLocale('en') ? $page->meta_title_en : $page->meta_title }}
+@stop
+@section('description', App::isLocale('en') ? $page->meta_description_en : $page->meta_description)
+
 @section('content')
 	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.o-trenazhere.title')</span></div>
 
@@ -183,7 +188,7 @@
 		</div>
 	</article>
 
-	@include('forms.feedback')
+	@include('forms.question')
 @endsection
 
 @push('css')
@@ -258,11 +263,7 @@
 
 										var $popup = $('#popup');
 
-										$popup.html(result.html).find('select').niceSelect();
-
-										//var productTypeAlias = $popup.find('#product').find(':selected').data('product-type-alias'),
-										//weekDays = (productTypeAlias == 'regular') ? [0, 6] : [],
-										//holidays = $popup.find('#holidays').val();
+										$popup.find('.popup-container').html(result.html).find('select').niceSelect();
 
 										calcAmount();
 
@@ -308,7 +309,7 @@
 
 										var $popup = $('#popup');
 
-										$popup.html(result.html).find('select').niceSelect();
+										$popup.find('.popup-container').html(result.html).find('select').niceSelect();
 
 										calcAmount();
 
@@ -509,9 +510,9 @@
 							return;
 						}
 
-						/*yaCounter46672077.reachGoal('SendOrder');
+						yaCounter46672077.reachGoal('SendOrder');
 						gtag_report_conversion();
-						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});
 
 						$alertSuccess.removeClass('hidden');
 						$popup.find('#name, #email, #phone, #flight_date').val('');

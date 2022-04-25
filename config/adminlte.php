@@ -431,6 +431,16 @@ return [
 							'url'  => '/site/ru/reviews',
 							'icon' => '',
 						],
+						[
+							'text' => 'Гости',
+							'url'  => '/site/ru/guests',
+							'icon' => '',
+						],
+						[
+							'text' => 'Страницы',
+							'url'  => '/site/ru/pages',
+							'icon' => '',
+						],
 					],
 				],
 				/*[

@@ -146,12 +146,27 @@
 
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
-					data = $(this).serializeArray();
+					formId = $(this).attr('id'),
+					$certificateTemplateFile = $('#certificate_template_file_path');
+
+				var formData = new FormData($(this)[0]);
+				if ($certificateTemplateFile.val()) {
+					formData.append('certificate_template_file', $certificateTemplateFile.prop('files')[0]);
+				}
+
+				var realMethod = method;
+				if (method === 'PUT') {
+					formData.append('_method', 'PUT');
+					realMethod = 'POST';
+				}
 
 				$.ajax({
 					url: action,
-					type: method,
-					data: data,
+					type: realMethod,
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
@@ -176,6 +191,29 @@
 
 			$(document).on('change', '#filter_city_id', function(e) {
 				getList();
+			});
+
+			$(document).on('click', '.js-certificate-template-delete', function(e) {
+				if (!confirm('Вы уверены?')) {
+					return false;
+				}
+
+				$div = $(this).closest('div');
+
+				$.ajax({
+					url: '/certificate/template/' + $(this).data('city_id') + '/' + $(this).data('product_id') + '/delete',
+					type: 'POST',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						$div.hide();
+						toastr.success('Файл успешно удален');
+					}
+				});
 			});
 		});
 	</script>

@@ -2,6 +2,11 @@
 
 return [
 	'common.руб' => 'rub',
+	'common.отправить' => 'Send',
+	'common.оплатить' => 'Pay online',
+	'common.мин' => 'min',
+	
+	'error.проверьте-правильность-заполнения-полей-формы' => 'Check that the form fields are filled in correctly',
 	
 	'верхнее-меню.главная' => 'Home',
 	'верхнее-меню.о-тренажере' => 'About the simulator',
@@ -84,12 +89,12 @@ return [
 	'home.role.admin' => 'Flight attendant',
 	'home.role.pilot' => 'Pilot',
 
-	'feedback.у-вас-остались-вопросы' => 'QUESTIONS?',
-	'feedback.напишите-менеджеру-компании' => 'Send us a message, along with any questions you have for the Dream Aero manager. Tell us about your “dream” flight session or simply pick a day and time for takeoff!',
-	'feedback.как-вас-зовут' => 'WHAT IS YOUR NAME?',
-	'feedback.ваш-email' => 'YOUR E-MAIL',
-	'feedback.введите-сообщение' => 'ENTER YOUR MESSAGE',
-	'feedback.отправить' => 'SEND',
+	'question.у-вас-остались-вопросы' => 'QUESTIONS?',
+	'question.напишите-менеджеру-компании' => 'Send us a message, along with any questions you have for the Dream Aero manager. Tell us about your “dream” flight session or simply pick a day and time for takeoff!',
+	'question.как-вас-зовут' => 'WHAT IS YOUR NAME?',
+	'question.ваш-email' => 'YOUR E-MAIL',
+	'question.введите-сообщение' => 'ENTER YOUR MESSAGE',
+	'question.сообщение-успешно-отправлено' => 'Your message has been sent successfully!',
 	
 	'o-trenazhere.title' => 'ABOUT THE SIMULATOR',
 	'o-trenazhere.забронировать' => 'Book a flight',
@@ -276,7 +281,7 @@ return [
 		<li>Competitions with prizes (for example, for the best landing) can be arranged.</li>
 		<li>The price of a flight simulator for a corporate event &ndash; from 4000 per person.</li>
 	</ul>
-	<p>View <a href=":link">photos</a></p>',
+	<p><a href=":photos_links" rel="noopener noreferrer">View</a></p>',
 	'price.акции' => 'SPECIAL OFFERS',
 	'price.акция-день-рождения' => '<p>There is a 20% discount available if you lucky enough to visit us on YOUR BIRTHDAY (or 3 days before or after your birthday) (PLEASE NOTE! Discounts are available ONLY if you present your ID).</p>
 	<p>Get 15 extra minutes when purchasing a flight between 10:00 a.m. and 1 p.m. on Monday through Thursday!</p>',
@@ -319,5 +324,91 @@ return [
 	'contacts.авиатренажерный-центр' => 'Aviation Training Center',
 	'contacts.как-нас-найти' => 'HOW TO FIND US',
 	'contacts.заказать-звонок' => 'Request a call',
+	
+	'galereya.title' => 'Gallery',
+	'galereya.intro-text' => 'See photos taken during the training on the flight simulator. Experience the emotions of entry-level pilots in a real aircraft cockpit. Real flight instruments, a real control column, full simulation of physical flight parameters and a vivid visual representation create a very realistic environment.',
+	'galereya.all' => 'All',
+	'galereya.our-guests' => 'Our guests',
+	'galereya.photo' => 'Photo',
+	'galereya.video' => 'Video',
+	
+	'news.title' => 'News',
+	'news.подробнее' => 'LEARN MORE',
+	'news.рейтинг' => 'Rating',
+	'news.все-новости' => 'all news',
+	
+	'reviews.title' => 'Reviews',
+	'reviews.оставить-отзыв' => 'submit your comments',
+	'reviews.ответ-администрации' => 'Administration response',
+	'reviews.отправлено' => 'Submitted',
+	
+	'rules.title' => 'Rules',
+	
+	'offer.title' => 'Public offer',
+	
+	'pay.не-указан-номер-счета' => 'For the selected city, the account number of the payment system is not specified',
+	'pay.счет-не-найден' => 'Account number not found. Check payment method, status and absence of payment date',
+	'pay.redirect' => 'Redirect to payment page...',
+	
+	'modal-booking.заполните-пару-полей' => 'Fill in a few fields and our Manager will contact you to confirm your booking',
+	'modal-booking.есть-сертификат' => 'I have a certificate',
+	'modal-booking.ваш-город' => 'Your city',
+	'modal-booking.номер-сертификата' => 'Certificate number',
+	'modal-booking.имя' => 'Your name',
+	'modal-booking.телефон' => 'Your phone number',
+	'modal-booking.email' => 'Your E-mail',
+	'modal-booking.дата-полета' => 'Desired flight date',
+	'modal-booking.введите-промокод' => 'Enter promo code',
+	'modal-booking.выберите-продолжительность-полета' => 'Choose flight duration',
+	'modal-booking.есть-промокод' => 'I have a promo code',
+	'modal-booking.не-суммируется-с-другими-акциями-и-предложениями' => 'Not combinable with other promotions and offers',
+	'modal-booking.стоимость' => 'Cost',
+	'modal-booking.согласен-с-условиями' => 'I agree with',
+	'modal-booking.публичной-оферты' => 'public offer',
+	'modal-booking.заявка-успешно-отправлена' => 'Your order has been successfully sent! We will contact you shortly.',
+	
+	'modal-certificate.приобрести-сертификат' => 'Buy a flight certificate
+in one click',
+	'modal-certificate.действует-во-всех-городах' => 'Valid in all cities',
+	'modal-certificate.ваш-город' => 'Your city',
+	'modal-certificate.выберите-вариант-полета' => 'Choose flight option',
+	'modal-certificate.будние-дни' => 'weekdays',
+	'modal-certificate.любые-дни' => 'any days',
+	'modal-certificate.имя' => 'Your name',
+	'modal-certificate.телефон' => 'Your phone',
+	'modal-certificate.email' => 'Your E-mail',
+	'modal-certificate.для-кого-сертификат-имя' => 'Who is the certificate for? (name)',
+	'modal-certificate.для-кого-сертификат-телефон' => 'Who is the certificate for? (phone number)',
+	'modal-certificate.есть-промокод' => 'I have a promo code',
+	'modal-certificate.введите-промокод' => 'Enter promo code',
+	'modal-certificate.выберите-продолжительность-полета' => 'Choose flight duration',
+	'modal-certificate.не-суммируется-с-другими-акциями-и-предложениями' => 'Not combinable with other promotions and offers',
+	'modal-certificate.стоимость' => 'Cost',
+	'modal-certificate.я-согласен' => 'I agree with the',
+	'modal-certificate.с-условиями' => 'terms',
+	'modal-certificate.пользования-сертификатом-такими-как' => 'of use of the certificate such as',
+	'modal-certificate.сертификат-действует' => 'the certificate is valid',
+	'modal-certificate.месяцев-со-дня-покупки' => 'months from the date of purchase',
+	'modal-certificate.в-кабине-может-присутствовать-2' => '2 people can be present in the cockpit; <br>flights take place in Moscow and others.',
+	'modal-certificate.в-кабине-может-присутствовать-3' => 'three people can be present in the cockpit;<br>children under 8 years old are not allowed to fly;<br>pregnant women are not allowed to fly under other conditions.',
+	'modal-certificate.а-также-с-условиями' => 'Also with conditions',
+	'modal-certificate.публичной-оферты' => 'public offer',
+	'modal-certificate.заявка-успешно-отправлена-оплата' => 'Your order has been successfully sent! Redirecting to the payment page...',
+	
+	'modal-certificate-booking.приобрести-сертификат' => 'Buy a certificate',
+	'modal-certificate-booking.забронировать-полет' => 'Book a flight',
+	
+	'modal-callback.заказать-обратный-звонок' => 'REQUEST A CALL BACK',
+	'modal-callback.заполните-пару-полей' => 'Fill in a couple of fields and we will contact you as soon as possible',
+	'modal-callback.ваше-имя' => 'Your name',
+	'modal-callback.номер-телефона' => 'Phone number',
+	'modal-callback.я-согласен-на-обработку-моих-данных' => 'I agree to the processing of my data',
+	'modal-callback.запрос-успешно-отправлен' => 'Your request has been successfully sent! We will contact you shortly.',
+	
+	'modal-review.остались-под-впечатлением' => 'WERE IMPRESSED?',
+	'modal-review.оставьте-свой-отзыв' => 'Express your opinion and we will publish it on the website!',
+	'modal-review.ваше-имя' => 'Your name',
+	'modal-review.текст-отзыва' => 'Text',
+	'modal-review.отзыв-успешно-отправлен' => 'Thank you, your review has been successfully submitted!',
 
 ];

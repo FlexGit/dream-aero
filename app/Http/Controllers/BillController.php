@@ -256,7 +256,7 @@ class BillController extends Controller
 		
 		$link = 'https://dream-aero.ru/pay/' . $bill->uuid;
 		
-		Mail::send('admin.emails.paylink', ['link' => $link], function ($message) use ($email) {
+		Mail::send('admin.emails.send_paylink', ['link' => $link], function ($message) use ($email) {
 			$message->to($email)->subject('Ссылка на оплату');
 		});
 		

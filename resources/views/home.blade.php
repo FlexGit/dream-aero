@@ -1,5 +1,10 @@
 @extends('layouts.master')
 
+@section('title')
+	{{ App::isLocale('en') ? $page->meta_title_en : $page->meta_title }}
+@stop
+@section('description', App::isLocale('en') ? $page->meta_description_en : $page->meta_description)
+
 @section('content')
 	<div class="main-block-full str">
 		<div class="video">
@@ -18,8 +23,8 @@
 			</div>
 			<h1 class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.3s" data-wow-iteration="1">@lang('main.home.испытай-себя-в-роли-пилота-авиалайнера')</h1>
 			<span class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.9s" data-wow-iteration="1">@lang('main.home.рады-представить-вам-тренажеры')</span>
-			<a href="{{ url('#popup') }}" class="fly button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>@lang('main.home.забронировать')</i></a>
-			<a href="{{ url('#popup') }}" class="give button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="certificate" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>@lang('main.home.подарить-полет')</i></a>
+			<a href="{{ url('#popup') }}" class="fly {{ App::isLocale('en') ? 'fly_en' : '' }} button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>@lang('main.home.забронировать')</i></a>
+			<a href="{{ url('#popup') }}" class="give button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open {{ App::isLocale('en') ? 'give_en' : '' }}" data-modal="certificate" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>@lang('main.home.подарить-полет')</i></a>
 		</div>
 		<div class="scroll-down">
 			<a class="scrollTo" href="#about">
@@ -80,7 +85,7 @@
 					</a>
 				</li>
 			</ul>
-			<a href="{{ url('#popup-booking') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form_open" data-modal="booking"><i>@lang('main.home.забронировать-полет')</i></a>
+			<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form_open" data-modal="booking"><i>@lang('main.home.забронировать-полет')</i></a>
 		</div>
 	</div>
 
@@ -237,18 +242,23 @@
 			<div class="col-md-8">
 			</div>
 			<div class="col-md-4">
-				<a class="button button-pipaluk button-pipaluk-orange popup-with-form" data-modal="review" href="{{ url('#popup-review') }}"><i>@lang('main.home.оставить-отзыв')</i></a>
+				<a href="javascript: void(0)" class="button button-pipaluk button-pipaluk-orange popup-with-form" data-popup-type="review"><i>@lang('main.home.оставить-отзыв')</i></a>
 				<a class="button main-all-review button-pipaluk button-pipaluk-orange" href="{{ url('reviews') }}"><i>@lang('main.home.показать-все-отзывы')</i></a>
 			</div>
 		</div>
 	</div>
 
-	@include('forms.feedback')
+	@include('forms.question')
 @endsection
 
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
+	<style>
+		.fly_en, .give_en {
+			width: 320px !important;
+		}
+	</style>
 @endpush
 
 @push('scripts')
@@ -274,7 +284,6 @@
 					data: {
 						'name': $form.find('[name="name"]').val(),
 						'body': $form.find('[name="body"]').val(),
-						'consent': $form.find('[name="consent"]:checked').val(),
 					},
 					dataType: 'json',
 					success: function(result) {
@@ -319,7 +328,6 @@
 			$('.popup-with-form').magnificPopup({
 				type: 'inline',
 				preloader: false,
-				/*focus: '#name',*/
 				removalDelay: 300,
 				mainClass: 'mfp-fade',
 				callbacks: {
@@ -327,7 +335,6 @@
 						$.magnificPopup.instance.close = function() {
 							$('form')[0].reset();
 							$('#popup').hide();
-							// Call the original close method to close the popup
 							$.magnificPopup.proto.close.call(this);
 						};
 
@@ -346,11 +353,7 @@
 
 										var $popup = $('#popup');
 
-										$popup.html(result.html).find('select').niceSelect();
-
-										//var productTypeAlias = $popup.find('#product').find(':selected').data('product-type-alias'),
-										//weekDays = (productTypeAlias == 'regular') ? [0, 6] : [],
-										//holidays = $popup.find('#holidays').val();
+										$popup.find('.popup-container').html(result.html).find('select').niceSelect();
 
 										calcAmount();
 
@@ -396,7 +399,7 @@
 
 										var $popup = $('#popup');
 
-										$popup.html(result.html).find('select').niceSelect();
+										$popup.find('.popup-container').html(result.html).find('select').niceSelect();
 
 										calcAmount();
 
@@ -510,8 +513,8 @@
 			});
 
 			$(document).on('change', 'input[name="consent"]', function() {
-				var $popup = $(this).closest('.popup'),
-					$btn = $popup.find('.js-booking-btn, .js-certificate-btn');
+				var $popup = $(this).closest('.popup, form.ajax_form'),
+					$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-question-btn');
 
 				if ($(this).is(':checked')) {
 					$btn.removeClass('button-pipaluk-grey')
@@ -549,7 +552,7 @@
 					'email': email,
 					'phone': phone,
 					'product_id': productId ? parseInt(productId) : 0,
-					'city_id': parseInt('{{ Request::get('cityId') }}'),
+					'city_id': parseInt('{{ $city->id ?? 1 }}'),
 					'location_id': locationId ? parseInt(locationId) : 0,
 					'flight_date_at': flightDateAt,
 					'flight_time_at': flightTimeAt,
@@ -579,7 +582,6 @@
 							if (result.errors) {
 								const entries = Object.entries(result.errors);
 								entries.forEach(function (item, key) {
-									//$('#' + item[0]).after('<p class="text-error text-small">' + item[1].join(' ') + '</p>');
 									var fieldId = (item[0] === 'flight_date_at') ? 'flight_date' : item[0];
 									$('#' + fieldId).addClass('field-error');
 								});
@@ -587,9 +589,9 @@
 							return;
 						}
 
-						/*yaCounter46672077.reachGoal('SendOrder');
+						yaCounter46672077.reachGoal('SendOrder');
 						gtag_report_conversion();
-						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});
 
 						$alertSuccess.removeClass('hidden');
 						$popup.find('#name, #email, #phone, #flight_date').val('');
@@ -618,7 +620,7 @@
 					'email': email,
 					'phone': phone,
 					'product_id': productId ? parseInt(productId) : 0,
-					'city_id': parseInt('{{ Request::get('cityId') }}'),
+					'city_id': parseInt('{{ $city->id ?? 1 }}'),
 					'certificate_whom': certificate_whom,
 					'is_unified': is_unified ? is_unified : 0,
 					'duration': duration,
@@ -632,8 +634,6 @@
 					data: data,
 					dataType: 'json',
 					success: function (result) {
-						console.log(result);
-
 						$alertSuccess.addClass('hidden');
 						$alertError.text('').addClass('hidden');
 						$('.field-error').removeClass('field-error');
@@ -662,6 +662,50 @@
 
 						$popup.find('fieldset').append(result.html);
 						$('#pay_form').submit();
+					}
+				});
+			});
+
+			$(document).on('click', '.js-question-btn', function() {
+				var $popup = $(this).closest('form'),
+					name = $popup.find('#name').val(),
+					email = $popup.find('#email').val(),
+					body = $popup.find('#body').val(),
+					$alertSuccess = $popup.find('.alert-success'),
+					$alertError = $popup.find('.alert-danger');
+
+				var data = {
+					'name': name,
+					'email': email,
+					'body': body,
+				};
+
+				$.ajax({
+					url: '/question',
+					type: 'POST',
+					data: data,
+					dataType: 'json',
+					success: function (result) {
+						$alertSuccess.addClass('hidden');
+						$alertError.text('').addClass('hidden');
+						$('.border-error').removeClass('border-error');
+
+						if (result.status !== 'success') {
+							if (result.reason) {
+								$alertError.text(result.reason).removeClass('hidden');
+							}
+							if (result.errors) {
+								const entries = Object.entries(result.errors);
+								entries.forEach(function (item, key) {
+									var fieldId = item[0];
+									$('#' + fieldId).addClass('border-error');
+								});
+							}
+							return;
+						}
+
+						$alertSuccess.removeClass('hidden');
+						$popup.find('#name, #email, #body').val('');
 					}
 				});
 			});

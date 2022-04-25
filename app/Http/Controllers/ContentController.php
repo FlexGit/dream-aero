@@ -223,6 +223,11 @@ class ContentController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
 		}
 		
+		$cityId = $this->request->city_id ?? 0;
+		if ($parentContent->alias == Content::PAGES_TYPE) {
+			$city = City::find($cityId);
+		}
+
 		$data = [];
 		if($file = $this->request->file('photo_preview_file')) {
 			$isFileUploaded = $file->move(public_path('upload/content/' . $version . '/' . $type), $file->getClientOriginalName());
@@ -231,16 +236,23 @@ class ContentController extends Controller
 			}
 		}
 		
+		$videoUrl = $this->request->video_url ?? '';
+		if ($videoUrl) {
+			$data['video_url'] = $videoUrl;
+		}
+		
 		$content = new Content();
 		$content->title = $this->request->title;
-		$content->alias = $this->request->alias;
+		$content->alias = ($parentContent->alias == Content::PAGES_TYPE && $city) ? $this->request->alias . '_' . $city->alias : $this->request->alias;
 		$content->preview_text = $this->request->preview_text;
 		$content->detail_text = $this->request->detail_text;
 		$content->parent_id = $parentContent->id;
-		$content->city_id = $this->request->city_id ?? 0;
+		$content->city_id = $cityId;
 		$content->version = $version;
 		$content->meta_title = $this->request->meta_title;
 		$content->meta_description = $this->request->meta_description;
+		$content->meta_title_en = $this->request->meta_title_en;
+		$content->meta_description_en = $this->request->meta_description_en;
 		$content->is_active = (bool)$this->request->is_active;
 		$content->data_json = $data;
 		$content->published_at = $this->request->published_at;
@@ -268,6 +280,8 @@ class ContentController extends Controller
 		if (!$parentContent) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
 		}
+		
+		$cityId = $this->request->city_id ?? 0;
 
 		$content = Content::where('parent_id', $parentContent->id)
 			->find($id);
@@ -299,15 +313,22 @@ class ContentController extends Controller
 			}
 		}
 		
+		$videoUrl = $this->request->video_url ?? '';
+		if ($videoUrl) {
+			$data['video_url'] = $videoUrl;
+		}
+		
 		$content->title = $this->request->title;
 		$content->alias = $this->request->alias;
 		$content->preview_text = $this->request->preview_text;
 		$content->detail_text = $this->request->detail_text;
 		$content->parent_id = $parentContent->id;
-		$content->city_id = $this->request->city_id ?? 0;
+		$content->city_id = $cityId;
 		$content->version = $version;
 		$content->meta_title = $this->request->meta_title;
 		$content->meta_description = $this->request->meta_description;
+		$content->meta_title_en = $this->request->meta_title_en;
+		$content->meta_description_en = $this->request->meta_description_en;
 		$content->is_active = (bool)$this->request->is_active;
 		if ($data) {
 			$content->data_json = $data;

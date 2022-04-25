@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Currency;
 use App\Models\Discount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 use App\Models\Product;
@@ -218,16 +218,38 @@ class PricingController extends Controller
 		
 		$rules = [
 			'price' => 'required|numeric',
+			'certificate_template_file' => 'sometimes|image|max:2048',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'price' => 'Стоимость',
+				'certificate_template_file' => 'Шаблон сертификата',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
+		$isCertificateTemplateFileUploaded = false;
+		if($certificateTemplateFile = $this->request->file('certificate_template_file')) {
+			$filePath = time() . '_' . $certificateTemplateFile->getClientOriginalName();
+			$isCertificateTemplateFileUploaded = $certificateTemplateFile->move(storage_path('app/private/certificate/template'), $filePath);
+		}
+		
+		$dataJson = [
+			'is_booking_allow' => (bool)$this->request->is_booking_allow,
+			'is_certificate_purchase_allow' => (bool)$this->request->is_certificate_purchase_allow,
+		];
+		if ($isCertificateTemplateFileUploaded) {
+			if ($cityProduct) {
+				$data = json_decode($cityProduct->pivot->data_json, true);
+				if (isset($data['certificate_template_file_path'])) {
+					Storage::disk('private')->delete($data['certificate_template_file_path']);
+				}
+			}
+
+			$dataJson['certificate_template_file_path'] = 'certificate/template/' . $filePath;
+		}
 		$data = [
 			'price' => $this->request->price ?? 0,
 			'currency_id' => $this->request->currency_id ?? 0,
@@ -235,10 +257,7 @@ class PricingController extends Controller
 			'is_hit' => (bool)$this->request->is_hit,
 			'score' => $this->request->score ?? 0,
 			'is_active' => (bool)$this->request->is_active,
-			'data_json' => json_encode([
-				'is_booking_allow' => (bool)$this->request->is_booking_allow,
-				'is_certificate_purchase_allow' => (bool)$this->request->is_certificate_purchase_allow,
-			], JSON_UNESCAPED_UNICODE),
+			'data_json' => json_encode($dataJson, JSON_UNESCAPED_UNICODE),
 		];
 		
 		if ($cityProduct) {
@@ -274,10 +293,81 @@ class PricingController extends Controller
 		$cityProduct = $city->products->find($productId);
 		if (!$cityProduct) return response()->json(['status' => 'error', 'reason' => 'Продукт в городе не найден']);
 		
+		$data = json_decode($cityProduct->pivot->data_json, true);
+		if (isset($data['certificate_template_file_path'])) {
+			Storage::disk('private')->delete($data['certificate_template_file_path']);
+		}
+		
 		if (!$city->products()->detach($product->id)) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
 		return response()->json(['status' => 'success']);
+	}
+	
+	/**
+	 * @param $cityId
+	 * @param $productId
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function deleteCertificateTemplateFile($cityId, $productId)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		$product = Product::find($productId);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+		
+		$data = json_decode($cityProduct->pivot->data_json, true);
+		if (isset($data['certificate_template_file_path'])) {
+			Storage::disk('private')->delete($data['certificate_template_file_path']);
+			unset($data['certificate_template_file_path']);
+			$cityProduct->pivot->data_json = json_encode($data, JSON_UNESCAPED_UNICODE);
+		}
+		if (!$cityProduct->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		return response()->json(['status' => 'success']);
+	}
+	
+	/**
+	 * @param $cityId
+	 * @param $productId
+	 * @return \never|\Symfony\Component\HttpFoundation\StreamedResponse
+	 */
+	public function getCertificateTemplateFile($cityId, $productId) {
+		if (!\Auth::user()->isSuperAdmin()) {
+			return abort(404);
+		}
+		
+		$product = Product::find($productId);
+		if (!$product) return abort(404);
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return abort(404);
+		}
+		
+		$data = json_decode($cityProduct->pivot->data_json, true);
+		if (!isset($data['certificate_template_file_path'])) {
+			return abort(404);
+		}
+		
+		if (!Storage::disk('private')->exists($data['certificate_template_file_path'])) {
+			return abort(404);
+		}
+		
+		return Storage::disk('private')->download($data['certificate_template_file_path']);
 	}
 }

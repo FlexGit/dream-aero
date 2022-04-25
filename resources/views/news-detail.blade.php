@@ -1,7 +1,12 @@
 @extends('layouts.master')
 
+@section('title')
+	{{ $news->meta_title ?: $news->name }}
+@stop
+@section('description', $news->meta_description ?: $news->name)
+
 @section('content')
-	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">Главная</a> <a href="{{ url('news') }}">Новости</a> <span>{{ $news->title }}</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <a href="{{ url('news') }}">@lang('main.news.title')</a> <span>{{ $news->title }}</span></div>
 
 	<article class="article">
 		<div class="container">
@@ -29,7 +34,7 @@
 								</div>
 								<div itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating" style="font-size: 14px; padding-top: 3px; padding-bottom: 3px;">
 
-									Рейтинг: <b class="rating-value">{{ $news->rating_value }}</b>/5 - <b itemprop="ratingCount" class="rating-count">{{ $news->rating_count }}</b>
+									@lang('main.news.рейтинг'): <b class="rating-value">{{ $news->rating_value }}</b>/5 - <b itemprop="ratingCount" class="rating-count">{{ $news->rating_count }}</b>
 									<img src="{{ asset('img/vote.png') }}" style="width: 20px;" alt="">
 									<meta itemprop="bestRating" content="5">
 									<meta itemprop="worstRating" content="1">
@@ -38,7 +43,7 @@
 							</div>
 						</div>
 					</div>
-					<a href="{{ url('news') }}" class="more button-wayra button-wayra-orange"><i>все новости</i></a>
+					<a href="{{ url('news') }}" class="more button-wayra button-wayra-orange"><i>@lang('main.news.все-новости')</i></a>
 				</div>
 				<meta itemprop="name" content="{{ $news->title }}">
 			</div>

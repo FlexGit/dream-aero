@@ -1,7 +1,5 @@
 <input type="hidden" id="id" name="id" value="{{ $promo->id }}">
 
-<input type="hidden" id="id" name="id">
-
 <div class="form-group">
 	<label for="name">Наименование</label>
 	<input type="text" class="form-control" id="name" name="name" value="{{ $promo->name }}" placeholder="Наименование">
@@ -34,7 +32,7 @@
 </div>
 <div class="form-group">
 	<label for="detail_text">Подробное описание</label>
-	<textarea class="form-control" id="detail_text" name="detail_text" rows="5">{{ $promo->detail_text }}</textarea>
+	<textarea class="form-control tinymce" id="detail_text" name="detail_text" rows="5">{{ $promo->detail_text }}</textarea>
 </div>
 <div class="form-group">
 	<label for="is_published">Для публикации</label>
@@ -71,4 +69,12 @@
 			<small>[<a href="javascript:void(0)" class="js-image-delete" data-id="{{ $promo->id }}">удалить</a>]</small>
 		</div>
 	@endif
+</div>
+<div class="form-group">
+	<label for="meta_title">Meta Title</label>
+	<input type="text" class="form-control" id="meta_title" name="meta_title" value="{{ $promo->meta_title }}" placeholder="Meta Title">
+</div>
+<div class="form-group">
+	<label for="meta_description">Meta Description</label>
+	<textarea class="form-control" id="meta_description" name="meta_description">{{ $promo->meta_description }}</textarea>
 </div>

@@ -362,13 +362,13 @@ class DealController extends Controller
 			
 			$validator = Validator::make($this->request->all(), $rules)
 				->setAttributeNames([
-					'name' => 'Имя',
-					'email' => 'E-mail',
-					'phone' => 'Телефон',
-					'product_id' => 'Продолжительность полета',
+					'name' => trans('main.modal-certificate.имя'),
+					'email' => trans('main.modal-certificate.email'),
+					'phone' => trans('main.modal-certificate.телефон'),
+					'product_id' => trans('main.modal-certificate.выберите-продолжительность-полета'),
 				]);
 			if (!$validator->passes()) {
-				return response()->json(['status' => 'error', 'reason' => 'Проверьте правильность заполнения полей формы', 'errors' => $validator->errors()]);
+				return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
 			}
 		} else {
 			$rules = [
@@ -428,6 +428,12 @@ class DealController extends Controller
 		$data = [];
 		if ($this->request->certificate_whom) {
 			$data['certificate_whom'] = $this->request->certificate_whom;
+		}
+		if ($this->request->certificate_whom_phone) {
+			$data['certificate_whom_phone'] = $this->request->certificate_whom_phone;
+		}
+		if ($this->request->delivery_address) {
+			$data['delivery_address'] = $this->request->delivery_address;
 		}
 		if ($this->request->comment) {
 			$data['comment'] = $this->request->comment;
@@ -536,6 +542,9 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
+		$job = new \App\Jobs\createCertificate($certificate);
+		$job->handle();
+
 		return response()->json(['status' => 'success', 'html' => $payFormHtml]);
 	}
 
@@ -548,8 +557,6 @@ class DealController extends Controller
 			abort(404);
 		}
 
-		//\Log::debug($this->request);
-		
 		if ($this->request->source == Deal::WEB_SOURCE) {
 			$rules = [
 				'name' => 'required',
@@ -562,15 +569,15 @@ class DealController extends Controller
 			
 			$validator = Validator::make($this->request->all(), $rules)
 				->setAttributeNames([
-					'name' => 'Имя',
-					'email' => 'E-mail',
-					'phone' => 'Телефон',
-					'product_id' => 'Продолжительность полета',
-					'location_id' => 'Локация',
-					'flight_date_at' => 'Дата полета',
+					'name' => trans('main.modal-booking.имя'),
+					'email' => trans('main.modal-booking.email'),
+					'phone' => trans('main.modal-booking.телефон'),
+					'product_id' => trans('main.modal-booking.выберите-продолжительность-полета'),
+					'location_id' => trans('main.modal-booking.локация'),
+					'flight_date_at' => trans('main.modal-booking.дата-полета'),
 				]);
 			if (!$validator->passes()) {
-				return response()->json(['status' => 'error', 'reason' => 'Проверьте правильность заполнения полей формы', 'errors' => $validator->errors()]);
+				return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
 			}
 		} else {
 			switch ($this->request->event_type) {

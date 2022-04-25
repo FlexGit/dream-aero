@@ -65,6 +65,8 @@ class Content extends Model
 	const NEWS_TYPE = 'news';
 	const REVIEWS_TYPE = 'reviews';
 	const GALLERY_TYPE = 'gallery';
+	const GUESTS_TYPE = 'guests';
+	const PAGES_TYPE = 'pages';
 
 	const VERSION_RU = 'ru';
 	const VERSION_AERO = 'aero';
@@ -102,6 +104,8 @@ class Content extends Model
 		'version',
 		'meta_title',
 		'meta_description',
+		'meta_title_en',
+		'meta_description_en',
 		'is_active',
 		'data_json',
 		'published_at',

@@ -494,7 +494,7 @@
 			});
 
 
-			$(document).on('click', '.js-sent-pay-link', function(e) {
+			$(document).on('click', '.js-send-pay-link', function(e) {
 				if (confirm('Вы уверены, что хотите отправить ссылку на оплату Счета?')) {
 					var $payLink = $(this);
 
@@ -523,6 +523,35 @@
 				}
 			});
 
+			$(document).on('click', '.js-send-certificate-link', function(e) {
+				if (confirm('Вы уверены, что хотите отправить сертификат?')) {
+					var $certificate = $(this);
+
+					$.ajax({
+						url: "{{ route('sendCertificate') }}",
+						type: 'POST',
+						dataType: 'json',
+						data: {
+							'id': $(this).data('id'),
+							'certificate_id': $(this).data('certificate_id'),
+						},
+						success: function(result) {
+							if (result.status !== 'success') {
+								toastr.error(result.reason);
+								return;
+							}
+
+							$certificate.attr('title', 'Сертификат отправлен ' + result.certificate_sent_at);
+							$i = $certificate.find('i');
+							$i.addClass('fa-envelope-open');
+							if ($i.hasClass('fa-envelope')) {
+								$i.removeClass('fa-envelope');
+							}
+							toastr.success('Сертификат успешно отправлен');
+						}
+					});
+				}
+			});
 
 			$.fn.isInViewport = function () {
 				let elementTop = $(this).offset().top;

@@ -1,5 +1,10 @@
 @extends('layouts.master')
 
+@section('title')
+	{{ App::isLocale('en') ? $page->meta_title_en : $page->meta_title }}
+@stop
+@section('description', App::isLocale('en') ? $page->meta_description_en : $page->meta_description)
+
 @section('content')
 	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.price.title')</span></div>
 
@@ -71,7 +76,7 @@
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</p>
 													</div>
-													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form_open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
+													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form_open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}" data-popup-type="product"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
 												</div>
 											@endforeach
 
@@ -94,7 +99,7 @@
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</p>
 													</div>
-													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
+													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}" data-popup-type="product"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
 													<p class="h4plat" style="display: none;">
 														@lang('main.price.развлекательный-курс')
 														<br>
@@ -119,7 +124,7 @@
 													<div style="position: relative;margin-top: 42.5px">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</p>
 													</div>
-													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
+													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}" data-popup-type="product"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
 													<p class="h4plat" style="display: none;">
 														@lang('main.price.сертификат-на-vip-полет-с-денисом-оканем')
 														<br>
@@ -214,7 +219,7 @@
 									<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
 								@endif
 								<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</p>
-								<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}"><i>@lang('main.price.заказать')</i></a>
+								<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-popup-type="product"><i>@lang('main.price.заказать')</i></a>
 							</div>
 						@endif
 					</div>
@@ -262,7 +267,7 @@
 					<p>@lang('main.price.мы-не-делаем-никаких-скидок')</p>
 				</div>
 				<div class="button-free">
-					<a href="{{ url('#popup-call-back-new') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form"><i>@lang('main.price.заказать-обратный-звонок')</i></a>
+					<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form" data-popup-type="callback"><i>@lang('main.price.заказать-обратный-звонок')</i></a>
 				</div>
 			</div>
 		</div>
@@ -275,11 +280,11 @@
 					<h2 class="block-title">@lang('main.price.корпоративный-отдых')</h2>
 					<div class="text">
 						@lang('main.price.однообразные-и-скучные-вечеринки')
-						<a class="button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#popup-call-back') }}"><i>@lang('main.price.заказать-обратный-звонок')</i></a>
+						<a href="{{ url('#popup') }}" class="button-pipaluk button-pipaluk-orange popup-with-form" data-popup-type="callback"><i>@lang('main.price.заказать-обратный-звонок')</i></a>
 					</div>
 				</div>
 				<div class="col-md-4 wow fadeInRight" data-wow-delay="1s" data-wow-duration="2s">
-					@lang('main.price.корпоратив', ['link' => url('galereya')])
+					@lang('main.price.корпоратив', ['photos_links' => url('galereya')])
 				</div>
 			</div>
 		</div>
@@ -297,7 +302,7 @@
 				<div class="col-md-4">
 					<div class="img wow fadeInRight" data-wow-delay="1s" data-wow-duration="2s">
 						<img src="{{ asset('img/plane.png') }}" alt="">
-						<a class="button-pipaluk button-pipaluk-orange popup-with-form" href="{{ url('#popup-call-back-new') }}"><i>@lang('main.price.мне-это-интересно')</i></a>
+						<a href="{{ url('#popup') }}" class="button-pipaluk button-pipaluk-orange popup-with-form" data-popup-type="callback"><i>@lang('main.price.мне-это-интересно')</i></a>
 					</div>
 				</div>
 			</div>
@@ -349,42 +354,64 @@
 				$(this).find('.h4plat').hide();
 			});
 
-			$('.popup-with-form').magnificPopup({
-				type: 'inline',
-				preloader: false,
-				/*focus: '#name',*/
-				removalDelay: 300,
-				mainClass: 'mfp-fade',
-				callbacks: {
-					open: function() {
-						$.magnificPopup.instance.close = function() {
-							//$('form')[0].reset();
-							//$('#popup').hide();
-							// Call the original close method to close the popup
-							$.magnificPopup.proto.close.call(this);
-						};
-
-						var mp = $.magnificPopup.instance,
-							t = $(mp.currItem.el[0]);
-
-						$.ajax({
-							type: 'GET',
-							url: '/modal/certificate-booking/' + t.data('product-alias'),
-							success: function (result) {
-								if (result.status != 'success') {
-									return;
-								}
-
-								var $popup = $('#popup');
-
-								$popup.html(result.html);
-
-								certificateForm(t.data('product-alias'));
-							}
-						});
-					}
-				}
+			$(document).on('click', '.popup-with-form', function(e) {
+				popup($(this));
 			});
+
+			function popup($el) {
+				$.magnificPopup.open({
+					items: {
+						src: '#popup'
+					},
+					type: 'inline',
+					preloader: false,
+					removalDelay: 300,
+					mainClass: 'mfp-fade',
+					callbacks: {
+						open: function () {
+							$.magnificPopup.instance.close = function () {
+								$.magnificPopup.proto.close.call(this);
+							};
+
+							var $popup = $('#popup');
+
+							$popup.hide();
+
+							var url = '';
+
+							switch ($el.data('popup-type')) {
+								case 'product':
+									url = '/modal/certificate-booking/' + $el.data('product-alias');
+								break;
+								case 'callback':
+									url = '/modal/callback';
+								break;
+							}
+
+							$.ajax({
+								type: 'GET',
+								url: url,
+								success: function (result) {
+									if (result.status != 'success') {
+										return;
+									}
+
+									$popup.find('.popup-container').html(result.html);
+
+									if ($el.data('popup-type') == 'callback') {
+										$popup.show();
+										return;
+									}
+
+									if ($el.data('popup-type') == 'product') {
+										certificateForm($el.data('product-alias'));
+									}
+								}
+							});
+						}
+					}
+				});
+			}
 
 			function certificateForm(productAlias) {
 				$.ajax({
@@ -562,7 +589,7 @@
 
 			$(document).on('change', 'input[name="consent"]', function() {
 				var $popup = $(this).closest('.popup'),
-					$btn = $popup.find('.js-booking-btn, .js-certificate-btn');
+					$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-callback-btn');
 
 				if ($(this).is(':checked')) {
 					$btn.removeClass('button-pipaluk-grey')
@@ -636,9 +663,9 @@
 							return;
 						}
 
-						/*yaCounter46672077.reachGoal('SendOrder');
+						yaCounter46672077.reachGoal('SendOrder');
 						gtag_report_conversion();
-						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});
 
 						$alertSuccess.removeClass('hidden');
 						$popup.find('#name, #email, #phone, #flight_date').val('');
@@ -692,23 +719,64 @@
 							if (result.errors) {
 								const entries = Object.entries(result.errors);
 								entries.forEach(function (item, key) {
-									//$('#' + item[0]).after('<p class="text-error text-small">' + item[1].join(' ') + '</p>');
-									var fieldId = /*(item[0] === 'flight_date_at') ? 'flight_date' : */item[0];
+									var fieldId = item[0];
 									$('#' + fieldId).addClass('field-error');
 								});
 							}
 							return;
 						}
 
-						/*yaCounter46672077.reachGoal('SendOrder');
+						yaCounter46672077.reachGoal('SendOrder');
 						gtag_report_conversion();
-						fbq('track', 'Purchase', {value: 200, currency: 'rub'});*/
+						fbq('track', 'Purchase', {value: 200, currency: 'rub'});
 
 						$alertSuccess.removeClass('hidden');
 						$popup.find('#name, #email, #phone, #certificate_whom').val('');
 
 						$popup.find('fieldset').append(result.html);
 						$('#pay_form').submit();
+					}
+				});
+			});
+
+			$(document).on('click', '.js-callback-btn', function() {
+				var $popup = $(this).closest('.popup'),
+					name = $popup.find('#name').val(),
+					phone = $popup.find('#phone').val(),
+					$alertSuccess = $popup.find('.alert-success'),
+					$alertError = $popup.find('.alert-danger');
+
+				var data = {
+					'name': name,
+					'phone': phone,
+				};
+
+				$.ajax({
+					url: '/callback',
+					type: 'POST',
+					data: data,
+					dataType: 'json',
+					success: function (result) {
+						$alertSuccess.addClass('hidden');
+						$alertError.text('').addClass('hidden');
+						$('.field-error').removeClass('field-error');
+
+						if (result.status !== 'success') {
+							if (result.reason) {
+								$alertError.text(result.reason).removeClass('hidden');
+							}
+							if (result.errors) {
+								const entries = Object.entries(result.errors);
+								entries.forEach(function (item, key) {
+									var fieldId = item[0];
+									$('#' + fieldId).addClass('field-error');
+								});
+							}
+							return;
+						}
+
+						$alertSuccess.removeClass('hidden');
+						$popup.find('#name, #phone').val('');
 					}
 				});
 			});

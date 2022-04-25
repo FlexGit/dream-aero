@@ -49,7 +49,7 @@
 	</div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="modalLabel">Редактирование</h5>
@@ -76,6 +76,7 @@
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
+	<script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
@@ -188,6 +189,63 @@
 						toastr.success(msg);
 					}
 				});
+			});
+
+			$(document).on('show.bs.modal', '#modal', function(e) {
+				tinymce.init({
+					selector: 'textarea.tinymce',
+					themes: 'sliver',
+					convert_urls: false,
+					relative_urls: false,
+					image_title: true,
+					automatic_uploads: true,
+					file_picker_types: 'image',
+					images_upload_handler: function (blobInfo, success, failure) {
+						var xhr, formData;
+						xhr = new XMLHttpRequest();
+						xhr.withCredentials = false;
+						xhr.open('POST', 'promo/image/upload');
+						var token = '{{ csrf_token() }}';
+						xhr.setRequestHeader("X-CSRF-Token", token);
+						xhr.onload = function() {
+							var json;
+							if (xhr.status != 200) {
+								failure('HTTP Error: ' + xhr.status);
+								return;
+							}
+							json = JSON.parse(xhr.responseText);
+
+							if (!json || typeof json.location != 'string') {
+								failure('Invalid JSON: ' + xhr.responseText);
+								return;
+							}
+							success(json.location);
+						};
+						formData = new FormData();
+						formData.append('file', blobInfo.blob(), blobInfo.filename());
+						xhr.send(formData);
+					},
+					language: 'ru_RU',
+					plugins: [
+						"advlist autolink lists link image charmap print preview anchor",
+						"searchreplace visualblocks code fullscreen",
+						"insertdatetime media table paste codesample"
+					],
+					toolbar: "undo redo | fontselect styleselect fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | codesample action section button",
+					font_formats: "Segoe UI=Segoe UI;",
+					fontsize_formats: "8px 9px 10px 11px 12px 14px 16px 18px 20px 22px 24px 26px 28px 30px 32px 34px 36px 38px 40px 42px 44px 46px 48px 50px 52px 54px 56px 58px 60px 62px 64px 66px 68px 70px 72px 74px 76px 78px 80px 82px 84px 86px 88px 90px 92px 94px 94px 96px",
+					height: 300,
+				});
+			});
+
+			$(document).on('hide.bs.modal', '#modal', function(e) {
+				tinymce.remove('#modal textarea.tinymce');
+			});
+
+			$(document).on('focusin', function(e) {
+				if ($(e.target).closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root").length) {
+					e.stopImmediatePropagation();
+				}
 			});
 
 			$(document).on('click', '.js-image-delete', function(e) {

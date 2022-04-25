@@ -36,4 +36,64 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # 301 Redirects from old CRM
+    Redirect 301 /news.html https://dream-aero.ru/msk
+    Redirect 301 /index.html https://dream-aero.ru/msk
+    Redirect 301 /aerophobia.html https://dream-aero.ru/msk
+    Redirect 301 /birthdaydream-aero.html https://dream-aero.ru/msk
+    Redirect 301 /news/c%D1%8E%D0%B6%D0%B5%D1%82-%D0%BE-%D0%BD%D0%B0%D1%88%D0%B5%D0%BC-%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5.html https://dream-aero.ru/msk
+    Redirect 301 /news/contest-instagram.html https://dream-aero.ru/msk
+    Redirect 301 /news/disney-dreamaero.html https://dream-aero.ru/msk
+    Redirect 301 /news/dmitry-khrustalev-in-dream-aero.html https://dream-aero.ru/msk
+    Redirect 301 /news/dream-aero-%D0%B2-%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%B5.-%D0%BE%D1%82%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5-%D0%BF%D1%80%D0%B5%D0%B4%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6.html https://dream-aero.ru/msk
+    Redirect 301 /news/dreamaeroaviationtest.html https://dream-aero.ru/msk
+    Redirect 301 /news/dream-aero-in-abu-dhabi.html https://dream-aero.ru/msk
+    Redirect 301 /news/dream-aero-in-moscow.html https://dream-aero.ru/msk
+    Redirect 301 /news/dreamaero-moscow-opening.html https://dream-aero.ru/msk
+    Redirect 301 /news/flightsimulator-in-moscow.html https://dream-aero.ru/msk
+    Redirect 301 /news/instagramcontest.html https://dream-aero.ru/msk
+    Redirect 301 /news/may.html https://dream-aero.ru/msk
+    Redirect 301 /news/vakansia_v_moskve.html https://dream-aero.ru/msk
+    Redirect 301 /find-us.html https://dream-aero.ru/contacts
+    Redirect 301 /requisites https://dream-aero.ru/contacts
+    Redirect 301 /terms.html https://dream-aero.ru/prices
+    Redirect 301 /oplata-online https://dream-aero.ru/prices
+    Redirect 301 /terms.html?city=msk https://dream-aero.ru/prices
+    Redirect 301 /terms.html?city=spb https://dream-aero.ru/prices
+    Redirect 301 /reviews.html https://dream-aero.ru/prices
+    Redirect 301 /reviews.html https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=1 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=2 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=3 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=4 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=5 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=6 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=7 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=8 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=9 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=10 https://dream-aero.ru/reviews
+    Redirect 301 /reviews.html?jn4c883e2f=11 https://dream-aero.ru/reviews
+    Redirect 301 /foto.html https://dream-aero.ru/msk
+    Redirect 301 /foto https://dream-aero.ru/msk
+    Redirect 301 /video.html https://dream-aero.ru/msk
+    Redirect 301 /video https://dream-aero.ru/msk
+    Redirect 301 /gift-certificate.html https://dream-aero.ru/gift-certificate
+    Redirect 301 /study https://dream-aero.ru/gift-certificate
+    Redirect 301 /about.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /about-us https://dream-aero.ru/o-trenazhere
+    Redirect 301 /about/cockpit.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /about/movable_base.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /about/professional_assistance https://dream-aero.ru/o-trenazhere
+    Redirect 301 /about/professional_assistance.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /about/visualization.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /conditions https://dream-aero.ru/o-trenazhere
+    Redirect 301 /booking.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /brief-instruction.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /aerofobia.html https://dream-aero.ru/o-trenazhere
+    Redirect 301 /contacts/Default https://dream-aero.ru/msk/contacts
+    Redirect 301 /^instruktazh/boeing-737-ng https://dream-aero.ru/boeing-737-ng
+    Redirect 301 /bfsale https://dream-aero.ru/price
+    Redirect 301 /blackfridaysale https://dream-aero.ru/price
+    Redirect 301 /blackfridaysale https://dream-aero.ru/price
 </IfModule>

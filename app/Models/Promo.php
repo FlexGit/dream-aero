@@ -92,6 +92,8 @@ class Promo extends Model
 		'active_from_at',
 		'active_to_at',
 		'is_published',
+		'meta_title',
+		'meta_description',
 		'data_json',
 	];
 

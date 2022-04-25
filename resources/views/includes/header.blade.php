@@ -48,11 +48,9 @@
 					<li>
 						<a href="{{ url('variantyi-poleta') }}">@lang('main.верхнее-меню.варианты-полета')</a>
 					</li>
-					@if(App::isLocale('ru'))
-						<li>
-							<a href="{{ url('news') }}" >@lang('main.верхнее-меню.новости')</a>
-						</li>
-					@endif
+					<li>
+						<a href="{{ url('news') }}" >@lang('main.верхнее-меню.новости')</a>
+					</li>
 					<li class="dropdownf">
 						<a href="{{ url('instruktazh') }}">@lang('main.верхнее-меню.инструктаж')</a>
 						<ul class="dropdown-menu">
@@ -66,13 +64,11 @@
 					</li>
 					<li class="dropdownf">
 						<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/price' : 'price') }}">@lang('main.верхнее-меню.цены')</a>
-						@if(App::isLocale('ru'))
-							<ul class="dropdown-menu">
-								<li class="first">
-									<a href="{{ url('vse-akcii') }}">@lang('main.верхнее-меню.акции')</a>
-								</li>
-							</ul>
-						@endif
+						<ul class="dropdown-menu">
+							<li class="first">
+								<a href="{{ url('vse-akcii') }}">@lang('main.верхнее-меню.акции')</a>
+							</li>
+						</ul>
 					</li>
 					<li class="dropdownf">
 						<a href="{{ url('galereya') }}">@lang('main.верхнее-меню.галерея')</a>
@@ -82,11 +78,9 @@
 							</li>
 						</ul>
 					</li>
-					@if(App::isLocale('ru'))
-						<li>
-							<a href="{{ url('reviews') }}">@lang('main.верхнее-меню.отзывы')</a>
-						</li>
-					@endif
+					<li>
+						<a href="{{ url('reviews') }}">@lang('main.верхнее-меню.отзывы')</a>
+					</li>
 					<li class="last">
 						<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/contacts' : 'contacts') }}">@lang('main.верхнее-меню.контакты')</a>
 					</li>
@@ -107,8 +101,8 @@
 			</div>
 			<div>
 				<span class="phone">
-					<a href="{{ url('#popup-call-back') }}" id = "mainphone" class="popup-with-form">
-						+7 (495) 532-87-37
+					<a href="tel:{{ $city->phone }}">
+						{{ $city->phoneFormatted() }}
 					</a>
 				</span>
 				@if (App::isLocale('ru'))

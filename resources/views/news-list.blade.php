@@ -1,11 +1,16 @@
 @extends('layouts.master')
 
+@section('title')
+	{{ App::isLocale('en') ? $page->meta_title_en : $page->meta_title }}
+@stop
+@section('description', App::isLocale('en') ? $page->meta_description_en : $page->meta_description)
+
 @section('content')
-	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">Главная</a> <span>Новости</span></div>
+	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.news.title')</span></div>
 
 	<div class="news-list">
 		<div class="container">
-			<h1 class="block-title">Новости</h1>
+			<h1 class="block-title">@lang('main.news.title')</h1>
 
 			<section class="list">
 				<ul class="row">
@@ -17,7 +22,7 @@
 									<article class="row">
 										<div class="col-md-6">
 											<div class="img">
-												<a href="/news/{{ $oneNews->alias }}">ПОДРОБНЕЕ</a>
+												<a href="/news/{{ $oneNews->alias }}">@lang('main.news.подробнее')</a>
 												@if(is_array($oneNews->data_json) && array_key_exists('photo_preview_file_path', $oneNews->data_json))
 													<img src="/upload/{{ $oneNews->data_json['photo_preview_file_path'] }}" alt="">
 												@endif
