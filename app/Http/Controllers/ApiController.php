@@ -1637,7 +1637,6 @@ class ApiController extends Controller
 		
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			//\Log::debug('getPromos() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 		
@@ -1727,7 +1726,6 @@ class ApiController extends Controller
 
 		$token = HelpFunctions::validToken($authToken);
 		if (!$token) {
-			//\Log::debug('getPromo() - ' . $authToken);
 			return $this->responseError('Токен авторизации не найден', 400);
 		}
 
