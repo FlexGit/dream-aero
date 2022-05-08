@@ -29,15 +29,15 @@
 					<table id="promoTable" class="table table-hover table-sm table-bordered table-striped table-data table-no-filter">
 						<thead>
 						<tr>
-							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Алиас</th>
-							<th class="text-center d-none d-sm-table-cell">Скидка/Бонус</th>
-							<th class="text-center d-none d-xl-table-cell">Город</th>
-							<th class="text-center d-none d-xl-table-cell">Для публикации</th>
-							<th class="text-center d-none d-xl-table-cell">Активность</th>
-							<th class="text-center d-none d-xl-table-cell">Дата начала активности</th>
-							<th class="text-center d-none d-xl-table-cell">Дата окончания активности</th>
-							<th class="text-center">Действие</th>
+							<th class="text-center align-middle">Наименование</th>
+							<th class="text-center align-middle d-none d-sm-table-cell">Алиас</th>
+							<th class="text-center align-middle d-none d-sm-table-cell">Скидка/Бонус</th>
+							<th class="text-center align-middle d-none d-xl-table-cell">Город</th>
+							<th class="text-center align-middle d-none d-xl-table-cell">Для публикации</th>
+							<th class="text-center align-middle d-none d-xl-table-cell">Активность</th>
+							<th class="text-center align-middle d-none d-xl-table-cell">Дата начала активности</th>
+							<th class="text-center align-middle d-none d-xl-table-cell">Дата окончания активности</th>
+							<th class="text-center align-middle">Действие</th>
 						</tr>
 						</thead>
 						<tbody>
