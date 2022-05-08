@@ -41,7 +41,7 @@
 		</tr>
 		<tr class="odd">
 			<td>Подробное описание</td>
-			<td>{{ $promo->detail_text }}</td>
+			<td>{{ strip_tags($promo->detail_text) }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Для публикации</td>
