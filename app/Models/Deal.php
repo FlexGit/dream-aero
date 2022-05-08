@@ -18,19 +18,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property string $name имя
  * @property string $phone номер телефона
  * @property string $email e-mail
- * @property int $product_id продукт
- * @property int $certificate_id сертификат
- * @property int $duration продолжительность полета
- * @property int $amount стоимость
  * @property int $city_id город, в котором будет осуществлен полет
- * @property int $location_id локация, на которой будет осуществлен полет
- * @property int $promo_id акция
- * @property int $promocode_id промокод
- * @property bool $is_certificate_purchase покупка сертификата
- * @property int $is_unified сертификат действует во всех городах
- * @property \datetime|null $flight_at дата и время полета
- * @property \datetime|null $invite_sent_at последняя дата отправки приглашения на e-mail
- * @property \datetime|null $certificate_sent_at последняя дата отправки сертификата на e-mail
  * @property string|null $source источник
  * @property int $user_id пользователь
  * @property array|null $data_json дополнительная информация
@@ -93,6 +81,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read int|null $positions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Score[] $scores
  * @property-read int|null $scores_count
+ * @property string|null $uuid
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereUuid($value)
  */
 class Deal extends Model
 {
@@ -102,6 +92,7 @@ class Deal extends Model
 		'number' => 'Нмер',
 		'status_id' => 'Статус',
 		'contractor_id' => 'Контрагент',
+		'city_id' => 'Город',
 		'name' => 'Имя',
 		'phone' => 'Телефон',
 		'email' => 'E-mail',
@@ -112,6 +103,7 @@ class Deal extends Model
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
 		'comment' => 'Комментарий',
+		'uuid' => 'Uuid',
 	];
 	
 	const CREATED_STATUS = 'deal_created';
@@ -176,7 +168,7 @@ class Deal extends Model
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
-	protected $dontKeepRevisionOf = ['source'];
+	protected $dontKeepRevisionOf = ['source', 'uuid'];
 	
 	/**
 	 * The attributes that are mass assignable.
@@ -187,11 +179,13 @@ class Deal extends Model
 		'number',
 		'status_id',
 		'contractor_id',
+		'city_id',
 		'name',
 		'phone',
 		'email',
 		'user_id',
 		'source',
+		'uuid',
 		'data_json',
 	];
 
@@ -212,6 +206,7 @@ class Deal extends Model
 		
 		Deal::created(function (Deal $deal) {
 			$deal->number = $deal->generateNumber();
+			$deal->uuid = (string)\Webpatser\Uuid\Uuid::generate();
 			$deal->save();
 		});
 
@@ -258,6 +253,11 @@ class Deal extends Model
 	{
 		return $this->hasOne(User::class, 'id', 'user_id');
 	}
+	
+	public function city()
+	{
+		return $this->hasOne(City::class, 'id', 'city_id');
+	}
 
 	public function scores()
 	{
@@ -301,7 +301,7 @@ class Deal extends Model
 		foreach ($this->positions ?? [] as $position) {
 			if ($position->certificate && $position->certificate->status && in_array($position->certificate->status->alias, [Certificate::CANCELED_STATUS, Certificate::RETURNED_STATUS])) continue;
 
-			$amount += $position->amount;
+			$amount += ($position->amount - $position->aeroflot_bonus_amount);
 		}
 
 		/*$scoreAmount = 0;
@@ -331,5 +331,26 @@ class Deal extends Model
 	public function balance()
 	{
 		return $this->billPayedAmount() - $this->amount();
+	}
+	
+	public function aeroflotBonusAmount()
+	{
+		$amount = 0;
+		foreach ($this->positions ?? [] as $position) {
+			if ($position->certificate && $position->certificate->status && in_array($position->certificate->status->alias, [Certificate::CANCELED_STATUS, Certificate::RETURNED_STATUS])) continue;
+			
+			$amount += $position->aeroflot_bonus_amount;
+		}
+
+		return $amount;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function phoneFormatted()
+	{
+		$phoneCleared = preg_replace( '/[^0-9]/', '', $this->phone);
+		return '+' . mb_substr($phoneCleared, 0, 1) . ' (' . mb_substr($phoneCleared, 1, 3) . ') ' . mb_substr($phoneCleared, 4, 3) . '-' . mb_substr($phoneCleared, 7, 2) . '-' . mb_substr($phoneCleared, 9, 2);
 	}
 }

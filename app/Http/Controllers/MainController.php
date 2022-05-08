@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bill;
 use App\Models\Deal;
 use App\Models\LegalEntity;
-use App\Models\PaymentMethod;
 use App\Models\Promo;
 use App\Models\Promocode;
-use App\Models\Status;
 use App\Services\HelpFunctions;
-use App\Services\PayAnyWayService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -171,6 +167,9 @@ class MainController extends Controller
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function promocodeVerify()
 	{
 		if (!$this->request->ajax()) {
@@ -182,11 +181,15 @@ class MainController extends Controller
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.не-передан-промокод')]);
 		}
 
+		$locationId = $this->request->location_id ?? 0;
+		$simulatorId = $this->request->simulator_id ?? 0;
+		
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
 		$date = date('Y-m-d');
 
+		//\DB::connection()->enableQueryLog();
 		$promocode = Promocode::where('number', $number)
 			->whereRelation('cities', 'cities.id', '=', $city->id)
 			->where('is_active', true)
@@ -197,15 +200,22 @@ class MainController extends Controller
 			->where(function ($query) use ($date) {
 				$query->where('active_to_at', '>=', $date)
 					->orWhereNull('active_to_at');
-			})
-			->first();
+			});
+		if ($locationId) {
+			$promocode = $promocode->where('location_id', $locationId);
+		}
+		if ($simulatorId) {
+			$promocode = $promocode->where('flight_simulator_id', $simulatorId);
+		}
+		$promocode = $promocode->first();
+		//\Log::debug(\DB::getQueryLog());
 		if (!$promocode) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.промокод-не-найден')]);
 		}
 
 		return response()->json(['status' => 'success', 'message' => trans('main.modal-booking.промокод-применен'), 'uuid' => $promocode->uuid]);
 	}
-	
+
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
@@ -336,7 +346,67 @@ class MainController extends Controller
 			'cityAlias' => $cityAlias,
 		]);
 	}
-	
+
+	public function flyNoFear()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'lechenie-aerofobii');
+		
+		$productTypes = ProductType::where('is_active', true)
+			->where('version', $city->version)
+			->orderBy('name')
+			->get();
+		
+		$cityProducts = $city->products;
+		
+		$products = [];
+		foreach ($productTypes as $productType) {
+			$products[mb_strtoupper($productType->alias)] = [];
+			
+			foreach ($productType->products ?? [] as $product) {
+				foreach ($cityProducts ?? [] as $cityProduct) {
+					if ($product->id != $cityProduct->id) continue;
+					
+					$price = $cityProduct->pivot->price;
+					if ($cityProduct->pivot->discount) {
+						$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
+					}
+					
+					$pivotData = json_decode($cityProduct->pivot->data_json, true);
+					
+					$products[mb_strtoupper($productType->alias)][$product->alias] = [
+						'id' => $product->id,
+						'name' => $product->name,
+						'alias' => $product->alias,
+						'duration' => $product->duration,
+						'price' => round($price),
+						'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
+						'is_hit' => (bool)$cityProduct->pivot->is_hit,
+						'is_booking_allow' => false,
+						'is_certificate_purchase_allow' => false,
+						'icon_file_path' => (is_array($product->data_json) && array_key_exists('icon_file_path', $product->data_json)) ? $product->data_json['icon_file_path'] : '',
+					];
+					
+					if (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) {
+						$products[mb_strtoupper($productType->alias)][$product->alias]['is_booking_allow'] = true;
+					}
+					if (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) {
+						$products[mb_strtoupper($productType->alias)][$product->alias]['is_certificate_purchase_allow'] = true;
+					}
+				}
+			}
+		}
+		
+		return view('lechenie-aerofobii', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+			'productTypes' => $productTypes,
+			'products' => $products,
+		]);
+	}
+
 	/**
 	 * @param null $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
@@ -530,29 +600,10 @@ class MainController extends Controller
 		}
 		
 		$job = new \App\Jobs\SendReviewEmail($name, $body);
-		$job->handle();
+		dispatch($job);
+		//$job->handle();
 		
 		return response()->json(['status' => 'success']);
-	}
-	
-	/**
-	 * Ответ на уведомление об оплате от сервиса Монета
-	 *
-	 * @return string
-	 */
-	public function paymentCallback()
-	{
-		return PayAnyWayService::checkPayCallback($this->request) ? 'SUCCESS' : 'FAIL';
-	}
-	
-	public function paymentSuccess()
-	{
-	
-	}
-	
-	public function paymentFail()
-	{
-	
 	}
 	
 	/**
@@ -933,7 +984,8 @@ class MainController extends Controller
 		$phone = trim(strip_tags($this->request->phone));
 		
 		$job = new \App\Jobs\SendCallbackEmail($name, $phone);
-		$job->handle();
+		dispatch($job);
+		//$job->handle();
 		
 		return response()->json(['status' => 'success']);
 	}
@@ -968,7 +1020,8 @@ class MainController extends Controller
 		$body = trim(strip_tags($this->request->body));
 		
 		$job = new \App\Jobs\SendQuestionEmail($name, $email, $body);
-		$job->handle();
+		dispatch($job);
+		//$job->handle();
 		
 		return response()->json(['status' => 'success']);
 	}
@@ -1059,51 +1112,6 @@ class MainController extends Controller
 			'city' => $city,
 			'product' => '',
 			'products' => $products ?? [],
-		]);
-	}
-	
-	/**
-	 * @param $uuid
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-	 */
-	public function payLink($uuid)
-	{
-		$cityAlias = $this->request->session()->get('cityAlias');
-		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-		
-		if (!$city->pay_account_number) {
-			return view('pay', [
-				'page' => $page ?? new Content,
-				'city' => $city,
-				'html' => '',
-				'error' => trans('main.pay.не-указан-номер-счета')
-			]);
-		}
-		
-		$paymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, PaymentMethod::ONLINE_ALIAS);
-		$status = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
-		
-		$bill = Bill::where('uuid', $uuid)
-			->where('payment_method_id', $paymentMethod->id)
-			->where('status_id', $status->id)
-			->whereNull('payed_at')
-			->first();
-		if (!$bill) {
-			return view('pay', [
-				'page' => $page ?? new Content,
-				'city' => $city,
-				'html' => '',
-				'error' => trans('main.pay.счет-не-найден')
-			]);
-		}
-
-		$payFormHtml = PayAnyWayService::generatePayForm($city->pay_account_number, $bill);
-		
-		return view('pay', [
-			'page' => $page ?? new Content,
-			'city' => $city,
-			'html' => $payFormHtml ?? '',
-			'error' => ''
 		]);
 	}
 }

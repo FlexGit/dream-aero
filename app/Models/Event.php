@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use \Venturecraft\Revisionable\RevisionableTrait;
 
 /**
@@ -77,6 +79,12 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Event withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Event withoutTrashed()
  * @mixin \Eloquent
+ * @property bool $is_notified
+ * @property \datetime|null $flight_invitation_sent_at
+ * @property string|null $uuid
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereFlightInvitationSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsNotified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereUuid($value)
  */
 class Event extends Model
 {
@@ -98,10 +106,13 @@ class Event extends Model
 		'is_unexpected_flight' => 'Спонтанный полет',
 		'is_test_flight' => 'Тестовый полет',
 		'notification_type' => 'Способ уведомления',
+		'is_notified' => 'Контрагент уведомлен о полете',
 		'pilot_assessment' => 'Оценка пилота',
 		'admin_assessment' => 'Оценка администратора',
 		'simulator_up_at' => 'Время подъема платформы',
 		'simulator_down_at' => 'Время опускания платформы',
+		'flight_invitation_sent_at' => 'Дата отправки приглашения на полет',
+		'uuid' => 'Uuid',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
@@ -110,7 +121,8 @@ class Event extends Model
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
-
+	protected $dontKeepRevisionOf = ['uuid', 'data_json'];
+	
 	const EVENT_SOURCE_DEAL = 'deal';
 	const EVENT_SOURCE_CALENDAR = 'calendar';
 
@@ -131,6 +143,9 @@ class Event extends Model
 		self::EVENT_TYPE_TEST_FLIGHT => 'Тестовый полет',
 	];
 	
+	const NOTIFICATION_TYPE_SMS = 'sms';
+	const NOTIFICATION_TYPE_CALL = 'call';
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -138,6 +153,7 @@ class Event extends Model
 	 */
 	protected $fillable = [
 		'event_type',
+		'contractor_id',
 		'deal_id',
 		'deal_position_id',
 		'user_id',
@@ -147,10 +163,17 @@ class Event extends Model
 		'flight_simulator_id',
 		'start_at',
 		'stop_at',
+		'is_repeated_flight',
+		'is_unexpected_flight',
+		'is_test_flight',
 		'pilot_assessment',
 		'admin_assessment',
 		'simulator_up_at',
 		'simulator_down_at',
+		'notification_type',
+		'is_notified',
+		'flight_invitation_sent_at',
+		'uuid',
 		'data_json',
 	];
 
@@ -167,12 +190,19 @@ class Event extends Model
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
+		'flight_invitation_sent_at' => 'datetime:Y-m-d H:i',
 		'data_json' => 'array',
+		'is_notified' => 'boolean',
 	];
 	
 	public static function boot()
 	{
 		parent::boot();
+		
+		Event::created(function (Event $event) {
+			$event->uuid = $event->generateUuid();
+			$event->save();
+		});
 		
 		Event::deleting(function (Event $event) {
 			$event->comments()->delete();
@@ -218,5 +248,64 @@ class Event extends Model
 	{
 		return $this->hasMany(EventComment::class, 'event_id', 'id')
 			->latest();
+	}
+	
+	/**
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function generateUuid()
+	{
+		return (string)\Webpatser\Uuid\Uuid::generate();
+	}
+	
+	/**
+	 * @return $this|null
+	 */
+	public function generateFile()
+	{
+		$simulatorAlias = $this->simulator->alias ?? '';
+		if (!$simulatorAlias) return null;
+
+		$product = $this->dealPosition->product;
+		if (!$product) return null;
+		
+		$productType = $product->productType;
+		if (!$productType) return null;
+		
+		$flightInvitationTemplateFileName = 'INVITE_' . $simulatorAlias . '.jpg';
+		if (!Storage::disk('private')->exists('invitation/template/' . $flightInvitationTemplateFileName)) {
+			return null;
+		}
+		
+		$flightInvitationTemplateFilePath = Storage::disk('private')->path('invitation/template/' . $flightInvitationTemplateFileName);
+		
+		$flightInvitationFile = Image::make($flightInvitationTemplateFilePath)->encode('jpg');
+		$fontPath = public_path('assets/fonts/GothamProRegular/GothamProRegular.ttf');
+		
+		$flightInvitationFile->text($this->start_at->format('d.m.Y'), 3520, 410, function ($font) use ($fontPath) {
+			$font->file($fontPath);
+			$font->size(120);
+			$font->color('#333333');
+		});
+		$flightInvitationFile->text($product->duration ?? '-', 1050, 3670, function ($font) use ($fontPath) {
+			$font->file($fontPath);
+			$font->size(160);
+			$font->color('#ffffff');
+		});
+		
+		$flightInvitationFileName = $this->uuid . '.jpg';
+		if (!$flightInvitationFile->save(storage_path('app/private/invitation/' . $flightInvitationFileName))) {
+			return null;
+		}
+		
+		$this->data_json = [
+			'flight_invitation_file_path' => 'invitation/' . $flightInvitationFileName,
+		];
+		if (!$this->save()) {
+			return null;
+		}
+		
+		return $this;
 	}
 }

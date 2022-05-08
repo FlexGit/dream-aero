@@ -21,7 +21,6 @@ class CreateCitiesTable extends Migration
 			$table->string('version', 25)->default('ru')->index()->comment('версия');
 			$table->string('timezone', 50)->nullable()->comment('временная зона');
 			$table->integer('sort')->default(0)->comment('сортировка');
-			$table->string('pay_account_number')->nullable()->comment('номер счета платежной системы');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();

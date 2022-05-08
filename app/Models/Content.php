@@ -57,6 +57,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereRatingCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereRatingIps($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereRatingValue($value)
+ * @property string|null $meta_title_en
+ * @property string|null $meta_description_en
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereMetaDescriptionEn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Content whereMetaTitleEn($value)
  */
 class Content extends Model
 {

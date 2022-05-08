@@ -50,18 +50,14 @@ class Status extends Model
 	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 	
     const STATUS_TYPE_CONTRACTOR = 'contractor';
-	/*const STATUS_TYPE_ORDER = 'order';*/
 	const STATUS_TYPE_DEAL = 'deal';
 	const STATUS_TYPE_CERTIFICATE = 'certificate';
 	const STATUS_TYPE_BILL = 'bill';
-	/*const STATUS_TYPE_PAYMENT = 'payment';*/
 	const STATUS_TYPES = [
 		Status::STATUS_TYPE_CONTRACTOR => 'Контрагент',
-		/*Status::STATUS_TYPE_ORDER => 'Заказ',*/
 		Status::STATUS_TYPE_DEAL => 'Сделка',
 		Status::STATUS_TYPE_CERTIFICATE => 'Сертификат',
 		Status::STATUS_TYPE_BILL => 'Счет',
-		/*Status::STATUS_TYPE_PAYMENT => 'Платеж',*/
 	];
 	
 	/*const ATTRIBUTES = [

@@ -5,21 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\DealPosition;
 use App\Models\PaymentMethod;
 use App\Services\HelpFunctions;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 use App\Models\Certificate;
-use App\Models\Deal;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Status;
-use App\Models\Contractor;
-use Mail;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Storage;
 
 class CertificateController extends Controller
 {
@@ -302,6 +296,9 @@ class CertificateController extends Controller
 		return response()->json(['status' => 'success']);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function sendCertificate() {
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -327,130 +324,35 @@ class CertificateController extends Controller
 		$certificate = Certificate::find($this->request->certificate_id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
-		$email = ($position->deal && $position->deal->contractor) ? $position->deal->contractor->email : '';
+		$job = new \App\Jobs\sendCertificateEmail($certificate);
+		dispatch($job);
+		//$job->handle();
 		
-		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
-		
-		$certificateFilePath = storage_path('app/private/certificate/' . $certificate->uuid . '.jpg');
-		
-		Mail::send('admin.emails.send_certificate', ['path' => $certificateFilePath], function ($message) use ($email, $certificateFilePath) {
-			$message->to($email)->subject('Сертификат на полет на авиатренажере');
-			$message->attach($certificateFilePath);
-		});
-		
-		$failures = Mail::failures();
-		if ($failures) {
-			return response()->json(['status' => 'error', 'reason' => implode(' ', $failures)]);
-		}
-		
-		$certificateSentAt = Carbon::now()->format('Y-m-d H:i:s');
-		$position->link_sent_at = $certificateSentAt;
-		if (!$position->save()) {
-			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-		}
-		
-		return response()->json(['status' => 'success', 'certificate_sent_at' => $certificateSentAt]);
+		return response()->json(['status' => 'success', 'message' => 'Задание на отправку сертификата успешно создано']);
 	}
 	
 	/**
 	 * @param $uuid
 	 * @return \never|\Symfony\Component\HttpFoundation\StreamedResponse
 	 */
-	public function generateCertificate($uuid)
+	public function getCertificateFile($uuid)
 	{
 		$certificate = HelpFunctions::getEntityByUuid(Certificate::class, $uuid);
 		if (!$certificate) {
-			return abort(404);
+			abort(404);
 		}
 		
-		$product = $certificate->product;
-		if (!$product) return abort(404);
+		$certificateFilePath = (is_array($certificate->data_json) && array_key_exists('certificate_file_path', $certificate->data_json)) ? $certificate->data_json['certificate_file_path'] : '';
 		
-		$productType = $product->productType;
-		if (!$productType) return abort(404);
-		
-		$city = $certificate->city;
-		if (!$city) return abort(404);
-		
-		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-		if (!$cityProduct || !$cityProduct->pivot) {
-			return abort(404);
+		// если файла сертификата по какой-то причине не оказалось, генерим его
+		$certificateFileExists = Storage::disk('private')->exists($certificateFilePath);
+		if (!isset($certificateFilePath) || !$certificateFileExists) {
+			$certificate = $certificate->generateFile();
+			if (!$certificate) {
+				abort(404);
+			}
 		}
-		
-		$data = json_decode($cityProduct->pivot->data_json, true);
-		if (!isset($data['certificate_template_file_path'])) {
-			return abort(404);
-		}
-		
-		if (!Storage::disk('private')->exists($data['certificate_template_file_path'])) {
-			return abort(404);
-		}
-		
-		$certificateTemplateFilePath = Storage::disk('private')->path($data['certificate_template_file_path']);
-		
-		$certificateFile = Image::make($certificateTemplateFilePath)->encode('jpg');
-		$fontPath = public_path('assets/fonts/GothamProRegular/GothamProRegular.ttf');
-		
-		/*switch ($city->alias) {
-			case City::MSK_ALIAS:*/
-				switch ($product->productType->alias) {
-					case ProductType::REGULAR_ALIAS:
-					case ProductType::ULTIMATE_ALIAS:
-						$certificateFile->text($certificate->number, 833, 121, function($font) use ($fontPath) {
-							$font->file($fontPath);
-							$font->size(22);
-							$font->color('#333333');
-						});
-						$certificateFile->text($certificate->created_at->format('d.m.Y'), 1300, 121, function($font) use ($fontPath) {
-							$font->file($fontPath);
-							$font->size(22);
-							$font->color('#333333');
-						});
-						$certificateFile->text($certificate->product->duration ?? '-', 355, 1225, function($font) use ($fontPath) {
-							$font->file($fontPath);
-							$font->size(46);
-							$font->color('#ffffff');
-						});
-					break;
-					case ProductType::COURSES_ALIAS:
-					case ProductType::PLATINUM_ALIAS:
-						$certificateFile->text($certificate->number, 4700, 3022, function($font) use ($fontPath) {
-							$font->file($fontPath);
-							$font->size(70);
-							$font->color('#333333');
-						});
-						$certificateFile->text($certificate->created_at->format('d.m.Y'), 6100, 3022, function($font) use ($fontPath) {
-							$font->file($fontPath);
-							$font->size(70);
-							$font->color('#333333');
-						});
-					break;
-					case ProductType::VIP_ALIAS:
-						$certificateFile->text($certificate->number, 1880, 430, function($font) use ($fontPath) {
-							$font->file($fontPath);
-							$font->size(36);
-							$font->color('#333333');
-						});
-						$certificateFile->text($certificate->created_at->format('d.m.Y'), 1965, 505, function($font) use ($fontPath) {
-							$font->file($fontPath);
-							$font->size(36);
-							$font->color('#333333');
-						});
-					break;
-				}
-			/*break;
-		}*/
-		
-		$certificateFileName = $certificate->uuid . '.jpg';
-		
-		$certificateFile->save(storage_path('app/private/certificate/' . $certificateFileName));
-		
-		$headers = [
-			'Content-Type' => 'image/jpeg',
-			'Content-Disposition' => 'attachment; filename=' . $certificateFileName,
-		];
-		return response()->stream(function() use ($certificateFile) {
-			echo $certificateFile;
-		}, 200, $headers);
+
+		return Storage::disk('private')->download($certificateFilePath);
 	}
 }

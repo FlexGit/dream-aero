@@ -46,7 +46,8 @@ class PromocodeController extends Controller
 			abort(404);
 		}
 		
-		$promocodes = Promocode::orderBy('number')
+		$promocodes = Promocode::whereNull('type')
+			->orderBy('number')
 			->get();
 		
 		$VIEW = view('admin.promocode.list', ['promocodes' => $promocodes]);

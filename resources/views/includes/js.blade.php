@@ -2,7 +2,6 @@
 <script src="{{ asset('js/wow.min.js') }}"></script>
 {{--<script src="{{ asset('js/default.js') }}"></script>
 <script src="{{ asset('js/ajaxjs.js') }}"></script>--}}
-
 {{--<script src="{{ asset('js/jquery.lazy.min.js') }}"></script>--}}
 <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ asset('js/jquery.nice-select.js') }}"></script>
@@ -10,12 +9,10 @@
 {{--<script src="{{ asset('js/owl.carousel.js') }}"></script>--}}
 {{--<script src="{{ asset('js/scrollspeed.js') }}"></script>--}}
 <script src="{{ asset('js/main.js?v=' . time()) }}"></script>
-
 {{--<script src="{{ asset('js/tabs.js') }}"></script>--}}
 {{--<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>--}}
 {{--<script src="{{ asset('js/jquery.fancybox.pack.js?v=2.1.7') }}"></script>
 <script src="{{ asset('js/jsprice.js?v=2.6.2') }}"></script>--}}
-
 {{--<script src="{{ asset('js/mainonly.js?v=' . time()) }}"></script>--}}
 {{--<script src="{{ asset('js/select2.min.js') }}"></script>--}}
 <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
@@ -60,10 +57,7 @@
 				type: 'GET',
 				dataType: 'json',
 				success: function(result) {
-					//console.log(result);
-					//$('#modal .modal-title').text(title);
 					$('#city_modal .modal-body').html(result.html);
-					//$('#city_modal').modal('show');
 				}
 			});
 		});
@@ -90,13 +84,12 @@
 					alias: $(this).data('alias'),
 				},
 				success: function(result) {
-					if (result.status == 'success') {
+					if (result.status === 'success') {
 						$('#city_modal').modal('hide');
 						window.location.href = '/' + result.cityAlias;
 					}
 				}
 			});
 		});
-
 	});
 </script>

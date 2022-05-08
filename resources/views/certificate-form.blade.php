@@ -118,6 +118,27 @@
 					<small class="promocode_note" style="display: none;">* @lang('main.modal-certificate.не-суммируется-с-другими-акциями-и-предложениями')</small>
 				</div>
 			@endif
+			@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS])) || !$product)
+				<div class="aeroflot_container">
+					<div style="display: flex;">
+						<div class="switch_box" style="margin-bottom: 10px;">
+							<label class="switch">
+								<input type="checkbox" name="has_aeroflot_card" class="edit_field" value="1">
+								<span class="slider round"></span>
+							</label><span>@lang('main.modal-certificate.есть-карта-аэрофлот')</span>
+						</div>
+						<div style="display: flex;width: 100%;">
+							<div style="width: 100%;">
+								<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" style="display: none;margin-bottom: 0;padding-top: 5px;">
+							</div>
+							<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-aeroflot-card-btn" style="display: none;width: 35px;"><i>Ok</i></button>
+							<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-aeroflot-card-remove" style="display: none;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>
+						</div>
+					</div>
+					<small class="aeroflot_note" style="display: none;">* @lang('main.modal-certificate.введите-номер-карты-аэрофлот-описание')</small>
+					<div class="aeroflot-buttons-container"></div>
+				</div>
+			@endif
 			<div class="amount-container text-right" style="margin: 20px 0;">
 				<span style="font-size: 24px;font-weight: bold;">@lang('main.modal-certificate.стоимость'): <span class="js-amount">0</span> @lang('main.common.руб')</span>
 			</div>
@@ -146,17 +167,17 @@
 				<div class="alert alert-danger hidden" role="alert"></div>
 			</div>
 
-			<button type="button" class="popup-submit button-pipaluk button-pipaluk-grey js-certificate-btn" style="margin-top: 20px;" disabled><i>@lang('main.common.оплатить')</i></button>
+			<button type="button" class="popup-submit button-pipaluk button-pipaluk-grey js-certificate-btn" data-source="{{ app('\App\Models\Deal')::WEB_SOURCE }}" data-event_type="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" data-url="{{ route('dealCertificateStore') }}" style="margin-top: 20px;" disabled><i>@lang('main.common.оплатить')</i></button>
 
 			<input type="hidden" id="amount">
 			<input type="hidden" id="promocode_uuid">
-			<input type="hidden" id="city_id" value="{{ $city->id ?? 1 }}">
+			<input type="hidden" id="aeroflot_bonus">
+			<input type="hidden" id="transaction_type">
 		</fieldset>
 	</div>
 @endsection
 
 @push('css')
-	<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
 	<style>
 		.fly_en, .give_en {
@@ -167,182 +188,10 @@
 
 @push('scripts')
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
-	{{--<script src="{{ asset('js/mainonly.js?' . time()) }}"></script>--}}
+	<script src="{{ asset('js/deal.js?v=' . time()) }}"></script>
 	<script>
 		$(function() {
-			$.datetimepicker.setLocale('ru', {
-				year: 'numeric',
-				month: '2-digit',
-				day: '2-digit'
-			});
-
 			calcAmount();
-
-			$(document).on('change', '.switch_box input[name="has_promocode"]', function() {
-				var $popup = $(this).closest('.popup');
-
-				if ($(this).is(':checked')) {
-					$popup.find('#promocode').show().focus();
-					$popup.find('.js-promocode-btn').show();
-					$popup.find('.promocode_note').show();
-				} else {
-					$('.js-promocode-remove').trigger('click');
-					$popup.find('#promocode').hide();
-					$popup.find('.js-promocode-btn').hide();
-					$popup.find('.promocode_note').hide();
-				}
-			});
-
-			$(document).on('click', '.js-promocode-btn', function() {
-				var $promocodeApplyBtn = $(this),
-					$promocodeContainer = $promocodeApplyBtn.closest('.promocode_container'),
-					$promocode = $promocodeContainer.find('#promocode'),
-					$promocodeRemoveBtn = $promocodeContainer.find('.js-promocode-remove'),
-					$fieldset = $promocodeApplyBtn.closest('fieldset'),
-					$product = $fieldset.find('#product'),
-					$errorMsg = $promocodeContainer.find('.text-error'),
-					$successMsg = $promocodeContainer.find('.text-success'),
-					$promocodeUuid = $fieldset.find('#promocode_uuid');
-
-				$errorMsg.remove();
-				$successMsg.remove();
-
-				if (!$promocode.val().length) return;
-				if ($product.val() === null) {
-					$promocode.after('<p class="text-error text-small">' + $promocode.data('no-product-error') + '</p>');
-					return;
-				}
-
-				$.ajax({
-					url: '/promocode/verify',
-					type: 'POST',
-					data: {
-						'promocode': $promocode.val(),
-					},
-					dataType: 'json',
-					success: function (result) {
-						if (result.status !== 'success') {
-							$promocode.after('<p class="text-error text-small">' + result.reason + '</p>');
-							return;
-						}
-
-						$promocode.after('<p class="text-success text-small">' + result.message + '</p>');
-						$promocodeUuid.val(result.uuid);
-						$promocode.attr('disabled', true);
-						$promocodeApplyBtn.hide();
-						$promocodeRemoveBtn.show();
-
-						calcAmount();
-					}
-				});
-			});
-
-			$(document).on('click', '.js-promocode-remove', function() {
-				var $promocodeRemoveBtn = $(this),
-					$promocodeContainer = $promocodeRemoveBtn.closest('.promocode_container'),
-					$promocodeApplyBtn = $promocodeContainer.find('.js-promocode-btn'),
-					$promocode = $promocodeContainer.find('#promocode'),
-					$fieldset = $promocodeRemoveBtn.closest('fieldset'),
-					$promocodeUuid = $fieldset.find('#promocode_uuid'),
-					$errorMsg = $promocodeContainer.find('.text-error'),
-					$successMsg = $promocodeContainer.find('.text-success');
-
-				$errorMsg.remove();
-				$successMsg.remove();
-				$promocodeRemoveBtn.hide();
-				$promocodeApplyBtn.show();
-				$promocode.val('');
-				$promocodeUuid.val('');
-				$promocode.attr('disabled', false);
-
-				calcAmount();
-			});
-
-			$(document).on('change', '#product', function() {
-				calcAmount();
-			});
-
-			$(document).on('change', 'input[name="consent"]', function() {
-				var $popup = $(this).closest('.popup, form.ajax_form'),
-					$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-question-btn');
-
-				if ($(this).is(':checked')) {
-					$btn.removeClass('button-pipaluk-grey')
-						.addClass('button-pipaluk-orange')
-						.prop('disabled', false);
-				} else {
-					$btn.removeClass('button-pipaluk-orange')
-						.addClass('button-pipaluk-grey')
-						.prop('disabled', true);
-				}
-			});
-
-			$(document).on('click', '.js-certificate-btn', function() {
-				var $popup = $(this).closest('.popup'),
-					cityId = $popup.find('#city_id').val(),
-					productId = $popup.find('#product').val(),
-					name = $popup.find('#name').val(),
-					email = $popup.find('#email').val(),
-					phone = $popup.find('#phone').val(),
-					certificate_whom = $popup.find('#certificate_whom').val(),
-					is_unified = $popup.find('#is_unified').is(':checked') ? 1 : 0,
-					duration = $popup.find('#product').find(':selected').data('product-duration'),
-					amount = $popup.find('#amount').val(),
-					promocode_uuid = $popup.find('#promocode_uuid').val(),
-					$alertSuccess = $popup.find('.alert-success'),
-					$alertError = $popup.find('.alert-danger');
-
-				var data = {
-					'source': '{{ app('\App\Models\Deal')::WEB_SOURCE }}',
-					'event_type': '{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}',
-					'name': name,
-					'email': email,
-					'phone': phone,
-					'product_id': productId ? parseInt(productId) : 0,
-					'city_id': cityId ? parseInt(cityId) : 0,
-					'certificate_whom': certificate_whom,
-					'is_unified': is_unified ? is_unified : 0,
-					'duration': duration,
-					'amount': amount ? parseInt(amount) : 0,
-					'promocode_uuid': promocode_uuid,
-				};
-
-				$.ajax({
-					url: '{{ route('dealCertificateStore') }}',
-					type: 'POST',
-					data: data,
-					dataType: 'json',
-					success: function (result) {
-						$alertSuccess.addClass('hidden');
-						$alertError.text('').addClass('hidden');
-						$('.field-error').removeClass('field-error');
-
-						if (result.status !== 'success') {
-							if (result.reason) {
-								$alertError.text(result.reason).removeClass('hidden');
-							}
-							if (result.errors) {
-								const entries = Object.entries(result.errors);
-								entries.forEach(function (item, key) {
-									var fieldId = item[0];
-									$('#' + fieldId).addClass('field-error');
-								});
-							}
-							return;
-						}
-
-						yaCounter46672077.reachGoal('SendOrder');
-						gtag_report_conversion();
-						fbq('track', 'Purchase', {value: 200, currency: 'rub'});
-
-						$alertSuccess.removeClass('hidden');
-						$popup.find('#name, #email, #phone, #certificate_whom').val('');
-
-						$popup.find('fieldset').append(result.html);
-						$('#pay_form').submit();
-					}
-				});
-			});
 		});
 	</script>
 @endpush

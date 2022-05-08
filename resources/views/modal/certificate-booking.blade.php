@@ -7,7 +7,9 @@
 
 <div class="popup-titl">
 	<p id="on-title">{{ preg_replace('/[0-9]+/', '', $product->name) }}</p>
-	<p id="on-number">{{ $product->duration }} @lang('main.common.мин')</p>
+	@if($product->alias != 'fly_no_fear')
+		<p id="on-number">{{ $product->duration }} @lang('main.common.мин')</p>
+	@endif
 </div>
 
 <div class="form-container"></div>

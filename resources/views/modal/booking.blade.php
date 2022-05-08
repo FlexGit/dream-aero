@@ -111,7 +111,7 @@
 			<div class="alert alert-danger hidden" role="alert"></div>
 		</div>
 
-		<button type="button" class="popup-submit button-pipaluk button-pipaluk-grey js-booking-btn" style="margin-top: 20px;" disabled><i>@lang('main.common.отправить')</i></button>
+		<button type="button" class="popup-submit button-pipaluk button-pipaluk-grey js-booking-btn" data-source="{{ app('\App\Models\Deal')::WEB_SOURCE }}" data-event_type="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" data-url="{{ route('dealCertificateStore') }}" style="margin-top: 20px;" disabled><i>@lang('main.common.отправить')</i></button>
 
 		<input type="hidden" id="amount">
 		<input type="hidden" id="promocode_uuid">

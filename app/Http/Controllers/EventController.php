@@ -16,6 +16,7 @@ use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\Comment;
 use Validator;
 
@@ -53,8 +54,15 @@ class EventController extends Controller
 			->orderBy('name')
 			->get();
 		
+		$upcomingEvents = Event::where('event_type', Event::EVENT_TYPE_DEAL)
+			->where('start_at', '>=', Carbon::now()->addDays(1)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('start_at', '<=', Carbon::now()->addDays(1)->endOfDay()->format('Y-m-d H:i:s'))
+			->where('is_notified', false)
+			->get();
+		
 		return view('admin.event.index', [
 			'cities' => $cities,
+			'upcomingEvents' => $upcomingEvents,
 			'user' => $user,
 		]);
 	}
@@ -432,6 +440,7 @@ class EventController extends Controller
 					
 					$event = new Event();
 					$event->event_type = Event::EVENT_TYPE_DEAL;
+					$event->contractor_id = ($position->deal && $position->deal->contractor) ? $position->deal->contractor->id : 0;
 					$event->deal_id = $position->deal ? $position->deal->id : 0;
 					$event->deal_position_id = $position->id ?? 0;
 					$event->city_id = $city->id;
@@ -570,6 +579,7 @@ class EventController extends Controller
 						$event->extra_time = (int)$this->request->extra_time;
 						$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
 						$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
+						$event->notification_type = $this->request->notification_type;
 						$event->pilot_assessment = (int)$this->request->pilot_assessment;
 						$event->admin_assessment = (int)$this->request->admin_assessment;
 						$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;
@@ -662,7 +672,7 @@ class EventController extends Controller
 			abort(404);
 		}
 		
-		\Log::debug($this->request);
+		//\Log::debug($this->request);
 		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
@@ -764,11 +774,17 @@ class EventController extends Controller
 
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
-
+		
+		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
+		
 		if (!$event->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
-
+		
+		if ($flightInvitationFilePath) {
+			Storage::disk('private')->delete($flightInvitationFilePath);
+		}
+		
 		return response()->json(['status' => 'success']);
 	}
 	
@@ -794,5 +810,87 @@ class EventController extends Controller
 		}
 		
 		return response()->json(['status' => 'success', 'msg' => 'Комментарий успешно удален']);
+	}
+	
+	public function notified()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$eventId = $this->request->event_id ?? 0;
+		if (!$eventId) {
+			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
+		}
+		
+		$event = Event::find($eventId);
+		if (!$event) {
+			return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
+		}
+		
+		$event->is_notified = true;
+		if (!$event->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		return response()->json(['status' => 'success', 'msg' => 'Уведомление по событию успешно сохранено']);
+	}
+	
+	public function sendFlightInvitation()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$rules = [
+			'id' => 'required|numeric|min:0|not_in:0',
+			'event_id' => 'required|numeric|min:0|not_in:0',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'id' => 'Позиция',
+				'event_id' => 'Событие',
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+		
+		$position = DealPosition::find($this->request->id);
+		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
+		
+		$event = Event::find($this->request->event_id);
+		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
+		
+		$job = new \App\Jobs\SendFlightInvitationEmail($event);
+		dispatch($job);
+		//$job->handle();
+		
+		return response()->json(['status' => 'success', 'message' => 'Задание на отправку приглашения на полет успешно создано']);
+	}
+	
+	/**
+	 * @param $uuid
+	 * @return \never|\Symfony\Component\HttpFoundation\StreamedResponse
+	 */
+	public function getFlightInvitationFile($uuid)
+	{
+		$event = HelpFunctions::getEntityByUuid(Event::class, $uuid);
+		if (!$event) {
+			abort(404);
+		}
+		
+		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
+		
+		// если файла приглашения на полет по какой-то причине не оказалось, генерим его
+		$flightInvitationFileExists = Storage::disk('private')->exists($flightInvitationFilePath);
+		if (!isset($flightInvitationFilePath) || !$flightInvitationFileExists) {
+			$event = $event->generateFile();
+			if (!$event) {
+				abort(404);
+			}
+		}
+		
+		return Storage::disk('private')->download($flightInvitationFilePath);
 	}
 }

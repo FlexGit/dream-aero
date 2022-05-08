@@ -6,15 +6,11 @@
 <div class="row">
 	<div class="col">
 		<div class="form-group">
-			<label for="product_id">Продукт</label>
-			<select class="form-control js-product" id="product_id" name="product_id">
-				<option></option>
-				@foreach($productTypes ?? [] as $productType)
-					<optgroup label="{{ $productType->name }}">
-						@foreach($productType->products ?? [] as $product)
-							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($product->id == $position->product_id) selected @endif>{{ $product->name }}</option>
-						@endforeach
-					</optgroup>
+			<label for="city_id">Город</label>
+			<select class="form-control" id="city_id" name="city_id">
+				<option value=""></option>
+				@foreach($cities ?? [] as $city)
+					<option value="{{ $city->id }}" @if($city->id == $position->city_id) selected @endif>{{ $city->name }}</option>
 				@endforeach
 			</select>
 		</div>
@@ -45,11 +41,15 @@
 <div class="row">
 	<div class="col-4">
 		<div class="form-group">
-			<label for="city_id">Город</label>
-			<select class="form-control" id="city_id" name="city_id">
-				<option value=""></option>
-				@foreach($cities ?? [] as $city)
-					<option value="{{ $city->id }}" @if($city->id == $position->city_id) selected @endif>{{ $city->name }}</option>
+			<label for="product_id">Продукт</label>
+			<select class="form-control js-product" id="product_id" name="product_id">
+				<option></option>
+				@foreach($productTypes ?? [] as $productType)
+					<optgroup label="{{ $productType->name }}">
+						@foreach($productType->products ?? [] as $product)
+							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($product->id == $position->product_id) selected @endif>{{ $product->name }}</option>
+						@endforeach
+					</optgroup>
 				@endforeach
 			</select>
 		</div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -51,7 +52,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $phone телефон
  * @method static \Illuminate\Database\Eloquent\Builder|City whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|City wherePhone($value)
- * @property string|null $pay_account_number
  * @method static \Illuminate\Database\Eloquent\Builder|City wherePayAccountNumber($value)
  * @property string $name_en
  * @method static \Illuminate\Database\Eloquent\Builder|City whereNameEn($value)
@@ -135,13 +135,13 @@ class City extends Model
 	 */
 	protected $fillable = [
 		'name',
+		'name_en',
 		'alias',
 		'version',
 		'timezone',
 		'email',
 		'phone',
 		'sort',
-		'pay_account_number',
 		'is_active',
 		'data_json',
 	];
@@ -194,5 +194,35 @@ class City extends Model
 	{
 		$phoneCleared = preg_replace( '/[^0-9]/', '', $this->phone);
 		return '+' . mb_substr($phoneCleared, 0, 1) . ' (' . mb_substr($phoneCleared, 1, 3) . ') ' . mb_substr($phoneCleared, 4, 3) . '-' . mb_substr($phoneCleared, 7, 2) . '-' . mb_substr($phoneCleared, 9, 2);
+	}
+	
+	/**
+	 * Распределение оплат между локациями города
+	 *
+	 * @return mixed|null
+	 */
+	public function getLocationForBill()
+	{
+		//\DB::connection()->enableQueryLog();
+		$locations = $this->locations()
+			->where('is_active', true)
+			->whereNotNull('pay_account_number')
+			->get();
+		if ($locations->isEmpty()) return null;
+		//\Log::debug(\DB::getQueryLog());
+		
+		if ($locations->count() > 1) {
+			$sortLocations = [];
+			foreach ($locations as $location) {
+				$sortLocations[$location->alias] = $location->countBillsInCurrentMonth();
+			}
+			
+			asort($sortLocations);
+			$location = HelpFunctions::getEntityByAlias(Location::class, array_key_first($sortLocations));
+			
+			return $location;
+		}
+
+		return $locations->first();
 	}
 }

@@ -106,6 +106,17 @@ class HelpFunctions {
 		return app($entity)::where('uuid', $uuid)
 			->first();
 	}
+	
+	/**
+	 * @param $entity
+	 * @param $number
+	 * @return mixed
+	 */
+	public static function getEntityByNumber($entity, $number)
+	{
+		return app($entity)::where('number', $number)
+			->first();
+	}
 
 	/**
 	 * @param $authToken

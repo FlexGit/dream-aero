@@ -51,6 +51,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereAlias($value)
  * @property array|null $data_json дополнительная информация
  * @method static \Illuminate\Database\Eloquent\Builder|Promo whereDataJson($value)
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @method static \Illuminate\Database\Eloquent\Builder|Promo whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promo whereMetaTitle($value)
  */
 class Promo extends Model
 {
@@ -85,6 +89,7 @@ class Promo extends Model
 	protected $fillable = [
 		'name',
 		'alias',
+		'discount_id',
 		'preview_text',
 		'detail_text',
 		'city_id',

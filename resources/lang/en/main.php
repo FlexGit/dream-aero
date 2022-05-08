@@ -6,7 +6,11 @@ return [
 	'common.оплатить' => 'Pay online',
 	'common.мин' => 'min',
 	
+	'error.повторите-позже' => 'The operation cannot be completed at the moment, please try again later!',
 	'error.проверьте-правильность-заполнения-полей-формы' => 'Check that the form fields are filled in correctly',
+	'error.некорректные-параметры' => 'Incorrect parameters',
+	'error.не-передан-промокод' => 'Promo code not sent',
+	'error.промокод-не-найден' => 'Promo code not found',
 	
 	'верхнее-меню.главная' => 'Home',
 	'верхнее-меню.о-тренажере' => 'About the simulator',
@@ -182,7 +186,7 @@ return [
 	'flight-types.программа-для-детей' => 'Programs for Children',
 	'flight-types.любовь-к-авиации' => 'Many people say that they’ve loved flying since their childhood days and look back at them fondly. Give your child a chance to try something new and experience the same joy. Dream Aero has prepared various entertaining programs for young dreamers, which teaches them the complexities of flying in a fun and interactive way.',
 	
-	'instruction.title' => 'FLIGHT BRIEFING',
+	'instruction.title' => 'Flight briefing',
 	
 	'instruction.737.для-вашего-удобства' => 'For your convenience and to save time, learn the basics of the Boeing 737 NG and complete your briefing before your flight.',
 	
@@ -346,9 +350,24 @@ return [
 	
 	'offer.title' => 'Public offer',
 	
+	'lechenie-aerofobii.title' => 'Treatment of aerophobia',
+	
 	'pay.не-указан-номер-счета' => 'For the selected city, the account number of the payment system is not specified',
-	'pay.счет-не-найден' => 'Account number not found. Check payment method, status and absence of payment date',
-	'pay.redirect' => 'Redirect to payment page...',
+	'pay.счет-не-найден' => 'Invoice number not found',
+	'pay.счет-способ-оплаты' => 'Incorrect payment method for the specified Invoice',
+	'pay.счет-оплачен' => 'The invoice has already been paid',
+	'pay.redirect' => 'Redirecting to payment page...',
+	'payment.счет-успешно-оплачен' => 'Invoice # :number paid successfully!',
+	'payment.cертификат-не-найден' => 'Flight certificate not found. Please call us at: :phone.',
+	'payment.счет-не-найден' => 'Invoice not found',
+	'payment.счет-уже-был-оплачен' => 'Invoice # :number has already been paid',
+	'payment.счет-не-был-оплачен' => 'Invoice # :number has not been paid. Please try again later!',
+	'payment.счет-оплачен-сертификат-отправлен' => 'Invoice # :number paid successfully!<br>We will send Flight Certificate # :certificate_number within a few minutes to the E-mail specified in the application.',
+	'payment.оплата-успешно-принята-сертификат-будет-отправлен' => 'Payment against Invoice # :number successfully accepted.<br>Some time later, after confirmation from the payment system, we will send you your Certificate to the E-mail specified in the application.',
+	'payment.оплата-успешно-принята-приглашение-на-полет-будет-отправлено' => 'Payment against Invoice # :number successfully accepted.<br>Some time later, after confirmation from the payment system, we will send you a flight invitation to the E-mail specified in the application.',
+	'payment.оплата-успешно-принята' => 'Payment against Invoice # :number successfully accepted.',
+	'payment.оплата-счета-отклонена' => 'Payment for Invoice # :number declined.',
+	'payment.title' => 'Payment',
 	
 	'modal-booking.заполните-пару-полей' => 'Fill in a few fields and our Manager will contact you to confirm your booking',
 	'modal-booking.есть-сертификат' => 'I have a certificate',
@@ -366,9 +385,10 @@ return [
 	'modal-booking.согласен-с-условиями' => 'I agree with',
 	'modal-booking.публичной-оферты' => 'public offer',
 	'modal-booking.заявка-успешно-отправлена' => 'Your order has been successfully sent! We will contact you shortly.',
+	'modal-booking.локация' => 'Location',
+	'modal-booking.промокод-применен' => 'Promo code applied',
 	
-	'modal-certificate.приобрести-сертификат' => 'Buy a flight certificate
-in one click',
+	'modal-certificate.приобрести-сертификат' => 'Buy a flight certificate in one click',
 	'modal-certificate.действует-во-всех-городах' => 'Valid in all cities',
 	'modal-certificate.ваш-город' => 'Your city',
 	'modal-certificate.выберите-вариант-полета' => 'Choose flight option',
@@ -383,6 +403,13 @@ in one click',
 	'modal-certificate.введите-промокод' => 'Enter promo code',
 	'modal-certificate.выберите-продолжительность-полета' => 'Choose flight duration',
 	'modal-certificate.не-суммируется-с-другими-акциями-и-предложениями' => 'Not combinable with other promotions and offers',
+	'modal-certificate.есть-карта-аэрофлот' => 'I have an Aeroflot Bonus card',
+	'modal-certificate.введите-номер-карты-аэрофлот' => 'Enter card number',
+	'modal-certificate.введите-номер-карты-аэрофлот-описание' => 'Enter your Aeroflot Bonus card number to earn or redeem miles',
+	'modal-certificate.номер-карты-введен-верно' => 'Number entered correctly',
+	'modal-certificate.номер-карты-введен-неверно' => 'Card number entered incorrectly',
+	'modal-certificate.начислить-мили' => 'Earn miles',
+	'modal-certificate.использовать-мили' => 'Redeem miles',
 	'modal-certificate.стоимость' => 'Cost',
 	'modal-certificate.я-согласен' => 'I agree with the',
 	'modal-certificate.с-условиями' => 'terms',
@@ -394,6 +421,8 @@ in one click',
 	'modal-certificate.а-также-с-условиями' => 'Also with conditions',
 	'modal-certificate.публичной-оферты' => 'public offer',
 	'modal-certificate.заявка-успешно-отправлена-оплата' => 'Your order has been successfully sent! Redirecting to the payment page...',
+	'modal-certificate.с-правилами-и-условиями-оферты-ознакомлен' => 'I have read the <a href=":link_rules" target="_blank">Terms</a> and conditions of the <a href=":link_offer" target="_blank">Offer</a>',
+	'modal-certificate.приобрести-видео-курс-полет-без-страха' => 'Buy in one click',
 	
 	'modal-certificate-booking.приобрести-сертификат' => 'Buy a certificate',
 	'modal-certificate-booking.забронировать-полет' => 'Book a flight',
@@ -410,5 +439,7 @@ in one click',
 	'modal-review.ваше-имя' => 'Your name',
 	'modal-review.текст-отзыва' => 'Text',
 	'modal-review.отзыв-успешно-отправлен' => 'Thank you, your review has been successfully submitted!',
-
+	
+	'404.title' => 'Error 404',
+	'404.страница-не-найдена' => 'Page not found',
 ];

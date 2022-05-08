@@ -1,7 +1,7 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="contractor_id" name="contractor_id">
 <input type="hidden" id="amount" name="amount">
-<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">
+{{--<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">--}}
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
 <input type="hidden" id="source" name="source" value="{{ $source ?? '' }}">
 
@@ -46,7 +46,7 @@
 			<label for="email">E-mail</label>
 			<input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
 			<div class="js-contractor-container hidden">
-				<small><span class="js-contractor"></span></small> <i class="fas fa-times js-contractor-delete" title="Удалить позицию" style="cursor: pointer;color: #aaa;"></i>
+				<small><span class="js-contractor"></span></small> <i class="fas fa-times js-contractor-delete" title="Удалить" style="cursor: pointer;color: #aaa;"></i>
 			</div>
 		</div>
 	</div>
@@ -70,6 +70,25 @@
 	</div>
 </div>
 <div class="row">
+	{{--@if($user->isSuperAdmin())--}}
+	<div class="col">
+		<div class="form-group">
+			<label for="location_id">Локация</label>
+			<select class="form-control" id="location_id" name="location_id">
+				<option value="0"></option>
+				@foreach($cities ?? [] as $city)
+					<optgroup label="{{ $city->name }}">
+						@foreach($city->locations ?? [] as $location)
+							@foreach($location->simulators ?? [] as $simulator)
+								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+							@endforeach
+						@endforeach
+					</optgroup>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	{{--@endif--}}
 	<div class="col">
 		<div class="form-group">
 			<label for="product_id">Продукт</label>
@@ -83,12 +102,6 @@
 					</optgroup>
 				@endforeach
 			</select>
-		</div>
-	</div>
-	<div class="col">
-		<div class="form-group">
-			<label for="certificate">Сертификат</label>
-			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Сертификат">
 		</div>
 	</div>
 	<div class="col">
@@ -115,26 +128,7 @@
 	</div>
 </div>
 <div class="row">
-	{{--@if($user->isSuperAdmin())
-		<div class="col">
-			<div class="form-group">
-				<label for="location_id">Локация</label>
-				<select class="form-control" id="location_id" name="location_id">
-					<option value="0"></option>
-					@foreach($cities ?? [] as $city)
-						<optgroup label="{{ $city->name }}">
-							@foreach($city->locations ?? [] as $location)
-								@foreach($location->simulators ?? [] as $simulator)
-									<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
-								@endforeach
-							@endforeach
-						</optgroup>
-					@endforeach
-				</select>
-			</div>
-		</div>
-	@endif--}}
-	<div class="col-6">
+	<div class="col">
 		<div class="form-group">
 			<label for="flight_date_at">Дата и время</label>
 			<div class="d-flex">
@@ -143,7 +137,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-3 js-duration hidden">
+	<div class="col js-duration hidden">
 		<div class="form-group">
 			<label for="duration">Длительность</label>
 			<select class="form-control" id="duration" name="duration">
@@ -157,7 +151,7 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-6">
+	<div class="col">
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
@@ -188,6 +182,12 @@
 					</div>
 				</div>
 			@endif
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="certificate">Сертификат</label>
+			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Сертификат">
 		</div>
 	</div>
 </div>

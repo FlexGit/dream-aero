@@ -6,7 +6,7 @@
 @section('description', App::isLocale('en') ? $page->meta_description_en : $page->meta_description)
 
 @section('content')
-	<div class="breadcrumbs container"><a href="{{ url(Request::get('cityAlias') ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.contacts.title')</span></div>
+	<div class="breadcrumbs container"><a href="{{ url($city->alias ?? '/') }}">@lang('main.home.title')</a> <span>@lang('main.contacts.title')</span></div>
 
 	<div class="contacts">
 		<div class="container">
@@ -123,57 +123,6 @@
 @push('scripts')
 	<script>
 		$(function() {
-			$(document).on('click', '.popup-with-form', function(e) {
-				popup($(this));
-			});
-
-			function popup($el) {
-				$.magnificPopup.open({
-					items: {
-						src: '#popup'
-					},
-					type: 'inline',
-					preloader: false,
-					removalDelay: 300,
-					mainClass: 'mfp-fade',
-					callbacks: {
-						open: function () {
-							$.magnificPopup.instance.close = function () {
-								$.magnificPopup.proto.close.call(this);
-							};
-
-							var $popup = $('#popup');
-
-							$popup.hide();
-
-							var url = '';
-
-							switch ($el.data('popup-type')) {
-								case 'scheme':
-									url = '/modal/scheme/' + $el.data('alias');
-									break;
-								case 'callback':
-									url = '/modal/callback';
-									break;
-							}
-
-							$.ajax({
-								type: 'GET',
-								url: url,
-								success: function (result) {
-									if (result.status != 'success') {
-										return;
-									}
-
-									$popup.addClass('popup-map');
-									$popup.find('.popup-container').html(result.html);
-									$popup.show();
-								}
-							});
-						}
-					}
-				});
-			}
 		});
 	</script>
 @endpush

@@ -76,6 +76,7 @@ class Notification extends Model
 		'title',
 		'description',
 		'city_id',
+		'contractor_id',
 		'is_active',
 		'data_json',
 	];
@@ -116,7 +117,7 @@ class Notification extends Model
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
-			'description' => $this->description,
+			'description' => strip_tags($this->description),
 			'is_new' => (bool)$this->pivot->is_new,
 			'created_at' => $this->pivot->created_at ? $this->pivot->created_at->format('Y-m-d H:i:s') : null,
 			'updated_at' => $this->pivot->updated_at ? $this->pivot->updated_at->format('Y-m-d H:i:s') : null,

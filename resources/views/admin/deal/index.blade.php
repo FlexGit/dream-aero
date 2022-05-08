@@ -33,7 +33,7 @@
 								<div>
 									<label for="search_contractor">Контрагент</label>
 								</div>
-								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
+								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="ФИО, E-mail, Телефон">
 							</div>
 							<div class="form-group ml-2">
 								<div>
@@ -115,7 +115,7 @@
 							</th>
 						</tr>
 						</thead>
-						<tbody>
+						<tbody class="body">
 						</tbody>
 					</table>
 				</div>
@@ -161,7 +161,7 @@
 	<script>
 		$(function() {
 			function getList(loadMore) {
-				var $selector = $('#dealTable tbody');
+				var $selector = $('#dealTable tbody.body');
 
 				var $tr = $('tr.odd[data-id]:last'),
 					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
@@ -217,7 +217,7 @@
 					return null;
 				}
 
-				if ($.inArray(type, ['deal', 'position']) !== -1) {
+				if ($.inArray(type, ['deal', 'position', 'event']) !== -1) {
 					$modalDialog.addClass('modal-lg');
 				} else {
 					$modalDialog.removeClass('modal-lg');
@@ -367,16 +367,16 @@
 				}
 			});
 
-			$(document).on('click', '.js-contractor-delete', function(e) {
+			$(document).on('click', '.js-contractor-delete', function() {
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
 				$('#contractor_id').val('');
 			});
 
-			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free', function(e) {
+			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free', function() {
 				calcProductAmount();
 			});
 
-			$(document).on('keyup', '#certificate', function(e) {
+			$(document).on('keyup', '#certificate', function() {
 				calcProductAmount();
 			});
 
@@ -428,40 +428,58 @@
 				}
 			});*/
 
-			$(document).on('click', '.js-remove-position', function(e) {
-				if (confirm('Вы уверены, что хотите удалить позицию?')) {
-					$.ajax({
-						url: '/deal_position/' + $(this).data('id'),
-						type: 'DELETE',
-						dataType: 'json',
-						success: function(result) {
-							if (result.status !== 'success') {
-								toastr.error(result.reason);
-								return;
-							}
+			$(document).on('click', '.js-remove-position', function() {
+				if (!confirm('Вы уверены, что хотите удалить позицию?')) return;
 
-							getList(false);
+				$.ajax({
+					url: '/deal_position/' + $(this).data('id'),
+					type: 'DELETE',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
 						}
-					});
-				}
+
+						getList(false);
+					}
+				});
 			});
 
-			$(document).on('click', '.js-remove-bill', function(e) {
-				if (confirm('Вы уверены, что хотите удалить счет?')) {
-					$.ajax({
-						url: '/bill/' + $(this).data('id'),
-						type: 'DELETE',
-						dataType: 'json',
-						success: function(result) {
-							if (result.status !== 'success') {
-								toastr.error(result.reason);
-								return;
-							}
+			$(document).on('click', '.js-remove-event', function() {
+				if (!confirm('Вы уверены, что хотите удалить событие?')) return;
 
-							getList(false);
+				$.ajax({
+					url: '/event/' + $(this).data('id'),
+					type: 'DELETE',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
 						}
-					});
-				}
+
+						getList(false);
+					}
+				});
+			});
+
+			$(document).on('click', '.js-remove-bill', function() {
+				if (!confirm('Вы уверены, что хотите удалить счет?')) return;
+
+				$.ajax({
+					url: '/bill/' + $(this).data('id'),
+					type: 'DELETE',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						getList(false);
+					}
+				});
 			});
 
 			$('#filter_status_id, #filter_location_id, #filter_product_id').multiselect({
@@ -495,62 +513,82 @@
 
 
 			$(document).on('click', '.js-send-pay-link', function(e) {
-				if (confirm('Вы уверены, что хотите отправить ссылку на оплату Счета?')) {
-					var $payLink = $(this);
+				if (!confirm('Вы уверены, что хотите отправить ссылку на оплату Счета?')) return;
 
-					$.ajax({
-						url: "{{ route('sendPayLink') }}",
-						type: 'POST',
-						dataType: 'json',
-						data: {
-							'bill_id': $(this).data('id'),
-						},
-						success: function(result) {
-							if (result.status !== 'success') {
-								toastr.error(result.reason);
-								return;
-							}
+				var $payLink = $(this);
 
-							$payLink.attr('title', 'Ссылка на оплату Счета отправлена ' + result.link_sent_at);
-							$i = $payLink.find('i');
-							$i.addClass('fa-envelope-open');
-							if ($i.hasClass('fa-envelope')) {
-								$i.removeClass('fa-envelope');
-							}
-							toastr.success('Ссылка на оплату Счета успешно отправлена');
+				$.ajax({
+					url: "{{ route('sendPayLink') }}",
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						'bill_id': $(this).data('id'),
+					},
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
 						}
-					});
-				}
+
+						$payLink.attr('title', 'Ссылка на оплату Счета отправлена ' + result.link_sent_at);
+						$i = $payLink.find('i');
+						$i.addClass('fa-envelope-open');
+						if ($i.hasClass('fa-envelope')) {
+							$i.removeClass('fa-envelope');
+						}
+						toastr.success('Ссылка на оплату Счета успешно отправлена');
+					}
+				});
 			});
 
-			$(document).on('click', '.js-send-certificate-link', function(e) {
-				if (confirm('Вы уверены, что хотите отправить сертификат?')) {
-					var $certificate = $(this);
+			$(document).on('click', '.js-send-certificate-link', function() {
+				if (!confirm('Вы уверены, что хотите отправить сертификат?')) return;
 
-					$.ajax({
-						url: "{{ route('sendCertificate') }}",
-						type: 'POST',
-						dataType: 'json',
-						data: {
-							'id': $(this).data('id'),
-							'certificate_id': $(this).data('certificate_id'),
-						},
-						success: function(result) {
-							if (result.status !== 'success') {
-								toastr.error(result.reason);
-								return;
-							}
-
-							$certificate.attr('title', 'Сертификат отправлен ' + result.certificate_sent_at);
-							$i = $certificate.find('i');
-							$i.addClass('fa-envelope-open');
-							if ($i.hasClass('fa-envelope')) {
-								$i.removeClass('fa-envelope');
-							}
-							toastr.success('Сертификат успешно отправлен');
+				$.ajax({
+					url: "{{ route('sendCertificate') }}",
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						'id': $(this).data('id'),
+						'certificate_id': $(this).data('certificate_id'),
+					},
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
 						}
-					});
-				}
+
+						toastr.success(result.message);
+					}
+				});
+			});
+
+			$(document).on('click', '.js-send-flight-invitation-link', function() {
+				if (!confirm('Вы уверены, что хотите отправить приглашение на полет?')) return;
+
+				$.ajax({
+					url: "{{ route('sendFlightInvitation') }}",
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						'id': $(this).data('id'),
+						'event_id': $(this).data('event_id'),
+					},
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						/*$event.attr('title', 'Приглашение отправлено ' + result.flight_invitation_sent_at);
+						$i = $event.find('i');
+						$i.addClass('fa-envelope-open');
+						if ($i.hasClass('fa-envelope')) {
+							$i.removeClass('fa-envelope');
+						}*/
+						toastr.success(result.message);
+					}
+				});
 			});
 
 			$.fn.isInViewport = function () {

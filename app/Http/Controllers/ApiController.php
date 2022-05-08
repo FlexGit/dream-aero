@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContractorPromocode;
 use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\DealPosition;
@@ -1837,6 +1838,13 @@ class ApiController extends Controller
 		if (!$promocode) {
 			return $this->responseError('Промокод не найден', 400);
 		}
+
+		$contractorPromocodeWasUsed = ContractorPromocode::where('contractor_id', $contractor->id)
+			->where('promocode_id', $promocode->id)
+			->exists();
+		if ($contractorPromocodeWasUsed) {
+			return $this->responseError('Промокод уже был применен', 400);
+		}
 		
 		$data = [
 			'id' => $promocode->id,
@@ -2502,7 +2510,10 @@ class ApiController extends Controller
 				})
 				->find($this->request->certificate_id);
 			if (!$certificate) {
-				return $this->responseError('Сертификат не найден', 400);
+				return $this->responseError('Сертификат не найден или не соответствует выбранным параметрам', 400);
+			}
+			if (!$certificate->wasUsed()) {
+				return $this->responseError('Сертификат уже был ранее использован', 400);
 			}
 		}
 		
@@ -2614,7 +2625,8 @@ class ApiController extends Controller
 		//dispatch(new \App\Jobs\SendDealEmail($deal));
 
 		$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();
+		dispatch($job);
+		//$job->handle();
 		
 		$data = [
 			'deal' => $deal->format(),
@@ -2792,9 +2804,9 @@ class ApiController extends Controller
 			return $this->responseError('Статус заявки не найден', 400);
 		}
 		
-		if ($this->request->promocode_id) {
-			$promocode = Promocode::/*whereIn('city_id', [$city->id, 0])
-				->*/whereRelation('cities', 'cities.id', '=', $cityId)
+		$promocodeId = $this->request->promocode_id ?? 0;
+		if ($promocodeId) {
+			$promocode = Promocode::whereRelation('cities', 'cities.id', '=', $cityId)
 				->where('is_active', true)
 				->where(function ($query) use ($date) {
 					$query->where('active_from_at', '<=', $date)
@@ -2804,10 +2816,12 @@ class ApiController extends Controller
 					$query->where('active_to_at', '>=', $date)
 						->orWhereNull('active_to_at');
 				})
-				->find($this->request->promocode_id);
+				->find($promocodeId);
 			if (!$promocode) {
 				return $this->responseError('Промокод не найден', 400);
 			}
+			
+			$promocode->contractors()->attach($contractor->id);
 		}
 		
 		$debitScore = (int)$this->request->score ?? 0;
@@ -2904,7 +2918,8 @@ class ApiController extends Controller
 		//dispatch(new \App\Jobs\SendDealEmail($deal));
 		
 		$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();
+		dispatch($job);
+		//$job->handle();
 		
 		$data = [
 			'deal' => $deal->format(),
@@ -3072,7 +3087,8 @@ class ApiController extends Controller
 		//dispatch(new \App\Jobs\SendDealEmail($deal));
 
 		$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();
+		dispatch($job);
+		//$job->handle();
 
 		$data = [
 			'deal' => $deal->format(),
@@ -3156,13 +3172,10 @@ class ApiController extends Controller
 		}
 
 		$date = date('Y-m-d');
-
+		
+		// проверка сертификата на валидность
 		$certificate = Certificate::where('number', $number)
 			->whereIn('city_id', [$city->id, 0])
-			/*->where(function ($query) use ($city) {
-				$query->whereIn('city_id', [$city->id, 0])
-					->orWhere('is_unified', true);
-			})*/
 			->where('status_id', $statusesData['certificate'][Certificate::CREATED_STATUS]['id'])
 			->where('product_id', $product->id)
 			->where(function ($query) use ($date) {
@@ -3171,9 +3184,12 @@ class ApiController extends Controller
 			})
 			->first();
 		if (!$certificate) {
-			return $this->responseError('Сертификат не найден', 400);
+			return $this->responseError('Сертификат не найден или не соответствует выбранным параметрам', 400);
 		}
-
+		if (!$certificate->wasUsed()) {
+			return $this->responseError('Сертификат уже был ранее использован', 400);
+		}
+		
 		$data = [
 			'id' => $certificate->id,
 			'number' => $certificate->number,
@@ -3405,7 +3421,8 @@ class ApiController extends Controller
 		//dispatch(new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message));
 
 		$job = new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message);
-		$job->handle();
+		dispatch($job);
+		//$job->handle();
 
 		return $this->responseSuccess('Сообщение успешно отправлено', null);
 	}

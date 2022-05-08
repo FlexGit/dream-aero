@@ -1,0 +1,23 @@
+.alex-block a{display:inline !important; font-size: 18px !important;}
+.alex-block div img{width:100%;}
+.alex-block > div > p {text-align:center;margin-top:15px;font-size:18px;font-weight:700;}
+.block-price{display:inline-block;width:31%;border:2px solid #f7f7f9;text-align:center;margin-right:1.5%;margin-bottom:53px;vertical-align:top;position:relative;}
+.block-price span{position:absolute;top:0;background:#FF8200;padding:4px;text-transform:uppercase;font-size:11px;margin-left:-56px;width:112px;color:white;}
+.block-price p.title{margin:41px 0 10px;text-transform:uppercase;color:black;font-weight:bold;font-size:17px;}
+.block-price p.time{color:#FF8200;font-size:16px;font-weight:bold;}
+.block-price p.pr{font-weight:bold;font-size:25px;padding-bottom:15px;}
+.block-price img{margin:15px 0 20px;}
+.block-price:hover{background:#f7f7f9;}
+
+a.bron.button-pipaluk.button-pipaluk-orange.popup-with-form{color:white;text-transform:uppercase;padding:15px 40px;display:none;}
+.block-price.ather{width:285px;background:#f7f7f9;padding:0 20px 40px;margin:0px auto;display:block;}
+.block-price.ather button{background:#FF8200;border:none;color:white;text-transform:uppercase;font-size:14px;letter-spacing:1px;padding:10px 70px;}
+.block-price.ather:after{content:'';width:50%;height:72%;position:absolute;left:287px;top:44px;z-index:-1;background:url(../img/dots4.png) no-repeat;}
+
+@media screen and (max-width: 1199px) {
+    
+    .block-price{
+        width: 100%;
+        max-width: 300px;
+    }
+    }

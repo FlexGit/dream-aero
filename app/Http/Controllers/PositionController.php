@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
-use App\Models\Contractor;
 use App\Models\DealPosition;
 use App\Models\Discount;
 use App\Models\FlightSimulator;
@@ -19,6 +18,7 @@ use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 use Throwable;
 
@@ -502,6 +502,7 @@ class PositionController extends Controller
 		if ($this->request->certificate) {
 			$date = date('Y-m-d');
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
+			
 			// проверка сертификата на валидность
 			$certificate = Certificate::whereIn('city_id', [$location->city->id, 0])
 				->where('status_id', $certificateStatus->id)
@@ -514,6 +515,9 @@ class PositionController extends Controller
 				->first();
 			if (!$certificate) {
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден или не соответствует выбранным параметрам']);
+			}
+			if (!$certificate->wasUsed()) {
+				return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
 			}
 		}
 
@@ -939,9 +943,15 @@ class PositionController extends Controller
 
 		$position = DealPosition::find($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-
+		
+		$certificateFilePath = ($position->is_certificate_purchase && $position->certificate && is_array($position->certificate->data_json) && array_key_exists('certificate_file_path', $position->certificate->data_json)) ? $position->certificate->data_json['certificate_file_path'] : '';
+		
 		if (!$position->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		if ($certificateFilePath) {
+			Storage::disk('private')->delete($certificateFilePath);
 		}
 
 		return response()->json(['status' => 'success']);

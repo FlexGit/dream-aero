@@ -6,13 +6,15 @@
 <div class="row">
 	<div class="col">
 		<div class="form-group">
-			<label for="product_id">Продукт</label>
-			<select class="form-control js-product" id="product_id" name="product_id">
-				<option></option>
-				@foreach($productTypes ?? [] as $productType)
-					<optgroup label="{{ $productType->name }}">
-						@foreach($productType->products ?? [] as $product)
-							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($product->id == $position->product_id) selected @endif>{{ $product->name }}</option>
+			<label for="location_id">Локация</label>
+			<select class="form-control" id="location_id" name="location_id">
+				<option value="0"></option>
+				@foreach($cities ?? [] as $city)
+					<optgroup label="{{ $city->name }}">
+						@foreach($city->locations ?? [] as $location)
+							@foreach($location->simulators ?? [] as $simulator)
+								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($position->location_id == $location->id && $position->flight_simulator_id == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
+							@endforeach
 						@endforeach
 					</optgroup>
 				@endforeach
@@ -45,15 +47,13 @@
 <div class="row">
 	<div class="col-4">
 		<div class="form-group">
-			<label for="location_id">Локация</label>
-			<select class="form-control" id="location_id" name="location_id">
-				<option value="0"></option>
-				@foreach($cities ?? [] as $city)
-					<optgroup label="{{ $city->name }}">
-						@foreach($city->locations ?? [] as $location)
-							@foreach($location->simulators ?? [] as $simulator)
-								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($position->location_id == $location->id && $position->flight_simulator_id == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
-							@endforeach
+			<label for="product_id">Продукт</label>
+			<select class="form-control js-product" id="product_id" name="product_id">
+				<option></option>
+				@foreach($productTypes ?? [] as $productType)
+					<optgroup label="{{ $productType->name }}">
+						@foreach($productType->products ?? [] as $product)
+							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($product->id == $position->product_id) selected @endif>{{ $product->name }}</option>
 						@endforeach
 					</optgroup>
 				@endforeach

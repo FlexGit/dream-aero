@@ -82,7 +82,9 @@ class Score extends Model
 	 */
 	protected $fillable = [
 		'score',
+		'type',
 		'contractor_id',
+		'deal_id',
 		'deal_position_id',
 		'event_id',
 		'duration',

@@ -49,3 +49,16 @@
 		</div>
 	</div>--}}
 </div>
+<div class="row">
+	<div class="col-6">
+		<div class="form-group">
+			<label for="position_id">Позиция</label>
+			<select class="form-control" id="position_id" name="position_id">
+				<option value=""></option>
+				@foreach($positions as $position)
+					<option value="{{ $position->id }}">{{ $position->number }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+</div>

@@ -99,3 +99,15 @@ input[readonly]{
 .fc-day-sat, .fc-day-sun {
 	background-color: #e7ffe7 !important;
 }
+.control-sidebar::before {
+	display: none;
+}
+.upcomming-event {
+	border-bottom: 1px solid #fff;
+	font-size: 11px;
+	color: #fff;
+	text-align: left;
+}
+.upcomming-event:hover {
+	background-color: #222;
+}

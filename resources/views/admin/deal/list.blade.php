@@ -9,7 +9,7 @@
 				<div>
 					{{ $deal->name }}
 					@if($deal->contractor)
-						[<a href="javascript:void(0)">{{ $deal->contractor->name }} {{ $deal->contractor->lastname }}</a>]
+						[<a href="/contractor/{{ $deal->contractor_id }}" target="_blank">{{ $deal->contractor->name }} {{ $deal->contractor->lastname }}</a>]
 					@endif
 				</div>
 				<div>
@@ -21,10 +21,10 @@
 			</div>
 		</td>
 		<td class="text-center align-top d-none d-sm-table-cell small">
-			<div class="font-weight-bold">
+			<div class="font-weight-bold" title="Номер сделки">
 				<a href="javascript:void(0)" data-toggle="modal" data-url="/deal/{{ $deal->id }}/edit" data-action="/deal/{{ $deal->id }}" data-title="Редактирование сделки" title="Редактировать сделку" data-method="PUT" data-type="deal">{{ $deal->number }}</a>
 			</div>
-			<div class="text-nowrap" style="line-height: 0.9em;">
+			<div class="text-nowrap" style="line-height: 0.9em;" title="Дата сделки">
 				от {{ $deal->created_at ? $deal->created_at->format('Y-m-d H:i') : '' }}
 			</div>
 			<div>
@@ -46,8 +46,18 @@
 						@endif
 						@php($scoreAmount += abs($score->score))
 					@endforeach
-					<div class="d-inline-block" title="Оплачено баллами">
-						<i class="far fa-star"></i> {{ $scoreAmount ? number_format($scoreAmount, 0, '.', ' ') : 0 }}
+					@if($scoreAmount)
+						<div class="d-inline-block" title="Оплачено баллами">
+							<i class="far fa-star"></i> {{ number_format($scoreAmount, 0, '.', ' ') }}
+						</div>
+					@endif
+				@endif
+				@php($aeroflotBonusAmount = $deal->aeroflotBonusAmount())
+				@if($aeroflotBonusAmount)
+					<div class="d-inline-block" title="Скидка Аэрофлот Бонус">
+						<span class="pl-2 pr-2" style="background-color: #cfffba;">
+							<i class="fas fa-globe-americas"></i> {{ number_format($aeroflotBonusAmount, 0, '.', ' ') }}
+						</span>
 					</div>
 				@endif
 				<div class="d-inline-block mt-1" title="Итого к оплате">
@@ -61,24 +71,24 @@
 				</div>
 			</div>
 			@if($deal->status)
-				<div>
+				<div title="Статус сделки">
 					<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $deal->status->data_json ?? []) ? $deal->status->data_json['color'] : 'none' }};">
 						{{ $deal->status->name }}
 					</div>
 				</div>
 			@endif
 			@if(is_array($deal->data_json) && array_key_exists('comment', $deal->data_json) && $deal->data_json['comment'])
-				<div class="text-left mt-2">
+				<div class="text-left mt-2" title="Комментарий">
 					<div style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;">
 						<i class="far fa-comment-dots"></i> <i>{{ $deal->data_json['comment'] }}</i>
 					</div>
 				</div>
 			@endif
 			<div class="d-flex justify-content-between mt-2">
-				<div>
+				<div title="Источник">
 					{{ isset(\App\Models\Deal::SOURCES[$deal->source]) ? \App\Models\Deal::SOURCES[$deal->source] : '' }}
 				</div>
-				<div>
+				<div title="Кто создал">
 					@if($deal->user)
 						{{ $deal->user->name }}
 					@endif
@@ -96,7 +106,7 @@
 							<a href="javascript:void(0)" class="js-remove-bill" data-id="{{ $bill->id }}" title="Удалить счет"><i class="fas fa-times" style="color: #aaa;"></i></a>
 						</div>
 					</div>
-					<div class="text-nowrap" style="line-height: 0.9em;">
+					<div class="text-nowrap" style="line-height: 0.9em;" title="Дата создания">
 						от {{ $bill->created_at ? $bill->created_at->format('Y-m-d H:i') : '' }}
 					</div>
 					<div>
@@ -120,7 +130,7 @@
 						@endif
 					</div>
 					@if ($bill->status)
-						<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $bill->status->data_json ?? []) ? $bill->status->data_json['color'] : 'none' }};">
+						<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $bill->status->data_json ?? []) ? $bill->status->data_json['color'] : 'none' }};" title="Статус Счета">
 							{{ $bill->status->name }}
 						</div>
 					@endif
@@ -134,7 +144,7 @@
 			<table class="table table-sm table-bordered table-striped mb-0">
 				<tr>
 					<td class="col-4 small font-weight-bold">
-						Тип сделки
+						Тип
 					</td>
 					<td class="col-2 small font-weight-bold">
 						Продукт
@@ -188,39 +198,41 @@
 							</div>
 							@if(!$position->is_certificate_purchase)
 								@if($position->city)
-									<div>
+									<div title="Локация">
 										<i class="fas fa-map-marker-alt"></i>
 										{{ $position->city->name }}
 										@if($position->location)
-											{{ $position->location->name }}
+											<div title="Локация полета">
+												<i class="fas fa-map-marker-alt"></i> {{ $position->location->name }}
+											</div>
 										@endif
 										@if($position->simulator)
-											{{ $position->simulator->name }}
+											<div title="Авиатренажер для полета">
+												<i class="fas fa-plane"></i> {{ $position->simulator->name }}
+											</div>
 										@endif
 									</div>
 								@endif
-								<div>
-									<i class="far fa-calendar-alt" title="Желаемое время полета"></i> {{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d H:i') }}
+								<div title="Желаемое время полета">
+									<i class="far fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d H:i') }}
 								</div>
 							@endif
 							@if($position->certificate)
 								<div>
-									<i class="far fa-file-alt" title="Сертификат"></i>
-									<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
-										@if ($position->certificate->number)
-											{{ $position->certificate->number }}
-										@else
-											без номера
-										@endif
-										@if ($position->certificate_sent_at)
-											<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат отправлен {{ $position->certificate_sent_at }}"><i class="far fa-envelope-open"></i></a>
-										@else
-											<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат пока не отправлен"><i class="far fa-envelope"></i></a>
-										@endif
+									<a href="{{ route('getCertificate', ['uuid' => $position->certificate->uuid]) }}" class="mr-2">
+										<i class="far fa-file-alt" title="Файл Сертификата"></i>
 									</a>
+									<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
+										{{ $position->certificate->number ?: 'без номера' }}
+									</a>
+									@if($position->is_certificate_purchase && $position->certificate->certificate_sent_at)
+										<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат отправлен {{ $position->certificate->certificate_sent_at }}"><i class="far fa-envelope-open"></i></a>
+									@else
+										<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат пока не отправлен"><i class="far fa-envelope"></i></a>
+									@endif
 								</div>
 								@if($position->is_certificate_purchase)
-									<div>
+									<div title="Город действия сертификата">
 										<i class="fas fa-map-marker-alt"></i>
 										@if($position->certificate->city)
 											{{ $position->certificate->city->name }}
@@ -229,13 +241,16 @@
 										@endif
 									</div>
 								@endif
-								@if(is_array($position->data_json) && array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom'])
-									<div style="line-height: 0.9;">
-										для кого: {{ $position->data_json['certificate_whom'] }}
-									</div>
-								@endif
+								<div style="line-height: 0.9;" title="Для кого сертификат">
+									@if(is_array($position->data_json) && array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom'])
+										{{ $position->data_json['certificate_whom'] }}
+									@endif
+									@if(is_array($position->data_json) && array_key_exists('certificate_whom_phone', $position->data_json) && $position->data_json['certificate_whom_phone'])
+										[{{ $position->data_json['certificate_whom_phone'] }}]
+									@endif
+								</div>
 								@if ($position->certificate->status)
-									<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $position->certificate->status->data_json ?? []) ? $position->certificate->status->data_json['color'] : 'none' }};">
+									<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $position->certificate->status->data_json ?? []) ? $position->certificate->status->data_json['color'] : 'none' }};" title="Статус сертификата">
 										{{ $position->certificate->status->name }}
 									</div>
 								@endif
@@ -251,29 +266,29 @@
 								</div>
 							@endif--}}
 							@if($position->promo)
-								<div>
-									<i class="fas fa-percent" title="Акция"></i> {{ $position->promo->name }}
+								<div title="Акция">
+									<i class="fas fa-percent"></i> {{ $position->promo->name }}
 								</div>
 							@endif
 							@if($position->promocode)
-								<div>
-									<i class="fas fa-tag" title="Промокод"></i> {{ $position->promocode->number }}
+								<div title="Промокод">
+									<i class="fas fa-tag"></i> {{ $position->promocode->number }}
 								</div>
 							@endif
-							<div>
+							<div title="Стоимость продукта">
 								@if($position->currency)
-									@if($position->currency->alias == app('\App\Models\Currency')::RUB_ALIAS)
-										<i class="fas fa-ruble-sign"></i>
-									@elseif($position->currency->alias == app('\App\Models\Currency')::USD_ALIAS)
+									@if($position->currency->alias == app('\App\Models\Currency')::USD_ALIAS)
 										<i class="fas fa-dollar-sign"></i>
+									@else
+										<i class="fas fa-ruble-sign"></i>
 									@endif
 								@endif
-								{{ $position->amount ? number_format($position->amount, 0, '.', ' ') : 'бесплатно' }}
+								{{ $position->amount ? number_format($position->amount, 0, '.', ' ') : 0 }}
 							</div>
 						</td>
-						<td class="text-center align-middle small">
+						<td class="text-center small" nowrap>
 							@if(!$position->is_certificate_purchase && $position->event)
-								<div>
+								<div class="d-inline-block" title="Дата и время полета">
 									<i class="far fa-calendar-alt"></i>
 									{{ \Carbon\Carbon::parse($position->event->start_at)->format('Y-m-d') }}
 									с {{ \Carbon\Carbon::parse($position->event->start_at)->format('H:i') }} по {{ \Carbon\Carbon::parse($position->event->stop_at)->addMinutes($position->event->extra_time)->format('H:i') }}
@@ -281,18 +296,33 @@
 										(+ {{ $deal->event->extra_time }} мин)
 									@endif--}}
 								</div>
+								<div class="d-inline-block ml-2">
+									<a href="javascript:void(0)" class="js-remove-event" data-id="{{ $position->event->id }}" title="Удалить событие"><i class="fas fa-times" style="color: #aaa;"></i></a>
+								</div>
 								@if($position->event->location)
-									<div>
+									<div title="Локация полета">
 										<i class="fas fa-map-marker-alt"></i> {{ $position->event->location->name }}
 									</div>
 								@endif
 								@if($position->event->simulator)
-									<div>
+									<div title="Авиатренажер для полета">
 										<i class="fas fa-plane"></i> {{ $position->event->simulator->name }}
 									</div>
 								@endif
+								<div>
+									@if ($position->event->uuid)
+										<a href="{{ route('getFlightInvitation', ['uuid' => $position->event->uuid ]) }}">
+											<i class="far fa-file-alt" title="Скачать Приглашение на полет"></i>
+										</a>
+									@endif
+									@if($position->event->flight_invitation_sent_at)
+										<a href="javascript:void(0)" class="js-send-flight-invitation-link ml-2" data-id="{{ $position->id }}" data-event_id="{{ $position->event->id }}" title="Приглашение на полет отправлено {{ $position->event->flight_invitation_sent_at }}"><i class="far fa-envelope-open"></i></a>
+									@else
+										<a href="javascript:void(0)" class="js-send-flight-invitation-link ml-2" data-id="{{ $position->id }}" data-event_id="{{ $position->event->id }}" title="Приглашение на полет пока не отправлено"><i class="far fa-envelope"></i></a>
+									@endif
+								</div>
 								@if(count($position->event->comments))
-									<div class="text-center mt-2" style="margin: 0 auto;max-width: 300px;">
+									<div class="text-center mt-2" style="margin: 0 auto;max-width: 300px;" title="Комментарий к полету">
 										<div class="text-left" style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;">
 											@foreach($position->event->comments ?? [] as $comment)
 												<div>

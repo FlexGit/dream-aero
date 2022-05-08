@@ -17,8 +17,12 @@
 			</td>
 		</tr>
 		<tr class="odd">
+			<td>Контрагент</td>
+			<td>{{ $promocode->contractor ? $promocode->contractor->fio() : '-' }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Скидка</td>
-			<td>{{ $promocode->discount ? $promocode->discount->valueFormatted() : '' }}</td>
+			<td>{{ $promocode->discount ? $promocode->discount->valueFormatted() : '-' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Активность</td>

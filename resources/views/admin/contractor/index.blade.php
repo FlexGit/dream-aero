@@ -37,9 +37,11 @@
 									</select>
 								</div>
 							@endif
-							<div class="form-group ml-2">
-								<label for="search_contractor">Контрагент</label>
-								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
+							<div class="col-6">
+								<div class="form-group ml-2">
+									<label for="search_contractor">Контрагент</label>
+									<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="ФИО, E-mail, Телефон">
+								</div>
 							</div>
 							<div class="form-group align-self-end ml-auto pl-2">
 								<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/add" data-action="/contractor" data-method="POST" data-type="contractor" data-title="Новый контрагент" class="btn btn-secondary btn-sm" title="Добавить контрагента">Добавить контрагента</a>
@@ -96,6 +98,11 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
+			@if($contractor)
+				$('#search_contractor').val('{{ $contractor->uuid }}');
+				getList(false);
+			@endif
+
 			function getList(loadMore) {
 				var $selector = $('#contractorTable tbody');
 

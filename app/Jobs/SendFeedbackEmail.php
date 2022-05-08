@@ -35,9 +35,9 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 		$contractor = Contractor::find($this->contractorId);
 		if (!$contractor) return;
 		
-		$recipients = [];
-		$recipients[] = 'anton.s@dream-aero.com';
-		$recipients[] = 'webmanage@inbox.ru';
+		$recipients = $bcc = [];
+		$recipients[] = env('ADMIN_EMAIL');
+		$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'fio' => $this->fio,
@@ -50,11 +50,11 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 
 		$subject = env('APP_NAME') . ': сообщение обратной связи';
 
-		Mail::send(['html' => "admin.emails.send_feedback"], $messageData, function ($message) use ($subject, $recipients) {
+		Mail::send(['html' => "admin.emails.send_feedback"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
-			/*$message->priority(2);*/
 			$message->to($recipients);
+			$message->bcc($bcc);
 		});
 	}
 }

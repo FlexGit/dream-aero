@@ -2,13 +2,9 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -74,6 +70,10 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|Contractor withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Contractor withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promocode[] $contractorPromocodes
+ * @property-read int|null $contractor_promocodes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promocode[] $promocodes
+ * @property-read int|null $promocodes_count
  */
 class Contractor extends Authenticatable
 {
@@ -204,11 +204,18 @@ class Contractor extends Authenticatable
 		return $this->hasOne(User::class, 'id', 'user_id');
 	}
 	
-	public function notifications()
+	public function contractorPromocodes()
 	{
-		return $this->belongsToMany(Notification::class, 'notifications_contractors', 'contractor_id', 'notification_id')
-			->using(NotificationContractor::class)
-			->withPivot(['is_new'])
+		return $this->belongsToMany(Promocode::class, 'contractor_promocodes', 'promocode_id', 'contractor_id')
+			->using(ContractorPromocode::class)
+			->withPivot(['was_used'])
+			->withTimestamps();
+	}
+	
+	public function promocodes()
+	{
+		return $this->belongsToMany(Promocode::class, 'cities_promocodes', 'city_id', 'promocode_id')
+			->using(CityPromocode::class)
 			->withTimestamps();
 	}
 	
@@ -402,5 +409,14 @@ class Contractor extends Authenticatable
 	public function fio()
 	{
 		return trim(($this->lastname ?? '') . ' ' . ($this->name ?? ''));
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function phoneFormatted()
+	{
+		$phoneCleared = preg_replace( '/[^0-9]/', '', $this->phone);
+		return '+' . mb_substr($phoneCleared, 0, 1) . ' (' . mb_substr($phoneCleared, 1, 3) . ') ' . mb_substr($phoneCleared, 4, 3) . '-' . mb_substr($phoneCleared, 7, 2) . '-' . mb_substr($phoneCleared, 9, 2);
 	}
 }

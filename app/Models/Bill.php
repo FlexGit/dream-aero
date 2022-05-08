@@ -60,6 +60,12 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read \App\Models\Deal|null $deal
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereCurrencyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDealId($value)
+ * @property int $deal_position_id
+ * @property int $location_id локация, по которой был выставлен счет
+ * @property-read \App\Models\Location|null $location
+ * @property-read \App\Models\DealPosition|null $position
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDealPositionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereLocationId($value)
  */
 class Bill extends Model
 {
@@ -69,10 +75,12 @@ class Bill extends Model
 		'number' => 'Номер счета',
 		'contractor_id' => 'Контрагент',
 		'deal_id' => 'Сделка',
+		'deal_position_id' => 'Позиция сделки',
 		'payment_method_id' => 'Способ оплаты',
 		'status_id' => 'Статус счета',
 		'amount' => 'Сумма',
 		'currency_id' => 'Валюта',
+		'location_id' => 'Локация, по которой был выставлен счет',
 		'uuid' => 'Uuid',
 		'data_json' => 'Дополнительная информация',
 		'user_id' => 'Пользователь',
@@ -84,6 +92,7 @@ class Bill extends Model
 	];
 
 	const NOT_PAYED_STATUS = 'bill_not_payed';
+	const PAYED_PROCESSING_STATUS = 'bill_payed_processing';
 	const PAYED_STATUS = 'bill_payed';
 	const STATUSES = [
 		self::NOT_PAYED_STATUS,
@@ -108,10 +117,12 @@ class Bill extends Model
 		'number',
 		'contractor_id',
 		'deal_id',
+		'deal_position_id',
 		'payment_method_id',
 		'status_id',
 		'amount',
 		'currency_id',
+		'location_id',
 		'uuid',
 		'payed_at',
 		'link_sent_at',
@@ -162,10 +173,20 @@ class Bill extends Model
 	{
 		return $this->hasOne(PaymentMethod::class, 'id', 'payment_method_id');
 	}
+	
+	public function position()
+	{
+		return $this->hasOne(DealPosition::class, 'id', 'deal_position_id');
+	}
 
 	public function currency()
 	{
 		return $this->hasOne(Currency::class, 'id', 'currency_id');
+	}
+	
+	public function location()
+	{
+		return $this->belongsTo(Location::class);
 	}
 
 	/**

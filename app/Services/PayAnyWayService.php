@@ -3,13 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\MessageFormatter;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use App\Models\Bill;
 
 class PayAnyWayService {
@@ -21,35 +14,38 @@ class PayAnyWayService {
 	const DATA_INTEGRITY_CHECK_CODE = 'Jr#47%Hdk';
 	
 	/**
-	 * @param $payAccountNumber
 	 * @param Bill $bill
 	 * @return string
 	 */
-	public static function generatePayForm($payAccountNumber, Bill $bill) {
+	public static function generatePaymentForm(Bill $bill) {
 		$params = [
 			'url' => self::BASE_URL . self::PAY_REQUEST_URL,
-			'MNT_ID' => $payAccountNumber,
+			'MNT_ID' => $bill->location->pay_account_number,
 			'MNT_AMOUNT' => number_format($bill->amount, 2, '.', ''),
-			'MNT_TRANSACTION_ID' => $bill->number,
+			'MNT_TRANSACTION_ID' => $bill->uuid,
 			'MNT_CURRENCY_CODE' => self::CURRENCY_CODE,
 			'MNT_TEST_MODE' => self::TEST_MODE,
 			'MNT_DESCRIPTION' => 'Оплата по счету ' . $bill->number,
 			'MNT_SUBSCRIBER_ID' => $bill->contractor->uuid,
-			'MNT_SUCCESS_URL' => route('home'), //paymentSuccess
-			'MNT_FAIL_URL' => route('home'), //paymentFail
-			'MNT_RETURN_URL' => route('home'),
+			'MNT_SUCCESS_URL' => request()->getSchemeAndHttpHost() . '/payment/success',
+			'MNT_FAIL_URL' => request()->getSchemeAndHttpHost() . '/payment/fail',
+			'MNT_RETURN_URL' => request()->getSchemeAndHttpHost(),
 			'unitId' => 'card',
 		];
 		
 		$params['MNT_SIGNATURE'] = md5($params['MNT_ID'] . $params['MNT_TRANSACTION_ID'] . $params['MNT_AMOUNT'] . $params['MNT_CURRENCY_CODE'] . $params['MNT_SUBSCRIBER_ID'] . $params['MNT_TEST_MODE'] . self::DATA_INTEGRITY_CHECK_CODE);
 		
-		$VIEW = view('pay-form', $params);
+		$VIEW = view('payment-form', $params);
 		
 		return (string)$VIEW;
 	}
 	
-	public static function checkPayCallback(Request $request) {
-		\Log::debug($request);
+	/**
+	 * @param Request $request
+	 * @return bool
+	 */
+	public static function paymentCallback(Request $request) {
+		//\Log::debug($request);
 		\Log::debug($request->MNT_SIGNATURE . ' - ' . md5($request->MNT_ID . $request->MNT_TRANSACTION_ID . $request->MNT_OPERATION_ID . $request->MNT_AMOUNT . $request->MNT_CURRENCY_CODE . $request->MNT_SUBSCRIBER_ID . $request->MNT_TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE));
 		
 		return $request->MNT_SIGNATURE == md5($request->MNT_ID . $request->MNT_TRANSACTION_ID . $request->MNT_OPERATION_ID . $request->MNT_AMOUNT . $request->MNT_CURRENCY_CODE . $request->MNT_SUBSCRIBER_ID . $request->MNT_TEST_MODE . self::DATA_INTEGRITY_CHECK_CODE);

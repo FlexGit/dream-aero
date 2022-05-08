@@ -13,7 +13,15 @@ class Kernel extends ConsoleKernel
 	 * @var array
 	 */
 	protected $commands = [
-		//
+		Commands\SendCertificateEmail::class,
+		Commands\SendFlightInvitationEmail::class,
+		Commands\AddContractorScore::class,
+		Commands\SendPromocodeAfterFlightEmail::class,
+		Commands\ImportContractor::class,
+		Commands\ImportFlight::class,
+		Commands\ImportNews::class,
+		Commands\ImportRating::class,
+		Commands\ImportReview::class,
 	];
 
 	/**
@@ -24,10 +32,53 @@ class Kernel extends ConsoleKernel
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		$filePath = storage_path('logs/schedule.log');
+		// запуск демона для обработки задач из очереди
+		$filePath = storage_path('logs/queue_worker.log');
+		$schedule->command('queue:work --daemon')
+			->everyMinute()
+			->withoutOverlapping()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
 		
+		// перезапуск демона очереди (чтобы изменения в коде были применены)
+		$schedule->command('queue:restart')
+			->everyFiveMinutes()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// отправка контрагенту сертификата на полет
+		$filePath = storage_path('logs/commands/certificate_email.log');
+		$schedule->command('certificate_email:send')
+			->everyFiveMinutes()
+			->withoutOverlapping()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// отправка контрагенту приглашения на полет
+		$filePath = storage_path('logs/commands/flight_invitation_email.log');
+		$schedule->command('flight_invitation_email:send')
+			->everyFiveMinutes()
+			->withoutOverlapping()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// отправка контрагенту промокода на полет на другом типе тренажера
+		$filePath = storage_path('logs/commands/promocode_send.log');
+		$schedule->command('promocode_email:send')
+			->everyFiveMinutes()
+			->withoutOverlapping()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+
+		// начисление баллов после полета
+		$filePath = storage_path('logs/commands/scoring.log');
 		$schedule->command('score:add')
-			->/*everyMinute()*/hourly()
+			->hourly()
 			->withoutOverlapping()
 			->runInBackground()
 			->appendOutputTo($filePath)

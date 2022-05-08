@@ -1,13 +1,16 @@
 <?php
 
+use App\Http\Controllers\AeroflotBonusController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
@@ -109,7 +112,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
 		/*Route::get('contractor/{id}/show', [ContractorController::class, 'show']);*/
 
-		Route::get('contractor', [ContractorController::class, 'index'])->name('contractorIndex');
+		Route::get('contractor/{id?}', [ContractorController::class, 'index'])->name('contractorIndex');
 		Route::get('contractor/list/ajax', [ContractorController::class, 'getListAjax'])->name('contractorList');
 		Route::post('contractor', [ContractorController::class, 'store']);
 		Route::post('contractor/search', [ContractorController::class, 'search'])->name('contractorSearch');
@@ -124,6 +127,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		// События
 		Route::get('/', [EventController::class, 'index'])->name('eventIndex');
 		Route::get('event/list/ajax', [EventController::class, 'getListAjax'])->name('eventList');
+		Route::post('event/notified', [EventController::class, 'notified'])->name('notified-event');
 		Route::post('event', [EventController::class, 'store'])->name('store-event');
 		Route::put('event/drag_drop/{id}', [EventController::class, 'dragDrop'])->name('drag-drop-event');
 		Route::put('event/{id}', [EventController::class, 'update'])->name('update-event');
@@ -133,6 +137,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('event/{position_id}/add/{event_type?}', [EventController::class, 'add'])->name('add-event');
 		Route::get('event/{id}/edit/{is_shift?}', [EventController::class, 'edit'])->name('edit-event');
 		Route::get('event/{id}/show', [EventController::class, 'show'])->name('show-event');
+		
+		Route::get('event/{uuid}/file', [EventController::class, 'getFlightInvitationFile'])->name('getFlightInvitation');
+		Route::post('event/send', [EventController::class, 'sendFlightInvitation'])->name('sendFlightInvitation');
 
 		// Сделки
 		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
@@ -164,10 +171,13 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		// Сертификаты
 		Route::post('certificate', [CertificateController::class, 'store']);
 		Route::put('certificate/{id}', [CertificateController::class, 'update']);
-
+		
 		Route::get('certificate/{deal_id}/add', [CertificateController::class, 'add']);
 		Route::get('certificate/{id}/edit', [CertificateController::class, 'edit']);
-
+		
+		Route::get('certificate/{uuid}/file', [CertificateController::class, 'getCertificateFile'])->name('getCertificate');
+		Route::post('certificate/send', [CertificateController::class, 'sendCertificate'])->name('sendCertificate');
+		
 		// Счета
 		Route::post('bill', [BillController::class, 'store']);
 		Route::put('bill/{id}', [BillController::class, 'update']);
@@ -177,7 +187,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('bill/{id}/edit', [BillController::class, 'edit']);
 
 		Route::post('bill/paylink/send', [BillController::class, 'sendPayLink'])->name('sendPayLink');
-		Route::post('certificate/send', [CertificateController::class, 'sendCertificate'])->name('sendCertificate');
 
 		// Скидки
 		Route::get('discount', [DiscountController::class, 'index'])->name('discountIndex');
@@ -391,135 +400,141 @@ Route::group(['middleware' => ['setlanguage']], function () {
 
 	Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
 		Route::group(['middleware' => ['citycheck']], function () {
-			Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
-			Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
-			
-			Route::get('boeing-virttour', [MainController::class, 'virtualTourBoeing'])->name('boeing-virttour');
-			Route::post('boeing-virttour', [MainController::class, 'virtualTourBoeing']);
-			Route::get('desktop', [MainController::class, 'virtualTourAirbus'])->name('desktop');
-			Route::post('desktop', [MainController::class, 'virtualTourAirbus']);
-			Route::get('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile'])->name('airbus-virttour-mobile');
-			Route::post('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile']);
-			
-			Route::get('podarit-polet', [MainController::class, 'giftFlight'])->name('podarit-polet');
-			Route::get('variantyi-poleta', [MainController::class, 'flightTypes'])->name('variantyi-poleta');
-			Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
-			Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
-			Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
-			Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
-			Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
-			
-			Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
-			Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
-			
-			Route::get('lechenie-aerofobii', [MainController::class, 'flyFear'])->name('lechenie-aerofobii');
-			
-			Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
-			
-			Route::post('review/create', [MainController::class, 'reviewCreate']);
-			
-			Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
-			Route::get('city/change', [MainController::class, 'changeCity']);
-			
-			Route::get('pay/{uuid}', [MainController::class, 'payLink'])->name('pay');
-			Route::post('payment/callback', [MainController::class, 'paymentCallback']);
-			Route::get('payment/success', [MainController::class, 'paymentSuccess'])->name('payment');
-			Route::get('payment/fail', [MainController::class, 'paymentFail'])->name('payment');
-			
-			Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
-			Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
-			
-			Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromos'])->name('vse-akcii');
-			
-			Route::get('galereya', [MainController::class, 'getGallery'])->name('galereya');
-			
-			Route::get('reviews', [MainController::class, 'getReviews'])->name('reviews');
-			
-			Route::get('modal/booking/{product_alias?}', [MainController::class, 'getBookingModal']);
-			Route::get('modal/certificate/{product_alias?}', [MainController::class, 'getCertificateModal']);
-			Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
-			Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
-			Route::get('modal/review', [MainController::class, 'getReviewModal']);
-			Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
-			Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
-			Route::get('modal/vip', [MainController::class, 'getVipFlightModal']);
-			
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
-			
-			Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
-			Route::post('question', [MainController::class, 'question'])->name('questionStore');
 		});
+
+		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
+		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
+		
+		Route::get('boeing-virttour', [MainController::class, 'virtualTourBoeing'])->name('boeing-virttour');
+		Route::post('boeing-virttour', [MainController::class, 'virtualTourBoeing']);
+		Route::get('desktop', [MainController::class, 'virtualTourAirbus'])->name('desktop');
+		Route::post('desktop', [MainController::class, 'virtualTourAirbus']);
+		Route::get('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile'])->name('airbus-virttour-mobile');
+		Route::post('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile']);
+		
+		Route::get('podarit-polet', [MainController::class, 'giftFlight'])->name('podarit-polet');
+		Route::get('variantyi-poleta', [MainController::class, 'flightTypes'])->name('variantyi-poleta');
+		Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
+		Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
+		Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
+		Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
+		Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
+		
+		Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
+		Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
+		
+		Route::get('lechenie-aerofobii', [MainController::class, 'flyNoFear'])->name('lechenie-aerofobii');
+		
+		Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
+		
+		Route::post('aeroflot-card/verify', [AeroflotBonusController::class, 'cardVerify']);
+		Route::post('aeroflot-card/info', [AeroflotBonusController::class, 'getCardInfo']);
+		
+		Route::post('review/create', [MainController::class, 'reviewCreate']);
+		
+		Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
+		Route::get('city/change', [MainController::class, 'changeCity']);
+		
+		Route::get('payment/success', [PaymentController::class, 'paymentSuccess'])->name('paymentSuccess');
+		Route::get('payment/fail', [PaymentController::class, 'paymentFail'])->name('paymentFail');
+		Route::get('payment/{uuid}/{type?}', [PaymentController::class, 'payment'])->name('payment');
+		Route::post('payment/callback', [PaymentController::class, 'paymentCallback']);
+		
+		Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
+		Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
+		
+		Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromos'])->name('vse-akcii');
+		
+		Route::get('galereya', [MainController::class, 'getGallery'])->name('galereya');
+		
+		Route::get('reviews', [MainController::class, 'getReviews'])->name('reviews');
+		
+		Route::get('modal/booking/{product_alias?}', [MainController::class, 'getBookingModal']);
+		Route::get('modal/certificate/{product_alias?}', [MainController::class, 'getCertificateModal']);
+		Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
+		Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
+		Route::get('modal/review', [MainController::class, 'getReviewModal']);
+		Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
+		Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
+		Route::get('modal/vip', [MainController::class, 'getVipFlightModal']);
+		
+		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
+		Route::post('question', [MainController::class, 'question'])->name('questionStore');
 	});
 	
 	Route::domain(env('DOMAIN_EN', 'en.dream-aero.ru'))->group(function () {
 		Route::group(['middleware' => ['citycheck']], function () {
-			Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
-			Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
-			
-			Route::get('boeing-virttour', [MainController::class, 'virtualTourBoeing'])->name('boeing-virttour');
-			Route::post('boeing-virttour', [MainController::class, 'virtualTourBoeing']);
-			Route::get('desktop', [MainController::class, 'virtualTourAirbus'])->name('desktop');
-			Route::post('desktop', [MainController::class, 'virtualTourAirbus']);
-			Route::get('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile'])->name('airbus-virttour-mobile');
-			Route::post('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile']);
-			
-			Route::get('podarit-polet', [MainController::class, 'giftFlight'])->name('podarit-polet');
-			Route::get('variantyi-poleta', [MainController::class, 'flightTypes'])->name('variantyi-poleta');
-			Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
-			Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
-			Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
-			Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
-			Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
-			
-			Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
-			Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
-			
-			Route::get('lechenie-aerofobii', [MainController::class, 'flyFear'])->name('lechenie-aerofobii');
-			
-			Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
-			
-			Route::post('review/create', [MainController::class, 'reviewCreate']);
-			
-			Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
-			Route::get('city/change', [MainController::class, 'changeCity']);
-			
-			Route::get('pay/{uuid}', [MainController::class, 'payLink'])->name('pay');
-			Route::post('payment/callback', [MainController::class, 'paymentCallback']);
-			Route::get('payment/success', [MainController::class, 'paymentSuccess'])->name('payment');
-			Route::get('payment/fail', [MainController::class, 'paymentFail'])->name('payment');
-			
-			Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
-			Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
-			
-			Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromos'])->name('vse-akcii');
-			
-			Route::get('galereya', [MainController::class, 'getGallery'])->name('galereya');
-			
-			Route::get('reviews', [MainController::class, 'getReviews'])->name('reviews');
-			
-			Route::get('modal/booking/{product_alias?}', [MainController::class, 'getBookingModal']);
-			Route::get('modal/certificate/{product_alias?}', [MainController::class, 'getCertificateModal']);
-			Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
-			Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
-			Route::get('modal/review', [MainController::class, 'getReviewModal']);
-			Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
-			Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
-			
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
-			
-			Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
-			Route::post('question', [MainController::class, 'question'])->name('questionStore');
 		});
+		
+		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
+		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
+		
+		Route::get('boeing-virttour', [MainController::class, 'virtualTourBoeing'])->name('boeing-virttour');
+		Route::post('boeing-virttour', [MainController::class, 'virtualTourBoeing']);
+		Route::get('desktop', [MainController::class, 'virtualTourAirbus'])->name('desktop');
+		Route::post('desktop', [MainController::class, 'virtualTourAirbus']);
+		Route::get('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile'])->name('airbus-virttour-mobile');
+		Route::post('airbus-virttour-mobile', [MainController::class, 'virtualTourAirbusMobile']);
+		
+		Route::get('podarit-polet', [MainController::class, 'giftFlight'])->name('podarit-polet');
+		Route::get('variantyi-poleta', [MainController::class, 'flightTypes'])->name('variantyi-poleta');
+		Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
+		Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
+		Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
+		Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
+		Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
+		
+		Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
+		Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
+		
+		Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
+		
+		Route::post('aeroflot-card/verify', [AeroflotBonusController::class, 'cardVerify']);
+		Route::post('aeroflot-card/info', [AeroflotBonusController::class, 'getCardInfo']);
+		
+		Route::post('review/create', [MainController::class, 'reviewCreate']);
+		
+		Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
+		Route::get('city/change', [MainController::class, 'changeCity']);
+		
+		Route::get('payment/success', [PaymentController::class, 'paymentSuccess'])->name('paymentSuccess');
+		Route::get('payment/fail', [PaymentController::class, 'paymentFail'])->name('paymentFail');
+		Route::get('payment/{uuid}/{type?}', [PaymentController::class, 'payment'])->name('payment');
+
+		Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
+		Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
+		
+		Route::get('vse-akcii/{alias?}', [MainController::class, 'getPromos'])->name('vse-akcii');
+		
+		Route::get('galereya', [MainController::class, 'getGallery'])->name('galereya');
+		
+		Route::get('reviews', [MainController::class, 'getReviews'])->name('reviews');
+		
+		Route::get('modal/booking/{product_alias?}', [MainController::class, 'getBookingModal']);
+		Route::get('modal/certificate/{product_alias?}', [MainController::class, 'getCertificateModal']);
+		Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
+		Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
+		Route::get('modal/review', [MainController::class, 'getReviewModal']);
+		Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
+		Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
+		
+		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
+		Route::post('question', [MainController::class, 'question'])->name('questionStore');
 	});
 
 	Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
 	Route::post('deal/certificate', [DealController::class, 'storeCertificate'])->name('dealCertificateStore');
 	Route::post('deal/booking', [DealController::class, 'storeBooking'])->name('dealBookingStore');
-	Route::get('certificate/{uuid}/generate', [CertificateController::class, 'generateCertificate']);
+	Route::post('aeroflot-use/retry', [AeroflotBonusController::class, 'useRetry'])->name('useRetry');
+	Route::post('aeroflot-use/refresh', [AeroflotBonusController::class, 'useRefresh'])->name('useRefresh');
+	
+	Route::get('test/model/{uuid}', [TestController::class, 'getModel']);
 
 	Route::fallback(function () {
 		abort(404);

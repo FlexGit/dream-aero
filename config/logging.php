@@ -105,6 +105,18 @@ return [
 			'driver' => 'single',
 			'path' => storage_path('logs/api.log'),
 		],
+
+		'aeroflot' => [
+			'driver' => 'single',
+			'path' => storage_path('logs/aeroflot.log'),
+			'level' => 'info',
+		],
+
+		'payanyway' => [
+			'driver' => 'single',
+			'path' => storage_path('logs/payanyway.log'),
+			'level' => 'info',
+		],
     ],
 
 ];

@@ -22,10 +22,10 @@
 <div class="form-group">
 	<label for="file">Файл</label>
 	&nbsp;&nbsp;[
-	@if(file_exists(storage_path('app/private/certificate/' . $certificate->uuid . '.jpg')))
-		<a href="{{ storage_path('app/private/certificate/' . $certificate->uuid . '.jpg') }}" target="_blank">скачать</a>
-	@else
+	{{--@if(Storage::disk('private')->exists($certificate->data_json['certificate_file_path'] ?? ''))--}}
+		<a href="{{ route('getCertificate', ['uuid' => $certificate->uuid]) }}" target="_blank">скачать</a>
+	{{--@else
 		не найден
-	@endif
+	@endif--}}
 	]
 </div>

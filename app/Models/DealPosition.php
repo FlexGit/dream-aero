@@ -11,28 +11,36 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * App\Models\DealPosition
  *
  * @property int $id
- * @property string|null $number
+ * @property string|null $number номер
  * @property int $deal_id сделка
  * @property int $product_id продукт
  * @property int $certificate_id сертификат
  * @property int $duration продолжительность полета
  * @property int $amount стоимость
- * @property int $currency_id
+ * @property int $currency_id валюта
  * @property int $city_id город, в котором будет осуществлен полет
  * @property int $location_id локация, на которой будет осуществлен полет
- * @property int $flight_simulator_id
+ * @property int $flight_simulator_id авиатренажер
  * @property int $promo_id акция
  * @property int $promocode_id промокод
  * @property bool $is_certificate_purchase покупка сертификата
  * @property \datetime|null $flight_at дата и время полета
- * @property \datetime|null $invite_sent_at последняя дата отправки приглашения на e-mail
- * @property \datetime|null $certificate_sent_at последняя дата отправки сертификата на e-mail
  * @property string|null $source источник
+ * @property string|null $aeroflot_transaction_type
+ * @property string|null $aeroflot_transaction_order_id
+ * @property string|null $aeroflot_card_number
+ * @property int $aeroflot_bonus_amount
+ * @property string|null $uuid
+ * @property string|null $aeroflot_status
+ * @property string|null $aeroflot_state
  * @property int $user_id пользователь
  * @property array|null $data_json дополнительная информация
  * @property \datetime|null $created_at
  * @property \datetime|null $updated_at
  * @property \datetime|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AeroflotBonusLog[] $aeroflotBonusLog
+ * @property-read int|null $aeroflot_bonus_log_count
+ * @property-read \App\Models\Bill|null $bill
  * @property-read \App\Models\Certificate|null $certificate
  * @property-read \App\Models\City|null $city
  * @property-read \App\Models\Currency|null $currency
@@ -44,12 +52,19 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read \App\Models\Promocode|null $promocode
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
+ * @property-read \App\Models\Score|null $score
  * @property-read \App\Models\FlightSimulator|null $simulator
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition newQuery()
  * @method static \Illuminate\Database\Query\Builder|DealPosition onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotBonusAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotCardNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateSentAt($value)
@@ -63,7 +78,6 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereFlightAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereFlightSimulatorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereInviteSentAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereIsCertificatePurchase($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereLocationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereNumber($value)
@@ -73,10 +87,10 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereSource($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereUuid($value)
  * @method static \Illuminate\Database\Query\Builder|DealPosition withTrashed()
  * @method static \Illuminate\Database\Query\Builder|DealPosition withoutTrashed()
  * @mixin \Eloquent
- * @property-read \App\Models\Score|null $score
  */
 class DealPosition extends Model
 {
@@ -97,9 +111,14 @@ class DealPosition extends Model
 		'promocode_id' => 'Промокод',
 		'is_certificate_purchase' => 'Покупка сертификата',
 		'flight_at' => 'Дата полета',
-		'invite_sent_at' => 'Дата отправки приглашения',
-		'certificate_sent_at' => 'Дата отправки сертификата',
 		'source' => 'Источник',
+		'aeroflot_transaction_type' => 'Тип транзакции',
+		'aeroflot_transaction_order_id' => 'ID транзакции/заказа',
+		'aeroflot_card_number' => 'Номер карты',
+		'aeroflot_bonus_amount' => 'Сумма бонуса',
+		'aeroflot_status' => 'Статус операции',
+		'aeroflot_state' => 'Состояние заказа',
+		'uuid' => 'Uuid',
 		'user_id' => 'Пользователь',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
@@ -142,10 +161,15 @@ class DealPosition extends Model
 		'promocode_id',
 		'is_certificate_purchase',
 		'flight_at',
-		'invite_sent_at',
-		'certificate_sent_at',
 		'user_id',
 		'source',
+		'uuid',
+		'aeroflot_transaction_type',
+		'aeroflot_transaction_order_id',
+		'aeroflot_card_number',
+		'aeroflot_bonus_amount',
+		'aeroflot_status',
+		'aeroflot_state',
 		'data_json',
 	];
 
@@ -156,8 +180,6 @@ class DealPosition extends Model
 	 */
 	protected $casts = [
 		'flight_at' => 'datetime:Y-m-d H:i',
-		'invite_sent_at' => 'datetime:Y-m-d H:i',
-		'certificate_sent_at' => 'datetime:Y-m-d H:i',
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
@@ -170,6 +192,7 @@ class DealPosition extends Model
 
 		DealPosition::created(function (DealPosition $dealPosition) {
 			$dealPosition->number = $dealPosition->generateNumber();
+			$dealPosition->uuid = (string)\Webpatser\Uuid\Uuid::generate();
 			$dealPosition->save();
 		});
 
@@ -243,6 +266,16 @@ class DealPosition extends Model
 	public function score()
 	{
 		return $this->belongsTo(Score::class);
+	}
+	
+	public function bill()
+	{
+		return $this->belongsTo(Bill::class, 'id', 'deal_position_id');
+	}
+	
+	public function aeroflotBonusLog()
+	{
+		return $this->hasMany(AeroflotBonusLog::class, 'deal_position_id', 'id');
 	}
 
 	/**

@@ -5,7 +5,7 @@
 		<div class="calendars-container">
 			@foreach($cities ?? [] as $city)
 				@php
-					// для Мск и Сбп название города не выводим города
+					// для Мск и Сбп название города не выводим
 					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
 				@endphp
 
@@ -72,7 +72,33 @@
 
 	<div id="datepicker" data-date="{{ date('d.m.Y') }}"></div>
 
-	<div class="m-2 pl-4 pr-3">
+	<div class="mt-2 mb-2 ml-3 mr-3">
+		<div class="text-center mb-2">
+			<a href="javascript: void(0)" class="js-upcomming-events">
+				<span class="mr-2">Полеты на завтра</span><i class="fas fa-angle-down"></i>
+			</a>
+			<div class="js-upcomming-events-container mt-2 hidden">
+				@if(!$upcomingEvents->isEmpty())
+					@foreach($upcomingEvents as $upcomingEvent)
+						<div class="upcomming-event pt-1 pb-1" data-location-id="{{ $upcomingEvent->location_id }}" data-simulator-id="{{ $upcomingEvent->flight_simulator_id }}">
+							<div class="text-right">
+								<span>{{ $upcomingEvent->start_at->format('d.m.Y') }} {{ $upcomingEvent->start_at->format('H:i') }} - {{ $upcomingEvent->stop_at->format('H:i') }}</span><i class="js-event-notified fas fa-times ml-2 hidden" data-event-id="{{ $upcomingEvent->id }}" style="color: red;cursor: pointer;" title="Удалить"></i>
+							</div>
+							<div>
+								<span>{{ $upcomingEvent->deal->name ?? '' }} {{ $upcomingEvent->deal->phone ?? '' }}</span>
+							</div>
+							<div>
+								<span>{{ $upcomingEvent->location->name ?? '' }} {{ $upcomingEvent->simulator->alias ?? '' }}</span>
+							</div>
+						</div>
+					@endforeach
+				@else
+					<span style="font-size: 14px;color: #fff;">Ничего не найдено</span>
+				@endif
+			</div>
+		</div>
+	</div>
+	<div class="mt-2 mb-2 ml-3 mr-3">
 		<div class="text-center mb-2">
 			Календари
 		</div>
@@ -118,8 +144,8 @@
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=1') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=2') }}">
 @stop
 
 @section('js')
@@ -631,6 +657,7 @@
 					$calendarContainer.show();
 				} else {
 					$(this).prop('checked', false);
+					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').addClass('hidden');
 					$calendarContainer.hide();
 				}
 			});
@@ -648,9 +675,11 @@
 
 				if (isChecked) {
 					$calendarContainer.show();
+					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').removeClass('hidden');
 					calendarArr[locationId][simulatorId].refetchEvents();
 				} else {
 					$calendarContainer.hide();
+					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').addClass('hidden');
 				}
 			});
 
@@ -829,6 +858,68 @@
 						//$form.find('#amount-text h1').text('0');
 						break;
 				}
+			});
+
+			var $upcommingEventscontainer = $('.js-upcomming-events-container'),
+				$upcommingEventsIcon = $(this).find('i.fas'),
+				isUpcommingEventsShow = localStorage.getItem('isUpcommingEventsShow');
+
+			if (isUpcommingEventsShow == 0 || isUpcommingEventsShow == null) {
+				$upcommingEventsIcon.removeClass('fa-angle-up').addClass('fa-angle-down');
+				$upcommingEventscontainer.addClass('hidden');
+			} else {
+				$upcommingEventsIcon.removeClass('fa-angle-down').addClass('fa-angle-up');
+				$upcommingEventscontainer.removeClass('hidden');
+			}
+
+			$(document).on('click', '.js-upcomming-events', function() {
+				var isUpcommingEventsShow = localStorage.getItem('isUpcommingEventsShow');
+
+				if (isUpcommingEventsShow == 0 || isUpcommingEventsShow == null) {
+					$upcommingEventsIcon.removeClass('fa-angle-down').addClass('fa-angle-up');
+					$upcommingEventscontainer.removeClass('hidden');
+					localStorage.setItem('isUpcommingEventsShow', 1);
+				} else {
+					$upcommingEventsIcon.removeClass('fa-angle-up').addClass('fa-angle-down');
+					$upcommingEventscontainer.addClass('hidden');
+					localStorage.setItem('isUpcommingEventsShow', 0);
+				}
+			});
+
+			$(document).on('mouseover', '.upcomming-event', function() {
+				var $delIcon = $(this).find('.js-event-notified');
+
+				$delIcon.removeClass('hidden');
+			});
+			$(document).on('mouseout', '.upcomming-event', function() {
+				var $delIcon = $(this).find('.js-event-notified');
+
+				$delIcon.addClass('hidden');
+			});
+
+			$(document).on('click', '.js-event-notified', function() {
+				if (!confirm('Вы уверены?')) return null;
+
+				var $container = $(this).closest('.upcomming-event');
+
+				$.ajax({
+					url: '/event/notified',
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						'event_id': $(this).data('event-id'),
+					},
+					success: function (result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						$container.remove();
+
+						toastr.success(result.msg);
+					}
+				});
 			});
 
 			/*$(document).on('shown.lte.pushmenu', function() {

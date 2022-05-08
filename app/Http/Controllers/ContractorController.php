@@ -24,9 +24,10 @@ class ContractorController extends Controller
 	}
 	
 	/**
+	 * @param null $contractorId
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function index()
+	public function index($contractorId = null)
 	{
 		$user = \Auth::user();
 		
@@ -36,8 +37,13 @@ class ContractorController extends Controller
 			->orderBy('name')
 			->get();
 
+		if ($contractorId) {
+			$contractor = Contractor::find($contractorId);
+		}
+		
 		return view('admin.contractor.index', [
 			'cities' => $cities,
+			'contractor' => $contractor ?? null,
 		]);
 	}
 	
@@ -66,7 +72,8 @@ class ContractorController extends Controller
 				$query->where('name', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('lastname', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
-					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%');
+					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('uuid', $this->request->search_contractor);
 			});
 		}
 		if ($id) {

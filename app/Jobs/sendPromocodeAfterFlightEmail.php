@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Jobs\QueueExtension\ReleaseHelperTrait;
+use App\Models\Contractor;
+use App\Models\Deal;
+use App\Models\FlightSimulator;
+use App\Models\Location;
+use App\Models\Promocode;
+use Carbon\Carbon;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Mail;
+
+class sendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
+	use InteractsWithQueue, SerializesModels, ReleaseHelperTrait;
+	
+	protected $contractor;
+	protected $location;
+	protected $simulator;
+	protected $deal;
+	protected $promocode;
+
+	public function __construct(Contractor $contractor, Location $location, FlightSimulator $simulator, Deal $deal, Promocode $promocode) {
+		$this->contractor = $contractor;
+		$this->location = $location;
+		$this->simulator = $simulator;
+		$this->deal = $deal;
+		$this->promocode = $promocode;
+	}
+	
+	/**
+	 * @return int|void
+	 */
+	public function handle() {
+		$recipients = $bcc = [];
+		$recipients[] = $this->deal->email;
+		$bcc[] = env('DEV_EMAIL');
+
+		$messageData = [
+			'contractor' => $this->contractor,
+			'location' => $this->location,
+			'simulator' => $this->simulator,
+			'deal' => $this->deal,
+			'promocode' => $this->promocode,
+		];
+
+		$subject = env('APP_NAME') . ': промокод на полет';
+
+		Mail::send(['html' => "admin.emails.send_promocode_after_flight"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
+			/** @var \Illuminate\Mail\Message $message */
+			$message->subject($subject);
+			$message->to($recipients);
+			$message->bcc($bcc);
+		});
+		$failures = Mail::failures();
+		if (!$failures) {
+			$this->promocode->sent_at = Carbon::now()->format('Y-m-d H:i:s');
+			$this->promocode->save();
+		}
+	}
+}

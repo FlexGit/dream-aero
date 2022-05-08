@@ -44,6 +44,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property string|null $uuid uuid
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereUuid($value)
+ * @property string|null $type
+ * @property int $contractor_id
+ * @property int $location_id
+ * @property int $flight_simulator_id
+ * @property \datetime|null $sent_at
+ * @property-read \App\Models\Contractor|null $contractor
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Contractor[] $contractors
+ * @property-read int|null $contractors_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereContractorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereFlightSimulatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereType($value)
  */
 class Promocode extends Model
 {
@@ -64,6 +77,8 @@ class Promocode extends Model
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;*/
 	
+    const SIMULATOR_TYPE = 'simulator';
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -71,10 +86,15 @@ class Promocode extends Model
 	 */
 	protected $fillable = [
 		'number',
+		'type',
+		'contractor_id',
+		'location_id',
+		'flight_simulator_id',
 		'discount_id',
 		'is_active',
 		'active_from_at',
 		'active_to_at',
+		'sent_at',
 		'uuid',
 		'data_json',
 	];
@@ -90,6 +110,7 @@ class Promocode extends Model
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
 		'active_from_at' => 'datetime:Y-m-d H:i:s',
 		'active_to_at' => 'datetime:Y-m-d H:i:s',
+		'sent_at' => 'datetime:Y-m-d H:i:s',
 		'is_active' => 'boolean',
 		'data_json' => 'array',
 	];
@@ -115,7 +136,19 @@ class Promocode extends Model
 			->using(CityPromocode::class)
 			->withTimestamps();
 	}
+	
+	public function contractor()
+	{
+		return $this->hasOne(Contractor::class, 'id', 'contractor_id');
+	}
 
+	public function contractors()
+	{
+		return $this->belongsToMany(Contractor::class, 'contractor_promocodes', 'contractor_id', 'promocode_id')
+			->using(ContractorPromocode::class)
+			->withTimestamps();
+	}
+	
 	public function format() {
 		$data = $this->data_json ?? [];
 		

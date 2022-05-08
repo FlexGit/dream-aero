@@ -1,4 +1,6 @@
 @php
+	if (!isset($city)) $city = null;
+
 	$urlEn = url('//' . env('DOMAIN_EN', 'en.dream-aero.ru'));
 	if (Request::segment(1)) {
 		$urlEn .= '/' . Request::segment(1);
@@ -101,8 +103,8 @@
 			</div>
 			<div>
 				<span class="phone">
-					<a href="tel:{{ $city->phone }}">
-						{{ $city->phoneFormatted() }}
+					<a href="tel:{{ $city->phone ?? '+74955328737' }}">
+						{{ ($city && $city->phone) ? $city->phoneFormatted() : '+7 (495) 532-87-37' }}
 					</a>
 				</span>
 				@if (App::isLocale('ru'))

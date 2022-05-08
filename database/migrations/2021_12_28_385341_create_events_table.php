@@ -30,10 +30,14 @@ class CreateEventsTable extends Migration
 			$table->boolean('is_unexpected_flight')->default(false)->index()->comment('признак спонтанного полета');
 			$table->boolean('is_test_flight')->default(false)->index()->comment('признак тестового полета');
 			$table->string('notification_type')->nullable()->comment('способ оповещения контрагента о полете');
+			$table->boolean('is_notified')->default(false)->index()->comment('уведомлен ли контрагент о предстоящем полете');
 			$table->tinyInteger('pilot_assessment')->default(0)->comment('оценка пилота');
 			$table->tinyInteger('admin_assessment')->default(0)->comment('оценка администратора');
 			$table->timestamp('simulator_up_at')->nullable()->comment('дата и время подъема платформы');
 			$table->timestamp('simulator_down_at')->nullable()->comment('дата и время опускания платформы');
+			$table->timestamp('promocode_sent_at')->nullable()->comment('дата и время последней отправки промокода контрагенту');
+			$table->timestamp('flight_invitation_sent_at')->nullable()->comment('дата и время последней отправки приглашения на полет контрагенту');
+			$table->string('uuid')->nullable();
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();

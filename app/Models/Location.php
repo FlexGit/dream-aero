@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -51,6 +53,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FlightSimulator[] $simulators
  * @property-read int|null $simulators_count
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereNameEn($value)
+ * @property string|null $pay_account_number номер счета в платежной системе
+ * @method static \Illuminate\Database\Eloquent\Builder|Location wherePayAccountNumber($value)
  */
 class Location extends Model
 {
@@ -91,6 +95,7 @@ class Location extends Model
 		'alias',
 		'legal_entity_id',
 		'city_id',
+		'pay_account_number',
 		'sort',
 		'data_json',
 		'is_active',
@@ -156,5 +161,19 @@ class Location extends Model
 			/*'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
 			'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,*/
 		];
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function countBillsInCurrentMonth()
+	{
+		$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, PaymentMethod::ONLINE_ALIAS);
+		if (!$onlinePaymentMethod) return 0;
+		
+		return Bill::where('payment_method_id', $onlinePaymentMethod->id)
+			->where('location_id', $this->id)
+			->where('created_at', Carbon::now()->format('Y-m'))
+			->count();
 	}
 }

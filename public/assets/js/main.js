@@ -4,24 +4,11 @@ $.ajaxSetup({
 	}
 });
 
-$(document).ready(function(){
-
-	function setLocation(curLoc) {
-		try {
-			history.pushState(null,null, curLoc);
-			return;
-		} catch(e) {}
-
-		window.location.hash = '#' + curLoc;
-	}
-
+$(function(){
     $(".ajax-container").on("focusin", function() {
  		$("a.fancybox, a.various").fancybox({
   			'padding': 0
  		});
- 		/*$("a.various").fancybox({
-  			'padding': 0
- 		});*/
 	});
     
     url = document.location.href;
@@ -103,119 +90,16 @@ $(document).ready(function(){
 		$('.main-menu').slideToggle(300);
 	});
 
-	/*$('body').on('click','.promoblock .rugs-button', function () {
-    	$('#err_mess').remove();
-
-    	$.ajax({
-       		type:'post',//тип запроса: get,post либо head
-       		url:'/admin/dealajax',//url адрес файла обработчика
-       		data:{'action':'getpromocode','promocode':$('.promoblock input').val(),'client_city':$('#current_city').text(),'prod_type':$('.promoblock input').attr("data-type")},//параметры запроса
-       		response:'text',//тип возвращаемого ответа text либо xml
-       		success:function (data) {//возвращаемый результат от сервера
-        		var promodata = jQuery.parseJSON(data);
-        		if (promodata.promo_id){
-        			$('.promoblock .rugs-button').hide();
-        			$('.promoblock input').attr("readonly",1);
-        			$('.promoblock input').css("padding","15px");
-        			$('.promoblock input').css("background-color","#E4E4E4");
-        			$('.promoblock').prepend("<div id=\"paypromo\"><input type=\"hidden\" name=\"promoid\"  id=\"promoid\"  value="+promodata.promo_id+"><input type=\"hidden\" id=\"promoamount\" value="+promodata.promo_disc+"><input type=\"hidden\" id=\"promotype\" value="+promodata.promo_curr+"></div>");
-     			} else {
-           			$('.promoblock').prepend("<p id=\"err_mess\" style=\"color:red\">Промокод либо недействителен, либо истек срок его действия.</p>");
-        		}
-        		TotalPrice();
-       		}
-    	});
-    });*/
-    
-    /*$("body").on("click", ".aerbonus_btns #charge", function(){
-        if ($('#total-amount .strikethrough').length){
-            price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
-            $('#total-amount').html('Стоимость: '+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+' руб');
-        }
-        $('#bonus_info').html('<i>Будет начислено <b>'+calculate_mils()+'</b> миль (1 миля за каждые потраченные 50 рублей)</i><input type="hidden" name="bonus_charge" value="'+calculate_mils()+'">');
-    });
-
-    $("body").on("click", ".aerbonus_btns #use", function(){
-        bonus4use();
-    });
-
-    $("body").on("click", ".aerocard .rugs-button", function(){
-        $('#errmess').remove();
-	     $.ajax({
-           type:'post',//тип запроса: get,post либо head
-           url:'/admin/dealajax',//url адрес файла обработчика
-           data:{'action':'aerocardverificate','cardnum':$('.aerocard input').val()},//параметры запроса
-         response:'text',//тип возвращаемого ответа text либо xml
-         success:function (data) {//возвращаемый результат от сервера
-             if(data==0){
-                $(".aerocard .rugs-button, .aerocard svg, .have_promo").hide();
-                $('.aerocard input').attr("readonly",1);
-                $('.aerocard input').css("background-color","#AADDC7");
-                $('.aerocard input').css("padding","15px");
-                $('.aerocard').append("<ul class=\"aerbonus_btns\"><li class=\"plan-time\" id=\"charge\">Начислить мили</li><li id=\"use\" class=\"plan-time\">Использовать мили</li></ul><div id=\"bonus_info\"></div>");
-                 
-             }
-             else{
-                 $('.aerocard').prepend("<p id=\"errmess\" style=\"color:red\">Номер карты введен некорректно, проверьте данные и попробуйте ещё раз</p>");
-             }
-         }
-         });   
-    	        
-	});
-	   
-    $("body").on("click", ".aerbonus_btns li", function(){
-        $('.aerbonus_btns li').removeClass('active');
-	    $(this).addClass('active');
-	});*/
-
     $(document).on('click', '.have_promo', function() {
 	    $(this).hide();
 	    $('.aeroflotbonus').hide();
 	    $(".promoblock").show();
 	});
 	
-	/*$("body").on("input", "#bonus_mils", function(){
-	    mils=$(this).val().replace(/\D+/g,"");
-	    console.log(mils+' '+$(this).attr("data-max")+' '+$(this).attr("data-min"));
-	    if (parseInt(mils)>parseInt($(this).attr("data-max")))
-	        mils=$(this).attr("data-max");
-	    else if (parseInt(mils)<parseInt($(this).attr("data-min")))
-	        mils=$(this).attr("data-min");
-	       $(this).val(mils);
-	       
-	        $("#rubinmils").val(' => '+(Math.round(($(this).val())*4))+ ' миль');
-	   if ($('#total-amount .strikethrough').length){
-            price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
-            $('#total-amount').html('Стоимость: <b class="strikethrough">'+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+'</b>'+String((price-$(this).val())).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+' руб');
-        }
-	});*/
-
 	$('.popup-close').click(function(e){
 		e.preventDefault();
 		$.magnificPopup.close();
 	});
-
-	/*$(document).on('af_complete',function(event,response){
-		var form=response.form;
-		if(form.attr('id')=='popup-payonline'){
-			$.magnificPopup.open({
-				items:{
-					src:"#online-welcome"},
-					type:'inline',
-					preloader:false,
-					removalDelay:3000,
-					mainClass:'mfp-fade'});
-					onlinepay("popup-payonline");
-				}
-	else if(form.attr('id')=='popup-mainpay'){$.magnificPopup.open({items:{src:"#online-welcome"},type:'inline',preloader:false,removalDelay:3000,mainClass:'mfp-fade'});onlinepay("popup-mainpay");}
-	else if(form.attr('id')=='popup-gensert'){$.magnificPopup.open({items:{src:"#popup-sert"},type:'inline',preloader:false,removalDelay:3000,mainClass:'mfp-fade'});window.open('https://dream-aero.ru/assets/files/'+document.getElementById("sertnum").value+'.jpg');}
-	else{$.magnificPopup.open({items:{src:"#popup-welcome"},type:'inline',preloader:false,removalDelay:300,mainClass:'mfp-fade'});}
-
-		setTimeout(function(){
-			$.magnificPopup.close();
-		},40000)
-		return false;
-	});*/
 
 	var wow = new WOW({
 		boxClass:'wow',
@@ -238,100 +122,307 @@ $(document).ready(function(){
 	});
 
 	bodyPadding();
+
+
+	$(document).on('click', '.popup-with-form[data-popup-type]', function(e) {
+		popup($(this));
+	});
+
+	function popup($el) {
+		$.magnificPopup.open({
+			items: {
+				src: '#popup'
+			},
+			type: 'inline',
+			preloader: false,
+			removalDelay: 300,
+			mainClass: 'mfp-fade',
+			callbacks: {
+				open: function () {
+					$.magnificPopup.instance.close = function () {
+						$.magnificPopup.proto.close.call(this);
+					};
+
+					var $popup = $('#popup');
+
+					$popup.hide();
+
+					var url = '';
+
+					switch ($el.data('popup-type')) {
+						case 'product':
+							url = '/modal/certificate-booking/' + $el.data('product-alias');
+							break;
+						case 'callback':
+							url = '/modal/callback';
+							break;
+						case 'review':
+							url = '/modal/review';
+							break;
+						case 'scheme':
+							url = '/modal/scheme/' + $el.data('alias');
+							break;
+					}
+
+					$.ajax({
+						type: 'GET',
+						url: url,
+						success: function (result) {
+							if (result.status !== 'success') {
+								return;
+							}
+
+							$popup.find('.popup-container').html(result.html);
+
+							switch ($el.data('popup-type')) {
+								case 'callback':
+								case 'review':
+									$popup.show();
+									break;
+								case 'scheme':
+									$popup.addClass('popup-map');
+									$popup.show();
+									break;
+								case 'product':
+									certificateForm($el.data('product-alias'));
+									break;
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+
+	$(document).on('click', '.button-tab[data-modal]', function() {
+		if ($(this).data('modal') === 'certificate') {
+			certificateForm($(this).data('product-alias'));
+		} else if ($(this).data('modal') === 'booking') {
+			bookingForm($(this).data('product-alias'), $(this).data('product-type-alias'));
+		}
+	});
+
+	function certificateForm(productAlias) {
+		$.ajax({
+			type: 'GET',
+			url: '/modal/certificate/' + productAlias,
+			success: function (result) {
+				if (result.status !== 'success') {
+					return;
+				}
+
+				var $popup = $('#popup');
+
+				$popup.find('.form-container').html(result.html).find('select').niceSelect();
+
+				calcAmount();
+
+				$popup.show();
+			}
+		});
+	}
+
+	function bookingForm(productAlias, productTypeAlias) {
+		$.ajax({
+			type: 'GET',
+			url: '/modal/booking/' + productAlias,
+			success: function (result) {
+				if (result.status !== 'success') {
+					return;
+				}
+
+				var $popup = $('#popup');
+
+				$popup.find('.form-container').html(result.html).find('select').niceSelect();
+
+				var weekDays = (productTypeAlias === 'regular') ? [0, 6] : [],
+					holidays = (productTypeAlias === 'regular') ? $popup.find('#holidays').val() : '';
+
+				calcAmount();
+
+				$popup.show();
+
+				$('.datetimepicker').datetimepicker({
+					format: 'd.m.Y H:i',
+					step: 30,
+					dayOfWeekStart: 1,
+					minDate: 0,
+					minTime: '10:00',
+					maxTime: '23:00',
+					lang: 'ru',
+					lazyInit: true,
+					scrollInput: false,
+					scrollTime: false,
+					scrollMonth: false,
+					validateOnBlur: false,
+					onChangeDateTime: function (value) {
+						value.setSeconds(0);
+						$('#flight_date').val(value.toLocaleString());
+						calcAmount();
+					},
+					disabledWeekDays: weekDays,
+					disabledDates: holidays,
+					formatDate: 'd.m.Y',
+				});
+			}
+		});
+	}
+
+	$(document).on('click', '.button-tab[data-simulator]', function() {
+		if ($(this).data('simulator') === '737NG') {
+			$('#content-astab1').show();
+			$('#content-astab2').hide();
+		} else if ($(this).data('simulator') === 'A320') {
+			$('#content-astab2').show();
+			$('#content-astab1').hide();
+		}
+	});
+
+	$(document).on('change', 'input[name="consent"]', function() {
+		var $popup = $(this).closest('.popup, .form'),
+			$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-callback-btn, .js-review-btn, .js-question-btn');
+		if ($(this).is(':checked')) {
+			$btn.removeClass('button-pipaluk-grey')
+				.addClass('button-pipaluk-orange')
+				.prop('disabled', false);
+		} else {
+			$btn.removeClass('button-pipaluk-orange')
+				.addClass('button-pipaluk-grey')
+				.prop('disabled', true);
+		}
+	});
+
+	$(document).on('click', '.js-review-btn', function() {
+		var $popup = $(this).closest('.popup'),
+			name = $popup.find('#name').val(),
+			body = $popup.find('#body').val(),
+			$alertSuccess = $popup.find('.alert-success'),
+			$alertError = $popup.find('.alert-danger');
+
+		var data = {
+			'name': name,
+			'body': body,
+		};
+
+		$.ajax({
+			url: '/review/create',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function (result) {
+				$alertSuccess.addClass('hidden');
+				$alertError.text('').addClass('hidden');
+				$('.field-error').removeClass('field-error');
+
+				if (result.status !== 'success') {
+					if (result.reason) {
+						$alertError.text(result.reason).removeClass('hidden');
+					}
+					if (result.errors) {
+						const entries = Object.entries(result.errors);
+						entries.forEach(function (item, key) {
+							var fieldId = item[0];
+							$('#' + fieldId).addClass('field-error');
+						});
+					}
+					return;
+				}
+
+				$alertSuccess.removeClass('hidden');
+				$popup.find('#name, #body').val('');
+			}
+		});
+	});
+
+	$(document).on('click', '.js-question-btn', function() {
+		var $popup = $(this).closest('form'),
+			name = $popup.find('#name').val(),
+			email = $popup.find('#email').val(),
+			body = $popup.find('#body').val(),
+			$alertSuccess = $popup.find('.alert-success'),
+			$alertError = $popup.find('.alert-danger');
+
+		var data = {
+			'name': name,
+			'email': email,
+			'body': body,
+		};
+
+		$.ajax({
+			url: '/question',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function (result) {
+				$alertSuccess.addClass('hidden');
+				$alertError.text('').addClass('hidden');
+				$('.border-error').removeClass('border-error');
+
+				if (result.status !== 'success') {
+					if (result.reason) {
+						$alertError.text(result.reason).removeClass('hidden');
+					}
+					if (result.errors) {
+						const entries = Object.entries(result.errors);
+						entries.forEach(function (item, key) {
+							var fieldId = item[0];
+							$('#' + fieldId).addClass('border-error');
+						});
+					}
+					return;
+				}
+
+				$alertSuccess.removeClass('hidden');
+				$popup.find('#name, #email, #body').val('');
+			}
+		});
+	});
+
+	$(document).on('click', '.js-callback-btn', function() {
+		var $popup = $(this).closest('.popup'),
+			name = $popup.find('#name').val(),
+			phone = $popup.find('#phone').val(),
+			$alertSuccess = $popup.find('.alert-success'),
+			$alertError = $popup.find('.alert-danger');
+
+		var data = {
+			'name': name,
+			'phone': phone,
+		};
+
+		$.ajax({
+			url: '/callback',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function (result) {
+				$alertSuccess.addClass('hidden');
+				$alertError.text('').addClass('hidden');
+				$('.field-error').removeClass('field-error');
+
+				if (result.status !== 'success') {
+					if (result.reason) {
+						$alertError.text(result.reason).removeClass('hidden');
+					}
+					if (result.errors) {
+						const entries = Object.entries(result.errors);
+						entries.forEach(function (item, key) {
+							var fieldId = item[0];
+							$('#' + fieldId).addClass('field-error');
+						});
+					}
+					return;
+				}
+
+				$alertSuccess.removeClass('hidden');
+				$popup.find('#name, #phone').val('');
+			}
+		});
+	});
 });
 
 function bodyPadding(){
 	var header=$('.header');var headerHeight=$(header).outerHeight();$('body').css('padding-top',headerHeight);
-}
-
-/*function bonus4use(){
-     $.ajax({
-       type:'post',//тип запроса: get,post либо head
-       url:'/admin/dealajax',//url адрес файла обработчика
-       data:{'action':'getbonusinfo','cardnum':$('.aerocard input').val(),'tarif':$('#tarif').val(),'tarif_type':$('#tarif_type').val(),'contextalias':$('#current_city').attr('data-context')},
-       beforeSend: function() {
-           $('#bonus_info').html('<div style="text-align: center;"><p><b>Идет расчет</b></p><img src="/assets/planes.gif"></div>');},
-       response:'text',
-       success:function (data) {
-           price=parseInt($('#total-amount').text().replace(/\D+/g,""));
-           minbonus=Math.floor((price/100)*20);
-           if (data){
-            var bonusdata = jQuery.parseJSON(data);
-            if (typeof bonusdata['pointsAllocation'] !== "undefined"
-            && bonusdata['pointsAllocation']['maxChequePoints']> 0){
-              maxChequePoints=bonusdata['pointsAllocation']['maxChequePoints']/100;
-           $('#bonus_info').html('<p>Доступно для списания '+maxChequePoints+' руб.</p><p>Сколько из них Вы готовы списать?</p> <div style="display:flex"><input style="width:48%;border-bottom: 2px solid #828285;margin-top:10px" name="bonus_mils" data-min="'+minbonus+'" data-max="'+maxChequePoints+'" id="bonus_mils" type="text" value="'+maxChequePoints+'" required=""><input style="width:48%;border-bottom: 2px solid #828285;margin-top:10px" readonly id="rubinmils" type="text" value=" => '+Math.round(maxChequePoints*4)+' миль" required=""></div><i>Вы можете списать в милях не менее 20% и не более 50% от стоимости сертификата</i>');
-           $('#total-amount').html('Стоимость: <b class="strikethrough">'+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+'</b>'+String((price-maxChequePoints)).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+' руб');
-            }
-            else
-            $('#bonus_info').html('<p class="error">Произошла ошибка. Повторите, пожалуйста, попытку позже</p>');
-           }
-          else
-            $('#bonus_info').html('<p class="error">Произошла ошибка. Повторите, пожалуйста, попытку позже</p>');
-       }
-	    });
-}*/
-
-/*function calculate_mils(){
-    if ($('#total-amount .strikethrough').length) 
-        price=parseInt($('#total-amount .strikethrough').text().replace(/\D+/g,""));
-     else
-        price=parseInt($('#total-amount').text().replace(/\D+/g,""));
-    return Math.floor(price/50);
-}*/
-
-/*function TotalPrice(){
-    $('#submibtn').hide();
-     $.ajax({
-       type:'post',//тип запроса: get,post либо head
-       url:'/admin/dealajax',//url адрес файла обработчика
-       data:{'action':'getprice','contextalias':$('#current_city').attr('data-context'),'tarif_type':$('#tarif_type').val(),'tarif':$('#tarif').val()},//параметры запроса
-       response:'text',//тип возвращаемого ответа text либо xml
-       success:function (data) {//возвращаемый результат от сервера
-        var tarifdata = jQuery.parseJSON(data);
-        sale=0;
-        old_price='';
-        if (($('.promoblock input').attr('data-type')=='sert' && tarifdata['sale']) || ($('.promoblock input').attr('data-type')=='bron' && tarifdata['sale_bron'])){
-            sale=1;
-            price=tarifdata['price_new'];
-            old_price='<b class="strikethrough">'+String(tarifdata['price']).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+'</b>';
-        }
-        else
-            price=tarifdata['price'];
-            
-        if ($('#promoamount').val()>0 && sale==0 && ($('#tarif').val().toUpperCase().indexOf('ULTIMATE') >= 0 || $('#tarif').val().toUpperCase().indexOf('REGULAR') >= 0)){
-            
-            old_price='<b class="strikethrough">'+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+'</b>';
-            if ($('#promotype').val()=='percent')
-                price=(1-($('#promoamount').val()/100))*price;
-            else
-                price=price-$('#promoamount').val();
-        }
-        
-        
-       $('#total-amount').html('Стоимость: '+old_price+String(price).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+' руб');
-       if ($(".aerbonus_btns #charge").hasClass("active"))
-         $('#bonus_info').html('<i>Будет начислено <b>'+calculate_mils()+'</b> миль (1 миля за каждые потраченные 50 рублей)</i><input type="hidden" name="bonus_charge" value="'+calculate_mils()+'">');
-        else if($(".aerbonus_btns #use").hasClass("active"))
-            bonus4use();
-        $('#submibtn').show();
-     }
-    });
-}*/
-
-function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
-    }
 }
 
 function calcAmount() {
@@ -358,19 +449,17 @@ function calcAmount() {
 		source: 'web',
 	};
 
-	//console.log(data);
-
 	$.ajax({
 		type: 'GET',
 		url: '/deal/product/calc',
 		data: data,
 		dataType: 'json',
 		success: function(result) {
-			if (result.status != 'success') {
+			if (result.status !== 'success') {
 				return;
 			}
 
-			if (result.amount != result.baseAmount) {
+			if (result.amount !== result.baseAmount) {
 				amount = '<span class="strikethrough">' + result.baseAmount + '</span>' + result.amount;
 			} else if (result.amount) {
 				amount = result.amount;

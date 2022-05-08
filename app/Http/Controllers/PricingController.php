@@ -239,6 +239,8 @@ class PricingController extends Controller
 		$dataJson = [
 			'is_booking_allow' => (bool)$this->request->is_booking_allow,
 			'is_certificate_purchase_allow' => (bool)$this->request->is_certificate_purchase_allow,
+			'is_discount_booking_allow' => (bool)$this->request->is_discount_booking_allow,
+			'is_discount_certificate_purchase_allow' => (bool)$this->request->is_discount_certificate_purchase_allow,
 		];
 		if ($isCertificateTemplateFileUploaded) {
 			if ($cityProduct) {
@@ -247,7 +249,6 @@ class PricingController extends Controller
 					Storage::disk('private')->delete($data['certificate_template_file_path']);
 				}
 			}
-
 			$dataJson['certificate_template_file_path'] = 'certificate/template/' . $filePath;
 		}
 		$data = [
@@ -347,25 +348,31 @@ class PricingController extends Controller
 	 * @return \never|\Symfony\Component\HttpFoundation\StreamedResponse
 	 */
 	public function getCertificateTemplateFile($cityId, $productId) {
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
 		if (!\Auth::user()->isSuperAdmin()) {
-			return abort(404);
+			abort(404);
 		}
 		
 		$product = Product::find($productId);
-		if (!$product) return abort(404);
+		if (!$product) {
+			abort(404);
+		}
 		
 		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
 		if (!$cityProduct || !$cityProduct->pivot) {
-			return abort(404);
+			abort(404);
 		}
 		
 		$data = json_decode($cityProduct->pivot->data_json, true);
 		if (!isset($data['certificate_template_file_path'])) {
-			return abort(404);
+			abort(404);
 		}
 		
 		if (!Storage::disk('private')->exists($data['certificate_template_file_path'])) {
-			return abort(404);
+			abort(404);
 		}
 		
 		return Storage::disk('private')->download($data['certificate_template_file_path']);

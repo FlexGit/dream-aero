@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\City;
 use App\Models\Currency;
+use App\Models\DealPosition;
 use App\Models\PaymentMethod;
 use App\Models\Deal;
 use App\Models\Status;
@@ -50,12 +51,16 @@ class BillController extends Controller
 			->get();
 
 		$currencies = Currency::get();
+		
+		$deal = $bill->deal;
+		$positions = $deal->positions;
 
 		$VIEW = view('admin.bill.modal.edit', [
 			'bill' => $bill,
 			'paymentMethods' => $paymentMethods,
 			'statuses' => $statuses,
 			'currencies' => $currencies,
+			'positions' => $positions,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -87,12 +92,15 @@ class BillController extends Controller
 
 		$currencies = Currency::get();
 		
+		$positions = $deal->positions;
+
 		$VIEW = view('admin.bill.modal.add', [
 			'deal' => $deal,
 			'amount' => ($amount > 0) ? $amount : 0,
 			'paymentMethods' => $paymentMethods,
 			'statuses' => $statuses,
 			'currencies' => $currencies,
+			'positions' => $positions,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -134,15 +142,38 @@ class BillController extends Controller
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 
 		if (!$deal->contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+		
+		$positionId = $this->request->position_id ?? 0;
+		if ($positionId) {
+			$position = DealPosition::find($positionId);
+			if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки  не найдена']);
+		}
+		
+		$paymentMethodId = $this->request->payment_method_id ?? 0;
+		if ($paymentMethodId) {
+			$paymentMethod = PaymentMethod::find($paymentMethodId);
+		}
 
 		try {
 			\DB::beginTransaction();
-
+			
+			$location = $deal->city ? $deal->city->getLocationForBill() : null;
+			if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS && !$location) {
+				\DB::rollback();
+				
+				Log::debug('500 - Bill Create: Не найден номер счета платежной системы');
+				
+				return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
+			}
+			
 			$bill = new Bill();
 			$bill->contractor_id = $deal->contractor->id ?? 0;
-			$bill->payment_method_id = $this->request->payment_method_id;
+			$bill->deal_id = $deal->id ?? 0;
+			$bill->deal_position_id = $position->id ?? 0;
+			$bill->location_id = $location->id ?? 0;
+			$bill->payment_method_id = $paymentMethodId;
 			$bill->status_id = $this->request->status_id ?? 0;
-			$bill->amount = $this->request->amount;
+			$bill->amount = $this->request->amount ?? 0;
 			$bill->currency_id = $this->request->currency_id ?? 0;
 			$bill->user_id = $this->request->user()->id;
 			$bill->save();
@@ -194,7 +225,14 @@ class BillController extends Controller
 		if (!$status) {
 			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
 		}
-
+		
+		$positionId = $this->request->position_id ?? 0;
+		if ($positionId) {
+			$position = DealPosition::find($positionId);
+			if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки  не найдена']);
+		}
+		
+		$bill->deal_position_id = $position->id ?? 0;
 		$bill->payment_method_id = $this->request->payment_method_id ?? 0;
 		$bill->status_id = $this->request->status_id ?? 0;
 		$bill->amount = $this->request->amount;
@@ -250,13 +288,18 @@ class BillController extends Controller
 		$bill = Bill::find($this->request->bill_id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
-		$email = ($bill->deal && $bill->deal->contractor) ? $bill->deal->contractor->email : '';
-
+		$email = $bill->deal->email ?: $bill->deal->contractor->email;
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
 		
-		$link = 'https://dream-aero.ru/pay/' . $bill->uuid;
+		$name = $bill->deal->name ?: $bill->deal->contractor->name;
 		
-		Mail::send('admin.emails.send_paylink', ['link' => $link], function ($message) use ($email) {
+		$messageData = [
+			'name' => $name,
+			'amount' => $bill->amount,
+			'payLink' => $this->request->getSchemeAndHttpHost() . '/payment/' . $bill->uuid,
+		];
+		
+		Mail::send('admin.emails.send_paylink', $messageData, function ($message) use ($email) {
 			$message->to($email)->subject('Ссылка на оплату');
 		});
 		
@@ -272,76 +315,5 @@ class BillController extends Controller
 		}
 		
 		return response()->json(['status' => 'success', 'link_sent_at' => $linkSentAt]);
-	}
-
-	/**
-	 * @param $id
-	 * @param $cityId
-	 * @return \Illuminate\Http\JsonResponse|null
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 */
-	public function sendPayRequest($id, $cityId) {
-		$city = City::where('is_active', true)
-			->find($cityId);
-		if(!$city) {
-			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-		}
-
-		$payAccountNumber = $city->pay_account_number ?? '';
-		if (!$payAccountNumber) {
-			return response()->json(['status' => 'error', 'reason' => 'Некорректный номер счета платежной системы']);
-		}
-
-		$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
-		if (!$billStatus) {
-			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
-		}
-
-		$bill = Bill::where('status_id', $billStatus->id)
-			->find($id);
-		if(!$bill) {
-			return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
-		}
-
-		if (!$bill->deals) {
-			return response()->json(['status' => 'error', 'reason' => 'Счет не привязан ни к одной сделке']);
-		}
-
-		$result = PayAnyWayService::sendPayRequest($payAccountNumber, $bill);
-
-		return $result;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function payCallback() {
-		$result = PayAnyWayService::checkPayCallback($this->request);
-
-		if (!$result) {
-			return 'FAIL';
-		}
-
-		$billId = $this->request->MNT_TRANSACTION_ID ?? 0;
-		if ($billId) {
-			$bill = Bill::find($billId);
-			if ($bill && $bill->amount == $this->request->MNT_AMOUNT) {
-
-			}
-		}
-
-		return 'SUCCESS';
-	}
-
-	public function paySuccess() {
-		return 'success';
-	}
-
-	public function payFail() {
-		return 'fail';
-	}
-
-	public function payReturn() {
-		return 'cancel';
 	}
 }

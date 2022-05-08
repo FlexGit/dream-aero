@@ -21,6 +21,7 @@ class CreateCertificatesTable extends Migration
 			$table->integer('product_id')->default(0)->index()->comment('продукт');
 			$table->string('uuid')->nullable()->comment('uuid');
 			$table->timestamp('expire_at')->nullable()->comment('срок окончания действия сертификата');
+			$table->timestamp('certificate_sent_at')->nullable()->comment('время последней отправки Сертификата контрагенту');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();

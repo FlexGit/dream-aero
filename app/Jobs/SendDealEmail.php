@@ -13,25 +13,22 @@ use Mail;
 class SendDealEmail extends Job implements ShouldQueue {
 	use InteractsWithQueue, SerializesModels, ReleaseHelperTrait;
 	
-	protected $dealId;
+	protected $deal;
 	
 	public function __construct(Deal $deal) {
-		$this->dealId = $deal->id;
+		$this->deal = $deal;
 	}
 	
 	/**
 	 * @return int|void
 	 */
 	public function handle() {
-		$deal = Deal::find($this->dealId);
-		if (!$deal) return;
-		
-		$position = $deal->positions()->first();
+		$position = $this->deal->positions()->first();
 		if (!$position) return;
 
 		$scoreAmount = 0;
-		if ($deal->scores) {
-			foreach ($deal->scores ?? [] as $score) {
+		if ($this->deal->scores) {
+			foreach ($this->deal->scores ?? [] as $score) {
 				if ($score->type != Score::USED_TYPE) continue;
 
 				$scoreAmount += abs($score->score);
@@ -40,28 +37,27 @@ class SendDealEmail extends Job implements ShouldQueue {
 
 		$locationData = $position->location ? $position->location->data_json ?? [] : [];
 
-		if ($deal->contractor && $deal->contractor->city) {
+		if ($this->deal->contractor && $this->deal->contractor->city) {
 			$cityData = [
-				'phone' => $deal->contractor->city->phone ?? '',
-				'email' => $deal->contractor->city->email ?? '',
+				'phone' => $this->deal->contractor->city->phone ?? '',
+				'email' => $this->deal->contractor->city->email ?? '',
 			];
 		}
 
 		$recipients = [];
-		//$recipients[] = 'webmanage@inbox.ru';
 		if ($cityData['email']) {
 			$recipients[] = $cityData['email'];
 		}
 
 		$messageData = [
-			'contractorFio' => $deal->contractor ? $deal->contractor->fio() : '',
-			'dealName' => $deal->name ?? '',
-			'dealPhone' => $deal->phone ?? '',
-			'dealEmail' => $deal->email ?? '',
-			'dealNumber' => $deal->number ?? '',
+			'contractorFio' => $this->deal->contractor ? $this->deal->contractor->fio() : '',
+			'dealName' => $this->deal->name ?? '',
+			'dealPhone' => $this->deal->phone ?? '',
+			'dealEmail' => $this->deal->email ?? '',
+			'dealNumber' => $this->deal->number ?? '',
 			'positionNumber' => $position->number ?? '',
 			'isCertificatePurchase' => (bool)$position->is_certificate_purchase,
-			'statusName' => $deal->status ? $deal->status->name : '',
+			'statusName' => $this->deal->status ? $this->deal->status->name : '',
 			'certificateNumber' => $position->certificate ? $position->certificate->number : '',
 			'certificateExpireAt' => $position->certificate ? $position->certificate->expire_at : '',
 			'flightAt' => $position->flight_at,
@@ -72,7 +68,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'promoName' => $position->promo ? $position->promo->name : '',
 			'promocodeNumber' => $position->promocode ? $position->promocode->number : '',
 			'source' => $position->source ? app('\App\Models\DealPosition')::SOURCES[$position->source] : '',
-			'updatedAt' => $deal->updated_at,
+			'updatedAt' => $this->deal->updated_at,
 			'productName' => $position->product ? $position->product->name : '',
 			'duration' => $position->duration,
 			'amount' => $position->amount,
@@ -85,36 +81,24 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'comment' => ((array_key_exists('comment', $position->data_json) && $position->data_json['comment']) ? $position->data_json['comment'] : '') . ((array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom']) ? '. Сертификат для: ' . $position->data_json['certificate_whom'] : ''),
 		];
 
-		try {
-			$subject = $position->is_certificate_purchase ? env('APP_NAME') . ': заявка на покупку сертификата' : env('APP_NAME') . ': заявка на бронирование полета';
+		$subject = $position->is_certificate_purchase ? env('APP_NAME') . ': заявка на покупку сертификата' : env('APP_NAME') . ': заявка на бронирование полета';
 
-			// клиенту
-			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject, $deal) {
+		// контрагенту
+		/*if ($this->deal->email) {
+			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject) {
 				/** @var \Illuminate\Mail\Message $message */
-				$message->subject($subject);
-				/*$message->priority(2);*/
-				$message->to($deal->email);
+				/*$message->subject($subject);
+				$message->to($this->deal->email);
 			});
+		}*/
 
-			if (in_array($deal->email, Mail::failures())) {
-				throw new \Exception("Email $deal->email in a failed list");
-			}
-
-			// админу
+		// админу
+		if ($recipients) {
 			Mail::send(['html' => "admin.emails.send_deal_admin"], $messageData, function ($message) use ($subject, $recipients) {
 				/** @var \Illuminate\Mail\Message $message */
 				$message->subject($subject);
-				/*$message->priority(2);*/
 				$message->to($recipients);
 			});
-
-			foreach ($recipients as $recipient) {
-				if (in_array($recipient, Mail::failures())) {
-					throw new \Exception("Email $recipient in a failed list");
-				}
-			}
-		} catch (\Exception $e) {
-			/*$log->error('ERROR on Deal send ', ['number' => $deal->number, 'email' => $deal->email, 'msg' => $e->getMessage()]);*/
 		}
 	}
 }
