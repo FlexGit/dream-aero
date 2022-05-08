@@ -306,7 +306,7 @@ class Product extends Model
 		$amount = $cityProduct->pivot->price;
 
 		// скидка на продукт
-		$dataJson = $cityProduct->pivot->data_json ?? [];
+		$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
 		if ($locationId) {
 			$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
 		} else {
