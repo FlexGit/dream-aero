@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
 					|| $e instanceof TooManyRequestsHttpException
 					|| $e instanceof FatalErrorException
 					|| $e instanceof PDOException
-					|| $e instanceof QueryException
+					/*|| $e instanceof QueryException*/
 					|| $e instanceof HttpException)
 				{
 					Log::debug($e->getStatusCode() . ' - ' . $e->getMessage());
