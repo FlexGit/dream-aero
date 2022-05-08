@@ -209,6 +209,12 @@ class PromoController extends Controller
 		$promo->active_from_at = $this->request->active_from_at ? Carbon::parse($this->request->active_from_at)->format('Y-m-d') : null;
 		$promo->active_to_at = $this->request->active_to_at ? Carbon::parse($this->request->active_to_at)->format('Y-m-d') : null;
 		$data = $promo->data_json;
+		if ($this->request->is_discount_booking_allow) {
+			$data['is_discount_booking_allow'] = (bool)$this->request->is_discount_booking_allow;
+		}
+		if ($this->request->is_discount_certificate_purchase_allow) {
+			$data['is_discount_certificate_purchase_allow'] = (bool)$this->request->is_discount_certificate_purchase_allow;
+		}
 		if ($isImageFileUploaded) {
 			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
 		}
@@ -276,6 +282,12 @@ class PromoController extends Controller
 		$promo->active_from_at = $this->request->active_from_at ? Carbon::parse($this->request->active_from_at)->format('Y-m-d') : null;
 		$promo->active_to_at = $this->request->active_to_at ? Carbon::parse($this->request->active_to_at)->format('Y-m-d') : null;
 		$data = $promo->data_json;
+		if ($this->request->is_discount_booking_allow) {
+			$data['is_discount_booking_allow'] = (bool)$this->request->is_discount_booking_allow;
+		}
+		if ($this->request->is_discount_certificate_purchase_allow) {
+			$data['is_discount_certificate_purchase_allow'] = (bool)$this->request->is_discount_certificate_purchase_allow;
+		}
 		if ($isImageFileUploaded) {
 			$data['image_file_path'] = 'promo/' . $imageFile->getClientOriginalName();
 		}

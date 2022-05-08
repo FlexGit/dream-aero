@@ -330,8 +330,14 @@ class Product extends Model
 			}
 
 			// скидка по указанной акции
+			$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
+			if ($locationId) {
+				$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
+			} else {
+				$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+			}
 			$discount = ($promo && $promo->discount) ? $promo->discount : null;
-			if ($discount) {
+			if ($isDiscountAllow && $discount) {
 				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
 				return ($amount > 0) ? round($amount) : 0;

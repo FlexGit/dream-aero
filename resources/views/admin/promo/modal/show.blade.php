@@ -1,3 +1,10 @@
+@php
+	$isDiscountBookingAllow = $isDiscountCertificatePurchaseAllow = 0;
+	$data = is_array($promo->data_json) ? $promo->data_json : json_decode($promo->data_json, true);
+	$isDiscountBookingAllow = array_key_exists('is_discount_booking_allow', $data) ? $data['is_discount_booking_allow'] : 0;
+	$isDiscountCertificatePurchaseAllow = array_key_exists('is_discount_certificate_purchase_allow', $data) ? $data['is_discount_certificate_purchase_allow'] : 0;
+@endphp
+
 <table class="table table-hover table-sm table-bordered table-striped">
 	<tbody>
 		<tr class="odd">
@@ -15,6 +22,14 @@
 		<tr class="odd">
 			<td>Скидка</td>
 			<td>{{ $promo->discount ? $promo->discount->valueFormatted() : '' }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Скидка действует на бронирование</td>
+			<td>{{ $isDiscountBookingAllow ? 'Да' : 'Нет' }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Скидка действует на покупку сертификата</td>
+			<td>{{ $isDiscountCertificatePurchaseAllow ? 'Да' : 'Нет' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Город</td>
