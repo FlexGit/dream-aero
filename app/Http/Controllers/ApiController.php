@@ -2174,7 +2174,7 @@ class ApiController extends Controller
 			$score = 0;
 		}
 
-		$amount = $product->calcAmount($contractor->id, $cityId, 'api', false, $locationId, 0, 0, $promocodeId, $certificateId, $isUnified, false, $score);
+		$amount = $product->calcAmount($contractor->id, $cityId, 'api', false, $locationId, 0, 0, $promocodeId, $certificateId, $isUnified, false, $score, $isCertificatePurchase);
 		if ($amount < 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
@@ -2304,7 +2304,7 @@ class ApiController extends Controller
 			$score = 0;
 		}
 		
-		$amount = $product->calcAmount($contractor->id, $cityId, 'api', false, $locationId, 0, 0, $promocodeId, $certificateId, $isUnified, false, $score);
+		$amount = $product->calcAmount($contractor->id, $cityId, 'api', false, $locationId, 0, 0, $promocodeId, $certificateId, $isUnified, false, $score, $isCertificatePurchase);
 		if ($amount < 0) {
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
