@@ -366,9 +366,15 @@ class Product extends Model
 					})
 					->latest()
 					->first();
-				if ($contractor->birthdate && Carbon::parse($contractor->birthdate)->format('m-d') == Carbon::parse($date)->format('m-d')) {
-					$birthdayDiscount = ($birthdayPromo && $birthdayPromo->discount) ? $birthdayPromo->discount : null;
-					if ($birthdayDiscount) {
+				if ($birthdayPromo && $contractor->birthdate && Carbon::parse($contractor->birthdate)->format('m-d') == Carbon::parse($date)->format('m-d')) {
+					$dataJson = $birthdayPromo->data_json ? (array)$birthdayPromo->data_json : [];
+					if ($isCertificatePurchase) {
+						$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+					} else {
+						$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
+					}
+					$birthdayDiscount = $birthdayPromo->discount ?? null;
+					if ($isDiscountAllow && $birthdayDiscount) {
 						$amount = $birthdayDiscount->is_fixed ? ($amount - $birthdayDiscount->value) : ($amount - $amount * $birthdayDiscount->value / 100);
 
 						$amounts[] = ($amount > 0) ? round($amount) : 0;
@@ -393,8 +399,14 @@ class Product extends Model
 				->latest()
 				->get();
 			foreach ($promos as $promo) {
-				$discount = ($promo && $promo->discount) ? $promo->discount : null;
-				if ($discount) {
+				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
+				if ($isCertificatePurchase) {
+					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+				} else {
+					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
+				}
+				$discount = $promo->discount ?? null;
+				if ($isDiscountAllow && $discount) {
 					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
 					$amounts[] = ($amount > 0) ? round($amount) : 0;
