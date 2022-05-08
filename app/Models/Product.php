@@ -251,7 +251,7 @@ class Product extends Model
 		
 		return true;
 	}
-
+	
 	/**
 	 * @param $contractorId
 	 * @param $cityId
@@ -265,14 +265,14 @@ class Product extends Model
 	 * @param bool $isUnified
 	 * @param bool $isAirlineMilesPurchase
 	 * @param int $score
-	 *
-	 * @return float|int
+	 * @param bool $isCertificatePurchase
+	 * @return float|int|mixed
 	 */
-	public function calcAmount($contractorId, $cityId, $source = 'api', $isFree = false, $locationId = 0, $paymentMethodId = 0, $promoId = 0, $promocodeId = 0, $certificateId = 0, $isUnified = false, $isAirlineMilesPurchase = false, $score = 0)
+	public function calcAmount($contractorId, $cityId, $source = 'api', $isFree = false, $locationId = 0, $paymentMethodId = 0, $promoId = 0, $promocodeId = 0, $certificateId = 0, $isUnified = false, $isAirlineMilesPurchase = false, $score = 0, $isCertificatePurchase = false)
 	{
 		if ($isFree) return 0;
 
-		if ($certificateId && $locationId) {
+		if (!$isCertificatePurchase && $certificateId && $locationId) {
 			$date = date('Y-m-d');
 			$location = Location::find($locationId);
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
@@ -294,7 +294,7 @@ class Product extends Model
 			->find($promocodeId) : null;
 
 		// если это покупка сертификата и город любой, то цены продуктов города Москва
-		if ($isUnified && !$locationId) {
+		if ($isCertificatePurchase && $isUnified) {
 			$mskCity = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 			$cityId = $mskCity->id;
 		}
@@ -307,10 +307,10 @@ class Product extends Model
 
 		// скидка на продукт
 		$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
-		if ($locationId) {
-			$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
-		} else {
+		if ($isCertificatePurchase) {
 			$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+		} else {
+			$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
 		}
 		$discount = $cityProduct->pivot->discount ?? null;
 		if ($isDiscountAllow && $discount) {
@@ -330,17 +330,19 @@ class Product extends Model
 			}
 
 			// скидка по указанной акции
-			$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
-			if ($locationId) {
-				$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
-			} else {
-				$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
-			}
-			$discount = ($promo && $promo->discount) ? $promo->discount : null;
-			if ($isDiscountAllow && $discount) {
-				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
-
-				return ($amount > 0) ? round($amount) : 0;
+			if ($promo) {
+				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
+				if ($isCertificatePurchase) {
+					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+				} else {
+					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
+				}
+				$discount = $promo->discount ?? null;
+				if ($isDiscountAllow && $discount) {
+					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+					
+					return ($amount > 0) ? round($amount) : 0;
+				}
 			}
 
 			$date = date('Y-m-d');
