@@ -54,18 +54,18 @@ class Handler extends ExceptionHandler
 					
 					return $this->responseError(null, $e->getStatusCode(), $request->url());
 				}
-				if ($e instanceof TokenMismatchException
+				/*if ($e instanceof TokenMismatchException
 					|| $e instanceof MethodNotAllowedHttpException
 					|| $e instanceof TooManyRequestsHttpException
 					|| $e instanceof FatalErrorException
 					|| $e instanceof PDOException
-					/*|| $e instanceof QueryException*/
+					|| $e instanceof QueryException
 					|| $e instanceof HttpException)
 				{
 					Log::debug($e->getStatusCode() . ' - ' . $e->getMessage());
 					
 					return $this->responseError(null, $e->getStatusCode(), $e->getMessage() . ' - ' . $request->url());
-				}
+				}*/
 			}
 			
 			//return parent::render($request, $e);
