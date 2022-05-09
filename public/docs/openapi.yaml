@@ -3120,7 +3120,7 @@ paths:
                 file_base64:
                   type: string
                   description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
-                  example: at
+                  example: voluptates
               required:
                 - file_base64
   /api/profile/avatar/delete:
@@ -4666,11 +4666,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: quia
+                  example: molestiae
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: et
+                  example: eum
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -4678,11 +4678,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 10
+                  example: 13
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 8
+                  example: 2
                 promocode_id:
                   type: integer
                   description: ''
@@ -4694,7 +4694,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: voluptas
+                  example: et
                 comment:
                   type: string
                   description: ''
@@ -5250,11 +5250,11 @@ paths:
                 flight_date:
                   type: date
                   description: 'Required for booking'
-                  example: earum
+                  example: quia
                 flight_time:
                   type: time
                   description: 'Required for booking'
-                  example: et
+                  example: veniam
                 is_unified:
                   type: boolean
                   description: 'Required for certificate purchase'
@@ -5262,11 +5262,11 @@ paths:
                 location_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 3
+                  example: 12
                 flight_simulator_id:
                   type: integer
                   description: 'Required for booking'
-                  example: 9
+                  example: 2
                 promocode_id:
                   type: integer
                   description: ''
@@ -5278,7 +5278,7 @@ paths:
                 certificate_whom:
                   type: string
                   description: 'For whom certificate. Required for certificate purchase'
-                  example: voluptas
+                  example: alias
                 comment:
                   type: string
                   description: ''
