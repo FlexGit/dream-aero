@@ -39,7 +39,7 @@
 
     # 301 Redirects from old CRM
     Redirect 301 /news.html https://dream-aero.ru/msk
-    Redirect 301 /index.html https://dream-aero.ru/msk
+    #Redirect 301 /index.html https://dream-aero.ru/msk
     Redirect 301 /aerophobia.html https://dream-aero.ru/msk
     Redirect 301 /birthdaydream-aero.html https://dream-aero.ru/msk
     Redirect 301 /news/c%D1%8E%D0%B6%D0%B5%D1%82-%D0%BE-%D0%BD%D0%B0%D1%88%D0%B5%D0%BC-%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D0%B5%D1%80%D0%B5.html https://dream-aero.ru/msk
