@@ -3224,11 +3224,12 @@ class ApiController extends Controller
 			}
 		}
 		
+		\DB::connection()->enableQueryLog();
 		$notifications = Notification::where('is_active', true)
 			->whereIn('contractor_id', [$contractor->id, 0])
 			->whereIn('city_id', [$city->id, 0])
 			->latest('created_at');
-		
+		\Log::debug(\DB::getQueryLog());
 		$data = [];
 		foreach ($notifications ?? [] as $notification) {
 			$data[] = [
