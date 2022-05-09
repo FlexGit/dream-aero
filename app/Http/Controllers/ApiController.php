@@ -3224,6 +3224,7 @@ class ApiController extends Controller
 			}
 		}
 		
+		\Log::debug($contractor->id . ' - ' . $city->id);
 		\DB::connection()->enableQueryLog();
 		$notifications = Notification::where('is_active', true)
 			->whereIn('contractor_id', [$contractor->id, 0])
