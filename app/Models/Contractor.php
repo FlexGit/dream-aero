@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,8 +35,6 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property \datetime|null $deleted_at
  * @property-read \App\Models\City|null $city
  * @property-read \App\Models\Discount|null $discount
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Venturecraft\Revisionable\Revision[] $revisionHistory
  * @property-read int|null $revision_history_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Token[] $tokens
@@ -77,7 +74,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class Contractor extends Authenticatable
 {
-	use HasApiTokens, HasFactory, Notifiable, SoftDeletes, RevisionableTrait;
+	use HasApiTokens, HasFactory, SoftDeletes, RevisionableTrait;
 	
 	const ATTRIBUTES = [
 		'name' => 'Имя',
@@ -216,6 +213,13 @@ class Contractor extends Authenticatable
 	{
 		return $this->belongsToMany(Promocode::class, 'cities_promocodes', 'city_id', 'promocode_id')
 			->using(CityPromocode::class)
+			->withTimestamps();
+	}
+	
+	public function notifications()
+	{
+		return $this->belongsToMany(Notification::class, 'notifications_contractors', 'notification_id', 'contractor_id')
+			->using(NotificationContractor::class)
 			->withTimestamps();
 	}
 	

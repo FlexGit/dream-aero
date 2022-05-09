@@ -3224,9 +3224,10 @@ class ApiController extends Controller
 			}
 		}
 		
-		$notifications = $contractor->notifications
-			->where('is_active', true)
-			->sortByDesc('created_at');
+		$notifications = Notification::where('is_active', true)
+			->whereIn('contractor_id', [$contractor->id, 0])
+			->whereIn('city_id', [$city->id, 0])
+			->latest('created_at');
 		
 		$data = [];
 		foreach ($notifications ?? [] as $notification) {
@@ -3301,8 +3302,7 @@ class ApiController extends Controller
 			}
 		}
 		
-		$notification = $contractor->notifications
-			->where('is_active', true)
+		$notification = Notification::where('is_active', true)
 			->find($notificationId);
 		if (!$notification) {
 			return $this->responseError('Уведомление не найдено', 400);
