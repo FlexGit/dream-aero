@@ -9,7 +9,6 @@ use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\FlightSimulator;
 use App\Models\Notification;
-use App\Models\NotificationContractor;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
@@ -3225,17 +3224,16 @@ class ApiController extends Controller
 			}
 		}
 		
-		//\DB::connection()->enableQueryLog();
-		$notifications = Notification::where('is_active', true)
+		$notifications = $contractor->notifications
+			->where('is_active', true)
 			->whereIn('contractor_id', [$contractor->id, 0])
 			->whereIn('city_id', [$city->id, 0])
-			->latest('created_at')
-			->get();
-		//\Log::debug(\DB::getQueryLog());
+			->sortByDesc('created_at');
+		
 		$data = [];
 		foreach ($notifications ?? [] as $notification) {
 			$data[] = [
-				'notification' =>  $notification->format($contractor),
+				'notification' =>  $notification->format(),
 			];
 		}
 
@@ -3305,24 +3303,23 @@ class ApiController extends Controller
 			}
 		}
 		
-		$notification = Notification::where('is_active', true)
+		$notification = $contractor->notifications
+			->where('is_active', true)
 			->find($notificationId);
 		if (!$notification) {
 			return $this->responseError('Уведомление не найдено', 400);
 		}
-		
-		$notificationContractor = NotificationContractor::where('contractor_id', $contractor->id)
-			->where('notification_id', $notificationId)
-			->first();
 
 		// после прочтения уведомления снимаем признак того, что оно новое
-		if ($notificationContractor->is_new) {
-			$notificationContractor->is_new = false;
-			$notificationContractor->save();
+		if ($notification->pivot->is_new) {
+			$data = [
+				'is_new' => false,
+			];
+			$contractor->notifications()->updateExistingPivot($notification->id, $data);
 		}
 
 		$data = [
-			'notification' =>  $notification->format($contractor),
+			'notification' =>  $notification->format(),
 		];
 
 		return $this->responseSuccess(null, $data);

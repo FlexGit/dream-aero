@@ -1534,7 +1534,7 @@ endpoints:
         name: file_base64
         description: 'data:image/jpeg;base64,/9j/7gAhQWR...'
         required: true
-        example: voluptates
+        example: autem
         type: string
         custom: []
     responses:
@@ -2414,14 +2414,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: molestiae
+        example: quae
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: eum
+        example: placeat
         type: time
         custom: []
       is_unified:
@@ -2435,14 +2435,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 13
+        example: 4
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 2
+        example: 8
         type: integer
         custom: []
       promocode_id:
@@ -2463,7 +2463,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: et
+        example: aliquam
         type: string
         custom: []
       comment:
@@ -2793,14 +2793,14 @@ endpoints:
         name: flight_date
         description: 'Required for booking'
         required: false
-        example: quia
+        example: quo
         type: date
         custom: []
       flight_time:
         name: flight_time
         description: 'Required for booking'
         required: false
-        example: veniam
+        example: deserunt
         type: time
         custom: []
       is_unified:
@@ -2814,14 +2814,14 @@ endpoints:
         name: location_id
         description: 'Required for booking'
         required: false
-        example: 12
+        example: 13
         type: integer
         custom: []
       flight_simulator_id:
         name: flight_simulator_id
         description: 'Required for booking'
         required: false
-        example: 2
+        example: 18
         type: integer
         custom: []
       promocode_id:
@@ -2842,7 +2842,7 @@ endpoints:
         name: certificate_whom
         description: 'For whom certificate. Required for certificate purchase'
         required: false
-        example: alias
+        example: voluptas
         type: string
         custom: []
       comment:

@@ -110,21 +110,17 @@ class Notification extends Model
 	/**
 	 * @return array
 	 */
-	public function format(Contractor $contractor)
+	public function format()
 	{
 		$data = $this->data_json ?? [];
-		
-		$notificationContractor = NotificationContractor::where('contractor_id', $contractor->id)
-			->where('notification_id', $this->id)
-			->first();
 		
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
 			'description' => strip_tags($this->description),
-			'is_new' => (bool)$notificationContractor->is_new,
-			'created_at' => $notificationContractor->created_at ? $notificationContractor->created_at->format('Y-m-d H:i:s') : null,
-			'updated_at' => $notificationContractor->updated_at ? $notificationContractor->updated_at->format('Y-m-d H:i:s') : null,
+			'is_new' => (bool)$this->pivot->is_new,
+			'created_at' => $this->pivot->created_at ? $this->pivot->created_at->format('Y-m-d H:i:s') : null,
+			'updated_at' => $this->pivot->updated_at ? $this->pivot->updated_at->format('Y-m-d H:i:s') : null,
 		];
 	}
 }
