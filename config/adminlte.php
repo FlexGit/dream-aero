@@ -253,7 +253,7 @@ return [
 			'text'        => 'Сделки',
 			'url'         => '/deal',
 			'icon'        => 'fas fa-handshake',
-			'can'	  => 'is_superadmin',
+			/*'can'	  => 'is_superadmin',*/
 			'label'       => '',
 			'label_color' => '',
 		],
