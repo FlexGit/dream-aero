@@ -350,8 +350,6 @@ class DealController extends Controller
 			abort(404);
 		}
 		
-		//\Log::debug($this->request);
-		
 		if ($this->request->source == Deal::WEB_SOURCE) {
 			$rules = [
 				'name' => 'required',

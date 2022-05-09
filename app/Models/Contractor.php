@@ -406,8 +406,6 @@ class Contractor extends Authenticatable
 			->where('contractor_id', $this->id)
 			->sum('amount');
 
-		\Log::debug($this->id . ' - ' . $dealSum . ' - ' . $billSum);
-		
 		return ($billSum - $dealSum);
 	}
 

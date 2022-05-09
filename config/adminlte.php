@@ -244,7 +244,7 @@ return [
             'text'        => 'Календарь',
             'url'         => '/',
             'icon'        => 'far fa-fw fa-calendar-alt',
-			'can'	  => 'is_superadmin',
+			/*'can'	  => 'is_superadmin',*/
             'label'       => '',
             'label_color' => '',
         ],
