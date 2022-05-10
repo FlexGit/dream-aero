@@ -7,11 +7,11 @@ use App\Models\Bill;
 
 class PayAnyWayService {
 	
-	const BASE_URL = 'https://demo.moneta.ru'; // PROD https://www.payanyway.ru
+	const BASE_URL = 'https://demo.moneta.ru'; // PROD https://www.payanyway.ru DEV https://demo.moneta.ru
 	const PAY_REQUEST_URL = '/assistant.htm';
-	const TEST_MODE = 1; // PROD 0
+	const TEST_MODE = 1; // PROD 0 DEV 1
 	const CURRENCY_CODE = 'RUB';
-	const DATA_INTEGRITY_CHECK_CODE = 'Jr#47%Hdk';
+	const DATA_INTEGRITY_CHECK_CODE = 'Jr#47%Hdk'; // PROD da20181011pay DEV Jr#47%Hdk
 	
 	/**
 	 * @param Bill $bill
