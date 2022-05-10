@@ -5,41 +5,43 @@
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
 <input type="hidden" id="source" name="source" value="{{ $source ?? '' }}">
 
-<div class="row">
-	<div class="col-3">
-		<div class="form-group">
-			<div class="custom-control">
-				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" checked>
-				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}">Бронирование</label>
+@if($source)
+	<div class="row">
+		<div class="col-3">
+			<div class="form-group">
+				<div class="custom-control">
+					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" checked>
+					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}">Бронирование</label>
+				</div>
+			</div>
+		</div>
+		<div class="col-3">
+			<div class="form-group">
+				<div class="custom-control">
+					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}">
+					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}">Перерыв</label>
+				</div>
+			</div>
+		</div>
+		<div class="col-3">
+			<div class="form-group">
+				<div class="custom-control">
+					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}">
+					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}">Уборка кабины</label>
+				</div>
+			</div>
+		</div>
+		<div class="col-3">
+			<div class="form-group">
+				<div class="custom-control">
+					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">
+					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">Тестовый полет</label>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-3">
-		<div class="form-group">
-			<div class="custom-control">
-				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}">
-				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}">Перерыв</label>
-			</div>
-		</div>
-	</div>
-	<div class="col-3">
-		<div class="form-group">
-			<div class="custom-control">
-				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}">
-				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}">Уборка кабины</label>
-			</div>
-		</div>
-	</div>
-	<div class="col-3">
-		<div class="form-group">
-			<div class="custom-control">
-				<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">
-				<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">Тестовый полет</label>
-			</div>
-		</div>
-	</div>
-</div>
-<hr>
+	<hr>
+@endif
 <div class="row">
 	<div class="col">
 		<div class="form-group">

@@ -682,7 +682,6 @@ class DealController extends Controller
 		$extraTime = (int)$this->request->extra_time ?? 0;
 		$isRepeatedFlight = (bool)$this->request->is_repeated_flight ?? false;
 		$isUnexpectedFlight = (bool)$this->request->is_unexpected_flight ?? false;
-		$isTextFlight = (bool)$this->request->is_test_flight ?? false;
 		$duration = $this->request->duration ?? 0;
 		
 		$product = Product::find($productId);
@@ -898,7 +897,6 @@ class DealController extends Controller
 						$event->extra_time = $extraTime;
 						$event->is_repeated_flight = $isRepeatedFlight;
 						$event->is_unexpected_flight = $isUnexpectedFlight;
-						$event->is_test_flight = $isTextFlight;
 						$event->save();
 						
 						$position->event()->save($event);

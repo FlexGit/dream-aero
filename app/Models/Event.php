@@ -27,7 +27,6 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property int $extra_time дополнительное время
  * @property int $is_repeated_flight признак повторного полета
  * @property int $is_unexpected_flight признак спонтанного полета
- * @property int $is_test_flight признак повторного полета
  * @property string|null $notification_type способ оповещения контрагента о полете
  * @property int $pilot_assessment оценка пилота
  * @property int $admin_assessment оценка админа
@@ -65,7 +64,6 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereFlightSimulatorId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsRepeatedFlight($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsTestFlight($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsUnexpectedFlight($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereLocationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereNotificationType($value)
@@ -104,7 +102,6 @@ class Event extends Model
 		'extra_time' => 'Дополнительное время',
 		'is_repeated_flight' => 'Повторный полет',
 		'is_unexpected_flight' => 'Спонтанный полет',
-		'is_test_flight' => 'Тестовый полет',
 		'notification_type' => 'Способ уведомления',
 		'is_notified' => 'Контрагент уведомлен о полете',
 		'pilot_assessment' => 'Оценка пилота',
@@ -165,7 +162,6 @@ class Event extends Model
 		'stop_at',
 		'is_repeated_flight',
 		'is_unexpected_flight',
-		'is_test_flight',
 		'pilot_assessment',
 		'admin_assessment',
 		'simulator_up_at',

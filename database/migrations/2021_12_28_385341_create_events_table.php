@@ -28,7 +28,6 @@ class CreateEventsTable extends Migration
 			$table->integer('extra_time')->default(0)->comment('дополнительное время');
 			$table->boolean('is_repeated_flight')->default(false)->index()->comment('признак повторного полета');
 			$table->boolean('is_unexpected_flight')->default(false)->index()->comment('признак спонтанного полета');
-			$table->boolean('is_test_flight')->default(false)->index()->comment('признак тестового полета');
 			$table->string('notification_type')->nullable()->comment('способ оповещения контрагента о полете');
 			$table->boolean('is_notified')->default(false)->index()->comment('уведомлен ли контрагент о предстоящем полете');
 			$table->tinyInteger('pilot_assessment')->default(0)->comment('оценка пилота');
