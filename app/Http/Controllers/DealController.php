@@ -400,6 +400,14 @@ class DealController extends Controller
 			}
 		}
 		
+		if ($paymentMethodId) {
+			$paymentMethod = PaymentMethod::where('is_active', true)
+				->find($paymentMethodId);
+			if (!$paymentMethod) {
+				return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
+			}
+		}
+		
 		// Аэрофлот Бонус
 		if ($hasAeroflotCard) {
 			if (!trim($cardNumber) || !$transactionType) {
@@ -501,47 +509,51 @@ class DealController extends Controller
 
 			$deal->positions()->save($position);
 			
-			if ($source == Deal::WEB_SOURCE) {
-				$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
-			}
 			
-			$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
-
-			if ($city) {
-				if ($city->version == City::EN_VERSION) {
-					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
-				}
-				else {
+			if ($amount) {
+				$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
+				$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+				
+				if ($city) {
+					if ($city->version == City::EN_VERSION) {
+						$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
+					}
+					else {
+						$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
+					}
+				} else {
 					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 				}
-			} else {
-				$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
-			}
-			
-			$location = $city->getLocationForBill();
-			if (!$location) {
-				\DB::rollback();
 				
-				Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+				if (!$paymentMethodId || $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+					$billLocation = $city->getLocationForBill();
+					if (!$billLocation) {
+						\DB::rollback();
+						
+						Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+						
+						return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
+					}
+					$billLocationId = $billLocation->id;
+				} else {
+					$billLocationId = $this->request->user()->location_id ?? 0;
+				}
 				
-				return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
+				$bill = new Bill();
+				$bill->contractor_id = $contractor->id ?? 0;
+				$bill->deal_id = $deal->id ?? 0;
+				$bill->deal_position_id = $position->id ?? 0;
+				$bill->location_id = $billLocationId;
+				$bill->payment_method_id = $paymentMethod->id ?: $onlinePaymentMethod->id;
+				$bill->status_id = $billStatus->id ?? 0;
+				$bill->amount = $amount;
+				$bill->currency_id = $currency->id ?? 0;
+				$bill->user_id = $this->request->user()->id ?? 0;
+				$bill->save();
+				
+				$deal->bills()->save($bill);
 			}
-			
-			$bill = new Bill();
-			$bill->contractor_id = $contractor->id ?? 0;
-			$bill->deal_position_id = $position->id ?? 0;
-			$bill->location_id = $location->id ?? 0;
-			$bill->payment_method_id =  ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : $paymentMethodId;
-			$bill->status_id = $billStatus->id ?? 0;
-			$bill->amount = $amount;
-			$bill->currency_id = $currency->id ?? 0;
-			$bill->user_id = $this->request->user()->id ?? 0;
-			$bill->save();
-			
-			$deal->bills()->save($bill);
-			
-			$bill = $bill->fresh();
-			
+
 			if ($transactionType) {
 				switch ($transactionType) {
 					case AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER:
@@ -736,7 +748,15 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
-
+		
+		if ($paymentMethodId) {
+			$paymentMethod = PaymentMethod::where('is_active', true)
+				->find($paymentMethodId);
+			if (!$paymentMethod) {
+				return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
+			}
+		}
+		
 		$certificateId = 0;
 		if ($certificateNumber) {
 			$date = date('Y-m-d');
@@ -838,21 +858,26 @@ class DealController extends Controller
 							$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 						}
 						
-						$location = $city->getLocationForBill();
-						if (!$location) {
-							\DB::rollback();
-							
-							Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
-							
-							return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
+						if (!$paymentMethodId || $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+							$billLocation = $city->getLocationForBill();
+							if (!$billLocation) {
+								\DB::rollback();
+								
+								Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+								
+								return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
+							}
+							$billLocationId = $billLocation->id;
+						} else {
+							$billLocationId = $this->request->user()->location_id ?? 0;
 						}
 						
 						$bill = new Bill();
 						$bill->contractor_id = $contractor->id ?? 0;
 						$bill->deal_id = $deal->id ?? 0;
 						$bill->deal_position_id = $position->id ?? 0;
-						$bill->location_id = $location->id ?? 0;
-						$bill->payment_method_id = $paymentMethodId ?: $onlinePaymentMethod->id;
+						$bill->location_id = $billLocationId;
+						$bill->payment_method_id = $paymentMethod->id ?: $onlinePaymentMethod->id;
 						$bill->status_id = $billStatus->id ?? 0;
 						$bill->amount = $amount;
 						$bill->currency_id = $currency->id ?? 0;
@@ -967,6 +992,7 @@ class DealController extends Controller
 		$comment = $this->request->comment ?? '';
 		$amount = $this->request->amount ?? 0;
 		$contractorId = $this->request->contractor_id ?? 0;
+		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$name = $this->request->name ?? '';
 		$email = $this->request->email ?? '';
 		$phone = $this->request->phone ?? '';
@@ -998,6 +1024,14 @@ class DealController extends Controller
 			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+			}
+		}
+		
+		if ($paymentMethodId) {
+			$paymentMethod = PaymentMethod::where('is_active', true)
+				->find($paymentMethodId);
+			if (!$paymentMethod) {
+				return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 			}
 		}
 
@@ -1054,6 +1088,45 @@ class DealController extends Controller
 			
 			if ($promocodeId) {
 				$promocode->contractors()->save($contractor);
+			}
+			
+			if ($amount) {
+				$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
+				$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+				
+				if ($city->version == City::EN_VERSION) {
+					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
+				} else {
+					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
+				}
+				
+				if (!$paymentMethodId || $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+					$billLocation = $city->getLocationForBill();
+					if (!$billLocation) {
+						\DB::rollback();
+						
+						Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+						
+						return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
+					}
+					$billLocationId = $billLocation->id;
+				} else {
+					$billLocationId = $this->request->user()->location_id ?? 0;
+				}
+				
+				$bill = new Bill();
+				$bill->contractor_id = $contractor->id ?? 0;
+				$bill->deal_id = $deal->id ?? 0;
+				$bill->deal_position_id = $position->id ?? 0;
+				$bill->location_id = $billLocationId;
+				$bill->payment_method_id = $paymentMethod->id ?: $onlinePaymentMethod->id;
+				$bill->status_id = $billStatus->id ?? 0;
+				$bill->amount = $amount;
+				$bill->currency_id = $currency->id ?? 0;
+				$bill->user_id = $this->request->user()->id ?? 0;
+				$bill->save();
+				
+				$deal->bills()->save($bill);
 			}
 			
 			\DB::commit();
