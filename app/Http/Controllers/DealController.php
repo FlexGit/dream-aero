@@ -256,12 +256,14 @@ class DealController extends Controller
 		$products = $this->productTypeRepo->getActualProductList($user, false, false, true);
 		$promos = $this->promoRepo->getList($user, false);
 		$promocodes = $this->promocodeRepo->getList($user, false);
+		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
 
 		$VIEW = view('admin.deal.modal.product.add', [
 			'cities' => $cities,
 			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
+			'paymentMethods' => $paymentMethods,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);

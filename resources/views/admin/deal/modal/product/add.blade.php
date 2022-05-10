@@ -82,6 +82,17 @@
 			</select>
 		</div>
 	</div>
+	<div class="col-4">
+		<div class="form-group">
+			<label for="payment_method_id">Способ оплаты</label>
+			<select class="form-control" id="payment_method_id" name="payment_method_id">
+				<option value=""></option>
+				@foreach($paymentMethods ?? [] as $paymentMethod)
+					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
 </div>
 <div class="row">
 	<div class="col-8">
