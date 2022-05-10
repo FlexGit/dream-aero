@@ -32,6 +32,7 @@ class PaymentController extends Controller
 	 */
 	public function payment($uuid, $type = null)
 	{
+		\Log::debug(111);
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
@@ -41,6 +42,7 @@ class PaymentController extends Controller
 		$bill = Bill::where('uuid', $uuid)
 			->where('location_id', '!=', 0)
 			->first();
+		\Log::debug($bill);
 		if (!$bill) {
 			abort(404);
 		}

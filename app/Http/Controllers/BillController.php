@@ -304,7 +304,7 @@ class BillController extends Controller
 		$messageData = [
 			'name' => $name,
 			'amount' => $bill->amount,
-			'payLink' => $this->request->getSchemeAndHttpHost() . '/payment/' . $bill->uuid,
+			'payLink' => (($city->version == City::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid,
 			'city' => $city ?? null,
 		];
 		
