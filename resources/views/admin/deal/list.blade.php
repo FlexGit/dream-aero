@@ -240,7 +240,7 @@
 									</div>
 								@endif
 							@endif
-							@if(is_array($position->data_json))
+							@if(is_array($position->data_json) && ((array_key_exists('comment', $position->data_json) && $position->data_json['comment']) || (array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom']) || (array_key_exists('certificate_whom_phone', $position->data_json) && $position->data_json['certificate_whom_phone']) || (array_key_exists('delivery_address', $position->data_json) && $position->data_json['delivery_address'])))
 								<div class="text-left mt-2">
 									<div style="border: 1px solid;border-radius: 6px;padding: 4px 8px;background-color: #fff;">
 										@if(array_key_exists('comment', $position->data_json) && $position->data_json['comment'])
