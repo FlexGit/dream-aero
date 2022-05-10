@@ -92,7 +92,8 @@ class PaymentController extends Controller
 	 */
 	public function paymentCallback()
 	{
-		return 'SUCCESS';
+		\Log::debug('paymentCallback');
+		\Log::debug($this->request);
 		
 		$uuid = $this->request->MNT_TRANSACTION_ID ?? '';
 		if (!$uuid) {
