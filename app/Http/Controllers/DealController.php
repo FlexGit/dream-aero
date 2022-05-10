@@ -828,7 +828,7 @@ class DealController extends Controller
 				
 					$deal->positions()->save($position);
 				
-					if ($source == Deal::WEB_SOURCE && $amount) {
+					if ($amount) {
 						$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 						$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
 						
@@ -852,7 +852,7 @@ class DealController extends Controller
 						$bill->deal_id = $deal->id ?? 0;
 						$bill->deal_position_id = $position->id ?? 0;
 						$bill->location_id = $location->id ?? 0;
-						$bill->payment_method_id = ($source == Deal::WEB_SOURCE && $amount) ? $onlinePaymentMethod->id : $paymentMethodId;
+						$bill->payment_method_id = $paymentMethodId ?: $onlinePaymentMethod->id;
 						$bill->status_id = $billStatus->id ?? 0;
 						$bill->amount = $amount;
 						$bill->currency_id = $currency->id ?? 0;
