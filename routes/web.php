@@ -399,12 +399,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 });
 
 	Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
-		Route::group(['middleware' => ['citycheck']], function () {
-			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
-			Route::get('{alias}/price', [MainController::class, 'price']);
-			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
-		});
-
 		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
 		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
 		
@@ -463,15 +457,15 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
 		Route::post('question', [MainController::class, 'question'])->name('questionStore');
-	});
-	
-	Route::domain(env('DOMAIN_EN', 'en.dream-aero.ru'))->group(function () {
+		
 		Route::group(['middleware' => ['citycheck']], function () {
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
 		});
-		
+	});
+	
+	Route::domain(env('DOMAIN_EN', 'en.dream-aero.ru'))->group(function () {
 		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
 		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
 		
@@ -526,6 +520,12 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
 		Route::post('question', [MainController::class, 'question'])->name('questionStore');
+		
+		Route::group(['middleware' => ['citycheck']], function () {
+			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
+			Route::get('{alias}/price', [MainController::class, 'price']);
+			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
+		});
 	});
 
 	Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
