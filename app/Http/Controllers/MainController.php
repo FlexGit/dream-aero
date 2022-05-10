@@ -1062,6 +1062,7 @@ class MainController extends Controller
 						'name' => $product->name,
 						'alias' => $product->alias,
 						'duration' => $product->duration,
+						'description' => (is_array($product->data_json) && array_key_exists('description', $product->data_json)) ? $product->data_json['description'] : '',
 						'price' => round($price),
 						'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
 						'is_hit' => (bool)$cityProduct->pivot->is_hit,
