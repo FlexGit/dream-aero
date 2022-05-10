@@ -288,15 +288,24 @@ class BillController extends Controller
 		$bill = Bill::find($this->request->bill_id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
-		$email = $bill->deal->email ?: $bill->deal->contractor->email;
+		$deal = $bill->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+
+		$contractor = $bill->contractor;
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+		
+		$city = $contractor->city;
+		
+		$email = $deal->email ?: $contractor->email;
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
 		
-		$name = $bill->deal->name ?: $bill->deal->contractor->name;
+		$name = $deal->name ?: $contractor->name;
 		
 		$messageData = [
 			'name' => $name,
 			'amount' => $bill->amount,
 			'payLink' => $this->request->getSchemeAndHttpHost() . '/payment/' . $bill->uuid,
+			'city' => $city ?? null,
 		];
 		
 		Mail::send('admin.emails.send_paylink', $messageData, function ($message) use ($email) {

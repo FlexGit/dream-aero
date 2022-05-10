@@ -29,7 +29,7 @@
 											<td width="30"><p style="margin:0;font-size:1px;line-height:1px;">&nbsp;</p></td>
 											<td style="text-align:left;">
 												<p style="margin:0 0 4px;font-weight:bold;color:#333333;font-size:14px;line-height:22px;">Если у Вас остались вопросы,</p>
-												<p style="margin:0;color:#333333;font-size:11px;line-height:18px;">наш администратор готов ответить на них.<br>Позвоните <a target="_blank" rel=" noopener noreferrer"><span class="js-phone-number">{{ $cityPhone }}</span></a> или <a target="_blank" rel=" noopener noreferrer">напишите {{ $cityEmail }}</a>
+												<p style="margin:0;color:#333333;font-size:11px;line-height:18px;">наш администратор готов ответить на них.<br>Позвоните <a target="_blank" rel=" noopener noreferrer"><span class="js-phone-number">{{ $city->phone ?? '' }}</span></a> или <a href="mailto:{{ $city->email ?? '' }}" target="_blank" rel=" noopener noreferrer">напишите {{ $city->email ?? '' }}</a>
 												</p>
 												<p style="margin:0;font-size:1px;line-height:1px;">&nbsp;</p>
 												<a href="https://www.facebook.com/dreamaero/" style="float:left;width:24px;height:24px;margin:6px 8px 10px 0;" target="_blank" rel="noopener noreferrer">
