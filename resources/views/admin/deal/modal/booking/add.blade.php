@@ -41,6 +41,8 @@
 		</div>
 	</div>
 	<hr>
+@else
+	<input type="hidden" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}">
 @endif
 <div class="row">
 	<div class="col">
