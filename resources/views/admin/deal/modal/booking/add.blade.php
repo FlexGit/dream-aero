@@ -59,7 +59,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="name">Имя</label>
-			<input type="text" class="form-control" id="name" name="name" value="{{ $contractor ? $contractor->name : '' }}" placeholder="Имя">
+			<input type="text" class="form-control" id="name" name="name" placeholder="Имя">
 		</div>
 	</div>
 	<div class="col">
@@ -94,9 +94,9 @@
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
 				<option value="0"></option>
-				@foreach($productTypes ?? [] as $productType)
-					<optgroup label="{{ $productType->name }}">
-						@foreach($productType->products ?? [] as $product)
+				@foreach($products ?? [] as $productTypeName => $productId)
+					<optgroup label="{{ $productTypeName }}">
+						@foreach($productId as $product)
 							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}">{{ $product->name }}</option>
 						@endforeach
 					</optgroup>
@@ -110,12 +110,12 @@
 			<select class="form-control" id="promo_id" name="promo_id">
 				<option value="0"></option>
 				@foreach($promos ?? [] as $promo)
-					<option value="{{ $promo->id }}">{{ $promo->name }}</option>
+					<option value="{{ $promo->id }}">{{ $promo->valueFormatted() }}</option>
 				@endforeach
 			</select>
 		</div>
 	</div>
-	<div class="col">
+	{{--<div class="col">
 		<div class="form-group">
 			<label for="promocode_id">Промокод</label>
 			<select class="form-control" id="promocode_id" name="promocode_id">
@@ -124,6 +124,25 @@
 					<option value="{{ $promocode->id }}">{{ $promocode->valueFormatted() }}</option>
 				@endforeach
 			</select>
+		</div>
+	</div>--}}
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="payment_method_id">Способ оплаты</label>
+			<select class="form-control" id="payment_method_id" name="payment_method_id">
+				<option value=""></option>
+				@foreach($paymentMethods ?? [] as $paymentMethod)
+					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="certificate">Сертификат</label>
+			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Сертификат">
 		</div>
 	</div>
 </div>
@@ -182,12 +201,6 @@
 					</div>
 				</div>
 			@endif
-		</div>
-	</div>
-	<div class="col">
-		<div class="form-group">
-			<label for="certificate">Сертификат</label>
-			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Сертификат">
 		</div>
 	</div>
 </div>

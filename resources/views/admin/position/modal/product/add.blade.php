@@ -18,7 +18,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="promo_id">Акция</label>
-			<select class="form-control" id="promo_id" name="promo_id">
+			<select class="form-control" id="promo_id" name="promo_id" disabled>
 				<option value=""></option>
 				@foreach($promos ?? [] as $promo)
 					<option value="{{ $promo->id }}">{{ $promo->valueFormatted() }}</option>
@@ -29,7 +29,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="promocode_id">Промокод</label>
-			<select class="form-control" id="promocode_id" name="promocode_id">
+			<select class="form-control" id="promocode_id" name="promocode_id" disabled>
 				<option value=""></option>
 				@foreach($promocodes ?? [] as $promocode)
 					<option value="{{ $promocode->id }}">{{ $promocode->valueFormatted() }}</option>
@@ -44,9 +44,9 @@
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
 				<option></option>
-				@foreach($productTypes ?? [] as $productType)
-					<optgroup label="{{ $productType->name }}">
-						@foreach($productType->products ?? [] as $product)
+				@foreach($products ?? [] as $productTypeName => $productId)
+					<optgroup label="{{ $productTypeName }}">
+						@foreach($productId as $product)
 							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}">{{ $product->name }}</option>
 						@endforeach
 					</optgroup>

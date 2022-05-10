@@ -142,26 +142,6 @@ class PricingController extends Controller
 	}
 	
 	/**
-	 * @param $id
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	/*public function show($id)
-	{
-		if (!$this->request->ajax()) {
-			abort(404);
-		}
-
-		$product = Product::find($id);
-		if (!$product) return response()->json(['status' => 'error', 'reason' => 'ПРодукт не найден']);
-
-		$VIEW = view('admin.pricing.modal.show', [
-			'product' => $product,
-		]);
-		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}*/
-	
-	/**
 	 * @param $cityId
 	 * @param $productId
 	 * @return \Illuminate\Http\JsonResponse
@@ -218,39 +198,37 @@ class PricingController extends Controller
 		
 		$rules = [
 			'price' => 'required|numeric',
-			'certificate_template_file' => 'sometimes|image|max:2048',
+			/*'certificate_template_file' => 'sometimes|image|max:2048',*/
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'price' => 'Стоимость',
-				'certificate_template_file' => 'Шаблон сертификата',
+				/*'certificate_template_file' => 'Шаблон сертификата',*/
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$isCertificateTemplateFileUploaded = false;
+		/*$isCertificateTemplateFileUploaded = false;
 		if($certificateTemplateFile = $this->request->file('certificate_template_file')) {
 			$filePath = time() . '_' . $certificateTemplateFile->getClientOriginalName();
 			$isCertificateTemplateFileUploaded = $certificateTemplateFile->move(storage_path('app/private/certificate/template'), $filePath);
-		}
+		}*/
 		
-		$dataJson = [
-			'is_booking_allow' => (bool)$this->request->is_booking_allow,
-			'is_certificate_purchase_allow' => (bool)$this->request->is_certificate_purchase_allow,
-			'is_discount_booking_allow' => (bool)$this->request->is_discount_booking_allow,
-			'is_discount_certificate_purchase_allow' => (bool)$this->request->is_discount_certificate_purchase_allow,
-		];
-		if ($isCertificateTemplateFileUploaded) {
-			if ($cityProduct) {
-				$data = json_decode($cityProduct->pivot->data_json, true);
-				if (isset($data['certificate_template_file_path'])) {
-					Storage::disk('private')->delete($data['certificate_template_file_path']);
-				}
+		$data = $cityProduct ? json_decode($cityProduct->pivot->data_json, true) : [];
+		$data['is_booking_allow'] = (bool)$this->request->is_booking_allow;
+		$data['is_certificate_purchase_allow'] = (bool)$this->request->is_certificate_purchase_allow;
+		$data['is_discount_booking_allow'] = (bool)$this->request->is_discount_booking_allow;
+		$data['is_discount_certificate_purchase_allow'] = (bool)$this->request->is_discount_certificate_purchase_allow;
+
+		/*if ($isCertificateTemplateFileUploaded) {
+			if (isset($data['certificate_template_file_path'])) {
+				Storage::disk('private')->delete($data['certificate_template_file_path']);
 			}
-			$dataJson['certificate_template_file_path'] = 'certificate/template/' . $filePath;
-		}
+			$data['certificate_template_file_path'] = 'certificate/template/' . $filePath;
+		}*/
+
 		$data = [
 			'price' => $this->request->price ?? 0,
 			'currency_id' => $this->request->currency_id ?? 0,
@@ -258,7 +236,7 @@ class PricingController extends Controller
 			'is_hit' => (bool)$this->request->is_hit,
 			'score' => $this->request->score ?? 0,
 			'is_active' => (bool)$this->request->is_active,
-			'data_json' => json_encode($dataJson, JSON_UNESCAPED_UNICODE),
+			'data_json' => json_encode($data, JSON_UNESCAPED_UNICODE),
 		];
 		
 		if ($cityProduct) {
@@ -292,12 +270,12 @@ class PricingController extends Controller
 		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		
 		$cityProduct = $city->products->find($productId);
-		if (!$cityProduct) return response()->json(['status' => 'error', 'reason' => 'Продукт в городе не найден']);
+		if (!$cityProduct) return response()->json(['status' => 'error', 'reason' => 'Продукт в указанном городе не найден']);
 		
-		$data = json_decode($cityProduct->pivot->data_json, true);
+		/*$data = json_decode($cityProduct->pivot->data_json, true);
 		if (isset($data['certificate_template_file_path'])) {
 			Storage::disk('private')->delete($data['certificate_template_file_path']);
-		}
+		}*/
 		
 		if (!$city->products()->detach($product->id)) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -311,7 +289,7 @@ class PricingController extends Controller
 	 * @param $productId
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function deleteCertificateTemplateFile($cityId, $productId)
+	/*public function deleteCertificateTemplateFile($cityId, $productId)
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -340,14 +318,14 @@ class PricingController extends Controller
 		}
 		
 		return response()->json(['status' => 'success']);
-	}
+	}*/
 	
 	/**
 	 * @param $cityId
 	 * @param $productId
 	 * @return \never|\Symfony\Component\HttpFoundation\StreamedResponse
 	 */
-	public function getCertificateTemplateFile($cityId, $productId) {
+	/*public function getCertificateTemplateFile($cityId, $productId) {
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
@@ -376,5 +354,5 @@ class PricingController extends Controller
 		}
 		
 		return Storage::disk('private')->download($data['certificate_template_file_path']);
-	}
+	}*/
 }

@@ -50,9 +50,9 @@
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
 				<option></option>
-				@foreach($productTypes ?? [] as $productType)
-					<optgroup label="{{ $productType->name }}">
-						@foreach($productType->products ?? [] as $product)
+				@foreach($products ?? [] as $productTypeName => $productId)
+					<optgroup label="{{ $productTypeName }}">
+						@foreach($productId as $product)
 							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($product->id == $position->product_id) selected @endif>{{ $product->name }}</option>
 						@endforeach
 					</optgroup>

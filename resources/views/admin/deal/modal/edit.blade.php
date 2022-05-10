@@ -48,9 +48,9 @@
 		</div>
 	</div>
 </div>
-<div class="row">
+{{--<div class="row">
 	<div class="col-8">
 		<label for="comment">Комментарий</label>
 		<textarea class="form-control" id="comment" name="comment" rows="2">{{ isset($deal->data_json['comment']) ? $deal->data_json['comment'] : '' }}</textarea>
 	</div>
-</div>
+</div>--}}

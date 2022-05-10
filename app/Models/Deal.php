@@ -320,6 +320,8 @@ class Deal extends Model
 	{
 		$amount = 0;
 		foreach ($this->bills ?? [] as $bill) {
+			$status = $bill->status;
+			if (!$status) continue;
 			if ($bill->status->alias != Bill::PAYED_STATUS) continue;
 
 			$amount += $bill->amount;

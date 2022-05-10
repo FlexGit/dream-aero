@@ -318,7 +318,7 @@ class Product extends Model
 
 			return ($amount > 0) ? round($amount) : 0;
 		}
-
+		
 		// скидка по промокоду/акции/клиента действует только для типов тарифов Regular и Ultimate
 		if ($this->productType && in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
 			// сидка по промокоду
@@ -335,6 +335,7 @@ class Product extends Model
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
+					\Log::debug($dataJson);
 					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
 				}
 				$discount = $promo->discount ?? null;

@@ -561,8 +561,8 @@
 						'product_id': $('#product_id').val(),
 						'contractor_id': $('#contractor_id').val(),
 						'promo_id': $('#promo_id').val(),
-						'promocode_id': $('#promocode_id').val(),
-						/*'payment_method_id': $('#payment_method_id').val(),*/
+						/*'promocode_id': $('#promocode_id').val(),*/
+						'payment_method_id': $('#payment_method_id').val(),
 						'city_id': $('#city_id').val(),
 						'location_id': $('#location_id').val(),
 						'certificate': $('#certificate').val(),
@@ -814,10 +814,9 @@
 				var value = $(this).filter(':checked').val(),
 					$form = $(this).closest('form');
 
-				console.log(value);
-
 				switch (value) {
 					case 'test_flight':
+						$form.find('#payment_method_id').closest('.row').show();
 						$form.find('#email').closest('.row').show();
 						$form.find('#product_id').closest('.row').show();
 						$form.find('#comment').closest('.row').show();
@@ -825,8 +824,9 @@
 						$form.find('#duration').closest('.js-duration').addClass('hidden');
 
 						$form.find('#certificate').val('').prop('disabled', true);
+						$form.find('#payment_method_id').val(0).prop('disabled', true);
 						$form.find('#promo_id').val(0).prop('disabled', true);
-						$form.find('#promocode_id').val(0).prop('disabled', true);
+						/*$form.find('#promocode_id').val(0).prop('disabled', true);*/
 						$form.find('#extra_time').val(0).prop('disabled', true);
 						$form.find('#is_repeated_flight').val(0).prop('disabled', true);
 						$form.find('#is_unexpected_flight').val(0).prop('disabled', true);
@@ -835,6 +835,7 @@
 						break;
 					case 'break':
 					case 'cleaning':
+						$form.find('#payment_method_id').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
@@ -842,6 +843,7 @@
 						$form.find('#duration').closest('.js-duration').removeClass('hidden');
 						break;
 					case 'deal':
+						$form.find('#payment_method_id').closest('.row').show();
 						$form.find('#email').closest('.row').show();
 						$form.find('#product_id').closest('.row').show();
 						$form.find('#comment').closest('.row').show();
@@ -849,13 +851,13 @@
 						$form.find('#duration').closest('.js-duration').addClass('hidden');
 
 						$form.find('#certificate').val('').prop('disabled', false);
+						$form.find('#payment_method_id').val(0).prop('disabled', false);
 						$form.find('#promo_id').val(0).prop('disabled', false);
-						$form.find('#promocode_id').val(0).prop('disabled', false);
+						/*$form.find('#promocode_id').val(0).prop('disabled', false);*/
 						$form.find('#extra_time').val(0).prop('disabled', false);
 						$form.find('#is_repeated_flight').val(0).prop('disabled', false);
 						$form.find('#is_unexpected_flight').val(0).prop('disabled', false);
 						$form.find('#is_free').prop('checked', false).prop('disabled', false);
-						//$form.find('#amount-text h1').text('0');
 						break;
 				}
 			});

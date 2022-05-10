@@ -23,7 +23,7 @@
 	<label for="file">Файл</label>
 	&nbsp;&nbsp;[
 	{{--@if(Storage::disk('private')->exists($certificate->data_json['certificate_file_path'] ?? ''))--}}
-		<a href="{{ route('getCertificate', ['uuid' => $certificate->uuid]) }}" target="_blank">скачать</a>
+		<a href="{{ route('getCertificate', ['uuid' => $certificate->uuid]) }}">скачать</a>
 	{{--@else
 		не найден
 	@endif--}}

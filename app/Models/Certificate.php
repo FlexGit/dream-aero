@@ -183,7 +183,7 @@ class Certificate extends Model
 		if (!$city && in_array($productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
 			$certificateTemplateFilePath = 'certificate/template/' . mb_strtoupper($productType->alias) . '_UNI.jpg';
 		} else {
-			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+			/*$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
 			if (!$cityProduct || !$cityProduct->pivot) {
 				return null;
 			}
@@ -192,7 +192,8 @@ class Certificate extends Model
 			$certificateTemplateFilePath = $data['certificate_template_file_path'] ?? '';
 			if (!isset($certificateTemplateFilePath)) {
 				return null;
-			}
+			}*/
+			$certificateTemplateFilePath = 'certificate/template/' . preg_replace("/[^A-Z]/", '', mb_strtoupper($product->alias)) . '_' . mb_strtoupper($city->alias) . '.jpg';
 		}
 		
 		if (!Storage::disk('private')->exists($certificateTemplateFilePath)) {

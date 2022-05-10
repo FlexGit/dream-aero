@@ -57,8 +57,8 @@
 		<div class="form-group">
 			<label for="is_discount_booking_allow">Скидка действует на бронирование</label>
 			<select class="form-control" id="is_discount_booking_allow" name="is_discount_booking_allow">
-				<option value="1" @if(!$cityProduct || ($cityProduct && $isDiscountBookingAllow)) selected @endif>Да</option>
-				<option value="0" @if($cityProduct && !$isDiscountBookingAllow) selected @endif>Нет</option>
+				<option value="1" @if($cityProduct && $isDiscountBookingAllow) selected @endif>Да</option>
+				<option value="0" @if(!$cityProduct || ($cityProduct && !$isDiscountBookingAllow)) selected @endif>Нет</option>
 			</select>
 		</div>
 	</div>
@@ -66,8 +66,8 @@
 		<div class="form-group">
 			<label for="is_discount_certificate_purchase_allow">Скидка действует на покупку сертификата</label>
 			<select class="form-control" id="is_discount_certificate_purchase_allow" name="is_discount_certificate_purchase_allow">
-				<option value="1" @if(!$cityProduct || ($cityProduct && $isDiscountCertificatePurchaseAllow)) selected @endif>Да</option>
-				<option value="0" @if($cityProduct && !$isDiscountCertificatePurchaseAllow) selected @endif>Нет</option>
+				<option value="1" @if($cityProduct && $isDiscountCertificatePurchaseAllow) selected @endif>Да</option>
+				<option value="0" @if(!$cityProduct || ($cityProduct && !$isDiscountCertificatePurchaseAllow)) selected @endif>Нет</option>
 			</select>
 		</div>
 	</div>
@@ -112,7 +112,7 @@
 		</div>
 	</div>
 </div>
-<div class="row">
+{{--<div class="row">
 	<div class="col">
 		<div class="form-group">
 			<label for="photo_preview_file">Шаблон сертификата</label>
@@ -127,4 +127,4 @@
 			@endif
 		</div>
 	</div>
-</div>
+</div>--}}

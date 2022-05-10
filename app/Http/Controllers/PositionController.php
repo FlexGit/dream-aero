@@ -4,16 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\DealPosition;
-use App\Models\Discount;
 use App\Models\FlightSimulator;
 use App\Models\Promo;
 use App\Models\Deal;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\Product;
-use App\Models\ProductType;
 use App\Models\Promocode;
 use App\Models\Status;
+use App\Repositories\CityRepository;
+use App\Repositories\ProductTypeRepository;
+use App\Repositories\PromoRepository;
+use App\Repositories\PromocodeRepository;
+use App\Repositories\DealPositionRepository;
+use App\Repositories\DealRepository;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,12 +29,27 @@ use Throwable;
 class PositionController extends Controller
 {
 	private $request;
+	private $cityRepo;
+	private $promoRepo;
+	private $promocodeRepo;
+	private $productTypeRepo;
+	private $positionRepo;
+	private $dealRepo;
 	
 	/**
+	 * PositionController constructor.
+	 *
 	 * @param Request $request
+	 * @param CityRepository $cityRepo
 	 */
-	public function __construct(Request $request) {
+	public function __construct(Request $request, CityRepository $cityRepo, PromoRepository $promoRepo, PromocodeRepository $promocodeRepo, ProductTypeRepository $productTypeRepo, DealPositionRepository $positionRepo, DealRepository $dealRepo) {
 		$this->request = $request;
+		$this->cityRepo = $cityRepo;
+		$this->promoRepo = $promoRepo;
+		$this->promocodeRepo = $promocodeRepo;
+		$this->productTypeRepo = $productTypeRepo;
+		$this->positionRepo = $positionRepo;
+		$this->dealRepo = $dealRepo;
 	}
 
 	/**
@@ -44,40 +63,21 @@ class PositionController extends Controller
 			abort(404);
 		}
 
-		$deal = Deal::find($dealId);
+		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
-
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->get();
-
-		$productTypes = ProductType::where('is_active', true)
-			->whereNotIn('alias', ['services'])
-			->orderBy('name')
-			->get();
-
-		$promos = Promo::where('is_active', true)
-			->orderBy('name')
-			->get();
-
-		$promocodes = Promocode::where('is_active', true)
-			->orderBy('number')
-			->get();
-
-		$discounts = Discount::where('is_active', true)
-			->orderBy('is_fixed')
-			->orderBy('value')
-			->get();
-
+		
+		$user = \Auth::user();
+		$cities = $this->cityRepo->getList($user);
+		$products = $this->productTypeRepo->getActualProductList($user);
+		$promos = $this->promoRepo->getList($user);
+		$promocodes = $this->promocodeRepo->getList($user);
+		
 		$VIEW = view('admin.position.modal.certificate.add', [
+			'deal' => $deal,
 			'cities' => $cities,
-			'productTypes' => $productTypes,
+			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
-			'discounts' => $discounts,
-			'deal' => $deal ?? null,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -93,42 +93,22 @@ class PositionController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$deal = Deal::find($dealId);
+		
+		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
-
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->whereNotIn('alias', ['uae'])
-			->get();
-
-		$productTypes = ProductType::where('is_active', true)
-			->whereNotIn('alias', ['services'])
-			->orderBy('name')
-			->get();
-
-		$promos = Promo::where('is_active', true)
-			->orderBy('name')
-			->get();
-
-		$promocodes = Promocode::where('is_active', true)
-			->orderBy('number')
-			->get();
-
-		$discounts = Discount::where('is_active', true)
-			->orderBy('is_fixed')
-			->orderBy('value')
-			->get();
-
+		
+		$user = \Auth::user();
+		$cities = $this->cityRepo->getList($user);
+		$products = $this->productTypeRepo->getActualProductList($user);
+		$promos = $this->promoRepo->getList($user);
+		$promocodes = $this->promocodeRepo->getList($user);
+		
 		$VIEW = view('admin.position.modal.booking.add', [
+			'deal' => $deal,
 			'cities' => $cities,
-			'productTypes' => $productTypes,
+			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
-			'discounts' => $discounts,
-			'deal' => $deal ?? null,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -144,42 +124,22 @@ class PositionController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$deal = Deal::find($dealId);
+		
+		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
-
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->whereNotIn('alias', ['uae'])
-			->get();
-
-		$productTypes = ProductType::where('is_active', true)
-			->whereIn('alias', ['services'])
-			->orderBy('name')
-			->get();
-
-		$promos = Promo::where('is_active', true)
-			->orderBy('name')
-			->get();
-
-		$promocodes = Promocode::where('is_active', true)
-			->orderBy('number')
-			->get();
-
-		/*$discounts = Discount::where('is_active', true)
-			->orderBy('is_fixed')
-			->orderBy('value')
-			->get();*/
-
+		
+		$user = \Auth::user();
+		$cities = $this->cityRepo->getList($user);
+		$products = $this->productTypeRepo->getActualProductList($user, true, false, true);
+		$promos = $this->promoRepo->getList($user);
+		$promocodes = $this->promocodeRepo->getList($user);
+		
 		$VIEW = view('admin.position.modal.product.add', [
+			'deal' => $deal,
 			'cities' => $cities,
-			'productTypes' => $productTypes,
+			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
-			/*'discounts' => $discounts,*/
-			'deal' => $deal ?? null,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -194,41 +154,22 @@ class PositionController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$position = DealPosition::find($id);
+		
+		$position = $this->positionRepo->getById($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
 		
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->whereNotIn('alias', ['uae'])
-			->get();
-		
-		$productTypes = ProductType::where('is_active', true)
-			->whereNotIn('alias', ['services'])
-			->orderBy('name')
-			->get();
-		
-		$promos = Promo::/*where('is_active', true)
-			->*/orderBy('name')
-			->get();
-
-		$promocodes = Promocode::/*where('is_active', true)
-			->*/orderBy('number')
-			->get();
-
-		/*$discounts = Discount::orderBy('is_fixed')
-			->orderBy('value')
-			->get();*/
+		$user = \Auth::user();
+		$cities = $this->cityRepo->getList($user, false);
+		$products = $this->productTypeRepo->getActualProductList($user, false);
+		$promos = $this->promoRepo->getList($user, false);
+		$promocodes = $this->promocodeRepo->getList($user, false);
 		
 		$VIEW = view('admin.position.modal.certificate.edit', [
 			'position' => $position,
 			'cities' => $cities,
-			'productTypes' => $productTypes,
+			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
-			/*'discounts' => $discounts,*/
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -244,40 +185,21 @@ class PositionController extends Controller
 			abort(404);
 		}
 
-		$position = DealPosition::find($id);
+		$position = $this->positionRepo->getById($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->whereNotIn('alias', ['uae'])
-			->get();
-
-		$productTypes = ProductType::where('is_active', true)
-			->whereNotIn('alias', ['services'])
-			->orderBy('name')
-			->get();
-
-		$promos = Promo::/*where('is_active', true)
-			->*/orderBy('name')
-			->get();
-
-		$promocodes = Promocode::/*where('is_active', true)
-			->*/orderBy('number')
-			->get();
-
-		/*$discounts = Discount::orderBy('is_fixed')
-			->orderBy('value')
-			->get();*/
+		
+		$user = \Auth::user();
+		$cities = $this->cityRepo->getList($user, false);
+		$products = $this->productTypeRepo->getActualProductList($user, false);
+		$promos = $this->promoRepo->getList($user, false);
+		$promocodes = $this->promocodeRepo->getList($user, false);
 
 		$VIEW = view('admin.position.modal.booking.edit', [
 			'position' => $position,
 			'cities' => $cities,
-			'productTypes' => $productTypes,
+			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
-			/*'discounts' => $discounts,*/
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -292,41 +214,22 @@ class PositionController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$position = DealPosition::find($id);
+		
+		$position = $this->positionRepo->getById($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-
-		$cities = City::orderBy('version', 'desc')
-			->orderByRaw("FIELD(alias, 'msk') DESC")
-			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name')
-			->whereNotIn('alias', ['uae'])
-			->get();
-
-		$productTypes = ProductType::where('is_active', true)
-			->whereIn('alias', ['services'])
-			->orderBy('name')
-			->get();
-
-		$promos = Promo::/*where('is_active', true)
-			->*/orderBy('name')
-			->get();
-
-		$promocodes = Promocode::/*where('is_active', true)
-			->*/orderBy('number')
-			->get();
-
-		/*$discounts = Discount::orderBy('is_fixed')
-			->orderBy('value')
-			->get();*/
+		
+		$user = \Auth::user();
+		$cities = $this->cityRepo->getList($user, false);
+		$products = $this->productTypeRepo->getActualProductList($user, false, false, true);
+		$promos = $this->promoRepo->getList($user, false);
+		$promocodes = $this->promocodeRepo->getList($user, false);
 
 		$VIEW = view('admin.position.modal.product.edit', [
 			'position' => $position,
 			'cities' => $cities,
-			'productTypes' => $productTypes,
+			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
-			/*'discounts' => $discounts,*/
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -355,38 +258,66 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 
-		$deal = Deal::find($this->request->deal_id);
+		$dealId = $this->request->deal_id ?? 0;
+		$cityId = $this->request->city_id ?? 0;
+		$productId = $this->request->product_id ?? 0;
+		$promoId = $this->request->promo_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
+		$certificateWhom = $this->request->certificate_whom ?? '';
+		$certificateWhomPhone = $this->request->certificate_whom_phone ?? '';
+		$comment = $this->request->comment ?? '';
+		$deliveryAddress = $this->request->delivery_address ?? '';
+		$certificateExpireAt = $this->request->certificate_expire_at ?? null;
+		$amount = $this->request->amount ?? 0;
+		
+		$deal = Deal::find($dealId);
 		if (!$deal) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка не найден']);
 		}
 
-		$product = Product::find($this->request->product_id);
+		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
+		
+		if ($cityId) {
+			$city = City::find($cityId);
+			if (!$city) {
+				return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+			}
+		}
 
-		if ($this->request->promo_id) {
-			$promo = Promo::find($this->request->promo_id);
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId ?: 1);
+		if (!$cityProduct) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
+		}
+		
+		if ($promoId) {
+			$promo = Promo::find($promoId);
 			if (!$promo) {
 				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 			}
 		}
 
-		if ($this->request->promocode_id) {
-			$promocode = Promocode::find($this->request->promocode_id);
+		if ($promocodeId) {
+			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
 
-		$cityProduct = $product->cities->find($this->request->city_id);
-
 		$data = [];
-		if ($this->request->certificate_whom) {
-			$data['certificate_whom'] = $this->request->certificate_whom;
+		if ($certificateWhom) {
+			$data['certificate_whom'] = $certificateWhom;
 		}
-		if ($this->request->comment) {
-			$data['comment'] = $this->request->comment;
+		if ($certificateWhomPhone) {
+			$data['certificate_whom_phone'] = $certificateWhomPhone;
+		}
+		if ($deliveryAddress) {
+			$data['delivery_address'] = $deliveryAddress ?? '';
+		}
+		if ($comment) {
+			$data['comment'] = $comment;
 		}
 
 		try {
@@ -394,30 +325,37 @@ class PositionController extends Controller
 
 			$certificate = new Certificate();
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
-			$certificate->status_id = $certificateStatus ? $certificateStatus->id : 0;
-			$certificate->city_id = $this->request->city_id ?? 0;
-			$certificate->product_id = $product ? $product->id : 0;
+			$certificate->status_id = $certificateStatus->id ?? 0;
+			$certificate->city_id = $city->id ?? 0;
+			$certificate->product_id = $product->id ?? 0;
 			$certificatePeriod = ($product && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
-			$certificate->expire_at = Carbon::parse($this->request->certificate_expire_at)->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
+			$certificate->expire_at = Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
 			$certificate->save();
 			
 			$position = new DealPosition();
-			$position->product_id = $product ? $product->id : 0;
-			$position->certificate_id = $certificate ? $certificate->id : 0;
-			$position->duration = $product ? $product->duration : 0;
-			$position->amount = $this->request->amount;
-			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
-			$position->city_id = $this->request->city_id ?? 0;
-			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
-			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
-			$position->is_certificate_purchase = 1;
+			$position->product_id = $product->id ?? 0;
+			$position->certificate_id = $certificate->id ?? 0;
+			$position->duration = $product->duration ?? 0;
+			$position->amount = $amount;
+			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
+			$position->city_id = $city->id ?? 0;
+			$position->promo_id = $promo->id ?? 0;
+			$position->promocode_id = $promocodeId ? $promocode->id : 0;
+			$position->is_certificate_purchase = true;
 			$position->source = Deal::ADMIN_SOURCE;
 			$position->user_id = $this->request->user()->id;
-			$position->data_json = $data;
+			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
 
 			$deal->positions()->save($position);
-
+			
+			if ($promocodeId) {
+				$contractor = $deal->contractor;
+				if ($contractor) {
+					$promocode->contractors()->save($contractor);
+				}
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -456,62 +394,79 @@ class PositionController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
+		
+		$dealId = $this->request->deal_id ?? 0;
+		$productId = $this->request->product_id ?? 0;
+		$locationId = $this->request->location_id ?? 0;
+		$simulatorId = $this->request->flight_simulator_id ?? 0;
+		$promoId = $this->request->promo_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
+		$comment = $this->request->comment ?? '';
+		$amount = $this->request->amount ?? 0;
+		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
+		$certificateNumber = $this->request->certificate ?? '';
 
-		$deal = Deal::find($this->request->deal_id);
+		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка не найден']);
 		}
 
-		$product = Product::find($this->request->product_id);
+		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		if (!$product->validateFlightDate($this->request->flight_date_at . ' ' . $this->request->flight_time_at)) {
+		if (!$product->validateFlightDate($flightAt)) {
 			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
 		}
 
-		$location = Location::find($this->request->location_id);
+		$location = Location::find($locationId);
 		if (!$location) {
 			return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		}
 
-		if (!$location->city) {
-			return response()->json(['status' => 'error', 'reason' => 'Локация не привязана к городу не найден']);
+		$city = $location->city;
+		if (!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		}
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		if (!$cityProduct) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
 		}
 
-		$simulator = FlightSimulator::find($this->request->flight_simulator_id);
+		$simulator = FlightSimulator::find($simulatorId);
 		if (!$simulator) {
 			return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		}
 
-		if ($this->request->promo_id) {
-			$promo = Promo::find($this->request->promo_id);
+		if ($promoId) {
+			$promo = Promo::find($promoId);
 			if (!$promo) {
 				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 			}
 		}
 
-		if ($this->request->promocode_id) {
-			$promocode = Promocode::find($this->request->promocode_id);
+		if ($promocodeId) {
+			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
 
-		if ($this->request->certificate) {
+		if ($certificateNumber) {
 			$date = date('Y-m-d');
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			
 			// проверка сертификата на валидность
-			$certificate = Certificate::whereIn('city_id', [$location->city->id, 0])
+			$certificate = Certificate::whereIn('city_id', [$city->id, 0])
 				->where('status_id', $certificateStatus->id)
 				->where('product_id', $product->id)
 				->where(function ($query) use ($date) {
 					$query->where('expire_at', '>=', $date)
 						->orWhereNull('expire_at');
 				})
-				->where('number', $this->request->certificate)
+				->where('number', $certificateNumber)
 				->first();
 			if (!$certificate) {
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден или не соответствует выбранным параметрам']);
@@ -520,42 +475,45 @@ class PositionController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
 			}
 		}
-
-		if ($location && $location->city) {
-			$cityProduct = $product->cities->find($location->city->id);
-		}
-
+		
 		$data = [];
-		if ($this->request->comment) {
-			$data['comment'] = $this->request->comment;
+		if ($comment) {
+			$data['comment'] = $comment;
 		}
 
 		try {
 			\DB::beginTransaction();
 
 			$position = new DealPosition();
-			$position->product_id = $product ? $product->id : 0;
-			$position->certificate_id = ($this->request->certificate && $certificate) ? $certificate->id : 0;
-			$position->duration = $product ? $product->duration : 0;
-			$position->amount = $this->request->amount;
-			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
-			$position->city_id = ($location && $location->city) ? $location->city->id : 0;
-			$position->location_id = $location ? $location->id : 0;
-			$position->flight_simulator_id = $simulator ? $simulator->id : 0;
-			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
-			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
-			$position->flight_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
+			$position->product_id = $product->id ?? 0;
+			$position->certificate_id = $certificate->id ?? 0;
+			$position->duration = $product->duration ?? 0;
+			$position->amount = $amount;
+			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
+			$position->city_id = $city->id ?? 0;
+			$position->location_id = $location->id ?? 0;
+			$position->flight_simulator_id = $simulator->id ?? 0;
+			$position->promo_id = $promo->id ?? 0;
+			$position->promocode_id = $promocode->id ?? 0;
+			$position->flight_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
 			$position->source = Deal::ADMIN_SOURCE;
-			$position->user_id = $this->request->user()->id;
-			$position->data_json = $data;
+			$position->user_id = $this->request->user()->id ?? 0;
+			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
 
 			$deal->positions()->save($position);
-
+			
+			if ($promocode) {
+				$contractor = $deal->contractor;
+				if ($contractor) {
+					$promocode->contractors()->save($contractor);
+				}
+			}
+			
 			// если сделка на бронирование по сертификату, то регистрируем сертификат
 			if ($this->request->certificate && $certificate) {
 				$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::REGISTERED_STATUS);
-				$certificate->status_id = $certificateStatus->id;
+				$certificate->status_id = $certificateStatus->id ?? 0;
 				$certificate->save();
 			}
 
@@ -593,55 +551,78 @@ class PositionController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-
-		$deal = Deal::find($this->request->deal_id);
+		
+		$dealId = $this->request->deal_id ?? 0;
+		$productId = $this->request->product_id ?? 0;
+		$cityId = $this->request->city_id ?? 0;
+		$promoId = $this->request->promo_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
+		$comment = $this->request->comment ?? '';
+		$amount = $this->request->amount ?? 0;
+		
+		$deal = Deal::find($dealId);
 		if (!$deal) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка не найден']);
 		}
 
-		$product = Product::find($this->request->product_id);
+		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
-
-		if ($this->request->promo_id) {
-			$promo = Promo::find($this->request->promo_id);
+		
+		$city = City::find($cityId);
+		if (!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		}
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		if (!$cityProduct) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
+		}
+		
+		if ($promoId) {
+			$promo = Promo::find($promoId);
 			if (!$promo) {
 				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 			}
 		}
 
-		if ($this->request->promocode_id) {
-			$promocode = Promocode::find($this->request->promocode_id);
+		if ($promocodeId) {
+			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
 
-		$cityProduct = $product->cities->find($this->request->city_id);
-
 		$data = [];
-		if ($this->request->comment) {
-			$data['comment'] = $this->request->comment;
+		if ($comment) {
+			$data['comment'] = $comment;
 		}
 
 		try {
 			\DB::beginTransaction();
 
 			$position = new DealPosition();
-			$position->product_id = $product ? $product->id : 0;
-			$position->amount = $this->request->amount;
-			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
-			$position->city_id = $this->request->city_id ?? 0;
-			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
-			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
+			$position->product_id = $product->id ?? 0;
+			$position->amount = $amount;
+			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
+			$position->city_id = $city->id ?? 0;
+			$position->promo_id = $promo->id ?? 0;
+			$position->promocode_id = $promocode->id ?? 0;
 			$position->source = Deal::ADMIN_SOURCE;
 			$position->user_id = $this->request->user()->id;
-			$position->data_json = $data;
+			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
 
 			$deal->positions()->save($position);
-
+			
+			if ($promocode) {
+				$contractor = $deal->contractor;
+				if ($contractor) {
+					$promocode->contractors()->save($contractor);
+				}
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -681,59 +662,83 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
+		$cityId = $this->request->city_id ?? 0;
 		$productId = $this->request->product_id ?? 0;
-		if ($productId) {
-			$product = Product::find($productId);
+		$promoId = $this->request->promo_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
+		$certificateWhom = $this->request->certificate_whom ?? '';
+		$certificateWhomPhone = $this->request->certificate_whom_phone ?? '';
+		$comment = $this->request->comment ?? '';
+		$deliveryAddress = $this->request->delivery_address ?? '';
+		$amount = $this->request->amount ?? 0;
+
+		$product = Product::find($productId);
+		if (!$product) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		if ($this->request->city_id) {
-			$city = City::find($this->request->city_id);
+		if ($cityId) {
+			$city = City::find($cityId);
 			if (!$city) {
 				return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 			}
-		} else {
-			$city = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
-			if (!$city) {
-				return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-			}
+		}
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId ?: 1);
+		if (!$cityProduct) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
 		}
 
-		if ($this->request->promo_id) {
-			$promo = Promo::find($this->request->promo_id);
+		if ($promoId) {
+			$promo = Promo::find($promoId);
 			if (!$promo) {
 				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 			}
 		}
 
-		if ($this->request->promocode_id) {
-			$promocode = Promocode::find($this->request->promocode_id);
+		if ($promocodeId) {
+			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
-
-		$cityProduct = $product->cities->find($city->id);
-
-		$data = [];
-		if ($this->request->certificate_whom) {
-			$data['certificate_whom'] = $this->request->certificate_whom;
+		
+		$data = is_array($position->data_json) ? $position->data_json : json_decode($position->data_json, true);
+		if ($certificateWhom) {
+			$data['certificate_whom'] = $certificateWhom;
 		}
-		if ($this->request->comment) {
-			$data['comment'] = $this->request->comment;
+		if ($certificateWhomPhone) {
+			$data['certificate_whom_phone'] = $certificateWhomPhone;
+		}
+		if ($deliveryAddress) {
+			$data['delivery_address'] = $deliveryAddress ?? '';
+		}
+		if ($comment) {
+			$data['comment'] = $comment;
 		}
 		
 		try {
 			\DB::beginTransaction();
 
-			$position->product_id = $product ? $product->id : 0;
-			$position->duration = $product ? $product->duration : 0;
-			$position->amount = $this->request->amount;
-			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
-			$position->city_id = $this->request->city_id ?? 0;
-			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
-			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
-			$position->data_json = $data;
+			$position->product_id = $product->id ?? 0;
+			$position->duration = $product->duration ?? 0;
+			$position->amount = $amount;
+			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
+			$position->city_id = $city->id ?? 0;
+			$position->promo_id = $promo->id ?? 0;
+			$position->promocode_id = $promocodeId ? $promocode->id : 0;
+			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
+			
+			if ($promocodeId) {
+				$deal = $position->deal;
+				if ($deal) {
+					$contractor = $deal->contractor;
+					if ($contractor) {
+						$promocode->contractors()->save($contractor);
+					}
+				}
+			}
 			
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -778,69 +783,89 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 
-		$product = Product::find($this->request->product_id);
+		$productId = $this->request->product_id ?? 0;
+		$locationId = $this->request->location_id ?? 0;
+		$simulatorId = $this->request->flight_simulator_id ?? 0;
+		$promoId = $this->request->promo_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
+		$comment = $this->request->comment ?? '';
+		$amount = $this->request->amount ?? 0;
+		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
+		
+		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		if (!$product->validateFlightDate($this->request->flight_date_at . ' ' . $this->request->flight_time_at)) {
+		if (!$product->validateFlightDate($flightAt)) {
 			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
 		}
 
-		$location = Location::find($this->request->location_id);
+		$location = Location::find($locationId);
 		if (!$location) {
 			return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		}
 
-		if (!$location->city) {
-			return response()->json(['status' => 'error', 'reason' => 'Локация не привязана к городу не найден']);
+		$city = $location->city;
+		if (!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 		}
 
-		$simulator = FlightSimulator::find($this->request->flight_simulator_id);
+		$simulator = FlightSimulator::find($simulatorId);
 		if (!$simulator) {
 			return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		}
 
-		if ($this->request->promo_id) {
-			$promo = Promo::find($this->request->promo_id);
+		if ($promoId) {
+			$promo = Promo::find($promoId);
 			if (!$promo) {
 				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 			}
 		}
 
-		if ($this->request->promocode_id) {
-			$promocode = Promocode::find($this->request->promocode_id);
+		if ($promocodeId) {
+			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
-
-		if ($location && $location->city) {
-			$cityProduct = $product->cities->find($location->city->id);
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		if (!$cityProduct) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
 		}
-		\Log::debug($cityProduct);
-
-		$data = [];
-		if ($this->request->comment) {
-			$data['comment'] = $this->request->comment;
+		
+		$data = is_array($position->data_json) ? $position->data_json : json_decode($position->data_json, true);
+		if ($comment) {
+			$data['comment'] = $comment;
 		}
 
 		try {
 			\DB::beginTransaction();
 
-			$position->product_id = $product ? $product->id : 0;
-			$position->duration = $product ? $product->duration : 0;
-			$position->amount = $this->request->amount;
-			$position->currency_id = ($cityProduct && $cityProduct->pivot) ? $cityProduct->pivot->currency_id : 0;
-			$position->city_id = ($location && $location->city) ? $location->city->id : 0;
-			$position->location_id = $location ? $location->id : 0;
-			$position->flight_simulator_id = $simulator ? $simulator->id : 0;
-			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
-			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
-			$position->flight_at = Carbon::parse($this->request->flight_date_at . ' ' . $this->request->flight_time_at)->format('Y-m-d H:i');
-			$position->data_json = $data;
+			$position->product_id = $product->id ?? 0;
+			$position->duration = $product->duration ?? 0;
+			$position->amount = $amount;
+			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
+			$position->city_id = $city->id ?? 0;
+			$position->location_id = $location->id ?? 0;
+			$position->flight_simulator_id = $simulator->id ?? 0;
+			$position->promo_id = $promo->id ?? 0;
+			$position->promocode_id = $promocode->id ?? 0;
+			$position->flight_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
+			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
-
+			
+			if ($promocode) {
+				$deal = $position->deal;
+				if ($deal) {
+					$contractor = $deal->contractor;
+					if ($contractor) {
+						$promocode->contractors()->save($contractor);
+					}
+				}
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -879,45 +904,70 @@ class PositionController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-
-		$product = Product::find($this->request->product_id);
+		
+		$productId = $this->request->product_id ?? 0;
+		$cityId = $this->request->city_id ?? 0;
+		$promoId = $this->request->promo_id ?? 0;
+		$promocodeId = $this->request->promocode_id ?? 0;
+		$comment = $this->request->comment ?? '';
+		$amount = $this->request->amount ?? 0;
+		
+		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
-
-		if ($this->request->promo_id) {
-			$promo = Promo::find($this->request->promo_id);
+		
+		$city = City::find($cityId);
+		if (!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		}
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		if (!$cityProduct) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
+		}
+		
+		if ($promoId) {
+			$promo = Promo::find($promoId);
 			if (!$promo) {
 				return response()->json(['status' => 'error', 'reason' => 'Акция не найдена']);
 			}
 		}
 
-		if ($this->request->promocode_id) {
-			$promocode = Promocode::find($this->request->promocode_id);
+		if ($promocodeId) {
+			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
-
-		$cityProduct = $product->cities->find($this->request->city_id);
-
-		$data = [];
-		if ($this->request->comment) {
-			$data['comment'] = $this->request->comment;
+		
+		$data = is_array($position->data_json) ? $position->data_json : json_decode($position->data_json, true);
+		if ($comment) {
+			$data['comment'] = $comment;
 		}
 
 		try {
 			\DB::beginTransaction();
 
-			$position->product_id = $product ? $product->id : 0;
-			$position->amount = $this->request->amount;
-			$position->currency_id = $cityProduct ? $cityProduct->currency_id : 0;
-			$position->city_id = $this->request->city_id ?? 0;
-			$position->promo_id = ($this->request->promo_id && $promo) ? $promo->id : 0;
-			$position->promocode_id = ($this->request->promocode_id && $promocode) ? $promocode->id : 0;
-			$position->data_json = $data;
+			$position->product_id = $product->id ?? 0;
+			$position->amount = $amount;
+			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
+			$position->city_id = $city->id;
+			$position->promo_id = $promo->id ?? 0;
+			$position->promocode_id = $promocode->id ?? 0;
+			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
-
+			
+			if ($promocode) {
+				$deal = $position->deal;
+				if ($deal) {
+					$contractor = $deal->contractor;
+					if ($contractor) {
+						$promocode->contractors()->save($contractor);
+					}
+				}
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();

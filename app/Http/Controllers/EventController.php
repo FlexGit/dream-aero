@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\City;
+use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\EventComment;
 use App\Models\FlightSimulator;
 use App\Models\Location;
+use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductType;
+use App\Models\Status;
 use App\Models\User;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
@@ -59,6 +63,9 @@ class EventController extends Controller
 			->where('start_at', '<=', Carbon::now()->addDays(1)->endOfDay()->format('Y-m-d H:i:s'))
 			->where('is_notified', false)
 			->get();
+		if (!$user->isSuperAdmin() && $user->city) {
+			$upcomingEvents = $upcomingEvents->where('city_id', $user->city->id);
+		}
 		
 		return view('admin.event.index', [
 			'cities' => $cities,
@@ -110,8 +117,6 @@ class EventController extends Controller
 			->with(['dealPosition', 'user'])
 			->get();
 
-		//\Log::debug($events);
-		
 		$eventData = [];
 		foreach ($events as $event) {
 			$data = isset($locationData[$event->location_id][$event->flight_simulator_id]) ? $locationData[$event->location_id][$event->flight_simulator_id] : [];
@@ -443,9 +448,9 @@ class EventController extends Controller
 					$event->contractor_id = ($position->deal && $position->deal->contractor) ? $position->deal->contractor->id : 0;
 					$event->deal_id = $position->deal ? $position->deal->id : 0;
 					$event->deal_position_id = $position->id ?? 0;
-					$event->city_id = $city->id;
-					$event->location_id = $location->id;
-					$event->flight_simulator_id = $simulator->id;
+					$event->city_id = $city->id ?? 0;
+					$event->location_id = $location->id ?? 0;
+					$event->flight_simulator_id = $simulator->id ?? 0;
 					$event->start_at = Carbon::parse($startAt)->format('Y-m-d H:i');
 					$event->stop_at = Carbon::parse($stopAt)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
 					$event->extra_time = (int)$this->request->extra_time;
@@ -453,6 +458,40 @@ class EventController extends Controller
 					$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
 					$event->data_json = $data;
 					$event->save();
+					
+					if ($position->amount && $position->deal) {
+						$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
+						$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+						
+						if ($city->version == City::EN_VERSION) {
+							$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
+						} else {
+							$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
+						}
+						
+						$location = $city->getLocationForBill();
+						if (!$location) {
+							\DB::rollback();
+							
+							\Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+							
+							return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
+						}
+						
+						$bill = new Bill();
+						$bill->contractor_id = ($position->deal && $position->deal->contractor) ? $position->deal->contractor->id : 0;
+						$bill->deal_id = $position->deal ? $position->deal->id : 0;
+						$bill->deal_position_id = $position->id ?? 0;
+						$bill->location_id = $location->id ?? 0;
+						$bill->payment_method_id = $onlinePaymentMethod->id ?: $this->request->payment_method_id;
+						$bill->status_id = $billStatus->id ?? 0;
+						$bill->amount = $position->amount;
+						$bill->currency_id = $currency->id ?? 0;
+						$bill->user_id = $this->request->user()->id ?? 0;
+						$bill->save();
+						
+						$position->deal->bills()->save($bill);
+					}
 					
 					$commentText = $this->request->comment ?? '';
 					if ($commentText) {
@@ -508,8 +547,6 @@ class EventController extends Controller
 		
 		$userId = $this->request->user_id ?? 0;
 
-		\Log::debug($this->request);
-		
 		switch ($event->event_type) {
 			case Event::EVENT_TYPE_DEAL:
 				$position = DealPosition::find($event->deal_position_id);
@@ -890,6 +927,8 @@ class EventController extends Controller
 				abort(404);
 			}
 		}
+		
+		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 		
 		return Storage::disk('private')->download($flightInvitationFilePath);
 	}

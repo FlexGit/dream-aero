@@ -50,22 +50,24 @@
 									@endforeach
 								</select>
 							</div>
-							<div class="form-group ml-2">
-								<div>
-									<label for="filter_location_id">Локация</label>
-								</div>
-								<select class="form-control" id="filter_location_id" name="filter_location_id[]" multiple="multiple">
-									@foreach($cities ?? [] as $city)
-										<optgroup label="{{ $city->name }}">
-											@foreach($city->locations ?? [] as $location)
-												@foreach($location->simulators ?? [] as $simulator)
-													<option value="{{ $location->id }}" data-city_id="{{ $location->city_id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+							@if($user->isSuperAdmin())
+								<div class="form-group ml-2">
+									<div>
+										<label for="filter_location_id">Локация</label>
+									</div>
+									<select class="form-control" id="filter_location_id" name="filter_location_id[]" multiple="multiple">
+										@foreach($cities ?? [] as $city)
+											<optgroup label="{{ $city->name }}">
+												@foreach($city->locations ?? [] as $location)
+													@foreach($location->simulators ?? [] as $simulator)
+														<option value="{{ $location->id }}" data-city_id="{{ $location->city_id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+													@endforeach
 												@endforeach
-											@endforeach
-										</optgroup>
-									@endforeach
-								</select>
-							</div>
+											</optgroup>
+										@endforeach
+									</select>
+								</div>
+							@endif
 							<div class="form-group ml-2 text-nowrap">
 								<div>
 									<label for="filter_product_id">Продукт</label>

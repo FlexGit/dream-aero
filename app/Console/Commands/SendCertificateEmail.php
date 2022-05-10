@@ -58,8 +58,11 @@ class SendCertificateEmail extends Command
 			/** @var Bill $bill */
 			$bill = $position->bill;
 			if ($bill) {
+				$status = $bill->status;
+				if (!$status) continue;
+				
 				// если к позиции привязан счет, то он должен быть оплачен
-				if ($bill->status->alias != Bill::PAYED_STATUS) continue;
+				if ($status->alias != Bill::PAYED_STATUS) continue;
 			} else {
 				// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
 				$balance = $deal->balance();

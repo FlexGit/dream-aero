@@ -77,13 +77,6 @@
 					</div>
 				</div>
 			@endif
-			@if(is_array($deal->data_json) && array_key_exists('comment', $deal->data_json) && $deal->data_json['comment'])
-				<div class="text-left mt-2" title="Комментарий">
-					<div style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;">
-						<i class="far fa-comment-dots"></i> <i>{{ $deal->data_json['comment'] }}</i>
-					</div>
-				</div>
-			@endif
 			<div class="d-flex justify-content-between mt-2">
 				<div title="Источник">
 					{{ isset(\App\Models\Deal::SOURCES[$deal->source]) ? \App\Models\Deal::SOURCES[$deal->source] : '' }}
@@ -241,19 +234,41 @@
 										@endif
 									</div>
 								@endif
-								<div style="line-height: 0.9;" title="Для кого сертификат">
-									@if(is_array($position->data_json) && array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom'])
-										{{ $position->data_json['certificate_whom'] }}
-									@endif
-									@if(is_array($position->data_json) && array_key_exists('certificate_whom_phone', $position->data_json) && $position->data_json['certificate_whom_phone'])
-										[{{ $position->data_json['certificate_whom_phone'] }}]
-									@endif
-								</div>
 								@if ($position->certificate->status)
 									<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $position->certificate->status->data_json ?? []) ? $position->certificate->status->data_json['color'] : 'none' }};" title="Статус сертификата">
 										{{ $position->certificate->status->name }}
 									</div>
 								@endif
+							@endif
+							@if(is_array($position->data_json))
+								<div class="text-left mt-2">
+									<div style="border: 1px solid;border-radius: 6px;padding: 4px 8px;background-color: #fff;">
+										@if(array_key_exists('comment', $position->data_json) && $position->data_json['comment'])
+											<div title="Комментарий">
+												<i class="far fa-comment-dots"></i>
+												<span><i>{{ $position->data_json['comment'] }}</i></span>
+											</div>
+										@endif
+										@if(array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom'])
+											<div title="Для кого Сертификат (имя)">
+												<i class="fas fa-user"></i>
+												<span><i>{{ $position->data_json['certificate_whom'] }}</i></span>
+											</div>
+										@endif
+										@if(array_key_exists('certificate_whom_phone', $position->data_json) && $position->data_json['certificate_whom_phone'])
+											<div title="Для кого Сертификат (телефон)">
+												<i class="fas fa-mobile-alt"></i>
+												<span><i>{{ $position->data_json['certificate_whom_phone'] }}</i></span>
+											</div>
+										@endif
+										@if(array_key_exists('delivery_address', $position->data_json) && $position->data_json['delivery_address'])
+											<div title="Адрес доставки">
+												<i class="fas fa-truck"></i>
+												<span><i>{{ $position->data_json['delivery_address'] }}</i></span>
+											</div>
+										@endif
+									</div>
+								</div>
 							@endif
 						</td>
 						<td class="small">
@@ -309,6 +324,9 @@
 										<i class="fas fa-plane"></i> {{ $position->event->simulator->name }}
 									</div>
 								@endif
+								@if($position->event->event_type == app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT)
+									<div><span class="font-weight-bold">Тестовый полет</span></div>
+								@endif
 								<div>
 									@if ($position->event->uuid)
 										<a href="{{ route('getFlightInvitation', ['uuid' => $position->event->uuid ]) }}">
@@ -344,7 +362,7 @@
 							@endif
 						</td>
 						<td class="text-center align-middle">
-							@if(!$position->is_certificate_purchase && $position->location)
+							@if(!$position->is_certificate_purchase && $position->location && $position->event->event_type != app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT)
 								@if($position->event)
 									<div>
 										<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $position->event->id }}/edit" data-action="/event/{{ $position->event->id }}" data-method="PUT" data-title="Редактирование события" data-type="event" title="Редактировать событие" class="btn btn-success btn-sm"><i class="far fa-calendar-alt"></i></a>

@@ -46,6 +46,21 @@
 	</div>
 	<div class="col">
 		<div class="form-group">
+			<label for="product_id">Продукт</label>
+			<select class="form-control js-product" id="product_id" name="product_id">
+				<option></option>
+				@foreach($products ?? [] as $productTypeName => $productId)
+					<optgroup label="{{ $productTypeName }}">
+						@foreach($productId as $product)
+							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" data-currency="{{ $product->currency ? $product->currency->alias : '' }}">{{ $product->name }}</option>
+						@endforeach
+					</optgroup>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
 			<label for="promo_id">Акция</label>
 			<select class="form-control" id="promo_id" name="promo_id">
 				<option value=""></option>
@@ -70,27 +85,31 @@
 <div class="row">
 	<div class="col">
 		<div class="form-group">
-			<label for="product_id">Продукт</label>
-			<select class="form-control js-product" id="product_id" name="product_id">
-				<option></option>
-				@foreach($productTypes ?? [] as $productType)
-					<optgroup label="{{ $productType->name }}">
-						@foreach($productType->products ?? [] as $product)
-							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" data-currency="{{ $product->currency ? $product->currency->alias : '' }}">{{ $product->name }}</option>
-						@endforeach
-					</optgroup>
+			<label for="payment_method_id">Способ оплаты</label>
+			<select class="form-control" id="payment_method_id" name="payment_method_id">
+				<option value=""></option>
+				@foreach($paymentMethods ?? [] as $paymentMethod)
+					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
 				@endforeach
 			</select>
 		</div>
 	</div>
 	<div class="col">
-		<label for="certificate_whom">Для кого сертификат</label>
+		<label for="certificate_whom">Для кого Cертификат (имя)</label>
 		<input type="text" class="form-control" id="certificate_whom" name="certificate_whom">
 	</div>
 	<div class="col">
+		<label for="certificate_whom_phone">Для кого Сертификат (телефон)</label>
+		<input type="text" class="form-control" id="certificate_whom_phone" name="certificate_whom_phone">
 	</div>
 </div>
 <div class="row">
+	<div class="col">
+		<label for="delivery_address">Адрес доставки</label>
+		<textarea class="form-control" id="delivery_address" name="delivery_address" rows="1"></textarea>
+	</div>
+</div>
+<div class="row mt-3">
 	<div class="col-8">
 		<label for="comment">Комментарий</label>
 		<textarea class="form-control" id="comment" name="comment" rows="2"></textarea>
