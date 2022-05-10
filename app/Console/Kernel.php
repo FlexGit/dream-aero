@@ -15,13 +15,8 @@ class Kernel extends ConsoleKernel
 	protected $commands = [
 		Commands\SendCertificateEmail::class,
 		Commands\SendFlightInvitationEmail::class,
-		Commands\AddContractorScore::class,
+		/*Commands\AddContractorScore::class,*/
 		Commands\SendPromocodeAfterFlightEmail::class,
-		Commands\ImportContractor::class,
-		Commands\ImportFlight::class,
-		Commands\ImportNews::class,
-		Commands\ImportRating::class,
-		Commands\ImportReview::class,
 	];
 
 	/**
@@ -36,7 +31,7 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/queue_worker.log');
 		$schedule->command('queue:work --daemon')
 			->everyMinute()
-			->withoutOverlapping()
+			/*->withoutOverlapping()*/
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
@@ -76,13 +71,13 @@ class Kernel extends ConsoleKernel
 			->emailOutputOnFailure(env('DEV_EMAIL'));
 
 		// начисление баллов после полета
-		$filePath = storage_path('logs/commands/scoring.log');
+		/*$filePath = storage_path('logs/commands/scoring.log');
 		$schedule->command('score:add')
 			->hourly()
 			->withoutOverlapping()
 			->runInBackground()
 			->appendOutputTo($filePath)
-			->emailOutputOnFailure(env('DEV_EMAIL'));
+			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 	}
 
 	/**
