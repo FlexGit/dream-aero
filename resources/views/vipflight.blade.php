@@ -94,10 +94,16 @@
 					<div>
 						<p class="font_8" style="line-height:1.5em;text-align:center;font-size:18px">&nbsp;</p>
 						<p class="font_8" style="line-height:1.5em;text-align:center;font-size:18px;font-weight:700">{{ $product['user']['fio'] }}</p>
-						<p class="font_8" style="text-align:center;font-size:16px;">
-							<a href="https://www.instagram.com/{{ $product['user']['instagram'] }}/" style="color: #fff;" target="_blank">{{ '@' . $product['user']['instagram'] }}</a>
-						</p>
-						<p class="color_13 font_8" style="font-size:16px; line-height:1.5em; text-align:center;color:#A29C9C">{{ $product['description'] ?? '' }}</p>
+						@if($product['user']['instagram'])
+							<p class="font_8" style="text-align:center;font-size:16px;">
+								<a href="https://www.instagram.com/{{ $product['user']['instagram'] }}/" style="color: #fff;" target="_blank">{{ '@' . $product['user']['instagram'] }}</a>
+							</p>
+						@endif
+						@if($product['description'])
+							<p class="color_13 font_8" style="font-size:16px; line-height:1.5em; text-align:center;color:#A29C9C">
+								{{ $product['description'] ?? '' }}
+							</p>
+						@endif
 						<p class="font_8" style="line-height:1.5em;text-align:center;font-size:18px">&nbsp;</p>
 						<p class="font_8" style="line-height:1.5em;text-align:center;font-size:18px;font-weight:700">
 							<span style="color:#FFFFFF">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</span>
