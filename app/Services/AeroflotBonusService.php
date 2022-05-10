@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-require __DIR__ . '/afbonus/vendor/autoload.php';
+require __DIR__ . '/../../afbonus/vendor/autoload.php';
 
 use AfService\AfService;
 use App\Models\AeroflotBonusLog;
@@ -13,7 +13,7 @@ use Request;
 class AeroflotBonusService {
 	
 	const CURRENCY_CODE = 643;
-	const CONFIG_PATH = __DIR__ . '/afbonus/config.ini';
+	const CONFIG_PATH = __DIR__ . '/../../afbonus/config.ini';
 	const PARTNER_ID = 5164734;
 	const LOCATION = '1IM';
 	const TERMINAL = 1;
