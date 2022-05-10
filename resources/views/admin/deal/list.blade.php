@@ -362,8 +362,8 @@
 							@endif
 						</td>
 						<td class="text-center align-middle">
-							@if(!$position->is_certificate_purchase && $position->location && $position->event->event_type != app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT)
-								@if($position->event)
+							@if(!$position->is_certificate_purchase && $position->location)
+								@if($position->event && $position->event->event_type != app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT)
 									<div>
 										<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $position->event->id }}/edit" data-action="/event/{{ $position->event->id }}" data-method="PUT" data-title="Редактирование события" data-type="event" title="Редактировать событие" class="btn btn-success btn-sm"><i class="far fa-calendar-alt"></i></a>
 									</div>
