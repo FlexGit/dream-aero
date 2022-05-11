@@ -302,8 +302,7 @@ class BillController extends Controller
 		$email = $deal->email ?: $contractor->email;
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
 		
-		$job = new \App\Jobs\sendPayLinkEmail($bill);
-		dispatch($job);
+		dispatch(new \App\Jobs\SendPayLinkEmail($bill));
 		
 		return response()->json(['status' => 'success', 'message' => 'Ссылка на оплату успешно создано']);
 	}
