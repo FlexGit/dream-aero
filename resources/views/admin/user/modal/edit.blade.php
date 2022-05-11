@@ -35,7 +35,6 @@
 		<div class="form-group">
 			<label for="role">Роль</label>
 			<select class="form-control" id="role" name="role">
-				<option></option>
 				@foreach($roles ?? [] as $role => $roleName)
 					<option value="{{ $role }}" @if($role == $user->role) selected @endif>{{ $roleName }}</option>
 				@endforeach
