@@ -250,9 +250,9 @@ class UserController extends Controller
 		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
-		$user->is_reserved = $this->request->is_reserved ?? 0;
-		$user->is_official = $this->request->is_official ?? 0;
-		$user->enable = $this->request->enable;
+		$user->is_reserved = (bool)$this->request->is_reserved;
+		$user->is_official = (bool)$this->request->is_official;
+		$user->enable = (bool)$this->request->enable;
 		$data = [];
 		if ($isPhotoFileUploaded) {
 			$data['photo_file_path'] = 'user/photo/' . $photoFile->getClientOriginalName();
@@ -327,9 +327,9 @@ class UserController extends Controller
 		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
-		$user->is_reserved = $this->request->is_reserved ?? 0;
-		$user->is_official = $this->request->is_official ?? 0;
-		$user->enable = $this->request->enable;
+		$user->is_reserved = (bool)$this->request->is_reserved;
+		$user->is_official = (bool)$this->request->is_official;
+		$user->enable = (bool)$this->request->enable;
 		$data = $user->data_json;
 		if ($isPhotoFileUploaded) {
 			$data['photo_file_path'] = 'user/photo/' . $photoFile->getClientOriginalName();
