@@ -172,7 +172,7 @@ class User extends Authenticatable
 	 */
 	public function fioFormatted()
 	{
-		return $this->lastname . ($this->name ? mb_substr($this->name, 0, 1) . '.' : '') . ($this->middlename ? mb_substr($this->middlename, 0, 1) . '.' : '');
+		return $this->lastname . ($this->name ? ' ' . mb_substr($this->name, 0, 1) . '.' : '') . ($this->middlename ? ' ' . mb_substr($this->middlename, 0, 1) . '.' : '');
 	}
 	
 	/**
