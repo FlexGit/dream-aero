@@ -21,17 +21,26 @@ class PromocodeRepository {
 	 */
 	public function getList(User $user, $onlyActive = true, $onlyNoPersonal = true)
 	{
-		$promocodes = $this->model->orderBy('number')
-			->get();
-		if (!$user->isSuperAdmin() && $user->city) {
-			$promocodes = $promocodes->whereIn('city_id', [$user->city_id, 0]);
-		}
+		$promocodes = $this->model->orderBy('number');
 		if ($onlyActive) {
-			$promocodes = $promocodes->where('is_active', true);
+			$date = date('Y-m-d H:i:s');
+			$promocodes = $promocodes->where('is_active', true)
+				->where(function ($query) use ($date) {
+					$query->where('active_from_at', '<=', $date)
+						->orWhereNull('active_from_at');
+				})
+				->where(function ($query) use ($date) {
+					$query->where('active_to_at', '>=', $date)
+						->orWhereNull('active_to_at');
+				});
 		}
 		if ($onlyNoPersonal) {
 			$promocodes = $promocodes->where('contractor_id', 0);
 		}
+		if (!$user->isSuperAdmin() && $user->city) {
+			$promocodes = $promocodes->whereRelation('cities', 'cities.id', '=', $user->city_id);
+		}
+		$promocodes = $promocodes->get();
 		
 		return $promocodes;
 	}

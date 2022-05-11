@@ -193,11 +193,11 @@ class DealController extends Controller
 		}
 		
 		$user = \Auth::user();
-		$cities = $this->cityRepo->getList($user, false);
+		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user);
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
-		$promocodes = $this->promocodeRepo->getList($user, false);
-		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
+		$promocodes = $this->promocodeRepo->getList($user);
+		$paymentMethods = $this->paymentRepo->getPaymentMethodList();
 		
 		$VIEW = view('admin.deal.modal.certificate.add', [
 			'cities' => $cities,
@@ -220,11 +220,11 @@ class DealController extends Controller
 		}
 		
 		$user = \Auth::user();
-		$cities = $this->cityRepo->getList($user, false);
+		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user);
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
-		$promocodes = $this->promocodeRepo->getList($user, false);
-		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
+		$promocodes = $this->promocodeRepo->getList($user);
+		$paymentMethods = $this->paymentRepo->getPaymentMethodList();
 
 		$VIEW = view('admin.deal.modal.booking.add', [
 			'cities' => $cities,
@@ -252,11 +252,11 @@ class DealController extends Controller
 		}
 		
 		$user = \Auth::user();
-		$cities = $this->cityRepo->getList($user, false);
-		$products = $this->productTypeRepo->getActualProductList($user, false, false, true);
+		$cities = $this->cityRepo->getList($user);
+		$products = $this->productTypeRepo->getActualProductList($user, true, false, true);
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
-		$promocodes = $this->promocodeRepo->getList($user, false);
-		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
+		$promocodes = $this->promocodeRepo->getList($user);
+		$paymentMethods = $this->paymentRepo->getPaymentMethodList();
 
 		$VIEW = view('admin.deal.modal.product.add', [
 			'cities' => $cities,
