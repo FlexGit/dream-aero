@@ -475,7 +475,7 @@ class EventController extends Controller
 					$event->data_json = $data;
 					$event->save();
 					
-					if ($position->amount && $position->deal) {
+					/*if ($position->amount && $position->deal) {
 						$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 						$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
 						
@@ -507,7 +507,7 @@ class EventController extends Controller
 						$bill->save();
 						
 						$position->deal->bills()->save($bill);
-					}
+					}*/
 					
 					$commentText = $this->request->comment ?? '';
 					if ($commentText) {
