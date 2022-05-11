@@ -166,7 +166,15 @@ class User extends Authenticatable
 	{
 		return $this->lastname . ' ' . $this->name . ' ' . $this->middlename;
 	}
-
+	
+	/**
+	 * @return string
+	 */
+	public function fioFormatted()
+	{
+		return $this->lastname . ($this->name ? ucfirst($this->name) . '.' : '') . ($this->middlename ? ucfirst($this->middlename) . '.' : '');
+	}
+	
 	/**
 	 * @return array
 	 */

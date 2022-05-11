@@ -83,7 +83,7 @@
 				</div>
 				<div title="Кто создал">
 					@if($deal->user)
-						{{ $deal->user->name }}
+						{{ $deal->user->fioFormatted() }}
 					@endif
 				</div>
 			</div>

@@ -335,7 +335,6 @@ class Product extends Model
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
-					\Log::debug($dataJson);
 					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
 				}
 				$discount = $promo->discount ?? null;
