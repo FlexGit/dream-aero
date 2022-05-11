@@ -218,7 +218,7 @@
 									<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
 										{{ $position->certificate->number ?: 'без номера' }}
 									</a>
-									@if($position->is_certificate_purchase && $position->certificate->certificate_sent_at)
+									@if($position->is_certificate_purchase && $position->certificate->sent_at)
 										<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат отправлен {{ $position->certificate->certificate_sent_at }}"><i class="far fa-envelope-open"></i></a>
 									@else
 										<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат пока не отправлен"><i class="far fa-envelope"></i></a>
