@@ -111,3 +111,6 @@ input[readonly]{
 .upcomming-event:hover {
 	background-color: #222;
 }
+input[type=time]::-webkit-datetime-edit-ampm-field {
+	display: none;
+}
