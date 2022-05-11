@@ -221,10 +221,24 @@ class ApiController extends Controller
 			$code->code = $codeValue;
 			$code->email = $email;
 			$code->contractor_id = $contractor->id ?? 0;
-			$code->save();
-
-			Mail::send('admin.emails.code', ['code' => $codeValue], function ($message) use ($email) {
-				$message->to($email)->subject('Код подтверждения');
+			if (!$code->save()) {
+				return $this->responseError(null, 500);
+			}
+			
+			$messageData = [
+				'code' => $codeValue,
+				'city' => $contractor->city ?? new City(),
+			];
+			
+			$recipients = [];
+			$recipients[] = $email;
+			
+			$subject = env('APP_NAME') . ': код подтверждения';
+			
+			Mail::send('admin.emails.code', $messageData, function ($message) use ($subject, $recipients) {
+				/** @var \Illuminate\Mail\Message $message */
+				$message->subject($subject);
+				$message->to($recipients);
 			});
 			
 			$failures = Mail::failures();

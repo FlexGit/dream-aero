@@ -30,20 +30,20 @@
 											<td width="30"><p style="margin:0;font-size:1px;line-height:1px;">&nbsp;</p></td>
 											<td style="text-align:left;">
 												<p style="margin:0 0 4px;font-weight:bold;color:#333333;font-size:14px;line-height:22px;">Если у Вас остались вопросы,</p>
-												<p style="margin:0;color:#333333;font-size:11px;line-height:18px;">наш администратор готов ответить на них.<br>Позвоните <a target="_blank" rel=" noopener noreferrer"><span class="js-phone-number">{{ array_key_exists('phone', $location->data_json) ? $location->data_json['phone'] : '' }}</span></a> или <a target="_blank" rel=" noopener noreferrer">напишите {{ array_key_exists('email', $location->data_json) ? $location->data_json['email'] : '' }}</a>
+												<p style="margin:0;color:#333333;font-size:11px;line-height:18px;">наш администратор готов ответить на них.<br>Позвоните <a target="_blank" rel=" noopener noreferrer"><span class="js-phone-number">{{ $city->phone ?? '' }}</span></a> или напишите <a href="mailto:{{ $city->email ?? '' }}" target="_blank" rel=" noopener noreferrer">{{ $city->email ?? '' }}</a>
 												</p>
 												<p style="margin:0;font-size:1px;line-height:1px;">&nbsp;</p>
-												<a href="https://www.facebook.com/dreamaero/" style="float:left;width:24px;height:24px;margin:6px 8px 10px 0;" target="_blank" rel="noopener noreferrer">
-													<img src="{{ asset('img/fb.png') }}" width="24" height="24" alt="facebook" style="display:block;margin:0;border:0;">
-												</a>
 												<a href="https://vk.com/dream.aero" target="_blank" rel="noopener noreferrer">
-													<img src="{{ asset('img/vk.png') }}" width="24" height="24" alt="vk" style="display:block;margin:0;border:0;">
+													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/vk.png') }}" width="24" height="24" alt="vk" style="display:block;margin:0;border:0;">
+												</a>
+												<a href="https://t.me/dreamaero/" style="float:left;width:24px;height:24px;margin:6px 8px 10px 0;" target="_blank" rel="noopener noreferrer">
+													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/telegram.png') }}" width="24" height="24" alt="facebook" style="display:block;margin:0;border:0;">
 												</a>
 												<a href="https://www.instagram.com/dream.aero/" style="float:left;width:24px;height:24px;margin:6px 8px 10px 0;" target="_blank" rel=" noopener noreferrer">
-													<img src="{{ asset('img/inst.png') }}" width="24" height="24" alt="instagram" style="display:block;margin:0;border:0;">
+													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/inst.png') }}" width="24" height="24" alt="instagram" style="display:block;margin:0;border:0;">
 												</a>
 												<a href="https://www.youtube.com/channel/UC3huC7ltIlfkNMsz8Jt4qnw" style="float:left;width:24px;height:24px;margin:6px 0 10px 0;" target="_blank" rel=" noopener noreferrer">
-													<img src="{{ asset('img/you.png') }}" width="24" height="24" alt="youtube" style="display:block;margin:0;border:0;">
+													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/you.png') }}" width="24" height="24" alt="youtube" style="display:block;margin:0;border:0;">
 												</a>
 											</td>
 											<td width="30">

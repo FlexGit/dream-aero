@@ -3,7 +3,9 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
+use App\Models\City;
 use App\Models\Event;
+use App\Repositories\CityRepository;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -33,26 +35,49 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			}
 		}
 		
-		$simulatorAlias = $this->event->simulator->alias ?? '';
-		if (!$simulatorAlias) return null;
+		$city = $this->event->city;
+		if (!$city) return null;
+
+		$contractor = $this->event->contractor;
+		if (!$contractor) return null;
 		
-		$dealEmail = $this->event->deal->email ?? '';
-		$dealName = $this->event->deal->name ?? '';
-		$contractorEmail = $this->event->contractor->email ?? '';
-		$contractorName = $this->event->contractor->name ?? '';
+		$deal = $this->event->deal;
+		if (!$deal) return null;
+		
+		$location = $this->event->location;
+		if (!$location) return null;
+		
+		$simulator = $this->event->simulator;
+		if (!$simulator) return null;
+		
+		$position = $this->event->dealPosition;
+		if (!$position) return null;
+		
+		$bill = $position->bill;
+		if (!$bill) return null;
+		
+		$amount = $bill->amount;
+		if (!$amount) return null;
+		
+		$dealEmail = $deal->email ?? '';
+		$dealName = $deal->name ?? '';
+		$contractorEmail = $contractor->email ?? '';
+		$contractorName = $contractor->name ?? '';
 		if (!$dealEmail && !$contractorEmail) {
 			return null;
 		}
 		
+		$simulatorAlias = $simulator->alias ?? '';
+		if (!$simulatorAlias) return null;
+		
 		$messageData = [
 			'name' => $dealName ?: $contractorName,
 			'flightDate' => $this->event->start_at ?? '',
-			'locationName' => $this->event->location->name ?? '',
-			'simulatorName' => $this->event->simulator->name ?? '',
-			'amount' => $this->event->dealPosition->amount ?? '',
-			'billUuid' => $this->event->dealPosition->bill->uuid ?? '',
-			'cityEmail' => $this->event->city->email ?? '',
-			'cityPhone' => $this->event->city->phone ?? '',
+			'location' => $location,
+			'simulator' => $simulator,
+			'amount' => $amount,
+			'bill' => $bill,
+			'city' => $city,
 		];
 		
 		$recipients = [];

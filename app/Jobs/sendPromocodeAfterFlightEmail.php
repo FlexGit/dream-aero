@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
+use App\Models\City;
 use App\Models\Contractor;
 use App\Models\Deal;
 use App\Models\FlightSimulator;
@@ -40,11 +41,12 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 		$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
-			'contractor' => $this->contractor,
-			'location' => $this->location,
-			'simulator' => $this->simulator,
-			'deal' => $this->deal,
-			'promocode' => $this->promocode,
+			'contractor' => $this->contractor ?: new Contractor(),
+			'location' => $this->location ?: new Location(),
+			'simulator' => $this->simulator ?: new FlightSimulator(),
+			'deal' => $this->deal ?: new Deal(),
+			'promocode' => $this->promocode ?: new Promocode(),
+			'city' => $this->deal->city ?: new City(),
 		];
 
 		$subject = env('APP_NAME') . ': промокод на полет';
