@@ -599,9 +599,7 @@ class MainController extends Controller
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.повторите-позже')]);
 		}
 		
-		$job = new \App\Jobs\SendReviewEmail($name, $body);
-		dispatch($job);
-		//$job->handle();
+		dispatch(new \App\Jobs\SendReviewEmail($name, $body));
 		
 		return response()->json(['status' => 'success']);
 	}
@@ -983,9 +981,7 @@ class MainController extends Controller
 		$name = trim(strip_tags($this->request->name));
 		$phone = trim(strip_tags($this->request->phone));
 		
-		$job = new \App\Jobs\SendCallbackEmail($name, $phone);
-		dispatch($job);
-		//$job->handle();
+		dispatch(new \App\Jobs\SendCallbackEmail($name, $phone));
 		
 		return response()->json(['status' => 'success']);
 	}
@@ -1019,9 +1015,7 @@ class MainController extends Controller
 		$email = trim(strip_tags($this->request->email));
 		$body = trim(strip_tags($this->request->body));
 		
-		$job = new \App\Jobs\SendQuestionEmail($name, $email, $body);
-		dispatch($job);
-		//$job->handle();
+		dispatch(new \App\Jobs\SendQuestionEmail($name, $email, $body));
 		
 		return response()->json(['status' => 'success']);
 	}

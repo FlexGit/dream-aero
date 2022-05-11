@@ -14,7 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Mail;
 
-class sendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
+class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 	use InteractsWithQueue, SerializesModels, ReleaseHelperTrait;
 	
 	protected $contractor;

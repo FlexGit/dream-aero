@@ -121,9 +121,7 @@ class PaymentController extends Controller
 				if ($position->is_certificate_purchase && $certificate) {
 					$certificate = $certificate->generateFile();
 					
-					$job = new \App\Jobs\sendCertificateEmail($certificate);
-					dispatch($job);
-					//$job->handle();
+					dispatch(new \App\Jobs\SendCertificateEmail($certificate));
 				}
 				
 				// если было выбрано начисление бонусов Аэрофлот

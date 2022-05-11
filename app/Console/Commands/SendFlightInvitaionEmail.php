@@ -70,9 +70,7 @@ class SendFlightInvitationEmail extends Command
 			}
    
 			try {
-				$job = new \App\Jobs\sendFlightInvitationEmail($event);
-				//dispatch($job);
-				$job->handle();
+				dispatch(new \App\Jobs\SendFlightInvitationEmail($event));
 			} catch (Throwable $e) {
 				\Log::debug('500 - ' . $e->getMessage());
 			

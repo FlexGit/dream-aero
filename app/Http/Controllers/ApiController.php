@@ -2592,11 +2592,7 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		//dispatch(new \App\Jobs\SendDealEmail($deal));
-
-		$job = new \App\Jobs\SendDealEmail($deal);
-		dispatch($job);
-		//$job->handle();
+		dispatch(new \App\Jobs\SendDealEmail($deal));
 		
 		$data = [
 			'deal' => $deal->format(),
@@ -2884,11 +2880,7 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		//dispatch(new \App\Jobs\SendDealEmail($deal));
-		
-		$job = new \App\Jobs\SendDealEmail($deal);
-		dispatch($job);
-		//$job->handle();
+		dispatch(new \App\Jobs\SendDealEmail($deal));
 		
 		$data = [
 			'deal' => $deal->format(),
@@ -3052,11 +3044,7 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 
-		//dispatch(new \App\Jobs\SendDealEmail($deal));
-
-		$job = new \App\Jobs\SendDealEmail($deal);
-		dispatch($job);
-		//$job->handle();
+		dispatch(new \App\Jobs\SendDealEmail($deal));
 
 		$data = [
 			'deal' => $deal->format(),
@@ -3384,11 +3372,7 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 
-		//dispatch(new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message));
-
-		$job = new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message);
-		dispatch($job);
-		//$job->handle();
+		dispatch(new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message));
 
 		return $this->responseSuccess('Сообщение успешно отправлено', null);
 	}
