@@ -17,8 +17,28 @@
 			<td>{{ $user->middlename }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Дата рождения</td>
+			<td>{{ \Carbon\Carbon::parse($user->birthdate)->format('d.m.Y') }}</td>
+		</tr>
+		<tr class="odd">
 			<td>E-mail</td>
 			<td>{{ $user->email }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Телефон</td>
+			<td>{{ $user->phone }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Должность</td>
+			<td>{{ $user->position }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Резервный сотрудник</td>
+			<td>{{ $user->is_reserved ? 'Да' : 'Нет' }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Офиц. трудоустройство</td>
+			<td>{{ $user->is_official ? 'Да' : 'Нет' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Роль</td>

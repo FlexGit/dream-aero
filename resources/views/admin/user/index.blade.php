@@ -35,6 +35,15 @@
 									@endforeach
 								</select>
 							</div>
+							<div class="form-group ml-3">
+								<label for="filter_role">Роль</label>
+								<select class="form-control" id="filter_role" name="filter_role">
+									<option value="0">Все</option>
+									@foreach($roles ?? [] as $roleAlias => $roleName)
+										<option value="{{ $roleAlias }}">{{ $roleName }}</option>
+									@endforeach
+								</select>
+							</div>
 							<div class="form-group align-self-end ml-auto pl-2">
 								<a href="javascript:void(0)" data-toggle="modal" data-url="/user/add" data-action="/user" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
 							</div>
@@ -46,7 +55,6 @@
 							<th class="text-center">ФИО</th>
 							<th class="text-center d-none d-sm-table-cell">E-mail</th>
 							<th class="text-center d-none d-md-table-cell">Роль</th>
-							<th class="text-center d-none d-lg-table-cell">Версия</th>
 							<th class="text-center d-none d-lg-table-cell">Город</th>
 							<th class="text-center d-none d-xl-table-cell">Локация</th>
 							<th class="text-center d-none d-xl-table-cell">Активность</th>
@@ -103,7 +111,8 @@
 					type: 'GET',
 					dataType: 'json',
 					data: {
-						"filter_city_id": $('#filter_city_id').val(),
+						"city_id": $('#filter_city_id').val(),
+						"role": $('#filter_role').val(),
 						"id": id
 					},
 					success: function(result) {
@@ -215,7 +224,7 @@
 				});
 			});
 
-			$(document).on('change', '#filter_city_id', function(e) {
+			$(document).on('change', '#filter_city_id, #filter_role', function(e) {
 				getList(false);
 			});
 

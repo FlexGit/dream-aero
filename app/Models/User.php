@@ -120,6 +120,7 @@ class User extends Authenticatable
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
         'email_verified_at' => 'datetime',
+		'birthdate' => 'datetime',
 		'enable' => 'boolean',
 		'data_json' => 'array',
     ];

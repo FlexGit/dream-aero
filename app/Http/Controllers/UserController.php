@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -29,9 +30,12 @@ class UserController extends Controller
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
 			->get();
+		
+		$roles = User::ROLES;
 
 		return view('admin.user.index', [
 			'cities' => $cities,
+			'roles' => $roles,
 		]);
 	}
 	
@@ -47,8 +51,11 @@ class UserController extends Controller
 		/*$id = $this->request->id ?? 0;*/
 
 		$users = User::orderBy('lastname')->orderBy('name');
-		if ($this->request->filter_city_id) {
-			$users = $users->where('city_id', $this->request->filter_city_id);
+		if ($this->request->city_id) {
+			$users = $users->where('city_id', $this->request->city_id);
+		}
+		if ($this->request->role) {
+			$users = $users->where('role', $this->request->role);
 		}
 		/*if ($id) {
 			$users = $users->where('id', '<', $id);
@@ -199,25 +206,32 @@ class UserController extends Controller
 		$rules = [
 			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
-			/*'middlename' => ['required', 'max:255'],*/
-			'email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL'],
+			/*'email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL'],*/
 			'role' => ['required'],
-			'photo_file' => 'sometimes|image|max:512',
+			'photo_file' => 'sometimes|image|max:1024',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'lastname' => 'Фамилия',
 				'name' => 'Имя',
-				/*'middlename' => 'Отчество',*/
-				'email' => 'E-mail',
+				/*'email' => 'E-mail',*/
 				'role' => 'Роль',
 				'photo_file' => 'Фото',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-
+		
+		$email = $this->request->email ?? '';
+		if ($email) {
+			$user = User::where('email', $email)
+				->first();
+			if ($user) {
+				return response()->json(['status' => 'error', 'reason' => 'Пользователь с таким E-mail уже существует']);
+			}
+		}
+		
 		$isPhotoFileUploaded = false;
 		if($photoFile = $this->request->file('photo_file')) {
 			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
@@ -226,13 +240,18 @@ class UserController extends Controller
 		$user = new User();
 		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
-		$user->middlename = $this->request->middlename ?? '';
+		$user->middlename = $this->request->middlename ?? null;
 		$user->email = $this->request->email;
 		$user->password = '';
 		$user->role = $this->request->role;
+		$user->birthdate = $this->request->birthdate ? Carbon::parse($this->request->birthdate)->format('Y-m-d') : null;
+		$user->phone = $this->request->phone ?? null;
+		$user->position = $this->request->position ?? null;
 		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
+		$user->is_reserved = $this->request->is_reserved ?? 0;
+		$user->is_official = $this->request->is_official ?? 0;
 		$user->enable = $this->request->enable;
 		$data = [];
 		if ($isPhotoFileUploaded) {
@@ -266,38 +285,50 @@ class UserController extends Controller
 		$rules = [
 			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
-			/*'middlename' => ['required', 'max:255'],*/
-			'email' => ['required', 'email', 'unique:users,email,' . $id . ',id,deleted_at,NULL'],
+			/*'email' => ['sometimes', 'required', 'email', 'unique:users,email,' . $id . ',id,deleted_at,NULL'],*/
 			'role' => ['required'],
-			'photo_file' => 'sometimes|image|max:512',
+			'photo_file' => ['sometimes', 'image', 'max:1024'],
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'lastname' => 'Фамилия',
 				'name' => 'Имя',
-				/*'middlename' => 'Отчество',*/
-				'email' => 'E-mail',
+				/*'email' => 'E-mail',*/
 				'role' => 'Роль',
 				'photo_file' => 'Фото',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
+		
+		$email = $this->request->email ?? '';
+		if ($email) {
+			$user = User::where('email', $email)
+				->first();
+			if ($user && $user->id != $id) {
+				return response()->json(['status' => 'error', 'reason' => 'Пользователь с таким E-mail уже существует']);
+			}
+		}
 
 		$isPhotoFileUploaded = false;
 		if($photoFile = $this->request->file('photo_file')) {
 			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
 		}
-
+		
 		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
 		$user->middlename = $this->request->middlename ?? '';
-		$user->email = $this->request->email;
+		$user->email = $email;
 		$user->role = $this->request->role;
+		$user->birthdate = $this->request->birthdate ? Carbon::parse($this->request->birthdate)->format('Y-m-d') : null;
+		$user->phone = $this->request->phone ?? null;
+		$user->position = $this->request->position ?? null;
 		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
+		$user->is_reserved = $this->request->is_reserved ?? 0;
+		$user->is_official = $this->request->is_official ?? 0;
 		$user->enable = $this->request->enable;
 		$data = $user->data_json;
 		if ($isPhotoFileUploaded) {
