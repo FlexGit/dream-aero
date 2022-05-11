@@ -236,8 +236,6 @@ class UserController extends Controller
 		if($photoFile = $this->request->file('photo_file')) {
 			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
 		}
-		
-		\Log::debug($this->request);
 
 		$user = new User();
 		$user->lastname = $this->request->lastname;
@@ -246,7 +244,7 @@ class UserController extends Controller
 		$user->email = $this->request->email;
 		$user->password = '';
 		$user->role = $this->request->role;
-		$user->birthdate = !is_null($this->request->birthdate) ? Carbon::parse($this->request->birthdate)->format('Y-m-d') : null;
+		$user->birthdate = $this->request->birthdate ? Carbon::parse($this->request->birthdate)->format('Y-m-d') : null;
 		$user->phone = $this->request->phone ?? null;
 		$user->position = $this->request->position ?? null;
 		$user->version = $this->request->version;
@@ -323,7 +321,7 @@ class UserController extends Controller
 		$user->middlename = $this->request->middlename ?? '';
 		$user->email = $email;
 		$user->role = $this->request->role;
-		$user->birthdate = !is_null($this->request->birthdate) ? Carbon::parse($this->request->birthdate)->format('Y-m-d') : null;
+		$user->birthdate = $this->request->birthdate ? Carbon::parse($this->request->birthdate)->format('Y-m-d') : null;
 		$user->phone = $this->request->phone ?? null;
 		$user->position = $this->request->position ?? null;
 		$user->version = $this->request->version;

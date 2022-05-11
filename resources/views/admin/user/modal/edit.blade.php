@@ -24,7 +24,7 @@
 		</div>
 		<div class="form-group">
 			<label for="birthdate">Дата рождения</label>
-			<input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ \Carbon\Carbon::parse($user->birthdate)->format('Y-m-d') }}" placeholder="Дата рождения">
+			<input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ $user->birthdate ? \Carbon\Carbon::parse($user->birthdate)->format('Y-m-d') : '' }}" placeholder="Дата рождения">
 		</div>
 		<div class="form-group">
 			<label for="position">Должность</label>
