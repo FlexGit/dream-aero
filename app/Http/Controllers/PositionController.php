@@ -340,7 +340,7 @@ class PositionController extends Controller
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id ?? 0;
 			$position->promo_id = $promo->id ?? 0;
-			$position->promocode_id = $promocodeId ? $promocode->id : 0;
+			$position->promocode_id = $promocodeId ?? 0;
 			$position->is_certificate_purchase = true;
 			$position->source = Deal::ADMIN_SOURCE;
 			$position->user_id = $this->request->user()->id;
@@ -494,7 +494,7 @@ class PositionController extends Controller
 			$position->location_id = $location->id ?? 0;
 			$position->flight_simulator_id = $simulator->id ?? 0;
 			$position->promo_id = $promo->id ?? 0;
-			$position->promocode_id = $promocode->id ?? 0;
+			$position->promocode_id = $promocodeId ?? 0;
 			$position->flight_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
 			$position->source = Deal::ADMIN_SOURCE;
 			$position->user_id = $this->request->user()->id ?? 0;
@@ -503,7 +503,7 @@ class PositionController extends Controller
 
 			$deal->positions()->save($position);
 			
-			if ($promocode) {
+			if ($promocodeId) {
 				$contractor = $deal->contractor;
 				if ($contractor) {
 					$promocode->contractors()->save($contractor);
@@ -608,7 +608,7 @@ class PositionController extends Controller
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id ?? 0;
 			$position->promo_id = $promo->id ?? 0;
-			$position->promocode_id = $promocode->id ?? 0;
+			$position->promocode_id = $promocodeId ?? 0;
 			$position->source = Deal::ADMIN_SOURCE;
 			$position->user_id = $this->request->user()->id;
 			$position->data_json = !empty($data) ? $data : null;
@@ -616,7 +616,7 @@ class PositionController extends Controller
 
 			$deal->positions()->save($position);
 			
-			if ($promocode) {
+			if ($promocodeId) {
 				$contractor = $deal->contractor;
 				if ($contractor) {
 					$promocode->contractors()->save($contractor);
@@ -726,7 +726,7 @@ class PositionController extends Controller
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id ?? 0;
 			$position->promo_id = $promo->id ?? 0;
-			$position->promocode_id = $promocodeId ? $promocode->id : 0;
+			$position->promocode_id = $promocodeId ?? 0;
 			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
 			
@@ -851,12 +851,12 @@ class PositionController extends Controller
 			$position->location_id = $location->id ?? 0;
 			$position->flight_simulator_id = $simulator->id ?? 0;
 			$position->promo_id = $promo->id ?? 0;
-			$position->promocode_id = $promocode->id ?? 0;
+			$position->promocode_id = $promocodeId ?? 0;
 			$position->flight_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
 			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
 			
-			if ($promocode) {
+			if ($promocodeId) {
 				$deal = $position->deal;
 				if ($deal) {
 					$contractor = $deal->contractor;
@@ -954,11 +954,11 @@ class PositionController extends Controller
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id;
 			$position->promo_id = $promo->id ?? 0;
-			$position->promocode_id = $promocode->id ?? 0;
+			$position->promocode_id = $promocodeId ?? 0;
 			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
 			
-			if ($promocode) {
+			if ($promocodeId) {
 				$deal = $position->deal;
 				if ($deal) {
 					$contractor = $deal->contractor;

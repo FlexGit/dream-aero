@@ -20,7 +20,7 @@
 	<select class="form-control" id="role" name="role">
 		<option></option>
 		@foreach($roles ?? [] as $role => $roleName)
-			<option value="{{ $role }}" @if($role == 'admin') selected @endif>{{ $roleName }}</option>
+			<option value="{{ $role }}">{{ $roleName }}</option>
 		@endforeach
 	</select>
 </div>

@@ -91,6 +91,11 @@ class User extends Authenticatable
 		'version',
 		'city_id',
 		'location_id',
+		'phone',
+		'birthdata',
+		'position',
+		'is_reserved',
+		'is_official',
 		'enable',
 		'data_json',
     ];
