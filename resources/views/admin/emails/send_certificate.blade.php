@@ -12,7 +12,7 @@
 								<td width="4" height="4"><p style="margin:0;font-size:1px;line-height:1px;">&nbsp;</p></td>
 								<td colspan="3" rowspan="3" bgcolor="#FFFFFF" style="padding:10px 0 30px;text-align:center">
 									<a href="{{ Request::getSchemeAndHttpHost() }}" style="display:flex;width:167px;height:auto;margin:0 auto;" target="_blank" rel=" noopener noreferrer">
-										<img src="{{ asset('img/logo-new.webp') }}" width="167px" alt="logo" style="display:flex;border:0;margin:0;">
+										<img src="{{ Request::getSchemeAndHttpHost() . '/assets/img/logo-new.webp'}}" width="167px" alt="logo" style="display:flex;border:0;margin:0;">
 									</a>
 
 									<p style="margin:15px 30px 33px;text-align:left;font-size:16px;line-height:30px;color:#484a42;">

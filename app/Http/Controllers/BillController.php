@@ -288,6 +288,8 @@ class BillController extends Controller
 		$bill = Bill::find($this->request->bill_id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
+		if ($bill->amount <= 0) return response()->json(['status' => 'error', 'reason' => 'Сумма счета указана некорректно']);
+		
 		$deal = $bill->deal;
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 
@@ -295,34 +297,13 @@ class BillController extends Controller
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 		
 		$city = $contractor->city;
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Город контрагента не найден']);
 		
 		$email = $deal->email ?: $contractor->email;
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
 		
-		$name = $deal->name ?: $contractor->name;
+		dispatch(new \App\Jobs\sendPayLinkEmail($bill));
 		
-		$messageData = [
-			'name' => $name,
-			'amount' => $bill->amount,
-			'payLink' => (($city->version == City::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid,
-			'city' => $city ?? null,
-		];
-		
-		Mail::send('admin.emails.send_paylink', $messageData, function ($message) use ($email) {
-			$message->to($email)->subject('Ссылка на оплату');
-		});
-		
-		$failures = Mail::failures();
-		if ($failures) {
-			return response()->json(['status' => 'error', 'reason' => implode(' ', $failures)]);
-		}
-
-		$linkSentAt = Carbon::now()->format('Y-m-d H:i:s');
-		$bill->link_sent_at = $linkSentAt;
-		if (!$bill->save()) {
-			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-		}
-		
-		return response()->json(['status' => 'success', 'link_sent_at' => $linkSentAt]);
+		return response()->json(['status' => 'success', 'message' => 'Задание на отправку ссылки на оплату успешно создано']);
 	}
 }

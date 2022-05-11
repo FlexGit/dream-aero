@@ -122,7 +122,9 @@ class AeroflotBonusService {
 				if ($bill) {
 					$amountDiff = $position->amount - $position->aeroflot_bonus_amount;
 					$bill->amount = ($amountDiff >= 0) ? $amountDiff : 0;
-					$bill->save();
+					if ($bill->save()) {
+						dispatch(new \App\Jobs\sendPayLinkEmail($bill));
+					}
 				}
 			}
 			

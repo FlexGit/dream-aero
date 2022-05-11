@@ -589,6 +589,8 @@ class DealController extends Controller
 		}
 		
 		if ($source == Deal::WEB_SOURCE) {
+			dispatch(new \App\Jobs\sendPayLinkEmail($bill));
+			
 			$paymentFormHtml = PayAnyWayService::generatePaymentForm($bill);
 			return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена! Перенаправляем на страницу оплаты. Пожалуйста, подождите...', 'html' => $paymentFormHtml]);
 		}
