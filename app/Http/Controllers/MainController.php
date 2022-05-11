@@ -140,7 +140,7 @@ class MainController extends Controller
 		
 		$VIEW = view('modal.certificate', [
 			'city' => $city,
-			'product' => $product ?? '',
+			'product' => isset($product) ? $product : new Product(),
 			'products' => $products ?? [],
 		]);
 		
