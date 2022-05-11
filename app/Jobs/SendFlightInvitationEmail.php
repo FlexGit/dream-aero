@@ -82,6 +82,9 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		
 		$recipients = [];
 		$recipients[] = $dealEmail ?: $contractorEmail;
+		
+		\Log::debug($dealEmail);
+		\Log::debug($flightInvitationFilePath);
 
 		$subject = env('APP_NAME') . ': приглашение на полет';
 
