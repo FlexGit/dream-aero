@@ -78,6 +78,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			'amount' => $amount,
 			'bill' => $bill,
 			'city' => $city,
+			'payLink' => (($city->version == City::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid,
 		];
 		
 		$recipients = [];
