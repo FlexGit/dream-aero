@@ -293,7 +293,7 @@
 								</a>
 								{{ $event->dealPosition->certificate->number ?: 'без номера' }}
 								@if ($event->dealPosition->certificate->sent_at)
-									<i class="far fa-envelope-open" title="{{ $event->dealPosition->certificate->certificate_sent_at }}"></i>
+									<i class="far fa-envelope-open" title="{{ $event->dealPosition->certificate->sent_at }}"></i>
 								@else
 									<i class="far fa-envelope" title="Сертификат пока не отправлен"></i>
 								@endif
