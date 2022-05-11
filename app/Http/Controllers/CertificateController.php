@@ -328,7 +328,7 @@ class CertificateController extends Controller
 		dispatch($job);
 		//$job->handle();
 		
-		return response()->json(['status' => 'success', 'message' => 'Задание на отправку сертификата успешно создано']);
+		return response()->json(['status' => 'success', 'message' => 'Сертификат успешно отправлен']);
 	}
 	
 	/**

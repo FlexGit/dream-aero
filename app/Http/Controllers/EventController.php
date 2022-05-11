@@ -923,7 +923,7 @@ class EventController extends Controller
 		dispatch($job);
 		//$job->handle();
 		
-		return response()->json(['status' => 'success', 'message' => 'Задание на отправку приглашения на полет успешно создано']);
+		return response()->json(['status' => 'success', 'message' => 'Приглашение на полет успешно отправлено']);
 	}
 	
 	/**
