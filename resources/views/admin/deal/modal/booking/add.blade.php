@@ -119,7 +119,7 @@
 			</select>
 		</div>
 	</div>
-	{{--<div class="col">
+	<div class="col">
 		<div class="form-group">
 			<label for="promocode_id">Промокод</label>
 			<select class="form-control" id="promocode_id" name="promocode_id">
@@ -129,7 +129,7 @@
 				@endforeach
 			</select>
 		</div>
-	</div>--}}
+	</div>
 </div>
 <div class="row">
 	<div class="col">
