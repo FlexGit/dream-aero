@@ -54,6 +54,7 @@ class SendPayLinkEmail extends Job implements ShouldQueue {
 		$subject = env('APP_NAME') . ': cсылка на оплату';
 		
 		Mail::send('admin.emails.send_paylink', $messageData, function ($message) use ($recipients, $subject) {
+			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->to($recipients);
 		});
