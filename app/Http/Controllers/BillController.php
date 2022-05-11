@@ -83,6 +83,7 @@ class BillController extends Controller
 		$amount = $deal->amount() - $deal->billPayedAmount();
 		
 		$statuses = Status::where('type', Status::STATUS_TYPE_BILL)
+			->where('alias', '!=', Bill::PAYED_PROCESSING_STATUS)
 			->orderBy('sort')
 			->get();
 
