@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/commands/certificate_email.log');
 		$schedule->command('certificate_email:send')
 			->everyFiveMinutes()
-			->withoutOverlapping()
+			/*->withoutOverlapping()*/
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
@@ -56,7 +56,7 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/commands/flight_invitation_email.log');
 		$schedule->command('flight_invitation_email:send')
 			->everyFiveMinutes()
-			->withoutOverlapping()
+			/*->withoutOverlapping()*/
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
@@ -65,7 +65,7 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/commands/promocode_send.log');
 		$schedule->command('promocode_email:send')
 			->everyFiveMinutes()
-			->withoutOverlapping()
+			/*->withoutOverlapping()*/
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
@@ -74,7 +74,7 @@ class Kernel extends ConsoleKernel
 		/*$filePath = storage_path('logs/commands/scoring.log');
 		$schedule->command('score:add')
 			->hourly()
-			->withoutOverlapping()
+			//->withoutOverlapping()
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));*/
