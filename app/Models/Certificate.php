@@ -177,22 +177,14 @@ class Certificate extends Model
 		if (!$productType) return null;
 		
 		$city = $this->city;
-		//if (!$city) return null;
 
-		// если это Единый сертификат
 		if (!$city && in_array($productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
+			// единый Сертификат
 			$certificateTemplateFilePath = 'certificate/template/' . mb_strtoupper($productType->alias) . '_UNI.jpg';
+		} elseif ($productType->alias == ProductType::VIP_ALIAS) {
+			// vip
+			$certificateTemplateFilePath = 'certificate/template/VIP_' . mb_strtoupper($productType->alias) . '.jpg';
 		} else {
-			/*$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-			if (!$cityProduct || !$cityProduct->pivot) {
-				return null;
-			}
-			
-			$data = json_decode($cityProduct->pivot->data_json, true);
-			$certificateTemplateFilePath = $data['certificate_template_file_path'] ?? '';
-			if (!isset($certificateTemplateFilePath)) {
-				return null;
-			}*/
 			$certificateTemplateFilePath = 'certificate/template/' . preg_replace("/[^A-Z]/", '', mb_strtoupper($product->alias)) . '_' . mb_strtoupper($city->alias) . '.jpg';
 		}
 		
