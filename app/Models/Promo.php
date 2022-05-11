@@ -77,6 +77,7 @@ class Promo extends Model
 	];*/
 
 	const BIRTHDAY_ALIAS = 'birthday';
+	const MOB_REGISTRATION_SCORES_ALIAS = 'registration_500_scores';
 
 	/*protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;*/

@@ -195,7 +195,7 @@ class DealController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user);
-		$promos = $this->promoRepo->getList($user, false);
+		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user, false);
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
 		
@@ -222,7 +222,7 @@ class DealController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user);
-		$promos = $this->promoRepo->getList($user, false);
+		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user, false);
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
 
@@ -254,7 +254,7 @@ class DealController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false, false, true);
-		$promos = $this->promoRepo->getList($user, false);
+		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user, false);
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
 

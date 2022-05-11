@@ -65,7 +65,7 @@
 			<select class="form-control" id="promo_id" name="promo_id">
 				<option value=""></option>
 				@foreach($promos ?? [] as $promo)
-					<option value="{{ $promo->id }}">{{ $promo->name }}</option>
+					<option value="{{ $promo->id }}">{{ $promo->valueFormatted() }}</option>
 				@endforeach
 			</select>
 		</div>

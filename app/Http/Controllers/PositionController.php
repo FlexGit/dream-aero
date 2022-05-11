@@ -69,7 +69,7 @@ class PositionController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user);
-		$promos = $this->promoRepo->getList($user);
+		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user);
 		
 		$VIEW = view('admin.position.modal.certificate.add', [
@@ -100,7 +100,7 @@ class PositionController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user);
-		$promos = $this->promoRepo->getList($user);
+		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user);
 		
 		$VIEW = view('admin.position.modal.booking.add', [
@@ -131,7 +131,7 @@ class PositionController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user, true, false, true);
-		$promos = $this->promoRepo->getList($user);
+		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user);
 		
 		$VIEW = view('admin.position.modal.product.add', [
@@ -161,7 +161,7 @@ class PositionController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false);
-		$promos = $this->promoRepo->getList($user, false);
+		$promos = $this->promoRepo->getList($user, false, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user, false);
 		
 		$VIEW = view('admin.position.modal.certificate.edit', [
@@ -191,7 +191,7 @@ class PositionController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false);
-		$promos = $this->promoRepo->getList($user, false);
+		$promos = $this->promoRepo->getList($user, false, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user, false);
 
 		$VIEW = view('admin.position.modal.booking.edit', [
@@ -221,7 +221,7 @@ class PositionController extends Controller
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false, false, true);
-		$promos = $this->promoRepo->getList($user, false);
+		$promos = $this->promoRepo->getList($user, false, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user, false);
 
 		$VIEW = view('admin.position.modal.product.edit', [
