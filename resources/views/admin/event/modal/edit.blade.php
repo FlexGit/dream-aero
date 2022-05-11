@@ -23,7 +23,10 @@
 				<a class="nav-link" data-toggle="tab" href="{{ asset('#comments') }}">Комментарий</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="{{ asset('#notification') }}">Уведомление о полете</a>
+				<a class="nav-link" data-toggle="tab" href="{{ asset('#notification') }}">Уведомление</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="{{ asset('#pilot') }}">Пилот</a>
 			</li>
 		</ul>
 
@@ -390,6 +393,31 @@
 								<input type="radio" class="custom-control-input" id="notification_type_call" name="notification_type" value="call" @if($event->notification_type == app('\App\Models\Event')::NOTIFICATION_TYPE_CALL) checked @endif>
 								<label class="custom-control-label" for="notification_type_call">Звонок</label>
 							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="pilot">
+				<div class="row pl-3 pr-3 mt-4">
+					<div class="col">
+						<label>Пилоты смены</label>
+						<div>
+							@foreach ($shifts as $shift)
+								<div>
+									{{ $shift->start_at->format('H:i') }} - {{ $shift->stop_at->format('H:i') }} - {{ $shift->user->fio() }}
+								</div>
+							@endforeach
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group">
+							<label for="pilot_id">Фактический пилот</label>
+							<select class="form-control" id="pilot_id" name="pilot_id">
+								<option value="0">---</option>
+								@foreach($pilots as $pilot)
+									<option value="{{ $pilot->id }}" @if($event->pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
+								@endforeach
+							</select>
 						</div>
 					</div>
 				</div>

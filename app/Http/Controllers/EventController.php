@@ -296,11 +296,26 @@ class EventController extends Controller
 				->whereNotIn('alias', ['services'])
 				->get();
 			
+			$shifts = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+				->where('city_id', $event->city_id)
+				->where('location_id', $event->location_id)
+				->where('flight_simulator_id', $event->flight_simulator_id)
+				->where('start_at', '>=', Carbon::parse($event->start_at)->format('Y-m-d'))
+				->where('stop_at', '<=', Carbon::parse($event->start_at)->addDay()->format('Y-m-d'))
+				->orderBy('start_at')
+				->get();
+
+			$pilots = User::where('role', User::ROLE_PILOT)
+				->where('version', $user->version)
+				->get();
+			
 			$VIEW = view('admin.event.modal.edit', [
 				'event' => $event,
 				'comments' => $commentData,
 				'productTypes' => $productTypes,
 				'cities' => $cities,
+				'pilots' => $pilots,
+				'shifts' => $shifts,
 			]);
 		} else {
 			$users = User::where('enable', true)
@@ -456,6 +471,7 @@ class EventController extends Controller
 					$event->extra_time = (int)$this->request->extra_time;
 					$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
 					$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
+					$event->pilot_id = $this->request->pilot ?? 0;
 					$event->data_json = $data;
 					$event->save();
 					
@@ -597,6 +613,9 @@ class EventController extends Controller
 			}
 		}
 		
+		\Log::debug($this->request);
+		\Log::debug($event);
+		
 		try {
 			\DB::beginTransaction();
 			
@@ -621,6 +640,7 @@ class EventController extends Controller
 						$event->admin_assessment = (int)$this->request->admin_assessment;
 						$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;
 						$event->simulator_down_at = $this->request->simulator_down_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_down_at)->format('Y-m-d H:i') : null;
+						$event->pilot_id = $this->request->pilot_id ?? 0;
 					} else if ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at)->subMinutes($event->extra_time ?? 0)->format('Y-m-d H:i');

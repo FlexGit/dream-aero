@@ -109,6 +109,7 @@ class Event extends Model
 		'simulator_up_at' => 'Время подъема платформы',
 		'simulator_down_at' => 'Время опускания платформы',
 		'flight_invitation_sent_at' => 'Дата отправки приглашения на полет',
+		'pilot_id' => 'Фактический пилот',
 		'uuid' => 'Uuid',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
@@ -169,6 +170,7 @@ class Event extends Model
 		'notification_type',
 		'is_notified',
 		'flight_invitation_sent_at',
+		'pilot_id',
 		'uuid',
 		'data_json',
 	];
@@ -238,6 +240,11 @@ class Event extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'user_id', 'id');
+	}
+	
+	public function pilot()
+	{
+		return $this->belongsTo(User::class, 'pilot_id', 'id');
 	}
 	
 	public function comments()
