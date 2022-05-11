@@ -879,7 +879,7 @@ class DealController extends Controller
 						$bill->deal_id = $deal->id ?? 0;
 						$bill->deal_position_id = $position->id ?? 0;
 						$bill->location_id = $billLocationId;
-						$bill->payment_method_id = $paymentMethodId ?: $onlinePaymentMethod->id;
+						$bill->payment_method_id = $paymentMethodId ?: 0;
 						$bill->status_id = $billStatus->id ?? 0;
 						$bill->amount = $amount;
 						$bill->currency_id = $currency->id ?? 0;
