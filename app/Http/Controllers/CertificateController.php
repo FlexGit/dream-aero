@@ -320,13 +320,25 @@ class CertificateController extends Controller
 		
 		$position = DealPosition::find($this->request->id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-
+		
+		$deal = $position->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		$contractor = $deal->contractor;
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+		
+		$dealEmail = $deal->email ?? '';
+		$contractorEmail = $contractor->email ?? '';
+		if (!$dealEmail && !$contractorEmail) {
+			return null;
+		}
+		
 		$certificate = Certificate::find($this->request->certificate_id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
 		dispatch(new \App\Jobs\SendCertificateEmail($certificate));
 		
-		return response()->json(['status' => 'success', 'message' => 'Сертификат успешно отправлен']);
+		return response()->json(['status' => 'success', 'message' => 'Задание на отправку Сертификата принято']);
 	}
 	
 	/**

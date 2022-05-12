@@ -916,12 +916,29 @@ class EventController extends Controller
 		$position = DealPosition::find($this->request->id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
 		
+		/** @var Deal $deal */
+		$deal = $position->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		/** @var Bill $bill */
+		$bill = $position->bill;
+		if ($bill) {
+			// если к позиции привязан счет, то он должен быть оплачен
+			if ($bill->status->alias != Bill::PAYED_STATUS) {
+				return response()->json(['status' => 'error', 'reason' => 'Счет ' . $bill->number . ' не оплачен']);
+			}
+		} else {
+			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
+			$balance = $deal->balance();
+			if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Сделка не оплачена']);
+		}
+		
 		$event = Event::find($this->request->event_id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
 		dispatch(new \App\Jobs\SendFlightInvitationEmail($event));
 		
-		return response()->json(['status' => 'success', 'message' => 'Приглашение на полет успешно отправлено']);
+		return response()->json(['status' => 'success', 'message' => 'Задание на отправку Приглашения на полет принято']);
 	}
 	
 	/**

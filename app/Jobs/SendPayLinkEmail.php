@@ -28,7 +28,7 @@ class SendPayLinkEmail extends Job implements ShouldQueue {
 		if (!$deal) return null;
 		
 		$amount = $this->bill->amount;
-		if (!$amount) return null;
+		if ($amount <= 0) return null;
 		
 		$contractor = $this->bill->contractor;
 		if (!$contractor) return null;

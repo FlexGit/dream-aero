@@ -305,6 +305,6 @@ class BillController extends Controller
 		
 		dispatch(new \App\Jobs\SendPayLinkEmail($bill));
 		
-		return response()->json(['status' => 'success', 'message' => 'Ссылка на оплату успешно создано']);
+		return response()->json(['status' => 'success', 'message' => 'Задание на отправку Ссылки на оплату принято']);
 	}
 }
