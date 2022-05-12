@@ -927,6 +927,10 @@ class EventController extends Controller
 			if ($bill->status->alias != Bill::PAYED_STATUS) {
 				return response()->json(['status' => 'error', 'reason' => 'Счет ' . $bill->number . ' не оплачен']);
 			}
+			$amount = $bill->amount;
+			if ($amount <= 0) {
+				return response()->json(['status' => 'error', 'reason' => 'Некорректная сумма Счета ' . $bill->number]);
+			}
 		} else {
 			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
 			$balance = $deal->balance();
