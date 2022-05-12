@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
+use App\Models\Bill;
 use App\Models\City;
 use App\Models\Event;
 use App\Repositories\CityRepository;
@@ -61,7 +62,16 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		\Log::debug(7);
 		
 		$bill = $position->bill;
-		if (!$bill) return null;
+		if ($bill) {
+			// если к позиции привязан счет, то он должен быть оплачен
+			if ($bill->status->alias != Bill::PAYED_STATUS) {
+				return null;
+			}
+		} else {
+			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
+			$balance = $deal->balance();
+			if ($balance < 0) return null;
+		}
 		\Log::debug(8);
 		
 		$amount = $bill->amount;
