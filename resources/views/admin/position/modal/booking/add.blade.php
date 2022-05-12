@@ -5,7 +5,7 @@
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id">
 
 <div class="row">
-	<div class="col">
+	<div class="col-5">
 		<div class="form-group">
 			<label for="location_id">Локация</label>
 			<select class="form-control" id="location_id" name="location_id">
@@ -22,7 +22,7 @@
 			</select>
 		</div>
 	</div>
-	<div class="col">
+	<div class="col-4">
 		<div class="form-group">
 			<label for="promo_id">Акция</label>
 			<select class="form-control" id="promo_id" name="promo_id">
@@ -33,7 +33,7 @@
 			</select>
 		</div>
 	</div>
-	<div class="col">
+	<div class="col-3">
 		<div class="form-group">
 			<label for="promocode_id">Промокод</label>
 			<select class="form-control" id="promocode_id" name="promocode_id">

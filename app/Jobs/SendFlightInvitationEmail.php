@@ -54,7 +54,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		$position = $this->event->dealPosition;
 		if (!$position) return null;
 		
-		$amount = 0;
+		//$amount = 0;
 		$bill = $position->bill;
 		/*if ($bill) {
 			// если к позиции привязан счет, то он должен быть оплачен
@@ -85,7 +85,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			'flightDate' => $this->event->start_at ?? '',
 			'location' => $location,
 			'simulator' => $simulator,
-			'amount' => $amount,
+			'amount' => $bill->amount ?? 0,
 			'city' => $city,
 			'payLink' => $bill ? ((($city->version == City::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid) : '',
 		];
