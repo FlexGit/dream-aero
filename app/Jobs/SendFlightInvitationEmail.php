@@ -35,31 +35,24 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 				return null;
 			}
 		}
-		\Log::debug(1);
 		
 		$city = $this->event->city;
 		if (!$city) return null;
-		\Log::debug(2);
 
 		$contractor = $this->event->contractor;
 		if (!$contractor) return null;
-		\Log::debug(3);
 		
 		$deal = $this->event->deal;
 		if (!$deal) return null;
-		\Log::debug(4);
 		
 		$location = $this->event->location;
 		if (!$location) return null;
-		\Log::debug(5);
 		
 		$simulator = $this->event->simulator;
 		if (!$simulator) return null;
-		\Log::debug(6);
 		
 		$position = $this->event->dealPosition;
 		if (!$position) return null;
-		\Log::debug(7);
 		
 		$amount = 0;
 		$bill = $position->bill;
@@ -75,7 +68,6 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			$balance = $deal->balance();
 			if ($balance < 0) return null;
 		}
-		\Log::debug(8);
 		
 		$dealEmail = $deal->email ?? '';
 		$dealName = $deal->name ?? '';
@@ -84,11 +76,9 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		if (!$dealEmail && !$contractorEmail) {
 			return null;
 		}
-		\Log::debug(10);
 		
 		$simulatorAlias = $simulator->alias ?? '';
 		if (!$simulatorAlias) return null;
-		\Log::debug(11);
 		
 		$messageData = [
 			'name' => $dealName ?: $contractorName,
