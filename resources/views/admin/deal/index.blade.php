@@ -157,6 +157,8 @@
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
+	<script src="{{ asset('js/admin/moment.min.js') }}"></script>
+	<script src="{{ asset('js/admin/moment-timezone-with-data.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
@@ -374,13 +376,46 @@
 				$('#contractor_id').val('');
 			});
 
-			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free', function() {
+			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at', function() {
 				calcProductAmount();
+
+				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at']) !== -1) {
+					validateFlightDate();
+				}
+			});
+
+			$(document).on('keyup', '#product_id, #flight_date_at, #flight_time_at', function() {
+				validateFlightDate();
 			});
 
 			$(document).on('keyup', '#certificate', function() {
 				calcProductAmount();
 			});
+
+			function validateFlightDate() {
+				var $eventStopElement = $('.js-event-stop-at'),
+					$isValidFlightDate = $('#is_valid_flight_date'),
+					$product = $('#product_id'),
+					$flightDate = $('#flight_date_at'),
+					$flightTime = $('#flight_time_at'),
+					duration = $product.find(':selected').data('duration');
+
+				if (($product.val() > 0) && duration && $flightDate.val().length && $flightTime.val().length) {
+					var flightStartAt = moment(new Date($flightDate.val() + 'T' + $flightTime.val()), 'DD.MM.YYYY HH:mm'),
+						flightStopAt = flightStartAt.add(duration, 'm');
+
+					if (!flightStopAt.isAfter($flightDate.val(), 'day')) {
+						$isValidFlightDate.val(1);
+						$eventStopElement.text('Окончание полета: ' + flightStopAt.format('DD.MM.YYYY HH:mm'));
+					} else {
+						$isValidFlightDate.val(0);
+						$eventStopElement.text('Некорректное начало полета');
+					}
+				} else {
+					$isValidFlightDate.val(0);
+					$eventStopElement.text('');
+				}
+			}
 
 			function calcProductAmount() {
 				$.ajax({

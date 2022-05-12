@@ -53,7 +53,7 @@
 				@foreach($products ?? [] as $productTypeName => $productId)
 					<optgroup label="{{ $productTypeName }}">
 						@foreach($productId as $product)
-							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($product->id == $position->product_id) selected @endif>{{ $product->name }}</option>
+							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" data-duration="{{ $product->duration }}" @if($product->id == $position->product_id) selected @endif>{{ $product->name }}</option>
 						@endforeach
 					</optgroup>
 				@endforeach
@@ -61,13 +61,19 @@
 		</div>
 	</div>
 	<div class="col-5">
-		<label for="flight_date_at">Желаемая дата и время полета</label>
+		<label for="flight_date_at">Дата и время начала полета</label>
 		<div class="row">
-			<div class="col-7">
-				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d') }}">
+			<div class="d-flex">
+				<div class="col-7">
+					<input type="date" class="form-control" id="flight_date_at" name="flight_date_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d') }}">
+				</div>
+				<div class="col-5">
+					<input type="time" class="form-control" id="flight_time_at" name="flight_time_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('H:i') }}">
+				</div>
 			</div>
-			<div class="col-5">
-				<input type="time" class="form-control" id="flight_time_at" name="flight_time_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('H:i') }}">
+			<div>
+				<input type="hidden" id="is_valid_flight_date" name="is_valid_flight_date" value="1">
+				<span class="js-event-stop-at"></span>
 			</div>
 		</div>
 	</div>

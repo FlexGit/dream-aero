@@ -66,7 +66,7 @@
 				<div class="row mt-3">
 					<div class="col">
 						<div class="form-group">
-							<label>Дата и время</label>
+							<label>Дата и время начала полета</label>
 							<div class="d-flex">
 								<input type="date" class="form-control" name="start_at_date" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('Y-m-d') : '' }}" placeholder="Дата начала полета">
 								<input type="time" class="form-control ml-2" name="start_at_time" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('H:i') : '' }}" placeholder="Время начала полета">

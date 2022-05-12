@@ -699,6 +699,11 @@ class DealController extends Controller
 		$isRepeatedFlight = (bool)$this->request->is_repeated_flight ?? false;
 		$isUnexpectedFlight = (bool)$this->request->is_unexpected_flight ?? false;
 		$duration = $this->request->duration ?? 0;
+		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
+		
+		if (!in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE]) && in_array($eventType, [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT]) && !$isValidFlightDate) {
+			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
+		}
 		
 		$product = Product::find($productId);
 		if (!$product) {

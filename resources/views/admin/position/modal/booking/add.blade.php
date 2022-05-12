@@ -54,7 +54,7 @@
 				@foreach($products ?? [] as $productTypeName => $productId)
 					<optgroup label="{{ $productTypeName }}">
 						@foreach($productId as $product)
-							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}">{{ $product->name }}</option>
+							<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" data-duration="{{ $product->duration }}">{{ $product->name }}</option>
 						@endforeach
 					</optgroup>
 				@endforeach
@@ -62,13 +62,19 @@
 		</div>
 	</div>
 	<div class="col-5">
-		<label for="flight_date_at">Желаемая дата и время полета</label>
+		<label for="flight_date_at">Дата и время начала полета</label>
 		<div class="row">
-			<div class="col-7">
-				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at">
+			<div class="d-flex">
+				<div class="col-7">
+					<input type="date" class="form-control" id="flight_date_at" name="flight_date_at">
+				</div>
+				<div class="col-5">
+					<input type="time" class="form-control" id="flight_time_at" name="flight_time_at">
+				</div>
 			</div>
-			<div class="col-5">
-				<input type="time" class="form-control" id="flight_time_at" name="flight_time_at">
+			<div>
+				<input type="hidden" id="is_valid_flight_date" name="is_valid_flight_date">
+				<span class="js-event-stop-at"></span>
 			</div>
 		</div>
 	</div>	<div class="col-3">

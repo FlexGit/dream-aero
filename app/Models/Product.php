@@ -396,7 +396,7 @@ class Product extends Model
 					$query->where('active_to_at', '>=', $date)
 						->orWhereNull('active_to_at');
 				})
-				->latest()
+				->orderByDesc('active_from_at')
 				->get();
 			foreach ($promos as $promo) {
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
