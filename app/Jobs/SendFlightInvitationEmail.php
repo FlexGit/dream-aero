@@ -56,7 +56,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		
 		$amount = 0;
 		$bill = $position->bill;
-		if ($bill) {
+		/*if ($bill) {
 			// если к позиции привязан счет, то он должен быть оплачен
 			if ($bill->status->alias != Bill::PAYED_STATUS) {
 				return null;
@@ -67,7 +67,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
 			$balance = $deal->balance();
 			if ($balance < 0) return null;
-		}
+		}*/
 		
 		$dealEmail = $deal->email ?? '';
 		$dealName = $deal->name ?? '';
@@ -86,7 +86,6 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			'location' => $location,
 			'simulator' => $simulator,
 			'amount' => $amount,
-			'bill' => $bill,
 			'city' => $city,
 			'payLink' => $bill ? ((($city->version == City::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid) : '',
 		];

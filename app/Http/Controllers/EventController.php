@@ -921,7 +921,7 @@ class EventController extends Controller
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
 		/** @var Bill $bill */
-		$bill = $position->bill;
+		/*$bill = $position->bill;
 		if ($bill) {
 			// если к позиции привязан счет, то он должен быть оплачен
 			if ($bill->status->alias != Bill::PAYED_STATUS) {
@@ -935,7 +935,7 @@ class EventController extends Controller
 			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
 			$balance = $deal->balance();
 			if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Сделка не оплачена']);
-		}
+		}*/
 		
 		$event = Event::find($this->request->event_id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
