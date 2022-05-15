@@ -24,12 +24,11 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		$certificateFilePath = isset($this->certificate->data_json['certificate_file_path']) ? $this->certificate->data_json['certificate_file_path'] : [];
+		$certificateFilePath = isset($this->certificate->data_json['certificate_file_path']) ? $this->certificate->data_json['certificate_file_path'] : '';
 		if ($certificateFilePath) {
-			$certificateFile = Storage::disk('private')->exists($certificateFilePath);
+			$certificateFileExists = Storage::disk('private')->exists($certificateFilePath);
 		}
-
-		if (!$certificateFilePath || !$certificateFile) {
+		if (!$certificateFilePath || !$certificateFileExists) {
 			$this->certificate = $this->certificate->generateFile();
 			if (!$this->certificate) {
 				return null;
@@ -53,6 +52,13 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			return null;
 		}
 		
+		$city = $this->certificate->city;
+		if ($city) {
+			$rulesFileName = 'RULES_' . mb_strtoupper($city->alias);
+		} else {
+			$rulesFileName = 'RULES_MAIN';
+		}
+		
 		$messageData = [
 			'name' => $dealName ?: $contractorName,
 			'city' => $position->city ?? null,
@@ -63,11 +69,11 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 
 		$subject = env('APP_NAME') . ': сертификат на полет';
 		
-		Mail::send(['html' => "admin.emails.send_certificate"], $messageData, function ($message) use ($subject, $recipients) {
+		Mail::send(['html' => "admin.emails.send_certificate"], $messageData, function ($message) use ($subject, $recipients, $rulesFileName) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->attach(Storage::disk('private')->path($this->certificate->data_json['certificate_file_path']));
-			$message->attach(Storage::disk('private')->path('rule/RULES_MAIN.jpg'));
+			$message->attach(Storage::disk('private')->path('rule/' . $rulesFileName . '.jpg'));
 			$message->to($recipients);
 		});
 		

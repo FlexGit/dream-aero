@@ -27,9 +27,11 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		$flightInvitationFilePath = $this->event->data_json['flight_invitation_file_path'] ?? '';
-		$flightInvitationFileExists = Storage::disk('private')->exists($flightInvitationFilePath);
-		if (!isset($flightInvitationFilePath) || !$flightInvitationFileExists) {
+		$flightInvitationFilePath = isset($this->event->data_json['flight_invitation_file_path']) ? $this->event->data_json['flight_invitation_file_path'] : '';
+		if ($flightInvitationFilePath) {
+			$flightInvitationFileExists = Storage::disk('private')->exists($flightInvitationFilePath);
+		}
+		if (!$flightInvitationFilePath || !$flightInvitationFileExists) {
 			$this->event = $this->event->generateFile();
 			if (!$this->event) {
 				return null;
@@ -99,7 +101,6 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->attach(Storage::disk('private')->path($flightInvitationFilePath));
-			$message->attach(Storage::disk('private')->path('rule/RULES_MAIN.jpg'));
 			$message->to($recipients);
 		});
 		
