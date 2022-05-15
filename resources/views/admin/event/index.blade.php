@@ -863,7 +863,7 @@
 			});
 
 			var $upcommingEventscontainer = $('.js-upcomming-events-container'),
-				$upcommingEventsIcon = $(this).find('i.fas'),
+				$upcommingEventsIcon = $('.js-upcomming-events').find('i.fas'),
 				isUpcommingEventsShow = localStorage.getItem('isUpcommingEventsShow');
 
 			if (isUpcommingEventsShow == 0 || isUpcommingEventsShow == null) {

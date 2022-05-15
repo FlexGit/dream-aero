@@ -400,13 +400,13 @@ return [
                 ],*/
             ],
         ],
-		/*[
+		[
 			'text'        => 'Wiki',
 			'url'         => '/wiki',
 			'icon'        => 'fas fa-fw fa-info',
 			'label'       => '',
 			'label_color' => '',
-		],*/
+		],
 		[
 			'text'    => 'Сайты',
 			'icon'    => 'fas fa-sitemap',
@@ -439,6 +439,11 @@ return [
 						[
 							'text' => 'Страницы',
 							'url'  => '/site/ru/pages',
+							'icon' => '',
+						],
+						[
+							'text' => 'Промобоксы',
+							'url'  => '/site/ru/promobox',
 							'icon' => '',
 						],
 					],

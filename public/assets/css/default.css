@@ -223,3 +223,61 @@ h1.block-title:after {
 	position: absolute;
 	background-size: 130px 210px;
 }
+
+.overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.7);
+	transition: opacity 500ms;
+	visibility: hidden;
+	opacity: 0;
+	z-index: 999;
+}
+.overlay:target {
+	visibility: visible;
+	opacity: 1;
+}
+
+.popup-promo {
+	margin: 200px auto;
+	padding: 20px;
+	background: #fff;
+	border-radius: 5px;
+	width: 30%;
+	position: relative;
+	transition: all 5s ease-in-out;
+}
+
+.popup-promo h2 {
+	margin-top: 0;
+	color: #333;
+	/*font-family: Tahoma, Arial, sans-serif;*/
+}
+.popup-promo .close {
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	transition: all 200ms;
+	font-size: 30px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #333;
+}
+.popup-promo .close:hover {
+	color: #000;
+}
+.popup-promo .content {
+	max-height: 30%;
+	overflow: auto;
+	text-align: center;
+	margin-top: 20px;
+}
+
+@media screen and (max-width: 700px){
+	.popup-promo {
+		width: 70%;
+	}
+}

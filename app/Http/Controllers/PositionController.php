@@ -281,6 +281,7 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 		
+		$city = null;
 		if ($cityId) {
 			$city = City::find($cityId);
 			if (!$city) {
@@ -327,7 +328,7 @@ class PositionController extends Controller
 			$certificate = new Certificate();
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			$certificate->status_id = $certificateStatus->id ?? 0;
-			$certificate->city_id = $city->id ?? 0;
+			$certificate->city_id = $cityId;
 			$certificate->product_id = $product->id ?? 0;
 			$certificatePeriod = ($product && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
 			$certificate->expire_at = Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
@@ -339,7 +340,7 @@ class PositionController extends Controller
 			$position->duration = $product->duration ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
-			$position->city_id = $city->id ?? 0;
+			$position->city_id = $cityId;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = $promocodeId ?? 0;
 			$position->is_certificate_purchase = true;

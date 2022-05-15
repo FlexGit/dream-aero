@@ -369,6 +369,7 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 		
+		$city = null;
 		if ($cityId) {
 			$city = City::find($cityId);
 			if (!$city) {
@@ -527,7 +528,7 @@ class DealController extends Controller
 					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 				}
 				
-				if (!$paymentMethodId || ($paymentMethodId && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS)) {
+				if ($source == Deal::WEB_SOURCE) {
 					$billLocation = $city->getLocationForBill();
 					if (!$billLocation) {
 						\DB::rollback();
@@ -546,7 +547,7 @@ class DealController extends Controller
 				$bill->deal_id = $deal->id ?? 0;
 				$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
-				$bill->payment_method_id = $paymentMethodId ?: $onlinePaymentMethod->id;
+				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : ($paymentMethodId ?? 0);
 				$bill->status_id = $billStatus->id ?? 0;
 				$bill->amount = $amount;
 				$bill->currency_id = $currency->id ?? 0;
@@ -867,7 +868,7 @@ class DealController extends Controller
 							$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 						}
 						
-						if (!$paymentMethodId || ($paymentMethodId && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS)) {
+						if ($source == Deal::WEB_SOURCE) {
 							$billLocation = $city->getLocationForBill();
 							if (!$billLocation) {
 								\DB::rollback();
@@ -886,7 +887,7 @@ class DealController extends Controller
 						$bill->deal_id = $deal->id ?? 0;
 						$bill->deal_position_id = $position->id ?? 0;
 						$bill->location_id = $billLocationId;
-						$bill->payment_method_id = $paymentMethodId ?: 0;
+						$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : ($paymentMethodId ?? 0);
 						$bill->status_id = $billStatus->id ?? 0;
 						$bill->amount = $amount;
 						$bill->currency_id = $currency->id ?? 0;
@@ -1109,7 +1110,7 @@ class DealController extends Controller
 					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 				}
 				
-				if (!$paymentMethodId || ($paymentMethodId && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS)) {
+				if ((!$paymentMethodId && $source == Deal::WEB_SOURCE) || ($paymentMethodId && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS)) {
 					$billLocation = $city->getLocationForBill();
 					if (!$billLocation) {
 						\DB::rollback();
@@ -1128,7 +1129,7 @@ class DealController extends Controller
 				$bill->deal_id = $deal->id ?? 0;
 				$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
-				$bill->payment_method_id = $paymentMethodId ?: $onlinePaymentMethod->id;
+				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : ($paymentMethodId ?? 0);
 				$bill->status_id = $billStatus->id ?? 0;
 				$bill->amount = $amount;
 				$bill->currency_id = $currency->id ?? 0;

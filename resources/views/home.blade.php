@@ -174,7 +174,7 @@
 			<h2 class="block-title">@lang('main.home.наша-команда')</h2>
 			<div class="owl-carousel">
 				@foreach($users as $user)
-					@if(!$user->data_json || !array_key_exists('photo_file_path', $user->data_json))
+					@if(!$user->data_json || !array_key_exists('photo_file_path', $user->data_json) || !$user->data_json['photo_file_path'])
 						@continue
 					@endif
 					<div>

@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
 			$table->integer('city_id')->index()->default(0)->comment('город');
 			$table->integer('location_id')->index()->default(0)->comment('локация');
 			$table->string('phone', 50)->nullable()->comment('телефон');
-			$table->timestamp('birthdate')->nullable()->comment('дата рождения');
+			$table->date('birthdate')->nullable()->comment('дата рождения');
 			$table->string('position')->nullable()->comment('должность');
 			$table->boolean('is_reserved')->default(0)->comment('признак запасного сотрудника');
 			$table->boolean('is_official')->default(0)->comment('признак официального трудоустройства');

@@ -83,12 +83,12 @@ class SendPromocodeAfterFlightEmail extends Command
 			if ($promocode) continue;
 
 			// проверяем, есть ли в данном городе локация с другим типом авиатренажера
-			\DB::connection()->enableQueryLog();
+			//\DB::connection()->enableQueryLog();
 			$location = Location::where('is_active', true)
 				->where('city_id', $city->id)
 				->whereRelation('simulators', 'flight_simulators.id', '!=', $simulator->id)
 				->first();
-			\Log::debug(\DB::getQueryLog());
+			//\Log::debug(\DB::getQueryLog());
 			if (!$location) continue;
 			
 			$anotherSimulator = FlightSimulator::where('is_active', true)

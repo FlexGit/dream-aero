@@ -237,8 +237,6 @@ class UserController extends Controller
 			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
 		}
 		
-		\Log::debug($this->request->birthdate);
-
 		$user = new User();
 		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;

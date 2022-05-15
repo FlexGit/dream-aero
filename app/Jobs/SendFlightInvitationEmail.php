@@ -28,9 +28,9 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 	 */
 	public function handle() {
 		$flightInvitationFilePath = isset($this->event->data_json['flight_invitation_file_path']) ? $this->event->data_json['flight_invitation_file_path'] : '';
-		if ($flightInvitationFilePath) {
-			$flightInvitationFileExists = Storage::disk('private')->exists($flightInvitationFilePath);
-		}
+		$flightInvitationFileExists = Storage::disk('private')->exists($flightInvitationFilePath);
+		
+		// если файла приглашения по какой-то причине не оказалось, генерим его
 		if (!$flightInvitationFilePath || !$flightInvitationFileExists) {
 			$this->event = $this->event->generateFile();
 			if (!$this->event) {
