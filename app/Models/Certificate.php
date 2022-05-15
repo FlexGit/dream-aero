@@ -212,7 +212,7 @@ class Certificate extends Model
 						$font->size(40);
 						$font->color('#333333');
 					});
-					$certificateFile->text($this->product->duration ?? '-', 1340, 2590, function ($font) use ($fontPath) {
+					$certificateFile->text($product->duration ?? '-', 1340, 2590, function ($font) use ($fontPath) {
 						$font->file($fontPath);
 						$font->size(56);
 						$font->color('#333333');
@@ -228,10 +228,10 @@ class Certificate extends Model
 						$font->size(22);
 						$font->color('#333333');
 					});
-					$certificateFile->text($this->product->duration ?? '-', 355, 1225, function ($font) use ($fontPath) {
+					$certificateFile->text($product->duration ?? '-', 355, 1225, function ($font) use ($fontPath) {
 						$font->file($fontPath);
 						$font->size(46);
-						$font->color('#ffffff');
+						$font->color('#333333');
 					});
 				}
 			break;
