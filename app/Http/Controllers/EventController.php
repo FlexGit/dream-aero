@@ -127,9 +127,11 @@ class EventController extends Controller
 			switch ($event->event_type) {
 				case Event::EVENT_TYPE_DEAL:
 					$balance = ($event->deal) ? $event->deal->balance() : 0;
+					$position = $event->dealPosition;
 					
 					$title = $event->deal ? $event->deal->name . ' ' . HelpFunctions::formatPhone($event->deal->phone) : '';
-					$title .= ($event->dealPosition && $event->dealPosition->product) ? ' ' . $event->dealPosition->product->name : '';
+					$title .= ($position && $position->product) ? ' ' . $position->product->name : '';
+					$title .= ($position && $position->certificate) ? ' ' . $position->certificate->number : '';
 					
 					$allDay = false;
 					
