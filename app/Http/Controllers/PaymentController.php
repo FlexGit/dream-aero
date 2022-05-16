@@ -107,6 +107,7 @@ class PaymentController extends Controller
 			return 'FAIL';
 		}
 		
+		$certificate = null;
 		if ($bill->status && $bill->status->alias != Bill::PAYED_STATUS) {
 			$payedStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::PAYED_STATUS);
 			$bill->status_id = $payedStatus->id;
@@ -130,6 +131,8 @@ class PaymentController extends Controller
 				}
 			}
 		}
+		
+		dispatch(new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate));
 		
 		return 'SUCCESS';
 	}

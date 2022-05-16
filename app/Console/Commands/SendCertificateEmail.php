@@ -70,7 +70,9 @@ class SendCertificateEmail extends Command
 			}
    
 			try {
-				dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+				//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+				$job = new \App\Jobs\SendCertificateEmail($certificate);
+				$job->handle();
 			} catch (Throwable $e) {
 				\Log::debug('500 - ' . $e->getMessage());
 			
