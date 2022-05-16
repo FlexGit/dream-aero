@@ -346,7 +346,7 @@
 								</div>
 								@if(count($position->event->comments))
 									<div class="text-center mt-2" style="margin: 0 auto;max-width: 300px;" title="Комментарий к полету">
-										<div class="text-left" style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;">
+										<div class="text-left" style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;white-space: normal;">
 											@foreach($position->event->comments ?? [] as $comment)
 												<div>
 													<i class="far fa-comment-dots"></i> <i>{{ $comment->name }}</i>
