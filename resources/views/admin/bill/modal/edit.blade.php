@@ -67,11 +67,13 @@
 		</div>
 	</div>
 	<div class="col-6">
-		<div class="form-group">
-			<label>Ссылка на оплату</label>
-			<div>
-				[ <a href="{{ (($bill->deal->city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid }}" target="_blank">открыть</a> ]
+		@if ($bill->paymentMethod->alias == app('\App\Models\PaymentMethod')::ONLINE_ALIAS)
+			<div class="form-group">
+				<label>Ссылка на оплату</label>
+				<div>
+					[ <a href="{{ (($bill->deal->city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid }}" target="_blank">открыть</a> ]
+				</div>
 			</div>
-		</div>
+		@endif
 	</div>
 </div>
