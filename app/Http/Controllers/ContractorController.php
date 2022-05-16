@@ -265,7 +265,7 @@ class ContractorController extends Controller
 					->orWhere("email", "LIKE", "%{$q}%")
 					->orWhere("phone", "LIKE", "%{$q}%");
 			})
-			->whereRelation('city', 'version', '=', $user->version)
+			/*->whereRelation('city', 'version', '=', $user->version)*/
 			//->where("email", "LIKE", "%{$q}%")
 			->orderBy('name')
 			->orderBy('lastname');
