@@ -41,8 +41,8 @@ class AddContractorScore extends Command
     public function handle()
     {
     	$events = Event::where('event_type', Event::EVENT_SOURCE_DEAL)
-			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
-			->where('stop_at', '>=', Carbon::today()->format('Y-m-d H:i:s'))
+			->where('stop_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->where('stop_at', '>=', Carbon::now()->subHour()->format('Y-m-d H:i:s'))
 			->with('deal')
 			->get();
     	foreach ($events as $event) {
