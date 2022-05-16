@@ -385,6 +385,9 @@ class EventController extends Controller
 				
 				//\DB::connection()->enableQueryLog();
 				$existingEvent = Event::where('event_type', $shiftUser)
+					->where('city_id', $cityId)
+					->where('location_id', $locationId)
+					->where('flight_simulator_id', $simulatorId)
 					->where('start_at', '<', Carbon::parse($stopAt)->format('Y-m-d H:i'))
 					->where('stop_at', '>', Carbon::parse($startAt)->format('Y-m-d H:i'))
 					->first();
