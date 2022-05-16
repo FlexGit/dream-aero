@@ -655,6 +655,9 @@ class PositionController extends Controller
 		$position = DealPosition::find($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
 		
+		$certificate = $position->certificate;
+		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
+		
 		$rules = [
 			'product_id' => 'required|numeric|min:0|not_in:0',
 			'city_id' => 'required|numeric|min:0',
@@ -727,7 +730,7 @@ class PositionController extends Controller
 		try {
 			\DB::beginTransaction();
 
-			$position->product_id = $product->id ?? 0;
+			$position->product_id = $product->id;
 			$position->duration = $product->duration ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
@@ -736,6 +739,9 @@ class PositionController extends Controller
 			$position->promocode_id = $promocodeId ?? 0;
 			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
+			
+			$certificate->product_id = $product->id;
+			$certificate->save();
 			
 			if ($promocodeId) {
 				$deal = $position->deal;
