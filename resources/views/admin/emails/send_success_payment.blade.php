@@ -7,5 +7,8 @@
 	<p>Сертфиикат: {{ $certificate->number }}</p>
 @endif
 <p>Контрагент: {{ $contractor->fio() }} (e-mail: {{ $contractor->email }}, тел.: {{ $contractor->phone }})</p>
+@if($location)
+	<p>Локация: {{ $location->name }}</p>
+@endif
 <br>
 <p><small>Письмо отправлено автоматически</small></p>
