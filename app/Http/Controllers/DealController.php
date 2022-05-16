@@ -170,9 +170,9 @@ class DealController extends Controller
 					});
 			});
 		}
-		if (!$user->isSuperAdmin() && $user->city) {
-			$deals = $deals->whereIn('city_id', [$user->city->id, 0]);
-		}
+		/*if (!$user->isSuperAdmin() && $user->city) {
+			$deals = $deals->where('city_id', $user->city->id);
+		}*/
 		if ($id) {
 			$deals = $deals->where('id', '<', $id);
 		}
