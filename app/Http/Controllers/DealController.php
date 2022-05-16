@@ -116,11 +116,11 @@ class DealController extends Controller
 		
 		$id = $this->request->id ?? 0;
 		
-		$deals = Deal::whereHas('contractor', function ($query) use ($user) {
+		$deals = Deal::/*whereHas('contractor', function ($query) use ($user) {
 			$query->whereHas('city', function ($query) use ($user) {
 				$query->where('version', $user->version);
 			});
-		})->orderBy('id', 'desc');
+		})->*/orderBy('id', 'desc');
 		if ($this->request->filter_status_id) {
 			$deals = $deals->where(function ($query) {
 				$query->whereIn('status_id', $this->request->filter_status_id)
@@ -170,9 +170,9 @@ class DealController extends Controller
 					});
 			});
 		}
-		/*if (!$user->isSuperAdmin() && $user->city) {
+		if (!$user->isSuperAdmin() && $user->city) {
 			$deals = $deals->where('city_id', $user->city->id);
-		}*/
+		}
 		if ($id) {
 			$deals = $deals->where('id', '<', $id);
 		}
