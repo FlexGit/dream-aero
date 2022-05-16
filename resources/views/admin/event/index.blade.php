@@ -676,10 +676,11 @@
 				if (isChecked) {
 					$calendarContainer.show();
 					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').removeClass('hidden');
-					calendarArr[locationId][simulatorId].refetchEvents();
+					calendarArr[$(this).data('location_id')][$(this).data('simulator_id')].refetchEvents();
 				} else {
 					$calendarContainer.hide();
 					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').addClass('hidden');
+					calendarArr[$(this).data('location_id')][$(this).data('simulator_id')].refetchEvents();
 				}
 			});
 
