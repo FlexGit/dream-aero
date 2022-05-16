@@ -2842,6 +2842,7 @@ class ApiController extends Controller
 			$deal->name = $this->request->name;
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
+			$deal->city_id =  $city ? $city->id : 0;
 			$deal->source = Deal::MOB_SOURCE;
 			$dealData = [];
 			/*$dealData['comment'] = $this->request->comment;
@@ -3027,6 +3028,7 @@ class ApiController extends Controller
 			$deal->name = $this->request->name;
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
+			$deal->city_id =  $city ? $city->id : 0;
 			$deal->source = Deal::MOB_SOURCE;
 			$dealData = [];
 			/*$dealData['comment'] = $this->request->comment;

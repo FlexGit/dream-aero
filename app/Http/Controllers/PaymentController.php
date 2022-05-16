@@ -122,7 +122,9 @@ class PaymentController extends Controller
 				if ($position->is_certificate_purchase && $certificate) {
 					$certificate = $certificate->generateFile();
 					
-					dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+					//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+					$job = new \App\Jobs\SendCertificateEmail($certificate);
+					$job->handle();
 				}
 				
 				// если было выбрано начисление бонусов Аэрофлот
@@ -132,7 +134,9 @@ class PaymentController extends Controller
 			}
 		}
 		
-		dispatch(new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate));
+		//dispatch(new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate));
+		$job = new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate);
+		$job->handle();
 		
 		return 'SUCCESS';
 	}

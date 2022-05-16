@@ -497,10 +497,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
 		Route::get('city/change', [MainController::class, 'changeCity']);
 		
-		/*Route::get('payment/success', [PaymentController::class, 'paymentSuccess'])->name('paymentSuccess');
-		Route::get('payment/fail', [PaymentController::class, 'paymentFail'])->name('paymentFail');
-		Route::get('payment/{uuid}/{type?}', [PaymentController::class, 'payment'])->name('payment');*/
-
 		Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
 		Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');
 		
