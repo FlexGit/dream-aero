@@ -607,6 +607,8 @@ class DealController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
+		
+		\Log::debug($this->request);
 
 		if ($this->request->source == Deal::WEB_SOURCE) {
 			$rules = [
