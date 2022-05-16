@@ -243,7 +243,7 @@
 						$modalDialog.addClass('modal-lg');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
-						console.log(locationId);
+						//console.log(info);
 						$.ajax({
 							url: url,
 							type: 'GET',

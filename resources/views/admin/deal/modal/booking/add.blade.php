@@ -1,7 +1,7 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="contractor_id" name="contractor_id">
 <input type="hidden" id="amount" name="amount">
-{{--<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">--}}
+<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
 <input type="hidden" id="source" name="source" value="{{ $source ?? '' }}">
 
