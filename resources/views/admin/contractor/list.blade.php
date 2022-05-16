@@ -68,7 +68,7 @@
 				@endif
 			</div>
 			<div class="col-12 text-nowrap">
-				<small>[<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/score" data-action="/contractor/{{ $contractor->id }}/score" data-method="POST" data-type="score" data-title="История начисления баллов и времени налета" title="История История начисления баллов и времени налета">История начисления</a>]</small>
+				<small>[<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/score" data-action="{{--/contractor/{{ $contractor->id }}/score--}}" data-method="POST" data-type="score" data-title="История начисления баллов и времени налета" title="История История начисления баллов и времени налета">История начисления</a>]</small>
 			</div>
 		</div>
 	</td>
