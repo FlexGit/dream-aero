@@ -92,6 +92,8 @@
 @endsection
 
 @push('scripts')
+	<script src="{{ asset('js/deal.js?v=' . time()) }}"></script>
+
 	<script>
 		$(function() {
 			@if(!$error && $payType)
