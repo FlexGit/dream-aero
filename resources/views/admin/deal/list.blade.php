@@ -102,6 +102,11 @@
 					<div class="text-nowrap" style="line-height: 0.9em;" title="Дата создания">
 						от {{ $bill->created_at ? $bill->created_at->format('Y-m-d H:i') : '' }}
 					</div>
+					@if($bill->location)
+						<div class="text-nowrap" title="Локация">
+							{{ $bill->location->name ?? '' }}
+						</div>
+					@endif
 					<div>
 						@if($bill->currency)
 							@if($bill->currency->alias == app('\App\Models\Currency')::RUB_ALIAS)
