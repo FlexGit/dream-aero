@@ -352,16 +352,16 @@ class CertificateController extends Controller
 			abort(404);
 		}
 		
-		$certificateFilePath = isset($certificate->data_json['certificate_file_path']) ? $certificate->data_json['certificate_file_path'] : '';
-		$certificateFileExists = Storage::disk('private')->exists($certificateFilePath);
+		//$certificateFilePath = isset($certificate->data_json['certificate_file_path']) ? $certificate->data_json['certificate_file_path'] : '';
+		//$certificateFileExists = Storage::disk('private')->exists($certificateFilePath);
 
 		// если файла сертификата по какой-то причине не оказалось, генерим его
-		if (!$certificateFilePath || !$certificateFileExists) {
+		//if (!$certificateFilePath || !$certificateFileExists) {
 			$certificate = $certificate->generateFile();
 			if (!$certificate) {
 				abort(404);
 			}
-		}
+		//
 		
 		$certificateFilePath = (is_array($certificate->data_json) && array_key_exists('certificate_file_path', $certificate->data_json)) ? $certificate->data_json['certificate_file_path'] : '';
 		
