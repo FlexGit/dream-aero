@@ -275,7 +275,8 @@ class MainController extends Controller
 	 */
 	public function virtualTourAirbusMobile()
 	{
-		return view('airbus-virttour-mobile');
+		//return view('airbus-virttour-mobile');
+		return view('airbus-virttour');
 	}
 
 	/**
