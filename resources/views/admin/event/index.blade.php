@@ -34,7 +34,7 @@
 	</div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-xl">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="modalLabel">Событие</h5>
@@ -289,7 +289,13 @@
 							type = $(this).data('event_type'),
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						if ($.inArray(title, ['Тестовый полет', 'Уборка', 'Перерыв']) !== -1) return;
+						if ((title.indexOf('Тестовый полет') !== -1)
+							|| (title.indexOf('Уборка') !== -1)
+							|| (title.indexOf('Перерыв') !== -1)
+							|| (title.indexOf('Полет сотрудника') !== -1)
+						) {
+							return;
+						}
 
 						$(info.el).tooltip('hide');
 
@@ -463,12 +469,26 @@
 				var action = $(this).attr('action'),
 					method = $(this).attr('method'),
 					formId = $(this).attr('id'),
-					data = $(this).serializeArray();
+					$docFile = $('#doc_file');
+
+				var formData = new FormData($(this)[0]);
+				if ($docFile.val()) {
+					formData.append('doc_file', $docFile.prop('files')[0]);
+				}
+
+				var realMethod = method;
+				if (method === 'PUT') {
+					formData.append('_method', 'PUT');
+					realMethod = 'POST';
+				}
 
 				$.ajax({
 					url: action,
-					type: method,
-					data: data,
+					type: realMethod,
+					data: formData,
+					processData: false,
+					contentType: false,
+					cache: false,
 					success: function(result) {
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
@@ -817,22 +837,24 @@
 
 				switch (value) {
 					case 'test_flight':
-						$form.find('#payment_method_id').closest('.row').show();
-						$form.find('#email').closest('.row').show();
-						$form.find('#product_id').closest('.row').show();
-						$form.find('#comment').closest('.row').show();
-						$form.find('#extra_time').closest('.row').show();
-						$form.find('#duration').closest('.js-duration').addClass('hidden');
-
-						$form.find('#certificate').val('').prop('disabled', true);
-						$form.find('#payment_method_id').val(0).prop('disabled', true);
-						$form.find('#promo_id').val(0).prop('disabled', true);
-						/*$form.find('#promocode_id').val(0).prop('disabled', true);*/
-						$form.find('#extra_time').val(0).prop('disabled', true);
-						$form.find('#is_repeated_flight').val(0).prop('disabled', true);
-						$form.find('#is_unexpected_flight').val(0).prop('disabled', true);
-						$form.find('#is_free').prop('checked', true).prop('disabled', true);
-						$form.find('#amount-text h1').text('0');
+						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#email').closest('.row').hide();
+						$form.find('#product_id').closest('.row').hide();
+						$form.find('#comment').closest('.row').hide();
+						$form.find('#extra_time').closest('.row').hide();
+						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
+						$form.find('#pilot_id').closest('.js-pilot').removeClass('hidden');
+						break;
+					case 'user_flight':
+						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#email').closest('.row').hide();
+						$form.find('#product_id').closest('.row').hide();
+						$form.find('#comment').closest('.row').hide();
+						$form.find('#extra_time').closest('.row').hide();
+						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
+						$form.find('#employee_id').closest('.js-employee').removeClass('hidden');
 						break;
 					case 'break':
 					case 'cleaning':
@@ -842,6 +864,8 @@
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
 						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
+						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 						break;
 					case 'deal':
 						$form.find('#payment_method_id').closest('.row').show();
@@ -850,11 +874,12 @@
 						$form.find('#comment').closest('.row').show();
 						$form.find('#extra_time').closest('.row').show();
 						$form.find('#duration').closest('.js-duration').addClass('hidden');
+						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
+						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 
 						$form.find('#certificate').val('').prop('disabled', false);
 						$form.find('#payment_method_id').val(0).prop('disabled', false);
 						$form.find('#promo_id').val(0).prop('disabled', false);
-						/*$form.find('#promocode_id').val(0).prop('disabled', false);*/
 						$form.find('#extra_time').val(0).prop('disabled', false);
 						$form.find('#is_repeated_flight').val(0).prop('disabled', false);
 						$form.find('#is_unexpected_flight').val(0).prop('disabled', false);

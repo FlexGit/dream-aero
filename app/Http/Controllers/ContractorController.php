@@ -87,6 +87,7 @@ class ContractorController extends Controller
 		$VIEW = view('admin.contractor.list', [
 			'contractors' => $contractors,
 			'statuses' => $statuses,
+			'user' => $user,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -319,6 +320,7 @@ class ContractorController extends Controller
 			'productTypes' => $productTypes,
 			'scores' => $scores,
 			'contractorId' => $contractorId,
+			'user' => $this->request->user(),
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);

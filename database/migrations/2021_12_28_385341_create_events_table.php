@@ -37,6 +37,8 @@ class CreateEventsTable extends Migration
 			$table->timestamp('promocode_sent_at')->nullable()->comment('дата и время последней отправки промокода контрагенту');
 			$table->timestamp('flight_invitation_sent_at')->nullable()->comment('дата и время последней отправки приглашения на полет контрагенту');
 			$table->integer('pilot_id')->default(0)->index()->comment('фактический пилот');
+			$table->integer('text_pilot_id')->default(0)->index()->comment('тестовый полет пилота');
+			$table->integer('employee_id')->default(0)->index()->comment('полет сотрудника');
 			$table->string('uuid')->nullable();
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();

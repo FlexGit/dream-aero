@@ -1,13 +1,13 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="contractor_id" name="contractor_id">
 <input type="hidden" id="amount" name="amount">
-<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">
+{{--<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">--}}
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
 <input type="hidden" id="source" name="source" value="{{ $source ?? '' }}">
 
 @if($source)
 	<div class="row">
-		<div class="col-3">
+		<div class="col-2">
 			<div class="form-group">
 				<div class="custom-control">
 					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" checked>
@@ -15,7 +15,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-3">
+		<div class="col-2">
 			<div class="form-group">
 				<div class="custom-control">
 					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_BREAK }}">
@@ -23,7 +23,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-3">
+		<div class="col-2">
 			<div class="form-group">
 				<div class="custom-control">
 					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_CLEANING }}">
@@ -31,11 +31,19 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-3">
+		<div class="col-2">
 			<div class="form-group">
 				<div class="custom-control">
 					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">
 					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT }}">Тестовый полет</label>
+				</div>
+			</div>
+		</div>
+		<div class="col-2">
+			<div class="form-group">
+				<div class="custom-control">
+					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT }}">
+					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT }}">Полет сотрудника</label>
 				</div>
 			</div>
 		</div>
@@ -84,7 +92,7 @@
 					<optgroup label="{{ $city->name }}">
 						@foreach($city->locations ?? [] as $location)
 							@foreach($location->simulators ?? [] as $simulator)
-								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($locationId && $locationId == $location->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
 							@endforeach
 						@endforeach
 					</optgroup>
@@ -175,6 +183,28 @@
 				<option value="90">90 мин</option>
 				<option value="120">120 мин</option>
 				<option value="180">180 мин</option>
+			</select>
+		</div>
+	</div>
+	<div class="col js-employee hidden">
+		<div class="form-group">
+			<label for="employee_id">Сотрудник</label>
+			<select class="form-control" id="employee_id" name="employee_id">
+				<option value="0">---</option>
+				@foreach($employees as $employee)
+					<option value="{{ $employee->id }}">{{ $employee->fio() }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col js-pilot hidden">
+		<div class="form-group">
+			<label for="pilot_id">Пилот</label>
+			<select class="form-control" id="pilot_id" name="pilot_id">
+				<option value="0">---</option>
+				@foreach($pilots as $pilot)
+					<option value="{{ $pilot->id }}">{{ $pilot->fio() }}</option>
+				@endforeach
 			</select>
 		</div>
 	</div>

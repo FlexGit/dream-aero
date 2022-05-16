@@ -131,6 +131,7 @@ class Event extends Model
 	const EVENT_TYPE_BREAK = 'break';
 	const EVENT_TYPE_CLEANING = 'cleaning';
 	const EVENT_TYPE_TEST_FLIGHT = 'test_flight';
+	const EVENT_TYPE_USER_FLIGHT = 'user_flight';
 	const EVENT_TYPES = [
 		self::EVENT_TYPE_DEAL => 'Сделка не оплачена',
 		self::EVENT_TYPE_DEAL_PAID => 'Сделка оплачена',
@@ -139,6 +140,7 @@ class Event extends Model
 		self::EVENT_TYPE_BREAK => 'Перерыв',
 		self::EVENT_TYPE_CLEANING => 'Уборка',
 		self::EVENT_TYPE_TEST_FLIGHT => 'Тестовый полет',
+		self::EVENT_TYPE_USER_FLIGHT => 'Полет сотрудника',
 	];
 	
 	const NOTIFICATION_TYPE_SMS = 'sms';
@@ -171,6 +173,8 @@ class Event extends Model
 		'is_notified',
 		'flight_invitation_sent_at',
 		'pilot_id',
+		'test_pilot_id',
+		'employee_id',
 		'uuid',
 		'data_json',
 	];
@@ -247,6 +251,16 @@ class Event extends Model
 		return $this->belongsTo(User::class, 'pilot_id', 'id');
 	}
 	
+	public function testPilot()
+	{
+		return $this->belongsTo(User::class, 'test_pilot_id', 'id');
+	}
+	
+	public function employee()
+	{
+		return $this->belongsTo(User::class, 'employee_id', 'id');
+	}
+	
 	public function comments()
 	{
 		return $this->hasMany(EventComment::class, 'event_id', 'id')
@@ -302,9 +316,10 @@ class Event extends Model
 			return null;
 		}
 		
-		$this->data_json = [
-			'flight_invitation_file_path' => 'invitation/' . $flightInvitationFileName,
-		];
+		$data = $this->data_json ?? [];
+		$data['flight_invitation_file_path'] = 'invitation/' . $flightInvitationFileName;
+		
+		$this->data_json = $data;
 		if (!$this->save()) {
 			return null;
 		}

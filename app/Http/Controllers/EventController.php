@@ -172,9 +172,18 @@ class EventController extends Controller
 				break;
 				case Event::EVENT_TYPE_TEST_FLIGHT:
 					$title = Event::EVENT_TYPES[Event::EVENT_TYPE_TEST_FLIGHT];
+					$title .= $event->testPilot ? ' ' . $event->testPilot->fio() : '';
 					$allDay = false;
 					if ($data && isset($data[Event::EVENT_TYPE_TEST_FLIGHT])) {
 						$color = $data[Event::EVENT_TYPE_TEST_FLIGHT];
+					}
+				break;
+				case Event::EVENT_TYPE_USER_FLIGHT:
+					$title = Event::EVENT_TYPES[Event::EVENT_TYPE_USER_FLIGHT];
+					$title .= $event->employee ? ' ' . $event->employee->fio() : '';
+					$allDay = false;
+					if ($data && isset($data[Event::EVENT_TYPE_USER_FLIGHT])) {
+						$color = $data[Event::EVENT_TYPE_USER_FLIGHT];
 					}
 				break;
 			}
@@ -548,16 +557,18 @@ class EventController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
 		$rules = [
 			'start_at_date' => 'required_if:source,deal|date',
 			'start_at_time' => 'required_if:source,deal',
+			'doc_file' => 'sometimes|image|max:5120|mimes:jpg,jpeg,png,webp',
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'start_at_date' => 'Дата начала полета',
 				'start_at_time' => 'Время начала полета',
+				'doc_file' => 'Фото документа',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -618,9 +629,6 @@ class EventController extends Controller
 			}
 		}
 		
-		//\Log::debug($this->request);
-		//\Log::debug($event);
-		
 		try {
 			\DB::beginTransaction();
 			
@@ -665,6 +673,13 @@ class EventController extends Controller
 					if (isset($simulator)) {
 						$event->flight_simulator_id = $simulator->id;
 					}
+					
+					$data = $event->data_json ?? [];
+					if($file = $this->request->file('doc_file')) {
+						$isFileUploaded = $file->move(storage_path('app/private/contractor/doc'), $file->getClientOriginalName());
+						$data['doc_file_path'] = $isFileUploaded ? 'contractor/doc/' . $file->getClientOriginalName() : '';
+					}
+
 					if (isset($data)) {
 						$event->data_json = $data;
 					}
@@ -734,14 +749,11 @@ class EventController extends Controller
 			abort(404);
 		}
 		
-		//\Log::debug($this->request);
-		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
 		switch ($event->event_type) {
 			case Event::EVENT_TYPE_DEAL:
-			case Event::EVENT_TYPE_TEST_FLIGHT:
 				$position = DealPosition::find($event->deal_position_id);
 				if (!$position) {
 					return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
@@ -776,7 +788,6 @@ class EventController extends Controller
 			
 			switch ($event->event_type) {
 				case Event::EVENT_TYPE_DEAL:
-				case Event::EVENT_TYPE_TEST_FLIGHT:
 					if ($this->request->source == Event::EVENT_SOURCE_DEAL) {
 						$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
@@ -798,6 +809,8 @@ class EventController extends Controller
 				break;
 				case Event::EVENT_TYPE_BREAK:
 				case Event::EVENT_TYPE_CLEANING:
+				case Event::EVENT_TYPE_TEST_FLIGHT:
+				case Event::EVENT_TYPE_USER_FLIGHT:
 					$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 					$stopAt = Carbon::parse($this->request->stop_at)->format('Y-m-d H:i');
 					$event->start_at = $startAt;
@@ -975,5 +988,21 @@ class EventController extends Controller
 		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 		
 		return Storage::disk('private')->download($flightInvitationFilePath);
+	}
+	
+	/**
+	 * @param $uuid
+	 * @return \Symfony\Component\HttpFoundation\StreamedResponse
+	 */
+	public function getDocFile($uuid)
+	{
+		$event = HelpFunctions::getEntityByUuid(Event::class, $uuid);
+		if (!$event) {
+			abort(404);
+		}
+		
+		$docFilePath = (is_array($event->data_json) && array_key_exists('doc_file_path', $event->data_json)) ? $event->data_json['doc_file_path'] : '';
+
+		return Storage::disk('private')->download($docFilePath);
 	}
 }

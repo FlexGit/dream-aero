@@ -28,6 +28,9 @@
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="{{ asset('#pilot') }}">Пилот</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="{{ asset('#doc') }}">Документ</a>
+			</li>
 		</ul>
 
 		<div class="tab-content">
@@ -418,6 +421,22 @@
 									<option value="{{ $pilot->id }}" @if($event->pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
 								@endforeach
 							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="doc">
+				<div class="row pl-3 pr-3 mt-4">
+					<div class="col-6">
+						<div class="form-group">
+							<label for="doc_file">Фото документа</label>
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" id="doc_file" name="doc_file">
+								<label class="custom-file-label" for="doc_file">Выбрать файл</label>
+								@if(array_key_exists('doc_file_path', $event->data_json) && $event->data_json['doc_file_path'])
+									[ <a href="{{ url('/event/' . $event->uuid . '/doc/file') }}">скачать</a> ]
+								@endif
+							</div>
 						</div>
 					</div>
 				</div>

@@ -140,6 +140,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::get('event/{uuid}/file', [EventController::class, 'getFlightInvitationFile'])->name('getFlightInvitation');
 		Route::post('event/send', [EventController::class, 'sendFlightInvitation'])->name('sendFlightInvitation');
+		Route::get('event/{uuid}/doc/file', [EventController::class, 'getDocFile'])->name('getDocFile');
 
 		// Сделки
 		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
