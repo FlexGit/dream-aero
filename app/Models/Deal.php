@@ -304,16 +304,16 @@ class Deal extends Model
 			$amount += ($position->amount - $position->aeroflot_bonus_amount);
 		}
 
-		/*$scoreAmount = 0;
+		$scoreAmount = 0;
 		if ($this->scores) {
 			foreach ($this->scores ?? [] as $score) {
 				if ($score->type != Score::USED_TYPE) continue;
 
 				$scoreAmount += abs($score->score);
 			}
-		}*/
+		}
 
-		return /*(*/$amount/* - $scoreAmount)*/;
+		return ($amount - $scoreAmount);
 	}
 
 	public function billPayedAmount()
