@@ -604,6 +604,7 @@ class DealController extends Controller
 	 */
 	public function storeBooking()
 	{
+		\Log::debug($this->request);
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
