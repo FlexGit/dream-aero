@@ -69,15 +69,15 @@ class DealController extends Controller
 	{
 		$user = \Auth::user();
 		
-		if ($user->isSuperAdmin()) {
+		/*if ($user->isSuperAdmin()) {*/
 			$cities = City::where('version', $user->version)
 				->orderByRaw("FIELD(alias, 'msk') DESC")
 				->orderByRaw("FIELD(alias, 'spb') DESC")
 				->orderBy('name')
 				->get();
-		} else {
+		/*} else {
 			$cities = [];
-		}
+		}*/
 		
 		$productTypes = ProductType::orderBy('name')
 			->get();
@@ -170,9 +170,9 @@ class DealController extends Controller
 					});
 			});
 		}
-		if (!$user->isSuperAdmin() && $user->city) {
+		/*if (!$user->isSuperAdmin() && $user->city) {
 			$deals = $deals->whereIn('city_id', [$user->city->id, 0]);
-		}
+		}*/
 		if ($id) {
 			$deals = $deals->where('id', '<', $id);
 		}
