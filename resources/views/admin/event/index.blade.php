@@ -11,7 +11,7 @@
 
 				@foreach($city->locations ?? [] as $location)
 					@php
-						if ($user->location && $user->location->id != $location->id) {
+						if ($user->city && $user->city->id != $city->id) {
 							continue;
 						}
 						// только для Мск и Сбп выводим название локации
