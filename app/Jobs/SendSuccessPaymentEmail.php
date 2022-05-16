@@ -40,6 +40,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		if (!$city) return null;
 		if (!$city->email) return null;
 		
+		$location = $this->bill->location ?? null;
 		$certificate = $this->certificate ?? null;
 		
 		$messageData = [
@@ -48,6 +49,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 			'contractor' => $contractor,
 			'deal' => $deal,
 			'position' => $position,
+			'location' => $location,
 		];
 		
 		$recipients = $bcc = [];
