@@ -1,5 +1,6 @@
 <input type="hidden" id="contractor_id" name="contractor_id" value="{{ $contractorId ?? 0 }}">
 
+{{--
 <div class="row">
 	<div class="col">
 		<div class="form-group">
@@ -58,6 +59,7 @@
 		</div>
 	</div>
 </div>
+--}}
 
 @if(!$scores->isEmpty())
 	<hr>
