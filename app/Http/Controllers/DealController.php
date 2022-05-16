@@ -219,8 +219,6 @@ class DealController extends Controller
 			abort(404);
 		}
 		
-		\Log::debug($this->request);
-		
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user);

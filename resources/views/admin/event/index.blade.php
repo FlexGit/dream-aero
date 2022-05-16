@@ -251,7 +251,7 @@
 							data: {
 								'action': action,
 								'method': method,
-								'type': type,
+								'event_type': type,
 								'source': 'calendar',
 								'flight_at': moment($(info.date)[0])/*.utc()*/.format('YYYY-MM-DD HH:mm'),
 								'city_id': cityId,
@@ -286,7 +286,7 @@
 							url = 'event/' + id + '/edit/' + allDay,
 							action = '/event/' + id,
 							method = 'PUT',
-							type = $(this).data('type'),
+							type = $(this).data('event_type'),
 							$modalDialog = $('.modal').find('.modal-dialog');
 
 						if ($.inArray(title, ['Тестовый полет', 'Уборка', 'Перерыв']) !== -1) return;
