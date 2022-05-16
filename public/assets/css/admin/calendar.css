@@ -119,7 +119,7 @@ td.fc-daygrid-day {
 }
 .calendar-container {
 	width: 100%;
-	min-width: 490px;
+	min-width: 450px;
 }
 body {
 	overflow: hidden;

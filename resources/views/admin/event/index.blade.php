@@ -145,7 +145,7 @@
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=2') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=' . time()) }}">
 @stop
 
 @section('js')
