@@ -158,20 +158,20 @@ class BillController extends Controller
 		try {
 			\DB::beginTransaction();
 			
-			$location = $deal->city ? $deal->city->getLocationForBill() : null;
+			/*$location = $deal->city ? $deal->city->getLocationForBill() : null;
 			if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS && !$location) {
 				\DB::rollback();
 				
 				Log::debug('500 - Bill Create: Не найден номер счета платежной системы');
 				
 				return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
-			}
+			}*/
 			
 			$bill = new Bill();
 			$bill->contractor_id = $deal->contractor->id ?? 0;
 			$bill->deal_id = $deal->id ?? 0;
 			$bill->deal_position_id = $position->id ?? 0;
-			$bill->location_id = $location->id ?? 0;
+			$bill->location_id = /*$location->id*/$this->request->user()->location_id ?? 0;
 			$bill->payment_method_id = $paymentMethodId;
 			$bill->status_id = $this->request->status_id ?? 0;
 			$bill->amount = $this->request->amount ?? 0;
@@ -303,7 +303,9 @@ class BillController extends Controller
 		$email = $deal->email ?: $contractor->email;
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
 		
-		dispatch(new \App\Jobs\SendPayLinkEmail($bill));
+		//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
+		$job = new \App\Jobs\SendPayLinkEmail($bill);
+		$job->handle();
 		
 		return response()->json(['status' => 'success', 'message' => 'Задание на отправку Ссылки на оплату принято']);
 	}
