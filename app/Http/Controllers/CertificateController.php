@@ -336,7 +336,9 @@ class CertificateController extends Controller
 		$certificate = Certificate::find($this->request->certificate_id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
-		dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+		//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+		$job = new \App\Jobs\SendCertificateEmail($certificate);
+		$job->handle();
 		
 		return response()->json(['status' => 'success', 'message' => 'Задание на отправку Сертификата принято']);
 	}
@@ -361,7 +363,7 @@ class CertificateController extends Controller
 			if (!$certificate) {
 				abort(404);
 			}
-		//
+		//}
 		
 		$certificateFilePath = (is_array($certificate->data_json) && array_key_exists('certificate_file_path', $certificate->data_json)) ? $certificate->data_json['certificate_file_path'] : '';
 		

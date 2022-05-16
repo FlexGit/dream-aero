@@ -959,16 +959,16 @@ class EventController extends Controller
 			abort(404);
 		}
 		
-		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
+		/*$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 		
 		// если файла приглашения на полет по какой-то причине не оказалось, генерим его
 		$flightInvitationFileExists = Storage::disk('private')->exists($flightInvitationFilePath);
-		if (!isset($flightInvitationFilePath) || !$flightInvitationFileExists) {
+		if (!isset($flightInvitationFilePath) || !$flightInvitationFileExists) {*/
 			$event = $event->generateFile();
 			if (!$event) {
 				abort(404);
 			}
-		}
+		/*}*/
 		
 		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 		
