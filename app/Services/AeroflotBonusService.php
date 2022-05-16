@@ -153,6 +153,51 @@ class AeroflotBonusService {
 	}
 	
 	/**
+	 * @param $cardNumber
+	 * @param Product $product
+	 * @param $amount
+	 * @return \Illuminate\Http\JsonResponse|null
+	 */
+	public static function getCardInfo($cardNumber, Product $product, $amount)
+	{
+		try {
+			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
+			
+			$dateTime = date('Ymdhis');
+			$transactionId = $dateTime . rand(10000, 99999);
+			
+			$request = [
+				'transaction' => [
+					'id' => $transactionId,
+					'pan' => $cardNumber,
+					'dateTime' => $dateTime,
+				],
+				'cheque' => [
+					'item' => [
+						'product' => $product->alias ?? '',
+						'quantity' => 1,
+						'amount' => $amount * 100,
+					]
+				],
+				'currency' => self::CURRENCY_CODE,
+			];
+			
+			$result = $AfService->getInfo2($request);
+			$result = json_decode(json_encode($result), true);
+			
+			$result = [
+				'max_limit' => isset($result['pointsAllocation']['maxChequePoints']) ? floor($result['pointsAllocation']['maxChequePoints'] / 100) : 0,
+			];
+			
+			return $result;
+		} catch (\Throwable $e) {
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . $fields['request'] . '. Rsponse: ' . $fields['response']);
+			
+			return null;
+		}
+	}
+	
+	/**
 	 * @param DealPosition $position
 	 * @return mixed|null
 	 */
@@ -236,51 +281,6 @@ class AeroflotBonusService {
 				'response' => json_encode($result),
 			];
 			self::addLog($fields);
-			
-			return $result;
-		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . $fields['request'] . '. Rsponse: ' . $fields['response']);
-			
-			return null;
-		}
-	}
-	
-	/**
-	 * @param $cardNumber
-	 * @param Product $product
-	 * @param $amount
-	 * @return \Illuminate\Http\JsonResponse|null
-	 */
-	public static function getCardInfo($cardNumber, Product $product, $amount)
-	{
-		try {
-			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
-			
-			$dateTime = date('Ymdhis');
-			$transactionId = $dateTime . rand(10000, 99999);
-			
-			$request = [
-				'transaction' => [
-					'id' => $transactionId,
-					'pan' => $cardNumber,
-					'dateTime' => $dateTime,
-				],
-				'cheque' => [
-					'item' => [
-						'product' => $product->alias ?? '',
-						'quantity' => 1,
-						'amount' => $amount * 100,
-					]
-				],
-				'currency' => self::CURRENCY_CODE,
-			];
-			
-			$result = $AfService->getInfo2($request);
-			$result = json_decode(json_encode($result), true);
-			
-			$result = [
-				'max_limit' => isset($result['pointsAllocation']['maxChequePoints']) ? floor($result['pointsAllocation']['maxChequePoints'] / 100) : 0,
-			];
 			
 			return $result;
 		} catch (\Throwable $e) {

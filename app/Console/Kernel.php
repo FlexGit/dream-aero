@@ -68,12 +68,12 @@ class Kernel extends ConsoleKernel
 			->emailOutputOnFailure(env('DEV_EMAIL'));
 
 		// начисление баллов после полета
-		$filePath = storage_path('logs/commands/scoring.log');
+		/*$filePath = storage_path('logs/commands/scoring.log');
 		$schedule->command('score:add')
 			->hourly()
 			->runInBackground()
 			->appendOutputTo($filePath)
-			->emailOutputOnFailure(env('DEV_EMAIL'));
+			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 		
 		// проставление пилота после полета
 		$filePath = storage_path('logs/commands/pilot_set.log');

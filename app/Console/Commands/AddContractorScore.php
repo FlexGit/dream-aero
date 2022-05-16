@@ -41,28 +41,29 @@ class AddContractorScore extends Command
     public function handle()
     {
     	$events = Event::where('event_type', Event::EVENT_SOURCE_DEAL)
-			->where('stop_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
-			->where('stop_at', '>=', Carbon::now()->subHour()->format('Y-m-d H:i:s'))
-			->with('deal')
+			->whereBetween('stop_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
 			->get();
     	foreach ($events as $event) {
     		$score = Score::where('event_id', $event->id)->first();
     		if ($score) continue;
 
-			$cityId = ($event->deal && $event->deal->city) ? $event->deal->city->id : 0;
-			if (!$cityId) continue;
-
-			$product = ($event->deal && $event->deal->product) ? $event->deal->product : null;
+    		$position = $event->dealPosition;
+			if (!$position) continue;
+		
+			$product = $position->product;
 			if (!$product) continue;
-
-			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
-			if (!$cityProduct || !$cityProduct->pivot) continue;
+		
+			$city = $position->city;
+			if (!$city) continue;
+   
+			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+			if (!$cityProduct/* || !$cityProduct->pivot*/) continue;
 
     		$score = new Score();
     		$score->score = $cityProduct->score ?? 0;
-			$score->contractor_id = $event->deal ? $event->deal->contractor_id : 0;
-			$score->deal_id = $event->deal ? $event->deal->id : 0;
-			$score->deal_position_id = $event->dealPosition ? $event->dealPosition->id : 0;
+			$score->contractor_id = $event->contractor_id;
+			$score->deal_id = $event->deal_id;
+			$score->deal_position_id = $event->deal_position_id;
 			$score->event_id = $event->id;
 			$score->duration = $product->duration;
 			$score->type = Score::SCORING_TYPE;
