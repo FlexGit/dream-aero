@@ -46,17 +46,20 @@ class SetDealCity extends Command
 			->get();
     	/** @var Deal[] $deals */
 		foreach ($deals as $deal) {
-			$contractor = $deal->contractor;
-			if (!$contractor) continue;
+			$position = $deal->positions->where('city_id', '!=', 0)->first();
+			if (!$position) continue;
+			
+			/*$contractor = $deal->contractor;
+			if (!$contractor) continue;*/
 
-    		$city = $contractor->city;
+    		$city = $position->city;
     		if (!$city) continue;
 			
 			$deal->city_id = $city->id;
 			$deal->save();
 		}
 			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - deal_cuty:set - OK');
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - deal_city:set - OK');
     	
         return 0;
     }
