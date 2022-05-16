@@ -41,7 +41,7 @@ class AddContractorScore extends Command
     public function handle()
     {
     	$events = Event::where('event_type', Event::EVENT_SOURCE_DEAL)
-			->whereBetween('stop_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+			->whereBetween('stop_at', [Carbon::now()->startOfHour(), Carbon::now()->endOfHour()])
 			->get();
     	foreach ($events as $event) {
     		$score = Score::where('event_id', $event->id)->first();
