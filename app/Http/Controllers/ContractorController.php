@@ -273,7 +273,7 @@ class ContractorController extends Controller
 			$contractors = $contractors->whereIn('id', [$this->request->user()->city->id, 0]);
 		}*/
 		if (!$user->isSuperAdmin() && $user->city) {
-			$contractors = $contractors->where('city_id', $user->city->id);
+			$contractors = $contractors->whereIn('city_id', [$user->city->id, 0]);
 		}
 		$contractors = $contractors->get();
 		
