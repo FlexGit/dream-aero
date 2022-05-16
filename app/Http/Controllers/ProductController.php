@@ -88,7 +88,7 @@ class ProductController extends Controller
 			->orderBy('lastname')
 			->orderBy('name')
 			->get();
-		\Log::debug($pilots);
+
 		$VIEW = view('admin.product.modal.edit', [
 			'product' => $product,
 			'productTypes' => $productTypes,

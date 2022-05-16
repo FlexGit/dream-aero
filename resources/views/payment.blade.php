@@ -41,6 +41,28 @@
 												<li class="js-use-retry" data-uuid="{{ $bill->position->uuid }}">Повторить попытку</li>
 											</ul>
 										@endif
+									@else
+										@if(($bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
+											<div class="aeroflot_container">
+												<div style="display: flex;">
+													<div class="switch_box" style="margin-bottom: 10px;">
+														<label class="switch">
+															<input type="checkbox" name="has_aeroflot_card" class="edit_field" value="1">
+															<span class="slider round"></span>
+														</label><span>@lang('main.modal-certificate.есть-карта-аэрофлот')</span>
+													</div>
+													<div style="display: flex;width: 100%;">
+														<div style="width: 100%;">
+															<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" style="display: none;margin-bottom: 0;padding-top: 5px;">
+														</div>
+														<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-aeroflot-card-btn" style="display: none;width: 35px;"><i>Ok</i></button>
+														<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-aeroflot-card-remove" style="display: none;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>
+													</div>
+												</div>
+												<small class="aeroflot_note" style="display: none;">* @lang('main.modal-certificate.введите-номер-карты-аэрофлот-описание')</small>
+												<div class="aeroflot-buttons-container"></div>
+											</div>
+										@endif
 									@endif
 								@endif
 

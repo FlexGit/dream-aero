@@ -203,26 +203,19 @@ class City extends Model
 	 */
 	public function getLocationForBill()
 	{
-		\Log::debug('getLocationForBill()');
-		\DB::connection()->enableQueryLog();
 		$locations = $this->locations()
 			->where('is_active', true)
 			->whereNotNull('pay_account_number')
 			->get();
 		if ($locations->isEmpty()) return null;
-		\Log::debug(\DB::getQueryLog());
 		
-		\Log::debug('count = ' . $locations->count());
 		if ($locations->count() > 1) {
 			$sortLocations = [];
 			foreach ($locations as $location) {
 				$sortLocations[$location->alias] = $location->countBillsInCurrentMonth();
 			}
-			\Log::debug($sortLocations);
 			asort($sortLocations);
-			\Log::debug($sortLocations);
 			$location = HelpFunctions::getEntityByAlias(Location::class, array_key_first($sortLocations));
-			\Log::debug($location->alias);
 			
 			return $location;
 		}

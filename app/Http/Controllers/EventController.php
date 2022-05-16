@@ -618,8 +618,8 @@ class EventController extends Controller
 			}
 		}
 		
-		\Log::debug($this->request);
-		\Log::debug($event);
+		//\Log::debug($this->request);
+		//\Log::debug($event);
 		
 		try {
 			\DB::beginTransaction();

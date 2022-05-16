@@ -171,12 +171,10 @@ class Location extends Model
 		$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, PaymentMethod::ONLINE_ALIAS);
 		if (!$onlinePaymentMethod) return 0;
 		
-		\DB::connection()->enableQueryLog();
 		$billCount = Bill::where('payment_method_id', $onlinePaymentMethod->id)
 			->where('location_id', $this->id)
 			->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
 			->count();
-		\Log::debug(\DB::getQueryLog());
 		
 		return $billCount;
 	}
