@@ -229,8 +229,9 @@ class DealController extends Controller
 		$employees = User::where('enable', true)
 			->whereIn('city_id', [$user->city_id, 0])
 			->get();
+		dump($user);
 		$pilots = User::where('enable', true)
-			/*->whereIn('city_id', [$user->city_id, 0])*/
+			->whereIn('city_id', [$user->city_id, 0])
 			->where('role', User::ROLE_PILOT)
 			->get();
 
