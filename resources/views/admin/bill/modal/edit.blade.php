@@ -66,4 +66,12 @@
 			</select>
 		</div>
 	</div>
+	<div class="col-6">
+		<div class="form-group">
+			<label>Ссылка на оплату</label>
+			<div>
+				[ <a href="{{ (($city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $this->bill->uuid }}">открыть</a> ]
+			</div>
+		</div>
+	</div>
 </div>
