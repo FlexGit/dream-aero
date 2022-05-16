@@ -226,13 +226,17 @@ class DealController extends Controller
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user);
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList();
-		$employees = User::where('enable', true)
-			->whereIn('city_id', [$user->city_id, 0])
-			->get();
-		\Log::debug($user);
-		$pilots = User::where('enable', true)
-			->whereIn('city_id', [$user->city_id, 0])
-			->where('role', User::ROLE_PILOT)
+		$employees = User::where('enable', true);
+		if ($user->city_id) {
+			$employees = $employees->whereIn('city_id', [$user->city_id, 0]);
+		}
+		$employees = $employees->get();
+		
+		$pilots = User::where('enable', true);
+		if ($user->city_id) {
+			$pilots = $pilots->whereIn('city_id', [$user->city_id, 0]);
+		}
+		$pilots = $pilots->where('role', User::ROLE_PILOT)
 			->get();
 
 		$VIEW = view('admin.deal.modal.booking.add', [
