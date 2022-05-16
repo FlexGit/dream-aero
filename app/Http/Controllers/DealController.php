@@ -786,7 +786,7 @@ class DealController extends Controller
 			if (!$certificate) {
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден или не соответствует выбранным параметрам']);
 			}
-			if (!$certificate->wasUsed()) {
+			if ($certificate->wasUsed()) {
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
 			}
 			$certificateId = $certificate->id;
