@@ -128,7 +128,7 @@ class EventController extends Controller
 				case Event::EVENT_TYPE_DEAL:
 					$balance = ($event->deal) ? $event->deal->balance() : 0;
 					
-					$title = $event->contractor ? $event->contractor->name . ' ' . HelpFunctions::formatPhone($event->contractor->phone) : '';
+					$title = $event->deal ? $event->deal->name . ' ' . HelpFunctions::formatPhone($event->deal->phone) : '';
 					$title .= ($event->dealPosition && $event->dealPosition->product) ? ' ' . $event->dealPosition->product->name : '';
 					
 					$allDay = false;
