@@ -57,10 +57,10 @@ class AddContractorScore extends Command
 			if (!$city) continue;
    
 			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-			if (!$cityProduct/* || !$cityProduct->pivot*/) continue;
+			if (!$cityProduct || !$cityProduct->pivot) continue;
 
     		$score = new Score();
-    		$score->score = $cityProduct->score ?? 0;
+    		$score->score = $cityProduct->pivot->score;
 			$score->contractor_id = $event->contractor_id;
 			$score->deal_id = $event->deal_id;
 			$score->deal_position_id = $event->deal_position_id;
