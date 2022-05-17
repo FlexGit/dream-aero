@@ -316,18 +316,18 @@ class LocationController extends Controller
 		$location->is_active = $this->request->is_active;
 		$location->legal_entity_id = $this->request->legal_entity_id;
 		$location->city_id = $this->request->city_id;
-		$location->data_json = [
-			'address' => $this->request->address,
-			'address_en' => $this->request->address_en,
-			'working_hours' => $this->request->working_hours,
-			'working_hours_en' => $this->request->working_hours_en,
-			'phone' => $this->request->phone,
-			'email' => $this->request->email,
-			'map_link' => $this->request->map_link,
-			'skype' => $this->request->skype,
-			'whatsapp' => $this->request->whatsapp,
-			'scheme_file_path' => $isFileUploaded ? 'scheme/' . $file->getClientOriginalName() : '',
-		];
+		$data = $location->data_json;
+		$data['address'] = $this->request->address;
+		$data['address_en'] = $this->request->address_en;
+		$data['working_hours'] = $this->request->working_hours;
+		$data['working_hours_en'] = $this->request->working_hours_en;
+		$data['phone'] = $this->request->phone;
+		$data['email'] = $this->request->email;
+		$data['map_link'] = $this->request->map_link;
+		$data['skype'] = $this->request->skype;
+		$data['whatsapp'] = $this->request->whatsapp;
+		$data['scheme_file_path'] = $isFileUploaded ? 'scheme/' . $file->getClientOriginalName() : '';
+
 		if (!$location->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
