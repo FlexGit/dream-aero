@@ -36,10 +36,8 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		\Log::debug('promocode4 - ' . $this->deal->number);
 		$recipients = $bcc = [];
-		///$recipients[] = $this->deal->email;
-		$recipients[] = env('DEV_EMAIL');
+		$recipients[] = $this->deal->email;
 		$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
@@ -52,8 +50,7 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 		];
 
 		$subject = env('APP_NAME') . ': промокод на полет';
-		
-		\Log::debug('promocode5 - ' . $this->deal->number);
+
 		Mail::send(['html' => "admin.emails.send_promocode_after_flight"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
@@ -61,9 +58,7 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 			$message->bcc($bcc);
 		});
 		$failures = Mail::failures();
-		\Log::debug('promocode6 - ' . $this->deal->number . json_encode($failures));
 		if (!$failures) {
-			\Log::debug('promocode7 - ' . $this->deal->number);
 			$this->promocode->sent_at = Carbon::now()->format('Y-m-d H:i:s');
 			$this->promocode->save();
 		}
