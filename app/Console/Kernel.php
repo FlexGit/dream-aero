@@ -62,7 +62,7 @@ class Kernel extends ConsoleKernel
 		// отправка контрагенту промокода на полет на другом типе тренажера
 		$filePath = storage_path('logs/commands/promocode_send.log');
 		$schedule->command('promocode_email:send')
-			->everyFiveMinutes()
+			->hourly()
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
