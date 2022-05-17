@@ -13,10 +13,12 @@ class SendCallbackEmail extends Job implements ShouldQueue {
 
 	protected $name;
 	protected $phone;
+	protected $city;
 
-	public function __construct($name, $phone) {
+	public function __construct($name, $phone, $city) {
 		$this->name = $name;
 		$this->phone = $phone;
+		$this->city = $city;
 	}
 	
 	/**
@@ -24,8 +26,11 @@ class SendCallbackEmail extends Job implements ShouldQueue {
 	 */
 	public function handle() {
 		$recipients = $bcc = [];
-		$recipients[] = env('ADMIN_EMAIL');
-		$bcc[] = env('DEV_EMAIL');
+		if ($this->city && $this->city->email) {
+			$recipients[] = $this->city->email;
+		}
+		//$recipients[] = env('ADMIN_EMAIL');
+		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'name' => $this->name,

@@ -35,9 +35,14 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 		$contractor = Contractor::find($this->contractorId);
 		if (!$contractor) return;
 		
+		$city = $contractor->city;
+		
 		$recipients = $bcc = [];
-		$recipients[] = env('ADMIN_EMAIL');
-		$bcc[] = env('DEV_EMAIL');
+		if ($city && $city->email) {
+			$recipients[] = $city->email;
+		}
+		//$recipients[] = env('ADMIN_EMAIL');
+		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'fio' => $this->fio,

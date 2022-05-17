@@ -981,11 +981,14 @@ class MainController extends Controller
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
 		}
 		
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
 		$name = trim(strip_tags($this->request->name));
 		$phone = trim(strip_tags($this->request->phone));
 		
 		//dispatch(new \App\Jobs\SendCallbackEmail($name, $phone));
-		$job = new \App\Jobs\SendCallbackEmail($name, $phone);
+		$job = new \App\Jobs\SendCallbackEmail($name, $phone, $city);
 		$job->handle();
 		
 		return response()->json(['status' => 'success']);
