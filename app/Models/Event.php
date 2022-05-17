@@ -303,12 +303,12 @@ class Event extends Model
 		$flightInvitationFile->text($this->start_at->format('d.m.Y H:i'), 840, 100, function ($font) use ($fontPath) {
 			$font->file($fontPath);
 			$font->size(24);
-			$font->color('#333333');
+			$font->color('#000000');
 		});
 		$flightInvitationFile->text($product->duration ?? '-', 250, 890, function ($font) use ($fontPath) {
 			$font->file($fontPath);
 			$font->size(35);
-			$font->color('#ffffff');
+			$font->color('#000000');
 		});
 		
 		$flightInvitationFileName = $this->uuid . '.jpg';

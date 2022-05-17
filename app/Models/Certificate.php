@@ -205,17 +205,17 @@ class Certificate extends Model
 					$certificateFile->text($this->number, 935, 485, function ($font) use ($fontPath) {
 						$font->file($fontPath);
 						$font->size(40);
-						$font->color('#333333');
+						$font->color('#000000');
 					});
 					$certificateFile->text($this->created_at->format('d.m.Y'), 1735, 485, function ($font) use ($fontPath) {
 						$font->file($fontPath);
 						$font->size(40);
-						$font->color('#333333');
+						$font->color('#000000');
 					});
 					$certificateFile->text($product->duration ?? '-', 1340, 2590, function ($font) use ($fontPath) {
 						$font->file($fontPath);
 						$font->size(56);
-						$font->color('#333333');
+						$font->color('#000000');
 					});
 				} else {
 					switch ($city->alias) {
@@ -260,17 +260,17 @@ class Certificate extends Model
 							$certificateFile->text($this->number, 850, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 							$certificateFile->text($this->created_at->format('d.m.Y'), 1300, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 							$certificateFile->text($product->duration ?? '-', 355, 1225, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(46);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 						break;
 						case City::KZN_ALIAS:
@@ -279,34 +279,34 @@ class Certificate extends Model
 							$certificateFile->text($this->number, 850, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 							$certificateFile->text($this->created_at->format('d.m.Y'), 1300, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 							$certificateFile->text($product->duration ?? '-', 355, 1370, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(46);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 						break;
 						case City::KHV_ALIAS:
 							$certificateFile->text($this->number, 840, 127, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 							$certificateFile->text($this->created_at->format('d.m.Y'), 1300, 127, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 							$certificateFile->text($product->duration ?? '-', 360, 1370, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(46);
-								$font->color('#333333');
+								$font->color('#000000');
 							});
 						break;
 					}
@@ -316,24 +316,24 @@ class Certificate extends Model
 				$certificateFile->text($this->number, 1560, 1005, function($font) use ($fontPath) {
 					$font->file($fontPath);
 					$font->size(24);
-					$font->color('#333333');
+					$font->color('#000000');
 				});
 				$certificateFile->text($this->created_at->format('d.m.Y'), 2030, 1005, function($font) use ($fontPath) {
 					$font->file($fontPath);
 					$font->size(24);
-					$font->color('#333333');
+					$font->color('#000000');
 				});
 			break;
 			case ProductType::VIP_ALIAS:
 				$certificateFile->text($this->number, 1880, 430, function($font) use ($fontPath) {
 					$font->file($fontPath);
 					$font->size(36);
-					$font->color('#333333');
+					$font->color('#000000');
 				});
 				$certificateFile->text($this->created_at->format('d.m.Y'), 1965, 505, function($font) use ($fontPath) {
 					$font->file($fontPath);
 					$font->size(36);
-					$font->color('#333333');
+					$font->color('#000000');
 				});
 			break;
 		}
