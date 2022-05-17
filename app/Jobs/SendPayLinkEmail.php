@@ -36,6 +36,8 @@ class SendPayLinkEmail extends Job implements ShouldQueue {
 		$city = $contractor->city;
 		if (!$city) return null;
 		
+		$dealCity = $deal->city;
+		
 		$email = $deal->email ?: $contractor->email;
 		if (!$email) return null;
 		
@@ -50,8 +52,8 @@ class SendPayLinkEmail extends Job implements ShouldQueue {
 		
 		$recipients = $bcc = [];
 		$recipients[] = $email;
-		if ($city->email) {
-			$bcc[] = $city->email;
+		if ($dealCity && $dealCity->email) {
+			$bcc[] = $dealCity->email;
 		}
 		
 		$subject = env('APP_NAME') . ': cсылка на оплату';
