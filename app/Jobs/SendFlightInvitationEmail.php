@@ -100,12 +100,13 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		Mail::send(['html' => "admin.emails.send_flight_invitation"], $messageData, function ($message) use ($subject, $recipients, $flightInvitationFilePath) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
-			$message->attach(Storage::disk('private')->path($flightInvitationFilePath));
+			$message->attach(Storage::disk('private')->path($this->event->data_json['flight_invitation_file_path']));
 			$message->to($recipients);
 		});
 		
 		$failures = Mail::failures();
 		if ($failures) {
+			\Log::debug($this->event->id . ' - ' . $this->event->data_json['flight_invitation_file_path']);
 			return null;
 		}
 		
