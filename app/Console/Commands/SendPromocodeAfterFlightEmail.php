@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Content;
 use App\Models\Contractor;
 use App\Models\Discount;
 use App\Models\Event;
@@ -63,7 +64,7 @@ class SendPromocodeAfterFlightEmail extends Command
 			$deal = $event->deal;
 			if (!$deal) continue;
 			
-			if ($deal->number != 'D2216915') continue; // ToDo удалить заглушку
+			if ($deal->number != 'D2216884') continue; // ToDo удалить заглушку
 		
 			$position = $event->dealPosition;
 			if (!$position) continue;
@@ -72,6 +73,7 @@ class SendPromocodeAfterFlightEmail extends Command
 			if (!$city) continue;
 		
 			$contractor = Contractor::where('is_active', true)
+				->where('email', '!=', Contractor::ANONYM_EMAIL)
 				->find($event->contractor_id);
 			if (!$contractor) continue;
 		
@@ -112,7 +114,7 @@ class SendPromocodeAfterFlightEmail extends Command
 				$promocode->cities()->sync((array)$city->id);
 				
 				// отправим в мобилку уведомление о промокоде тоже
-				$notification = new Notification();
+				/*$notification = new Notification();
 				$notification->title = 'Дарим скидку ' . ($promocode->discount->valueFormatted() ?? '') . ' по персональному промокоду';
 				$notification->description = 'Воспользуйтесь промокодом ' . $promocode->number . ' и получите скидку ' . ($promocode->discount->valueFormatted() ?? '') . ' на полет в Dream Aero на авиатренажере ' . $anotherSimulator->name . ' по адресу ' . (array_key_exists('address', $location->data_json) ? $location->data_json['address'] : '') . '.';
 				$notification->city_id = $city->id;
@@ -120,7 +122,7 @@ class SendPromocodeAfterFlightEmail extends Command
 				$notification->is_active = true;
 				$notification->save();
 			
-				$notification->contractors()->attach($city->id);
+				$notification->contractors()->attach($city->id);*/
 			
 				//dispatch(new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode));
 				$job = new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode);
