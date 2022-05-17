@@ -80,7 +80,7 @@ class BillController extends Controller
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
 		
-		$amount = $deal->amount() - $deal->billPayedAmount() - $deal->scoreAmount();
+		$amount = $deal->amount() - $deal->billPayedAmount()/* - $deal->scoreAmount()*/;
 		
 		$statuses = Status::where('type', Status::STATUS_TYPE_BILL)
 			->where('alias', '!=', Bill::PAYED_PROCESSING_STATUS)
