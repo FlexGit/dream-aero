@@ -570,6 +570,8 @@ class DealController extends Controller
 				$bill->user_id = $this->request->user()->id ?? 0;
 				$bill->save();
 				
+				\Log::debug($bill->number . ' - ' . $source . ' - ' . $billLocationId . ' - ' . $this->request->user()->id . ' - ' . $this->request->user()->location_id);
+				
 				$deal->bills()->save($bill);
 			}
 
@@ -957,6 +959,8 @@ class DealController extends Controller
 						$bill->user_id = $this->request->user()->id ?? 0;
 						$bill->save();
 						
+						\Log::debug($bill->number . ' - ' . $source . ' - ' . $billLocationId . ' - ' . $this->request->user()->id . ' - ' . $this->request->user()->location_id);
+						
 						$deal->bills()->save($bill);
 					}
 
@@ -1178,7 +1182,7 @@ class DealController extends Controller
 					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 				}
 				
-				if ((!$paymentMethodId && $source == Deal::WEB_SOURCE) || ($paymentMethodId && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS)) {
+				if ($source == Deal::WEB_SOURCE) {
 					$billLocation = $city->getLocationForBill();
 					if (!$billLocation) {
 						\DB::rollback();
@@ -1203,6 +1207,8 @@ class DealController extends Controller
 				$bill->currency_id = $currency->id ?? 0;
 				$bill->user_id = $this->request->user()->id ?? 0;
 				$bill->save();
+				
+				\Log::debug($bill->number . ' - ' . $source . ' - ' . $billLocationId . ' - ' . $this->request->user()->id . ' - ' . $this->request->user()->location_id);
 				
 				$deal->bills()->save($bill);
 			}
