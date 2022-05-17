@@ -44,7 +44,7 @@ table.fc-scrollgrid tbody {
 	border-bottom: 0 !important;
 }
 td.fc-daygrid-day {
-	height: 55px !important;
+	height: 50px !important;
 }
 .fc-scroller.fc-scroller-liquid-absolute {
 	overflow: hidden !important;
