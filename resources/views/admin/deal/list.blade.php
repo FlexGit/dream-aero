@@ -1,6 +1,7 @@
 @foreach ($deals as $deal)
 	@php
 		$balance = $deal->balance();
+		$scoreAmount = $deal->scoreAmount();
 	@endphp
 
 	<tr class="odd" data-id="{{ $deal->id }}" @if($deal->status && $deal->status->alias == app('\App\Models\Deal')::CREATED_STATUS) style="background-color: #e6d8d8;" @endif>
@@ -38,19 +39,10 @@
 					@endif
 					{{ number_format($deal->amount(), 0, '.', ' ') }}
 				</div>
-				@if($deal->scores)
-					@php($scoreAmount = 0)
-					@foreach($deal->scores ?? [] as $score)
-						@if($score->type != app('\App\Models\Score')::USED_TYPE)
-							@continue
-						@endif
-						@php($scoreAmount += abs($score->score))
-					@endforeach
-					@if($scoreAmount)
-						<div class="d-inline-block" title="Оплачено баллами">
-							<i class="far fa-star"></i> {{ number_format($scoreAmount, 0, '.', ' ') }}
-						</div>
-					@endif
+				@if($scoreAmount)
+					<div class="d-inline-block" title="Оплачено баллами">
+						<i class="far fa-star"></i> {{ number_format($scoreAmount, 0, '.', ' ') }}
+					</div>
 				@endif
 				@php($aeroflotBonusAmount = $deal->aeroflotBonusAmount())
 				@if($aeroflotBonusAmount)
