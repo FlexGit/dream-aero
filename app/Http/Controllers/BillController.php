@@ -184,6 +184,11 @@ class BillController extends Controller
 			$bill->save();
 			
 			$deal->bills()->save($bill);
+			
+			if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+				$job = new \App\Jobs\SendPayLinkEmail($bill);
+				$job->handle();
+			}
 
 			\DB::commit();
 		} catch (Throwable $e) {
