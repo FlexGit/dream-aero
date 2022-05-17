@@ -307,13 +307,13 @@ class Deal extends Model
 		}
 
 		$scoreAmount = 0;
-		if ($this->scores) {
+		/*if ($this->scores) {
 			foreach ($this->scores ?? [] as $score) {
 				if ($score->type != Score::USED_TYPE) continue;
 
 				$scoreAmount += abs($score->score);
 			}
-		}
+		}*/
 
 		return ($amount - $scoreAmount);
 	}
