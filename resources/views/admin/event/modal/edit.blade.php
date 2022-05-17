@@ -433,7 +433,7 @@
 							<div class="custom-file">
 								<input type="file" class="custom-file-input" id="doc_file" name="doc_file">
 								<label class="custom-file-label" for="doc_file">Выбрать файл</label>
-								@if(array_key_exists('doc_file_path', $event->data_json) && $event->data_json['doc_file_path'])
+								@if(is_array($event->data_json) && array_key_exists('doc_file_path', $event->data_json) && $event->data_json['doc_file_path'])
 									[ <a href="{{ url('/event/' . $event->uuid . '/doc/file') }}">скачать</a> ]
 								@endif
 							</div>
