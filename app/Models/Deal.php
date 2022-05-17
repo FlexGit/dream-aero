@@ -298,7 +298,8 @@ class Deal extends Model
 		];
 	}
 
-	public function amount() {
+	public function amount()
+	{
 		$amount = 0;
 		foreach ($this->positions ?? [] as $position) {
 			if ($position->certificate && $position->certificate->status && in_array($position->certificate->status->alias, [Certificate::CANCELED_STATUS, Certificate::RETURNED_STATUS])) continue;
@@ -306,16 +307,21 @@ class Deal extends Model
 			$amount += ($position->amount - $position->aeroflot_bonus_amount);
 		}
 
+		return $amount;
+	}
+	
+	public function scoreAmount()
+	{
 		$scoreAmount = 0;
-		/*if ($this->scores) {
+		if ($this->scores) {
 			foreach ($this->scores ?? [] as $score) {
 				if ($score->type != Score::USED_TYPE) continue;
-
+				
 				$scoreAmount += abs($score->score);
 			}
-		}*/
-
-		return ($amount - $scoreAmount);
+		}
+		
+		return $scoreAmount;
 	}
 
 	public function billPayedAmount()
@@ -334,7 +340,7 @@ class Deal extends Model
 
 	public function balance()
 	{
-		return $this->billPayedAmount() - $this->amount();
+		return $this->billPayedAmount() - $this->amount() - $this->scoreAmount();
 	}
 	
 	public function aeroflotBonusAmount()
