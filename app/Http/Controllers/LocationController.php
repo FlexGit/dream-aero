@@ -309,6 +309,7 @@ class LocationController extends Controller
 		if($file = $this->request->file('scheme_file')) {
 			$isFileUploaded = $file->move(public_path('upload/scheme'), $file->getClientOriginalName());
 		}
+		\Log::debug($isFileUploaded);
 			
 		$location->name = $this->request->name;
 		$location->name_en = $this->request->name_en;
@@ -316,6 +317,7 @@ class LocationController extends Controller
 		$location->is_active = $this->request->is_active;
 		$location->legal_entity_id = $this->request->legal_entity_id;
 		$location->city_id = $this->request->city_id;
+		
 		$data = $location->data_json;
 		$data['address'] = $this->request->address;
 		$data['address_en'] = $this->request->address_en;
