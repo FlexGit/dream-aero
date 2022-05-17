@@ -1275,7 +1275,15 @@ class DealController extends Controller
 				$deal->city_id = $cityId;
 			}
 			$deal->save();
-
+			
+			if ($contractorId) {
+				$bills = $deal->bills;
+				foreach ($bills as $bill) {
+					$bill->contractor_id = $contractorId;
+					$bill->save();
+				}
+			}
+			
 			// если сделку отменяют, а по ней было списание баллов, то начисляем баллы обратно
 			if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
 				$scores = Score::where('deal_id', $deal->id)
