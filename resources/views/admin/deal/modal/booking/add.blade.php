@@ -11,7 +11,7 @@
 			<div class="form-group">
 				<div class="custom-control">
 					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" checked>
-					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}">Бронирование</label>
+					<label class="custom-control-label" for="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}">Полет контрагента</label>
 				</div>
 			</div>
 		</div>
@@ -169,7 +169,7 @@
 <div class="row">
 	<div class="col">
 		<div class="form-group">
-			<label for="flight_date_at">Дата и время начала полета</label>
+			<label for="flight_date_at">Дата и время начала</label>
 			<div class="d-flex">
 				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at" value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->format('Y-m-d') : '' }}">
 				<input type="time" class="form-control ml-2" id="flight_time_at" name="flight_time_at" value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->format('H:i') : '' }}">
