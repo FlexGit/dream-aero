@@ -287,7 +287,7 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'virtual-tour');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'flight-gift');
 		
 		return view('gift-flight', [
 			'page' => $page ?? new Content,
