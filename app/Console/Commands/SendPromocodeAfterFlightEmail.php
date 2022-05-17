@@ -73,19 +73,20 @@ class SendPromocodeAfterFlightEmail extends Command
 		
 			$city = $event->city;
 			if (!$city) continue;
+			\Log::debug('promocode12 - ' . $deal->number);
 		
 			$contractor = Contractor::where('is_active', true)
 				->where('email', '!=', Contractor::ANONYM_EMAIL)
 				->find($event->contractor_id);
 			if (!$contractor) continue;
-		
+			\Log::debug('promocode13 - ' . $deal->number);
 			// промокод данного типа контрагент может получить только единожды
 			$promocode = Promocode::where('is_active', true)
 				->where('contractor_id', $contractor->id)
 				->where('type', Promocode::SIMULATOR_TYPE)
 				->first();
 			if ($promocode) continue;
-
+			\Log::debug('promocode14 - ' . $deal->number);
 			// проверяем, есть ли в данном городе локация с другим типом авиатренажера
 			//\DB::connection()->enableQueryLog();
 			$location = Location::where('is_active', true)
@@ -94,12 +95,12 @@ class SendPromocodeAfterFlightEmail extends Command
 				->first();
 			//\Log::debug(\DB::getQueryLog());
 			if (!$location) continue;
-			
+			\Log::debug('promocode15 - ' . $deal->number);
 			$anotherSimulator = FlightSimulator::where('is_active', true)
 				->where('id', '!=', $simulator->id)
 				->first();
 			if (!$anotherSimulator) continue;
-			
+			\Log::debug('promocode16 - ' . $deal->number);
 			$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000_RUB');
 			if (!$discount) continue;
 		
