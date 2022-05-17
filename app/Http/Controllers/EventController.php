@@ -128,6 +128,7 @@ class EventController extends Controller
 				case Event::EVENT_TYPE_DEAL:
 					$balance = ($event->deal) ? $event->deal->balance() : 0;
 					$position = $event->dealPosition;
+					$bill = $position->bill;
 					
 					$title = $event->deal ? $event->deal->name . ' ' . HelpFunctions::formatPhone($event->deal->phone) : '';
 					$title .= ($position && $position->product) ? ' ' . $position->product->name : '';
@@ -139,7 +140,13 @@ class EventController extends Controller
 						$title .= '(+' . $event->extra_time . ')';
 					}
 					if ($data) {
-						$color = ($balance >= 0) ? $data['deal_paid'] : $data['deal'];
+						// если к позиции привязан счет, то он должен быть оплачен
+						// иначе проверяем чтобы вся сделка была оплачена
+						if ($bill) {
+							$color = ($bill->status->alias == Bill::PAYED_STATUS) ? $data['deal_paid'] : $data['deal'];
+						} else {
+							$color = ($balance >= 0) ? $data['deal_paid'] : $data['deal'];
+						}
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:
