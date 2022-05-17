@@ -7,7 +7,7 @@
 
 @if($source)
 	<div class="row">
-		<div class="col-2">
+		<div class="col-3">
 			<div class="form-group">
 				<div class="custom-control">
 					<input type="radio" class="custom-control-input" id="event_type_{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}" checked>
