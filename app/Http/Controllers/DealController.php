@@ -585,6 +585,11 @@ class DealController extends Controller
 							return response()->json(['status' => 'error', 'reason' => 'Aeroflot Bonus: ' . $registerOrderResult['status']['description']]);
 						}
 						
+						if ($source == Deal::WEB_SOURCE) {
+							$job = new \App\Jobs\SendDealEmail($deal);
+							$job->handle();
+						}
+						
 						\DB::commit();
 						
 						return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена! Перенаправляем на страницу "Аэрофлот Бонус"...', 'payment_url' => $registerOrderResult['paymentUrl']]);
