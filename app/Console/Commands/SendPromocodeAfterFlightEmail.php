@@ -66,6 +66,8 @@ class SendPromocodeAfterFlightEmail extends Command
 			
 			if ($deal->number != 'D2216814') continue; // ToDo удалить заглушку
 		
+			\Log::debug('promocode1 - ' . $deal->number);
+			
 			$position = $event->dealPosition;
 			if (!$position) continue;
 		
@@ -101,6 +103,7 @@ class SendPromocodeAfterFlightEmail extends Command
 			$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000_RUB');
 			if (!$discount) continue;
 		
+			\Log::debug('promocode2 - ' . $deal->number);
 			try {
 				$promocode = new Promocode();
 				$promocode->number = $city->alias . $location->alias . $anotherSimulator->alias . rand(100000, 999999);
@@ -113,6 +116,7 @@ class SendPromocodeAfterFlightEmail extends Command
 				
 				$promocode->cities()->sync((array)$city->id);
 				
+				\Log::debug('promocode3 - ' . $deal->number);
 				// отправим в мобилку уведомление о промокоде тоже
 				/*$notification = new Notification();
 				$notification->title = 'Дарим скидку ' . ($promocode->discount->valueFormatted() ?? '') . ' по персональному промокоду';
@@ -127,6 +131,7 @@ class SendPromocodeAfterFlightEmail extends Command
 				//dispatch(new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode));
 				$job = new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode);
 				$job->handle();
+				\Log::debug('promocode4 - ' . $deal->number);
 			} catch (Throwable $e) {
 				\Log::debug('500 - ' . $e->getMessage());
 				
