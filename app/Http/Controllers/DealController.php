@@ -1282,6 +1282,11 @@ class DealController extends Controller
 					$bill->contractor_id = $contractorId;
 					$bill->save();
 				}
+				$events = $deal->events;
+				foreach ($events as $event) {
+					$event->contractor_id = $contractorId;
+					$event->save();
+				}
 			}
 			
 			// если сделку отменяют, а по ней было списание баллов, то начисляем баллы обратно
