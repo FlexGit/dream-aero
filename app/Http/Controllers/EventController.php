@@ -958,7 +958,9 @@ class EventController extends Controller
 		$event = Event::find($this->request->event_id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
-		dispatch(new \App\Jobs\SendFlightInvitationEmail($event));
+		//dispatch(new \App\Jobs\SendFlightInvitationEmail($event));
+		$job = new \App\Jobs\SendFlightInvitationEmail($event);
+		$job->handle();
 		
 		return response()->json(['status' => 'success', 'message' => 'Задание на отправку Приглашения на полет принято']);
 	}
