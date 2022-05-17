@@ -340,7 +340,7 @@ class Deal extends Model
 
 	public function balance()
 	{
-		return $this->billPayedAmount() - $this->amount() - $this->scoreAmount();
+		return $this->billPayedAmount() - $this->amount() + $this->scoreAmount();
 	}
 	
 	public function aeroflotBonusAmount()
