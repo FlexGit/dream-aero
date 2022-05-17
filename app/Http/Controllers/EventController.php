@@ -138,14 +138,13 @@ class EventController extends Controller
 					
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
 					$title .= $product ? ' ' . $product->name : '';
-					$title .= $certificate ? ' ' . $certificate->number : '';
-					$title .= $billStatus ? ' ' . $billStatus->name : '';
-					
-					$allDay = false;
-					
 					if ($event->extra_time) {
 						$title .= '(+' . $event->extra_time . ')';
 					}
+					$title .= $certificate ? ' ' . $certificate->number : '';
+					
+					$allDay = false;
+					
 					if ($data) {
 						// если к позиции привязан счет, то он должен быть оплачен
 						// иначе проверяем чтобы вся сделка была оплачена
