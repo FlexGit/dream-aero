@@ -132,7 +132,6 @@ class SendPromocodeAfterFlightEmail extends Command
 				//dispatch(new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode));
 				$job = new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode);
 				$job->handle();
-				\Log::debug('promocode4 - ' . $deal->number);
 			} catch (Throwable $e) {
 				\Log::debug('500 - ' . $e->getMessage());
 				
