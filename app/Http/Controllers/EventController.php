@@ -938,6 +938,10 @@ class EventController extends Controller
 		$deal = $position->deal;
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		/** @var Bill $bill */
 		/*$bill = $position->bill;
 		if ($bill) {

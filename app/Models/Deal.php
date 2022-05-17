@@ -107,12 +107,14 @@ class Deal extends Model
 	];
 	
 	const CREATED_STATUS = 'deal_created';
+	const IN_WORK_STATUS = 'deal_in_work';
 	const CONFIRMED_STATUS = 'deal_confirmed';
 	const PAUSED_STATUS = 'deal_paused';
 	const RETURNED_STATUS = 'deal_returned';
 	const CANCELED_STATUS = 'deal_canceled';
 	const STATUSES = [
 		self::CREATED_STATUS,
+		self::IN_WORK_STATUS,
 		self::CONFIRMED_STATUS,
 		self::PAUSED_STATUS,
 		self::RETURNED_STATUS,

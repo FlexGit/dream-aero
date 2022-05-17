@@ -273,9 +273,13 @@ class PositionController extends Controller
 		
 		$deal = Deal::find($dealId);
 		if (!$deal) {
-			return response()->json(['status' => 'error', 'reason' => 'Сделка не найден']);
+			return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		}
-
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
@@ -415,9 +419,13 @@ class PositionController extends Controller
 
 		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) {
-			return response()->json(['status' => 'error', 'reason' => 'Сделка не найден']);
+			return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		}
-
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
@@ -569,9 +577,13 @@ class PositionController extends Controller
 		
 		$deal = Deal::find($dealId);
 		if (!$deal) {
-			return response()->json(['status' => 'error', 'reason' => 'Сделка не найден']);
+			return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		}
-
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$product = Product::find($productId);
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
@@ -654,6 +666,13 @@ class PositionController extends Controller
 
 		$position = DealPosition::find($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
+		
+		$deal = $position->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
 		
 		$certificate = $position->certificate;
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
@@ -777,7 +796,14 @@ class PositionController extends Controller
 
 		$position = DealPosition::find($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-
+		
+		$deal = $position->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$rules = [
 			'product_id' => 'required|numeric|min:0|not_in:0',
 			'location_id' => 'required|numeric|min:0|not_in:0',
@@ -908,7 +934,14 @@ class PositionController extends Controller
 
 		$position = DealPosition::find($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-
+		
+		$deal = $position->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$rules = [
 			'product_id' => 'required|numeric|min:0|not_in:0',
 			'city_id' => 'required|numeric|min:0|not_in:0',
@@ -1011,6 +1044,13 @@ class PositionController extends Controller
 
 		$position = DealPosition::find($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
+		
+		$deal = $position->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
 		
 		$certificateFilePath = ($position->is_certificate_purchase && $position->certificate && is_array($position->certificate->data_json) && array_key_exists('certificate_file_path', $position->certificate->data_json)) ? $position->certificate->data_json['certificate_file_path'] : '';
 		

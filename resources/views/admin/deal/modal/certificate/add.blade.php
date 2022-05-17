@@ -5,11 +5,19 @@
 <div class="row">
 	<div class="col">
 		<div class="form-group">
+			<label for="contractor_search">Поиск контрагента</label>
+			<input type="email" class="form-control" id="contractor_search" name="email" placeholder="Поиск по ФИО, E-mail, телефону">
+			<div class="js-contractor-container hidden">
+				<span class="js-contractor"></span> <i class="fas fa-times js-contractor-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
 			<label for="email">E-mail</label>
 			<input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
-			<div class="js-contractor-container hidden">
-				<small>Контрагент: <span class="js-contractor"></span></small> <i class="fas fa-times js-contractor-delete" title="Удалить позицию" style="cursor: pointer;color: #aaa;"></i>
-			</div>
 		</div>
 	</div>
 	<div class="col">

@@ -514,10 +514,12 @@
 			});
 
 			$(document).on('show.bs.modal', '#modal', function(e) {
-				var $form = $(this).find('form');
+				var $form = $(this).find('form'),
+					$contractorId = $form.find('#contractor_id'),
+					isContractorExists = $contractorId.length ? $contractorId.val().length : '';
 
-				if ($form.attr('id') === 'deal' && $form.find('#contractor_id').length && !$form.find('#contractor_id').val().length) {
-					$('#email').autocomplete({
+				if ($form.attr('id') === 'deal') {
+					$('#contractor_search').autocomplete({
 						serviceUrl: '{{ route('contractorSearch') }}',
 						minChars: 1,
 						width: 'flex',
@@ -529,48 +531,81 @@
 							if (suggestion.id) {
 								$('#contractor_id').val(suggestion.id);
 							}
-							if (suggestion.data.name) {
-								$('#name').val(suggestion.data.name);
-							}
-							if (suggestion.data.lastname) {
-								$('#lastname').val(suggestion.data.lastname);
-							}
-							if (suggestion.data.email) {
-								$('#email').val(suggestion.data.email);
-							}
-							if (suggestion.data.phone) {
-								$('#phone').val(suggestion.data.phone);
-							}
-							if (suggestion.data.city_id && $('#city_id').length) {
+							if (suggestion.data.city_id) {
 								$('#city_id').val(suggestion.data.city_id);
 							}
-							$('.js-contractor').text(suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
-							calcProductAmount();
+							if (!isContractorExists) {
+								if (suggestion.data.name) {
+									$('#name').val(suggestion.data.name);
+								}
+								if (suggestion.data.lastname) {
+									$('#lastname').val(suggestion.data.lastname);
+								}
+								if (suggestion.data.email) {
+									$('#email').val(suggestion.data.email);
+								}
+								if (suggestion.data.phone) {
+									$('#phone').val(suggestion.data.phone);
+								}
+								calcProductAmount();
+							}
+							$('#contractor_search').attr('disabled', true);
+							$('.js-contractor').text('Привязан контрагент: ' + suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
 						}
 					});
 				}
 			});
 
-			$(document).on('shown.bs.modal', '#modal', function(e) {
+			$(document).on('shown.bs.modal', '#modal', function() {
 				var $form = $(this).find('form');
 
-				if ($form.attr('id') === 'deal' && $form.find('#contractor_id').length && !$form.find('#contractor_id').val().length) {
-					$('#email').focus();
+				if ($form.attr('id') === 'deal') {
+					$('#contractor_search').focus();
 				}
 			});
 
-			$(document).on('click', '.js-contractor-delete', function(e) {
+			$(document).on('click', '.js-contractor-delete', function() {
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
-				$('#contractor_id').val('');
+				$('#contractor_search').val('').attr('disabled', false).focus();
+				$('#contractor_id, #city_id').val('');
 			});
 
-			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free', function(e) {
+			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at', function() {
 				calcProductAmount();
+
+				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at']) !== -1) {
+					validateFlightDate();
+				}
 			});
 
 			$(document).on('keyup', '#certificate', function(e) {
 				calcProductAmount();
 			});
+
+			function validateFlightDate() {
+				var $eventStopElement = $('.js-event-stop-at'),
+					$isValidFlightDate = $('#is_valid_flight_date'),
+					$product = $('#product_id'),
+					$flightDate = $('#flight_date_at'),
+					$flightTime = $('#flight_time_at'),
+					duration = $product.find(':selected').data('duration');
+
+				if (($product.val() > 0) && duration && $flightDate.val().length && $flightTime.val().length) {
+					var flightStartAt = moment(new Date($flightDate.val() + 'T' + $flightTime.val()), 'DD.MM.YYYY HH:mm'),
+						flightStopAt = flightStartAt.add(duration, 'm');
+
+					if (!flightStopAt.isAfter($flightDate.val(), 'day')) {
+						$isValidFlightDate.val(1);
+						$eventStopElement.text('Окончание полета: ' + flightStopAt.format('DD.MM.YYYY HH:mm'));
+					} else {
+						$isValidFlightDate.val(0);
+						$eventStopElement.text('Некорректное начало полета');
+					}
+				} else {
+					$isValidFlightDate.val(0);
+					$eventStopElement.text('');
+				}
+			}
 
 			function calcProductAmount() {
 				$.ajax({

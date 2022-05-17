@@ -17,6 +17,7 @@ use App\Models\Location;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Promocode;
+use App\Models\Score;
 use App\Models\Status;
 use App\Models\User;
 use App\Repositories\CityRepository;
@@ -1226,6 +1227,10 @@ class DealController extends Controller
 		$deal = Deal::find($id);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$rules = [
 			'name' => 'required',
 			'email' => 'required|email',
@@ -1244,16 +1249,12 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$statusId = $this->request->status_id ?? '';
-		/*$comment = $this->request->comment ?? '';*/
+		$contractorId = $this->request->contractor_id ?? 0;
+		$cityId = $this->request->city_id ?? 0;
+		$statusId = $this->request->status_id ?? 0;
 		$name = $this->request->name ?? '';
 		$email = $this->request->email ?? '';
 		$phone = $this->request->phone ?? '';
-		
-		/*$data = is_array($deal->data_json) ? $deal->data_json : json_decode($deal->data_json, true);
-		if ($comment) {
-			$data['comment'] = $comment;
-		}*/
 		
 		try {
 			\DB::beginTransaction();
@@ -1262,30 +1263,31 @@ class DealController extends Controller
 			$deal->name = $name;
 			$deal->email = $email;
 			$deal->phone = $phone;
-			/*$deal->data_json = $data;*/
+			if ($contractorId) {
+				$deal->contractor_id = $contractorId;
+			}
+			if ($cityId) {
+				$deal->city_id = $cityId;
+			}
 			$deal->save();
 
 			// если сделку отменяют, а по ней было списание баллов, то начисляем баллы обратно
-			/*if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
-
-			}*/
-
-			/*if (in_array($deal->status->alias, [Deal::CANCELED_STATUS]) && $deal->certificate && $deal->is_certificate_purchase) {
-				$certificateStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Certificate::CANCELED_STATUS);
-				if ($certificateStatus) {
-					$certificate = Certificate::find($deal->certificate->id);
-					$certificate->status_id = $certificateStatus->id;
-					$certificate->save();
+			if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+				$scores = Score::where('deal_id', $deal->id)
+					->where('type', Score::USED_TYPE)
+					->get();
+				foreach ($scores as $item) {
+					$score = new Score();
+					$score->score = $item->score;
+					$score->type = Score::SCORING_TYPE;
+					$score->contractor_id = $item->contractor_id;
+					$score->deal_id = $item->deal_id;
+					$score->deal_position_id = $item->deal_position_id;
+					$score->user_id = $this->request->user()->id;
+					$score->save();
 				}
-			} elseif (in_array($deal->status->alias, [Deal::RETURNED_STATUS]) && $deal->certificate && $deal->is_certificate_purchase) {
-				$certificateStatus = HelpFunctions::getEntityByAlias('\App\Models\Status', Certificate::RETURNED_STATUS);
-				if ($certificateStatus) {
-					$certificate = Certificate::find($deal->certificate->id);
-					$certificate->status_id = $certificateStatus->id;
-					$certificate->save();
-				}
-			}*/
-			
+			}
+
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();

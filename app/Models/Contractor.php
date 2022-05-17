@@ -115,6 +115,8 @@ class Contractor extends Authenticatable
 	];
 
 	const REGISTRATION_SCORE = 500;
+
+	const ANONYM_EMAIL = 'anonym@dream-aero.ru';
 	
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;

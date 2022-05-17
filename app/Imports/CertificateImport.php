@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Certificate;
 use App\Models\Content;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
@@ -35,8 +36,8 @@ class CertificateImport implements OnEachRow, WithProgressBar
 			$parent = HelpFunctions::getEntityByAlias(Content::class, 'news');
 			$parentId = $parent ? $parent->id : 0;
 
-			$content = new Content();
-			$content->title = trim($row[0]);
+			$certificate = new Certificate();
+			$certificate->number = trim($row[0]);
 			$content->alias = trim($row[2]);
 			$content->preview_text = trim($row[3]);
 			$content->detail_text = trim($row[4]);

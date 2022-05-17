@@ -144,6 +144,10 @@ class BillController extends Controller
 
 		if (!$deal->contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$positionId = $this->request->position_id ?? 0;
 		if ($positionId) {
 			$position = DealPosition::find($positionId);
@@ -206,6 +210,13 @@ class BillController extends Controller
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
+		$deal = $bill->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$rules = [
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
@@ -261,7 +272,14 @@ class BillController extends Controller
 
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
-
+		
+		$deal = $bill->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		if (!$bill->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -293,7 +311,11 @@ class BillController extends Controller
 		
 		$deal = $bill->deal;
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
-
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
 		$contractor = $bill->contractor;
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 		

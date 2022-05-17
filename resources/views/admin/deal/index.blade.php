@@ -128,7 +128,7 @@
 	<div class="load_more"></div>
 
 	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-xl">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="modalLabel">Редактирование</h5>
@@ -221,11 +221,11 @@
 					return null;
 				}
 
-				if ($.inArray(type, ['deal', 'position', 'event']) !== -1) {
-					$modalDialog.addClass('modal-lg');
+				/*if ($.inArray(type, ['event']) !== -1) {
+					$modalDialog.addClass('modal-xl');
 				} else {
-					$modalDialog.removeClass('modal-lg');
-				}
+					$modalDialog.removeClass('modal-xl');
+				}*/
 
 				$modalDialog.find('form').attr('id', type);
 
@@ -326,10 +326,12 @@
 			});
 
 			$(document).on('show.bs.modal', '#modal', function(e) {
-				var $form = $(this).find('form');
+				var $form = $(this).find('form'),
+					$contractorId = $form.find('#contractor_id'),
+					isContractorExists = $contractorId.length ? $contractorId.val().length : '';
 
-				if ($form.attr('id') === 'deal' && !$form.find('#contractor_id').val().length) {
-					$('#email').autocomplete({
+				if ($form.attr('id') === 'deal') {
+					$('#contractor_search').autocomplete({
 						serviceUrl: '{{ route('contractorSearch') }}',
 						minChars: 1,
 						width: 'flex',
@@ -341,39 +343,43 @@
 							if (suggestion.id) {
 								$('#contractor_id').val(suggestion.id);
 							}
-							if (suggestion.data.name) {
-								$('#name').val(suggestion.data.name);
-							}
-							if (suggestion.data.lastname) {
-								$('#lastname').val(suggestion.data.lastname);
-							}
-							if (suggestion.data.email) {
-								$('#email').val(suggestion.data.email);
-							}
-							if (suggestion.data.phone) {
-								$('#phone').val(suggestion.data.phone);
-							}
-							if (suggestion.data.city_id && $('#city_id').length) {
+							if (suggestion.data.city_id) {
 								$('#city_id').val(suggestion.data.city_id);
 							}
-							$('.js-contractor').text(suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
-							calcProductAmount();
+							if (!isContractorExists) {
+								if (suggestion.data.name) {
+									$('#name').val(suggestion.data.name);
+								}
+								if (suggestion.data.lastname) {
+									$('#lastname').val(suggestion.data.lastname);
+								}
+								if (suggestion.data.email) {
+									$('#email').val(suggestion.data.email);
+								}
+								if (suggestion.data.phone) {
+									$('#phone').val(suggestion.data.phone);
+								}
+								calcProductAmount();
+							}
+							$('#contractor_search').attr('disabled', true);
+							$('.js-contractor').text('Привязан контрагент: ' + suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
 						}
 					});
 				}
 			});
 
-			$(document).on('shown.bs.modal', '#modal', function(e) {
+			$(document).on('shown.bs.modal', '#modal', function() {
 				var $form = $(this).find('form');
 
-				if ($form.attr('id') === 'deal' && !$form.find('#contractor_id').val().length) {
-					$('#email').focus();
+				if ($form.attr('id') === 'deal') {
+					$('#contractor_search').focus();
 				}
 			});
 
 			$(document).on('click', '.js-contractor-delete', function() {
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
-				$('#contractor_id').val('');
+				$('#contractor_search').val('').attr('disabled', false).focus();
+				$('#contractor_id, #city_id').val('');
 			});
 
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at', function() {

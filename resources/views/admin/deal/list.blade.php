@@ -3,7 +3,7 @@
 		$balance = $deal->balance();
 	@endphp
 
-	<tr class="odd" data-id="{{ $deal->id }}">
+	<tr class="odd" data-id="{{ $deal->id }}" @if($deal->status && $deal->status->alias == app('\App\Models\Deal')::CREATED_STATUS) style="background-color: #e6d8d8;" @endif>
 		<td class="align-top small">
 			<div class="col-12 d-inline-block text-nowrap">
 				<div>
