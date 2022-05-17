@@ -52,7 +52,7 @@ class ContentController extends Controller
 		
 		$id = $this->request->id ?? 0;
 
-		$contents = Content::orderBy('created_at', 'desc')
+		$contents = Content::orderByDesc('id')
 			->where('version', $version)
 			->where('parent_id', $parentContent->id);
 		if ($this->request->search_content) {
