@@ -52,43 +52,35 @@ class SendPromocodeAfterFlightEmail extends Command
 			->whereBetween('stop_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
 			->get();
     	foreach ($events as $event) {
-    		\Log::debug('promocode - 1');
     		if (!$event->contractor_id) continue;
 		
-			\Log::debug('promocode - 2');
     		$location = $event->location;
     		if (!$location) continue;
 		
-			\Log::debug('promocode - 3');
 			$simulator = $event->simulator;
 			if (!$simulator) continue;
 		
-			\Log::debug('promocode - 4');
 			$deal = $event->deal;
 			if (!$deal) continue;
-			\Log::debug('promocode - 5');
+			
+			if ($deal->number != 'D2216915') continue; // ToDo удалить заглушку
 		
-			\Log::debug('promocode - 6');
 			$position = $event->dealPosition;
 			if (!$position) continue;
 		
-			\Log::debug('promocode - 7');
 			$city = $event->city;
 			if (!$city) continue;
 		
-			\Log::debug('promocode - 8');
 			$contractor = Contractor::where('is_active', true)
 				->find($event->contractor_id);
 			if (!$contractor) continue;
 		
-			\Log::debug('promocode - 9');
 			// промокод данного типа контрагент может получить только единожды
 			$promocode = Promocode::where('is_active', true)
 				->where('contractor_id', $contractor->id)
 				->where('type', Promocode::SIMULATOR_TYPE)
 				->first();
 			if ($promocode) continue;
-			\Log::debug('promocode - 10');
 
 			// проверяем, есть ли в данном городе локация с другим типом авиатренажера
 			//\DB::connection()->enableQueryLog();
@@ -98,18 +90,14 @@ class SendPromocodeAfterFlightEmail extends Command
 				->first();
 			//\Log::debug(\DB::getQueryLog());
 			if (!$location) continue;
-			\Log::debug('promocode - 11');
 			
 			$anotherSimulator = FlightSimulator::where('is_active', true)
 				->where('id', '!=', $simulator->id)
 				->first();
 			if (!$anotherSimulator) continue;
 			
-			\Log::debug('promocode - 12 - ' . $deal->number);
-		
-			$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000');
+			$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000_RUB');
 			if (!$discount) continue;
-			\Log::debug('promocode - 13');
 		
 			try {
 				$promocode = new Promocode();
@@ -122,8 +110,6 @@ class SendPromocodeAfterFlightEmail extends Command
 				$promocode->save();
 				
 				$promocode->cities()->sync((array)$city->id);
-				
-				\Log::debug('promocode - 14');
 				
 				// отправим в мобилку уведомление о промокоде тоже
 				$notification = new Notification();
