@@ -324,6 +324,8 @@ class MainController extends Controller
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
 		if ($simulator && $simulator == 'boeing-737-ng') {
+			$page = HelpFunctions::getEntityByAlias(Content::class, 'instruction-737-ng');
+
 			return view('instruction-737-ng', [
 				'page' => $page ?? new Content,
 				'city' => $city,
@@ -332,6 +334,8 @@ class MainController extends Controller
 		}
 
 		if ($simulator && $simulator == 'airbus-a320') {
+			$page = HelpFunctions::getEntityByAlias(Content::class, 'instruction-a320');
+
 			return view('instruction-a320', [
 				'page' => $page ?? new Content,
 				'city' => $city,
