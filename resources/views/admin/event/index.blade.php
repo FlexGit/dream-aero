@@ -873,6 +873,7 @@
 				switch (value) {
 					case 'test_flight':
 						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#contractor_search').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
@@ -883,6 +884,7 @@
 						break;
 					case 'user_flight':
 						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#contractor_search').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
@@ -894,6 +896,7 @@
 					case 'break':
 					case 'cleaning':
 						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#contractor_search').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
@@ -904,6 +907,7 @@
 						break;
 					case 'deal':
 						$form.find('#payment_method_id').closest('.row').show();
+						$form.find('#contractor_search').closest('.row').show();
 						$form.find('#email').closest('.row').show();
 						$form.find('#product_id').closest('.row').show();
 						$form.find('#comment').closest('.row').show();
