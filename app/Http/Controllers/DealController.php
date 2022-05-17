@@ -150,9 +150,10 @@ class DealController extends Controller
 			$deals = $deals->where(function ($query) {
 				$query->where('number', 'like', '%' . $this->request->search_doc . '%')
 					->orWhereRelation('positions', function ($query) {
-						return $query->orWhereHas('certificate', function ($query) {
-							return $query->where('certificates.number', 'like', '%' . $this->request->search_doc . '%');
-						});
+						return $query->where('number', 'like', '%' . $this->request->search_doc . '%')
+							->orWhereHas('certificate', function ($query) {
+								return $query->where('certificates.number', 'like', '%' . $this->request->search_doc . '%');
+							});
 					})
 					->orWhereHas('bills', function ($q) {
 						return $q->where('bills.number', 'like', '%' . $this->request->search_doc . '%');
@@ -164,11 +165,13 @@ class DealController extends Controller
 				$query->where('name', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%')
+					->orWhere('id', $this->request->search_contractor)
 					->orWhereHas('contractor', function ($query) {
 						return $query->where('name', 'like', '%' . $this->request->search_contractor . '%')
 							->orWhere('lastname', 'like', '%' . $this->request->search_contractor . '%')
 							->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
-							->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%');
+							->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%')
+							->orWhere('id', $this->request->search_contractor);
 					});
 			});
 		}
