@@ -67,7 +67,6 @@ class SendPromocodeAfterFlightEmail extends Command
 			$deal = $event->deal;
 			if (!$deal) continue;
 			\Log::debug('promocode - 5');
-			if (!$deal->email) continue;
 		
 			\Log::debug('promocode - 6');
 			$position = $event->dealPosition;
@@ -105,7 +104,8 @@ class SendPromocodeAfterFlightEmail extends Command
 				->where('id', '!=', $simulator->id)
 				->first();
 			if (!$anotherSimulator) continue;
-			\Log::debug('promocode - 12');
+			
+			\Log::debug('promocode - 12 - ' . $deal->number);
 		
 			$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000');
 			if (!$discount) continue;
