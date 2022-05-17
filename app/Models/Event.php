@@ -300,7 +300,7 @@ class Event extends Model
 		$flightInvitationFile = Image::make($flightInvitationTemplateFilePath)->encode('jpg');
 		$fontPath = public_path('assets/fonts/GothamProRegular/GothamProRegular.ttf');
 		
-		$flightInvitationFile->text($this->start_at->format('d.m.Y'), 3520, 410, function ($font) use ($fontPath) {
+		$flightInvitationFile->text($this->start_at->format('d.m.Y H:i'), 3430, 410, function ($font) use ($fontPath) {
 			$font->file($fontPath);
 			$font->size(120);
 			$font->color('#333333');
