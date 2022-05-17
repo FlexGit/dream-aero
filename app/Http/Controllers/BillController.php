@@ -320,7 +320,7 @@ class BillController extends Controller
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 		
 		$city = $contractor->city;
-		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Город контрагента не найден']);
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Город контрагента не найден!']);
 		
 		$email = $deal->email ?: $contractor->email;
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
