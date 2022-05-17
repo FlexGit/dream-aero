@@ -5,14 +5,13 @@
 <div class="row">
 	@if(in_array($type, [app('\App\Models\Content')::REVIEWS_TYPE, app('\App\Models\Content')::PAGES_TYPE]))
 		<input type="hidden" id="alias" name="alias" value="{{ (string)\Webpatser\Uuid\Uuid::generate() }}">
-	@else
-		<div class="col-4">
-			<div class="form-group">
-				<label for="alias">Алиас</label>
-				<input type="text" class="form-control" id="alias" name="alias" placeholder="Алиас">
-			</div>
-		</div>
 	@endif
+	<div class="col-4">
+		<div class="form-group">
+			<label for="alias">Алиас</label>
+			<input type="text" class="form-control" id="alias" name="alias" placeholder="Алиас">
+		</div>
+	</div>
 	<div class="col-3">
 		<div class="form-group">
 			<label for="city_id">Город</label>
