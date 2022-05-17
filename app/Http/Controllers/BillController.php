@@ -249,8 +249,13 @@ class BillController extends Controller
 			if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки  не найдена']);
 		}
 		
+		$paymentMethodId = $this->request->payment_method_id ?? 0;
+		if ($paymentMethodId) {
+			$paymentMethod = PaymentMethod::find($paymentMethodId);
+		}
+		
 		$bill->deal_position_id = $position->id ?? 0;
-		$bill->payment_method_id = $this->request->payment_method_id ?? 0;
+		$bill->payment_method_id = $paymentMethodId;
 		$bill->status_id = $this->request->status_id ?? 0;
 		$bill->amount = $this->request->amount;
 		$bill->currency_id = $this->request->currency_id ?? 0;
@@ -259,6 +264,11 @@ class BillController extends Controller
 		}
 		if (!$bill->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+			$job = new \App\Jobs\SendPayLinkEmail($bill);
+			$job->handle();
 		}
 		
 		return response()->json(['status' => 'success']);
