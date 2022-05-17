@@ -60,8 +60,8 @@ class ContractorController extends Controller
 		
 		$id = $this->request->id ?? 0;
 		
-		$contractors = Contractor::whereRelation('city', 'version', '=', $user->version)
-			->orderBy('created_at', 'desc');
+		$contractors = Contractor::/*whereRelation('city', 'version', '=', $user->version)
+			->*/orderBy('created_at', 'desc');
 		if ($this->request->filter_city_id) {
 			$contractors = $contractors->where('city_id', $this->request->filter_city_id);
 		/*} elseif ($this->request->user()->city) {
@@ -75,6 +75,9 @@ class ContractorController extends Controller
 					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('uuid', $this->request->search_contractor);
 			});
+		}
+		if (!$user->isSuperAdmin()) {
+			$contractors = $contractors->whereIn('city_id', [$user->city_id, 0]);
 		}
 		if ($id) {
 			$contractors = $contractors->where('id', '<', $id);
