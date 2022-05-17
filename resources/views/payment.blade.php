@@ -42,7 +42,7 @@
 											</ul>
 										@endif
 									@else
-										@if(($bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
+										{{--@if(($bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
 											<div class="aeroflot_container">
 												<div style="display: flex;">
 													<div class="switch_box" style="margin-bottom: 10px;">
@@ -62,7 +62,7 @@
 												<small class="aeroflot_note" style="display: none;">* @lang('main.modal-certificate.введите-номер-карты-аэрофлот-описание')</small>
 												<div class="aeroflot-buttons-container"></div>
 											</div>
-										@endif
+										@endif--}}
 									@endif
 								@endif
 
