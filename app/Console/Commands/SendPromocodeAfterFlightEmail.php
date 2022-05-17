@@ -64,7 +64,7 @@ class SendPromocodeAfterFlightEmail extends Command
 			$deal = $event->deal;
 			if (!$deal) continue;
 			
-			if ($deal->number != 'D2216884') continue; // ToDo удалить заглушку
+			if ($deal->number != 'D2216814') continue; // ToDo удалить заглушку
 		
 			$position = $event->dealPosition;
 			if (!$position) continue;
