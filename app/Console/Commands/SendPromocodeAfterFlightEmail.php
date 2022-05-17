@@ -106,10 +106,12 @@ class SendPromocodeAfterFlightEmail extends Command
 				->first();
 			if (!$anotherSimulator) continue;
 			\Log::debug('promocode - 12');
-
+		
+			$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000');
+			if (!$discount) continue;
+			\Log::debug('promocode - 13');
+		
 			try {
-				$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000');
-				
 				$promocode = new Promocode();
 				$promocode->number = $city->alias . $location->alias . $anotherSimulator->alias . rand(100000, 999999);
 				$promocode->type = Promocode::SIMULATOR_TYPE;
@@ -120,7 +122,9 @@ class SendPromocodeAfterFlightEmail extends Command
 				$promocode->save();
 				
 				$promocode->cities()->sync((array)$city->id);
-			
+				
+				\Log::debug('promocode - 14');
+				
 				// отправим в мобилку уведомление о промокоде тоже
 				$notification = new Notification();
 				$notification->title = 'Дарим скидку ' . ($promocode->discount->valueFormatted() ?? '') . ' по персональному промокоду';
