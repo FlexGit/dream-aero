@@ -119,7 +119,7 @@ class SendPromocodeAfterFlightEmail extends Command
 				$notification->is_active = true;
 				$notification->save();
 			
-				$notification->contractors()->attach($city->id);
+				$notification->contractors()->attach($contractor->id);
 			
 				//dispatch(new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode));
 				$job = new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode);
