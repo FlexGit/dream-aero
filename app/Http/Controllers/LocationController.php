@@ -309,7 +309,6 @@ class LocationController extends Controller
 		if($file = $this->request->file('scheme_file')) {
 			$isFileUploaded = $file->move(public_path('upload/scheme'), $file->getClientOriginalName());
 		}
-		\Log::debug($isFileUploaded);
 			
 		$location->name = $this->request->name;
 		$location->name_en = $this->request->name_en;
@@ -329,6 +328,7 @@ class LocationController extends Controller
 		$data['skype'] = $this->request->skype;
 		$data['whatsapp'] = $this->request->whatsapp;
 		$data['scheme_file_path'] = $isFileUploaded ? 'scheme/' . $file->getClientOriginalName() : '';
+		$location->data_json = $data;
 
 		if (!$location->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
