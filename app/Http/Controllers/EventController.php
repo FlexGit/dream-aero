@@ -18,6 +18,7 @@ use App\Models\Status;
 use App\Models\User;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
+use Doctrine\DBAL\Events;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -118,6 +119,7 @@ class EventController extends Controller
 			->get();
 
 		$eventData = [];
+		/** @var Event[] $events */
 		foreach ($events as $event) {
 			$data = isset($locationData[$event->location_id][$event->flight_simulator_id]) ? $locationData[$event->location_id][$event->flight_simulator_id] : [];
 
@@ -126,13 +128,18 @@ class EventController extends Controller
 			
 			switch ($event->event_type) {
 				case Event::EVENT_TYPE_DEAL:
-					$balance = ($event->deal) ? $event->deal->balance() : 0;
+					$deal = $event->deal;
+					$balance = $deal ? $deal->balance() : 0;
 					$position = $event->dealPosition;
-					$bill = $position->bill;
+					$product = $position ? $position->product : null;
+					$certificate = $position ? $position->certificate : null;
+					$bill = $position ? $position->bill : null;
+					$billStatus = $bill ? $bill->status : null;
 					
-					$title = $event->deal ? $event->deal->name . ' ' . HelpFunctions::formatPhone($event->deal->phone) : '';
-					$title .= ($position && $position->product) ? ' ' . $position->product->name : '';
-					$title .= ($position && $position->certificate) ? ' ' . $position->certificate->number : '';
+					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
+					$title .= $product ? ' ' . $product->name : '';
+					$title .= $certificate ? ' ' . $certificate->number : '';
+					$title .= $billStatus ? ' ' . $billStatus->name : '';
 					
 					$allDay = false;
 					
@@ -143,7 +150,7 @@ class EventController extends Controller
 						// если к позиции привязан счет, то он должен быть оплачен
 						// иначе проверяем чтобы вся сделка была оплачена
 						if ($bill) {
-							$color = ($bill->status->alias == Bill::PAYED_STATUS) ? $data['deal_paid'] : $data['deal'];
+							$color = ($billStatus->alias == Bill::PAYED_STATUS) ? $data['deal_paid'] : $data['deal'];
 						} else {
 							$color = ($balance >= 0) ? $data['deal_paid'] : $data['deal'];
 						}
