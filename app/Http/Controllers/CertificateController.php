@@ -380,7 +380,7 @@ class CertificateController extends Controller
 		
 		$user = \Auth::user();
 		
-		$certificates = Certificate::where('number', 'like', $q . '%')
+		$certificates = Certificate::where('number', 'like', '%' . $q . '%')
 			->orderBy('number')
 			->limit(10)
 			->get();
