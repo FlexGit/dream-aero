@@ -176,7 +176,7 @@ class EventController extends Controller
 						$title .= '. Сертификат: ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';
 						// способ оплаты
 						if ($paymentMethodNames) {
-							$title .= implode(', ', $paymentMethodNames);
+							$title .= '. ' . implode(', ', $paymentMethodNames);
 						}
 					} else {
 						$bills = $position->bills;
@@ -191,10 +191,9 @@ class EventController extends Controller
 						$promocode = $position->promocode;
 						
 						// способ оплаты
-						$paymentMethodName = $paymentMethod ? $paymentMethod->name : '';
 						$title .= ' за ' . $position->amount . ' руб';
-						if ($paymentMethodName) {
-							$title .= $paymentMethodName;
+						if ($paymentMethodNames) {
+							$title .= '. ' . implode(', ', $paymentMethodNames);
 						}
 					}
 					// инфа об акции
