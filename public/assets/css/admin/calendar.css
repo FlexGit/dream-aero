@@ -112,7 +112,7 @@ td.fc-daygrid-day {
 	cursor: pointer;
 }
 .fc-event-past {
-	opacity: 0.5;
+	opacity: 0.7;
 }
 .calendars-wrapper {
 	height: 92vh;
