@@ -142,11 +142,17 @@ class EventController extends Controller
 						$title .= '(+' . $event->extra_time . ')';
 					}
 					if ($certificate) {
-						$certificatePurchasePosition = DealPosition::where('is_certificate_purchase', true)
-							->where('certificate_id', $certificate->id)
-							->first();
+						$certificateData = $certificate->data_json;
+						if (isset($certificateData['amount'])) {
+							$amount = $certificateData['amount'];
+						} else {
+							$certificatePurchasePosition = DealPosition::where('is_certificate_purchase', true)
+								->where('certificate_id', $certificate->id)
+								->first();
+							$amount = $certificatePurchasePosition->amount;
+						}
 						
-						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . /*$certificatePurchasePosition ? $certificatePurchasePosition->amount : '-' .*/ ' руб)';
+						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб)';
 					}
 					
 					$allDay = false;
