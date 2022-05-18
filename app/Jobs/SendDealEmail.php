@@ -63,7 +63,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'certificateNumber' => $position->certificate ? $position->certificate->number : '',
 			'certificateExpireAt' => $position->certificate ? $position->certificate->expire_at : '',
 			'flightAt' => $position->flight_at,
-			'cityName' => $position->city ? $position->city->name : '',
+			'cityName' => $position->certificate ? ($position->certificate->city ? $position->certificate->city->name : '') : '',
 			'locationName' => $position->location ? $position->location->name : '',
 			'locationAddress' => array_key_exists('address', $locationData) ? $locationData['address'] : '',
 			'flightSimulatorName' => $position->simulator ? $position->simulator->name : '',
