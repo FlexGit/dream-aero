@@ -954,15 +954,7 @@ class DealController extends Controller
 						}
 						
 						if ($source == Deal::WEB_SOURCE) {
-							$billLocation = $city->getLocationForBill();
-							if (!$billLocation) {
-								\DB::rollback();
-								
-								Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
-								
-								return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
-							}
-							$billLocationId = $billLocation->id;
+							$billLocationId = $location->id ?? 0;
 						} else {
 							$billLocationId = $this->request->user()->location_id ?? 0;
 						}
@@ -1205,15 +1197,7 @@ class DealController extends Controller
 				}
 				
 				if ($source == Deal::WEB_SOURCE) {
-					$billLocation = $city->getLocationForBill();
-					if (!$billLocation) {
-						\DB::rollback();
-						
-						Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
-						
-						return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
-					}
-					$billLocationId = $billLocation->id;
+					$billLocationId = /*$location ? $location->id : */0;
 				} else {
 					$billLocationId = $this->request->user()->location_id ?? 0;
 				}
