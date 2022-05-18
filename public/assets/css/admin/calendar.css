@@ -110,6 +110,9 @@ td.fc-daygrid-day {
 .fa-edit, .fa-times-circle, .fa-trash-alt {
 	cursor: pointer;
 }
+.fc-event-past {
+	opacity: 0.5;
+}
 .calendars-wrapper {
 	height: 92vh;
 	overflow: auto;
