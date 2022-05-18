@@ -553,6 +553,24 @@
 							$('.js-contractor').text('Привязан контрагент: ' + suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
 						}
 					});
+
+					$('#certificate_number').autocomplete({
+						serviceUrl: '{{ route('certificateSearch') }}',
+						minChars: 3,
+						width: 'flex',
+						showNoSuggestionNotice: true,
+						noSuggestionNotice: 'Ничего не найдено',
+						type: 'POST',
+						dataType: 'json',
+						onSelect: function (suggestion) {
+							if (suggestion.id) {
+								$('#certificate_uuid').val(suggestion.id);
+							}
+							calcProductAmount();
+							$('#certificate_number').attr('disabled', true);
+							$('.js-certificate').text('Привязан сертификат: ' + suggestion.data.number).closest('.js-certificate-container').removeClass('hidden');
+						}
+					});
 				}
 			});
 
@@ -570,6 +588,12 @@
 				$('#contractor_id, #city_id').val('');
 			});
 
+			$(document).on('click', '.js-certificate-delete', function() {
+				$('.js-certificate').text('').closest('.js-certificate-container').addClass('hidden');
+				$('#certificate_number').val('').attr('disabled', false).focus();
+				$('#certificate_uuid').val('');
+			});
+
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at', function() {
 				calcProductAmount();
 
@@ -578,9 +602,9 @@
 				}
 			});
 
-			$(document).on('keyup', '#certificate', function(e) {
+			/*$(document).on('keyup', '#certificate', function(e) {
 				calcProductAmount();
-			});
+			});*/
 
 			function validateFlightDate() {
 				var $eventStopElement = $('.js-event-stop-at'),
@@ -620,7 +644,7 @@
 						'payment_method_id': $('#payment_method_id').val(),
 						'city_id': $('#city_id').val(),
 						'location_id': $('#location_id').val(),
-						'certificate': $('#certificate').val(),
+						'certificate_uuid': $('#certificate_uuid').val(),
 						'is_free': $('#is_free').is(':checked') ? 1 : 0,
 					},
 					success: function(result) {

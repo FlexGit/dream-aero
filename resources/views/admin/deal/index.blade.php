@@ -378,6 +378,7 @@
 							if (suggestion.id) {
 								$('#certificate_uuid').val(suggestion.id);
 							}
+							calcProductAmount();
 							$('#certificate_number').attr('disabled', true);
 							$('.js-certificate').text('Привязан сертификат: ' + suggestion.data.number).closest('.js-certificate-container').removeClass('hidden');
 						}
@@ -417,9 +418,9 @@
 				validateFlightDate();
 			});
 
-			$(document).on('keyup', '#certificate', function() {
+			/*$(document).on('keyup', '#certificate', function() {
 				calcProductAmount();
-			});
+			});*/
 
 			function validateFlightDate() {
 				var $eventStopElement = $('.js-event-stop-at'),
@@ -459,7 +460,7 @@
 						/*'payment_method_id': $('#payment_method_id').val(),*/
 						'city_id': $('#city_id').val(),
 						'location_id': $('#location_id').val(),
-						'certificate': $('#certificate').val(),
+						'certificate_uuid': $('#certificate_uuid').val(),
 						'is_free': $('#is_free').is(':checked') ? 1 : 0,
 					},
 					success: function(result) {
