@@ -159,7 +159,7 @@ class EventController extends Controller
 						}
 						$title .= '. Сертификат: ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';
 					} else {
-						$title .= $position->amount . ' руб';
+						$title .= '. ' . $position->amount . ' руб';
 					}
 					// инфа об акции
 					if ($promo) {
