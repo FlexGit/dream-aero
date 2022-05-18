@@ -358,10 +358,11 @@ class Certificate extends Model
 	 */
 	public function wasUsed()
 	{
-		$positionCount = DealPosition::where('is_certificate_purchase', false)
+		/*$positionCount = DealPosition::where('is_certificate_purchase', false)
 			->where('certificate_id', $this->id)
 			->count();
 		
-		return (bool)$positionCount;
+		return (bool)$positionCount;*/
+		return false;
 	}
 }
