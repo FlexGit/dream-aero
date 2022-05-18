@@ -1,5 +1,6 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="contractor_id" name="contractor_id">
+<input type="hidden" id="certificate_uuid" name="certificate_uuid">
 <input type="hidden" id="amount" name="amount">
 {{--<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">--}}
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
@@ -148,7 +149,16 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col">
+	<div class="col-9">
+		<div class="form-group">
+			<label for="certificate_number">Сертификат</label>
+			<input type="text" class="form-control" id="certificate_number" name="certificate_number" placeholder="Сертификат">
+			<div class="js-certificate-container hidden">
+				<span class="js-certificate"></span> <i class="fas fa-times js-certificate-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-3">
 		<div class="form-group">
 			<label for="payment_method_id">Способ оплаты</label>
 			<select class="form-control" id="payment_method_id" name="payment_method_id">
@@ -157,12 +167,6 @@
 					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
 				@endforeach
 			</select>
-		</div>
-	</div>
-	<div class="col">
-		<div class="form-group">
-			<label for="certificate">Сертификат</label>
-			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Сертификат">
 		</div>
 	</div>
 </div>

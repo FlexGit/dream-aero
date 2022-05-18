@@ -3,8 +3,6 @@
 namespace App\Imports;
 
 use App\Models\Certificate;
-use App\Models\Content;
-use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\OnEachRow;
@@ -30,25 +28,24 @@ class CertificateImport implements OnEachRow, WithProgressBar
 
 		try {
 			\DB::beginTransaction();
-
-			$cityId = 0;
-
-			$parent = HelpFunctions::getEntityByAlias(Content::class, 'news');
-			$parentId = $parent ? $parent->id : 0;
+			
+			$data = [
+				'sell_date' => trim($row[1]),
+				'duration' => trim($row[2]),
+				'amount' => trim($row[3]),
+				'location' => trim($row[4]),
+				'payment_method' => trim($row[5]),
+				'status' => trim($row[6]),
+				'comment' => strip_tags(trim($row[7])),
+			];
 
 			$certificate = new Certificate();
+			$certificate->expire_at = (trim($row[8]) == 'Бессрочный') ? null : Carbon::parse($row[8])->format('Y-m-d H:i:s');
+			$certificate->data_json = $data;
+			$certificate->save();
+
 			$certificate->number = trim($row[0]);
-			$content->alias = trim($row[2]);
-			$content->preview_text = trim($row[3]);
-			$content->detail_text = trim($row[4]);
-			$content->parent_id = $parentId;
-			$content->city_id = $cityId;
-			$content->created_at = $row[5] ? Carbon::createFromTimestamp($row[5])->format('Y-m-d H:i:s') : Carbon::now();
-			$content->updated_at = $row[6] ? Carbon::createFromTimestamp($row[6])->format('Y-m-d H:i:s') : Carbon::now();
-			$content->published_at = $row[7] ? Carbon::createFromTimestamp($row[7])->format('Y-m-d H:i:s') : Carbon::now();
-			$content->meta_title = trim($row[0]);
-			$content->meta_description = trim($row[1]);
-			$content->save();
+			$certificate->save();
 
 			\DB::commit();
 		} catch (Throwable $e) {

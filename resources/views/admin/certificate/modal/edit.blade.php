@@ -19,13 +19,15 @@
 		@endforeach
 	</select>
 </div>
-<div class="form-group">
-	<label for="file">Файл</label>
-	&nbsp;&nbsp;[
-	{{--@if(Storage::disk('private')->exists($certificate->data_json['certificate_file_path'] ?? ''))--}}
-		<a href="{{ route('getCertificate', ['uuid' => $certificate->uuid]) }}">скачать</a>
-	{{--@else
-		не найден
-	@endif--}}
-	]
-</div>
+@if($certificate->product_id)
+	<div class="form-group">
+		<label for="file">Файл</label>
+		&nbsp;&nbsp;[
+		{{--@if(Storage::disk('private')->exists($certificate->data_json['certificate_file_path'] ?? ''))--}}
+			<a href="{{ route('getCertificate', ['uuid' => $certificate->uuid]) }}">скачать</a>
+		{{--@else
+			не найден
+		@endif--}}
+		]
+	</div>
+@endif

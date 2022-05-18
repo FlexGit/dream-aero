@@ -476,8 +476,8 @@ class DealController extends Controller
 				->first();
 		}
 		
-		try {
-			\DB::beginTransaction();
+		/*try {
+			\DB::beginTransaction();*/
 
 			if (!$contractor) {
 				$contractor = new Contractor();
@@ -550,7 +550,7 @@ class DealController extends Controller
 				if ($source == Deal::WEB_SOURCE) {
 					$billLocation = $city->getLocationForBill();
 					if (!$billLocation) {
-						\DB::rollback();
+						//\DB::rollback();
 						
 						Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
 						
@@ -583,7 +583,7 @@ class DealController extends Controller
 					case AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER:
 						$registerOrderResult = AeroflotBonusService::registerOrder($position);
 						if ($registerOrderResult['status']['code'] != 0) {
-							\DB::rollback();
+							//\DB::rollback();
 							
 							\Log::debug('500 - Certificate Deal Create: ' . $registerOrderResult['status']['description']);
 							
@@ -595,7 +595,7 @@ class DealController extends Controller
 							$job->handle();
 						}
 						
-						\DB::commit();
+						//\DB::commit();
 						
 						return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена! Перенаправляем на страницу "Аэрофлот Бонус"...', 'payment_url' => $registerOrderResult['paymentUrl']]);
 					break;
@@ -606,14 +606,14 @@ class DealController extends Controller
 				$promocode->contractors()->save($contractor);
 			}
 			
-			\DB::commit();
+			/*\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
 			
 			Log::debug('500 - Deal Certificate Store: ' . $e->getMessage());
 			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-		}
+		}*/
 		
 		if ($source == Deal::WEB_SOURCE) {
 			//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
@@ -758,6 +758,7 @@ class DealController extends Controller
 		$locationId = $this->request->location_id ?? 0;
 		$simulatorId = $this->request->flight_simulator_id ?? 0;
 		$certificateNumber = $this->request->certificate ?? '';
+		$certificateUuid = $this->request->certificate_uuid ?? '';
 		$eventType = $this->request->event_type ?? '';
 		$extraTime = (int)$this->request->extra_time ?? 0;
 		$isRepeatedFlight = (bool)$this->request->is_repeated_flight ?? false;
@@ -837,25 +838,38 @@ class DealController extends Controller
 		}
 		
 		$certificateId = 0;
-		if ($certificateNumber) {
+		if ($certificateNumber || $certificateUuid) {
 			$date = date('Y-m-d');
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			
 			// проверка сертификата на валидность
-			$certificate = Certificate::whereIn('city_id', [$cityId, 0])
-				->where('status_id', $certificateStatus->id)
-				->where('product_id', $product->id)
-				->where(function ($query) use ($date) {
-					$query->where('expire_at', '>=', $date)
-						->orWhereNull('expire_at');
-				})
-				->where('number', $certificateNumber)
-				->first();
+			if ($certificateNumber) {
+				$certificate = Certificate::whereIn('city_id', [$cityId, 0])
+					/*->whereIn('status_id', [$certificateStatus->id, 0])
+					->whereIn('product_id', [$product->id, 0])
+					->where(function ($query) use ($date) {
+						$query->where('expire_at', '>=', $date)
+							->orWhereNull('expire_at');
+					})*/
+					->where('number', $certificateNumber)
+					->first();
+			} elseif ($certificateUuid) {
+				$certificate = HelpFunctions::getEntityByUuid(Certificate::class, $certificateUuid);
+			}
 			if (!$certificate) {
-				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден или не соответствует выбранным параметрам']);
+				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 			}
 			if ($certificate->wasUsed()) {
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
+			}
+			if (!in_array($certificate->status_id, [$certificateStatus->id, 0])) {
+				return response()->json(['status' => 'error', 'reason' => 'Некорректный статус Сертификата']);
+			}
+			if (!in_array($certificate->product_id, [$product->id, 0])) {
+				return response()->json(['status' => 'error', 'reason' => 'Некорректный продукт Сертификата']);
+			}
+			if (Carbon::parse($certificate->expire_at)->lt($date) && !is_null($certificate->expire_at)) {
+				return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);
 			}
 			$certificateId = $certificate->id;
 		}
@@ -1344,6 +1358,7 @@ class DealController extends Controller
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$locationId = $this->request->location_id ?? 0;
 		$certificateNumber = $this->request->certificate ?? '';
+		$certificateUuid = $this->request->certificate_uuuid ?? '';
 		$source = $this->request->source ?? 'admin';
 		$flightDate = $this->request->flight_date ?? '';
 		$isFree = $this->request->is_free ?? 0;
@@ -1391,6 +1406,9 @@ class DealController extends Controller
 		if ($certificateNumber) {
 			$certificate = Certificate::where('number', $certificateNumber)
 				->first();
+			$certificateId = $certificate ? $certificate->id : 0;
+		} elseif ($certificateUuid) {
+			$certificate = HelpFunctions::getEntityByUuid(Certificate::class, $certificateUuid);
 			$certificateId = $certificate ? $certificate->id : 0;
 		}
 

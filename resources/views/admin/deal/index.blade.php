@@ -365,6 +365,23 @@
 							$('.js-contractor').text('Привязан контрагент: ' + suggestion.data.name + ' ' + suggestion.data.lastname).closest('.js-contractor-container').removeClass('hidden');
 						}
 					});
+
+					$('#certificate_number').autocomplete({
+						serviceUrl: '{{ route('certificateSearch') }}',
+						minChars: 3,
+						width: 'flex',
+						showNoSuggestionNotice: true,
+						noSuggestionNotice: 'Ничего не найдено',
+						type: 'POST',
+						dataType: 'json',
+						onSelect: function (suggestion) {
+							if (suggestion.id) {
+								$('#certificate_uuid').val(suggestion.id);
+							}
+							$('#certificate_number').attr('disabled', true);
+							$('.js-certificate').text('Привязан сертификат: ' + suggestion.data.number).closest('.js-certificate-container').removeClass('hidden');
+						}
+					});
 				}
 			});
 
@@ -380,6 +397,12 @@
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
 				$('#contractor_search').val('').attr('disabled', false).focus();
 				$('#contractor_id, #city_id').val('');
+			});
+
+			$(document).on('click', '.js-certificate-delete', function() {
+				$('.js-certificate').text('').closest('.js-certificate-container').addClass('hidden');
+				$('#certificate_number').val('').attr('disabled', false).focus();
+				$('#certificate_uuid').val('');
 			});
 
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at', function() {

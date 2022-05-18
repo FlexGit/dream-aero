@@ -212,16 +212,20 @@
 							@endif
 							@if($position->certificate)
 								<div>
-									<a href="{{ route('getCertificate', ['uuid' => $position->certificate->uuid]) }}" class="mr-2">
-										<i class="far fa-file-alt" title="Файл Сертификата"></i>
-									</a>
+									@if($position->certificate->product_id)
+										<a href="{{ route('getCertificate', ['uuid' => $position->certificate->uuid]) }}" class="mr-2">
+											<i class="far fa-file-alt" title="Файл Сертификата"></i>
+										</a>
+									@endif
 									<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
 										{{ $position->certificate->number ?: 'без номера' }}
 									</a>
-									@if($position->is_certificate_purchase && $position->certificate->sent_at)
-										<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат отправлен {{ $position->certificate->sent_at }}"><i class="far fa-envelope-open"></i></a>
-									@else
-										<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат пока не отправлен"><i class="far fa-envelope"></i></a>
+									@if($position->certificate->product_id)
+										@if($position->is_certificate_purchase && $position->certificate->sent_at)
+											<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат отправлен {{ $position->certificate->sent_at }}"><i class="far fa-envelope-open"></i></a>
+										@else
+											<a href="javascript:void(0)" class="js-send-certificate-link ml-2" data-id="{{ $position->id }}" data-certificate_id="{{ $position->certificate->id }}" title="Сертификат пока не отправлен"><i class="far fa-envelope"></i></a>
+										@endif
 									@endif
 								</div>
 								@if($position->is_certificate_purchase)
@@ -236,7 +240,7 @@
 								@endif
 								@if ($position->certificate->status)
 									<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $position->certificate->status->data_json ?? []) ? $position->certificate->status->data_json['color'] : 'none' }};" title="Статус сертификата">
-										{{ $position->certificate->status->name }}
+										Сертификат {{ $position->certificate->status->name }}
 									</div>
 								@endif
 							@endif

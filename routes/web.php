@@ -175,6 +175,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::get('certificate/{deal_id}/add', [CertificateController::class, 'add']);
 		Route::get('certificate/{id}/edit', [CertificateController::class, 'edit']);
+		Route::post('certificate/search', [CertificateController::class, 'search'])->name('certificateSearch');
 		
 		Route::get('certificate/{uuid}/file', [CertificateController::class, 'getCertificateFile'])->name('getCertificate');
 		Route::post('certificate/send', [CertificateController::class, 'sendCertificate'])->name('sendCertificate');
