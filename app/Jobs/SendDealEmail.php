@@ -38,10 +38,10 @@ class SendDealEmail extends Job implements ShouldQueue {
 		$positionData = !is_array($position->data_json) ? json_decode($position->data_json, true) : $position->data_json;
 		$locationData = $position->location ? $position->location->data_json ?? [] : [];
 
-		if ($this->deal->contractor && $this->deal->contractor->city) {
+		if ($this->deal->city) {
 			$cityData = [
-				'phone' => $this->deal->contractor->city->phone ?? '',
-				'email' => $this->deal->contractor->city->email ?? '',
+				'phone' => $this->deal->city->phone ?? '',
+				'email' => $this->deal->city->email ?? '',
 			];
 		}
 
