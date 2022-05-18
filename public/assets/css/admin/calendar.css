@@ -54,7 +54,7 @@ td.fc-daygrid-day {
 }
 .fc-event-title {
 	color: #000 !important;
-	/*font-weight: bold !important;*/
+	font-weight: 600 !important;
 }
 .fc-event-title.fc-sticky {
 	font-size: 12px;
