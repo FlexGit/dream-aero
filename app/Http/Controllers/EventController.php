@@ -163,7 +163,7 @@ class EventController extends Controller
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_PILOT:
-					$title = $event->user->fio();
+					$title = $event->user->fioFormatted();
 					$allDay = true;
 					if ($data && isset($data['shift_pilot'])) {
 						$color = $data['shift_pilot'];
@@ -185,7 +185,7 @@ class EventController extends Controller
 				break;
 				case Event::EVENT_TYPE_TEST_FLIGHT:
 					$title = Event::EVENT_TYPES[Event::EVENT_TYPE_TEST_FLIGHT];
-					$title .= $event->testPilot ? ' ' . $event->testPilot->fio() : '';
+					$title .= $event->testPilot ? ' ' . $event->testPilot->fioFormatted() : '';
 					$allDay = false;
 					if ($data && isset($data[Event::EVENT_TYPE_TEST_FLIGHT])) {
 						$color = $data[Event::EVENT_TYPE_TEST_FLIGHT];
@@ -193,7 +193,7 @@ class EventController extends Controller
 				break;
 				case Event::EVENT_TYPE_USER_FLIGHT:
 					$title = Event::EVENT_TYPES[Event::EVENT_TYPE_USER_FLIGHT];
-					$title .= $event->employee ? ' ' . $event->employee->fio() : '';
+					$title .= $event->employee ? ' ' . $event->employee->fioFormatted() : '';
 					$allDay = false;
 					if ($data && isset($data[Event::EVENT_TYPE_USER_FLIGHT])) {
 						$color = $data[Event::EVENT_TYPE_USER_FLIGHT];
