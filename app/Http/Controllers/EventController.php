@@ -135,6 +135,8 @@ class EventController extends Controller
 					$certificate = $position ? $position->certificate : null;
 					$bill = $position ? $position->bill : null;
 					$billStatus = $bill ? $bill->status : null;
+					$promo = $position->promo;
+					$promocode = $position->promocode;
 					
 					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
@@ -155,11 +157,21 @@ class EventController extends Controller
 								->first();
 							$amount = $certificatePurchasePosition->amount;
 						}
-						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб)';
+						$title .= '. Сертификат: ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';
+					} else {
+						$title .= $position->amount . ' руб';
+					}
+					// инфа об акции
+					if ($promo) {
+						$title .= '. ' . $promo->name . '(' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
+					}
+					// инфа о промокоде
+					if ($promocode) {
+						$title .= '. ' . $promocode->number . '(' . ($promocode->discount ? $promocode->discount->valueFormatted() : '') . ')';
 					}
 					// время работы платформы от админа
 					if ($event->simulator_up_at || $event->simulator_down_at) {
-						$title .= '. Платформа: с ' . ($event->simulator_up_at ? Carbon::parse($event->simulator_up_at)->format('H:i') : '') . ' по ' . ($event->simulator_down_at ? Carbon::parse($event->simulator_down_at)->format('H:i') : '');
+						$title .= '. Платформа: ' . ($event->simulator_up_at ? Carbon::parse($event->simulator_up_at)->format('H:i') : '') . ' - ' . ($event->simulator_down_at ? Carbon::parse($event->simulator_down_at)->format('H:i') : '');
 					}
 					
 					$allDay = false;
