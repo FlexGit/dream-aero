@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -204,7 +205,12 @@ class DealPosition extends Model
 		});
 
 		DealPosition::deleting(function(DealPosition $position) {
-			$position->certificate()->delete();
+			//$position->certificate()->delete();
+			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
+			
+			$certificate = $position->certificate;
+			$certificate->status_id = $certificateStatus->id;
+			$certificate->save();
 		});
 	}
 	
