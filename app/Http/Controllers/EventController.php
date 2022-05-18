@@ -141,7 +141,9 @@ class EventController extends Controller
 					if ($event->extra_time) {
 						$title .= '(+' . $event->extra_time . ')';
 					}
-					$title .= $certificate ? ' ' . $certificate->number : '';
+					if ($certificate) {
+						$title .= '(' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . $position->amount . ' руб)';
+					}
 					
 					$allDay = false;
 					
