@@ -33,9 +33,9 @@
 @if($promocodeNumber)
 	<p>Промокод: {{ $promocodeNumber }}</p>
 @endif
-@if($comment)
+{{--@if($comment)
 	<p>Дополнительная информация: {{ $comment }}</p>
-@endif
+@endif--}}
 <p>Источник заявки: {{ $source ?? '' }}</p>
 <p>Дата заявки: {{ $updatedAt ? Carbon\Carbon::parse($updatedAt)->format('d.m.Y H:i') : '' }}</p>
 <br>
