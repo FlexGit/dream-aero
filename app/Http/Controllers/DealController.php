@@ -901,8 +901,8 @@ class DealController extends Controller
 			$data['comment'] = $comment;
 		}
 
-		/*try {
-			\DB::beginTransaction();*/
+		try {
+			\DB::beginTransaction();
 
 			switch ($eventType) {
 				case Event::EVENT_TYPE_DEAL:
@@ -1050,14 +1050,14 @@ class DealController extends Controller
 				$job->handle();
 			}
 			
-			/*\DB::commit();
+			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
 
 			Log::debug('500 - Deal Booking Store: ' . $e->getMessage());
 
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-		}*/
+		}
 
 		return response()->json(['status' => 'success']);
 	}
