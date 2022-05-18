@@ -1416,6 +1416,6 @@ class DealController extends Controller
 
 		$amount = $product->calcAmount($contractorId, $cityId, $source, $isFree, $locationId, $paymentMethodId, $promoId, $promocodeId, $certificateId);
 		
-		return response()->json(['status' => 'success', 'amount' => $amount, 'baseAmount' => $baseAmount]);
+		return response()->json(['status' => 'success', 'amount' => $amount, 'baseAmount' => $baseAmount, 'certificateUuid' => $certificateUuid, 'certificateId' => $certificateId]);
 	}
 }
