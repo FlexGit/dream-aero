@@ -608,6 +608,11 @@ class DealController extends Controller
 				$promocode->contractors()->save($contractor);
 			}
 			
+			if ($source == Deal::WEB_SOURCE) {
+				$job = new \App\Jobs\SendDealEmail($deal);
+				$job->handle();
+			}
+
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -1039,7 +1044,12 @@ class DealController extends Controller
 					$event->save();
 				break;
 			}
-
+			
+			if ($source == Deal::WEB_SOURCE) {
+				$job = new \App\Jobs\SendDealEmail($deal);
+				$job->handle();
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -1219,6 +1229,11 @@ class DealController extends Controller
 				}
 				
 				$deal->bills()->save($bill);
+			}
+			
+			if ($source == Deal::WEB_SOURCE) {
+				$job = new \App\Jobs\SendDealEmail($deal);
+				$job->handle();
 			}
 			
 			\DB::commit();
