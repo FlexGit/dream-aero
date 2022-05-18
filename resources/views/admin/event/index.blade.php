@@ -596,6 +596,7 @@
 				$('.js-is-indefinitely').addClass('hidden');
 				$('#certificate_number').val('').attr('disabled', false).focus();
 				$('#certificate_uuid').val('');
+				//$('#is_indefinitely')
 			});
 
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely', function() {

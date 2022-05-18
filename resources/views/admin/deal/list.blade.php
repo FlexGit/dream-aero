@@ -129,9 +129,9 @@
 					@endif
 				</div>
 			@endforeach
-			@if($balance < 0)
+			{{--@if($balance < 0)--}}
 				<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $deal->id }}/add" data-action="/bill" data-method="POST" data-title="Создание счета" data-type="bill" title="Создать счет" class="btn btn-info btn-sm">Создать счет</a>
-			@endif
+			{{--@endif--}}
 		</td>
 		<td class="align-top text-center d-none d-md-table-cell">
 			<table class="table table-sm table-bordered table-striped mb-0">
