@@ -518,13 +518,6 @@ $(function() {
 	});
 
 	$(document).on('change', '#is_unified', function() {
-		var $city = $('#city_id');
-
-		if ($(this).is(':checked')) {
-			$city.val(0);
-		} else {
-			$city.val($city.data('city-id'));
-		}
 		calcAmount();
 	});
 

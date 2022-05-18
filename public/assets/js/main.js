@@ -435,6 +435,8 @@ function calcAmount() {
 		certificate = $popup.find('#certificate_number').val(),
 		cityId = $('#city_id').val(),
 		$amount = $popup.find('#amount'),
+		$isUnified = $popup.find('#is_unified'),
+		isUnified = $isUnified.is(':checked') ? 1 : 0,
 		$amountContainer = $popup.find('.js-amount'),
 		amount = 0;
 
@@ -444,6 +446,7 @@ function calcAmount() {
 		location_id: locationId,
 		simulator_id: simulatorId,
 		city_id: cityId,
+		is_unified: isUnified,
 		flight_date: flightDate,
 		certificate: certificate,
 		source: 'web',
