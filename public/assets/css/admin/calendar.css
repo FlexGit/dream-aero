@@ -52,8 +52,12 @@ td.fc-daygrid-day {
 .fc-event-time {
 	color: #000;
 }
-.fc-event-title {
-	color: #000;
+a.fc-event {
+	color: #000 !important;
+	font-weight: bold !important;
+}
+a.fc-event:hover {
+	color: #fff;
 }
 .fc-event-title.fc-sticky {
 	font-size: 12px;
