@@ -449,12 +449,15 @@ function calcAmount() {
 		source: 'web',
 	};
 
+	console.log(data);
+
 	$.ajax({
 		type: 'GET',
 		url: '/deal/product/calc',
 		data: data,
 		dataType: 'json',
 		success: function(result) {
+			console.log(result);
 			if (result.status !== 'success') {
 				return;
 			}
