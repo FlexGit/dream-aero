@@ -159,9 +159,9 @@ class EventController extends Controller
 						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб)';
 					}
 					// время работы платформы от админа
-					if ($event->simulator_up_at || $event->simulator_down_at) {
+					/*if ($event->simulator_up_at || $event->simulator_down_at) {
 						$title .= '. Платформа: с ' . ($event->simulator_up_at ? Carbon::parse($event->simulator_up_at)->format('H:i') : '') . ' по ' . ($event->simulator_down_at ? Carbon::parse($event->simulator_down_at)->format('H:i') : '');
-					}
+					}*/
 					
 					$allDay = false;
 					
