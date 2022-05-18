@@ -135,12 +135,17 @@ class EventController extends Controller
 					$certificate = $position ? $position->certificate : null;
 					$bill = $position ? $position->bill : null;
 					$billStatus = $bill ? $bill->status : null;
+					$eventData = $event->data_json;
 					
+					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
+					// тариф
 					$title .= $product ? ' ' . $product->name : '';
+					// доп. время
 					if ($event->extra_time) {
 						$title .= '(+' . $event->extra_time . ')';
 					}
+					// инфа о сертификате
 					if ($certificate) {
 						$certificateData = $certificate->data_json;
 						if (isset($certificateData['amount'])) {
@@ -151,8 +156,11 @@ class EventController extends Controller
 								->first();
 							$amount = $certificatePurchasePosition->amount;
 						}
-						
 						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб)';
+					}
+					// время работы платформы от админа
+					if ($event->simulator_up_at || $event->simulator_down_at) {
+						$title .= '. Платформа: с ' . ($event->simulator_up_at ? Carbon::parse($event->simulator_up_at)->format('H:i') : '') . ' по ' . ($event->simulator_down_at ? Carbon::parse($event->simulator_down_at)->format('H:i') : '');
 					}
 					
 					$allDay = false;
