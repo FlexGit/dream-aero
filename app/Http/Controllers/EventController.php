@@ -146,20 +146,42 @@ class EventController extends Controller
 					if ($event->extra_time) {
 						$title .= '(+' . $event->extra_time . ')';
 					}
+					$amount = 0;
+					$paymentMethodName = '';
 					// инфа о сертификате
 					if ($certificate) {
 						$certificateData = $certificate->data_json;
 						if (isset($certificateData['amount'])) {
 							$amount = $certificateData['amount'];
+							// способ оплаты
+							if (isset($certificateData['payment_method'])) {
+								$paymentMethodName = $certificateData['payment_method'];
+							}
 						} else {
 							$certificatePurchasePosition = DealPosition::where('is_certificate_purchase', true)
 								->where('certificate_id', $certificate->id)
 								->first();
-							$amount = $certificatePurchasePosition->amount;
+							if ($certificatePurchasePosition) {
+								$amount = $certificatePurchasePosition->amount;
+								$bill = $certificatePurchasePosition->bill;
+								$paymentMethod = $bill->paymentMethod;
+								// способ оплаты
+								$paymentMethodName = $paymentMethod ? $paymentMethod->name : '';
+							}
 						}
 						$title .= '. Сертификат: ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';
+						if ($paymentMethodName) {
+							$title .= $paymentMethodName;
+						}
 					} else {
+						$bill = $position->bill;
+						$paymentMethod = $bill->paymentMethod;
+						// способ оплаты
+						$paymentMethodName = $paymentMethod ? $paymentMethod->name : '';
 						$title .= ' за ' . $position->amount . ' руб';
+						if ($paymentMethodName) {
+							$title .= $paymentMethodName;
+						}
 					}
 					// инфа об акции
 					if ($promo) {
