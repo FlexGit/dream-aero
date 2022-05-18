@@ -56,9 +56,9 @@ a.fc-event {
 	color: #000 !important;
 	font-weight: bold !important;
 }
-a.fc-event:hover {
+/*a.fc-event:hover {
 	color: #fff;
-}
+}*/
 .fc-event-title.fc-sticky {
 	font-size: 12px;
 }
