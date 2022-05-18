@@ -185,6 +185,9 @@ class EventController extends Controller
 								$paymentMethodNames[] = $paymentMethod->name;
 							}
 						}
+						$promo = $position->promo;
+						$promocode = $position->promocode;
+						
 						// способ оплаты
 						$paymentMethodName = $paymentMethod ? $paymentMethod->name : '';
 						$title .= ' за ' . $position->amount . ' руб';
