@@ -24,7 +24,7 @@ table.fc-scrollgrid tbody {
 	margin-bottom: 0;
 }
 .fc-toolbar, .fc-toolbar.fc-header-toolbar {
-	padding: 0.2rem 0;
+	padding: /*0.2rem */0;
 }
 .fc .fc-toolbar-title {
 	font-size: 1.0em;

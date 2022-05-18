@@ -24,7 +24,7 @@
 						@endphp
 
 						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
-							<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
+							{{--<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>--}}
 							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-timezone="{{ $city->timezone }}" class="calendar"></div>
 						</div>
 					@endforeach
