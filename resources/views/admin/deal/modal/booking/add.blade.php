@@ -151,7 +151,7 @@
 <div class="row">
 	<div class="col-9">
 		<div class="form-group">
-			<label for="certificate_number">Сертификат</label>
+			<label for="certificate_number">Поиск по номеру Сертификата</label>
 			<input type="text" class="form-control" id="certificate_number" name="certificate_number" placeholder="Сертификат">
 			<div class="js-certificate-container hidden">
 				<span class="js-certificate"></span> <i class="fas fa-times js-certificate-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
