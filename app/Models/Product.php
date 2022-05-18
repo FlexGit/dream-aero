@@ -278,8 +278,8 @@ class Product extends Model
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			// проверка сертификата на валидность
 			$certificate = Certificate::whereIn('city_id', [$location->city->id, 0])
-				->where('status_id', $certificateStatus->id)
-				->where('product_id', $this->id)
+				->whereIn('status_id', [$certificateStatus->id, 0])
+				->whereIn('product_id', [$this->id, 0])
 				->where(function ($query) use ($date) {
 					$query->where('expire_at', '>=', $date)
 						->orWhereNull('expire_at');
