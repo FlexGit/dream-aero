@@ -142,7 +142,11 @@ class EventController extends Controller
 						$title .= '(+' . $event->extra_time . ')';
 					}
 					if ($certificate) {
-						$title .= '(' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . $position->amount . ' руб)';
+						$certificatePurchasePosition = DealPosition::where('is_certificate_purchase', true)
+							->where('certificate_id', $certificate->id)
+							->first();
+						
+						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . $certificatePurchasePosition->amount . ' руб)';
 					}
 					
 					$allDay = false;
