@@ -632,6 +632,7 @@
 			}
 
 			function calcProductAmount() {
+				console.log($('#certificate_uuid').val());
 				$.ajax({
 					url: "{{ route('calcProductAmount') }}",
 					type: 'GET',
