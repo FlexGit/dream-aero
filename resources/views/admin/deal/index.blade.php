@@ -464,6 +464,7 @@
 						'is_free': $('#is_free').is(':checked') ? 1 : 0,
 					},
 					success: function(result) {
+						console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
