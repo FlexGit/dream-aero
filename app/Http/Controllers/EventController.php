@@ -163,11 +163,11 @@ class EventController extends Controller
 					}
 					// инфа об акции
 					if ($promo) {
-						$title .= '. ' . $promo->name . '(' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
+						$title .= '. Акция: ' . $promo->name . ' (' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
 					}
 					// инфа о промокоде
 					if ($promocode) {
-						$title .= '. ' . $promocode->number . '(' . ($promocode->discount ? $promocode->discount->valueFormatted() : '') . ')';
+						$title .= '. Промокод: ' . $promocode->number . ' (' . ($promocode->discount ? $promocode->discount->valueFormatted() : '') . ')';
 					}
 					// время работы платформы от админа
 					if ($event->simulator_up_at || $event->simulator_down_at) {
