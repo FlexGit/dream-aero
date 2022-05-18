@@ -381,6 +381,10 @@
 							calcProductAmount();
 							$('#certificate_number').attr('disabled', true);
 							$('.js-certificate').text('Привязан сертификат: ' + suggestion.data.number).closest('.js-certificate-container').removeClass('hidden');
+							console.log(suggestion.data);
+							if (suggestion.data.is_overdue) {
+								$('.js-is-indefinitely').removeClass('hidden');
+							}
 						}
 					});
 				}
@@ -402,6 +406,7 @@
 
 			$(document).on('click', '.js-certificate-delete', function() {
 				$('.js-certificate').text('').closest('.js-certificate-container').addClass('hidden');
+				$('.js-is-indefinitely').addClass('hidden');
 				$('#certificate_number').val('').attr('disabled', false).focus();
 				$('#certificate_uuid').val('');
 			});

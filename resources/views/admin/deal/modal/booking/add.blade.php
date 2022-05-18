@@ -155,6 +155,10 @@
 			<input type="text" class="form-control" id="certificate_number" name="certificate_number" placeholder="Сертификат">
 			<div class="js-certificate-container hidden">
 				<span class="js-certificate"></span> <i class="fas fa-times js-certificate-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
+				<div class="custom-control custom-switch custom-control js-is-indefinitely hidden">
+					<input type="checkbox" id="is_indefinitely" name="is_indefinitely" value="1" class="custom-control-input">
+					<label class="custom-control-label font-weight-normal" for="is_indefinitely">Не учитывать ограничение по сроку действия</label>
+				</div>
 			</div>
 		</div>
 	</div>

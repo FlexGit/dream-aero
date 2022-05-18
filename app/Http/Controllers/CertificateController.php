@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DealPosition;
 use App\Models\PaymentMethod;
 use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Validator;
@@ -390,21 +391,24 @@ class CertificateController extends Controller
 			$data = $certificate->data_json;
 			
 			if (!$certificate->product_id) {
-				$certificatInfo = (isset($data['sell_date']) ? 'от ' . $data['sell_date'] : '') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . (isset($data['duration']) ? ' на ' . $data['duration'] . ' мин' : '') . (isset($data['amount']) ? ' за ' . $data['amount'] . ' руб' : '') . (isset($data['payment_method']) ? ' (' . $data['payment_method'] . ')' : '') . (isset($data['location']) ? '. ' . $data['location'] : '') . (isset($data['status']) ? '. ' . $data['status'] : '') . ((isset($data['comment']) && $data['comment']) ? ', ' . $data['comment'] : '');
+				$certificateInfo = (isset($data['sell_date']) ? 'от ' . $data['sell_date'] : '') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . (isset($data['duration']) ? ' на ' . $data['duration'] . ' мин' : '') . (isset($data['amount']) ? ' за ' . $data['amount'] . ' руб' : '') . (isset($data['payment_method']) ? ' (' . $data['payment_method'] . ')' : '') . (isset($data['location']) ? '. ' . $data['location'] : '') . (isset($data['status']) ? '. ' . $data['status'] : '') . ((isset($data['comment']) && $data['comment']) ? ', ' . $data['comment'] : '');
 			} else {
 				//$position = $certificate->position()->where('is_certificate_purchase', true)->first();
 				$product = $certificate->product;
 				$city = $certificate->city;
 				$status = $certificate->status;
 				
-				$certificatInfo = $certificate->created_at->format('d.m.Y') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . ($product ? ' на ' . $product->duration . ' мин (' . $product->name . ')' : '') . ($city ? '. ' . $city->name : '') . ($status ? '. ' . $status->name : '');
+				$certificateInfo = $certificate->created_at->format('d.m.Y') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . ($product ? ' на ' . $product->duration . ' мин (' . $product->name . ')' : '') . ($city ? '. ' . $city->name : '') . ($status ? '. ' . $status->name : '');
 			}
 			
+			$date = date('Y-m-d');
+			
 			$suggestions[] = [
-				'value' => $certificate->number . ' [' . $certificatInfo . ']',
+				'value' => $certificate->number . ' [' . $certificateInfo . ']',
 				'id' => $certificate->uuid,
 				'data' => [
 					'number' => $certificate->number,
+					'is_overdue' => ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date)) ? true : false,
 				],
 			];
 		}

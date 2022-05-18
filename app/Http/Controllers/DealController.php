@@ -761,6 +761,7 @@ class DealController extends Controller
 		$simulatorId = $this->request->flight_simulator_id ?? 0;
 		$certificateNumber = $this->request->certificate ?? '';
 		$certificateUuid = $this->request->certificate_uuid ?? '';
+		$isIndefinitely = $this->request->is_indefinitely ?? 0;
 		$eventType = $this->request->event_type ?? '';
 		$extraTime = (int)$this->request->extra_time ?? 0;
 		$isRepeatedFlight = (bool)$this->request->is_repeated_flight ?? false;
@@ -870,7 +871,7 @@ class DealController extends Controller
 			if (!in_array($certificate->product_id, [$product->id, 0])) {
 				return response()->json(['status' => 'error', 'reason' => 'Некорректный продукт Сертификата']);
 			}
-			if (Carbon::parse($certificate->expire_at)->lt($date) && !is_null($certificate->expire_at)) {
+			if ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date) && !$isIndefinitely) {
 				return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);
 			}
 			$certificateId = $certificate->id;
