@@ -133,10 +133,6 @@ class EventController extends Controller
 					$position = $event->dealPosition;
 					$product = $position ? $position->product : null;
 					$certificate = $position ? $position->certificate : null;
-					$bill = $position ? $position->bill : null;
-					$billStatus = $bill ? $bill->status : null;
-					$promo = $position->promo;
-					$promocode = $position->promocode;
 					
 					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
@@ -146,16 +142,18 @@ class EventController extends Controller
 					if ($event->extra_time) {
 						$title .= '(+' . $event->extra_time . ')';
 					}
+					
 					$amount = 0;
 					$paymentMethodName = '';
+					$paymentMethodNames = [];
+
 					// инфа о сертификате
 					if ($certificate) {
 						$certificateData = $certificate->data_json;
 						if (isset($certificateData['amount'])) {
 							$amount = $certificateData['amount'];
-							// способ оплаты
 							if (isset($certificateData['payment_method'])) {
-								$paymentMethodName = $certificateData['payment_method'];
+								$paymentMethodNames[] = $certificateData['payment_method'];
 							}
 						} else {
 							$certificatePurchasePosition = DealPosition::where('is_certificate_purchase', true)
@@ -163,19 +161,30 @@ class EventController extends Controller
 								->first();
 							if ($certificatePurchasePosition) {
 								$amount = $certificatePurchasePosition->amount;
-								$bill = $certificatePurchasePosition->bill;
-								$paymentMethod = $bill->paymentMethod;
-								// способ оплаты
-								$paymentMethodName = $paymentMethod ? $paymentMethod->name : '';
+								$bills = $certificatePurchasePosition->bills;
+								foreach ($bills as $bill) {
+									$paymentMethod = $bill->paymentMethod;
+									if ($paymentMethod) {
+										$paymentMethodNames[] = $paymentMethod->name;
+									}
+								}
+								$promo = $position->promo;
+								$promocode = $position->promocode;
 							}
 						}
 						$title .= '. Сертификат: ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';
-						if ($paymentMethodName) {
-							$title .= $paymentMethodName;
+						// способ оплаты
+						if ($paymentMethodNames) {
+							$title .= implode(', ', $paymentMethodNames);
 						}
 					} else {
-						$bill = $position->bill;
-						$paymentMethod = $bill->paymentMethod;
+						$bills = $position->bills;
+						foreach ($bills as $bill) {
+							$paymentMethod = $bill->paymentMethod;
+							if ($paymentMethod) {
+								$paymentMethodNames[] = $paymentMethod->name;
+							}
+						}
 						// способ оплаты
 						$paymentMethodName = $paymentMethod ? $paymentMethod->name : '';
 						$title .= ' за ' . $position->amount . ' руб';

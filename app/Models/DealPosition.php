@@ -279,6 +279,11 @@ class DealPosition extends Model
 		return $this->belongsTo(Bill::class, 'id', 'deal_position_id');
 	}
 	
+	public function bills()
+	{
+		return $this->hasMany(Bill::class, 'deal_position_id', 'id');
+	}
+	
 	public function aeroflotBonusLog()
 	{
 		return $this->hasMany(AeroflotBonusLog::class, 'deal_position_id', 'id');
