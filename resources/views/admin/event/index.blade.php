@@ -598,7 +598,7 @@
 				$('#certificate_uuid').val('');
 			});
 
-			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at', function() {
+			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely', function() {
 				calcProductAmount();
 
 				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at']) !== -1) {
@@ -649,7 +649,7 @@
 						'city_id': $('#city_id').val(),
 						'location_id': $('#location_id').val(),
 						'certificate_uuid': $('#certificate_uuid').val(),
-						'is_free': $('#is_free').is(':checked') ? 1 : 0,
+						'is_free': ($('#is_free').is(':checked') || $('#is_indefinitely').is(':checked')) ? 1 : 0,
 					},
 					success: function(result) {
 						//console.log(result);
