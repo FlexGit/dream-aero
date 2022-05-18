@@ -592,10 +592,10 @@ class DealController extends Controller
 							return response()->json(['status' => 'error', 'reason' => 'Aeroflot Bonus: ' . $registerOrderResult['status']['description']]);
 						}
 						
-						if ($source == Deal::WEB_SOURCE) {
+						/*if ($source == Deal::WEB_SOURCE) {
 							$job = new \App\Jobs\SendDealEmail($deal);
 							$job->handle();
-						}
+						}*/
 						
 						\DB::commit();
 						
@@ -608,10 +608,10 @@ class DealController extends Controller
 				$promocode->contractors()->save($contractor);
 			}
 			
-			if ($source == Deal::WEB_SOURCE) {
+			/*if ($source == Deal::WEB_SOURCE) {
 				$job = new \App\Jobs\SendDealEmail($deal);
 				$job->handle();
-			}
+			}*/
 
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -1231,10 +1231,10 @@ class DealController extends Controller
 				$deal->bills()->save($bill);
 			}
 			
-			if ($source == Deal::WEB_SOURCE) {
+			/*if ($source == Deal::WEB_SOURCE) {
 				$job = new \App\Jobs\SendDealEmail($deal);
 				$job->handle();
-			}
+			}*/
 			
 			\DB::commit();
 		} catch (Throwable $e) {
