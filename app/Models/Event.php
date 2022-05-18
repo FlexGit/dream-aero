@@ -139,8 +139,8 @@ class Event extends Model
 		self::EVENT_TYPE_SHIFT_PILOT => 'Смена пилота',
 		self::EVENT_TYPE_BREAK => 'Перерыв',
 		self::EVENT_TYPE_CLEANING => 'Уборка',
-		self::EVENT_TYPE_TEST_FLIGHT => 'Тестовый полет',
-		self::EVENT_TYPE_USER_FLIGHT => 'Полет сотрудника',
+		self::EVENT_TYPE_TEST_FLIGHT => 'Тестовый',
+		self::EVENT_TYPE_USER_FLIGHT => 'Сотрудник',
 	];
 	
 	const NOTIFICATION_TYPE_SMS = 'sms';
