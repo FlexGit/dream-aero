@@ -1360,7 +1360,7 @@ class DealController extends Controller
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$locationId = $this->request->location_id ?? 0;
 		$certificateNumber = $this->request->certificate ?? '';
-		$certificateUuid = $this->request->certificate_uuuid ?? '';
+		$certificateUuid = $this->request->certificate_uuid ?? '';
 		$source = $this->request->source ?? 'admin';
 		$flightDate = $this->request->flight_date ?? '';
 		$isFree = $this->request->is_free ?? 0;
