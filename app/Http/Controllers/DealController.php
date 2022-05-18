@@ -1370,13 +1370,13 @@ class DealController extends Controller
 		$isFree = $this->request->is_free ?? 0;
 		$isUnified = $this->request->is_unified ?? 0;
 		
-		if ($this->request->city_id) {
+		if ($isUnified) {
+			$cityId = 1;
+		} elseif ($this->request->city_id) {
 			$cityId = $this->request->city_id ?? 0;
 		} elseif ($this->request->location_id) {
 			$location = Location::find($locationId);
 			$cityId = $location->city ? $location->city->id : 0;
-		} elseif ($isUnified) {
-			$cityId = 1;
 		} else {
 			$cityId = 1;
 		}
