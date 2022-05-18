@@ -1368,12 +1368,15 @@ class DealController extends Controller
 		$source = $this->request->source ?? 'admin';
 		$flightDate = $this->request->flight_date ?? '';
 		$isFree = $this->request->is_free ?? 0;
-
+		$isUnified = $this->request->is_unified ?? 0;
+		
 		if ($this->request->city_id) {
 			$cityId = $this->request->city_id ?? 0;
 		} elseif ($this->request->location_id) {
 			$location = Location::find($locationId);
 			$cityId = $location->city ? $location->city->id : 0;
+		} elseif ($isUnified) {
+			$cityId = 1;
 		} else {
 			$cityId = 1;
 		}
