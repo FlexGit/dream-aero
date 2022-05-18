@@ -135,7 +135,7 @@ class EventController extends Controller
 					$certificate = $position ? $position->certificate : null;
 					$bill = $position ? $position->bill : null;
 					$billStatus = $bill ? $bill->status : null;
-					$eventData = $event->data_json;
+					//$eventData = $event->data_json;
 					
 					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
