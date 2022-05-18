@@ -38,7 +38,7 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 	public function handle() {
 		$recipients = $bcc = [];
 		$recipients[] = $this->deal->email;
-		$bcc[] = env('DEV_EMAIL');
+		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'contractor' => $this->contractor ?: new Contractor(),

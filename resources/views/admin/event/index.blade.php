@@ -183,6 +183,8 @@
 					locale: 'ru',
 					editable: true,
 					selectable: true,
+					//height: $(window).height() + 200,
+					//contentHeight: 'auto',
 					droppable: true,
 					headerToolbar: {
 						left: /*'title'*/'',
@@ -481,6 +483,8 @@
 					formData.append('_method', 'PUT');
 					realMethod = 'POST';
 				}
+
+				console.log(formData);
 
 				$.ajax({
 					url: action,
