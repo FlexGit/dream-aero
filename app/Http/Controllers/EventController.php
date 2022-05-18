@@ -146,7 +146,7 @@ class EventController extends Controller
 							->where('certificate_id', $certificate->id)
 							->first();
 						
-						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . $certificatePurchasePosition ? $certificatePurchasePosition->amount : '-' . ' руб)';
+						$title .= ' (' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . /*$certificatePurchasePosition ? $certificatePurchasePosition->amount : '-' .*/ ' руб)';
 					}
 					
 					$allDay = false;
