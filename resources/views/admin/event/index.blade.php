@@ -177,14 +177,14 @@
 				var timezone = $(calendarEl).data('timezone') ? $(calendarEl).data('timezone') : 'Europe/Moscow';
 
 				var calendar = new FullCalendar.Calendar(calendarEl, {
-					aspectRatio: 0.5,
+					//aspectRatio: 0.8,
 					stickyHeaderDates: true,
 					initialView: calendarViewType,
 					locale: 'ru',
 					editable: true,
 					selectable: true,
-					//height: $(window).height() + 200,
-					//contentHeight: 'auto',
+					//height: '100%',
+					contentHeight: 'auto',
 					droppable: true,
 					headerToolbar: {
 						left: /*'title'*/'',
@@ -484,7 +484,7 @@
 					realMethod = 'POST';
 				}
 
-				console.log(formData);
+				//console.log(formData);
 
 				$.ajax({
 					url: action,

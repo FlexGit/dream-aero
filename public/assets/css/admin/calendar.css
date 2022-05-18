@@ -15,7 +15,7 @@
 }
 
 table.fc-scrollgrid tbody {
-	line-height: 0.8em;
+	line-height: 0.7em;
 }
 .fc .fc-button {
 	font-size: 0.8em;
@@ -33,18 +33,18 @@ table.fc-scrollgrid tbody {
 	min-height: auto;
 }
 .fc-timegrid-slots {
-	position: absolute !important;
-	height: 100%;
+	/*position: absolute !important;*/
+	/*height: 100%;*/
 }
 .fc-timegrid-slots table {
-	min-height: 100%;
+	/*min-height: 100%;*/
 }
 .fc-timegrid-slot {
 	height: 0.3em !important;
 	border-bottom: 0 !important;
 }
 td.fc-daygrid-day {
-	height: 55px !important;
+	height: 50px !important;
 }
 .fc-scroller.fc-scroller-liquid-absolute {
 	overflow: hidden !important;

@@ -688,11 +688,9 @@ class EventController extends Controller
 					}
 					
 					$data = $event->data_json ?? [];
-					\Log::debug($this->request);
 					if($file = $this->request->file('doc_file')) {
 						$isFileUploaded = $file->move(storage_path('app/private/contractor/doc'), $file->getClientOriginalName());
 						$data['doc_file_path'] = $isFileUploaded ? 'contractor/doc/' . $file->getClientOriginalName() : '';
-						\Log::debug($isFileUploaded);
 					}
 
 					if (isset($data)) {
