@@ -144,8 +144,8 @@ class EventController extends Controller
 					}
 					
 					$amount = 0;
-					$paymentMethodName = '';
 					$paymentMethodNames = [];
+					$billStatusAliases = [];
 
 					// инфа о сертификате
 					if ($certificate) {
@@ -163,6 +163,7 @@ class EventController extends Controller
 								$amount = $certificatePurchasePosition->amount;
 								$bills = $certificatePurchasePosition->bills;
 								foreach ($bills as $bill) {
+									$billStatusAliases[] = $bill->status ? $bill->status->alias : Bill::NOT_PAYED_STATUS;
 									$paymentMethod = $bill->paymentMethod;
 									if ($paymentMethod) {
 										$paymentMethodNames[] = $paymentMethod->name;
@@ -180,6 +181,7 @@ class EventController extends Controller
 					} else {
 						$bills = $position->bills;
 						foreach ($bills as $bill) {
+							$billStatusAliases[] = $bill->status ? $bill->status->alias : Bill::NOT_PAYED_STATUS;
 							$paymentMethod = $bill->paymentMethod;
 							if ($paymentMethod) {
 								$paymentMethodNames[] = $paymentMethod->name;
@@ -213,8 +215,8 @@ class EventController extends Controller
 					if ($data) {
 						// если к позиции привязан счет, то он должен быть оплачен
 						// иначе проверяем чтобы вся сделка была оплачена
-						if ($bill) {
-							$color = ($billStatus->alias == Bill::PAYED_STATUS) ? $data['deal_paid'] : $data['deal'];
+						if ($billStatusAliases) {
+							$color = (in_array(Bill::NOT_PAYED_STATUS, $billStatusAliases) || in_array(Bill::PAYED_PROCESSING_STATUS, $billStatusAliases)) ? $data['deal'] : $data['deal_paid'];
 						} else {
 							$color = ($balance >= 0) ? $data['deal_paid'] : $data['deal'];
 						}
