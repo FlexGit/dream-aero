@@ -197,11 +197,11 @@ class EventController extends Controller
 						}
 					}
 					// инфа об акции
-					if ($promo) {
+					if (isset($promo)) {
 						$title .= '. Акция: ' . $promo->name . ' (' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
 					}
 					// инфа о промокоде
-					if ($promocode) {
+					if (isset($promocode)) {
 						$title .= '. Промокод: ' . $promocode->number . ' (' . ($promocode->discount ? $promocode->discount->valueFormatted() : '') . ')';
 					}
 					// время работы платформы от админа
