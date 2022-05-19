@@ -50,7 +50,7 @@
 									@endforeach
 								</select>
 							</div>
-							@if($user->isSuperAdmin())
+								@if($cities)
 								<div class="form-group ml-2">
 									<div>
 										<label for="filter_location_id">Локация</label>

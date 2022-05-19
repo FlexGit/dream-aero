@@ -70,16 +70,21 @@ class DealController extends Controller
 	public function index()
 	{
 		$user = \Auth::user();
-		
-		if ($user->isSuperAdmin()) {
+		$locationCount = $user->city ? $user->city->locations->count() : 0;
+
+		if ($user->isSuperAdmin() || $locationCount > 1) {
 			$cities = City::where('version', $user->version)
 				->orderByRaw("FIELD(alias, 'msk') DESC")
 				->orderByRaw("FIELD(alias, 'spb') DESC")
-				->orderBy('name')
-				->get();
+				->orderBy('name');
+			if (!$user->isSuperAdmin() && $user->city_id) {
+				$cities = $cities->where('id', $user->city_id);
+			}
+			$cities = $cities->get();
 		} else {
 			$cities = [];
 		}
+		
 		
 		$productTypes = ProductType::orderBy('name')
 			->get();
@@ -102,6 +107,7 @@ class DealController extends Controller
 			'cities' => $cities,
 			'productTypes' => $productTypes,
 			'statusData' => $statusData,
+			'locationCount' => $locationCount,
 		]);
 	}
 	
@@ -876,7 +882,7 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Некорректный статус Сертификата']);
 			}
 			if (!in_array($certificate->product_id, [$product->id, 0])) {
-				return response()->json(['status' => 'error', 'reason' => 'Некорректный продукт Сертификата']);
+				return response()->json(['status' => 'error', 'reason' => 'Продукт по Сертификату не совпадает с выбранным']);
 			}
 			if ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date) && !$isIndefinitely) {
 				return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);

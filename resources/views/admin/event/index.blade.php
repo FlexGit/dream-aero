@@ -2,7 +2,7 @@
 
 @section('content')
 	<div class="calendars-wrapper">
-		<div class="calendars-container">
+		<div class="calendars-container" data-holidays="{{ json_encode(app('\App\Models\Deal')::HOLIDAYS) }}">
 			@foreach($cities ?? [] as $city)
 				@php
 					// для Мск и Сбп название города не выводим
@@ -713,11 +713,19 @@
 				}
 			});
 
-			var $datepicker = $('#datepicker');
+			var $datepicker = $('#datepicker'),
+				holidays = $('.calendars-container').data('holidays');
 
 			// contol sidebar datepicker
 			$datepicker.datepicker({
-				language: 'ru'
+				language: 'ru',
+				todayHighlight: true,
+				daysOfWeekHighlighted: [0,6],
+				beforeShowDay: function(date) {
+					if ($.inArray(date.toLocaleDateString(), holidays) !== -1) {
+						return {classes: 'holiday'};
+					}
+				},
 			}).on('changeDate', function(e) {
 				calendarArr.forEach(function (element, locationId) {
 					element.forEach(function (calendar, simulatorId) {
