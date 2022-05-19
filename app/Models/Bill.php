@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -152,6 +153,17 @@ class Bill extends Model
 			$bill->uuid = $bill->generateUuid();
 			$bill->save();
 		});
+
+		Bill::saved(function (Bill $bill) {
+			$deal = $bill->deal;
+			if ($bill->user && $deal) {
+				$status = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+				if ($status) {
+					$deal->status_id = $status->id;
+					$deal->save();
+				}
+			}
+		});
 	}
 
 	public function contractor()
@@ -162,6 +174,11 @@ class Bill extends Model
 	public function deal()
 	{
 		return $this->belongsTo(Deal::class);
+	}
+	
+	public function user()
+	{
+		return $this->belongsTo(User::class);
 	}
 
 	public function status()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -203,11 +204,23 @@ class Event extends Model
 		
 		Event::created(function (Event $event) {
 			$event->uuid = $event->generateUuid();
+			$event->user_id = \Auth::user()->id;
 			$event->save();
 		});
 		
 		Event::deleting(function (Event $event) {
 			$event->comments()->delete();
+		});
+		
+		Event::saved(function (Event $event) {
+			$deal = $event->deal;
+			if ($event->user && $deal) {
+				$status = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+				if ($status) {
+					$deal->status_id = $status->id;
+					$deal->save();
+				}
+			}
 		});
 	}
 	

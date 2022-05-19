@@ -202,6 +202,14 @@ class DealPosition extends Model
 				$dealPosition->user_id = \Auth::user()->id;
 				$dealPosition->save();
 			}
+			$deal = $dealPosition->deal;
+			if ($deal->user && $deal) {
+				$status = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+				if ($status) {
+					$deal->status_id = $status->id;
+					$deal->save();
+				}
+			}
 		});
 
 		DealPosition::deleting(function(DealPosition $position) {

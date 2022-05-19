@@ -173,6 +173,7 @@ class Location extends Model
 		
 		$billCount = Bill::where('payment_method_id', $onlinePaymentMethod->id)
 			->where('location_id', $this->id)
+			->where('user_id', 0)
 			->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
 			->count();
 		
