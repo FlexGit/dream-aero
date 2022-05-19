@@ -208,6 +208,14 @@ class EventController extends Controller
 					if ($event->simulator_up_at || $event->simulator_down_at) {
 						$title .= '. Платформа: ' . ($event->simulator_up_at ? Carbon::parse($event->simulator_up_at)->format('H:i') : '') . ' - ' . ($event->simulator_down_at ? Carbon::parse($event->simulator_down_at)->format('H:i') : '');
 					}
+					// спонтанный полет
+					if ($event->is_unexpected_flight) {
+						$title .= '. СП';
+					}
+					// повторный полет
+					if ($event->is_repeated_flight) {
+						$title .= '. ПП';
+					}
 					
 					$allDay = false;
 					
