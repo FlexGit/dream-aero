@@ -787,6 +787,17 @@
 					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').addClass('hidden');
 					//calendarArr[$(this).data('location_id')][$(this).data('simulator_id')].refetchEvents();
 				}
+
+				var date = $('#datepicker').datepicker('getDate');
+
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.gotoDate(date);
+							calendar.refetchEvents();
+						}
+					});
+				});
 			});
 
 			// select calendar view type
@@ -795,10 +806,14 @@
 
 				localStorage.setItem($(this).attr('id'), calendarViewType);
 
+				var date = $('#datepicker').datepicker('getDate');
+
 				calendarArr.forEach(function (element, locationId) {
 					element.forEach(function (calendar, simulatorId) {
 						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
 							calendar.changeView(calendarViewType);
+							calendar.gotoDate(date);
+							calendar.refetchEvents();
 						}
 					});
 				});
