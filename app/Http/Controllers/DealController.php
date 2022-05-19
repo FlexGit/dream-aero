@@ -994,7 +994,7 @@ class DealController extends Controller
 					if ($source == 'calendar') {
 						// создаем новую карточку контрагента, если E-mail из заявки не совпадает E-mail
 						// из карточки клиента, и пишем уже этого клиента в событие
-						/*if ($email && $email != $contractor->email) {
+						if ($email && $email != $contractor->email && $email != Contractor::ANONYM_EMAIL) {
 							$contractor = new Contractor();
 							$contractor->name = $name;
 							$contractor->email = $email;
@@ -1003,7 +1003,7 @@ class DealController extends Controller
 							$contractor->source = $source ?: Contractor::ADMIN_SOURCE;
 							$contractor->user_id = $this->request->user()->id ?? 0;
 							$contractor->save();
-						}*/
+						}
 						
 						$event = new Event();
 						$event->event_type = $eventType;
