@@ -622,7 +622,7 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		if (in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE])) {
+		if (in_array($source, [Deal::WEB_SOURCE/*, Deal::MOB_SOURCE*/])) {
 			//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
 			$job = new \App\Jobs\SendPayLinkEmail($bill);
 			$job->handle();
