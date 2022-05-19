@@ -476,8 +476,8 @@ class DealController extends Controller
 				->first();
 		}
 		
-		/*try {
-			\DB::beginTransaction();*/
+		try {
+			\DB::beginTransaction();
 
 			if (!$contractor) {
 				$contractor = new Contractor();
@@ -550,7 +550,7 @@ class DealController extends Controller
 				if ($source == Deal::WEB_SOURCE) {
 					$billLocation = $city->getLocationForBill();
 					if (!$billLocation) {
-						/*\DB::rollback();*/
+						\DB::rollback();
 						
 						Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
 						
@@ -585,7 +585,7 @@ class DealController extends Controller
 					case AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER:
 						$registerOrderResult = AeroflotBonusService::registerOrder($position);
 						if ($registerOrderResult['status']['code'] != 0) {
-							/*\DB::rollback();*/
+							\DB::rollback();
 							
 							\Log::debug('500 - Certificate Deal Create: ' . $registerOrderResult['status']['description']);
 							
@@ -597,7 +597,7 @@ class DealController extends Controller
 							$job->handle();
 						}*/
 						
-						/*\DB::commit();*/
+						\DB::commit();
 						
 						return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена! Перенаправляем на страницу "Аэрофлот Бонус"...', 'payment_url' => $registerOrderResult['paymentUrl']]);
 					break;
@@ -613,20 +613,22 @@ class DealController extends Controller
 				$job->handle();
 			}*/
 
-			/*\DB::commit();
+			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
 			
 			Log::debug('500 - Deal Certificate Store: ' . $e->getMessage());
 			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-		}*/
+		}
 		
 		if (in_array($source, [Deal::MOB_SOURCE])) {
 			//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
 			$job = new \App\Jobs\SendPayLinkEmail($bill);
 			$job->handle();
-			
+		}
+
+		if (in_array($source, [Deal::WEB_SOURCE])) {
 			$paymentFormHtml = PayAnyWayService::generatePaymentForm($bill);
 			return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена! Перенаправляем на страницу оплаты. Пожалуйста, подождите...', 'html' => $paymentFormHtml]);
 		}
