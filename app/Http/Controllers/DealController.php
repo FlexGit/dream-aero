@@ -872,9 +872,9 @@ class DealController extends Controller
 			if ($certificate->wasUsed()) {
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
 			}
-			/*if (!in_array($certificate->status_id, [$certificateStatus->id, 0])) {
+			if (in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE]) && !in_array($certificate->status_id, [$certificateStatus->id, 0])) {
 				return response()->json(['status' => 'error', 'reason' => 'Некорректный статус Сертификата']);
-			}*/
+			}
 			if (!in_array($certificate->product_id, [$product->id, 0])) {
 				return response()->json(['status' => 'error', 'reason' => 'Некорректный продукт Сертификата']);
 			}
