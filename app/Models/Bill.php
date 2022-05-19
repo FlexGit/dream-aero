@@ -155,13 +155,15 @@ class Bill extends Model
 		});
 
 		Bill::saved(function (Bill $bill) {
-			$deal = $bill->deal;
-			$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
-			if ($bill->user && $deal->status_id == $createdStatus->id) {
-				$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
-				if ($inWorkStatus) {
-					$deal->status_id = $inWorkStatus->id;
-					$deal->save();
+			if ($bill->user && $bill->created_at != $bill->updated_at) {
+				$deal = $bill->deal;
+				$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+				if ($deal->status_id == $createdStatus->id) {
+					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+					if ($inWorkStatus) {
+						$deal->status_id = $inWorkStatus->id;
+						$deal->save();
+					}
 				}
 			}
 		});
