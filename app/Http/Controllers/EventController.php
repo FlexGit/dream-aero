@@ -144,8 +144,8 @@ class EventController extends Controller
 					}
 					
 					$amount = 0;
-					$paymentMethodNames = [];
-					$billStatusAliases = [];
+					$paymentMethodNames = $billStatusAliases = [];
+					$promo = $promocode = null;
 
 					// инфа о сертификате
 					if ($certificate) {
@@ -198,10 +198,10 @@ class EventController extends Controller
 					}
 					// инфа об акции
 					if (isset($promo)) {
-						if ($user->email == env('DEV_EMAIL')) {
+						/*if ($user->email == env('DEV_EMAIL')) {
 							\Log::debug($position);
 							\Log::debug($promo);
-						}
+						}*/
 						$title .= '. Акция: ' . $promo->name . ' (' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
 					}
 					// инфа о промокоде
