@@ -169,8 +169,8 @@ class EventController extends Controller
 										$paymentMethodNames[] = $paymentMethod->name;
 									}
 								}
-								$promo = $position->promo;
-								$promocode = $position->promocode;
+								$promo = $certificatePurchasePosition->promo;
+								$promocode = $certificatePurchasePosition->promocode;
 							}
 						}
 						$title .= '. Сертификат: ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';

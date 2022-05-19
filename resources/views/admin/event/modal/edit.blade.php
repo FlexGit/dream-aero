@@ -39,7 +39,7 @@
 					<div class="row mt-3">
 						<div class="col">
 							<div class="form-group">
-								<label>Дата и время начала полета</label>
+								<label>Uuid</label>
 								<div class="d-flex">
 									{{ $event->uuid }}
 								</div>
