@@ -154,7 +154,7 @@ class Bill extends Model
 			$bill->save();
 		});
 
-		Bill::saved(function (Bill $bill) {
+		/*Bill::saved(function (Bill $bill) {
 			$deal = $bill->deal;
 			if ($bill->user && $deal) {
 				$status = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
@@ -163,7 +163,7 @@ class Bill extends Model
 					$deal->save();
 				}
 			}
-		});
+		});*/
 	}
 
 	public function contractor()

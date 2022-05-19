@@ -212,7 +212,7 @@ class Event extends Model
 			$event->comments()->delete();
 		});
 		
-		Event::saved(function (Event $event) {
+		/*Event::saved(function (Event $event) {
 			$deal = $event->deal;
 			if ($event->user && $deal) {
 				$status = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
@@ -221,7 +221,7 @@ class Event extends Model
 					$deal->save();
 				}
 			}
-		});
+		});*/
 	}
 	
 	public function contractor()
