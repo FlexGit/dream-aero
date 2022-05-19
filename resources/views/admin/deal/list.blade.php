@@ -1,7 +1,7 @@
 @foreach ($deals as $deal)
 	@php
-		$balance = $deal->balance();
 		$scoreAmount = $deal->scoreAmount();
+		$balance = $deal->balance() - $scoreAmount;
 	@endphp
 
 	<tr class="odd" data-id="{{ $deal->id }}" @if($deal->status && $deal->status->alias == app('\App\Models\Deal')::CREATED_STATUS) style="background-color: #e6d8d8;" @endif>
