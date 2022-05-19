@@ -35,6 +35,18 @@
 
 		<div class="tab-content">
 			<div class="tab-pane container fade in show active" id="flight">
+				@if($user->email == env('DEV_EMAIL'))
+					<div class="row mt-3">
+						<div class="col">
+							<div class="form-group">
+								<label>Дата и время начала полета</label>
+								<div class="d-flex">
+									{{ $event->uuid }}
+								</div>
+							</div>
+						</div>
+					</div>
+				@endif
 				{{--<div class="form-group">
 					<label for="product_id">Продукт</label>
 					<select class="form-control js-product" id="product_id" name="product_id">

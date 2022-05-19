@@ -415,6 +415,7 @@ class EventController extends Controller
 				'cities' => $cities,
 				'pilots' => $pilots,
 				'shifts' => $shifts,
+				'user' => $user,
 			]);
 		} else {
 			$users = User::where('enable', true)
