@@ -198,6 +198,10 @@ class EventController extends Controller
 					}
 					// инфа об акции
 					if (isset($promo)) {
+						if ($user->email == env('DEV_EMAIL')) {
+							\Log::debug($certificatePurchasePosition);
+							\Log::debug($promo);
+						}
 						$title .= '. Акция: ' . $promo->name . ' (' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
 					}
 					// инфа о промокоде
