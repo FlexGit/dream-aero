@@ -46,6 +46,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		
 		$dealEmail = $deal->email ?? '';
 		$dealName = $deal->name ?? '';
+		$dealCity = $deal->city;
 		$contractorEmail = $contractor->email ?? '';
 		$contractorName = $contractor->name ?? '';
 		if (!$dealEmail && !$contractorEmail) {
@@ -60,21 +61,26 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		}
 		
 		$messageData = [
+			'certificate' => $this->certificate,
 			'name' => $dealName ?: $contractorName,
-			'city' => $position->city ?? null,
+			'city' => $dealCity ?? null,
 		];
 		
-		$recipients = [];
+		$recipients = $bcc = [];
 		$recipients[] = $dealEmail ?: $contractorEmail;
+		if ($dealCity && $dealCity->email) {
+			$bcc[] = $dealCity->email;
+		}
 
 		$subject = env('APP_NAME') . ': сертификат на полет';
 		
-		Mail::send(['html' => "admin.emails.send_certificate"], $messageData, function ($message) use ($subject, $recipients, $rulesFileName) {
+		Mail::send(['html' => "admin.emails.send_certificate"], $messageData, function ($message) use ($subject, $recipients, $rulesFileName, $bcc) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->attach(Storage::disk('private')->path($this->certificate->data_json['certificate_file_path']));
 			$message->attach(Storage::disk('private')->path('rule/' . $rulesFileName . '.jpg'));
 			$message->to($recipients);
+			$message->bcc($bcc);
 		});
 		
 		$failures = Mail::failures();
