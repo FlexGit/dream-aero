@@ -212,16 +212,21 @@ class Event extends Model
 			$event->comments()->delete();
 		});
 		
-		/*Event::saved(function (Event $event) {
-			$deal = $event->deal;
-			if ($event->user && $deal) {
-				$status = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
-				if ($status) {
-					$deal->status_id = $status->id;
-					$deal->save();
+		Event::saved(function (Event $event) {
+			if ($event->user && $event->created_at != $event->updated_at) {
+				$deal = $event->deal;
+				if ($deal) {
+					$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+					if ($deal->status_id == $createdStatus->id) {
+						$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+						if ($inWorkStatus) {
+							$deal->status_id = $inWorkStatus->id;
+							$deal->save();
+						}
+					}
 				}
 			}
-		});*/
+		});
 	}
 	
 	public function contractor()
