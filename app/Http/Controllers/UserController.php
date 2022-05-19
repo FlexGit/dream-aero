@@ -304,9 +304,9 @@ class UserController extends Controller
 		
 		$email = $this->request->email ?? '';
 		if ($email) {
-			$user = User::where('email', $email)
+			$emailUser = User::where('email', $email)
 				->first();
-			if ($user && $user->id != $id) {
+			if ($emailUser && $emailUser->id != $id) {
 				return response()->json(['status' => 'error', 'reason' => 'Пользователь с таким E-mail уже существует']);
 			}
 		}
