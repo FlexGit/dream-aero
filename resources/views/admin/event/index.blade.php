@@ -149,6 +149,7 @@
 @stop
 
 @section('js')
+	<script src="{{ asset('js/admin/jquery-ui/jquery-ui.min.js') }}"></script>
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
 	<script src="{{ asset('js/admin/moment.min.js') }}"></script>
 	<script src="{{ asset('js/admin/moment-timezone-with-data.min.js') }}"></script>
@@ -156,9 +157,16 @@
 	<script src="{{ asset('js/admin/bootstrap-datepicker.ru.min.js') }}"></script>
 	<script src="{{ asset('js/admin/popper.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
-	<script src="{{ asset('js/admin/common.js') }}"></script>
+	<script src="{{ asset('js/admin/common.js?v=' . time()) }}"></script>
 	<script>
 		$(function(){
+			$('.modal>.modal-dialog').draggable({
+				cursor: 'move',
+				handle: '.modal-header'
+			});
+
+			$('.modal>.modal-dialog>.modal-content>.modal-header').css('cursor', 'move');
+
 			/*var timeZone = $('#time_zone').val();*/
 
 			var $calendarViewType = $('#calendar-view-type'),
