@@ -206,14 +206,8 @@ class Event extends Model
 			$event->uuid = $event->generateUuid();
 			$event->user_id = \Auth::user()->id;
 			$event->save();
-		});
-		
-		Event::deleting(function (Event $event) {
-			$event->comments()->delete();
-		});
-		
-		Event::saved(function (Event $event) {
-			if ($event->user && $event->created_at != $event->updated_at) {
+			
+			if ($event->user) {
 				$deal = $event->deal;
 				if ($deal) {
 					$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
@@ -226,6 +220,10 @@ class Event extends Model
 					}
 				}
 			}
+		});
+		
+		Event::deleting(function (Event $event) {
+			$event->comments()->delete();
 		});
 	}
 	
