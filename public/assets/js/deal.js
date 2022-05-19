@@ -486,6 +486,7 @@ $(function() {
 			data: data,
 			dataType: 'json',
 			success: function (result) {
+				console.log(result);
 				if (result.status !== 'success') {
 					if (result.reason) {
 						$alertError.text(result.reason).removeClass('hidden');
