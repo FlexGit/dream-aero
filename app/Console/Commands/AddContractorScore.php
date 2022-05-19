@@ -41,7 +41,7 @@ class AddContractorScore extends Command
     public function handle()
     {
     	$events = Event::where('event_type', Event::EVENT_SOURCE_DEAL)
-			->whereBetween('stop_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+			->whereBetween('stop_at', [Carbon::now()->subDays(2), Carbon::now()])
 			->where('contractor_id', '!=', '78800') // ToDo не начислять баллы Анониму (заменить на что-то более красивое)
 			->get();
     	foreach ($events as $event) {
