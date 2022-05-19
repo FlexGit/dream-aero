@@ -581,6 +581,7 @@ class EventController extends Controller
 					$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
 					$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
 					$event->pilot_id = $this->request->pilot ?? 0;
+					$event->user_id = $this->request->user()->id ?? 0;
 					$event->data_json = $data;
 					$event->save();
 					

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -227,6 +228,16 @@ class Event extends Model
 						}
 					}
 				}
+			}
+		});
+		
+		Event::saved(function (Event $event) {
+			if (($event->getOriginal('start_at') && $event->start_at != $event->getOriginal('start_at')) || ($event->getOriginal('stop_at') && $event->stop_at != $event->getOriginal('stop_at'))) {
+				$eventComment = new EventComment();
+				$eventComment->name = 'Перенос с ' . Carbon::parse($event->getOriginal('start_at'))->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->getOriginal('stop_at'))->format('d.m.Y H:i') . ' на ' . Carbon::parse($event->start_at)->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->stop_at)->format('d.m.Y H:i');
+				$eventComment->event_id = $event->id;
+				$eventComment->created_by = $event->user_id;
+				$eventComment->save();
 			}
 		});
 		
