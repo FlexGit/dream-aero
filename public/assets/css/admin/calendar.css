@@ -125,9 +125,6 @@ td.fc-daygrid-day {
 	width: 100%;
 	min-width: 450px;
 }
-.holiday {
-	background-color: #ffb8ad;
-}
 body {
 	overflow: hidden;
 }

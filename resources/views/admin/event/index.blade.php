@@ -723,7 +723,7 @@
 				daysOfWeekHighlighted: [0,6],
 				beforeShowDay: function(date) {
 					if ($.inArray(date.toLocaleDateString(), holidays) !== -1) {
-						return {classes: 'holiday'};
+						return {classes: 'highlighted'};
 					}
 				},
 			}).on('changeDate', function(e) {
