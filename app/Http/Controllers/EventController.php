@@ -179,29 +179,27 @@ class EventController extends Controller
 							$title .= '. ' . implode(', ', $paymentMethodNames);
 						}
 					} else {
-						$bills = $position->bills;
-						foreach ($bills as $bill) {
-							$billStatusAliases[] = $bill->status ? $bill->status->alias : Bill::NOT_PAYED_STATUS;
-							$paymentMethod = $bill->paymentMethod;
-							if ($paymentMethod) {
-								$paymentMethodNames[] = $paymentMethod->name;
+						if ($position) {
+							$bills = $position->bills;
+							foreach ($bills as $bill) {
+								$billStatusAliases[] = $bill->status ? $bill->status->alias : Bill::NOT_PAYED_STATUS;
+								$paymentMethod = $bill->paymentMethod;
+								if ($paymentMethod) {
+									$paymentMethodNames[] = $paymentMethod->name;
+								}
 							}
-						}
-						$promo = $position->promo;
-						$promocode = $position->promocode;
-						
-						// способ оплаты
-						$title .= ' за ' . $position->amount . ' руб';
-						if ($paymentMethodNames) {
-							$title .= '. ' . implode(', ', $paymentMethodNames);
+							$promo = $position->promo;
+							$promocode = $position->promocode;
+							
+							// способ оплаты
+							$title .= ' за ' . $position->amount . ' руб';
+							if ($paymentMethodNames) {
+								$title .= '. ' . implode(', ', $paymentMethodNames);
+							}
 						}
 					}
 					// инфа об акции
 					if (isset($promo)) {
-						/*if ($user->email == env('DEV_EMAIL')) {
-							\Log::debug($position);
-							\Log::debug($promo);
-						}*/
 						$title .= '. Акция: ' . $promo->name . ' (' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
 					}
 					// инфа о промокоде
