@@ -11,7 +11,7 @@
 				<a class="nav-link active" data-toggle="tab" href="{{ asset('#flight') }}">Полет</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="{{ asset('#deal') }}">Сделка</a>
+				<a class="nav-link" data-toggle="tab" href="{{ asset('#deal-info') }}">Сделка</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="{{ asset('#simulator') }}">Платформа</a>
@@ -119,7 +119,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="deal">
+			<div class="tab-pane fade" id="deal-info">
 				<div class="row mt-3">
 					<div class="col">
 						<div class="text-center font-weight-bold">Контрагент</div>
