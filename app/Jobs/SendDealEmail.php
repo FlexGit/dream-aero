@@ -49,7 +49,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 		if ($cityData['email']) {
 			$recipients[] = $cityData['email'];
 		}
-		$recipients[] = env('DEV_EMAIL');
+		//$recipients[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'contractorFio' => $this->deal->contractor ? $this->deal->contractor->fio() : '',
