@@ -92,16 +92,20 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			'payLink' => $bill ? ((($city->version == City::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid) : '',
 		];
 		
-		$recipients = [];
+		$recipients = $bcc = [];
 		$recipients[] = $dealEmail ?: $contractorEmail;
+		if ($city->email) {
+			$bcc[] = $city->email;
+		}
 		
 		$subject = env('APP_NAME') . ': приглашение на полет';
 
-		Mail::send(['html' => "admin.emails.send_flight_invitation"], $messageData, function ($message) use ($subject, $recipients, $flightInvitationFilePath) {
+		Mail::send(['html' => "admin.emails.send_flight_invitation"], $messageData, function ($message) use ($subject, $recipients, $flightInvitationFilePath, $bcc) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->attach(Storage::disk('private')->path($this->event->data_json['flight_invitation_file_path']));
 			$message->to($recipients);
+			$message->bcc($bcc);
 		});
 		
 		$failures = Mail::failures();
