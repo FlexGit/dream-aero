@@ -58,7 +58,9 @@ class AddContractorScore extends Command
 			if (!$city) continue;
    
 			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-			if (!$cityProduct || !$cityProduct->pivot) continue;
+			if (!$cityProduct) continue;
+			if (!$cityProduct->pivot) continue;
+			if ($cityProduct->pivot->score <= 0) continue;
 
     		$score = new Score();
     		$score->score = $cityProduct->pivot->score;
