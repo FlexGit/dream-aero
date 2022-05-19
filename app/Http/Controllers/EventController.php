@@ -218,6 +218,10 @@ class EventController extends Controller
 					if ($event->is_repeated_flight) {
 						$title .= '. ПП';
 					}
+					// описание
+					if ($event->description) {
+						$title .= '. ' . $event->description;
+					}
 					
 					$allDay = false;
 					
@@ -745,6 +749,7 @@ class EventController extends Controller
 						$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;
 						$event->simulator_down_at = $this->request->simulator_down_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_down_at)->format('Y-m-d H:i') : null;
 						$event->pilot_id = $this->request->pilot_id ?? 0;
+						$event->description = $this->request->description ?? null;
 					} else if ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at)->subMinutes($event->extra_time ?? 0)->format('Y-m-d H:i');

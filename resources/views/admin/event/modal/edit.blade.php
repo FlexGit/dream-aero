@@ -118,6 +118,14 @@
 						</div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col">
+						<div class="form-group">
+							<label for="description">Описание</label>
+							<textarea class="form-control" id="description" name="description" rows="3" placeholder="Введите текст">{{ $event->description ?? '' }}</textarea>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="tab-pane fade" id="deal-info">
 				<div class="row mt-3">
