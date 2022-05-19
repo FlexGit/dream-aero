@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -210,6 +211,14 @@ class Deal extends Model
 			$deal->number = $deal->generateNumber();
 			$deal->uuid = (string)\Webpatser\Uuid\Uuid::generate();
 			$deal->save();
+			
+			if ($deal->user_id) {
+				$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+				if ($inWorkStatus) {
+					$deal->status_id = $inWorkStatus->id;
+					$deal->save();
+				}
+			}
 		});
 
 		Deal::saved(function (Deal $deal) {

@@ -152,6 +152,18 @@ class Bill extends Model
 			$bill->number = $bill->generateNumber();
 			$bill->uuid = $bill->generateUuid();
 			$bill->save();
+			
+			if ($bill->user) {
+				$deal = $bill->deal;
+				$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+				if ($deal->status_id == $createdStatus->id) {
+					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+					if ($inWorkStatus) {
+						$deal->status_id = $inWorkStatus->id;
+						$deal->save();
+					}
+				}
+			}
 		});
 
 		Bill::saved(function (Bill $bill) {
