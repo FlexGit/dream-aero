@@ -208,7 +208,7 @@ class Event extends Model
 			$event->save();
 			
 			$eventComment = new EventComment();
-			$eventComment->name = 'Администратор ' . $event->user->fioFormatted();
+			$eventComment->name = 'Событие добавлено ' . $event->user->fioFormatted();
 			$eventComment->event_id = $event->id;
 			$eventComment->created_by = $event->user_id;
 			$eventComment->save();
