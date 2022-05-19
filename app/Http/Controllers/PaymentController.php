@@ -128,9 +128,9 @@ class PaymentController extends Controller
 				}
 				
 				// если было выбрано начисление бонусов Аэрофлот
-				if ($position->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS) {
+				/*if ($position->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS) {
 					AeroflotBonusService::authPoints($position);
-				}
+				}*/
 			}
 		}
 		
