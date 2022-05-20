@@ -912,6 +912,7 @@ class PositionController extends Controller
 			
 			$event = $position->event;
 			if ($event) {
+				$event->product_id = $product->id ?? 0;
 				$event->location_id = $location->id ?? 0;
 				$event->flight_simulator_id = $simulator->id ?? 0;
 				$event->save();
