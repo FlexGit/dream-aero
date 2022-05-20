@@ -154,7 +154,7 @@ class Certificate extends Model
 		$productTypeAlias = ($this->product && $this->product->productType) ? mb_strtoupper(substr($this->product->productType->alias, 0, 1)) : '';
 		$productDuration = $this->product ? $this->product->duration : '';
 		
-		return 'C' . date('y') . $cityAlias . (in_array($this->product->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]) ? $productDuration : $productTypeAlias) . $productAlias  . sprintf('%05d', $this->id);
+		return 'C' . date('y') . $cityAlias . (!in_array($this->product->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]) ? $productTypeAlias : '') . $productAlias  . (in_array($this->product->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]) ? $productDuration : '') . sprintf('%05d', $this->id);
 	}
 	
 	/**
