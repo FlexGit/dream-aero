@@ -2802,8 +2802,14 @@ class ApiController extends Controller
 			if (!$promocode) {
 				return $this->responseError('Промокод не найден', 400);
 			}
-			
-			//$promocode->contractors()->attach($contractor->id);
+			if ($promocode->type == Promocode::SIMULATOR_TYPE && !$isCertificatePurchase) {
+				if ($promocode->contractor_id != $contractor->id
+					|| $promocode->location_id != $location->id
+					|| $promocode->flight_simulator_id != $simulator->id
+				) {
+					return $this->responseError('Промокод не найден', 400);
+				}
+			}
 		}
 		
 		$debitScore = (int)$this->request->score ?? 0;
@@ -2910,8 +2916,7 @@ class ApiController extends Controller
 			}
 			
 			if ((isset($promocode) && $promocode instanceof Promocode) && $contractor) {
-				//$promocode->contractors()->save($promocode->id);
-				$promocode->contractors()->attach($contractor->id);
+				$promocode->contractors()->save($contractor);
 			}
 			
 			\DB::commit();
