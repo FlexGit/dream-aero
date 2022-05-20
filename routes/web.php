@@ -143,7 +143,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('event/{uuid}/doc/file', [EventController::class, 'getDocFile'])->name('getDocFile');
 
 		// Сделки
-		Route::get('deal', [DealController::class, 'index'])->name('dealIndex');
+		Route::get('deal/{id?}', [DealController::class, 'index'])->name('dealIndex');
 		Route::get('deal/list/ajax', [DealController::class, 'getListAjax'])->name('dealList');
 		Route::post('deal/product', [DealController::class, 'storeProduct']);
 		Route::put('deal/{id}', [DealController::class, 'update']);

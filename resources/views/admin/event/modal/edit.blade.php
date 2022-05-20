@@ -147,7 +147,9 @@
 					<div class="col">
 						<div class="text-center font-weight-bold">Сделка</div>
 						@if($event->deal)
-							<div>{{ $event->deal->number ?? '' }} от {{ $event->deal->created_at ? $event->deal->created_at->format('Y-m-d H:i') : '' }}</div>
+							<div>
+								<a href="/deal/{{ $event->deal->id }}">{{ $event->deal->number ?? '' }}</a> от {{ $event->deal->created_at ? $event->deal->created_at->format('Y-m-d H:i') : '' }}
+							</div>
 							<div class="d-inline-block">
 								@if($event->city)
 									@if($event->city->version == app('\App\Models\City')::EN_VERSION)

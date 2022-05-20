@@ -65,9 +65,10 @@ class DealController extends Controller
 	}
 	
 	/**
+	 * @param null $dealId
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function index()
+	public function index($dealId = null)
 	{
 		$user = \Auth::user();
 		$locationCount = $user->city ? $user->city->locations->count() : 0;
@@ -102,12 +103,17 @@ class DealController extends Controller
 			];
 		}
 		
-		return view('admin.deal.index', [
+		if ($dealId) {
+			$deal = Deal::find($dealId);
+		}
+		
+		return view(	'admin.deal.index', [
 			'user' => $user,
 			'cities' => $cities,
 			'productTypes' => $productTypes,
 			'statusData' => $statusData,
 			'locationCount' => $locationCount,
+			'deal' => $deal ?? null,
 		]);
 	}
 	
@@ -155,6 +161,7 @@ class DealController extends Controller
 		if ($this->request->search_doc) {
 			$deals = $deals->where(function ($query) {
 				$query->where('number', 'like', '%' . $this->request->search_doc . '%')
+					->orWhere('uuid', $this->request->search_doc)
 					->orWhereRelation('positions', function ($query) {
 						return $query->where('number', 'like', '%' . $this->request->search_doc . '%')
 							->orWhereHas('certificate', function ($query) {

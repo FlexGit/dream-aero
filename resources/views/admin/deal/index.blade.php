@@ -164,6 +164,11 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
+			@if($deal)
+				$('#search_doc').val('{{ $deal->number }}');
+				getList(false);
+			@endif
+
 			function getList(loadMore) {
 				var $selector = $('#dealTable tbody.body');
 
