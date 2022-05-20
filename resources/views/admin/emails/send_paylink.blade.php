@@ -33,7 +33,7 @@
 												</p>
 												<p style="margin:10px 0;font-size:1px;line-height:1px;">&nbsp;</p>
 												<a href="https://t.me/dreamaero/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
-													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/telegram.png') }}" width="24" height="24" alt="facebook">
+													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/telegram.png') }}" width="24" height="24" alt="Telegram">
 												</a>
 												<a href="https://vk.com/dream.aero" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
 													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/vk.png') }}" width="24" height="24" alt="vk">
