@@ -2803,7 +2803,7 @@ class ApiController extends Controller
 				return $this->responseError('Промокод не найден', 400);
 			}
 			
-			$promocode->contractors()->attach($contractor->id);
+			//$promocode->contractors()->attach($contractor->id);
 		}
 		
 		$debitScore = (int)$this->request->score ?? 0;
@@ -2907,6 +2907,11 @@ class ApiController extends Controller
 				$score->deal_position_id = $position->id;
 				$score->type = Score::USED_TYPE;
 				$score->save();
+			}
+			
+			if ((isset($promocode) && $promocode instanceof Promocode) && $contractor) {
+				//$promocode->contractors()->save($promocode->id);
+				$promocode->contractors()->attach($contractor->id);
 			}
 			
 			\DB::commit();
