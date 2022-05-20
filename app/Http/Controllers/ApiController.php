@@ -2838,19 +2838,19 @@ class ApiController extends Controller
 						return $this->responseError('Сертификат не найден', 400);
 					}
 					if ($certificate->wasUsed()) {
-						return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
+						return $this->responseError('Сертификат уже был ранее использован', 400);
 					}
 					if (!in_array($certificate->status_id, [$statusesData['certificate'][Certificate::CREATED_STATUS]['id'], 0])) {
-						return response()->json(['status' => 'error', 'reason' => 'Некорректный статус Сертификата']);
+						return $this->responseError('Некорректный статус Сертификата', 400);
 					}
 					if ($product) {
 						if (!in_array($certificate->product_id, [$product->id, 0])) {
-							return response()->json(['status' => 'error', 'reason' => 'Продукт по Сертификату не совпадает с выбранным']);
+							return $this->responseError('Продукт по Сертификату не совпадает с выбранным', 400);
 						}
 					}
 					$date = date('Y-m-d');
 					if ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date)) {
-						return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);
+						return $this->responseError('Срок действия Сертификата истек', 400);
 					}
 					
 					$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
