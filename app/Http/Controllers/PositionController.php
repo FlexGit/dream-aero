@@ -912,7 +912,9 @@ class PositionController extends Controller
 			
 			$event = $position->event;
 			if ($event) {
-				$event->product_id = $product->id ?? 0;
+				if ($product->duration) {
+					$event->stop_at = Carbon::parse($event->start_at)->addMinutes($product->duration)->format('Y-m-d H:i');;
+				}
 				$event->location_id = $location->id ?? 0;
 				$event->flight_simulator_id = $simulator->id ?? 0;
 				$event->save();
