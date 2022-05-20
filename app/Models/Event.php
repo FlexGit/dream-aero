@@ -207,24 +207,28 @@ class Event extends Model
 		
 		Event::created(function (Event $event) {
 			$event->uuid = $event->generateUuid();
-			$event->user_id = \Auth::user()->id;
+			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
+				$event->user_id = \Auth::user()->id;
+			}
 			$event->save();
 			
-			$eventComment = new EventComment();
-			$eventComment->name = 'Добавлено пользователем ' . $event->user->fioFormatted();
-			$eventComment->event_id = $event->id;
-			$eventComment->created_by = $event->user_id;
-			$eventComment->save();
-
-			if ($event->user) {
-				$deal = $event->deal;
-				if ($deal) {
-					$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
-					if ($deal->status_id == $createdStatus->id) {
-						$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
-						if ($inWorkStatus) {
-							$deal->status_id = $inWorkStatus->id;
-							$deal->save();
+			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
+				$eventComment = new EventComment();
+				$eventComment->name = 'Добавлено пользователем ' . $event->user->fioFormatted();
+				$eventComment->event_id = $event->id;
+				$eventComment->created_by = $event->user_id;
+				$eventComment->save();
+				
+				if ($event->user) {
+					$deal = $event->deal;
+					if ($deal) {
+						$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+						if ($deal->status_id == $createdStatus->id) {
+							$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+							if ($inWorkStatus) {
+								$deal->status_id = $inWorkStatus->id;
+								$deal->save();
+							}
 						}
 					}
 				}
@@ -232,12 +236,14 @@ class Event extends Model
 		});
 		
 		Event::saved(function (Event $event) {
-			if (($event->getOriginal('start_at') && $event->start_at != $event->getOriginal('start_at')) || ($event->getOriginal('stop_at') && $event->stop_at != $event->getOriginal('stop_at'))) {
-				$eventComment = new EventComment();
-				$eventComment->name = 'Перенос с ' . Carbon::parse($event->getOriginal('start_at'))->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->getOriginal('stop_at'))->format('d.m.Y H:i') . ' на ' . Carbon::parse($event->start_at)->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->stop_at)->format('d.m.Y H:i');
-				$eventComment->event_id = $event->id;
-				$eventComment->created_by = $event->user_id;
-				$eventComment->save();
+			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
+				if (($event->getOriginal('start_at') && $event->start_at != $event->getOriginal('start_at')) || ($event->getOriginal('stop_at') && $event->stop_at != $event->getOriginal('stop_at'))) {
+					$eventComment = new EventComment();
+					$eventComment->name = 'Перенос с ' . Carbon::parse($event->getOriginal('start_at'))->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->getOriginal('stop_at'))->format('d.m.Y H:i') . ' на ' . Carbon::parse($event->start_at)->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->stop_at)->format('d.m.Y H:i');
+					$eventComment->event_id = $event->id;
+					$eventComment->created_by = $event->user_id;
+					$eventComment->save();
+				}
 			}
 		});
 		
