@@ -55,6 +55,8 @@ class SendFlightInvitationEmail extends Command
 			/** @var DealPosition $position */
 			$position = $event->dealPosition;
 			if (!$position) continue;
+			
+			if (!$position->is_certificate_purchase && $position->certificate) continue;
 		
 			/** @var Deal $deal */
 			$deal = $position->deal;
