@@ -4,7 +4,7 @@
 	<p>Позиция: {{ $position->number }}</p>
 @endif
 @if($certificate)
-	<p>Сертфиикат: {{ $certificate->number }}</p>
+	<p>Сертификат: {{ $certificate->number }}</p>
 @endif
 <p>Контрагент: {{ $contractor->fio() }} (e-mail: {{ $contractor->email }}, тел.: {{ $contractor->phone }})</p>
 @if($location)
