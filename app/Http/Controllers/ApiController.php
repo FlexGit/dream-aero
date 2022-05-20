@@ -2841,7 +2841,7 @@ class ApiController extends Controller
 						return $this->responseError('Сертификат уже был ранее использован', 400);
 					}
 					if (!in_array($certificate->status_id, [$statusesData['certificate'][Certificate::CREATED_STATUS]['id'], 0])) {
-						return $this->responseError('Некорректный статус Сертификата', 400);
+						return $this->responseError('Сертификат уже был ранее использован', 400);
 					}
 					if ($product) {
 						if (!in_array($certificate->product_id, [$product->id, 0])) {
