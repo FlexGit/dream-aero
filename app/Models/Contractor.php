@@ -208,7 +208,7 @@ class Contractor extends Authenticatable
 	
 	public function contractorPromocodes()
 	{
-		return $this->belongsToMany(Promocode::class, 'contractor_promocodes', 'promocode_id', 'contractor_id')
+		return $this->belongsToMany(Promocode::class, 'contractors_promocodes', 'promocode_id', 'contractor_id')
 			->using(ContractorPromocode::class)
 			->withPivot(['was_used'])
 			->withTimestamps();
