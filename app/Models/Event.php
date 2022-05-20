@@ -212,23 +212,21 @@ class Event extends Model
 			}
 			$event->save();
 			
-			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
-				$eventComment = new EventComment();
-				$eventComment->name = 'Добавлено пользователем ' . $event->user->fioFormatted();
-				$eventComment->event_id = $event->id;
-				$eventComment->created_by = $event->user_id;
-				$eventComment->save();
-				
-				if ($event->user) {
-					$deal = $event->deal;
-					if ($deal) {
-						$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
-						if ($deal->status_id == $createdStatus->id) {
-							$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
-							if ($inWorkStatus) {
-								$deal->status_id = $inWorkStatus->id;
-								$deal->save();
-							}
+			$eventComment = new EventComment();
+			$eventComment->name = 'Добавлено пользователем ' . $event->user->fioFormatted();
+			$eventComment->event_id = $event->id;
+			$eventComment->created_by = $event->user_id;
+			$eventComment->save();
+		
+			if ($event->user && !in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
+				$deal = $event->deal;
+				if ($deal) {
+					$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+					if ($deal->status_id == $createdStatus->id) {
+						$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+						if ($inWorkStatus) {
+							$deal->status_id = $inWorkStatus->id;
+							$deal->save();
 						}
 					}
 				}
