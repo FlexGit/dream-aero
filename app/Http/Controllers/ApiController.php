@@ -2840,8 +2840,7 @@ class ApiController extends Controller
 					if ($certificate->wasUsed()) {
 						return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
 					}
-					$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
-					if (!in_array($certificate->status_id, [$certificateStatus->id, 0])) {
+					if (!in_array($certificate->status_id, [$statusesData['certificate'][Certificate::CREATED_STATUS]['id'], 0])) {
 						return response()->json(['status' => 'error', 'reason' => 'Некорректный статус Сертификата']);
 					}
 					if ($product) {
@@ -2853,14 +2852,11 @@ class ApiController extends Controller
 					if ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date)) {
 						return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);
 					}
+					
+					$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
+					$certificate->save();
 				}
 			}
-			
-			// если это бронирование по ранее купленному сертификату, то регистрируем сертификат
-			/*if ($this->request->certificate_id && !$isCertificatePurchase) {
-				$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
-				$certificate->save();
-			}*/
 			
 			// создание сделки
 			$deal = new Deal();
