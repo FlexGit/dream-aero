@@ -185,10 +185,10 @@ class BillController extends Controller
 			
 			$deal->bills()->save($bill);
 			
-			if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+			/*if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
 				$job = new \App\Jobs\SendPayLinkEmail($bill);
 				$job->handle();
-			}
+			}*/
 
 			\DB::commit();
 		} catch (Throwable $e) {
@@ -266,10 +266,10 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+		/*if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
 			$job = new \App\Jobs\SendPayLinkEmail($bill);
 			$job->handle();
-		}
+		}*/
 		
 		return response()->json(['status' => 'success']);
 	}
