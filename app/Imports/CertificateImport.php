@@ -38,6 +38,8 @@ class CertificateImport implements OnEachRow, WithProgressBar
 				'status' => trim($row[6]),
 				'comment' => strip_tags(trim($row[7])),
 			];
+			
+			\Log::debug($data);
 
 			$certificate = new Certificate();
 			$certificate->expire_at = (trim($row[8]) == 'Бессрочный') ? null : Carbon::parse($row[8])->format('Y-m-d H:i:s');
@@ -46,6 +48,7 @@ class CertificateImport implements OnEachRow, WithProgressBar
 
 			$certificate->number = trim($row[0]);
 			$certificate->save();
+			\Log::debug($certificate->id);
 
 			\DB::commit();
 		} catch (Throwable $e) {
