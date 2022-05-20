@@ -244,9 +244,9 @@ class DealController extends Controller
 		$promocodes = $this->promocodeRepo->getList($user);
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList();
 		$employees = User::where('enable', true);
-		if ($user->city_id) {
+		/*if ($user->city_id) {
 			$employees = $employees->whereIn('city_id', [$user->city_id, 0]);
-		}
+		}*/
 		$employees = $employees->get();
 		
 		$pilots = User::where('enable', true);
