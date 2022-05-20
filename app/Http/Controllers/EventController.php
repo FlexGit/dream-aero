@@ -394,10 +394,16 @@ class EventController extends Controller
 		if (!$isShift) {
 			$commentData = [];
 			foreach ($event->comments as $comment) {
+				$userName = '';
+				if ($comment->updated_by) {
+					$userName = $comment->updatedUser->fio();
+				} elseif ($comment->created_by) {
+					$userName = $comment->createdUser->fio();
+				}
 				$commentData[] = [
 					'id' => $comment->id,
 					'name' => $comment->name,
-					'user' => $comment->updated_by ? $comment->updatedUser->fio() : $comment->createdUser->fio(),
+					'user' => $userName,
 					'date' => $comment->updated_at->format('d.m.Y H:i'),
 					'wasUpdated' => ($comment->created_at != $comment->updated_at) ? 'изменено' : 'создано',
 				];
