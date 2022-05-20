@@ -149,11 +149,12 @@ class Certificate extends Model
 	 */
 	public function generateNumber()
 	{
-		$alias = !$this->city_id ? 'uni' : ($this->city ? mb_strtolower($this->city->alias) : '');
+		$cityAlias = !$this->city_id ? 'uni' : ($this->city ? mb_strtolower($this->city->alias) : '');
+		$productAlias = ($this->product) ? mb_strtoupper(substr($this->product->alias, 0, 1)) : '';
 		$productTypeAlias = ($this->product && $this->product->productType) ? mb_strtoupper(substr($this->product->productType->alias, 0, 1)) : '';
-		$productDuration = $this->product ? $this->product->duration : '';
+		//$productDuration = $this->product ? $this->product->duration : '';
 		
-		return 'C' . date('y') . $alias . $productTypeAlias . $productDuration  . sprintf('%05d', $this->id);
+		return 'C' . date('y') . $cityAlias . $productTypeAlias . $productAlias  . sprintf('%05d', $this->id);
 	}
 	
 	/**
