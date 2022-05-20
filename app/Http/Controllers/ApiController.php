@@ -2854,7 +2854,7 @@ class ApiController extends Controller
 			
 			$position = new DealPosition();
 			$position->product_id = $product ? $product->id : 0;
-			/*$position->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;*/
+			$position->certificate_id = (isset($certificate) && $certificate instanceof Certificate) ? $certificate->id : 0;
 			$position->duration = $product ? $product->duration : 0;
 			$position->amount = $productAmount ?? 0;
 			$position->promocode_id = (isset($promocode) && $promocode instanceof Promocode) ? $promocode->id : 0;
