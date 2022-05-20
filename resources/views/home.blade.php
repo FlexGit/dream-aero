@@ -179,7 +179,7 @@
 					@endif
 					<div>
 						<div class="img" style="background-image: url('/upload/{{ $user->data_json['photo_file_path'] }}');"></div>
-						<p>{{ trans('main.home.role.' . $user->role) }} <b>{{ $user['lastname'] }} {{ $user['name'] }}</b></p>
+						<p>{{ trans('main.home.role.' . $user->role) }} <b>{{ $user['name'] }}</b></p>
 					</div>
 				@endforeach
 			</div>
