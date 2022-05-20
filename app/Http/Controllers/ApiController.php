@@ -2738,6 +2738,7 @@ class ApiController extends Controller
 		
 		$isCertificatePurchase = filter_var($this->request->is_certificate_purchase, FILTER_VALIDATE_BOOLEAN);
 		$isUnified = filter_var($this->request->is_unified, FILTER_VALIDATE_BOOLEAN);
+		$certificateNumber = $this->request->certificate_number ?? '';
 		
 		if (!$isCertificatePurchase && $this->request->flight_date && $this->request->flight_time) {
 			$flightDateCarbon = Carbon::parse($this->request->flight_date . ' ' . $this->request->flight_time);
@@ -2829,6 +2830,30 @@ class ApiController extends Controller
 				$certificatePeriod = ($product && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
 				$certificate->expire_at = Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
 				$certificate->save();
+			} else {
+				if ($certificateNumber) {
+					$certificate = Certificate::where('number', $certificateNumber)
+						->first();
+					if (!$certificate) {
+						return $this->responseError('Сертификат не найден', 400);
+					}
+					if ($certificate->wasUsed()) {
+						return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
+					}
+					$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
+					if (!in_array($certificate->status_id, [$certificateStatus->id, 0])) {
+						return response()->json(['status' => 'error', 'reason' => 'Некорректный статус Сертификата']);
+					}
+					if ($product) {
+						if (!in_array($certificate->product_id, [$product->id, 0])) {
+							return response()->json(['status' => 'error', 'reason' => 'Продукт по Сертификату не совпадает с выбранным']);
+						}
+					}
+					$date = date('Y-m-d');
+					if ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date)) {
+						return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);
+					}
+				}
 			}
 			
 			// если это бронирование по ранее купленному сертификату, то регистрируем сертификат
