@@ -910,6 +910,12 @@ class PositionController extends Controller
 				}
 			}
 			
+			$event = $position->event;
+			if ($event) {
+				$event->location_id = $location->id ?? 0;
+				$event->save();
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();

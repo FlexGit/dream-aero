@@ -213,7 +213,7 @@ class Event extends Model
 			$event->save();
 			
 			$eventComment = new EventComment();
-			$eventComment->name = 'Добавлено пользователем ' . $event->user->fioFormatted();
+			$eventComment->name = 'Добавлено ' . $event->user->fioFormatted();
 			$eventComment->event_id = $event->id;
 			$eventComment->created_by = $event->user_id;
 			$eventComment->save();
