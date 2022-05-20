@@ -822,8 +822,6 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		\Log::debug('flight_simulator_id: ' . $this->request->flight_simulator_id);
-
 		$productId = $this->request->product_id ?? 0;
 		$locationId = $this->request->location_id ?? 0;
 		$simulatorId = $this->request->flight_simulator_id ?? 0;
@@ -915,7 +913,7 @@ class PositionController extends Controller
 			$event = $position->event;
 			if ($event) {
 				$event->location_id = $location->id ?? 0;
-				$position->flight_simulator_id = $simulator->id ?? 0;
+				$event->flight_simulator_id = $simulator->id ?? 0;
 				$event->save();
 			}
 			
