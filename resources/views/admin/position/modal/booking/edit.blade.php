@@ -80,7 +80,7 @@
 	<div class="col-3">
 		<div class="form-group">
 			<label for="certificate">Сертификат</label>
-			<input type="text" class="form-control" id="certificate" name="certificate" value="{{ $position->certificate ? $position->certificate->number : '' }}" placeholder="Номер" disabled>
+			<input type="text" class="form-control" id="certificate" name="certificate" value="{{ $position->certificate ? $position->certificate->number : '' }}" placeholder="Номер" {{--disabled--}}>
 		</div>
 	</div>
 </div>
