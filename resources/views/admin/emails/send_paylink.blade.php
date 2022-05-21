@@ -19,9 +19,9 @@
 										<b>Здравствуйте{{ $name ? ', ' . $name : '' }}!</b></p>
 									<p style="margin:15px 30px 33px;text-align:left;font-size:14px;line-height:30px;color:#484a42;">
 										Спасибо, что обратились к нам.<br>
-										Сумма к оплате {{ $amount }} рублей.<br><br>
-										@if($payLink)
-											<a href="{{ $payLink }}" target="_blank" rel="noopener noreferrer">Ссылка</a> для оплаты.
+										Сумма к оплате по Счёту {{ $bill->number }} составляет {{ $bill->amount }} рублей.<br><br>
+										@if($bill->uuid)
+											<a href="https://dream-aero.ru/payment/{{ $bill->uuid }}">Ссылка</a> для оплаты.
 										@endif
 									</p>
 									<p style="border-top:2px solid #e5e5e5;font-size:5px;line-height:5px;margin:0 30px 29px;">&nbsp;</p>
