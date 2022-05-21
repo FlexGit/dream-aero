@@ -9,6 +9,7 @@ use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\FlightSimulator;
 use App\Models\Notification;
+use App\Models\PaymentMethod;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
@@ -2919,6 +2920,31 @@ class ApiController extends Controller
 				$promocode->contractors()->save($contractor);
 			}
 			
+			// создание Счета
+			$billLocation = $city->getLocationForBill();
+			if (!$billLocation) {
+				\DB::rollback();
+				Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+			}
+			$billLocationId = $billLocation->id;
+			
+			$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
+			$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
+			
+			$bill = new Bill();
+			$bill->contractor_id = $contractor->id ?? 0;
+			$bill->deal_id = $deal->id ?? 0;
+			$bill->deal_position_id = $position->id ?? 0;
+			$bill->location_id = $billLocationId;
+			$bill->payment_method_id = $onlinePaymentMethod->id ?? 0;
+			$bill->status_id = $billStatus->id ?? 0;
+			$bill->amount = $productAmount ?? 0;
+			$bill->currency_id = $currency->id ?? 0;
+			$bill->save();
+			
+			$deal->bills()->save($bill);
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -2928,9 +2954,13 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		//dispatch(new \App\Jobs\SendDealEmail($deal));
-		$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();
+		/*$job = new \App\Jobs\SendDealEmail($deal);
+		$job->handle();*/
+		
+		if ($isCertificatePurchase && $bill) {
+			$job = new \App\Jobs\SendPayLinkEmail($bill);
+			$job->handle();
+		}
 		
 		$data = [
 			'deal' => $deal->format(),

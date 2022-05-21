@@ -586,9 +586,9 @@ class DealController extends Controller
 				$bill->user_id = $this->request->user()->id ?? 0;
 				$bill->save();
 				
-				if ($this->request->user()) {
+				/*if ($this->request->user()) {
 					\Log::debug($bill->number . ' - ' . $source . ' - ' . $billLocationId . ' - ' . $this->request->user()->id . ' - ' . $this->request->user()->location_id);
-				}
+				}*/
 				
 				$deal->bills()->save($bill);
 			}
@@ -635,11 +635,10 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		if (in_array($source, [Deal::MOB_SOURCE])) {
-			//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
+		/*if (in_array($source, [Deal::MOB_SOURCE])) {
 			$job = new \App\Jobs\SendPayLinkEmail($bill);
 			$job->handle();
-		}
+		}*/
 
 		if (in_array($source, [Deal::WEB_SOURCE])) {
 			$paymentFormHtml = PayAnyWayService::generatePaymentForm($bill);
