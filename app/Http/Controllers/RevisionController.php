@@ -13,6 +13,7 @@ class RevisionController extends Controller
 	const ENTITIES = [
 		'Contractor' => 'Контрагент',
 		'Deal' => 'Сделка',
+		'DealPosition' => 'Позиция сделки',
 		/*'Score' => 'Баллы',*/
 		'Bill' => 'Счет',
 		'Certificate' => 'Сертификат',
