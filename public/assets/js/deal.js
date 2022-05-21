@@ -381,7 +381,6 @@ $(function() {
 
 		yaCounter46672077.reachGoal('SendOrder');
 		gtag_report_conversion();
-		fbq('track', 'Purchase', {value: amount, currency: 'rub'});
 
 		$alertSuccess.addClass('hidden');
 		$alertError.text('').addClass('hidden');
@@ -454,7 +453,6 @@ $(function() {
 
 		yaCounter46672077.reachGoal('SendOrder');
 		gtag_report_conversion();
-		fbq('track', 'Purchase', {value: amount, currency: 'rub'});
 
 		$(this).removeClass('button-pipaluk-orange').addClass('button-pipaluk-grey').prop('disabled', true);
 		$alertSuccess.html('').addClass('hidden');
