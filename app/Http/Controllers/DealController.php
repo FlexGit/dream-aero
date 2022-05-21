@@ -1276,9 +1276,9 @@ class DealController extends Controller
 		$deal = Deal::find($id);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
-		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+		/*if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
-		}
+		}*/
 		
 		$rules = [
 			'name' => 'required',
