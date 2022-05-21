@@ -11,8 +11,8 @@
 							<tr>
 								<td width="4" height="4"><p style="margin:0;font-size:1px;line-height:1px;">&nbsp;</p></td>
 								<td colspan="3" rowspan="3" bgcolor="#FFFFFF" style="padding:10px 0 30px;text-align:center">
-									<a href="{{ Request::getSchemeAndHttpHost() }}" style="display:flex;width:167px;height:auto;margin:0 auto;" target="_blank" rel=" noopener noreferrer">
-										<img src="{{ Request::getSchemeAndHttpHost() . '/assets/img/logo-new-mail.png'}}" width="172px" alt="logo" style="display:flex;border:0;margin:0;">
+									<a href="https://dream-aero.ru" style="display:flex;width:167px;height:auto;margin:0 auto;" target="_blank" rel=" noopener noreferrer">
+										<img src="https://dream-aero.ru/assets/img/logo-new-mail.png" width="172px" alt="logo" style="display:flex;border:0;margin:0;">
 									</a>
 
 									<p style="margin:15px 30px 33px;text-align:left;font-size:16px;line-height:30px;color:#484a42;">
@@ -35,16 +35,16 @@
 												</p>
 												<p style="margin:10px 0;font-size:1px;line-height:1px;">&nbsp;</p>
 												<a href="https://t.me/dreamaero/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
-													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/telegram.png') }}" width="24" height="24" alt="Telegram">
+													<img src="https://dream-aero.ru/assets/img/telegram.png" width="24" height="24" alt="Telegram">
 												</a>
 												<a href="https://vk.com/dream.aero" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
-													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/vk.png') }}" width="24" height="24" alt="vk">
+													<img src="https://dream-aero.ru/assets/img/vk.png" width="24" height="24" alt="vk">
 												</a>
 												<a href="https://www.instagram.com/dream.aero/" target="_blank" rel=" noopener noreferrer" style="text-decoration: none;">
-													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/inst.png') }}" width="24" height="24" alt="instagram">
+													<img src="https://dream-aero.ru/assets/img/inst.png" width="24" height="24" alt="instagram">
 												</a>
 												<a href="https://www.youtube.com/channel/UC3huC7ltIlfkNMsz8Jt4qnw" target="_blank" rel=" noopener noreferrer" style="text-decoration: none;">
-													<img src="{{ Request::getSchemeAndHttpHost() . asset('img/you.png') }}" width="24" height="24" alt="youtube">
+													<img src="https://dream-aero.ru/assets/img/you.png" width="24" height="24" alt="youtube">
 												</a>
 											</td>
 											<td width="30">
