@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Content;
+use App\Models\Deal;
 use App\Models\PaymentMethod;
 use App\Models\Status;
 use App\Services\AeroflotBonusService;
@@ -42,6 +43,16 @@ class PaymentController extends Controller
 			->where('location_id', '!=', 0)
 			->first();
 		if (!$bill) {
+			abort(404);
+		}
+		if ($bill->amount <= 0) {
+			abort(404);
+		}
+		$deal = $bill->deal;
+		if (!$deal) {
+			abort(404);
+		}
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
 			abort(404);
 		}
 		if ($bill->paymentMethod->alias != $onlinePaymentMethod->alias) {
