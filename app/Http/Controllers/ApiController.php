@@ -2937,7 +2937,7 @@ class ApiController extends Controller
 			$bill->deal_id = $deal->id ?? 0;
 			$bill->deal_position_id = $position->id ?? 0;
 			$bill->location_id = $billLocationId;
-			$bill->payment_method_id = $onlinePaymentMethod->id ?? 0;
+			$bill->payment_method_id = $isCertificatePurchase ? $onlinePaymentMethod->id : 0;
 			$bill->status_id = $billStatus->id ?? 0;
 			$bill->amount = $productAmount ?? 0;
 			$bill->currency_id = $currency->id ?? 0;
