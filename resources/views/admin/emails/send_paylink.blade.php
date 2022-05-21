@@ -19,7 +19,13 @@
 										<b>Здравствуйте{{ $name ? ', ' . $name : '' }}!</b></p>
 									<p style="margin:15px 30px 33px;text-align:left;font-size:14px;line-height:30px;color:#484a42;">
 										Спасибо, что обратились к нам.<br>
-										Сумма к оплате по Счёту {{ $bill->number }} составляет {{ $bill->amount }} рублей.<br>
+										Сумма к оплате по Счёту {{ $bill->number }}
+										@if($bill->position)
+											@if($bill->position->product)
+												за продукт "{{ $bill->position->product->name }}"
+											@endif
+										@endif
+										составляет {{ $bill->amount }} рублей.<br>
 										@if($bill->uuid)
 											<a href="https://dream-aero.ru/payment/{{ $bill->uuid }}">Ссылка</a> для оплаты.
 										@endif
