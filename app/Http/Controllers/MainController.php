@@ -756,7 +756,7 @@ class MainController extends Controller
 			return response()->json(['status' => 'error']);
 		}
 		
-		$ips = $content->rating_ips;
+		$ips = $content->rating_ips ?? [];
 		if (in_array($_SERVER['REMOTE_ADDR'], $ips)) {
 			return response()->json(['status' => 'error']);
 		}
