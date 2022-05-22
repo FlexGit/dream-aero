@@ -117,7 +117,7 @@ class AeroflotBonusService {
 				$position->save();
 			}
 			
-			if ($position->aeroflot_state == self::PAYED_STATE) {
+			/*if ($position->aeroflot_state == self::PAYED_STATE) {
 				$bill = $position->bill;
 				if ($bill) {
 					$amountDiff = $position->amount - $position->aeroflot_bonus_amount;
@@ -128,7 +128,7 @@ class AeroflotBonusService {
 						$job->handle();
 					}
 				}
-			}
+			}*/
 			
 			$fields = [
 				'deal_position_id' => $position->id,
