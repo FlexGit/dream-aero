@@ -55,7 +55,7 @@ class SendPayLinkEmail extends Job implements ShouldQueue {
 		if ($dealCity && $dealCity->email) {
 			$bcc[] = $dealCity->email;
 		}
-		$bcc[] = env('DEV_EMAIL');
+		//$bcc[] = env('DEV_EMAIL');
 		
 		$subject = env('APP_NAME') . ': cсылка на оплату';
 		
