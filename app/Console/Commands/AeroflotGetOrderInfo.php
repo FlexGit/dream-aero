@@ -40,11 +40,16 @@ class AeroflotGetOrderInfo extends Command
      */
     public function handle()
     {
+    	//\Log::debug(\DB::connection()->enableQueryLog());
     	$positions = DealPosition::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER)
 			->whereNotNull('aeroflot_transaction_order_id')
 			->where('aeroflot_status', 0)
-			->whereIn('aeroflot_state', [AeroflotBonusService::REGISTERED_STATE, null])
+			->where(function ($query) {
+				$query->where('aeroflot_state', AeroflotBonusService::REGISTERED_STATE)
+					->orWhereNull('aeroflot_state');
+			})
 			->get();
+    	//\Log::debug(\DB::getQueryLog());
     	foreach ($positions as $position) {
 			$orderInfoResult = AeroflotBonusService::getOrderInfo($position);
 		}
