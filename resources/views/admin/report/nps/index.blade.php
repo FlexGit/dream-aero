@@ -69,6 +69,8 @@
 			function getList() {
 				var $selector = $('#reportTable');
 
+				$('#show_btn').attr('disabled', true);
+
 				$.ajax({
 					url: '{{ route('npsList') }}',
 					type: 'GET',
@@ -86,10 +88,10 @@
 
 						if (result.html) {
 							$selector.html(result.html);
-							$(window).data('ajaxready', true);
 						} else {
 							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
 						}
+						$('#show_btn').attr('disabled', false);
 					}
 				})
 			}
