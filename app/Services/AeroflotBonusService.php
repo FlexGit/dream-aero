@@ -117,18 +117,20 @@ class AeroflotBonusService {
 				$position->save();
 			}
 			
-			/*if ($position->aeroflot_state == self::PAYED_STATE) {
+			if ($position->aeroflot_state == self::PAYED_STATE) {
 				$bill = $position->bill;
 				if ($bill) {
 					$amountDiff = $position->amount - $position->aeroflot_bonus_amount;
 					$bill->amount = ($amountDiff >= 0) ? $amountDiff : 0;
-					if ($bill->save()) {
+					$bill->save();
+					
+					/*if ($bill->save()) {
 						//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
 						$job = new \App\Jobs\SendPayLinkEmail($bill);
 						$job->handle();
-					}
+					}*/
 				}
-			}*/
+			}
 			
 			$fields = [
 				'deal_position_id' => $position->id,
