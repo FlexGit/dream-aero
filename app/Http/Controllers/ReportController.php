@@ -109,6 +109,7 @@ class ReportController extends Controller {
 			if (!$goodNeutralBadSum) continue;
 			
 			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum, 1);
+			\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
 		
 		\Log::debug($userNps);
