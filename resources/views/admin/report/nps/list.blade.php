@@ -1,5 +1,5 @@
 @foreach ($cities as $city)
-	<table class="table table-hover table-sm table-bordered table-striped table-data">
+	<table class="table table-hover table-sm table-striped table-data">
 		<tbody>
 			<tr {{--class="odd"--}}>
 				<td colspan="100" class="align-top text-center">{{ $city->name }}</td>
