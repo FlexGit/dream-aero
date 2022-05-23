@@ -27,21 +27,19 @@
 								<td class="bg-danger text-white">{{ $userAssessments[$user->id]['bad'] }}</td>
 							</tr>
 							@foreach($events as $event)
+								@php
+									$assessment = 0;
+									if ($user->isAdmin()) {
+										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_ADMIN);
+									} elseif($user->isPilot()) {
+										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_PILOT);
+									}
+									$assessmentState = $event->getAssessmentState($assessment);
+									if (!$assessment) continue;
+								@endphp
 								<tr>
 									<td>
-										@if($user->isAdmin())
-											@php
-												$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_ADMIN);
-												$assessmentState = $event->getAssessmentState($assessment);
-											@endphp
-											<span @if($assessmentState) class="text-{{ $assessmentState }}" @endif>{{ $assessment }}</span>
-										@elseif($user->isPilot())
-											@php
-												$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_PILOT);
-												$assessmentState = $event->getAssessmentState($assessment);
-											@endphp
-											<span @if($assessmentState) class="text-{{ $assessmentState }}" @endif>{{ $assessment }}</span>
-										@endif
+										<span @if($assessmentState) class="text-{{ $assessmentState }}" @endif>{{ $assessment }}</span>
 									</td>
 								</tr>
 							@endforeach

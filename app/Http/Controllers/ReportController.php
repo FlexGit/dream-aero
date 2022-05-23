@@ -102,7 +102,7 @@ class ReportController extends Controller {
 			}
 		}
 		
-		\Log::debug($userAssessments);
+		//\Log::debug($userAssessments);
 		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
@@ -114,7 +114,7 @@ class ReportController extends Controller {
 			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
 		
-		\Log::debug($userNps);
+		//\Log::debug($userNps);
 		
 		$users = User::where('enable', true)
 			->orderBy('lastname')
