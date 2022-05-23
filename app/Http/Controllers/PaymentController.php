@@ -80,7 +80,7 @@ class PaymentController extends Controller
 			&& $position->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER
 			&& $position->aeroflot_transaction_order_id
 			&& $position->aeroflot_status == 0
-			&& $position->aeroflot_state == AeroflotBonusService::PAYED_STATE) {
+			&& in_array($position->aeroflot_state, [AeroflotBonusService::REGISTERED_STATE, null])) {
 			$orderInfoResult = AeroflotBonusService::getOrderInfo($position);
 		}
 		
