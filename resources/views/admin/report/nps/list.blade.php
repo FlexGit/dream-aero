@@ -2,7 +2,7 @@
 	<table class="table table-hover table-sm table-bordered table-striped table-data">
 		<tbody>
 			<tr {{--class="odd"--}}>
-				<td class="align-top text-center">{{ $city->name }}</td>
+				<td colspan="100" class="align-top text-center">{{ $city->name }}</td>
 			</tr>
 			<tr>
 				@foreach($users as $user)
@@ -12,7 +12,7 @@
 					<td class="align-middle text-center" data-user-role="{{ $user->role }}">
 						<table>
 							<tr>
-								<td>{{ $user->fio() }}</td>
+								<td nowrap>{{ $user->fioFormatted() }}</td>
 							</tr>
 							<tr>
 								<td class="bg-info">{{ $userNps[$user->id] }}%</td>
