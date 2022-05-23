@@ -1,5 +1,5 @@
 @foreach ($cities as $city)
-	<table class="table table-sm table-striped table-data">
+	<table class="table table-hover table-sm table-bordered table-striped table-data">
 		<tbody>
 			<tr {{--class="odd"--}}>
 				<td colspan="100" class="align-top text-center">{{ $city->name }}</td>
@@ -10,7 +10,7 @@
 						@continue
 					@endif
 					<td class="align-top text-center" data-user-role="{{ $user->role }}">
-						<table class="table table-hover table-sm table-bordered table-striped">
+						<table>
 							<tr>
 								<td nowrap>{{ $user->fioFormatted() }}</td>
 							</tr>
