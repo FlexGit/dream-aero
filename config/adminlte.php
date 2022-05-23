@@ -396,7 +396,8 @@ return [
                 [
                     'text' => 'NPS',
                     'url'  => '/report/nps',
-					'icon' => '',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-file',
                 ],
             ],
         ],

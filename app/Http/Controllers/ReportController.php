@@ -22,6 +22,12 @@ class ReportController extends Controller {
 	
 	public function npsIndex()
 	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
 		return view('admin.report.nps.index', [
 		]);
 	}
@@ -94,6 +100,8 @@ class ReportController extends Controller {
 			}
 		}
 		
+		\Log::debug($userAssessments);
+		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
 			$goodBadDiff = $assessment['good'] - $assessment['bad'];
@@ -102,6 +110,8 @@ class ReportController extends Controller {
 			
 			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum, 1);
 		}
+		
+		\Log::debug($userNps);
 		
 		$users = User::where('enable', true)
 			->orderBy('lastname')
