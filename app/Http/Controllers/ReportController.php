@@ -100,7 +100,7 @@ class ReportController extends Controller {
 			}
 		}
 		
-		\Log::debug($userAssessments);
+		//\Log::debug($userAssessments);
 		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
@@ -108,11 +108,11 @@ class ReportController extends Controller {
 			$goodNeutralBadSum = $assessment['good'] + $assessment['neutral'] + $assessment['bad'];
 			if (!$goodNeutralBadSum) continue;
 			
-			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum, 1);
-			\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
+			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum * 100, 1);
+			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
 		
-		\Log::debug($userNps);
+		//\Log::debug($userNps);
 		
 		$users = User::where('enable', true)
 			->orderBy('lastname')
