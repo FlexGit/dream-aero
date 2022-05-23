@@ -103,12 +103,12 @@
 				getList();
 			});
 
-			$(document).on('click', '.nps-event', function(e) {
+			/*$(document).on('click', '.nps-event', function(e) {
 				window.open(
 					'/deal/null/' + $(this).data('uuid'),
 					'_blank'
 				);
-			});
+			});*/
 		});
 	</script>
 @stop
