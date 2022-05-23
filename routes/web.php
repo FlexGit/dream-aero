@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -397,6 +398,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::put('site/{version}/{type}/{id}', [ContentController::class, 'update']);
 		Route::delete('site/{version}/{type}/{id}', [ContentController::class, 'delete']);
 		Route::post('site/{version}/{type}/image/upload', [ContentController::class, 'imageUpload']);
+		
+		// Отчеты
+		Route::get('report/nps', [ReportController::class, 'npsIndex'])->name('npsIndex');
+		Route::get('report/nps/list/ajax', [ReportController::class, 'npsGetListAjax'])->name('npsList');
 	});
 });
 

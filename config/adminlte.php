@@ -393,11 +393,11 @@ return [
             'icon'    => 'far fa-fw fa-file-excel',
 			'can'	  => 'is_superadmin',
             'submenu' => [
-                /*[
-                    'text' => 'Отчет 1',
-                    'url'  => '#',
+                [
+                    'text' => 'NPS',
+                    'url'  => '/report/nps',
 					'icon' => '',
-                ],*/
+                ],
             ],
         ],
 		[
