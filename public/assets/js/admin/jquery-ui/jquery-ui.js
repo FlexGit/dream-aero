@@ -1,4 +1,4 @@
-/*! jQuery UI - v1.13.1 - 2022-05-19
+/*! jQuery UI - v1.13.1 - 2022-05-23
 * http://jqueryui.com
 * Includes: widget.js, data.js, scroll-parent.js, widgets/draggable.js, widgets/mouse.js
 * Copyright jQuery Foundation and other contributors; Licensed MIT */

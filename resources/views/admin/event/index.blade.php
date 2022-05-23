@@ -9,22 +9,53 @@
 					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
 				@endphp
 
+				@if($user->location && $city->locations->count() > 1)
+					@foreach($city->locations ?? [] as $location)
+						@php
+							if ($user->city && $user->city->id != $city->id) {
+								continue;
+							}
+							// только для Мск и Спб выводим название локации
+							$locationName = ($city->locations->count() > 1) ? $location->name : '';
+						@endphp
+
+						@foreach($location->simulators ?? [] as $simulator)
+							@php
+								// только локация, связанная с юзером
+								if ($user->location && $user->location->id != $location->id) {
+									continue;
+								}
+								$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
+							@endphp
+
+							<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
+								<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
+								<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-timezone="{{ $city->timezone }}" class="calendar"></div>
+							</div>
+						@endforeach
+					@endforeach
+				@endif
+
 				@foreach($city->locations ?? [] as $location)
 					@php
 						if ($user->city && $user->city->id != $city->id) {
 							continue;
 						}
-						// только для Мск и Сбп выводим название локации
+						// только для Мск и Спб выводим название локации
 						$locationName = ($city->locations->count() > 1) ? $location->name : '';
 					@endphp
 
 					@foreach($location->simulators ?? [] as $simulator)
 						@php
+							// только локации, не связанные с юзером
+							if ($user->location && $user->location->id == $location->id) {
+								continue;
+							}
 							$simulatorName = ($city->locations->count() > 1) ? $simulator->alias : '';
 						@endphp
 
 						<div class="calendar-container" data-location-id="{{ $location->id }}" data-simulator-id="{{ $simulator->id }}">
-							{{--<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>--}}
+							<div class="calendar-title text-center hidden">{{ $cityName }} {{ $locationName }} {{ $simulatorName }}</div>
 							<div id="calendar-{{ $location->id }}-{{ $simulator->id }}" data-city_id="{{ $city->id }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-timezone="{{ $city->timezone }}" class="calendar"></div>
 						</div>
 					@endforeach
@@ -166,6 +197,75 @@
 			});
 
 			$('.modal>.modal-dialog>.modal-content>.modal-header').css('cursor', 'move');
+
+			/*var placeholderElement = $('<div style="background-color: #eee;width: 400px;height: 100%;"></div>');
+
+			$('.calendars-container').sortable({
+				/!*placeholder: "ui-state-highlight",*!/
+				cursor: 'move',
+				axis: 'x',
+				handle: '.calendar-title',
+				revert: true,
+				zIndex: 10,
+				containment: '.calendars-container',
+				start: function(event, ui) {
+					console.log(ui.item[0].offsetWidth);
+					placeholderElement.insertBefore(ui.item[0]);
+
+					// Explicitly set the height and width to preserve
+					// flex calculations
+					placeholderElement.width(ui.item[0].offsetWidth);
+					placeholderElement.height(ui.item[0].offsetHeight);
+				},
+				stop: function() {
+					placeholderElement.remove();
+				},
+			});*/
+
+			/*var lastPlace;
+
+			$(".calendar-container").draggable({
+				cursor: 'pointer',
+				handle: '.calendar-title',
+				revert: true,
+				zIndex: 10,
+				snap: ".calendar-container",
+				snapMode: "outer",
+				snapTolerance: 30,
+				containment: '.calendars-container',
+				axis: 'x',
+				start: function (event, ui) {
+					lastPlace = $(this).parent();
+				}
+			});
+
+			$(".calendars-container").droppable({
+				accept: ".calendar-container",
+				tolerance: "pointer",
+				drop: function (event, ui) {
+					var dropped = ui.draggable;
+					var droppedOn = this;
+
+					//var $newPosX = ui.offset.left - $(this).offset().left;
+					//var $newPosY = ui.offset.top - $(this).offset().top;
+
+					//console.log(ui.offset.left + ' - ' + $(this).offset().left);
+
+					/!*var el = document.elementsFromPoint(event.pageX, event.pageY);
+					console.log($(el).data());
+
+					if ($(droppedOn).children().length > 0) {
+						$(droppedOn).children().detach().prependTo($(lastPlace));
+					}
+
+					$(dropped).detach().css({
+						top: 0,
+						left: 0
+					}).prependTo($(droppedOn));*!/
+
+					//localStorage.setItem('control-sidebar', 'collapsed');
+				}
+			});*/
 
 			/*var timeZone = $('#time_zone').val();*/
 
