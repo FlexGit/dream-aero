@@ -42,7 +42,7 @@
 									if (!$assessment) continue;
 								@endphp
 								<tr>
-									<td class="nps-event" title="{{ $event->getInterval() }}">
+									<td class="nps-event" data-uuid="{{ $event->uuid }}" title="{{ $event->getInterval() }}">
 										<span @if($assessmentState) class="text-{{ $assessmentState }}" @endif>{{ $assessment }}</span>
 									</td>
 								</tr>

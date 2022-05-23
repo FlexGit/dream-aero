@@ -46,7 +46,8 @@
 							</div>
 						</div>
 						<div class="form-group ml-3" style="padding-top: 31px;">
-							<button type="button" id="show_btn" class="btn btn-primary">Показать</button>
+							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>
+							{{--<button type="button" id="show_btn" class="btn btn-secondary"><i class="far fa-file-excel"></i> Excel</button>--}}
 						</div>
 					</div>
 					<div id="reportTable" style="display: flex;"></div>
@@ -100,6 +101,13 @@
 
 			$(document).on('click', '#show_btn', function(e) {
 				getList();
+			});
+
+			$(document).on('click', '.nps-event', function(e) {
+				window.open(
+					'/deal/null/' + $(this).data('uuid'),
+					'_blank'
+				);
 			});
 		});
 	</script>

@@ -168,6 +168,10 @@
 				$('#search_doc').val('{{ $deal->number }}');
 				getList(false);
 			@endif
+			@if($event)
+				$('#search_doc').val('{{ $event->uuid }}');
+				getList(false);
+			@endif
 
 			function getList(loadMore) {
 				var $selector = $('#dealTable tbody.body');

@@ -66,9 +66,10 @@ class DealController extends Controller
 	
 	/**
 	 * @param null $dealId
+	 * @param null $eventUuid
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function index($dealId = null)
+	public function index($dealId = null, $eventUuid = null)
 	{
 		$user = \Auth::user();
 		$locationCount = $user->city ? $user->city->locations->count() : 0;
@@ -103,8 +104,12 @@ class DealController extends Controller
 			];
 		}
 		
+		$dealId = intval($dealId);
 		if ($dealId) {
 			$deal = Deal::find($dealId);
+		}
+		if ($eventUuid) {
+			$event = HelpFunctions::getEntityByUuid(Event::class, $eventUuid);
 		}
 		
 		return view(	'admin.deal.index', [
@@ -114,6 +119,7 @@ class DealController extends Controller
 			'statusData' => $statusData,
 			'locationCount' => $locationCount,
 			'deal' => $deal ?? null,
+			'event' => $event ?? null,
 		]);
 	}
 	
@@ -170,6 +176,9 @@ class DealController extends Controller
 					})
 					->orWhereHas('bills', function ($q) {
 						return $q->where('bills.number', 'like', '%' . $this->request->search_doc . '%');
+					})
+					->orWhereHas('events', function ($q) {
+						return $q->where('events.uuid', '=', $this->request->search_doc);
 					});
 			});
 		}
