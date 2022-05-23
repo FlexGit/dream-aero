@@ -82,6 +82,7 @@ class PaymentController extends Controller
 			&& $position->aeroflot_status == 0
 			&& in_array($position->aeroflot_state, [AeroflotBonusService::REGISTERED_STATE, null])) {
 			$orderInfoResult = AeroflotBonusService::getOrderInfo($position);
+			$bill = $bill->fresh();
 		}
 		
 		$paymentFormHtml = PayAnyWayService::generatePaymentForm($bill);
