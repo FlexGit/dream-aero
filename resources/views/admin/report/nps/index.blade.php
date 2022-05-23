@@ -55,11 +55,8 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList(loadMore) {
+			function getList() {
 				var $selector = $('#reportTable tbody');
-
-				var $tr = $('tr.odd[data-id]:last'),
-					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
 
 				$.ajax({
 					url: '{{ route('npsList') }}',
@@ -68,7 +65,6 @@
 					data: {
 						"filter_date_from_at": $('#filter_date_from_at').val(),
 						"filter_date_to_at": $('#filter_date_to_at').val(),
-						"id": id
 					},
 					success: function(result) {
 						if (result.status !== 'success') {
@@ -77,11 +73,7 @@
 						}
 
 						if (result.html) {
-							if (loadMore) {
-								$selector.append(result.html);
-							} else {
-								$selector.html(result.html);
-							}
+							$selector.html(result.html);
 							$(window).data('ajaxready', true);
 						} else {
 							if (!id) {
@@ -92,32 +84,10 @@
 				})
 			}
 
-			getList(false);
+			getList();
 
 			$(document).on('change', '#filter_date_from_at, #filter_date_to_at', function(e) {
-				getList(false);
-			});
-
-			$.fn.isInViewport = function () {
-				let elementTop = $(this).offset().top;
-				let elementBottom = elementTop + $(this).outerHeight();
-
-				let viewportTop = $(window).scrollTop();
-				let viewportBottom = viewportTop + $(window).height();
-
-				return elementBottom > viewportTop && elementTop < viewportBottom;
-			};
-
-			$(window).on('scroll', function() {
-				if ($(window).data('ajaxready') === false) return;
-
-				var $tr = $('tr.odd[data-id]:last');
-				if (!$tr.length) return;
-
-				if ($tr.isInViewport()) {
-					$(window).data('ajaxready', false);
-					getList(true);
-				}
+				getList();
 			});
 		});
 	</script>
