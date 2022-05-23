@@ -200,12 +200,26 @@
 					$userSelector = $('#user_id'),
 					$productTypeIdSelector = $('#product_type_id'),
 					durations = $productTypeIdSelector.find(':selected').data('duration'),
-					withUser = $productTypeIdSelector.find(':selected').data('with_user');
+					withUser = $productTypeIdSelector.find(':selected').data('with_user'),
+					productTypeAlias = $productTypeIdSelector.find(':selected').data('alias'),
+					$coursesContainer = $('.courses-container'),
+					$vipContainer = $('.vip-container');
 
 				if (withUser) {
 					$userSelector.closest('.form-group').removeClass('d-none');
 				} else {
 					$userSelector.closest('.form-group').addClass('d-none');
+				}
+
+				if (productTypeAlias == 'courses') {
+					$coursesContainer.removeClass('hidden');
+					//$vipContainer.addClass('hidden');
+				} else if (productTypeAlias == 'vip') {
+					//$vipContainer.removeClass('hidden');
+					$coursesContainer.addClass('hidden');
+				} else {
+					$coursesContainer.addClass('hidden');
+					//$vipContainer.addClass('hidden');
 				}
 
 				$durationSelector.html('<option></option>');
