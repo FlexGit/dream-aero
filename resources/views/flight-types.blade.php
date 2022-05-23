@@ -44,39 +44,39 @@
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 4</span>
-					<p>@lang('flight-types.кольцово')</p>
+					<p>@lang('main.flight-types.кольцово')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 5</span>
-					<p>@lang('flight-types.иркутск')</p>
+					<p>@lang('main.flight-types.иркутск')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 6</span>
-					<p>@lang('flight-types.дубаи')</p>
+					<p>@lang('main.flight-types.дубаи')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 7</span>
-					<p>@lang('flight-types.инсбрук')</p>
+					<p>@lang('main.flight-types.инсбрук')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 8</span>
-					<p>@lang('flight-types.ницца')</p>
+					<p>@lang('main.flight-types.ницца')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 9</span>
-					<p>@lang('flight-types.тиват')</p>
+					<p>@lang('main.flight-types.тиват')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 10</span>
-					<p>@lang('flight-types.тенерифе')</p>
+					<p>@lang('main.flight-types.тенерифе')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 11</span>
-					<p>@lang('flight-types.сен-мартен')</p>
+					<p>@lang('main.flight-types.сен-мартен')</p>
 				</li>
 				<li class="col-md-3 wow fadeInUp var4fact" data-wow-delay="0" data-wow-duration="2s">
 					<span>@lang('main.flight-types.маршрут') 12</span>
-					<p>@lang('flight-types.собственный-маршрут')</p>
+					<p>@lang('main.flight-types.собственный-маршрут')</p>
 				</li>
 			</ul>
 		</div>
