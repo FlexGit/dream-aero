@@ -10,7 +10,7 @@
 						@continue
 					@endif
 					<td class="align-top text-center" data-user-role="{{ $user->role }}">
-						<table>
+						<table class="table-sm table-bordered">
 							<tr>
 								<td nowrap>{{ $user->fioFormatted() }}</td>
 							</tr>
