@@ -9,7 +9,7 @@
 					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
 				@endphp
 
-				@if($user->location && $city->locations->count() > 1)
+				@if($user->location)
 					@foreach($city->locations ?? [] as $location)
 						@php
 							if ($user->city && $user->city->id != $city->id) {
