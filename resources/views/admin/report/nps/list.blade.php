@@ -9,7 +9,7 @@
 					@if($user->city_id != $city->id || !isset($userNps[$user->id]))
 						@continue
 					@endif
-					<td class="align-middle text-center" data-user-role="{{ $user->role }}">
+					<td class="align-top text-center" data-user-role="{{ $user->role }}">
 						<table>
 							<tr>
 								<td nowrap>{{ $user->fioFormatted() }}</td>
