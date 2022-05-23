@@ -41,6 +41,7 @@ class ReportController extends Controller {
 		
 		$dateFromAt = $this->request->filter_date_from_at ?? '';
 		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$role = $this->request->filter_role ?? '';
 		
 		if (!$dateFromAt && !$dateToAt) {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
@@ -119,9 +120,12 @@ class ReportController extends Controller {
 		$users = User::where('enable', true)
 			->orderBy('lastname')
 			->orderBy('name')
-			->orderBy('middlename')
-			->get();
-		
+			->orderBy('middlename');
+		if ($role) {
+			$users = $users->where('role', $role);
+		}
+		$users = $users->get();
+
 		$cities = $this->cityRepo->getList($this->request->user());
 		
 		$VIEW = view('admin.report.nps.list', [

@@ -26,17 +26,27 @@
 						<div class="form-group">
 							<label for="filter_date_from_at">Дата начала периода</label>
 							<div>
-								<input type="date" id="filter_date_from_at" name="filter_date_from_at" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" style="width: 200px;">
+								<input type="date" class="form-control" id="filter_date_from_at" name="filter_date_from_at" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" style="width: 200px;">
 							</div>
 						</div>
 						<div class="form-group ml-3">
 							<label for="filter_date_to_at">Дата окончания периода</label>
 							<div>
-								<input type="date" id="filter_date_to_at" name="filter_date_to_at" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" style="width: 200px;">
+								<input type="date" class="form-control" id="filter_date_to_at" name="filter_date_to_at" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" style="width: 200px;">
+							</div>
+						</div>
+						<div class="form-group ml-3">
+							<label for="filter_role">Роль</label>
+							<div>
+								<select class="form-control" id="filter_role" name="filter_role">
+									<option value="">---</option>
+									<option value="{{ app('\App\Models\User')::ROLE_ADMIN }}">{{ app('\App\Models\User')::ROLES[app('\App\Models\User')::ROLE_ADMIN] }}</option>
+									<option value="{{ app('\App\Models\User')::ROLE_PILOT }}">{{ app('\App\Models\User')::ROLES[app('\App\Models\User')::ROLE_PILOT] }}</option>
+								</select>
 							</div>
 						</div>
 						<div class="form-group ml-3" style="padding-top: 31px;">
-							<button type="button" id="show_btn" class="btn btn-sm btn-primary">Показать</button>
+							<button type="button" id="show_btn" class="btn btn-primary">Показать</button>
 						</div>
 					</div>
 					<div id="reportTable" style="display: flex;"></div>
@@ -66,6 +76,7 @@
 					data: {
 						"filter_date_from_at": $('#filter_date_from_at').val(),
 						"filter_date_to_at": $('#filter_date_to_at').val(),
+						"filter_role": $('#filter_role').val(),
 					},
 					success: function(result) {
 						if (result.status !== 'success') {
@@ -77,9 +88,7 @@
 							$selector.html(result.html);
 							$(window).data('ajaxready', true);
 						} else {
-							if (!id) {
-								$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
-							}
+							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
 						}
 					}
 				})
