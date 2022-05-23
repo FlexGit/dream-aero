@@ -111,3 +111,6 @@ input[readonly]{
 .upcomming-event:hover {
 	background-color: #222;
 }
+.nps-event {
+	cursor: help;
+}

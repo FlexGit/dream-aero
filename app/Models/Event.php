@@ -402,4 +402,12 @@ class Event extends Model
 		if ($assessment >= 1 && $assessment <= 6) return 'danger';
 		return '';
 	}
+	
+	/**
+	 * @return string
+	 */
+	public function getInterval()
+	{
+		return Carbon::parse($this->start_at)->format('Y-m-d H:i') . ' - ' .Carbon::parse($this->stop_at)->format('H:i');
+	}
 }

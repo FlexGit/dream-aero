@@ -30,15 +30,19 @@
 								@php
 									$assessment = 0;
 									if ($user->isAdmin()) {
+										if ($event->user_id != $user->id) continue;
+
 										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_ADMIN);
 									} elseif($user->isPilot()) {
+										if ($event->pilot_id != $user->id) continue;
+
 										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_PILOT);
 									}
 									$assessmentState = $event->getAssessmentState($assessment);
 									if (!$assessment) continue;
 								@endphp
 								<tr>
-									<td>
+									<td class="nps-event" title="{{ $event->getInterval() }}">
 										<span @if($assessmentState) class="text-{{ $assessmentState }}" @endif>{{ $assessment }}</span>
 									</td>
 								</tr>
