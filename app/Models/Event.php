@@ -372,4 +372,34 @@ class Event extends Model
 		
 		return $this;
 	}
+	
+	/**
+	 * @param $role
+	 * @return int
+	 */
+	public function getAssessment($role)
+	{
+		switch ($role) {
+			case User::ROLE_ADMIN:
+				return $this->admin_assessment;
+			break;
+			case User::ROLE_PILOT:
+				return $this->pilot_assessment;
+			break;
+			default:
+				return 0;
+		}
+	}
+	
+	/**
+	 * @param $assessment
+	 * @return string
+	 */
+	public function getAssessmentState($assessment)
+	{
+		if ($assessment >= 9) return 'success';
+		if ($assessment >= 7 && $assessment <= 8) return 'warning';
+		if ($assessment >= 1 && $assessment <= 6) return 'danger';
+		return '';
+	}
 }

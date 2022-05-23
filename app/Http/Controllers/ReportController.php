@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Certificate;
-use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\User;
+use App\Repositories\CityRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\HelpFunctions;
 
 class ReportController extends Controller {
 	private $request;
+	private $cityRepo;
 	
 	/**
 	 * @param Request $request
 	 */
-	public function __construct(Request $request) {
+	public function __construct(Request $request, CityRepository $cityRepo) {
 		$this->request = $request;
+		$this->cityRepo = $cityRepo;
 	}
 	
 	public function npsIndex()
@@ -53,7 +54,8 @@ class ReportController extends Controller {
 		if ($dateToAt) {
 			$events = $events->where('stop_at', '<=', $dateToAt);
 		}
-		$events = $events->get();
+		$events = $events->orderBy('start_at')
+			->get();
 		
 		$userAssessments = [];
 		foreach ($events as $event) {
@@ -100,7 +102,7 @@ class ReportController extends Controller {
 			}
 		}
 		
-		//\Log::debug($userAssessments);
+		\Log::debug($userAssessments);
 		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
@@ -109,7 +111,7 @@ class ReportController extends Controller {
 			if (!$goodNeutralBadSum) continue;
 			
 			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum * 100, 1);
-			\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
+			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
 		
 		\Log::debug($userNps);
@@ -120,7 +122,15 @@ class ReportController extends Controller {
 			->orderBy('middlename')
 			->get();
 		
-		$VIEW = view('admin.report.nps.list', ['users' => $users, 'userNps' => $userNps]);
+		$cities = $this->cityRepo->getList($this->request->user());
+		
+		$VIEW = view('admin.report.nps.list', [
+			'events' => $events,
+			'users' => $users,
+			'cities' => $cities,
+			'userAssessments' => $userAssessments,
+			'userNps' => $userNps
+		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}

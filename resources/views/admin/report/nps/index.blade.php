@@ -24,21 +24,22 @@
 				<div class="card-body">
 					<div class="table-filter d-sm-flex mb-2">
 						<div class="form-group">
+							<label for="filter_date_from_at">Дата начала периода</label>
+							<div>
+								<input type="date" id="filter_date_from_at" name="filter_date_from_at" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" style="width: 200px;">
+							</div>
 						</div>
-						<div class="form-group pl-2">
+						<div class="form-group ml-3">
+							<label for="filter_date_to_at">Дата окончания периода</label>
+							<div>
+								<input type="date" id="filter_date_to_at" name="filter_date_to_at" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" style="width: 200px;">
+							</div>
+						</div>
+						<div class="form-group ml-3" style="padding-top: 31px;">
+							<button type="button" id="show_btn" class="btn btn-sm btn-primary">Показать</button>
 						</div>
 					</div>
-					<table id="reportTable" class="table table-hover table-sm table-bordered table-striped table-data">
-						<thead>
-						<tr class="text-center">
-							<th class="align-middle">Пользователь</th>
-							<th class="align-middle d-none d-sm-table-cell">Роль</th>
-							<th class="align-middle d-none d-md-table-cell">NPS</th>
-						</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
+					<div id="reportTable" style="display: flex;"></div>
 				</div>
 			</div>
 		</div>
@@ -56,7 +57,7 @@
 	<script>
 		$(function() {
 			function getList() {
-				var $selector = $('#reportTable tbody');
+				var $selector = $('#reportTable');
 
 				$.ajax({
 					url: '{{ route('npsList') }}',
@@ -86,7 +87,7 @@
 
 			getList();
 
-			$(document).on('change', '#filter_date_from_at, #filter_date_to_at', function(e) {
+			$(document).on('click', '#show_btn', function(e) {
 				getList();
 			});
 		});
