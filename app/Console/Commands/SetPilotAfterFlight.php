@@ -41,11 +41,13 @@ class SetPilotAfterFlight extends Command
     public function handle()
     {
     	// проверяем все полеты за последний час без пилота
+		\DB::connection()->enableQueryLog();
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->where('stop_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
 			->where('stop_at', '>=', Carbon::now()->subDays(9)->format('Y-m-d H:i:s'))
 			->where('pilot_id', 0)
 			->get();
+		\Log::debug(\DB::getQueryLog());
     	/** @var Event[] $events */
 		foreach ($events as $event) {
 			$city = $event->city;
