@@ -58,6 +58,7 @@ class SetPilotAfterFlight extends Command
 			if (!$simulator) continue;
 		
 			// находим пилота, который был на смене во время полета
+			\DB::connection()->enableQueryLog();
 			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 				->where('user_id', '!=', 0)
 				->where('city_id', $city->id)
@@ -66,6 +67,7 @@ class SetPilotAfterFlight extends Command
 				->whereDate('start_at', '<=', $event->start_at)
 				->whereDate('stop_at', '>=', $event->stop_at)
 				->first();
+			\Log::debug(\DB::getQueryLog());
 			if (!$shiftEvent) continue;
 			
 			$event->pilot_id = $shiftEvent->user_id;
