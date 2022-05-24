@@ -49,11 +49,6 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 |
 */
 
-Route::get('sitemap.xml', function () {
-	header('Content-Type: text/xml; charset=UTF-8');
-	readfile(dirname(__FILE__) . '/../public/sitemap.xml');
-});
-
 //Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['setlanguage']], function () {
@@ -411,6 +406,11 @@ Route::group(['middleware' => ['setlanguage']], function () {
 });
 
 	Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
+		Route::get('sitemap.xml', function () {
+			header('Content-Type: text/xml; charset=UTF-8');
+			readfile(dirname(__FILE__) . '/../public/sitemap.xml');
+		});
+
 		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
 		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
 		
@@ -478,6 +478,11 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	});
 	
 	Route::domain(env('DOMAIN_EN', 'en.dream-aero.ru'))->group(function () {
+		Route::get('sitemap.xml', function () {
+			header('Content-Type: text/xml; charset=UTF-8');
+			readfile(dirname(__FILE__) . '/../public/sitemap-en.xml');
+		});
+
 		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
 		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
 		

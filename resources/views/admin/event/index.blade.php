@@ -1154,6 +1154,18 @@
 				});
 			});
 
+			setInterval(refetch, 60 * 1000);
+
+			function refetch() {
+				calendarArr.forEach(function (element, locationId) {
+					element.forEach(function (calendar, simulatorId) {
+						if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+							calendar.refetchEvents();
+						}
+					});
+				});
+			}
+
 			/*$(document).on('shown.lte.pushmenu', function() {
 				$('#datepicker').show(100);
 			});
