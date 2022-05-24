@@ -49,6 +49,10 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 |
 */
 
+Route::get('sitemap.xml', function () {
+	return readfile(dirname(__FILE__)."/../public/sitemap.xml");
+});
+
 //Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['setlanguage']], function () {
@@ -538,7 +542,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	Route::post('aeroflot-use/refresh', [AeroflotBonusController::class, 'useRefresh'])->name('useRefresh');
 	
 	Route::get('test/model/{uuid}', [TestController::class, 'getModel']);
-
+	
 	Route::fallback(function () {
 		abort(404);
 	});
