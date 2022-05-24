@@ -12,5 +12,5 @@ disallow: /payment
 disallow: /modal
 disallow: /deal
 
-Sitemap: https://dream-aero.ru/sitemap.xml
-Host: dream-aero.ru
+Sitemap: https://en.dream-aero.ru/sitemap.xml
+Host: en.dream-aero.ru
