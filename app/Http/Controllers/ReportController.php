@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Content;
 use App\Models\Event;
 use App\Models\User;
 use App\Repositories\CityRepository;
@@ -29,7 +30,10 @@ class ReportController extends Controller {
 			abort(404);
 		}
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-nps');
+		
 		return view('admin.report.nps.index', [
+			'page' => $page,
 		]);
 	}
 	
