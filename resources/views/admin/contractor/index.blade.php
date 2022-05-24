@@ -23,7 +23,7 @@
 				<div class="card-body">
 					<div class="table-filter mb-2">
 						<div class="d-sm-flex">
-							@if(!\Auth::user()->city)
+							{{--@if(!\Auth::user()->city)--}}
 								<div class="form-group">
 									<label for="filter_city_id">Город</label>
 									<select class="form-control" id="filter_city_id" name="filter_city_id">
@@ -36,7 +36,7 @@
 										@endforeach
 									</select>
 								</div>
-							@endif
+							{{--@endif--}}
 							<div class="col-6">
 								<div class="form-group ml-2">
 									<label for="search_contractor">Контрагент</label>
