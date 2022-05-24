@@ -50,7 +50,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 */
 
 Route::get('sitemap.xml', function () {
-	return readfile(dirname(__FILE__)."/../public/sitemap.xml");
+	header('Content-Type: text/xml; charset=UTF-8');
+	readfile(dirname(__FILE__) . '/../public/sitemap.xml');
 });
 
 //Auth::routes(['register' => false]);
