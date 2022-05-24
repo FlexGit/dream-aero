@@ -5,13 +5,6 @@
 
     RewriteEngine On
 
-    RewriteCond %{HTTP_HOST} ^dev.dream-aero.ru$
-    RewriteRule ^robots\.txt$ robots-dev.txt
-
-    RewriteCond %{HTTP_HOST} ^en.dream-aero.ru$
-    RewriteRule ^robots\.txt$ robots-en.txt
-    RewriteRule ^sitemap\.xml$ sitemap-en.xml
-
     #add https
     #RewriteCond %{HTTPS} off
     #RewriteCond %{HTTP:X-Forwarded-Proto} !https
@@ -103,4 +96,11 @@
     Redirect 301 /bfsale https://dream-aero.ru/price
     Redirect 301 /blackfridaysale https://dream-aero.ru/price
     Redirect 301 /blackfridaysale https://dream-aero.ru/price
+
+    RewriteCond %{HTTP_HOST} ^dev.dream-aero.ru$
+    RewriteRule ^robots\.txt$ robots-dev.txt
+
+    RewriteCond %{HTTP_HOST} ^en.dream-aero.ru$
+    RewriteRule ^robots\.txt$ robots-en.txt
+    RewriteRule ^sitemap\.xml$ sitemap-en.xml
 </IfModule>
