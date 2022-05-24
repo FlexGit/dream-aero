@@ -5,7 +5,7 @@
 
     RewriteEngine On
 
-    RewriteCond %{HTTP_HOST} ^admin.dream-aero.loc$
+    RewriteCond %{HTTP_HOST} ^dev.dream-aero.ru$
     RewriteRule ^robots\.txt$ robots-dev.txt
 
     RewriteCond %{HTTP_HOST} ^en.dream-aero.ru$
