@@ -81,9 +81,9 @@ class ContractorController extends Controller
 					->orWhere('uuid', $this->request->search_contractor);
 			});
 		}
-		if (!$user->isSuperAdmin()) {
+		/*if (!$user->isSuperAdmin()) {
 			$contractors = $contractors->whereIn('city_id', [$user->city_id, 0]);
-		}
+		}*/
 		if ($id) {
 			$contractors = $contractors->where('id', '<', $id);
 		}
