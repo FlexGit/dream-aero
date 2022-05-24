@@ -972,4 +972,34 @@
 	<changefreq>weekly</changefreq>
 	<priority>0.50</priority>
 </url>
+<url>
+	<loc>https://dream-aero.ru/krd</loc>
+	<lastmod>2022-05-11T20:04:11+03:00</lastmod>
+	<changefreq>weekly</changefreq>
+	<priority>0.50</priority>
+</url>
+<url>
+	<loc>https://dream-aero.ru/ekb</loc>
+	<lastmod>2022-05-11T20:04:11+03:00</lastmod>
+	<changefreq>weekly</changefreq>
+	<priority>0.50</priority>
+</url>
+<url>
+	<loc>https://dream-aero.ru/nsk</loc>
+	<lastmod>2022-05-11T20:04:11+03:00</lastmod>
+	<changefreq>weekly</changefreq>
+	<priority>0.50</priority>
+</url>
+<url>
+	<loc>https://dream-aero.ru/nsk/price</loc>
+	<lastmod>2022-05-11T20:04:11+03:00</lastmod>
+	<changefreq>weekly</changefreq>
+	<priority>0.50</priority>
+</url>
+<url>
+	<loc>https://dream-aero.ru/nsk/contacts</loc>
+	<lastmod>2022-05-11T20:04:11+03:00</lastmod>
+	<changefreq>weekly</changefreq>
+	<priority>0.50</priority>
+</url>
 </urlset>
