@@ -43,7 +43,7 @@ class SetPilotAfterFlight extends Command
     	// проверяем все полеты за последний час без пилота
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->where('stop_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
-			->where('stop_at', '>=', Carbon::now()->subDays(2)->format('Y-m-d H:i:s'))
+			->where('stop_at', '>=', Carbon::now()->subDays(9)->format('Y-m-d H:i:s'))
 			->where('pilot_id', 0)
 			->get();
     	/** @var Event[] $events */
