@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\Certificate;
+use App\Models\Content;
 use App\Models\Contractor;
 use App\Models\Currency;
 use App\Models\DealPosition;
@@ -107,6 +108,8 @@ class DealController extends Controller
 			$deal = Deal::find($dealId);
 		}
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'deals');
+		
 		return view(	'admin.deal.index', [
 			'user' => $user,
 			'cities' => $cities,
@@ -114,6 +117,7 @@ class DealController extends Controller
 			'statusData' => $statusData,
 			'locationCount' => $locationCount,
 			'deal' => $deal ?? null,
+			'page' => $page,
 		]);
 	}
 	
