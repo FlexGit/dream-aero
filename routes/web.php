@@ -52,7 +52,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 //Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['setlanguage']], function () {
-	Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
+	Route::domain(env('DOMAIN_ADMIN', 'dev.dream-aero.ru'))->group(function () {
 		Route::get('sitemap.xml', function () {
 			abort(404);
 		});
