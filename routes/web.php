@@ -56,6 +56,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('sitemap.xml', function () {
 			abort(404);
 		});
+		Route::get('robots.txt', function () {
+			header('Content-Type: text/plain; charset=UTF-8');
+			readfile(dirname(__FILE__) . '/../public/robots-dev.txt');
+		});
 		
 		// Авторизация
 		/*Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -414,6 +418,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			header('Content-Type: text/xml; charset=UTF-8');
 			readfile(dirname(__FILE__) . '/../public/sitemap.xml');
 		});
+		Route::get('robots.txt', function () {
+			header('Content-Type: text/plain; charset=UTF-8');
+			readfile(dirname(__FILE__) . '/../public/robots-ru.txt');
+		});
 
 		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
 		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
@@ -485,6 +493,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('sitemap.xml', function () {
 			header('Content-Type: text/xml; charset=UTF-8');
 			readfile(dirname(__FILE__) . '/../public/sitemap-en.xml');
+		});
+		Route::get('robots.txt', function () {
+			header('Content-Type: text/plain; charset=UTF-8');
+			readfile(dirname(__FILE__) . '/../public/robots-en.txt');
 		});
 
 		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
