@@ -72,6 +72,11 @@ class DealController extends Controller
 	public function index($dealId = null)
 	{
 		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$locationCount = $user->city ? $user->city->locations->count() : 0;
 
 		if ($user->isSuperAdmin() || $locationCount > 1) {
@@ -131,6 +136,10 @@ class DealController extends Controller
 		}
 		
 		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
 		
 		$id = $this->request->id ?? 0;
 		
@@ -215,6 +224,11 @@ class DealController extends Controller
 		}
 		
 		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user);
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
@@ -242,6 +256,11 @@ class DealController extends Controller
 		}
 		
 		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user);
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
@@ -288,6 +307,11 @@ class DealController extends Controller
 		}
 		
 		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$cities = $this->cityRepo->getList($user);
 		$products = $this->productTypeRepo->getActualProductList($user, true, false, true);
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
@@ -315,6 +339,12 @@ class DealController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$deal = $this->dealRepo->getById($id);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
@@ -335,6 +365,12 @@ class DealController extends Controller
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
 		if ($this->request->source == Deal::WEB_SOURCE) {
@@ -659,6 +695,12 @@ class DealController extends Controller
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
 		if ($this->request->source == Deal::WEB_SOURCE) {
@@ -1088,7 +1130,13 @@ class DealController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$rules = [
 			'name' => 'required',
 			'email' => 'required|email|unique_email',
@@ -1275,7 +1323,13 @@ class DealController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$deal = Deal::find($id);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		

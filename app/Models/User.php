@@ -140,6 +140,14 @@ class User extends Authenticatable
 	{
 		return $this->role == self::ROLE_ADMIN;
 	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isAdminOrHigher()
+	{
+		return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_SUPERADMIN]);
+	}
 
 	/**
 	 * @return bool

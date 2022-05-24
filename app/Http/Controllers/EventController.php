@@ -47,11 +47,6 @@ class EventController extends Controller
 	{
 		$user = \Auth::user();
 		
-		// Временный редирект для админов
-		/*if (!$user->isSuperAdmin()) {
-			return redirect('/contractor');
-		}*/
-
 		$cities = $user->city
 			? new Collection([$user->city])
 			: City::where('version', $user->version)
@@ -334,7 +329,11 @@ class EventController extends Controller
 		}
 		
 		$user = \Auth::user();
-
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
@@ -384,6 +383,10 @@ class EventController extends Controller
 		}
 		
 		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
 		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
@@ -464,7 +467,13 @@ class EventController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-	
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$eventType = $this->request->event_type ?? '';
 		
 		switch ($eventType) {
@@ -670,6 +679,12 @@ class EventController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$rules = [
 			'start_at_date' => 'required_if:source,deal|date',
 			'start_at_time' => 'required_if:source,deal',
@@ -862,6 +877,12 @@ class EventController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
@@ -959,7 +980,13 @@ class EventController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
@@ -987,6 +1014,12 @@ class EventController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
@@ -1005,7 +1038,13 @@ class EventController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$eventId = $this->request->event_id ?? 0;
 		if (!$eventId) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
@@ -1028,6 +1067,12 @@ class EventController extends Controller
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
 		$rules = [
@@ -1093,6 +1138,12 @@ class EventController extends Controller
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		/*$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 		
 		// если файла приглашения на полет по какой-то причине не оказалось, генерим его
@@ -1115,6 +1166,12 @@ class EventController extends Controller
 	 */
 	public function getDocFile($uuid)
 	{
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		$event = HelpFunctions::getEntityByUuid(Event::class, $uuid);
 		if (!$event) {
 			abort(404);
