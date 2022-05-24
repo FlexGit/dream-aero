@@ -1,11 +1,5 @@
 @extends('admin/layouts.master')
 
-@if($page)
-	@section('title')
-		{{ $page->meta_title }}
-	@stop
-@endif
-
 @section('content_header')
 	<div class="row mb-2">
 		<div class="col-sm-6">
