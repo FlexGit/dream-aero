@@ -1364,7 +1364,7 @@ class DealController extends Controller
 		}
 		
 		$contractorId = $this->request->contractor_id ?? 0;
-		$cityId = $this->request->city_id ?? 0;
+		//$cityId = $this->request->city_id ?? 0;
 		$statusId = $this->request->status_id ?? 0;
 		$name = $this->request->name ?? '';
 		$email = $this->request->email ?? '';
@@ -1380,9 +1380,9 @@ class DealController extends Controller
 			if ($contractorId) {
 				$deal->contractor_id = $contractorId;
 			}
-			if ($cityId) {
+			/*if ($cityId) {
 				$deal->city_id = $cityId;
-			}
+			}*/
 			$deal->save();
 			
 			if ($contractorId) {
