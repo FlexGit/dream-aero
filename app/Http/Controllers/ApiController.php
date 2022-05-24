@@ -2921,12 +2921,16 @@ class ApiController extends Controller
 			}
 			
 			// создание Счета
-			$billLocation = $city->getLocationForBill();
-			if (!$billLocation) {
-				\DB::rollback();
-				Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+			if ($isCertificatePurchase) {
+				$billLocation = $city->getLocationForBill();
+				if (!$billLocation) {
+					\DB::rollback();
+					Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
+				}
+				$billLocationId = $billLocation->id;
+			} else {
+				$billLocationId = (isset($location) && $location instanceof Location) ? $location->id : 0;
 			}
-			$billLocationId = $billLocation->id;
 			
 			$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 			$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
