@@ -43,7 +43,7 @@ class ContractorController extends Controller
 			$contractor = Contractor::find($contractorId);
 		}
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'calendar');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'contractors');
 		
 		return view('admin.contractor.index', [
 			'cities' => $cities,
