@@ -369,8 +369,10 @@ class DealController extends Controller
 		
 		$user = \Auth::user();
 		
-		if (!$user->isAdminOrHigher()) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		if ($user) {
+			if (!$user->isAdminOrHigher()) {
+				return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+			}
 		}
 		
 		if ($this->request->source == Deal::WEB_SOURCE) {
@@ -699,8 +701,10 @@ class DealController extends Controller
 		
 		$user = \Auth::user();
 		
-		if (!$user->isAdminOrHigher()) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		if ($user) {
+			if (!$user->isAdminOrHigher()) {
+				return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+			}
 		}
 		
 		if ($this->request->source == Deal::WEB_SOURCE) {
@@ -1133,8 +1137,10 @@ class DealController extends Controller
 		
 		$user = \Auth::user();
 		
-		if (!$user->isAdminOrHigher()) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		if ($user) {
+			if (!$user->isAdminOrHigher()) {
+				return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+			}
 		}
 		
 		$rules = [
@@ -1326,8 +1332,10 @@ class DealController extends Controller
 		
 		$user = \Auth::user();
 		
-		if (!$user->isAdminOrHigher()) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		if ($user) {
+			if (!$user->isAdminOrHigher()) {
+				return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+			}
 		}
 		
 		$deal = Deal::find($id);
