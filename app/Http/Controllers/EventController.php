@@ -688,6 +688,8 @@ class EventController extends Controller
 		$rules = [
 			'start_at_date' => 'required_if:source,deal|date',
 			'start_at_time' => 'required_if:source,deal',
+			'stop_at_date' => 'required_if:source,deal|date',
+			'stop_at_time' => 'required_if:source,deal',
 			'doc_file' => 'sometimes|image|max:5120|mimes:jpg,jpeg,png,webp',
 		];
 
@@ -695,6 +697,8 @@ class EventController extends Controller
 			->setAttributeNames([
 				'start_at_date' => 'Дата начала полета',
 				'start_at_time' => 'Время начала полета',
+				'stop_at_date' => 'Дата окончания полета',
+				'stop_at_time' => 'Время окончания полета',
 				'doc_file' => 'Фото документа',
 			]);
 		if (!$validator->passes()) {
@@ -763,7 +767,7 @@ class EventController extends Controller
 				case Event::EVENT_TYPE_DEAL:
 					if ($this->request->source == Event::EVENT_SOURCE_DEAL) {
 						$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
-						$stopAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
+						$stopAt = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)/*->addMinutes($product->duration ?? 0)*/->format('Y-m-d H:i');
 						
 						if (!$product->validateFlightDate($startAt)) {
 							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);

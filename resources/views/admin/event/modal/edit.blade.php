@@ -90,6 +90,15 @@
 					</div>
 					<div class="col">
 						<div class="form-group">
+							<label>Дата и время окончания полета</label>
+							<div class="d-flex">
+								<input type="date" class="form-control" name="stop_at_date" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('Y-m-d') : '' }}" placeholder="Дата окончания полета">
+								<input type="time" class="form-control ml-2" name="stop_at_time" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('H:i') : '' }}" placeholder="Время окончания полета">
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group">
 							<label for="extra_time">Доп. время</label>
 							<select class="form-control" id="extra_time" name="extra_time">
 								<option value="0" @if(!$event->extra_time) selected @endif>---</option>
