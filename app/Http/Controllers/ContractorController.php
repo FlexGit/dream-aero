@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Content;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Score;
 use App\Models\Status;
 use App\Models\Contractor;
 use App\Models\City;
+use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
@@ -41,9 +43,12 @@ class ContractorController extends Controller
 			$contractor = Contractor::find($contractorId);
 		}
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'calendar');
+		
 		return view('admin.contractor.index', [
 			'cities' => $cities,
 			'contractor' => $contractor ?? null,
+			'page' => $page,
 		]);
 	}
 	

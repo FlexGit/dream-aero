@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\City;
+use App\Models\Content;
 use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\DealPosition;
@@ -68,10 +69,13 @@ class EventController extends Controller
 			$upcomingEvents = $upcomingEvents->where('city_id', $user->city->id);
 		}
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'calendar');
+		
 		return view('admin.event.index', [
 			'cities' => $cities,
 			'upcomingEvents' => $upcomingEvents,
 			'user' => $user,
+			'page' => $page,
 		]);
 	}
 	
