@@ -51,9 +51,9 @@
 									<h4 style="font-size: 24px;margin-bottom: 40px;">@lang('main.o-trenazhere.авиатренажерный-центр') {{ $flightSimulator->name }}</h4>
 									<ul>
 									@foreach($flightSimulator->locations as $location)
-										@if ($location->city && $location->city->version != Request::get('cityVersion'))
+										{{--@if ($location->city && $location->city->version != Request::get('cityVersion'))
 											@continue
-										@endif
+										@endif--}}
 										<li>
 											<span style="font-size: 18px;">{{ $location->name }}</span>
 											@if ($location->data_json)
