@@ -55,7 +55,7 @@
 											@continue
 										@endif--}}
 										<li>
-											<span style="font-size: 18px;">{{ $location->name }}</span>
+											<span style="font-size: 18px;white-space: nowrap;">{{ $location->name }}</span>
 											@if ($location->data_json)
 												<div style="padding: 10px 25px;line-height: 1.7em;font-size: 14px;">
 													{!! $location->data_json['address'] !!}
