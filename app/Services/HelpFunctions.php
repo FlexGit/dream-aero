@@ -290,7 +290,8 @@ class HelpFunctions {
 		if ($pos == 0) return '';
 		
 		$pos = $pos - ($length + 1);
-		return substr($string, $pos, $length);
+		
+		return trim(substr($string, $pos, $length));
 	}
 	
 	/**
@@ -309,10 +310,10 @@ class HelpFunctions {
 		if ($end != '') {
 			$len = strpos($string, $end, $pos) - $pos;
 			
-			return substr($string, $pos, $len);
+			return trim(substr($string, $pos, $len));
 		}
 
-		return substr($string, $pos);
+		return trim(substr($string, $pos));
 	}
 	
 	/**

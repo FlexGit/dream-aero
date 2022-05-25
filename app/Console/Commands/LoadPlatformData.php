@@ -55,7 +55,11 @@ class LoadPlatformData extends Command
 		$folder = $client->getFolderByName(env('IMAP_DEFAULT_FOLDER'));
 	
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $folder->messages()->unseen()->get();
+		//$messages = $folder->messages()->unseen()->get();
+	
+		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
+		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
+		$messages = $query->since('25.05.2022')->get();
 	
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
@@ -87,17 +91,19 @@ class LoadPlatformData extends Command
 			
 			$locationId = $simulatorId = 0;
 			foreach ($locations as $location) {
-				\Log::debug('location name = ' . $location->name);
-				if (!$location->pivot) continue;
+				if (!$location->simulators) continue;
 				
-				$locationSimulatorData = $location->pivot->data_json;
+				$pivot = $location->simulators->pivot;
+				if (!$pivot) continue;
+				
+				$locationSimulatorData = $pivot->data_json;
 				\Log::debug($locationSimulatorData);
 				$letterName = isset($locationSimulatorData['letter_name']) ? $locationSimulatorData['letter_name'] : '';
-				\Log::debug($letterName . ' - ' . $subject);
-				if ($letterName != $subject) continue;
+				\Log::debug($letterName);
+				if ($letterName != (string)$subject) continue;
 
 				$locationId = $location->id;
-				$simulatorId = $location->pivot->flight_simulator_id;
+				$simulatorId = $pivot->flight_simulator_id;
 			}
 			\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
