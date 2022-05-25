@@ -57,6 +57,11 @@ class LoadPlatformData extends Command
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
 		//$messages = $folder->messages()->unseen()->get();
 	
+	
+		/** @var \Webklex\PHPIMAP\Folder $folder */
+		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
+		$query = $folder->query();
+		
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
 		$messages = $query->since('25.05.2022')->get();
