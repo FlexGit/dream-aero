@@ -55,9 +55,8 @@ class LoadPlatformData extends Command
 		/** @var \Webklex\PHPIMAP\Folder $folder */
 		$folder = $client->getFolderByName(env('IMAP_DEFAULT_FOLDER'));
 	
-		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $folder->from(env('IMAP_DEFAULT_SENDER'))->unseen()->get();
+		$messages = $folder->messages()->unseen()->get();
 	
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
