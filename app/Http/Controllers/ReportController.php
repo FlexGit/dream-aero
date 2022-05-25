@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\NpsReportExport;
 use App\Models\Content;
 use App\Models\Event;
 use App\Models\User;
@@ -9,6 +10,9 @@ use App\Repositories\CityRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\HelpFunctions;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class ReportController extends Controller {
 	private $request;
@@ -43,9 +47,12 @@ class ReportController extends Controller {
 			abort(404);
 		}
 		
+		$user = \Auth::user();
+		
 		$dateFromAt = $this->request->filter_date_from_at ?? '';
 		$dateToAt = $this->request->filter_date_to_at ?? '';
 		$role = $this->request->filter_role ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
 		
 		if (!$dateFromAt && !$dateToAt) {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
@@ -132,14 +139,40 @@ class ReportController extends Controller {
 
 		$cities = $this->cityRepo->getList($this->request->user());
 		
-		$VIEW = view('admin.report.nps.list', [
+		$data = [
 			'events' => $events,
 			'users' => $users,
 			'cities' => $cities,
 			'userAssessments' => $userAssessments,
 			'userNps' => $userNps
-		]);
+		];
 		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+		$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-nps-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new NpsReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}
+		
+		$VIEW = view('admin.report.nps.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+	
+	/**
+	 * @param $fileName
+	 * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\StreamedResponse
+	 */
+	public function getExportFile($fileName)
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		return Storage::disk('private')->download('report/' . $fileName);
 	}
 }

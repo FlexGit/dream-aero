@@ -410,6 +410,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			// Отчеты
 			Route::get('report/nps', [ReportController::class, 'npsIndex'])->name('npsIndex');
 			Route::get('report/nps/list/ajax', [ReportController::class, 'npsGetListAjax'])->name('npsList');
+			Route::get('report/file/{filepath}', [ReportController::class, 'getExportFile'])->name('getExportFile');
 		});
 	});
 

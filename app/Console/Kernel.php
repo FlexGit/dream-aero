@@ -82,6 +82,14 @@ class Kernel extends ConsoleKernel
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// получение информации о списании баллов Аэрофлот Бонус
+		/*$filePath = storage_path('logs/commands/aeroflot_order_info.log');
+		$schedule->command('aeroflot_order_info:get')
+			->everyMinute()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 	}
 
 	/**

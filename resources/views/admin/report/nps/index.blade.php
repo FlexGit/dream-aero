@@ -47,7 +47,7 @@
 						</div>
 						<div class="form-group ml-3" style="padding-top: 31px;">
 							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>
-							{{--<button type="button" id="show_btn" class="btn btn-secondary"><i class="far fa-file-excel"></i> Excel</button>--}}
+							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
 						</div>
 					</div>
 					<div id="reportTable" style="display: flex;"></div>
@@ -67,21 +67,24 @@
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList() {
-				var $selector = $('#reportTable');
+			function getList(isExport) {
+				var $selector = $('#reportTable'),
+					btn = isExport ? $('#export_btn') : $('#show_btn');
 
-				$('#show_btn').attr('disabled', true);
+				btn.attr('disabled', true);
 
 				$.ajax({
 					url: '{{ route('npsList') }}',
 					type: 'GET',
 					dataType: 'json',
 					data: {
-						"filter_date_from_at": $('#filter_date_from_at').val(),
-						"filter_date_to_at": $('#filter_date_to_at').val(),
-						"filter_role": $('#filter_role').val(),
+						'filter_date_from_at': $('#filter_date_from_at').val(),
+						'filter_date_to_at': $('#filter_date_to_at').val(),
+						'filter_role': $('#filter_role').val(),
+						'is_export': isExport,
 					},
 					success: function(result) {
+						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
@@ -92,15 +95,24 @@
 						} else {
 							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
 						}
-						$('#show_btn').attr('disabled', false);
+
+						btn.attr('disabled', false);
+
+						if (result.fileName) {
+							window.location.href = '/report/file/' + result.fileName;
+						}
 					}
 				})
 			}
 
-			getList();
+			getList(false);
 
 			$(document).on('click', '#show_btn', function(e) {
-				getList();
+				getList(false);
+			});
+
+			$(document).on('click', '#export_btn', function(e) {
+				getList(true);
 			});
 
 			/*$(document).on('click', '.nps-event', function(e) {
