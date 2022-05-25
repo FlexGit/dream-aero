@@ -26,10 +26,7 @@ class SendCallbackEmail extends Job implements ShouldQueue {
 	 */
 	public function handle() {
 		$recipients = $bcc = [];
-		if ($this->city && $this->city->email) {
-			$recipients[] = $this->city->email;
-		}
-		//$recipients[] = env('ADMIN_EMAIL');
+		$recipients[] = $this->city->email ?: env('ADMIN_EMAIL');
 		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [

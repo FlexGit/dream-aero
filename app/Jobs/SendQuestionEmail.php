@@ -29,7 +29,7 @@ class SendQuestionEmail extends Job implements ShouldQueue {
 	public function handle() {
 		$recipients = $bcc = [];
 		$recipients[] = $this->city->email ?: env('ADMIN_EMAIL');
-		$bcc[] = env('DEV_EMAIL');
+		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'name' => $this->name,
