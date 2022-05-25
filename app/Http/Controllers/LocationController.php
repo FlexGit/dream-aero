@@ -335,12 +335,14 @@ class LocationController extends Controller
 		}
 
 		$colors = $this->request->color ?? [];
+		$letterNames = $this->request->letter_name ?? [];
 		$locationSimulatorData = [];
 		foreach (array_keys($this->request->simulator) ?? [] as $simulatorId) {
 			$locationSimulatorData[$simulatorId]['data_json'] = [];
 			foreach ($colors[$simulatorId] as $eventType => $color) {
 				$locationSimulatorData[$simulatorId]['data_json'][$eventType] = $color ?? '';
 			}
+			$locationSimulatorData[$simulatorId]['data_json']['letter_name'] = isset($letterNames[$simulatorId]) ? $letterNames[$simulatorId] : '';
 			$locationSimulatorData[$simulatorId]['data_json'] = json_encode($locationSimulatorData[$simulatorId]['data_json'], JSON_UNESCAPED_UNICODE);
 		}
 

@@ -30,6 +30,9 @@
 					<input class="form-check-input mr-2 js-simulator" type="checkbox" name="simulator[{{ $simulator->id }}]" value="1" @if($locationSimulator) checked @endif data-simulator-id="{{ $simulator->id }}" style="width: 18px;height: 18px;">
 					<label class="form-check-label text-bold">{{ $simulator->name }}</label>
 				</div>
+				<div class="form-group">
+					<input type="text" class="form-control form-control-sm" name="letter_name[{{ $simulator->id }}]" value="{{ isset($data['letter_name']) ? $data['letter_name'] : '' }}" placeholder="Наименование в письме платформы">
+				</div>
 				<table class="table table-hover table-sm table-bordered table-striped small">
 					<tr>
 						<td class="text-center align-middle">
