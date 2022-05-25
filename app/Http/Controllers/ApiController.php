@@ -1951,6 +1951,10 @@ class ApiController extends Controller
 
 		$data = [];
 		foreach ($events as $event) {
+			if ($event->deal->status && in_array($event->deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+				continue;
+			}
+			
 			$data[] = [
 				'date' => Carbon::parse($event->start_at)->format('Y-m-d'),
 				'time' => Carbon::parse($event->start_at)->format('H:i'),
