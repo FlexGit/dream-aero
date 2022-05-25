@@ -9,6 +9,7 @@ use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Throwable;
+use Webklex\IMAP\Facades\Client;
 
 class LoadPlatformData extends Command
 {
@@ -43,10 +44,55 @@ class LoadPlatformData extends Command
      */
     public function handle()
     {
-		$connection = imap_open(env('PLATFORM_IMAP'), env('PLATFORM_MAIL_LOGIN'), env('PLATFORM_MAIL_PASSWORD'));
-		if(!$connection) return 0;
+		//$connection = imap_open(env('PLATFORM_IMAP'), env('PLATFORM_MAIL_LOGIN'), env('PLATFORM_MAIL_PASSWORD'));
+		//if(!$connection) return 0;
+		
+		/** @var \Webklex\PHPIMAP\Client $client */
+		$client = Client::account('default');
+		$client->connect();
 	
-		$mails = imap_search($connection,'UNSEEN');
+		/** @var \Webklex\PHPIMAP\Client $client */
+		/** @var \Webklex\PHPIMAP\Folder $folder */
+		$folder = $client->getFolderByName(env('IMAP_DEFAULT_FOLDER'));
+	
+		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
+		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
+		$messages = $folder->from(env('IMAP_DEFAULT_SENDER'))->unseen()->get();
+	
+		/** @var \Webklex\PHPIMAP\Message $message */
+		foreach ($messages as $message) {
+			/** @var \Webklex\PHPIMAP\Message $message */
+			/** @var \Webklex\PHPIMAP\Attribute $subject */
+			$subject = $message->getSubject();
+			\Log::debug($subject);
+			
+			/** @var \Webklex\PHPIMAP\Message $message */
+			/** @var string|null $body */
+			$body = $message->getTextBody();
+			\Log::debug($body);
+			
+			/** @var \Webklex\PHPIMAP\Message $message */
+			/** @var string $raw */
+			$raw = $message->getRawBody();
+			\Log::debug($raw);
+			
+			/** @var \Webklex\PHPIMAP\Message $message */
+			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
+			$attachments = $message->getAttachments();
+			foreach ($attachments as $attachment) {
+				/** @var \Webklex\PHPIMAP\Attachment $attachment */
+				/** @var boolean $status */
+				$status = $attachment->save('/storage/app/private/attachments/', null);
+				\Log::debug('status = ' . $status);
+			}
+			
+			/** @var \Webklex\PHPIMAP\Message $message */
+			$message->setFlag('Seen');
+			
+			break;
+		}
+		
+		/*$mails = imap_search($connection,'UNSEEN');
 		if ($mails === false) return 0;
 	
 		$locations = Location::get();
@@ -83,7 +129,7 @@ class LoadPlatformData extends Command
 			if (!$dataAt) return 0;
 			
 			$txtFile = '';
-			if (isset($msg_structure->parts)) {
+			if (isset($msgStructure->parts)) {
 				for ($j = 1, $f = 2; $j <= count($msgStructure->parts); $j++, $f++) {
 					if (in_array($msgStructure->parts[$j]->subtype, ['OCTET-STREAM'])) {
 						$mailData[$i]['attachs'][$j]['type'] = $msgStructure->parts[$j]->subtype;
@@ -171,7 +217,7 @@ class LoadPlatformData extends Command
 					}
 				}
 			}
-		}
+		}*/
 
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - platform_data:load - OK');
     	
