@@ -171,8 +171,6 @@ class LoadPlatformData extends Command
 					}
 				}
 			}
-			
-			break;
 		}
 
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - platform_data:load - OK');
