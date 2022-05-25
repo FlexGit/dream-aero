@@ -1027,8 +1027,11 @@ class MainController extends Controller
 		$email = trim(strip_tags($this->request->email));
 		$body = trim(strip_tags($this->request->body));
 		
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
 		//dispatch(new \App\Jobs\SendQuestionEmail($name, $email, $body));
-		$job = new \App\Jobs\SendQuestionEmail($name, $email, $body);
+		$job = new \App\Jobs\SendQuestionEmail($name, $email, $body, $city);
 		$job->handle();
 		
 		return response()->json(['status' => 'success']);

@@ -14,11 +14,13 @@ class SendQuestionEmail extends Job implements ShouldQueue {
 	protected $name;
 	protected $email;
 	protected $body;
+	protected $city;
 
-	public function __construct($name, $email, $body) {
+	public function __construct($name, $email, $body, $city) {
 		$this->name = $name;
 		$this->email = $email;
 		$this->body = $body;
+		$this->city = $city;
 	}
 	
 	/**
@@ -26,7 +28,7 @@ class SendQuestionEmail extends Job implements ShouldQueue {
 	 */
 	public function handle() {
 		$recipients = $bcc = [];
-		$recipients[] = env('ADMIN_EMAIL');
+		$recipients[] = $this->city->email ?: env('ADMIN_EMAIL');
 		$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
