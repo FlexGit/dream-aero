@@ -75,22 +75,31 @@ class LoadPlatformData extends Command
 			//\Log::debug($raw);
 			
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
+			\Log::debug('dataAt = ' . $dataAt);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
-			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
-			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
+			\Log::debug('dataAt = ' . $dataAt);
 			if (!$dataAt) return 0;
+
+			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
+			\Log::debug('totalUp = ' . $totalUp);
+			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
+			\Log::debug('inAirNoMotion = ' . $inAirNoMotion);
 			
 			$locationId = $simulatorId = 0;
 			foreach ($locations as $location) {
+				\Log::debug('location name = ' . $location->name);
 				if (!$location->pivot) continue;
 				
 				$locationSimulatorData = $location->pivot->data_json;
+				\Log::debug($locationSimulatorData);
 				$letterName = isset($locationSimulatorData['letter_name']) ? $locationSimulatorData['letter_name'] : '';
+				\Log::debug($letterName . ' - ' . $subject);
 				if ($letterName != $subject) continue;
 
 				$locationId = $location->id;
 				$simulatorId = $location->pivot->flight_simulator_id;
 			}
+			\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
 			
 			$platformData = PlatformData::where('location_id', $locationId)
