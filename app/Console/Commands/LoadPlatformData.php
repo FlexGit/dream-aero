@@ -102,11 +102,11 @@ class LoadPlatformData extends Command
 					$letterNames[$location->id][$simulator->id] = isset($data['letter_name']) ? $data['letter_name'] : '';
 				}
 				
-				\Log::debug($letterNames);
-				\Log::debug($subject[0]);
+				//\Log::debug($letterNames);
 				
 				foreach ($letterNames as $locationId) {
 					foreach ($locationId as $simulatorId => $letterName) {
+						\Log::debug($letterName . ' - ' . $subject[0]);
 						if ($letterName != $subject[0]) continue;
 					}
 				}
