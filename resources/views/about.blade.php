@@ -55,7 +55,7 @@
 											@continue
 										@endif--}}
 										<li>
-											<span style="font-size: 18px;white-space: nowrap;">{{ $location->name }}</span>
+											<span style="font-size: 18px;">{{ $location->name }}</span>
 											@if ($location->data_json)
 												<div style="padding: 10px 25px;line-height: 1.7em;font-size: 14px;">
 													{!! $location->data_json['address'] !!}
@@ -63,7 +63,8 @@
 													<i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:{{ $location->data_json['phone'] }}">{{ $location->data_json['phone'] }}</a>
 													<i class="fa fa-envelope-o" aria-hidden="true" style="margin-left: 10px;"></i> <a href="mailto:{{ $location->data_json['email'] }}">{{ $location->data_json['email'] }}</a>
 													@if($location->data_json['skype'])
-														<i class="fa fa-skype" aria-hidden="true" style="margin-left: 10px;"></i> <a href="skype:{{ $location->data_json['skype'] }}">{{ $location->data_json['skype'] }}</a>
+														<br>
+														<i class="fa fa-skype" aria-hidden="true"></i> <a href="skype:{{ $location->data_json['skype'] }}">{{ $location->data_json['skype'] }}</a>
 													@endif
 													<br>
 													<i class="fa fa-calendar-check-o" aria-hidden="true"></i> @lang('main.o-trenazhere.график-работы')
