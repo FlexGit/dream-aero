@@ -31,6 +31,7 @@
 					<label class="form-check-label text-bold">{{ $simulator->name }}</label>
 				</div>
 				<div class="form-group">
+					<label for="alias">Наименование в письме платформы</label>
 					<input type="text" class="form-control form-control-sm" name="letter_name[{{ $simulator->id }}]" value="{{ isset($data['letter_name']) ? $data['letter_name'] : '' }}" placeholder="Наименование в письме платформы">
 				</div>
 				<table class="table table-hover table-sm table-bordered table-striped small">

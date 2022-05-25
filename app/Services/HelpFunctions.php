@@ -193,4 +193,155 @@ class HelpFunctions {
 	{
 		return preg_match('/^[a-f0-9]{32}$/', $md5);
 	}
+	
+	/**
+	 * @param $structure
+	 * @return array
+	 */
+	public static function mailSearch($structure)
+	{
+		if ($structure->subtype == 'HTML' || $structure->type == 0) {
+			if ($structure->parameters[0]->attribute == "charset") {
+				$charset = $structure->parameters[0]->value;
+			}
+			
+			return [
+				'encoding' => (int)$structure->encoding,
+				'charset' => strtolower($charset),
+				'subtype' => $structure->subtype
+			];
+		}
+
+		if (isset($structure->parts[0])) {
+			return self::mailSearch($structure->parts[0]);
+		}
+
+		if ($structure->parameters[0]->attribute == 'charset') {
+			$charset = $structure->parameters[0]->value;
+		}
+		
+		return [
+			'encoding' => (int)$structure->encoding,
+			'charset'  => strtolower($charset),
+			'subtype'  => $structure->subtype
+		];
+	}
+	
+	/**
+	 * @param $encoding
+	 * @param $msgBody
+	 * @return string
+	 */
+	public static function mailStructureEncoding($encoding, $msgBody)
+	{
+		switch ($encoding) {
+			case 4:
+				$body = imap_qprint($msgBody);
+			break;
+			case 3:
+				$body = imap_base64($msgBody);
+			break;
+			case 2:
+				$body = imap_binary($msgBody);
+			break;
+			case 1:
+				$body = imap_8bit($msgBody);
+			break;
+			case 0:
+				$body = $msgBody;
+			break;
+			default:
+				$body = '';
+			break;
+		}
+		
+		return $body;
+	}
+	
+	/**
+	 * @param $charset
+	 * @return bool
+	 */
+	public static function mailCheckUtf8($charset)
+	{
+		if (strtolower($charset) != 'utf-8') return false;
+		return true;
+	}
+	
+	/**
+	 * @param $inCharset
+	 * @param $str
+	 * @return bool|false|string
+	 */
+	public static function mailConvertToUtf8($inCharset, $str)
+	{
+		return iconv(strtolower($inCharset), 'utf-8', $str);
+	}
+	
+	/**
+	 * @param $string
+	 * @param $start
+	 * @param $length
+	 * @return bool|string
+	 */
+	public static function mailGetStringBefore($string, $start, $length)
+	{
+		$pos = strpos($string, $start);
+		if ($pos == 0) return '';
+		
+		$pos = $pos - ($length + 1);
+		return substr($string, $pos, $length);
+	}
+	
+	/**
+	 * @param $string
+	 * @param $start
+	 * @param $end
+	 * @return bool|string
+	 */
+	public static function mailGetStringBetween($string, $start, $end)
+	{
+		$string = ' ' . $string;
+		$pos = strpos($string, $start);
+		if ($pos == 0) return '';
+		
+		$pos += strlen($start);
+		if ($end != '') {
+			$len = strpos($string, $end, $pos) - $pos;
+			
+			return substr($string, $pos, $len);
+		}
+
+		return substr($string, $pos);
+	}
+	
+	/**
+	 * @param $str
+	 * @return mixed
+	 */
+	public static function mailGetImapTitle($str)
+	{
+		$mime = imap_mime_header_decode($str);
+		$title = '';
+		foreach ($mime as $key => $m) {
+			if (!self::mailCheckUtf8($m->charset)) {
+				$title .= self::mailConvertToUtf8($m->charset, $m->text);
+			} else {
+				$title .= $m->text;
+			}
+		}
+		
+		return $m->text;
+	}
+	
+	/**
+	 * @param $time
+	 * @return float|int
+	 */
+	public static function mailGetTimeSeconds($time)
+	{
+		$timeParts = explode(':', $time);
+		return $timeParts[0] * 3600 + $timeParts[1] * 60 + $timeParts[2];
+	}
+	
 }
