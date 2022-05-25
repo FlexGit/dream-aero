@@ -104,10 +104,9 @@ class LoadPlatformData extends Command
 				
 				\Log::debug($letterNames);
 				
-				$letterName = '';
 				foreach ($letterNames as $locationId) {
-					foreach ($locationId as $simulatorId) {
-						if ($simulatorId != (string)$subject) continue;
+					foreach ($locationId as $simulatorId => $letterName) {
+						if ($letterName != (string)$subject) continue;
 					}
 				}
 			}
