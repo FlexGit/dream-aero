@@ -95,20 +95,21 @@ class LoadPlatformData extends Command
 			\Log::debug('inAirNoMotion = ' . $inAirNoMotion);
 			
 			$locationId = $simulatorId = 0;
+			$letterNames = [];
 			foreach ($locations as $location) {
-				if (!$location->simulators) continue;
+				foreach ($location->simulators as $simulator) {
+					$data = json_decode($simulator->pivot->data_json, true);
+					$letterNames[$location->id][$simulator->id] = isset($data['letter_name']) ? $data['letter_name'] : '';
+				}
 				
-				$pivot = $location->simulators->pivot;
-				if (!$pivot) continue;
+				\Log::debug($letterNames);
 				
-				$locationSimulatorData = $pivot->data_json;
-				\Log::debug($locationSimulatorData);
-				$letterName = isset($locationSimulatorData['letter_name']) ? $locationSimulatorData['letter_name'] : '';
-				\Log::debug($letterName);
-				if ($letterName != (string)$subject) continue;
-
-				$locationId = $location->id;
-				$simulatorId = $pivot->flight_simulator_id;
+				$letterName = '';
+				foreach ($letterNames as $locationId) {
+					foreach ($locationId as $simulatorId) {
+						if ($simulatorId != (string)$subject) continue;
+					}
+				}
 			}
 			\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
