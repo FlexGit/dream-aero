@@ -81,7 +81,7 @@ class LoadPlatformData extends Command
 			foreach ($attachments as $attachment) {
 				/** @var \Webklex\PHPIMAP\Attachment $attachment */
 				/** @var boolean $status */
-				$status = $attachment->save('/storage/app/private/attachments/', null);
+				$status = $attachment->save('./storage/app/private/attachments/', null);
 				\Log::debug('status = ' . $status);
 			}
 			
