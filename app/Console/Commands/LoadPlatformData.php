@@ -44,8 +44,7 @@ class LoadPlatformData extends Command
      */
     public function handle()
     {
-		//$connection = imap_open(env('PLATFORM_IMAP'), env('PLATFORM_MAIL_LOGIN'), env('PLATFORM_MAIL_PASSWORD'));
-		//if(!$connection) return 0;
+		$locations = Location::get();
 		
 		/** @var \Webklex\PHPIMAP\Client $client */
 		$client = Client::account('default');
@@ -75,6 +74,39 @@ class LoadPlatformData extends Command
 			//$raw = $message->getRawBody();
 			//\Log::debug($raw);
 			
+			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
+			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
+			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
+			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
+			if (!$dataAt) return 0;
+			
+			$locationId = $simulatorId = 0;
+			foreach ($locations as $location) {
+				if (!$location->pivot) continue;
+				
+				$locationSimulatorData = $location->pivot->data_json;
+				$letterName = isset($locationSimulatorData['letter_name']) ? $locationSimulatorData['letter_name'] : '';
+				if ($letterName != $subject) continue;
+
+				$locationId = $location->id;
+				$simulatorId = $location->pivot->flight_simulator_id;
+			}
+			if (!$locationId || !$simulatorId) return 0;
+			
+			$platformData = PlatformData::where('location_id', $locationId)
+				->where('location_id', $simulatorId)
+				->where('data_at', $dataAt)
+				->first();
+			if (!$platformData) {
+				$platformData = new PlatformData();
+				$platformData->location_id = $locationId;
+				$platformData->flight_simulator_id = $simulatorId;
+				$platformData->data_at = Carbon::parse($dataAt)->format('Y-m-d');
+			}
+			$platformData->total_up = $totalUp;
+			$platformData->in_air_no_motion = $inAirNoMotion;
+			if (!$platformData->save()) return 0;
+			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
 			$attachments = $message->getAttachments();
@@ -90,12 +122,13 @@ class LoadPlatformData extends Command
 			
 			break;
 		}
-		
+	
+		//$connection = imap_open(env('PLATFORM_IMAP'), env('PLATFORM_MAIL_LOGIN'), env('PLATFORM_MAIL_PASSWORD'));
+		//if(!$connection) return 0;
+
 		/*$mails = imap_search($connection,'UNSEEN');
 		if ($mails === false) return 0;
 	
-		$locations = Location::get();
-		
 		$mailData = [];
 		$i = 1;
 		foreach ($mails as $mailId) {
