@@ -72,8 +72,8 @@ class LoadPlatformData extends Command
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var string $raw */
-			$raw = $message->getRawBody();
-			\Log::debug($raw);
+			//$raw = $message->getRawBody();
+			//\Log::debug($raw);
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
@@ -86,7 +86,7 @@ class LoadPlatformData extends Command
 			}
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
-			$message->setFlag('Seen');
+			$message->unsetFlag('Seen');
 			
 			break;
 		}
