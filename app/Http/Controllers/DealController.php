@@ -399,7 +399,7 @@ class DealController extends Controller
 				'email' => 'required|email|unique_email',
 				'phone' => 'required|valid_phone',
 				'product_id' => 'required|numeric|min:0|not_in:0',
-				/*'city_id' => 'required|numeric|min:0',*/
+				'city_id' => 'required|numeric|min:0',
 			];
 			
 			$validator = Validator::make($this->request->all(), $rules)
@@ -408,7 +408,7 @@ class DealController extends Controller
 					'email' => 'E-mail',
 					'phone' => 'Телефон',
 					'product_id' => 'Продукт',
-					/*'city_id' => 'Город',*/
+					'city_id' => 'Город',
 				]);
 			if (!$validator->passes()) {
 				return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -558,7 +558,7 @@ class DealController extends Controller
 			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 			$deal->status_id = $dealStatus->id ?? 0;
 			$deal->contractor_id = $contractor->id ?? 0;
-			$deal->city_id = /*$cityId*/$isUnified ? 0 : $cityId;
+			$deal->city_id = $cityId;
 			$deal->name = $name;
 			$deal->phone = $phone;
 			$deal->email = $email;
@@ -572,7 +572,7 @@ class DealController extends Controller
 			$position->duration = $product->duration ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
-			$position->city_id = /*$cityId*/$isUnified ? 0 : $cityId;
+			$position->city_id = $cityId;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = ($promocodeId || $promocodeUuid) ? $promocode->id : 0;
 			$position->is_certificate_purchase = true;
