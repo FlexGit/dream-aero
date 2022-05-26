@@ -154,9 +154,9 @@ class LoadPlatformData extends Command
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
 						$platformLog->action_type = PlatformLog::IN_AIR_ACTION_TYPE;
-						$platformLog->start_at = trim($itemData[0]);
-						$platformLog->stop_at = trim($itemData[2]);
-						$platformLog->duration = trim($itemData[4]);
+						$platformLog->start_at = Carbon::parse(trim($itemData[0]))->format('H:i:s');
+						$platformLog->stop_at = Carbon::parse(trim($itemData[2]))->format('H:i:s');
+						$platformLog->duration = Carbon::parse(trim($itemData[4]))->format('H:i:s');
 						$platformLog->save();
 					}
 				}
@@ -169,9 +169,9 @@ class LoadPlatformData extends Command
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
 						$platformLog->action_type = PlatformLog::IN_UP_ACTION_TYPE;
-						$platformLog->start_at = trim($itemData[0]);
-						$platformLog->stop_at = trim($itemData[2]);
-						$platformLog->duration = trim($itemData[4]);
+						$platformLog->start_at = Carbon::parse(trim($itemData[0]))->format('H:i:s');
+						$platformLog->stop_at = Carbon::parse(trim($itemData[2]))->format('H:i:s');
+						$platformLog->duration = Carbon::parse(trim($itemData[4]))->format('H:i:s');
 						$platformLog->save();
 					}
 				}
@@ -185,9 +185,9 @@ class LoadPlatformData extends Command
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
 						$platformLog->action_type = PlatformLog::IANM_ACTION_TYPE;
-						$platformLog->start_at = trim($itemData[0]);
-						$platformLog->stop_at = trim($itemData[2]);
-						$platformLog->duration = trim($itemData[4]);
+						$platformLog->start_at = Carbon::parse(trim($itemData[0]))->format('H:i:s');
+						$platformLog->stop_at = Carbon::parse(trim($itemData[2]))->format('H:i:s');
+						$platformLog->duration = Carbon::parse(trim($itemData[4]))->format('H:i:s');
 						$platformLog->save();
 					}
 				}
