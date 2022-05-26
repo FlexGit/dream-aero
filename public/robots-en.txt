@@ -4,6 +4,15 @@ disallow: /payment/fail
 disallow: /payment
 disallow: /modal
 disallow: /deal
+disallow: /nnv/pravila
+disallow: /spb/o-trenazhere
+disallow: /ekb/o-trenazhere
+disallow: /spb/podarit-polet
+disallow: /nnv/o-trenazhere
+disallow: /kzn/podarit-polet
+disallow: /sam/pravila
+disallow: /nnv/podarit-polet
+disallow: /contacts/voronezh
 
 User-agent: Yandex
 disallow: /payment/success
@@ -11,6 +20,15 @@ disallow: /payment/fail
 disallow: /payment
 disallow: /modal
 disallow: /deal
+disallow: /nnv/pravila
+disallow: /spb/o-trenazhere
+disallow: /ekb/o-trenazhere
+disallow: /spb/podarit-polet
+disallow: /nnv/o-trenazhere
+disallow: /kzn/podarit-polet
+disallow: /sam/pravila
+disallow: /nnv/podarit-polet
+disallow: /contacts/voronezh
 
 Sitemap: https://en.dream-aero.ru/sitemap.xml
 Host: en.dream-aero.ru
