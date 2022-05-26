@@ -152,7 +152,7 @@ class LoadPlatformData extends Command
 				foreach ($inAirArr as $item) {
 					//\Log::debug($item);
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
-					//\Log::debug($itemData);
+					\Log::debug($itemData);
 					if ($itemData[3] == 'IN-AIR') {
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
