@@ -342,7 +342,7 @@ class HelpFunctions {
 	public static function mailGetTimeSeconds($time)
 	{
 		$timeParts = explode(':', $time);
-		return $timeParts[0] * 3600 + $timeParts[1] * 60 + $timeParts[2];
+		return $timeParts[0] * 3600 + $timeParts[1] * 60 + (isset($timeParts[2]) ? $timeParts[2] : 0);
 	}
 	
 }
