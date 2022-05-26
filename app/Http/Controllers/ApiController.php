@@ -2970,6 +2970,9 @@ class ApiController extends Controller
 			$job->handle();
 		}
 		
+		$job = new \App\Jobs\SendDealEmail($deal);
+		$job->handle();
+		
 		$data = [
 			'deal' => $deal->format(),
 		];

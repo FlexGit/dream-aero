@@ -17,10 +17,10 @@ class CreatePlatformDataTable extends Migration
 			$table->id();
 			$table->integer('location_id')->default(0)->index()->comment('локация');
 			$table->integer('flight_simulator_id')->default(0)->index()->comment('авиатренажер');
-			$table->timestamp('data_at')->nullable()->comment('дата, на которую представлены данные');
-			$table->timestamp('total_up')->nullable()->comment('данные платформы: общее время в поднятом и подвижном состоянии');
-			$table->timestamp('user_total_up')->nullable()->comment('данные пользователя: общее время в поднятом и подвижном состоянии');
-			$table->timestamp('in_air_no_motion')->nullable()->comment('данные платформы: общее время в поднятом и неподвижном состоянии');
+			$table->date('data_at')->nullable()->comment('дата, на которую представлены данные');
+			$table->time('total_up')->nullable()->comment('данные платформы: общее время в поднятом и подвижном состоянии');
+			$table->time('user_total_up')->nullable()->comment('данные пользователя: общее время в поднятом и подвижном состоянии');
+			$table->time('in_air_no_motion')->nullable()->comment('данные платформы: общее время в поднятом и неподвижном состоянии');
 			$table->text('comment')->nullable()->comment('комментарий');
 			$table->timestamps();
 			$table->softDeletes();
