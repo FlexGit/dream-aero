@@ -90,6 +90,14 @@ class Kernel extends ConsoleKernel
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));*/
+
+		// загрузка данных платформы из письма
+		$filePath = storage_path('logs/commands/platform_data_load.log');
+		$schedule->command('platform_data:load')
+			->hourly()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
 	}
 
 	/**
