@@ -99,16 +99,18 @@ class LoadPlatformData extends Command
 			foreach ($locations as $location) {
 				foreach ($location->simulators as $simulator) {
 					$data = json_decode($simulator->pivot->data_json, true);
-					$letterNames[$location->id][$simulator->id] = isset($data['letter_name']) ? $data['letter_name'] : '';
+					$letterNames[$location->id . '_' . $simulator->id] = isset($data['letter_name']) ? $data['letter_name'] : '';
 				}
 				
 				//\Log::debug($letterNames);
 				
-				foreach ($letterNames as $locationId) {
-					foreach ($locationId as $simulatorId => $letterName) {
-						\Log::debug($letterName . ' - ' . $subject[0]);
-						if ($letterName != $subject[0]) continue;
-					}
+				foreach ($letterNames as $locationSimulatorId => $letterName) {
+					//\Log::debug($letterName . ' - ' . $subject[0]);
+					if ($letterName != $subject[0]) continue;
+					
+					$locationSimulatorArr = explode('_', $locationSimulatorId);
+					$locationId = $locationSimulatorArr[0];
+					$simulatorId = $locationSimulatorArr[1];
 				}
 			}
 			\Log::debug($locationId . ' - ' . $simulatorId);
