@@ -126,8 +126,8 @@ class LoadPlatformData extends Command
 				$platformData->flight_simulator_id = $simulatorId;
 				$platformData->data_at = Carbon::parse($dataAt)->format('Y-m-d');
 			}
-			$platformData->total_up = $totalUp;
-			$platformData->in_air_no_motion = $inAirNoMotion;
+			$platformData->total_up = Carbon::parse($totalUp)->format('H:i:s');
+			$platformData->in_air_no_motion = Carbon::parse($inAirNoMotion)->format('H:i:s');
 			if (!$platformData->save()) return 0;
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
