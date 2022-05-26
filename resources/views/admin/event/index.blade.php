@@ -407,7 +407,7 @@
 							return;
 						}
 
-						$(info.el).tooltip('hide');
+						/*$(info.el).tooltip('hide');*/
 
 						$modalDialog.find('form').attr('id', type);
 						//$modalDialog.removeClass('modal-lg');
@@ -455,7 +455,7 @@
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						$(info.el).tooltip('hide');
+						/*$(info.el).tooltip('hide');*/
 
 						//console.log($(info.event)[0]._def.extendedProps);
 						$.ajax({
@@ -482,7 +482,7 @@
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						$(info.el).tooltip('hide');
+						/*$(info.el).tooltip('hide');*/
 
 						$.ajax({
 							url: '/event/' + id,
@@ -537,13 +537,13 @@
 						$(info.el).tooltip({
 							title: data,
 							placement: 'top',
-							trigger: 'manual',
+							trigger: 'hover',
 							container: 'body',
 							html: true
-						}).tooltip('show');
+						});
 					},
 					eventMouseLeave: function (info) {
-						$(info.el).tooltip('hide');
+						/*$(info.el).tooltip('hide');*/
 					},
 					eventDataTransform: function (event) {
 						if (event.allDay) {
