@@ -147,7 +147,7 @@ class LoadPlatformData extends Command
 				\Log::debug($attachmentContent);
 
 				$inAirStr = HelpFunctions::mailGetStringBetween($attachmentContent, 'X-Plane', 'X-Plane');
-				$inAirArr = explode('\n', trim($inAirStr));
+				$inAirArr = explode('\r\n', trim($inAirStr));
 				\Log::debug($inAirArr);
 				foreach ($inAirArr as $item) {
 					\Log::debug($item);
