@@ -153,6 +153,8 @@ class LoadPlatformData extends Command
 					//\Log::debug($item);
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
 					\Log::debug($itemData);
+					if (!isset($itemData[3])) continue;
+
 					if ($itemData[3] == 'IN-AIR') {
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
@@ -165,9 +167,10 @@ class LoadPlatformData extends Command
 				}
 
 				$inUpStr = HelpFunctions::mailGetStringBetween($attachmentContent, 'Platform', 'Platform');
-				$inUpArr = explode('\n', trim($inUpStr));
+				$inUpArr = explode("\n", trim($inUpStr));
 				foreach ($inUpArr as $item) {
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
+					if (!isset($itemData[3])) continue;
 					if ($itemData[3] == 'UP') {
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
