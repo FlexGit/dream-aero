@@ -71,12 +71,12 @@ class LoadPlatformData extends Command
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Attribute $subject */
 			$subject = $message->getSubject();
-			\Log::debug($subject);
+			//\Log::debug($subject);
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var string|null $body */
 			$body = $message->getTextBody();
-			\Log::debug($body);
+			//\Log::debug($body);
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var string $raw */
@@ -84,15 +84,15 @@ class LoadPlatformData extends Command
 			//\Log::debug($raw);
 			
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
-			\Log::debug('dataAt = ' . $dataAt);
+			//\Log::debug('dataAt = ' . $dataAt);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
-			\Log::debug('dataAt = ' . $dataAt);
+			//\Log::debug('dataAt = ' . $dataAt);
 			if (!$dataAt) return 0;
 
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
-			\Log::debug('totalUp = ' . $totalUp);
+			//\Log::debug('totalUp = ' . $totalUp);
 			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
-			\Log::debug('inAirNoMotion = ' . $inAirNoMotion);
+			//\Log::debug('inAirNoMotion = ' . $inAirNoMotion);
 			
 			$locationId = $simulatorId = 0;
 			$letterNames = [];
@@ -113,7 +113,7 @@ class LoadPlatformData extends Command
 					$simulatorId = $locationSimulatorArr[1];
 				}
 			}
-			\Log::debug($locationId . ' - ' . $simulatorId);
+			//\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
 			
 			$platformData = PlatformData::where('location_id', $locationId)
@@ -140,19 +140,19 @@ class LoadPlatformData extends Command
 				/** @var \Webklex\PHPIMAP\Attachment $attachment */
 				/** @var boolean $status */
 				$status = $attachment->save($attachmentPath, $attachmentName);
-				\Log::debug('status = ' . $status);
+				//\Log::debug('status = ' . $status);
 				if (!$status) continue;
 
 				$attachmentContent = file_get_contents($attachmentPath . $attachmentName);
-				\Log::debug($attachmentContent);
+				//\Log::debug($attachmentContent);
 
 				$inAirStr = HelpFunctions::mailGetStringBetween($attachmentContent, 'X-Plane', 'X-Plane');
 				$inAirArr = explode("\n", trim($inAirStr));
-				\Log::debug($inAirArr);
+				//\Log::debug($inAirArr);
 				foreach ($inAirArr as $item) {
-					\Log::debug($item);
+					//\Log::debug($item);
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
-					\Log::debug($itemData);
+					//\Log::debug($itemData);
 					if ($itemData[3] == 'IN-AIR') {
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
