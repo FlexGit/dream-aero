@@ -64,7 +64,7 @@ class LoadPlatformData extends Command
 		
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $query->since('25.05.2022')->get();
+		$messages = $query->since('26.05.2022')->get();
 	
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
@@ -138,12 +138,62 @@ class LoadPlatformData extends Command
 				/** @var boolean $status */
 				$status = $attachment->save('./storage/app/private/attachments/', null);
 				\Log::debug('status = ' . $status);
+
+				if (!$status) continue;
+
+				\Log::debug($attachment);
+
+				/*$inAirStr = HelpFunctions::mailGetStringBetween($txtFile, 'X-Plane', 'X-Plane');
+				$inAirArr = explode('\n', trim($inAirStr));
+				foreach ($inAirArr as $item) {
+					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
+					if ($itemData[3] == 'IN-AIR') {
+						$platformLog = new PlatformLog();
+						$platformLog->platform_data_id = $platformData->id;
+						$platformLog->action_type = PlatformLog::IN_AIR_ACTION_TYPE;
+						$platformLog->start_at = trim($itemData[0]);
+						$platformLog->stop_at = trim($itemData[2]);
+						$platformLog->duration = trim($itemData[4]);
+						$platformLog->save();
+					}
+				}
+
+				$inUpStr = HelpFunctions::mailGetStringBetween($txtFile, 'Platform', 'Platform');
+				$inUpArr = explode('\n', trim($inUpStr));
+				foreach ($inUpArr as $item) {
+					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
+					if ($itemData[3] == 'UP') {
+						$platformLog = new PlatformLog();
+						$platformLog->platform_data_id = $platformData->id;
+						$platformLog->action_type = PlatformLog::IN_UP_ACTION_TYPE;
+						$platformLog->start_at = trim($itemData[0]);
+						$platformLog->stop_at = trim($itemData[2]);
+						$platformLog->duration = trim($itemData[4]);
+						$platformLog->save();
+					}
+				}
+
+				if (HelpFunctions::mailGetTimeSeconds($inAirNoMotion) >= 600) {
+					$ianmTime = HelpFunctions::mailGetStringBetween($txtFile, 'InAirNoMotion', 'InAirNoMotion Total Total');
+					$ianmStr = explode("\n", trim($ianmTime));
+					foreach ($ianmStr as $item) {
+						$itemData = explode(' ', $item);
+
+						$platformLog = new PlatformLog();
+						$platformLog->platform_data_id = $platformData->id;
+						$platformLog->action_type = PlatformLog::IANM_ACTION_TYPE;
+						$platformLog->start_at = trim($itemData[0]);
+						$platformLog->stop_at = trim($itemData[2]);
+						$platformLog->duration = trim($itemData[4]);
+						$platformLog->save();
+					}
+				}*/
 			}
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			$message->unsetFlag('Seen');
 			
-			break;
+			//break;
 		}
 	
 		//$connection = imap_open(env('PLATFORM_IMAP'), env('PLATFORM_MAIL_LOGIN'), env('PLATFORM_MAIL_PASSWORD'));
