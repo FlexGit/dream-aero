@@ -152,7 +152,7 @@ class LoadPlatformData extends Command
 				foreach ($inAirArr as $item) {
 					//\Log::debug($item);
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
-					\Log::debug($itemData);
+					//\Log::debug($itemData);
 					if (!isset($itemData[3])) continue;
 
 					if ($itemData[3] == 'IN-AIR') {
@@ -200,7 +200,7 @@ class LoadPlatformData extends Command
 			}
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
-			$message->unsetFlag('Seen');
+			//$message->unsetFlag('Seen');
 			
 			//break;
 		}

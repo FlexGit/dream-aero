@@ -564,7 +564,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	Route::post('aeroflot-use/retry', [AeroflotBonusController::class, 'useRetry'])->name('useRetry');
 	Route::post('aeroflot-use/refresh', [AeroflotBonusController::class, 'useRefresh'])->name('useRefresh');
 	
-	Route::get('test/model/{uuid}', [TestController::class, 'getModel']);
+	Route::get('test/parse/file', [TestController::class, 'parseFile']);
 	
 	Route::fallback(function () {
 		abort(404);
