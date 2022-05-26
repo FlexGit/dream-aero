@@ -148,8 +148,11 @@ class LoadPlatformData extends Command
 
 				$inAirStr = HelpFunctions::mailGetStringBetween($attachmentContent, 'X-Plane', 'X-Plane');
 				$inAirArr = explode('\n', trim($inAirStr));
+				\Log::debug($inAirArr);
 				foreach ($inAirArr as $item) {
+					\Log::debug($item);
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
+					\Log::debug($itemData);
 					if ($itemData[3] == 'IN-AIR') {
 						$platformLog = new PlatformLog();
 						$platformLog->platform_data_id = $platformData->id;
