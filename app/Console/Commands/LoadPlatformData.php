@@ -64,7 +64,7 @@ class LoadPlatformData extends Command
 		
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $query->since('26.05.2022')->get();
+		$messages = $query->unseen()->since('26.05.2022')->get();
 	
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
@@ -200,7 +200,7 @@ class LoadPlatformData extends Command
 			}
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
-			//$message->unsetFlag('Seen');
+			$message->setFlag('Seen');
 			
 			//break;
 		}
