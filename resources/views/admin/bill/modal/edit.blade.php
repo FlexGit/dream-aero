@@ -72,7 +72,7 @@
 				<div class="form-group">
 					<label>Ссылка на оплату</label>
 					<div>
-						[ <a href="{{ (($bill->deal->city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid }}" target="_blank">открыть</a> ]
+						[ <a href="{{ (($bill->deal && $bill->deal->city && $bill->deal->city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid }}" target="_blank">открыть</a> ]
 					</div>
 				</div>
 			@endif

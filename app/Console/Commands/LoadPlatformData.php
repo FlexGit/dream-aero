@@ -134,16 +134,19 @@ class LoadPlatformData extends Command
 			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
 			$attachments = $message->getAttachments();
 			foreach ($attachments as $attachment) {
+				$attachmentPath = './storage/app/private/attachments/';
+				$attachmentName = $dataAt . '.' . $locationId . '.' . $simulatorId . '.txt';
+
 				/** @var \Webklex\PHPIMAP\Attachment $attachment */
 				/** @var boolean $status */
-				$status = $attachment->save('./storage/app/private/attachments/', null);
+				$status = $attachment->save($attachmentPath, $attachmentName);
 				\Log::debug('status = ' . $status);
-
 				if (!$status) continue;
 
-				\Log::debug($attachment);
+				$attachmentContent = file_get_contents($attachmentPath . $attachmentName);
+				\Log::debug($attachmentContent);
 
-				/*$inAirStr = HelpFunctions::mailGetStringBetween($txtFile, 'X-Plane', 'X-Plane');
+				$inAirStr = HelpFunctions::mailGetStringBetween($attachmentContent, 'X-Plane', 'X-Plane');
 				$inAirArr = explode('\n', trim($inAirStr));
 				foreach ($inAirArr as $item) {
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
@@ -158,7 +161,7 @@ class LoadPlatformData extends Command
 					}
 				}
 
-				$inUpStr = HelpFunctions::mailGetStringBetween($txtFile, 'Platform', 'Platform');
+				$inUpStr = HelpFunctions::mailGetStringBetween($attachmentContent, 'Platform', 'Platform');
 				$inUpArr = explode('\n', trim($inUpStr));
 				foreach ($inUpArr as $item) {
 					$itemData = explode(' ', preg_replace('| +|', ' ', $item));
@@ -174,7 +177,7 @@ class LoadPlatformData extends Command
 				}
 
 				if (HelpFunctions::mailGetTimeSeconds($inAirNoMotion) >= 600) {
-					$ianmTime = HelpFunctions::mailGetStringBetween($txtFile, 'InAirNoMotion', 'InAirNoMotion Total Total');
+					$ianmTime = HelpFunctions::mailGetStringBetween($attachmentContent, 'InAirNoMotion', 'InAirNoMotion Total Total');
 					$ianmStr = explode("\n", trim($ianmTime));
 					foreach ($ianmStr as $item) {
 						$itemData = explode(' ', $item);
@@ -187,7 +190,7 @@ class LoadPlatformData extends Command
 						$platformLog->duration = trim($itemData[4]);
 						$platformLog->save();
 					}
-				}*/
+				}
 			}
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
