@@ -396,7 +396,7 @@ class DealController extends Controller
 		} else {
 			$rules = [
 				'name' => 'required',
-				'email' => 'required|email|unique_email',
+				'email' => 'required|email',
 				'phone' => 'required|valid_phone',
 				'product_id' => 'required|numeric|min:0|not_in:0',
 				/*'city_id' => 'required|numeric|min:0',*/
@@ -734,7 +734,7 @@ class DealController extends Controller
 				case Event::EVENT_TYPE_DEAL:
 					$rules = [
 						'name' => 'required',
-						'email' => 'required|email|unique_email',
+						'email' => 'required|email',
 						'phone' => 'required', //|valid_phone
 						'product_id' => 'required|numeric|min:0|not_in:0',
 						'location_id' => 'required|numeric|min:0|not_in:0',
@@ -1145,7 +1145,7 @@ class DealController extends Controller
 		
 		$rules = [
 			'name' => 'required',
-			'email' => 'required|email|unique_email',
+			'email' => 'required|email',
 			'phone' => 'required|valid_phone',
 			'product_id' => 'required|numeric|min:0|not_in:0',
 			'city_id' => 'required|numeric|min:0|not_in:0',
