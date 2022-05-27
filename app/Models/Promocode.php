@@ -144,7 +144,7 @@ class Promocode extends Model
 
 	public function contractors()
 	{
-		return $this->belongsToMany(Contractor::class, 'contractors_promocodes', 'contractor_id', 'promocode_id')
+		return $this->belongsToMany(Contractor::class, 'contractors_promocodes', 'promocode_id', 'contractor_id')
 			->using(ContractorPromocode::class)
 			->withTimestamps();
 	}
