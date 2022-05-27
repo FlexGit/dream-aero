@@ -1059,6 +1059,16 @@
 						$form.find('#employee_id').closest('.js-employee').removeClass('hidden');
 						break;
 					case 'break':
+						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#contractor_search').closest('.row').hide();
+						$form.find('#email').closest('.row').hide();
+						$form.find('#product_id').closest('.row').hide();
+						$form.find('#comment').closest('.row').hide();
+						$form.find('#extra_time').closest('.row').hide();
+						$form.find('#duration').val(30).closest('.js-duration').removeClass('hidden');
+						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
+						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
+						break;
 					case 'cleaning':
 						$form.find('#payment_method_id').closest('.row').hide();
 						$form.find('#contractor_search').closest('.row').hide();
