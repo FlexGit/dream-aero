@@ -288,10 +288,20 @@ class Product extends Model
 		}
 
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
+
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
+
 		/*$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;*/
-		$promocode = $promocodeId ? Promocode::whereRelation('cities', 'cities.id', '=', $cityId)
-			->find($promocodeId) : null;
+
+		$promocode = $promocodeId ? Promocode::find($promocodeId) : null;
+		if ($promocode) {
+			if (!$promocode->contractor_id) {
+				$validPromocodeCity = $promocode->cities()->where('cities.id', '=', $cityId)->exists();
+				if (!$validPromocodeCity) {
+					$promocode = null;
+				}
+			}
+		}
 
 		// если это покупка сертификата и город любой, то цены продуктов города Москва
 		if ($isCertificatePurchase && $isUnified) {
