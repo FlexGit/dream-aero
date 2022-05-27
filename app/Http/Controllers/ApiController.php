@@ -1832,6 +1832,7 @@ class ApiController extends Controller
 		}
 
 		$contractorPromocodeWasUsed = $promocode->contractors()->where('contractor_id', $contractor->id)->exists();
+		\Log::debug('contractorPromocodeWasUsed - ' . $contractorPromocodeWasUsed);
 		if ($contractorPromocodeWasUsed) {
 			return $this->responseError('Промокод уже был применен', 400);
 		}
