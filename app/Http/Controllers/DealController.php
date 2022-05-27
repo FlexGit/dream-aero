@@ -937,7 +937,7 @@ class DealController extends Controller
 			if (in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE]) && !in_array($certificate->status_id, [$certificateStatus->id, 0])) {
 				return response()->json(['status' => 'error', 'reason' => 'Некорректный статус Сертификата']);
 			}
-			if (!in_array($certificate->product_id, [$product->id, 0])) {
+			if (!in_array($certificate->product_id, [$product->id, 0]) && in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE])) {
 				return response()->json(['status' => 'error', 'reason' => 'Продукт по Сертификату не совпадает с выбранным']);
 			}
 			if ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date) && !$isIndefinitely) {
