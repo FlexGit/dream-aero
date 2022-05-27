@@ -2812,13 +2812,14 @@ class ApiController extends Controller
 				}
 			}
 
-			\Log::debug($promocode->type . ' - ' . $isCertificatePurchase . ' - ' . $promocode->contractor_id . ' - ' . $contractor->id . ' - ' . $promocode->location_id . ' - ' . $location->id . ' - ' . $promocode->flight_simulator_id . ' - ' . $simulator->id);
+			//\Log::debug($promocode->type . ' - ' . $isCertificatePurchase . ' - ' . $promocode->contractor_id . ' - ' . $contractor->id . ' - ' . $promocode->location_id . ' - ' . $location->id . ' - ' . $promocode->flight_simulator_id . ' - ' . $simulator->id);
+
 			if ($promocode->type == Promocode::SIMULATOR_TYPE && !$isCertificatePurchase) {
 				if ($promocode->contractor_id != $contractor->id
 					|| $promocode->location_id != $location->id
 					|| $promocode->flight_simulator_id != $simulator->id
 				) {
-					return $this->responseError('Промокод не найден', 400);
+					return $this->responseError('Промокод недоступен для выбранной локации', 400);
 				}
 			}
 		}
