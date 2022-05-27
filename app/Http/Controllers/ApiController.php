@@ -1831,9 +1831,7 @@ class ApiController extends Controller
 			return $this->responseError('Промокод не найден', 400);
 		}
 
-		$contractorPromocodeWasUsed = ContractorPromocode::where('contractor_id', $contractor->id)
-			->where('promocode_id', $promocode->id)
-			->exists();
+		$contractorPromocodeWasUsed = $promocode->contractors()->where('contractor_id', $contractor->id)->exists();
 		if ($contractorPromocodeWasUsed) {
 			return $this->responseError('Промокод уже был применен', 400);
 		}
