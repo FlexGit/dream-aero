@@ -301,7 +301,7 @@ class ContractorController extends Controller
 		
 		$user = \Auth::user();
 
-		\Log::debug(\DB::connection()->enableQueryLog());
+		//\Log::debug(\DB::connection()->enableQueryLog());
 		$contractors = Contractor::where('is_active', true)
 			->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")
@@ -320,7 +320,7 @@ class ContractorController extends Controller
 			$contractors = $contractors->whereIn('city_id', [$user->city->id, 0]);
 		}*/
 		$contractors = $contractors->get();
-		\Log::debug(\DB::getQueryLog());
+		//\Log::debug(\DB::getQueryLog());
 		
 		$suggestions = [];
 		foreach ($contractors as $contractor) {
