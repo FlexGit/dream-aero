@@ -2791,8 +2791,7 @@ class ApiController extends Controller
 		
 		$promocodeId = $this->request->promocode_id ?? 0;
 		if ($promocodeId) {
-			$promocode = Promocode::whereRelation('cities', 'cities.id', '=', $cityId)
-				->where('is_active', true)
+			$promocode = Promocode::where('is_active', true)
 				->where(function ($query) use ($date) {
 					$query->where('active_from_at', '<=', $date)
 						->orWhereNull('active_from_at');
@@ -2805,6 +2804,14 @@ class ApiController extends Controller
 			if (!$promocode) {
 				return $this->responseError('Промокод не найден', 400);
 			}
+
+			if (!$promocode->contractor_id) {
+				$validPromocodeCity = $promocode->cities()->where('cities.id', '=', $cityId)->exists();
+				if (!$validPromocodeCity) {
+					return $this->responseError('Промокод не действует для Вашего города', 400);
+				}
+			}
+
 			if ($promocode->type == Promocode::SIMULATOR_TYPE && !$isCertificatePurchase) {
 				if ($promocode->contractor_id != $contractor->id
 					|| $promocode->location_id != $location->id
