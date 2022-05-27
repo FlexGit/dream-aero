@@ -166,7 +166,7 @@ class PositionController extends Controller
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false);
 		$promos = $this->promoRepo->getList($user, false, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
-		$promocodes = $this->promocodeRepo->getList($user, false, $deal->contractor_id ?? 0);
+		$promocodes = $this->promocodeRepo->getList($user, false, false, $deal->contractor_id ?? 0);
 		
 		$VIEW = view('admin.position.modal.certificate.edit', [
 			'position' => $position,
@@ -199,7 +199,7 @@ class PositionController extends Controller
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false);
 		$promos = $this->promoRepo->getList($user, false, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
-		$promocodes = $this->promocodeRepo->getList($user, false, $deal->contractor_id ?? 0);
+		$promocodes = $this->promocodeRepo->getList($user, false, false, $deal->contractor_id ?? 0);
 
 		$VIEW = view('admin.position.modal.booking.edit', [
 			'position' => $position,
@@ -224,12 +224,15 @@ class PositionController extends Controller
 		
 		$position = $this->positionRepo->getById($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-		
+
+		$deal = $position->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false, false, true);
 		$promos = $this->promoRepo->getList($user, false, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
-		$promocodes = $this->promocodeRepo->getList($user, false);
+		$promocodes = $this->promocodeRepo->getList($user, false, false, $deal->contractor_id ?? 0);
 
 		$VIEW = view('admin.position.modal.product.edit', [
 			'position' => $position,
