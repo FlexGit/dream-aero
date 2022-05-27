@@ -1816,8 +1816,7 @@ class ApiController extends Controller
 		
 		//\DB::connection()->enableQueryLog();
 		$promocode = Promocode::where('number', $number)
-			/*->whereIn('city_id', [$city->id, 0])*/
-			->whereRelation('cities', 'cities.id', '=', $cityId)
+			/*->whereRelation('cities', 'cities.id', '=', $cityId)*/
 			->where('is_active', true)
 			->where(function ($query) use ($date) {
 				$query->where('active_from_at', '<=', $date)
