@@ -152,8 +152,12 @@ class ContractorController extends Controller
 		$contractor = Contractor::find($id);
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 
+		$statuses = Status::where('is_active', true)
+			->get();
+
 		$VIEW = view('admin.contractor.modal.Unite', [
 			'contractor' => $contractor,
+			'statuses' => $statuses,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -296,7 +300,8 @@ class ContractorController extends Controller
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
 		$user = \Auth::user();
-		
+
+		\Log::debug(\DB::connection()->enableQueryLog());
 		$contractors = Contractor::where('is_active', true)
 			->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")
@@ -315,6 +320,7 @@ class ContractorController extends Controller
 			$contractors = $contractors->whereIn('city_id', [$user->city->id, 0]);
 		}*/
 		$contractors = $contractors->get();
+		\Log::debug(\DB::getQueryLog());
 		
 		$suggestions = [];
 		foreach ($contractors as $contractor) {
