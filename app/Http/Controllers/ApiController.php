@@ -2921,7 +2921,7 @@ class ApiController extends Controller
 			}
 			
 			if ((isset($promocode) && $promocode instanceof Promocode) && $contractor) {
-				$promocode->contractors()->save($contractor);
+				$promocode->contractors()->attach($contractor->id);
 			}
 			
 			// создание Счета
