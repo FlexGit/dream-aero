@@ -1043,7 +1043,7 @@
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						$form.find('#duration').val(0).closest('.js-duration').removeClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').removeClass('hidden');
 						break;
@@ -1054,7 +1054,7 @@
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						$form.find('#duration').val(0).closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').removeClass('hidden');
 						break;
@@ -1076,7 +1076,7 @@
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						$form.find('#duration').closest('.js-duration').removeClass('hidden');
+						$form.find('#duration').val(0).closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 						break;
@@ -1087,7 +1087,7 @@
 						$form.find('#product_id').closest('.row').show();
 						$form.find('#comment').closest('.row').show();
 						$form.find('#extra_time').closest('.row').show();
-						$form.find('#duration').closest('.js-duration').addClass('hidden');
+						$form.find('#duration').val(0).closest('.js-duration').addClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 
