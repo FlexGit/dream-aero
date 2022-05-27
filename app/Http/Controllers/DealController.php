@@ -592,7 +592,7 @@ class DealController extends Controller
 				$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
 
 				if ($this->request->user()) {
-					if ($this->request->user()->city->version == City::EN_VERSION) {
+					if ($this->request->user()->city && $this->request->user()->city->version == City::EN_VERSION) {
 						$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
 					}
 					else {
