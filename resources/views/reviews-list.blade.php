@@ -26,12 +26,12 @@
 														<div class="reviews-item">
 															<div class="reviews-body wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
 																<p class="reviews-text">
-																	{{ $item->preview_text }}
+																	{{ strip_tags($item->preview_text) }}
 																	@if($item->detail_text)
 																		<br>
 																		<em>
 																			<b>@lang('main.reviews.ответ-администрации')</b>:
-																			{{ $item->detail_text }}
+																			{{ strip_tags($item->detail_text) }}
 																		</em>
 																	@endif
 																</p>
