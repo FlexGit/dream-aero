@@ -114,7 +114,7 @@ class ContractorController extends Controller
 		$user = \Auth::user();
 		
 		$contractor = Contractor::find($id);
-		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрганет не найден']);
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 
 		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
@@ -132,7 +132,33 @@ class ContractorController extends Controller
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
-	
+
+	/**
+	 * @param $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
+	 */
+	public function unite($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+
+		$user = \Auth::user();
+
+		if (!$user->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
+		$contractor = Contractor::find($id);
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+
+		$VIEW = view('admin.contractor.modal.Unite', [
+			'contractor' => $contractor,
+		]);
+
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
@@ -222,7 +248,11 @@ class ContractorController extends Controller
 
 		$contractor = Contractor::find($id);
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
-		
+
+		if ($contractor->email == Contractor::ANONYM_EMAIL) {
+			return response()->json(['status' => 'error', 'reason' => 'Контрагент Аноним не может быть изменен']);
+		}
+
 		$rules = [
 			'name' => 'required',
 			'email' => 'required|email|unique_email',
