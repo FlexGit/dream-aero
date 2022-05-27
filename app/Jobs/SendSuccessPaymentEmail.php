@@ -35,10 +35,13 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 
 		$position = $this->bill->position;
 		if (!$position) return null;
-		
-		$city = $deal->city;
-		/*if (!$city) return null;
-		if (!$city->email) return null;*/
+
+		$contractor = $deal->contractor;
+		if ($contractor) return null;
+
+		$city = $contractor->city;
+		if (!$city) return null;
+		if (!$city->email) return null;
 		
 		$location = $this->bill->location ?? null;
 		$certificate = $this->certificate ?? null;
@@ -53,8 +56,8 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		];
 		
 		$recipients = $bcc = [];
-		$recipients[] = $city ? $city->email : env('UNIFIED_CERTIFICATE_EMAIL');
-		//$bcc[] = env('DEV_EMAIL');
+		$recipients[] = $city->email;
+		$bcc[] = env('DEV_EMAIL');
 		
 		$subject = env('APP_NAME') . ': оплата Счета ' . $this->bill->number;
 		
