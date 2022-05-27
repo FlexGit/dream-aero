@@ -19,7 +19,7 @@ class PromocodeRepository {
 	 * @param bool $onlyNoPersonal
 	 * @return \Illuminate\Support\Collection
 	 */
-	public function getList(User $user, $onlyActive = true, $onlyNoPersonal = true)
+	public function getList(User $user, $onlyActive = true, $onlyNoPersonal = true, $contractorId = 0)
 	{
 		$promocodes = $this->model->orderBy('number');
 		if ($onlyActive) {
@@ -37,9 +37,12 @@ class PromocodeRepository {
 		if ($onlyNoPersonal) {
 			$promocodes = $promocodes->where('contractor_id', 0);
 		}
-		if (!$user->isSuperAdmin() && $user->city) {
-			$promocodes = $promocodes->whereRelation('cities', 'cities.id', '=', $user->city_id);
+		if ($contractorId) {
+			$promocodes = $promocodes->where('contractor_id', $contractorId);
 		}
+		/*if (!$user->isSuperAdmin() && $user->city) {
+			$promocodes = $promocodes->whereRelation('cities', 'cities.id', '=', $user->city_id);
+		}*/
 		$promocodes = $promocodes->get();
 		
 		return $promocodes;
