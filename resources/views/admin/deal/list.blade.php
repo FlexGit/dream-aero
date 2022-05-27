@@ -10,7 +10,9 @@
 				<div>
 					{{ $deal->name }}
 					@if($deal->contractor)
-						[<a href="/contractor/{{ $deal->contractor_id }}" target="_blank">{{ $deal->contractor->name }} {{ $deal->contractor->lastname }}</a>]
+						@if($deal->contractor->email != app('\App\Models\Contractor')::ANONYM_EMAIL)
+							[<a href="/contractor/{{ $deal->contractor_id }}" target="_blank">{{ $deal->contractor->fio() }}</a>]
+						@endif
 					@endif
 				</div>
 				<div>
