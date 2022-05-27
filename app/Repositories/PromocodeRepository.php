@@ -36,8 +36,9 @@ class PromocodeRepository {
 		}
 		if ($onlyNoPersonal) {
 			$promocodes = $promocodes->where('contractor_id', 0);
-		} elseif ($contractorId) {
-			$promocodes = $promocodes->where('contractor_id', $contractorId);
+		}
+		if ($contractorId) {
+			$promocodes = $promocodes->whereIn('contractor_id', [$contractorId, 0]);
 		}
 		/*if (!$user->isSuperAdmin() && $user->city) {
 			$promocodes = $promocodes->whereRelation('cities', 'cities.id', '=', $user->city_id);
