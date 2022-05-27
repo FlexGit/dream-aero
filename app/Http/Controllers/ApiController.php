@@ -2812,6 +2812,7 @@ class ApiController extends Controller
 				}
 			}
 
+			\Log::debug($promocode->type . ' - ' . $isCertificatePurchase . ' - ' . $promocode->contractor_id . ' - ' . $contractor->id . ' - ' . $promocode->location_id . ' - ' . $location->id . ' - ' . $promocode->flight_simulator_id . ' - ' . $simulator->id);
 			if ($promocode->type == Promocode::SIMULATOR_TYPE && !$isCertificatePurchase) {
 				if ($promocode->contractor_id != $contractor->id
 					|| $promocode->location_id != $location->id
