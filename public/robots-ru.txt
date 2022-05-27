@@ -1,4 +1,5 @@
 User-agent: *
+disallow: /docs
 disallow: /payment/success
 disallow: /payment/fail
 disallow: /payment
