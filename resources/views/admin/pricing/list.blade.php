@@ -8,12 +8,13 @@
 				<table class="table table-hover table-sm table-bordered table-striped">
 					<thead>
 					<tr>
-						<th class="text-center">Продукт</th>
-						<th class="text-center">Стоимость</th>
-						<th class="text-center d-none d-sm-table-cell">Скидка</th>
-						<th class="text-center d-none d-md-table-cell">Баллы</th>
-						<th class="text-center d-none d-md-table-cell">Активность</th>
-						<th class="text-center d-none d-xl-table-cell">Хит</th>
+						<th class="text-center align-middle">Продукт</th>
+						<th class="text-center align-middle">Стоимость</th>
+						<th class="text-center align-middle d-none d-sm-table-cell">Скидка</th>
+						<th class="text-center align-middle d-none d-md-table-cell">Баллы</th>
+						<th class="text-center align-middle d-none d-md-table-cell">Активность</th>
+						<th class="text-center align-middle d-none d-xl-table-cell">Хит</th>
+						<th class="text-center align-middle d-none d-xl-table-cell">Срок действия сертификата</th>
 						<th class="text-center">Действие</th>
 					</tr>
 					</thead>
@@ -22,6 +23,19 @@
 						@if($product->productType->version != $city->version)
 							@continue
 						@endif
+						@php
+							$certificatePeriod = '-';
+							if (isset($citiesProductsData[$city->id][$product->id])
+								&& isset($citiesProductsData[$city->id][$product->id]['data_json'])
+							) {
+								$data = is_array($citiesProductsData[$city->id][$product->id]['data_json']) ? $citiesProductsData[$city->id][$product->id]['data_json'] : json_decode($citiesProductsData[$city->id][$product->id]['data_json'], true);
+
+								if (isset($data['certificate_period'])) {
+									$certificatePeriod = $data['certificate_period'];
+									$certificatePeriod = $certificatePeriod ? (($certificatePeriod > 6) ? ($certificatePeriod / 12) . ' год' : $certificatePeriod . ' мес') : 'бессрочно';
+								}
+							}
+						@endphp
 						<tr class="odd">
 							<td class="align-middle">
 								{{ $product->name }}
@@ -46,6 +60,9 @@
 								@if(isset($citiesProductsData[$city->id][$product->id]))
 									{{ $citiesProductsData[$city->id][$product->id]['is_hit'] ? 'Да' : 'Нет' }}
 								@endif
+							</td>
+							<td class="text-center align-middle d-none d-xl-table-cell">
+								{{ $certificatePeriod }}
 							</td>
 							<td class="text-center align-middle">
 								<a href="javascript:void(0)" data-toggle="modal" data-url="/pricing/{{ $city->id }}/{{ $product->id }}/edit" data-action="/pricing/{{ $city->id }}/{{ $product->id }}" data-method="PUT" data-title="Редактирование" title="Редактировать">
