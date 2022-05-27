@@ -1841,6 +1841,8 @@ class ApiController extends Controller
 			'id' => $promocode->id,
 			'is_active' => $promocode->is_active,
 		];
+
+		\Log::debug($data);
 		
 		return $this->responseSuccess(null, $data);
 	}
