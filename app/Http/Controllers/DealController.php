@@ -415,7 +415,7 @@ class DealController extends Controller
 			}
 		}
 		
-		$cityId = $this->request->city_id ?: $this->request->user()->city_id;
+		$cityId = $this->request->city_id/* ?: $this->request->user()->city_id*/;
 		$productId = $this->request->product_id ?? 0;
 		$promoId = $this->request->promo_id ?? 0;
 		$promocodeId = $this->request->promocode_id ?? 0;
@@ -539,7 +539,7 @@ class DealController extends Controller
 				$contractor->name = $name;
 				$contractor->email = $email;
 				$contractor->phone = $phone;
-				$contractor->city_id = $cityId;
+				$contractor->city_id = $cityId ?: $this->request->user()->city_id;
 				$contractor->source = $source ?: Contractor::ADMIN_SOURCE;
 				$contractor->user_id = $this->request->user()->id ?? 0;
 				$contractor->save();
@@ -558,7 +558,7 @@ class DealController extends Controller
 			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 			$deal->status_id = $dealStatus->id ?? 0;
 			$deal->contractor_id = $contractor->id ?? 0;
-			$deal->city_id = /*$cityId*/$isUnified ? 0 : $cityId;
+			$deal->city_id = $isUnified ? 0 : $cityId;
 			$deal->name = $name;
 			$deal->phone = $phone;
 			$deal->email = $email;
@@ -572,7 +572,7 @@ class DealController extends Controller
 			$position->duration = $product->duration ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
-			$position->city_id = /*$cityId*/$isUnified ? 0 : $cityId;
+			$position->city_id = $isUnified ? 0 : $cityId;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = ($promocodeId || $promocodeUuid) ? $promocode->id : 0;
 			$position->is_certificate_purchase = true;
@@ -591,8 +591,8 @@ class DealController extends Controller
 				$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 				$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
 				
-				if ($city) {
-					if ($city->version == City::EN_VERSION) {
+				if ($this->request->user()->city) {
+					if ($this->request->user()->city->version == City::EN_VERSION) {
 						$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
 					}
 					else {
