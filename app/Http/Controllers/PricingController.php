@@ -221,6 +221,7 @@ class PricingController extends Controller
 		$data['is_certificate_purchase_allow'] = (bool)$this->request->is_certificate_purchase_allow;
 		$data['is_discount_booking_allow'] = (bool)$this->request->is_discount_booking_allow;
 		$data['is_discount_certificate_purchase_allow'] = (bool)$this->request->is_discount_certificate_purchase_allow;
+		$data['certificate_period'] = $this->request->certificate_period;
 
 		/*if ($isCertificateTemplateFileUploaded) {
 			if (isset($data['certificate_template_file_path'])) {
