@@ -72,5 +72,8 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		if ($failures) {
 			return null;
 		}
+		
+		$this->bill->success_payment_sent_at = Carbon::now()->format('Y-m-d H:i:s');
+		$this->bill->save();
 	}
 }

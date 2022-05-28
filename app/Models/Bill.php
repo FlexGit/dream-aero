@@ -87,6 +87,7 @@ class Bill extends Model
 		'user_id' => 'Пользователь',
 		'payed_at' => 'Оплачено',
 		'link_sent_at' => 'Ссылка на оплату отправлена',
+		'success_payment_sent_at' => 'Уведомление об успешной оплате отправлено',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
@@ -127,6 +128,7 @@ class Bill extends Model
 		'uuid',
 		'payed_at',
 		'link_sent_at',
+		'success_payment_sent_at',
 		'user_id',
 		'data_json',
 	];
@@ -139,6 +141,7 @@ class Bill extends Model
 	protected $casts = [
 		'payed_at' => 'datetime:Y-m-d H:i:s',
 		'link_sent_at' => 'datetime:Y-m-d H:i:s',
+		'success_payment_sent_at' => 'datetime:Y-m-d H:i:s',
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',

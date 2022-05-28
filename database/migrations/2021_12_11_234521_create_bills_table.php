@@ -25,7 +25,8 @@ class CreateBillsTable extends Migration
 			$table->integer('location_id')->default(0)->index()->comment('локация, по которой выставлен счет');
 			$table->string('uuid')->nullable()->comment('uuid');
 			$table->timestamp('payed_at')->nullable()->comment('дата проведения платежа');
-			$table->timestamp('link_sent_at')->nullable()->comment('дата отправка ссылки на оплату');
+			$table->timestamp('link_sent_at')->nullable()->comment('дата отправки ссылки на оплату');
+			$table->timestamp('success_payment_sent_at')->nullable()->comment('дата отправки уведомления об успешной оплате');
 			$table->integer('user_id')->default(0)->index()->comment('пользователь');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
