@@ -218,7 +218,7 @@ class City extends Model
 			$lastTwoBillsLocationIds = Bill::whereIn('location_id', $locationids)
 				->where('payment_method_id', $onlinePaymentMethod->id)
 				->where('user_id', 0)
-				->whereRelation('contractor', 'contractors.email', '=', env('DEV_EMAIL'))
+				/*->whereRelation('contractor', 'contractors.email', '!=', env('DEV_EMAIL'))*/
 				->latest()->take(2)->pluck('location_id')->all();
 			
 			// если это город Москва
