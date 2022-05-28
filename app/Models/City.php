@@ -206,20 +206,41 @@ class City extends Model
 		$locations = $this->locations()
 			->where('is_active', true)
 			->whereNotNull('pay_account_number')
+			->orderby('id')
 			->get();
 		if ($locations->isEmpty()) return null;
 		
 		if ($locations->count() > 1) {
-			$sortLocations = [];
-			foreach ($locations as $location) {
-				$sortLocations[$location->alias] = $location->countBillsInCurrentMonth();
+			$locationids = $locations->pluck('id')->all();
+			$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
+			
+			// проверяем локации последних двух Счетов (для Афимолла должно быть два Счета подряд)
+			$lastTwoBillsLocationIds = Bill::whereIn('location_id', $locationids)
+				->where('payment_method_id', $onlinePaymentMethod->id)
+				->where('user_id', 0)
+				->whereRelation('contractor', 'contractors.email', '=', env('DEV_EMAIL'))
+				->latest()->take(2)->pluck('location_id')->all();
+			
+			// если это город Москва
+			if ($this->alias == City::MSK_ALIAS) {
+				$afiLocation = HelpFunctions::getEntityByAlias(Location::class, Location::AFI_LOCATION);
+				// если последний Счет на Афимолл, а предпоследний не на Афимолл, то выставляем Счет снова на Афимолл
+				if ($afiLocation
+					&& $lastTwoBillsLocationIds[0] == $afiLocation->id
+					&& $lastTwoBillsLocationIds[0] != $lastTwoBillsLocationIds[1]
+				) {
+					return $afiLocation;
+				}
 			}
-			asort($sortLocations);
-			$location = HelpFunctions::getEntityByAlias(Location::class, array_key_first($sortLocations));
+			
+			// сдвигаем указатель в массиве локаций на следующую (или первую) локацию, на которую выставляем Счет
+			$lastBillLocationIdKey = array_search($lastTwoBillsLocationIds[0], $locationids);
+			$needLocationIdKey = isset($locationids[$lastBillLocationIdKey + 1]) ? $locationids[$lastBillLocationIdKey + 1] : $locationids[0];
+			$location = Location::find($needLocationIdKey);
 			
 			return $location;
 		}
-
+		
 		return $locations->first();
 	}
 }

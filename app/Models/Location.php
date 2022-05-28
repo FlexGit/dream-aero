@@ -84,6 +84,8 @@ class Location extends Model
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;*/
 	
+	const AFI_LOCATION = 'afi';
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *
