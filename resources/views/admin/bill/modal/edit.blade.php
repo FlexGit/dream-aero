@@ -71,15 +71,15 @@
 			@if ($bill->paymentMethod->alias == app('\App\Models\PaymentMethod')::ONLINE_ALIAS)
 				<div class="form-group">
 					<label>Ссылка на оплату</label>
+					<div>
+						[ <a href="{{ (($bill->deal && $bill->deal->city && $bill->deal->city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid }}" target="_blank">открыть</a> ]
+					</div>
 					@if($bill->link_sent_at)
 						<div>ссылка отправлена: {{ \Carbon\Carbon::parse($bill->link_sent_at)->format('Y-m-d H:i') }}</div>
 					@endif
 					@if($bill->success_payment_sent_at)
 						<div>уведомление об оплате отправлено: {{ \Carbon\Carbon::parse($bill->success_payment_sent_at)->format('Y-m-d H:i') }}</div>
 					@endif
-					<div>
-						[ <a href="{{ (($bill->deal && $bill->deal->city && $bill->deal->city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid }}" target="_blank">открыть</a> ]
-					</div>
 				</div>
 			@endif
 		@endif
