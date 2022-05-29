@@ -1040,9 +1040,9 @@ class DealController extends Controller
 						$bill->user_id = $this->request->user()->id ?? 0;
 						$bill->save();
 						
-						if ($this->request->user()) {
+						/*if ($this->request->user()) {
 							\Log::debug($bill->number . ' - ' . $source . ' - ' . $billLocationId . ' - ' . $this->request->user()->id . ' - ' . $this->request->user()->location_id);
-						}
+						}*/
 						
 						$deal->bills()->save($bill);
 					}
@@ -1296,9 +1296,9 @@ class DealController extends Controller
 				$bill->user_id = $this->request->user()->id ?? 0;
 				$bill->save();
 				
-				if ($this->request->user()) {
+				/*if ($this->request->user()) {
 					\Log::debug($bill->number . ' - ' . $source . ' - ' . $billLocationId . ' - ' . $this->request->user()->id . ' - ' . $this->request->user()->location_id);
-				}
+				}*/
 				
 				$deal->bills()->save($bill);
 			}
