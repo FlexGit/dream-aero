@@ -37,10 +37,10 @@
 					<li class="first dropdownf"><a href="{{ url('o-trenazhere') }}">@lang('main.верхнее-меню.о-тренажере')</a>
 						<ul class="dropdown-menu">
 							<li class="first">
-								<a href="{{ url('virtualt/#virttourboeing') }}">@lang('main.верхнее-меню.виртуальный-тур-b737')</a>
+								<a href="{{ url('virtualt') }}">@lang('main.верхнее-меню.виртуальный-тур-b737')</a>
 							</li>
 							<li class="last">
-								<a href="{{ url('virtualt/#virttourair') }}">@lang('main.верхнее-меню.виртуальный-тур-a320')</a>
+								<a href="{{ url('virtualt-airbus') }}">@lang('main.верхнее-меню.виртуальный-тур-a320')</a>
 							</li>
 						</ul>
 					</li>

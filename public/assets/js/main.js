@@ -39,9 +39,9 @@ $(function(){
 
 	/*$('.lazy').lazy();*/
 
-	$('.main-menu .dropdown-menu a').click(function() {
+	/*$('.main-menu .dropdown-menu a').click(function() {
 		newContent('tourDIV',hash);
-	});
+	});*/
 
 	$('#delaydiv .cboxClose').click(function() {
 		$('#delaydiv').hide("slow");

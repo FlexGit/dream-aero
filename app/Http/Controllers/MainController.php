@@ -244,7 +244,6 @@ class MainController extends Controller
 	{
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'virtual-tour');
 		
 		return view('virtual-tour', [
@@ -254,6 +253,22 @@ class MainController extends Controller
 		]);
 	}
 	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function virtualTourAir()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'virtual-tour');
+		
+		return view('virtual-tour-air', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */

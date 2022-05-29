@@ -14,17 +14,17 @@
 		@-ms-viewport { width: device-width; }
 
 		* { padding: 0; margin: 0; }
-		html { height: 100%; }
-		body { height: 100%; }
-		div#container { height: 100%; min-height: 100%; width: 100%; margin: 0 auto; }
+		html { height: 100vh; }
+		body { height: 100vh; }
+		div#container { height: 100vh; min-height: 100vh; width: 100%; margin: 0 auto; }
 		div#tourDIV {
-			height:100%;
+			height:100vh;
 			position:relative;
 			overflow:hidden;
 			margin-top: 10px;
 		}
 		div#panoDIV {
-			height:100%;
+			height: 100vh;
 			position:relative;
 			overflow:hidden;
 			-webkit-user-select: none;

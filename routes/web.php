@@ -425,7 +425,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		});
 
 		Route::get('o-trenazhere', [MainController::class, 'about'])->name('o-trenazhere');
-		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualt');
+		Route::get('virtualt', [MainController::class, 'virtualTour'])->name('virtualTourBoeing');
+		Route::get('virtualt-airbus', [MainController::class, 'virtualTourAir'])->name('virtualTourAir');
 		
 		Route::get('boeing-virttour', [MainController::class, 'virtualTourBoeing'])->name('boeing-virttour');
 		Route::post('boeing-virttour', [MainController::class, 'virtualTourBoeing']);

@@ -19,7 +19,7 @@
 @push('scripts')
 	<script>
 		$(function(){
-			newContent('tourDIV', 'virttourboeing');
+			newContent('tourDIV', 'virttourair');
 
 			$(document).on('click', '#virttourboeing', function() {
 				newContent('tourDIV', 'virttourboeing', true);
