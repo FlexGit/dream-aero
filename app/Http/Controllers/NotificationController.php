@@ -37,7 +37,8 @@ class NotificationController extends Controller
 			abort(404);
 		}
 
-		$notifications = Notification::orderby('id', 'desc')
+		$notifications = Notification::where('contractor_id', 0)
+			->orderby('id', 'desc')
 			->get();
 
 		$VIEW = view('admin.notification.list', [
