@@ -128,6 +128,10 @@ class PaymentController extends Controller
 				return 'FAIL';
 			}
 			
+			//dispatch(new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate));
+			$job = new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate);
+			$job->handle();
+			
 			$position = $bill->position;
 			if ($position) {
 				$certificate = $position->certificate;
@@ -145,10 +149,6 @@ class PaymentController extends Controller
 				}*/
 			}
 		}
-		
-		//dispatch(new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate));
-		$job = new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate);
-		$job->handle();
 		
 		return 'SUCCESS';
 	}
