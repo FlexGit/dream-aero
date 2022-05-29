@@ -398,7 +398,7 @@ class CertificateController extends Controller
 				$city = $certificate->city;
 				$status = $certificate->status;
 				
-				$certificateInfo = $certificate->created_at->format('d.m.Y') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . ($product ? ' на ' . $product->duration . ' мин (' . $product->name . ')' : '') . ($city ? '. ' . $city->name : '') . ($status ? '. ' . $status->name : '');
+				$certificateInfo = $certificate->created_at->format('d.m.Y') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . (isset($data['certificate_whom']) ? ', для ' . $data['certificate_whom'] : '') . (isset($data['certificate_whom_phone']) ? ' ' . $data['certificate_whom_phone'] : '') . ($product ? ' на ' . $product->duration . ' мин (' . $product->name . ')' : '') . ($city ? '. ' . $city->name : '') . ($status ? '. ' . $status->name : '');
 			}
 			
 			$date = date('Y-m-d');
