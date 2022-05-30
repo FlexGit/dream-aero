@@ -99,8 +99,8 @@ class ReportController extends Controller {
 				->where('city_id', $event->city_id)
 				->where('location_id', $event->location_id)
 				->where('flight_simulator_id', $event->simulator_id)
-				->whereDate('start_at', '<=', $event->start_at)
-				->whereDate('stop_at', '>=', $event->stop_at)
+				->where('start_at', '<=', $event->start_at)
+				->where('stop_at', '>=', $event->stop_at)
 				->first();
 			\Log::debug(\DB::getQueryLog());
 			if (!$shiftEvent) continue;
