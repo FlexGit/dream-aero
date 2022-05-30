@@ -92,6 +92,10 @@ class ReportController extends Controller {
 				}
 			}
 			
+			if ($event->user_id == 15) {
+				\Log::debug($event->id);
+			}
+			
 			if ($event->user_id) {
 				if (!isset($userAssessments[$event->user_id])) {
 					$userAssessments[$event->user_id] = [];
@@ -114,7 +118,7 @@ class ReportController extends Controller {
 			}
 		}
 		
-		//\Log::debug($userAssessments);
+		\Log::debug($userAssessments[15]);
 		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
@@ -126,7 +130,7 @@ class ReportController extends Controller {
 			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
 		
-		//\Log::debug($userNps);
+		\Log::debug($userNps[15]);
 		
 		$users = User::where('enable', true)
 			->orderBy('lastname')
