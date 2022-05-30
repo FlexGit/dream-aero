@@ -92,9 +92,9 @@ class ReportController extends Controller {
 				}
 			}
 			
-			if ($event->user_id == 15) {
+			/*if ($event->user_id == 15) {
 				\DB::connection()->enableQueryLog();
-			}
+			}*/
 			// находим админа, который был на смене во время полета (временно, только для мая)
 			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
 				->where('user_id', '!=', 0)
@@ -104,9 +104,9 @@ class ReportController extends Controller {
 				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
 				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
 				->first();
-			if ($event->user_id == 15) {
+			/*if ($event->user_id == 15) {
 				\Log::debug(\DB::getQueryLog());
-			}
+			}*/
 			if (!$shiftEvent) continue;
 			
 			if ($event->user_id) {
