@@ -103,7 +103,7 @@ class ReportController extends Controller {
 				}
 				
 				$assessment = $event->getAssessment(User::ROLE_ADMIN);
-				$eventItems[$adminId] = [
+				$eventItems[$adminId][] = [
 					'uuid' => $event->uuid,
 					'interval' => $event->getInterval(),
 					'assessment' => $assessment,
@@ -148,7 +148,7 @@ class ReportController extends Controller {
 				}
 
 				$assessment = $event->getAssessment(User::ROLE_PILOT);
-				$eventItems[$pilotId] = [
+				$eventItems[$pilotId][] = [
 					'uuid' => $event->uuid,
 					'interval' => $event->getInterval(),
 					'assessment' => $assessment,
