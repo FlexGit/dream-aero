@@ -50,8 +50,8 @@
 							{{--<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>--}}
 						</div>
 					</div>
-					<div id="reportTable" style="display: flex;justify-content: center;">
-						<i class="fas fa-sync fa-spin"></i>
+					<div id="reportTable" style="display: flex;">
+						<i class="fas fa-circle-notch fa-spin"></i>
 					</div>
 				</div>
 			</div>
