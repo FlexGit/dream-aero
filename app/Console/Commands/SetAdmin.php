@@ -40,6 +40,7 @@ class SetAdmin extends Command
      */
     public function handle()
     {
+		\DB::connection()->enableQueryLog();
     	// проверяем все полеты за последний час без пилота
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->where('stop_at', '<=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'))
@@ -57,7 +58,6 @@ class SetAdmin extends Command
 			if (!$simulator) continue;
 		
 			// находим админа, который был на смене во время полета
-			//\DB::connection()->enableQueryLog();
 			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
 				->where('user_id', '!=', 0)
 				->where('city_id', $city->id)
@@ -66,13 +66,13 @@ class SetAdmin extends Command
 				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
 				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
 				->first();
-			//\Log::debug(\DB::getQueryLog());
 			if (!$shiftEvent) continue;
 			
 			$event->temp_user_id = $shiftEvent->user_id;
 			$event->save();
 		}
-			
+		\Log::debug(\DB::getQueryLog());
+		
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - admin:set - OK');
     	
         return 0;
