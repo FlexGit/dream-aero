@@ -118,7 +118,7 @@ class Certificate extends Model
 		parent::boot();
 		
 		Certificate::created(function (Certificate $certificate) {
-			$certificate->number = $certificate->generateNumber();
+			//$certificate->number = $certificate->generateNumber();
 			$certificate->uuid = $certificate->generateUuid();
 			$certificate->save();
 		});
