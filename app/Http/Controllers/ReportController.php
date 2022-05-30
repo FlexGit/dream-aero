@@ -69,6 +69,7 @@ class ReportController extends Controller {
 		$events = $events->orderBy('start_at')
 			->get();
 		
+		\DB::connection()->enableQueryLog();
 		$userAssessments = [];
 		foreach ($events as $event) {
 			if ($event->pilot_id) {
@@ -93,7 +94,6 @@ class ReportController extends Controller {
 			}
 			
 			// находим админа, который был на смене во время полета (временно, только для мая)
-			//\DB::connection()->enableQueryLog();
 			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
 				->where('user_id', '!=', 0)
 				->where('city_id', $event->city_id)
@@ -102,7 +102,9 @@ class ReportController extends Controller {
 				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
 				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
 				->first();
-			//\Log::debug(\DB::getQueryLog());
+			if ($event->user_id == 15) {
+				\Log::debug(\DB::getQueryLog());
+			}
 			if (!$shiftEvent) continue;
 			
 			if ($event->user_id) {
