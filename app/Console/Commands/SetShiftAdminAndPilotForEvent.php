@@ -5,23 +5,22 @@ namespace App\Console\Commands;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Throwable;
 
-class SetAdmin extends Command
+class SetShiftAdminAndPilotForEvent extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'admin:set';
+    protected $signature = 'admin_pilot_event:set';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Set admin temp';
+    protected $description = 'Set admin and pilot for event';
 
     /**
      * Create a new command instance.
@@ -40,7 +39,7 @@ class SetAdmin extends Command
      */
     public function handle()
     {
-		\DB::connection()->enableQueryLog();
+		//\DB::connection()->enableQueryLog();
     	// проверяем все полеты за последний час без пилота
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->where('stop_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'))
@@ -58,7 +57,7 @@ class SetAdmin extends Command
 			if (!$simulator) continue;
 		
 			// находим админа, который был на смене во время полета
-			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
+			$shiftAdminEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
 				->where('user_id', '!=', 0)
 				->where('city_id', $city->id)
 				->where('location_id', $location->id)
@@ -66,14 +65,24 @@ class SetAdmin extends Command
 				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
 				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
 				->first();
-			if (!$shiftEvent) continue;
 			
-			$event->temp_user_id = $shiftEvent->user_id;
+			// находим пилота, который был на смене во время полета
+			$shiftPilotEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+				->where('user_id', '!=', 0)
+				->where('city_id', $city->id)
+				->where('location_id', $location->id)
+				->where('flight_simulator_id', $simulator->id)
+				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
+				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
+				->first();
+			
+			$event->shift_admin_id = $shiftAdminEvent ? $shiftAdminEvent->user_id : 0;
+			$event->shift_pilot_id = $shiftPilotEvent ? $shiftPilotEvent->user_id : 0;
 			$event->save();
 		}
-		\Log::debug(\DB::getQueryLog());
+		//\Log::debug(\DB::getQueryLog());
 		
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - admin:set - OK');
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - admin_pilot_event:set - OK');
     	
         return 0;
     }
