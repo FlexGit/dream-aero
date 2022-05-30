@@ -343,9 +343,9 @@ class Product extends Model
 			if ($promo) {
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($isCertificatePurchase) {
-					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
-					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
+					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
 				}
 				$discount = $promo->discount ?? null;
 				if ($isDiscountAllow && $discount) {
@@ -379,9 +379,9 @@ class Product extends Model
 				if ($birthdayPromo && $contractor->birthdate && Carbon::parse($contractor->birthdate)->format('m-d') == Carbon::parse($date)->format('m-d')) {
 					$dataJson = $birthdayPromo->data_json ? (array)$birthdayPromo->data_json : [];
 					if ($isCertificatePurchase) {
-						$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+						$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
 					} else {
-						$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
+						$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
 					}
 					$birthdayDiscount = $birthdayPromo->discount ?? null;
 					if ($isDiscountAllow && $birthdayDiscount) {
@@ -411,9 +411,9 @@ class Product extends Model
 			foreach ($promos as $promo) {
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($isCertificatePurchase) {
-					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? $dataJson['is_discount_certificate_purchase_allow'] : false;
+					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
-					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
+					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
 				}
 				$discount = $promo->discount ?? null;
 				if ($isDiscountAllow && $discount) {
