@@ -115,7 +115,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			->middleware('auth')
 			->name('logout');
 
-		Route::group(['middleware' => ['auth']], function () {
+		Route::group(['middleware' => ['auth', 'usercheck']], function () {
 			// Контрагенты
 			Route::get('contractor/add', [ContractorController::class, 'add']);
 			Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
