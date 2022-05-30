@@ -69,33 +69,23 @@ class ReportController extends Controller {
 		$events = $events->orderBy('start_at')
 			->get();
 		
-		$userAssessments = [];
+		$userAssessments = $eventItems = [];
 		foreach ($events as $event) {
-			if ($event->shift_pilot_id) {
-				if (!isset($userAssessments[$event->shift_pilot_id])) {
-					$userAssessments[$event->shift_pilot_id] = [];
-					$userAssessments[$event->shift_pilot_id] = [
-						'good' => 0,
-						'neutral' => 0,
-						'bad' => 0,
-					];
-				}
-				
-				if ($event->pilot_assessment >= 9) {
-					++$userAssessments[$event->shift_pilot_id]['good'];
-				}
-				elseif ($event->pilot_assessment >= 7 && $event->pilot_assessment <= 8) {
-					++$userAssessments[$event->shift_pilot_id]['neutral'];
-				}
-				elseif ($event->pilot_assessment >= 1 && $event->pilot_assessment <= 6) {
-					++$userAssessments[$event->shift_pilot_id]['bad'];
-				}
-			}
+			// находим админа, который был на смене во время полета
+			$shiftAdminEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
+				->where('user_id', '!=', 0)
+				->where('city_id', $event->city_id)
+				->where('location_id', $event->location_id)
+				->where('flight_simulator_id', $event->flight_simulator_id)
+				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
+				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
+				->first();
 			
-			if ($event->shift_admin_id) {
-				if (!isset($userAssessments[$event->shift_admin_id])) {
-					$userAssessments[$event->shift_admin_id] = [];
-					$userAssessments[$event->shift_admin_id] = [
+			$adminId = $shiftAdminEvent ? $shiftAdminEvent->user_id : 0;
+			if ($adminId) {
+				if (!isset($userAssessments[$adminId])) {
+					$userAssessments[$adminId] = [];
+					$userAssessments[$adminId] = [
 						'good' => 0,
 						'neutral' => 0,
 						'bad' => 0,
@@ -103,18 +93,69 @@ class ReportController extends Controller {
 				}
 				
 				if ($event->admin_assessment >= 9) {
-					++$userAssessments[$event->shift_admin_id]['good'];
+					++$userAssessments[$adminId]['good'];
 				}
 				else if ($event->admin_assessment >= 7 && $event->admin_assessment <= 8) {
-					++$userAssessments[$event->shift_admin_id]['neutral'];
+					++$userAssessments[$adminId]['neutral'];
 				}
 				elseif ($event->admin_assessment >= 1 && $event->admin_assessment <= 6) {
-					++$userAssessments[$event->shift_admin_id]['bad'];
+					++$userAssessments[$adminId]['bad'];
 				}
+				
+				$assessment = $event->getAssessment(User::ROLE_ADMIN);
+				$eventItems[$adminId] = [
+					'uuid' => $event->uuid,
+					'interval' => $event->getInterval(),
+					'assessment' => $assessment,
+					'assessment_state' => $event->getAssessmentState($assessment),
+				];
+			}
+
+			// если был установлен вручную фактический пилот
+			$pilotId = $event->pilot_id;
+			
+			if (!$pilotId) {
+				// находим пилота, который был на смене во время полета
+				$shiftPilotEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+					->where('user_id', '!=', 0)
+					->where('city_id', $event->city_id)
+					->where('location_id', $event->location_id)
+					->where('flight_simulator_id', $event->flight_simulator_id)
+					->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
+					->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
+					->first();
+				$pilotId = $shiftPilotEvent ? $shiftPilotEvent->user_id : 0;
+			}
+			
+			if ($pilotId) {
+				if (!isset($userAssessments[$pilotId])) {
+					$userAssessments[$pilotId] = [];
+					$userAssessments[$pilotId] = [
+						'good' => 0,
+						'neutral' => 0,
+						'bad' => 0,
+					];
+				}
+				
+				if ($event->pilot_assessment >= 9) {
+					++$userAssessments[$pilotId]['good'];
+				}
+				elseif ($event->pilot_assessment >= 7 && $event->pilot_assessment <= 8) {
+					++$userAssessments[$pilotId]['neutral'];
+				}
+				elseif ($event->pilot_assessment >= 1 && $event->pilot_assessment <= 6) {
+					++$userAssessments[$pilotId]['bad'];
+				}
+
+				$assessment = $event->getAssessment(User::ROLE_PILOT);
+				$eventItems[$pilotId] = [
+					'uuid' => $event->uuid,
+					'interval' => $event->getInterval(),
+					'assessment' => $assessment,
+					'assessment_state' => $event->getAssessmentState($assessment),
+				];
 			}
 		}
-		
-		//\Log::debug($userAssessments[15]);
 		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
@@ -125,8 +166,6 @@ class ReportController extends Controller {
 			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum * 100, 1);
 			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
-		
-		\Log::debug($userNps[15]);
 		
 		$users = User::where('enable', true)
 			->orderBy('lastname')
@@ -140,7 +179,7 @@ class ReportController extends Controller {
 		$cities = $this->cityRepo->getList($this->request->user());
 		
 		$data = [
-			'events' => $events,
+			'eventItems' => $eventItems,
 			'users' => $users,
 			'cities' => $cities,
 			'userAssessments' => $userAssessments,

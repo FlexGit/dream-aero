@@ -66,8 +66,8 @@ class SetPilotAfterFlight extends Command
 				->where('city_id', $city->id)
 				->where('location_id', $location->id)
 				->where('flight_simulator_id', $simulator->id)
-				->whereDate('start_at', '<=', $event->start_at)
-				->whereDate('stop_at', '>=', $event->stop_at)
+				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
+				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
 				->first();
 			//\Log::debug(\DB::getQueryLog());
 			if (!$shiftEvent) continue;

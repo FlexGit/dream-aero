@@ -77,7 +77,9 @@ class SetShiftAdminAndPilotForEvent extends Command
 				->first();
 			
 			$event->shift_admin_id = $shiftAdminEvent ? $shiftAdminEvent->user_id : 0;
-			$event->shift_pilot_id = $shiftPilotEvent ? $shiftPilotEvent->user_id : 0;
+			if (!$event->pilot_id) {
+				$event->pilot_id = $shiftPilotEvent ? $shiftPilotEvent->user_id : 0;
+			}
 			$event->save();
 		}
 		//\Log::debug(\DB::getQueryLog());

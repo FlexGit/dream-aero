@@ -26,24 +26,13 @@
 							<tr>
 								<td class="bg-danger text-white">{{ $userAssessments[$user->id]['bad'] }}</td>
 							</tr>
-							@foreach($events as $event)
-								@php
-									$assessment = 0;
-									if ($user->isAdmin()) {
-										if ($event->shift_admin_id != $user->id) continue;
-
-										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_ADMIN);
-									} elseif($user->isPilot()) {
-										if ($event->shift_pilot_id != $user->id) continue;
-
-										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_PILOT);
-									}
-									$assessmentState = $event->getAssessmentState($assessment);
-									if (!$assessment) continue;
-								@endphp
+							@foreach($eventItems as $userId => $eventItem)
+								@if ($userId != $user->id || !$eventItem['assessment'])
+									@continue
+								@endif
 								<tr>
-									<td class="nps-event" data-uuid="{{ $event->uuid }}" title="{{ $event->getInterval() }}">
-										<span @if($assessmentState) class="text-{{ $assessmentState }}" @endif>{{ $assessment }}</span>
+									<td class="nps-event" data-uuid="{{ $eventItem['uuid'] }}" title="{{ $eventItem['interval'] }}">
+										<span @if($eventItem['assessment_state']) class="text-{{ $eventItem['assessment_state'] }}" @endif>{{ $eventItem['assessment'] }}</span>
 									</td>
 								</tr>
 							@endforeach

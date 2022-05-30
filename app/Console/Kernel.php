@@ -76,12 +76,12 @@ class Kernel extends ConsoleKernel
 			->emailOutputOnFailure(env('DEV_EMAIL'));
 		
 		// проставление пилота после полета
-		$filePath = storage_path('logs/commands/pilot_set.log');
+		/*$filePath = storage_path('logs/commands/pilot_set.log');
 		$schedule->command('pilot:set')
 			->everyFiveMinutes()
 			->runInBackground()
 			->appendOutputTo($filePath)
-			->emailOutputOnFailure(env('DEV_EMAIL'));
+			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 		
 		// получение информации о списании баллов Аэрофлот Бонус
 		/*$filePath = storage_path('logs/commands/aeroflot_order_info.log');
