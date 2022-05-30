@@ -26,8 +26,8 @@
 							<tr>
 								<td class="bg-danger text-white">{{ $userAssessments[$user->id]['bad'] }}</td>
 							</tr>
-							@foreach($eventItems as $userId => $eventItem)
-								@if ($userId != $user->id || !$eventItem['assessment'])
+							@foreach($eventItems[$user->id] ?? [] as $eventItem)
+								@if (!$eventItem['assessment'])
 									@continue
 								@endif
 								<tr>
