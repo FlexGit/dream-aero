@@ -93,7 +93,7 @@ class ReportController extends Controller {
 			}
 			
 			// находим админа, который был на смене во время полета (временно, только для мая)
-			//\DB::connection()->enableQueryLog();
+			\DB::connection()->enableQueryLog();
 			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
 				->where('user_id', '!=', 0)
 				->where('city_id', $event->city_id)
@@ -102,7 +102,7 @@ class ReportController extends Controller {
 				->whereDate('start_at', '<=', $event->start_at)
 				->whereDate('stop_at', '>=', $event->stop_at)
 				->first();
-			//\Log::debug(\DB::getQueryLog());
+			\Log::debug(\DB::getQueryLog());
 			if (!$shiftEvent) continue;
 			
 			if ($event->user_id) {
