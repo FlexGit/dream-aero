@@ -433,6 +433,8 @@ class EventController extends Controller
 
 			$pilots = User::where('role', User::ROLE_PILOT)
 				->where('version', $user->version)
+				->orderBy('lastname')
+				->orderBy('name')
 				->get();
 			
 			$VIEW = view('admin.event.modal.edit', [

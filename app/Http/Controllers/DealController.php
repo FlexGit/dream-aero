@@ -277,6 +277,8 @@ class DealController extends Controller
 			$pilots = $pilots->whereIn('city_id', [$user->city_id, 0]);
 		}
 		$pilots = $pilots->where('role', User::ROLE_PILOT)
+			->orderBy('lastname')
+			->orderBy('name')
 			->get();
 
 		$VIEW = view('admin.deal.modal.booking.add', [
