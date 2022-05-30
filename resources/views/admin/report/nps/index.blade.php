@@ -51,7 +51,7 @@
 						</div>
 					</div>
 					<div id="reportTable" style="display: flex;justify-content: center;">
-						<i class="fas fa-cog fa-spin"></i>
+						<i class="fas fa-spinner fa-spin"></i>
 					</div>
 				</div>
 			</div>
