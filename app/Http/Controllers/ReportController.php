@@ -92,14 +92,23 @@ class ReportController extends Controller {
 				}
 			}
 			
-			if ($event->user_id == 15) {
-				\Log::debug($event->id);
-			}
+			// находим админа, который был на смене во время полета (временно, только для мая)
+			//\DB::connection()->enableQueryLog();
+			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
+				->where('user_id', '!=', 0)
+				->where('city_id', $event->city_id)
+				->where('location_id', $event->location_id)
+				->where('flight_simulator_id', $event->simulator_id)
+				->whereDate('start_at', '<=', $event->start_at)
+				->whereDate('stop_at', '>=', $event->stop_at)
+				->first();
+			//\Log::debug(\DB::getQueryLog());
+			if (!$shiftEvent) continue;
 			
 			if ($event->user_id) {
-				if (!isset($userAssessments[$event->user_id])) {
-					$userAssessments[$event->user_id] = [];
-					$userAssessments[$event->user_id] = [
+				if (!isset($userAssessments[$shiftEvent->user_id])) {
+					$userAssessments[$shiftEvent->user_id] = [];
+					$userAssessments[$shiftEvent->user_id] = [
 						'good' => 0,
 						'neutral' => 0,
 						'bad' => 0,
@@ -107,18 +116,16 @@ class ReportController extends Controller {
 				}
 				
 				if ($event->admin_assessment >= 9) {
-					++$userAssessments[$event->user_id]['good'];
+					++$userAssessments[$shiftEvent->user_id]['good'];
 				}
 				else if ($event->admin_assessment >= 7 && $event->admin_assessment <= 8) {
-					++$userAssessments[$event->user_id]['neutral'];
+					++$userAssessments[$shiftEvent->user_id]['neutral'];
 				}
 				elseif ($event->admin_assessment >= 1 && $event->admin_assessment <= 6) {
-					++$userAssessments[$event->user_id]['bad'];
+					++$userAssessments[$shiftEvent->user_id]['bad'];
 				}
 			}
 		}
-		
-		\Log::debug($userAssessments[15]);
 		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
@@ -129,8 +136,6 @@ class ReportController extends Controller {
 			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum * 100, 1);
 			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
-		
-		\Log::debug($userNps[15]);
 		
 		$users = User::where('enable', true)
 			->orderBy('lastname')
