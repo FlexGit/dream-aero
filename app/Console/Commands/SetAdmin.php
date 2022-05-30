@@ -43,8 +43,8 @@ class SetAdmin extends Command
 		\DB::connection()->enableQueryLog();
     	// проверяем все полеты за последний час без пилота
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
-			->where('stop_at', '<=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'))
-			->where('stop_at', '>=', Carbon::now()->endOfMonth()->format('Y-m-d H:i:s'))
+			->where('stop_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'))
+			->where('stop_at', '<=', Carbon::now()->endOfMonth()->format('Y-m-d H:i:s'))
 			->get();
     	/** @var Event[] $events */
 		foreach ($events as $event) {
