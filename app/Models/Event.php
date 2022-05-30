@@ -233,12 +233,12 @@ class Event extends Model
 			}
 		});
 		
-		Event::saving(function (Event $event) {
+		/*Event::saving(function (Event $event) {
 			$user = \Auth::user();
 			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
 				$event->user_id = $user ? $user->id : 0;
 			}
-		});
+		});*/
 		
 		Event::saved(function (Event $event) {
 			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
