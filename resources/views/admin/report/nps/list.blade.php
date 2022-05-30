@@ -30,11 +30,11 @@
 								@php
 									$assessment = 0;
 									if ($user->isAdmin()) {
-										if ($event->user_id != $user->id) continue;
+										if ($event->shift_admin_id != $user->id) continue;
 
 										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_ADMIN);
 									} elseif($user->isPilot()) {
-										if ($event->pilot_id != $user->id) continue;
+										if ($event->shift_pilot_id != $user->id) continue;
 
 										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_PILOT);
 									}

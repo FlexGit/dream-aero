@@ -71,10 +71,10 @@ class ReportController extends Controller {
 		
 		$userAssessments = [];
 		foreach ($events as $event) {
-			if ($event->pilot_id) {
-				if (!isset($userAssessments[$event->pilot_id])) {
-					$userAssessments[$event->pilot_id] = [];
-					$userAssessments[$event->pilot_id] = [
+			if ($event->shift_pilot_id) {
+				if (!isset($userAssessments[$event->shift_pilot_id])) {
+					$userAssessments[$event->shift_pilot_id] = [];
+					$userAssessments[$event->shift_pilot_id] = [
 						'good' => 0,
 						'neutral' => 0,
 						'bad' => 0,
@@ -82,37 +82,20 @@ class ReportController extends Controller {
 				}
 				
 				if ($event->pilot_assessment >= 9) {
-					++$userAssessments[$event->pilot_id]['good'];
+					++$userAssessments[$event->shift_pilot_id]['good'];
 				}
 				elseif ($event->pilot_assessment >= 7 && $event->pilot_assessment <= 8) {
-					++$userAssessments[$event->pilot_id]['neutral'];
+					++$userAssessments[$event->shift_pilot_id]['neutral'];
 				}
 				elseif ($event->pilot_assessment >= 1 && $event->pilot_assessment <= 6) {
-					++$userAssessments[$event->pilot_id]['bad'];
+					++$userAssessments[$event->shift_pilot_id]['bad'];
 				}
 			}
 			
-			/*if ($event->user_id == 15) {
-				\DB::connection()->enableQueryLog();
-			}*/
-			// находим админа, который был на смене во время полета (временно, только для мая)
-			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
-				->where('user_id', '!=', 0)
-				->where('city_id', $event->city_id)
-				->where('location_id', $event->location_id)
-				->where('flight_simulator_id', $event->flight_simulator_id)
-				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
-				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
-				->first();
-			/*if ($event->user_id == 15) {
-				\Log::debug(\DB::getQueryLog());
-			}*/
-			if (!$shiftEvent) continue;
-			
-			if ($event->user_id) {
-				if (!isset($userAssessments[$shiftEvent->user_id])) {
-					$userAssessments[$shiftEvent->user_id] = [];
-					$userAssessments[$shiftEvent->user_id] = [
+			if ($event->shift_admin_id) {
+				if (!isset($userAssessments[$event->shift_admin_id])) {
+					$userAssessments[$event->shift_admin_id] = [];
+					$userAssessments[$event->shift_admin_id] = [
 						'good' => 0,
 						'neutral' => 0,
 						'bad' => 0,
@@ -120,16 +103,18 @@ class ReportController extends Controller {
 				}
 				
 				if ($event->admin_assessment >= 9) {
-					++$userAssessments[$shiftEvent->user_id]['good'];
+					++$userAssessments[$event->shift_admin_id]['good'];
 				}
 				else if ($event->admin_assessment >= 7 && $event->admin_assessment <= 8) {
-					++$userAssessments[$shiftEvent->user_id]['neutral'];
+					++$userAssessments[$event->shift_admin_id]['neutral'];
 				}
 				elseif ($event->admin_assessment >= 1 && $event->admin_assessment <= 6) {
-					++$userAssessments[$shiftEvent->user_id]['bad'];
+					++$userAssessments[$event->shift_admin_id]['bad'];
 				}
 			}
 		}
+		
+		//\Log::debug($userAssessments[15]);
 		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
@@ -140,6 +125,8 @@ class ReportController extends Controller {
 			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum * 100, 1);
 			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
+		
+		\Log::debug($userNps[15]);
 		
 		$users = User::where('enable', true)
 			->orderBy('lastname')
