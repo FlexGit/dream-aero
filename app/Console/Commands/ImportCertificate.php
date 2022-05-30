@@ -39,7 +39,7 @@ class ImportCertificate extends Command
 	public function handle()
 	{
 		$this->output->title('Starting import');
-		(new CertificateImport)->withOutput($this->output)->import(storage_path('app/public/certificates5.xlsx'));
+		(new CertificateImport)->withOutput($this->output)->import(storage_path('app/public/certificates6.xlsx'));
 		$this->output->success('Import successful');
 	}
 }
