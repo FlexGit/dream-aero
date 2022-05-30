@@ -93,16 +93,16 @@ class ReportController extends Controller {
 			}
 			
 			// находим админа, который был на смене во время полета (временно, только для мая)
-			\DB::connection()->enableQueryLog();
+			//\DB::connection()->enableQueryLog();
 			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
 				->where('user_id', '!=', 0)
 				->where('city_id', $event->city_id)
 				->where('location_id', $event->location_id)
 				->where('flight_simulator_id', $event->simulator_id)
-				->where('start_at', '<=', $event->start_at)
-				->where('stop_at', '>=', $event->stop_at)
+				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
+				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
 				->first();
-			\Log::debug(\DB::getQueryLog());
+			//\Log::debug(\DB::getQueryLog());
 			if (!$shiftEvent) continue;
 			
 			if ($event->user_id) {
