@@ -56,15 +56,15 @@ class ReportController extends Controller {
 		
 		if (!$dateFromAt && !$dateToAt) {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
-			$dateToAt = Carbon::now()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 		}
 		
 		$events = Event::where('event_type', Event::EVENT_TYPE_DEAL);
 		if ($dateFromAt) {
-			$events = $events->where('stop_at', '>=', $dateFromAt);
+			$events = $events->where('stop_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'));
 		}
 		if ($dateToAt) {
-			$events = $events->where('stop_at', '<=', $dateToAt);
+			$events = $events->where('stop_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'));
 		}
 		$events = $events->orderBy('start_at')
 			->get();
