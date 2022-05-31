@@ -293,6 +293,11 @@ class Product extends Model
 		$cityProduct = $this->cities()->where('cities_products.is_active', true)->find($cityId);
 		if (!$cityProduct || !$cityProduct->pivot) return 0;
 
+		// баллы в расчете стоимости из моб. не учитываем
+		if ($source == Deal::MOB_SOURCE && $score) {
+			$score = 0;
+		}
+		
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
 
