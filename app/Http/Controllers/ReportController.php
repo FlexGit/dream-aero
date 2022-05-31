@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Exports\NpsReportExport;
+use App\Models\Bill;
 use App\Models\Content;
+use App\Models\Deal;
 use App\Models\Event;
+use App\Models\Status;
 use App\Models\User;
 use App\Repositories\CityRepository;
 use Carbon\Carbon;
@@ -198,6 +201,122 @@ class ReportController extends Controller {
 		$VIEW = view('admin.report.nps.list', $data);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+	
+	public function personalSellingIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-personal-selling');
+		
+		return view('admin.report.personal-selling.index', [
+			'page' => $page,
+		]);
+	}
+	
+	public function personalSellingGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+		}
+		
+		$bills = Bill::where('user_id', '!=', 0)
+			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			//->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
+			->get();
+		
+		$billItems = $dealIds = [];
+		foreach ($bills as $bill) {
+			if (!isset($billItems[$bill->location_id])) {
+				$billItems[$bill->location_id] = [];
+			}
+			if (!isset($billItems[$bill->location_id][$bill->user_id])) {
+				$billItems[$bill->location_id][$bill->user_id] = [];
+			}
+			
+			$billItems[$bill->location_id][$bill->user_id] = [
+				'bill_count' => 0,
+				'bill_sum' => 0,
+				'payed_bill_count' => 0,
+				'payed_bill_sum' => 0,
+				'deal_ids' => [],
+				'deal_count' => 0,
+				'deal_sum' => 0,
+			];
+
+			// кол-во счетов
+			++$billItems[$bill->location_id][$bill->user_id]['bill_count'];
+			// сумма счетов
+			$billItems[$bill->location_id][$bill->user_id]['bill_sum'] += $bill->amount;
+			if ($bill->status && $bill->status->alias == Bill::PAYED_STATUS) {
+				// кол-во оплаченных счетов
+				++$billItems[$bill->location_id][$bill->user_id]['payed_bill_count'];
+				// сумма оплаченных счетов
+				$billItems[$bill->location_id][$bill->user_id]['payed_bill_sum'] += $bill->amount;
+			}
+			$deal = $bill->deal;
+			if ($deal && !in_array($bill->deal_id, $billItems[$bill->location_id][$bill->user_id]['deal_ids'])) {
+				$billItems[$bill->location_id][$bill->user_id]['deal_ids'][] = $deal->id;
+				// кол-во сделок
+				++$billItems[$bill->location_id][$bill->user_id]['deal_count'];
+				// сумма сделок
+				$billItems[$bill->location_id][$bill->user_id]['deal_sum'] += $deal->amount();
+			}
+		}
+		
+		$userItems = [];
+		$users = User::where('enable', true)
+			->orderBy('lastname')
+			->orderBy('name')
+			->orderBy('middlename')
+			->get();
+		foreach ($users as $user) {
+			if (!$user->location_id) continue;
+			
+			$userItems[$user->location_id][] = [
+				'id' => $user->id,
+				'fio' => $user->fioFormatted(),
+			];
+		}
+		
+		$cities = $this->cityRepo->getList($this->request->user());
+		
+		$data = [
+			'billItems' => $billItems,
+			'userItems' => $userItems,
+			'cities' => $cities,
+		];
+		
+		\Log::debug($billItems);
+		
+		/*$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-personal-selling-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new PersonalSellingReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}*/
+		
+		$VIEW = view('admin.report.personal-selling.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
 	}
 	
 	/**
