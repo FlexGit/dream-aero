@@ -74,6 +74,7 @@ class RevisionController extends Controller
 		$table = $this->request->filter_entity_alias ? app('App\Models\\' . $this->request->filter_entity_alias)->getTable() : '';
 		switch ($table) {
 			case 'deals':
+			case 'deal_positions':
 			case 'certificates':
 			case 'bills':
 			/*case 'promocodes':*/
