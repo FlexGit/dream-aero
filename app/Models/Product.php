@@ -296,9 +296,9 @@ class Product extends Model
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
 
-		/*if ($score) {
+		if ($score) {
 			$amount += $score;
-		}*/
+		}
 		
 		// скидка на продукт
 		$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
