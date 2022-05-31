@@ -78,14 +78,31 @@
 
 				<div style="line-height: 1.0em;">
 					@if($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
-						@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-							<i class="fas fa-check text-success"></i> Успешная
+						Заявка на списание миль на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб [
+						@if($position->aeroflot_status != 0)
+							<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
 						@else
-							<i class="fas fa-exclamation-triangle text-warning"></i> Неуспешная
+							@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+								<i class="fas fa-check text-success"></i> подтверждена
+							@elseif($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
+								<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
+							@else
+								<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+							@endif
 						@endif
-						попытка списания<br>милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб.
+						]
 					@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
-						<i class="fas fa-check text-success"></i> Начисление милей
+						Заявка на начисление миль [
+						@if($position->aeroflot_status != 0)
+							<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
+						@else
+							@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+								<i class="fas fa-check text-success"></i> подтверждена
+							@else
+								<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+							@endif
+						@endif
+						]
 					@endif
 				</div>
 			@endforeach
