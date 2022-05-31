@@ -232,7 +232,7 @@ class ReportController extends Controller {
 		
 		if (!$dateFromAt && !$dateToAt) {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
-			$dateToAt = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 		}
 		
 		$bills = Bill::where('user_id', '!=', 0)
@@ -247,19 +247,17 @@ class ReportController extends Controller {
 				$billItems[$bill->location_id] = [];
 			}
 			if (!isset($billItems[$bill->location_id][$bill->user_id])) {
-				$billItems[$bill->location_id][$bill->user_id] = [];
+				$billItems[$bill->location_id][$bill->user_id] = [
+					'bill_count' => 0,
+					'bill_sum' => 0,
+					'payed_bill_count' => 0,
+					'payed_bill_sum' => 0,
+					'deal_ids' => [],
+					'deal_count' => 0,
+					'deal_sum' => 0,
+				];
 			}
 			
-			$billItems[$bill->location_id][$bill->user_id] = [
-				'bill_count' => 0,
-				'bill_sum' => 0,
-				'payed_bill_count' => 0,
-				'payed_bill_sum' => 0,
-				'deal_ids' => [],
-				'deal_count' => 0,
-				'deal_sum' => 0,
-			];
-
 			// кол-во счетов
 			++$billItems[$bill->location_id][$bill->user_id]['bill_count'];
 			// сумма счетов
