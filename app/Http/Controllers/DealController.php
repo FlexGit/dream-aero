@@ -751,8 +751,8 @@ class DealController extends Controller
 							'phone' => 'Телефон',
 							'product_id' => 'Продукт',
 							'location_id' => 'Локация',
-							'flight_date_at' => 'Дата',
-							'flight_time_at' => 'Время',
+							'flight_date_at' => 'Дата начала',
+							'flight_time_at' => 'Время начала',
 						]);
 				break;
 				case Event::EVENT_TYPE_BREAK:
@@ -761,15 +761,17 @@ class DealController extends Controller
 						'location_id' => 'required|numeric|min:0|not_in:0',
 						'flight_date_at' => 'required|date',
 						'flight_time_at' => 'required',
-						'duration' => 'required|numeric|min:0|not_in:0',
+						'flight_date_stop_at' => 'required|date',
+						'flight_time_stop_at' => 'required',
 					];
 					
 					$validator = Validator::make($this->request->all(), $rules)
 						->setAttributeNames([
 							'location_id' => 'Локация',
-							'flight_date_at' => 'Дата',
-							'flight_time_at' => 'Время',
-							'duration' => 'Длительность',
+							'flight_date_at' => 'Дата начала',
+							'flight_time_at' => 'Время начала',
+							'flight_date_stop_at' => 'Дата окончания',
+							'flight_time_stop_at' => 'Время окончания',
 						]);
 				break;
 				case Event::EVENT_TYPE_USER_FLIGHT:
@@ -777,16 +779,18 @@ class DealController extends Controller
 						'location_id' => 'required|numeric|min:0|not_in:0',
 						'flight_date_at' => 'required|date',
 						'flight_time_at' => 'required',
-						'duration' => 'required|numeric|min:0|not_in:0',
+						'flight_date_stop_at' => 'required|date',
+						'flight_time_stop_at' => 'required',
 						'employee_id' => 'required|numeric|min:0|not_in:0',
 					];
 					
 					$validator = Validator::make($this->request->all(), $rules)
 						->setAttributeNames([
 							'location_id' => 'Локация',
-							'flight_date_at' => 'Дата',
-							'flight_time_at' => 'Время',
-							'duration' => 'Длительность',
+							'flight_date_at' => 'Дата начала',
+							'flight_time_at' => 'Время начала',
+							'flight_date_stop_at' => 'Дата окончания',
+							'flight_time_stop_at' => 'Время окончания',
 							'employee_id' => 'Сотрудник',
 						]);
 				break;
@@ -795,16 +799,18 @@ class DealController extends Controller
 						'location_id' => 'required|numeric|min:0|not_in:0',
 						'flight_date_at' => 'required|date',
 						'flight_time_at' => 'required',
-						'duration' => 'required|numeric|min:0|not_in:0',
+						'flight_date_stop_at' => 'required|date',
+						'flight_time_stop_at' => 'required',
 						'pilot_id' => 'required|numeric|min:0|not_in:0',
 					];
 					
 					$validator = Validator::make($this->request->all(), $rules)
 						->setAttributeNames([
 							'location_id' => 'Локация',
-							'flight_date_at' => 'Дата',
-							'flight_time_at' => 'Время',
-							'duration' => 'Длительность',
+							'flight_date_at' => 'Дата начала',
+							'flight_time_at' => 'Время начала',
+							'flight_date_stop_at' => 'Дата окончания',
+							'flight_time_stop_at' => 'Время окончания',
 							'pilot_id' => 'Пилот',
 						]);
 				break;
@@ -828,6 +834,7 @@ class DealController extends Controller
 		$source = $this->request->source ?? '';
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
+		$flightStopAt = ($this->request->flight_date_stop_at ?? '') . ' ' . ($this->request->flight_time_stop_at ?? '');
 		$locationId = $this->request->location_id ?? 0;
 		$simulatorId = $this->request->flight_simulator_id ?? 0;
 		$certificateNumber = $this->request->certificate ?? '';
@@ -837,8 +844,8 @@ class DealController extends Controller
 		$extraTime = (int)$this->request->extra_time ?? 0;
 		$isRepeatedFlight = (bool)$this->request->is_repeated_flight ?? false;
 		$isUnexpectedFlight = (bool)$this->request->is_unexpected_flight ?? false;
-		$duration = $this->request->duration ?? 0;
-		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
+		/*$duration = $this->request->duration ?? 0;
+		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;*/
 		$employeeId = $this->request->employee_id ?? 0;
 		$pilotId = $this->request->pilot_id ?? 0;
 		
@@ -1106,7 +1113,7 @@ class DealController extends Controller
 					$event->employee_id = $employeeId;
 					$event->test_pilot_id = $pilotId;
 					$event->start_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
-					$event->stop_at = Carbon::parse($flightAt)->addMinutes($duration)->format('Y-m-d H:i');
+					$event->stop_at = Carbon::parse($flightStopAt)->format('Y-m-d H:i');
 					$event->save();
 				break;
 			}

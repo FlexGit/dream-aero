@@ -399,10 +399,11 @@
 							type = $(this).data('event_type'),
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						if ((title.indexOf('Тестовый полет') !== -1)
+						console.log(title);
+						if ((title.indexOf('Тестовый') !== -1)
 							|| (title.indexOf('Уборка') !== -1)
 							|| (title.indexOf('Перерыв') !== -1)
-							|| (title.indexOf('Полет сотрудника') !== -1)
+							|| (title.indexOf('Сотрудник') !== -1)
 						) {
 							return;
 						}
@@ -712,6 +713,8 @@
 			});
 
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely', function() {
+				if ($('input[name="event_type"]:checked').attr('id') !== 'event_type_deal') return false;
+
 				calcProductAmount();
 
 				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at']) !== -1) {
@@ -1043,9 +1046,12 @@
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						$form.find('#duration').val(0).closest('.js-duration').removeClass('hidden');
+						//$form.find('#flight_date_stop_at').val('');
+						//$form.find('#flight_time_stop_at').val('');
+						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').removeClass('hidden');
+						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'user_flight':
 						$form.find('#payment_method_id').closest('.row').hide();
@@ -1054,9 +1060,12 @@
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						$form.find('#duration').val(0).closest('.js-duration').removeClass('hidden');
+						//$form.find('#flight_date_stop_at').val('');
+						//$form.find('#flight_time_stop_at').val('');
+						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').removeClass('hidden');
+						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'break':
 						$form.find('#payment_method_id').closest('.row').hide();
@@ -1065,9 +1074,12 @@
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						$form.find('#duration').val(30).closest('.js-duration').removeClass('hidden');
+						//$form.find('#flight_date_stop_at').val('');
+						//$form.find('#flight_time_stop_at').val('');
+						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
+						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'cleaning':
 						$form.find('#payment_method_id').closest('.row').hide();
@@ -1076,9 +1088,12 @@
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						$form.find('#duration').val(0).closest('.js-duration').removeClass('hidden');
+						//$form.find('#flight_date_stop_at').val('');
+						//$form.find('#flight_time_stop_at').val('');
+						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
+						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'deal':
 						$form.find('#payment_method_id').closest('.row').show();
@@ -1087,7 +1102,9 @@
 						$form.find('#product_id').closest('.row').show();
 						$form.find('#comment').closest('.row').show();
 						$form.find('#extra_time').closest('.row').show();
-						$form.find('#duration').closest('.js-duration').addClass('hidden');
+						//$form.find('#flight_date_stop_at').val('');
+						//$form.find('#flight_time_stop_at').val('');
+						$form.find('#flight_date_stop_at').closest('.js-duration').addClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 

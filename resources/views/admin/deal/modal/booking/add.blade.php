@@ -190,16 +190,11 @@
 	</div>
 	<div class="col js-duration hidden">
 		<div class="form-group">
-			<label for="duration">Длительность</label>
-			<select class="form-control" id="duration" name="duration">
-				<option value="0">---</option>
-				<option value="15">15 мин</option>
-				<option value="30">30 мин</option>
-				<option value="60">60 мин</option>
-				<option value="90">90 мин</option>
-				<option value="120">120 мин</option>
-				<option value="180">180 мин</option>
-			</select>
+			<label for="flight_date_stop_at">Дата и время окончания</label>
+			<div class="d-flex">
+				<input type="date" class="form-control" id="flight_date_stop_at" name="flight_date_stop_at" value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->format('Y-m-d') : '' }}">
+				<input type="time" class="form-control ml-2" id="flight_time_stop_at" name="flight_time_stop_at" {{--value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->addMinutes(30)->format('H:i') : '' }}"--}}>
+			</div>
 		</div>
 	</div>
 	<div class="col js-employee hidden">
