@@ -171,6 +171,18 @@ class DealController extends Controller
 				return $query->whereIn('product_id', $this->request->filter_product_id);
 			});
 		}
+		if ($this->request->filter_advanced) {
+			if (in_array('with_score', $this->request->filter_advanced)) {
+				$deals = $deals->whereHas('scores', function ($query) {
+					return $query->where('type', '=', Score::USED_TYPE);
+				});
+			}
+			if (in_array('with_miles', $this->request->filter_advanced)) {
+				$deals = $deals->whereHas('positions', function ($query) {
+					return $query->whereNotNull('aeroflot_transaction_type');
+				});
+			}
+		}
 		if ($this->request->search_doc) {
 			$deals = $deals->where(function ($query) {
 				$query->where('number', 'like', '%' . $this->request->search_doc . '%')

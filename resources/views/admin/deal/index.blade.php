@@ -83,6 +83,15 @@
 									@endforeach
 								</select>
 							</div>
+							<div class="form-group ml-2 text-nowrap">
+								<div>
+									<label for="filter_advanced">Дополнительно</label>
+								</div>
+								<select class="form-control" id="filter_advanced" name="filter_advanced[]" multiple="multiple">
+									<option value="with_score">Со списанием баллов</option>
+									<option value="with_miles">Со списанием милей "Аэрофлот Бонус"</option>
+								</select>
+							</div>
 							<div class="form-group align-self-end ml-auto pl-2 text-nowrap">
 								<div class="btn-group dropleft">
 									<a href="javascript:void(0)" class="btn btn-secondary btn-sm dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Создать сделку">Создать сделку</a>
@@ -183,6 +192,7 @@
 						"filter_status_id": $('#filter_status_id').val(),
 						"filter_location_id": $('#filter_location_id').val(),
 						"filter_product_id": $('#filter_product_id').val(),
+						"filter_advanced": $('#filter_advanced').val(),
 						"search_contractor": $('#search_contractor').val(),
 						"search_doc": $('#search_doc').val(),
 						"id": id
@@ -488,7 +498,7 @@
 				});
 			}
 
-			$(document).on('change', '#filter_status_id, #filter_product_id, #filter_location_id', function(e) {
+			$(document).on('change', '#filter_status_id, #filter_product_id, #filter_advanced, #filter_location_id', function(e) {
 				getList(false);
 			});
 
@@ -562,7 +572,7 @@
 				});
 			});
 
-			$('#filter_status_id, #filter_location_id, #filter_product_id').multiselect({
+			$('#filter_status_id, #filter_location_id, #filter_product_id, #filter_advanced').multiselect({
 				includeSelectAllOption: true,
 				selectAllText: 'Всe',
 				buttonWidth: '200px',
