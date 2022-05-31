@@ -40,7 +40,7 @@
 							{{--<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>--}}
 						</div>
 					</div>
-					<div id="reportTable" style="display: flex;">
+					<div id="reportTable">
 						<i class="fas fa-circle-notch fa-spin"></i>
 					</div>
 				</div>

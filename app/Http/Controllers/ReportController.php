@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\Status;
 use App\Models\User;
 use App\Repositories\CityRepository;
+use App\Repositories\PaymentRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\HelpFunctions;
@@ -20,13 +21,15 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 class ReportController extends Controller {
 	private $request;
 	private $cityRepo;
+	private $paymentRepo;
 	
 	/**
 	 * @param Request $request
 	 */
-	public function __construct(Request $request, CityRepository $cityRepo) {
+	public function __construct(Request $request, CityRepository $cityRepo, PaymentRepository $paymentRepo) {
 		$this->request = $request;
 		$this->cityRepo = $cityRepo;
+		$this->paymentRepo = $paymentRepo;
 	}
 	
 	public function npsIndex()
@@ -241,7 +244,8 @@ class ReportController extends Controller {
 			//->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
 			->get();
 		
-		$billItems = $dealIds = [];
+		$billItems = $paymentMethodSumItems = $dealIds = [];
+		$totalSum = 0;
 		foreach ($bills as $bill) {
 			if (!isset($billItems[$bill->location_id])) {
 				$billItems[$bill->location_id] = [];
@@ -257,6 +261,9 @@ class ReportController extends Controller {
 					'deal_sum' => 0,
 				];
 			}
+			if (!isset($paymentMethodSumItems[$bill->payment_method_id])) {
+				$paymentMethodSumItems[$bill->payment_method_id] = 0;
+			}
 			
 			// кол-во счетов
 			++$billItems[$bill->location_id][$bill->user_id]['bill_count'];
@@ -267,6 +274,9 @@ class ReportController extends Controller {
 				++$billItems[$bill->location_id][$bill->user_id]['payed_bill_count'];
 				// сумма оплаченных счетов
 				$billItems[$bill->location_id][$bill->user_id]['payed_bill_sum'] += $bill->amount;
+				// сумма оплаченных счетов конкретного способа оплаты
+				$paymentMethodSumItems[$bill->payment_method_id] += $bill->amount;
+				$totalSum += $bill->amount;
 			}
 			$deal = $bill->deal;
 			if ($deal && !in_array($bill->deal_id, $billItems[$bill->location_id][$bill->user_id]['deal_ids'])) {
@@ -278,8 +288,21 @@ class ReportController extends Controller {
 			}
 		}
 		
+		$shiftItems = [];
+		$shifts = Event::where('event_type', Event::EVENT_TYPE_SHIFT_ADMIN)
+			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->get();
+		foreach ($shifts as $shift) {
+			if (!isset($shiftItems[$shift->user_id])) {
+				$shiftItems[$shift->user_id] = 0;
+			}
+			++$shiftItems[$shift->user_id];
+		}
+		
 		$userItems = [];
 		$users = User::where('enable', true)
+			->where('role', User::ROLE_ADMIN)
 			->orderBy('lastname')
 			->orderBy('name')
 			->orderBy('middlename')
@@ -294,14 +317,17 @@ class ReportController extends Controller {
 		}
 		
 		$cities = $this->cityRepo->getList($this->request->user());
+		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
 		
 		$data = [
 			'billItems' => $billItems,
+			'paymentMethodSumItems' => $paymentMethodSumItems,
+			'totalSum' => $totalSum,
+			'shiftItems' => $shiftItems,
 			'userItems' => $userItems,
 			'cities' => $cities,
+			'paymentMethods' => $paymentMethods,
 		];
-		
-		//\Log::debug($billItems);
 		
 		/*$reportFileName = '';
 		if ($isExport) {
