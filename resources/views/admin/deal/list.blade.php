@@ -85,7 +85,7 @@
 						@endif
 						попытка списания<br>милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб.
 					@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
-						Начисление милей
+						<i class="fas fa-check text-success"></i> Начисление милей
 					@endif
 				</div>
 			@endforeach
