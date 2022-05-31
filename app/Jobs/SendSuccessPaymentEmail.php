@@ -41,7 +41,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		
 		\Log::debug('success payment email: 4');
 		$contractor = $deal->contractor;
-		if ($contractor) return null;
+		if (!$contractor) return null;
 		
 		\Log::debug('success payment email: 5');
 		$city = $contractor->city;
