@@ -50,9 +50,7 @@
 							{{--<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>--}}
 						</div>
 					</div>
-					<div id="reportTable" style="display: flex;">
-						<i class="fas fa-circle-notch fa-spin"></i>
-					</div>
+					<div id="reportTable" style="display: flex;"></div>
 				</div>
 			</div>
 		</div>
@@ -71,8 +69,10 @@
 		$(function() {
 			function getList(isExport) {
 				var $selector = $('#reportTable'),
-					btn = isExport ? $('#export_btn') : $('#show_btn');
+					btn = isExport ? $('#export_btn') : $('#show_btn'),
+					$loader = $('<i class="fas fa-circle-notch fa-spin"></i>');
 
+				$selector.html($loader);
 				btn.attr('disabled', true);
 
 				$.ajax({
