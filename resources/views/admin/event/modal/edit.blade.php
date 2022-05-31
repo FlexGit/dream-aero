@@ -183,14 +183,14 @@
 									</div>
 								@endif
 							@endif
-							@php($aeroflotBonusAmount = $event->deal->aeroflotBonusAmount())
+							{{--@php($aeroflotBonusAmount = $event->deal->aeroflotBonusAmount())
 							@if($aeroflotBonusAmount)
 								<div class="d-inline-block" title="Скидка Аэрофлот Бонус">
 									<span class="pl-2 pr-2" style="background-color: #cfffba;">
 										<i class="fas fa-globe-americas"></i> {{ number_format($aeroflotBonusAmount, 0, '.', ' ') }}
 									</span>
 								</div>
-							@endif
+							@endif--}}
 							<div class="d-inline-block" title="Итого к оплате">
 								@php($balance = $event->deal->balance())
 								@if($balance < 0)
