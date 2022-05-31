@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\AeroflotBonusService;
 use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -98,6 +99,7 @@ class Deal extends Model
 		'phone' => 'Телефон',
 		'email' => 'E-mail',
 		'source' => 'Источник',
+		'roistat' => 'Номер визита Roistat',
 		'user_id' => 'Пользователь',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
@@ -188,6 +190,7 @@ class Deal extends Model
 		'email',
 		'user_id',
 		'source',
+		'roistat',
 		'uuid',
 		'data_json',
 	];
@@ -306,19 +309,44 @@ class Deal extends Model
 			'status' => $this->status ? $this->status->name : null,
 		];
 	}
-
+	
+	/**
+	 * @return int
+	 */
 	public function amount()
 	{
 		$amount = 0;
 		foreach ($this->positions ?? [] as $position) {
 			if ($position->certificate && $position->certificate->status && in_array($position->certificate->status->alias, [Certificate::CANCELED_STATUS, Certificate::RETURNED_STATUS])) continue;
-
-			$amount += ($position->amount - $position->aeroflot_bonus_amount);
+			
+			$amount += $position->amount;
 		}
+		
+		$amount -= $this->aeroflotBonusWriteOffAmount();
 
 		return $amount;
 	}
 	
+	/**
+	 * Скидка после списания милей "Аэрофлот Бонус" (по каждой позиции Сделки)
+	 *
+	 * @return int
+	 */
+	public function aeroflotBonusWriteOffAmount()
+	{
+		$amount = 0;
+		foreach ($this->positions as $position) {
+			$aeroflotBonusAmount = ($position->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER && $position->aeroflot_state == AeroflotBonusService::PAYED_STATE) ? $position->aeroflot_bonus_amount : 0;
+			
+			$amount += $aeroflotBonusAmount;
+		}
+		
+		return $amount;
+	}
+
+	/**
+	 * @return float|int
+	 */
 	public function scoreAmount()
 	{
 		$scoreAmount = 0;
@@ -332,7 +360,10 @@ class Deal extends Model
 		
 		return $scoreAmount;
 	}
-
+	
+	/**
+	 * @return int
+	 */
 	public function billPayedAmount()
 	{
 		$amount = 0;
@@ -346,22 +377,13 @@ class Deal extends Model
 
 		return /*(*/$amount/* + $this->scoreAmount())*/;
 	}
-
+	
+	/**
+	 * @return int
+	 */
 	public function balance()
 	{
-		return $this->billPayedAmount() - $this->amount()/* + $this->scoreAmount()*/;
-	}
-	
-	public function aeroflotBonusAmount()
-	{
-		$amount = 0;
-		foreach ($this->positions ?? [] as $position) {
-			if ($position->certificate && $position->certificate->status && in_array($position->certificate->status->alias, [Certificate::CANCELED_STATUS, Certificate::RETURNED_STATUS])) continue;
-			
-			$amount += $position->aeroflot_bonus_amount;
-		}
-
-		return $amount;
+		return $this->billPayedAmount() - $this->amount();
 	}
 	
 	/**

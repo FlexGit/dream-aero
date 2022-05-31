@@ -46,14 +46,14 @@
 						<i class="far fa-star"></i> {{ number_format($scoreAmount, 0, '.', ' ') }}
 					</div>
 				@endif
-				@php($aeroflotBonusAmount = $deal->aeroflotBonusAmount())
+				{{--@php($aeroflotBonusAmount = $deal->aeroflotBonusAmount())
 				@if($aeroflotBonusAmount)
 					<div class="d-inline-block" title="Скидка Аэрофлот Бонус">
 						<span class="pl-2 pr-2" style="background-color: #cfffba;">
 							<i class="fas fa-globe-americas"></i> {{ number_format($aeroflotBonusAmount, 0, '.', ' ') }}
 						</span>
 					</div>
-				@endif
+				@endif--}}
 				<div class="d-inline-block mt-1" title="Итого к оплате">
 					@if($balance < 0)
 						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ number_format($balance, 0, '.', ' ') }}</span>
@@ -71,6 +71,20 @@
 					</div>
 				</div>
 			@endif
+			@foreach($deal->positions as $position)
+				@if($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
+					<div>
+						Списание милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб
+						@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+							<i class="fas fa-check text-success"></i>
+						@endif
+					</div>
+				@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
+					<div>
+						Начисление милей <i class="fas fa-exclamation-triangle text-warning"></i>
+					</div>
+				@endif
+			@endforeach
 			<div class="d-flex justify-content-between mt-2">
 				<div title="Источник">
 					{{ isset(\App\Models\Deal::SOURCES[$deal->source]) ? \App\Models\Deal::SOURCES[$deal->source] : '' }}

@@ -25,6 +25,7 @@ class CreateDealsTable extends Migration
 			$table->string('uuid')->nullable()->comment('uuid');
 			$table->integer('user_id')->default(0)->index()->comment('пользователь');
 			$table->string('source', 25)->nullable()->comment('источник');
+			$table->string('roistat')->nullable()->comment('номер визита Roistat');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();
