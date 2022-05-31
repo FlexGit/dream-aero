@@ -375,7 +375,7 @@ class Deal extends Model
 			$amount += $bill->amount;
 		}
 
-		return /*(*/$amount/* + $this->scoreAmount())*/;
+		return $amount;
 	}
 	
 	/**
@@ -383,7 +383,7 @@ class Deal extends Model
 	 */
 	public function balance()
 	{
-		return $this->billPayedAmount() - $this->amount();
+		return $this->billPayedAmount() - $this->amount() - $this->scoreAmount();
 	}
 	
 	/**
