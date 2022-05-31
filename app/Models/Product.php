@@ -313,7 +313,7 @@ class Product extends Model
 		if ($isDiscountAllow && $discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-			return ($amount > 0) ? (round($amount) - $score) : 0;
+			return ($amount > 0) ? (round($amount) + $score) : 0;
 		}
 		
 		// скидка по промокоду/акции/клиента действует только для типов тарифов Regular и Ultimate
@@ -323,7 +323,7 @@ class Product extends Model
 			if ($discount) {
 				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-				return ($amount > 0) ? (round($amount) - $score) : 0;
+				return ($amount > 0) ? (round($amount) + $score) : 0;
 			}
 
 			// скидка по указанной акции
@@ -338,7 +338,7 @@ class Product extends Model
 				if ($isDiscountAllow && $discount) {
 					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 					
-					return ($amount > 0) ? (round($amount) - $score) : 0;
+					return ($amount > 0) ? (round($amount) + $score) : 0;
 				}
 			}
 
@@ -414,7 +414,7 @@ class Product extends Model
 				// применяем с наибольшей скидкой
 				rsort($amounts);
 				$amount = array_shift($amounts);
-				return ($amount - $score);
+				return ($amount + $score);
 			}
 
 			// скидка контрагента
@@ -436,6 +436,6 @@ class Product extends Model
 			}
 		}
 
-		return ($amount > 0) ? (round($amount) - $score) : 0;
+		return ($amount > 0) ? (round($amount) + $score) : 0;
 	}
 }
