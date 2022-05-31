@@ -296,10 +296,6 @@ class Product extends Model
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
 
-		if ($score) {
-			$amount += $score;
-		}
-		
 		// скидка на продукт
 		$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
 		if ($isCertificatePurchase) {
@@ -307,12 +303,12 @@ class Product extends Model
 		} else {
 			$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
 		}
-
+		
 		$discount = $cityProduct->pivot->discount ?? null;
 		if ($isDiscountAllow && $discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-			return ($amount > 0) ? round($amount) : 0;
+			return ($amount > 0) ? (round($amount) - $score) : 0;
 		}
 		
 		// скидка по промокоду/акции/клиента действует только для типов тарифов Regular и Ultimate
@@ -322,7 +318,7 @@ class Product extends Model
 			if ($discount) {
 				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 
-				return ($amount > 0) ? round($amount) : 0;
+				return ($amount > 0) ? (round($amount) - $score) : 0;
 			}
 
 			// скидка по указанной акции
@@ -337,7 +333,7 @@ class Product extends Model
 				if ($isDiscountAllow && $discount) {
 					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
 					
-					return ($amount > 0) ? round($amount) : 0;
+					return ($amount > 0) ? (round($amount) - $score) : 0;
 				}
 			}
 
@@ -412,7 +408,8 @@ class Product extends Model
 			if ($amounts) {
 				// применяем с наибольшей скидкой
 				rsort($amounts);
-				return array_shift($amounts);
+				$amount = array_shift($amounts);
+				return ($amount - $score);
 			}
 
 			// скидка контрагента
@@ -434,6 +431,6 @@ class Product extends Model
 			}
 		}
 
-		return ($amount > 0) ? round($amount) : 0;
+		return ($amount > 0) ? (round($amount) - $score) : 0;
 	}
 }
