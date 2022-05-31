@@ -79,7 +79,7 @@
 						@else
 							<i class="fas fa-exclamation-triangle text-warning"></i> Неуспешная
 						@endif
-						попытка списания милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб.
+						попытка списания<br>милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб.
 					</div>
 				@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
 					<div>
