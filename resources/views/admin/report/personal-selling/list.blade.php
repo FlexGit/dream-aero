@@ -1,6 +1,6 @@
 <div class="row flex justify-content-between">
 	<div class="col-3">
-		<table class="table table-sm table-bordered table-data">
+		<table class="table table-sm table-bordered table-striped table-data">
 			<thead>
 			<tr>
 				<th>
@@ -18,7 +18,7 @@
 		</table>
 	</div>
 	<div class="col-4">
-		<table class="table table-sm table-bordered table-data">
+		<table class="table table-sm table-bordered table-striped table-data">
 			<thead>
 				<tr>
 					<th>
