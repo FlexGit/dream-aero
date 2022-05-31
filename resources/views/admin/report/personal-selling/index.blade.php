@@ -40,9 +40,7 @@
 							{{--<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>--}}
 						</div>
 					</div>
-					<div id="reportTable">
-						<i class="fas fa-circle-notch fa-spin"></i>
-					</div>
+					<div id="reportTable"></div>
 				</div>
 			</div>
 		</div>
@@ -61,9 +59,11 @@
 		$(function() {
 			function getList(isExport) {
 				var $selector = $('#reportTable'),
-					btn = isExport ? $('#export_btn') : $('#show_btn');
+					$btn = isExport ? $('#export_btn') : $('#show_btn'),
+					$loader = $('<i class="fas fa-circle-notch fa-spin"></i>');
 
-				btn.attr('disabled', true);
+				$selector.html($loader);
+				$btn.attr('disabled', true);
 
 				$.ajax({
 					url: '{{ route('personalSellingList') }}',
@@ -87,7 +87,7 @@
 							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
 						}
 
-						btn.attr('disabled', false);
+						$btn.attr('disabled', false);
 
 						if (result.fileName) {
 							window.location.href = '/report/file/' + result.fileName;
