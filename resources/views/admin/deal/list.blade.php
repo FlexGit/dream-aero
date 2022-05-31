@@ -74,12 +74,12 @@
 			@foreach($deal->positions as $position)
 				@if($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
 					<div>
-						Попытка списания милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб
 						@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-							<i class="fas fa-check text-success"></i>
+							<i class="fas fa-check text-success"></i> Успешная
 						@else
-							<i class="fas fa-exclamation-triangle text-warning"></i>
+							<i class="fas fa-exclamation-triangle text-warning"></i> Неуспешная
 						@endif
+						попытка списания милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб.
 					</div>
 				@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
 					<div>
