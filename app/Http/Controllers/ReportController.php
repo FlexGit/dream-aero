@@ -301,7 +301,7 @@ class ReportController extends Controller {
 			'cities' => $cities,
 		];
 		
-		\Log::debug($billItems);
+		//\Log::debug($billItems);
 		
 		/*$reportFileName = '';
 		if ($isExport) {

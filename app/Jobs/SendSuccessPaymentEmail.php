@@ -27,28 +27,21 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		\Log::debug('success payment email: 1');
 		$contractor = $this->bill->contractor;
 		if (!$contractor) return null;
 		
-		\Log::debug('success payment email: 2');
 		$deal = $this->bill->deal;
 		if (!$deal) return null;
 		
-		\Log::debug('success payment email: 3');
 		$position = $this->bill->position;
 		if (!$position) return null;
 		
-		\Log::debug('success payment email: 4');
 		$contractor = $deal->contractor;
 		if (!$contractor) return null;
 		
-		\Log::debug('success payment email: 5');
 		$city = $contractor->city;
 		if (!$city) return null;
-		\Log::debug('success payment email: 6');
 		if (!$city->email) return null;
-		\Log::debug('success payment email: 7');
 		
 		$location = $this->bill->location ?? null;
 		$certificate = $this->certificate ?? null;

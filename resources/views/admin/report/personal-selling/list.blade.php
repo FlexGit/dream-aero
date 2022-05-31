@@ -15,34 +15,43 @@
 	<tbody>
 	@foreach($cities as $city)
 		@foreach($city->locations as $location)
-			@foreach($userItems[$location->id] ?? [] as $userItem)
 				<tr>
 					<td class="align-top text-center" rowspan="{{ count($userItems[$location->id]) }}">
 						{{ $location->name }}
 					</td>
 					<td>
-						{{ $userItem['fio'] }}
-					</td>
-					<td>
-						{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['deal_count'] : 0 }}
-					</td>
-					<td>
-						{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['deal_sum'] : 0 }}
-					</td>
-					<td>
-						{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['bill_count'] : 0 }}
-					</td>
-					<td>
-						{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['bill_sum'] : 0 }}
-					</td>
-					<td>
-						{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['payed_bill_count'] : 0 }}
-					</td>
-					<td>
-						{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['payed_bill_sum'] : 0 }}
-					</td>
-					<td>
+						<table>
+							<tbody>
+							@foreach($userItems[$location->id] ?? [] as $userItem)
+								<tr>
+									<td>
+										{{ $userItem['fio'] }}
+									</td>
+									<td>
+										{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['deal_count'] : 0 }}
+									</td>
+									<td>
+										{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['deal_sum'] : 0 }}
+									</td>
+									<td>
+										{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['bill_count'] : 0 }}
+									</td>
+									<td>
+										{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['bill_sum'] : 0 }}
+									</td>
+									<td>
+										{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['payed_bill_count'] : 0 }}
+									</td>
+									<td>
+										{{ isset($billItems[$location->id][$userItem['id']]) ? $billItems[$location->id][$userItem['id']]['payed_bill_sum'] : 0 }}
+									</td>
+									<td>
 
+									</td>
+								</tr>
+							@endforeach
+							</tbody>
+						</table>
 					</td>
 				</tr>
 			@endforeach
