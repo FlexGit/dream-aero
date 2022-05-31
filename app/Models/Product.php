@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\City;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Product
@@ -52,23 +49,7 @@ use Illuminate\Support\Facades\Log;
  */
 class Product extends Model
 {
-    use HasFactory, SoftDeletes/*, RevisionableTrait*/;
-	
-	/*const ATTRIBUTES = [
-		'name' => 'Наименование',
-		'alias' => 'Алиас',
-		'product_type_id' => 'Тип продукта',
-		'user_id' => 'Пользователь',
-		'city_id' => 'Город',
-		'duration' => 'Длительность',
-		'data_json' => 'Дополнительная информация',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-	
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
+    use HasFactory, SoftDeletes;
 	
 	const BASIC_ALIAS = 'basic';
 	const ADVANCED_ALIAS = 'advanced';
@@ -315,6 +296,10 @@ class Product extends Model
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
 
+		/*if ($score) {
+			$amount += $score;
+		}*/
+		
 		// скидка на продукт
 		$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
 		if ($isCertificatePurchase) {
@@ -322,6 +307,7 @@ class Product extends Model
 		} else {
 			$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? $dataJson['is_discount_booking_allow'] : false;
 		}
+
 		$discount = $cityProduct->pivot->discount ?? null;
 		if ($isDiscountAllow && $discount) {
 			$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);

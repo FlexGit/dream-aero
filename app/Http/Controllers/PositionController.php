@@ -12,6 +12,7 @@ use App\Models\City;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\Promocode;
+use App\Models\Score;
 use App\Models\Status;
 use App\Repositories\CityRepository;
 use App\Repositories\ProductTypeRepository;
@@ -191,10 +192,10 @@ class PositionController extends Controller
 
 		$position = $this->positionRepo->getById($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
-
+		
 		$deal = $position->deal;
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
-
+		
 		$user = \Auth::user();
 		$cities = $this->cityRepo->getList($user, false);
 		$products = $this->productTypeRepo->getActualProductList($user, false);
@@ -1072,6 +1073,21 @@ class PositionController extends Controller
 		}
 		
 		$certificateFilePath = ($position->is_certificate_purchase && $position->certificate && is_array($position->certificate->data_json) && array_key_exists('certificate_file_path', $position->certificate->data_json)) ? $position->certificate->data_json['certificate_file_path'] : '';
+		
+		// если позицию удаляют, а по ней было списание баллов, то начисляем баллы обратно
+		$scores = Score::where('deal_position_id', $position->id)
+			->where('type', Score::USED_TYPE)
+			->get();
+		foreach ($scores as $item) {
+			$score = new Score();
+			$score->score = $item->score;
+			$score->type = Score::SCORING_TYPE;
+			$score->contractor_id = $item->contractor_id;
+			$score->deal_id = $item->deal_id;
+			$score->deal_position_id = $item->deal_position_id;
+			$score->user_id = $this->request->user()->id;
+			$score->save();
+		}
 		
 		if (!$position->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

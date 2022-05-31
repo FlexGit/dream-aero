@@ -1458,6 +1458,8 @@ class DealController extends Controller
 		$flightDate = $this->request->flight_date ?? '';
 		$isFree = $this->request->is_free ?? 0;
 		$isUnified = $this->request->is_unified ?? 0;
+		$score = $this->request->score ?? 0;
+		$isCertificatePurchase = $this->request->is_certificate_purchase ?? 0;
 		
 		if ($isUnified) {
 			$cityId = 1;
@@ -1510,7 +1512,7 @@ class DealController extends Controller
 			$certificateId = $certificate ? $certificate->id : 0;
 		}
 
-		$amount = $product->calcAmount($contractorId, $cityId, $source, $isFree, $locationId, $paymentMethodId, $promoId, $promocodeId, $certificateId);
+		$amount = $product->calcAmount($contractorId, $cityId, $source, $isFree, $locationId, $paymentMethodId, $promoId, $promocodeId, $certificateId, $isUnified, false, $score, $isCertificatePurchase);
 		
 		return response()->json(['status' => 'success', 'amount' => $amount, 'baseAmount' => $baseAmount, 'certificateUuid' => $certificateUuid, 'certificateId' => $certificateId]);
 	}

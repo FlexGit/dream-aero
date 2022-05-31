@@ -283,16 +283,6 @@ class Deal extends Model
 	 */
 	public function generateNumber()
 	{
-		/*$locationCount = $this->city ? $this->city->locations->count() : 0;
-
-		$cityAlias = $this->city ? mb_strtolower($this->city->alias) : '';
-		$locationAlias = $this->location ? $this->location->alias : '';
-
-		$productTypeAlias = ($this->product && $this->product->productType) ? mb_strtoupper(substr($this->product->productType->alias, 0, 1)) : '';
-		$productDuration = $this->product ? $this->product->duration : '';
-
-		$alias = ($locationCount > 1 && $this->location) ? mb_strtolower($locationAlias) : mb_strtolower($cityAlias);*/
-		
 		return 'D' . date('y') . /*$alias . $productTypeAlias . $productDuration .*/ sprintf('%05d', $this->id);
 	}
 	

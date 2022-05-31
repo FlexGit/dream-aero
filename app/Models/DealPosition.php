@@ -282,7 +282,7 @@ class DealPosition extends Model
 
 	public function score()
 	{
-		return $this->belongsTo(Score::class);
+		return $this->belongsTo(Score::class, 'id', 'deal_position_id');
 	}
 	
 	public function bill()

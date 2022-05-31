@@ -472,9 +472,11 @@
 						'location_id': $('#location_id').val(),
 						'certificate_uuid': $('#certificate_uuid').val(),
 						'is_free': ($('#is_free').is(':checked') || $('#is_indefinitely').is(':checked')) ? 1 : 0,
+						'score': $('#score').val(),
+						'is_certificate_purchase': $('#is_certificate_purchase').val(),
 					},
 					success: function(result) {
-						console.log(result);
+						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
