@@ -72,20 +72,22 @@
 				</div>
 			@endif
 			@foreach($deal->positions as $position)
-				@if($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
-					<div>
+				@if(!$position->aeroflot_transaction_type)
+					@continue
+				@endif
+
+				<div style="line-height: 1.0em;">
+					@if($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
 						@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
 							<i class="fas fa-check text-success"></i> Успешная
 						@else
 							<i class="fas fa-exclamation-triangle text-warning"></i> Неуспешная
 						@endif
 						попытка списания<br>милей на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб.
-					</div>
-				@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
-					<div>
+					@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
 						Начисление милей
-					</div>
-				@endif
+					@endif
+				</div>
 			@endforeach
 			<div class="d-flex justify-content-between mt-2">
 				<div title="Источник">
