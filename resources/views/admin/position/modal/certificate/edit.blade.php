@@ -20,7 +20,7 @@
 			<select class="form-control" id="promo_id" name="promo_id">
 				<option value=""></option>
 				@foreach($promos ?? [] as $promo)
-					<option value="{{ $promo->id }}" @if($promo->id == $position->promo_id) selected @endif>{{ $promo->valueFormatted() }}</option>
+					<option value="{{ $promo->id }}" @if($promo->id == $position->promo_id) selected @endif>{{ $promo->valueFormatted() }}{{ !$promo->is_active ? ' - неактивна' : '' }}</option>
 				@endforeach
 			</select>
 		</div>
