@@ -141,7 +141,12 @@ class Promocode extends Model
 	{
 		return $this->hasOne(Contractor::class, 'id', 'contractor_id');
 	}
-
+	
+	public function location()
+	{
+		return $this->hasOne(Location::class, 'id', 'location_id');
+	}
+	
 	public function contractors()
 	{
 		return $this->belongsToMany(Contractor::class, 'contractors_promocodes', 'promocode_id', 'contractor_id')

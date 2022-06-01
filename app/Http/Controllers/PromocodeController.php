@@ -215,6 +215,7 @@ class PromocodeController extends Controller
 		
 		$promocode = new Promocode();
 		$promocode->number = $this->request->number;
+		$promocode->location_id = $this->request->location_id;
 		$promocode->discount_id = $this->request->discount_id;
 		$promocode->is_active = $this->request->is_active;
 		if ($this->request->active_from_at_date) {
@@ -223,7 +224,10 @@ class PromocodeController extends Controller
 		if ($this->request->active_to_at_date) {
 			$promocode->active_to_at = Carbon::parse($this->request->active_to_at_date . ' ' . $this->request->active_to_at_time)->format('Y-m-d H:i:s');
 		}
-		//$promocode->data_json = $data;
+		$data = $promocode->data_json;
+		$data['is_discount_booking_allow'] = (bool)$this->request->is_discount_booking_allow;
+		$data['is_discount_certificate_purchase_allow'] = (bool)$this->request->is_discount_certificate_purchase_allow;
+		$promocode->data_json = $data;
 		if (!$promocode->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -280,6 +284,7 @@ class PromocodeController extends Controller
 		//$data = [];
 		
 		$promocode->number = $this->request->number;
+		$promocode->location_id = $this->request->location_id;
 		$promocode->discount_id = $this->request->discount_id;
 		$promocode->is_active = $this->request->is_active;
 		if ($this->request->active_from_at_date) {
@@ -288,7 +293,10 @@ class PromocodeController extends Controller
 		if ($this->request->active_to_at_date) {
 			$promocode->active_to_at = Carbon::parse($this->request->active_to_at_date . ' ' . $this->request->active_to_at_time)->format('Y-m-d H:i:s');
 		}
-		//$promocode->data_json = $data;
+		$data = $promocode->data_json;
+		$data['is_discount_booking_allow'] = (bool)$this->request->is_discount_booking_allow;
+		$data['is_discount_certificate_purchase_allow'] = (bool)$this->request->is_discount_certificate_purchase_allow;
+		$promocode->data_json = $data;
 		if (!$promocode->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}

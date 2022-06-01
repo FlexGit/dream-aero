@@ -31,6 +31,7 @@
 							<tr>
 								<th class="text-center">Номер</th>
 								<th class="text-center">Город</th>
+								<th class="text-center">Локация</th>
 								{{--<th class="text-center d-none d-sm-table-cell">Контрагент</th>--}}
 								<th class="text-center d-none d-md-table-cell">Скидка</th>
 								<th class="text-center d-none d-md-table-cell">Активность</th>

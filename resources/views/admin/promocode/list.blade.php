@@ -8,6 +8,7 @@
 			<div>{{ $city->name }}</div>
 		@endforeach
 	</td>
+	<td class="text-center">{{ $promocode->location ? $promocode->location->name : '-' }}</td>
 	{{--<td class="text-center d-none d-sm-table-cell">{{ $promocode->contractor ? $promocode->contractor->fio() : '-' }}</td>--}}
 	<td class="text-center d-none d-md-table-cell">{{ $promocode->discount ? $promocode->discount->valueFormatted() : '-' }}</td>
 	<td class="text-center d-none d-md-table-cell">{{ $promocode->is_active ? 'Да' : 'Нет' }}</td>

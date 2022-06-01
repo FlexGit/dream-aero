@@ -17,6 +17,10 @@
 			</td>
 		</tr>
 		<tr class="odd">
+			<td>Локация</td>
+			<td>{{ $promocode->location ? $promocode->location->name : '-' }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Контрагент</td>
 			<td>{{ $promocode->contractor ? $promocode->contractor->fio() : '-' }}</td>
 		</tr>
