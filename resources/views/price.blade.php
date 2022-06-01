@@ -126,7 +126,7 @@
 													</div>
 													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}" data-popup-type="product"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
 													<p class="h4plat" style="display: none;">
-														@lang('main.price.сертификат-на-vip-полет-с-денисом-оканем')
+														@lang('main.price.сертификат-на-vip-полет', ['name' => $product['name']])
 														<br>
 														<a href="{{ url('vipflight') }}" target="_blank">@lang('main.home.подробнее')</a>
 													</p>

@@ -207,7 +207,7 @@ return [
 	'price.certificate' => 'certificate',
 	'price.развлекательный-курс' => 'An entertaining course on the best airports in the world, 30 minutes of theory and two hours of unforgettable flights. The certificate is valid for 1 year. Promotions and tariff discounts do not apply.',
 	'price.план-полетов' => 'Flight plan',
-	'price.сертификат-на-vip-полет-с-денисом-оканем' => 'Certificate for VIP flight with Denis Okan. <b>Flying in Moscow</b>.
+	'price.сертификат-на-vip-полет' => 'Certificate for VIP flight with pilot :name. <b>Flying in Moscow</b>.
 <br>Two guests with a certificate, valid for one year.',
 	'price.подготовьтесь-к-полёту' => 'BE 100% READY FOR YOUR FLIGHT',
 	'price.выберите-программу' => 'Select a flight <a href=":link" target="_blank">program</a> that meets your interests.',
