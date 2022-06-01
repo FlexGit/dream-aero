@@ -1812,7 +1812,7 @@ class ApiController extends Controller
 			}
 		}
 
-		$date = date('Y-m-d');
+		$date = date('Y-m-d H:i:s');
 		
 		\DB::connection()->enableQueryLog();
 		$promocode = Promocode::whereRaw('lower(number) = "' . mb_strtolower($number) . '"')
