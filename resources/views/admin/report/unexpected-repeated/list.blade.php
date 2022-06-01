@@ -1,8 +1,11 @@
-<table class="table table-sm table-bordered table-data">
+<table class="table table-sm table-bordered table-striped table-hover table-data">
 	<thead>
 		<tr>
 			<th>
-				Локация
+				Город
+			</th>
+			<th>
+				Локация / Тренажер
 			</th>
 			<th>
 				Спонтанные
@@ -19,8 +22,9 @@
 				<tr>
 					<td class="align-middle">
 						{{ $location->city ? $location->city->name : '' }}
-						<br>
-						{{ $location->name }}
+					</td>
+					<td class="align-middle">
+						{{ $location->name }} {{ $simulator->name }}
 					</td>
 					<td class="align-middle text-right">
 						{{ isset($eventItems[$location->id][$simulator->id]['is_unexpected_flight']) ? $eventItems[$location->id][$simulator->id]['is_unexpected_flight'] : 0 }}
