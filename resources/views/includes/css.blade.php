@@ -104,6 +104,9 @@
 	.button-pipaluk-grey:after {
 		background-color: #bbb !important;
 	}
+	.button-pipaluk-green {
+		background-color: #09bb63 !important;
+	}
 	.close-btn {
 		margin: 3px 0 0 2px;
 		cursor: pointer;
