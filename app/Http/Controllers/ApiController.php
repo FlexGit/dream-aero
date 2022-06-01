@@ -2782,7 +2782,7 @@ class ApiController extends Controller
 			}
 		}
 		
-		$date = date('Y-m-d');
+		$date = date('Y-m-d H:i:s');
 		
 		$statusesData = HelpFunctions::getStatusesByType();
 		

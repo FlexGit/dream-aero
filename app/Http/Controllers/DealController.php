@@ -832,8 +832,6 @@ class DealController extends Controller
 			}
 		}
 		
-		\Log::debug($this->request);
-		
 		$cityId = $this->request->city_id ?: $this->request->user()->city_id;
 		$productId = $this->request->product_id ?? 0;
 		$promoId = $this->request->promo_id ?? 0;
