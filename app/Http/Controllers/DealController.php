@@ -832,6 +832,8 @@ class DealController extends Controller
 			}
 		}
 		
+		\Log::debug($this->request);
+		
 		$cityId = $this->request->city_id ?: $this->request->user()->city_id;
 		$productId = $this->request->product_id ?? 0;
 		$promoId = $this->request->promo_id ?? 0;
@@ -911,14 +913,14 @@ class DealController extends Controller
 		if ($promocodeId) {
 			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
-				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден!']);
+				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
 
 		if ($promocodeUuid) {
 			$promocode = HelpFunctions::getEntityByUuid(Promocode::class, $promocodeUuid);
 			if (!$promocode) {
-				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден.']);
+				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
 		
