@@ -10,5 +10,8 @@
 @if($location)
 	<p>Локация: {{ $location->name }}</p>
 @endif
+@if($event)
+	<p>Событие на полет: {{ $event->getInterval() }}</p>
+@endif
 <br>
 <p><small>Письмо отправлено автоматически</small></p>
