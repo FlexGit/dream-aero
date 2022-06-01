@@ -265,7 +265,7 @@ class PromoController extends Controller
 		}
 
 		// удаляем старый файл оферты
-		if ($isImageFileUploaded && $promo->data_json && $promo->data_json['image_file_path'] && is_file(public_path('upload/' . $promo->data_json['image_file_path']))) {
+		if ($isImageFileUploaded && $promo->data_json && isset($promo->data_json['image_file_path']) && $promo->data_json['image_file_path'] && is_file(public_path('upload/' . $promo->data_json['image_file_path']))) {
 			unlink(public_path('upload/' . $promo->data_json['image_file_path']));
 		}
 
