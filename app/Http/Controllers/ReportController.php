@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\NpsReportExport;
 use App\Models\Bill;
+use App\Models\Certificate;
 use App\Models\Content;
 use App\Models\Deal;
 use App\Models\Event;
@@ -189,7 +190,7 @@ class ReportController extends Controller {
 			'users' => $users,
 			'cities' => $cities,
 			'userAssessments' => $userAssessments,
-			'userNps' => $userNps
+			'userNps' => $userNps,
 		];
 		
 		$reportFileName = '';
@@ -418,6 +419,99 @@ class ReportController extends Controller {
 		}*/
 		
 		$VIEW = view('admin.report.unexpected-repeated.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
+	}
+	
+	public function certificatesIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-certificates');
+		
+		$cities = $this->cityRepo->getList($this->request->user());
+		
+		return view('admin.report.certificates.index', [
+			'page' => $page,
+			'cities' => $cities,
+		]);
+	}
+	
+	public function certificatesGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$cityId = ($this->request->filter_city_id != 'all') ? $this->request->filter_city_id : null;
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+		}
+		//\DB::connection()->enableQueryLog();
+		$certificates = Certificate::where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'));
+		if (!is_null($cityId)) {
+			$certificates = $certificates->where('city_id', $cityId);
+		}
+		$certificates = $certificates->has('product')
+			->has('position')
+			->get();
+		//\Log::debug(\DB::getQueryLog());
+		$certificateItems = [];
+		/** @var Certificate[] $certificates */
+		foreach ($certificates as $certificate) {
+			$position = $certificate->position;
+			$positionProduct = $position ? $position->product : null;
+			$positionBill = $position->bill;
+			$positionBillStatus = ($positionBill && $positionBill->status) ? $positionBill->status : null;
+			$positionBillPaymentMethod = ($positionBill && $positionBill->paymentMethod) ? $positionBill->paymentMethod : null;
+			$certificateProduct = $certificate->product;
+			$certificateCity = $certificate->city;
+			$certificateStatus = $certificate->status ?? null;
+			
+			$certificateItems[$certificate->id] = [
+				'number' => $certificate->number,
+				'created_at' => $certificate->created_at,
+				'city_name' => $certificateCity ? $certificateCity->name : 'Действует в любом городе',
+				'certificate_product_name' => $certificateProduct ? $certificateProduct->name : '',
+				'position_product_name' => $positionProduct ? $positionProduct->name : '',
+				'position_amount' => $position ? $position->amount : 0,
+				'expire_at' => $certificate->expire_at ? Carbon::parse($certificate->expire_at)->format('Y-m-d') : 'бессрочно',
+				'certificate_status_name' => $certificateStatus ? $certificateStatus->name : '',
+				'bill_number' => $positionBill ? $positionBill->number : '',
+				'bill_status_alias' => $positionBillStatus ? $positionBillStatus->alias : '',
+				'bill_status_name' => $positionBillStatus ? $positionBillStatus->name : '',
+				'bill_payment_method_name' => $positionBillPaymentMethod ? $positionBillPaymentMethod->name : '',
+			];
+		}
+		
+		//\Log::debug($certificateItems);
+		
+		$data = [
+			'certificateItems' => $certificateItems,
+		];
+		
+		/*$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-personal-selling-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new PersonalSellingReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}*/
+		
+		$VIEW = view('admin.report.certificates.list', $data);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
 	}

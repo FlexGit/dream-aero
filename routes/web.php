@@ -416,7 +416,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			
 			Route::get('report/unexpected-repeated', [ReportController::class, 'unexpectedRepeatedIndex'])->name('unexpectedRepeatedIndex');
 			Route::get('report/unexpected-repeated/list/ajax', [ReportController::class, 'unexpectedRepeatedGetListAjax'])->name('unexpectedRepeatedGetList');
-
+			
+			Route::get('report/certificates', [ReportController::class, 'certificatesIndex'])->name('certificatesIndex');
+			Route::get('report/certificates/list/ajax', [ReportController::class, 'certificatesGetListAjax'])->name('certificatesGetList');
+			
 			Route::get('report/file/{filepath}', [ReportController::class, 'getExportFile'])->name('getExportFile');
 		});
 	});

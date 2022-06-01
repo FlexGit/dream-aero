@@ -424,6 +424,12 @@ return [
 					'can'  => 'is_superadmin',
 					'icon' => 'far fa-circle nav-icon',
 				],
+				[
+					'text' => 'Сертификаты',
+					'url'  => '/report/certificates',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-circle nav-icon',
+				],
             ],
         ],
 		[
