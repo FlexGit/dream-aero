@@ -413,6 +413,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			
 			Route::get('report/personal-selling', [ReportController::class, 'personalSellingIndex'])->name('personalSellingIndex');
 			Route::get('report/personal-selling/list/ajax', [ReportController::class, 'personalSellingGetListAjax'])->name('personalSellingList');
+			
+			Route::get('report/unexpected-repeated', [ReportController::class, 'unexpectedRepeatedIndex'])->name('unexpectedRepeatedIndex');
+			Route::get('report/unexpected-repeated/list/ajax', [ReportController::class, 'unexpectedRepeatedGetListAjax'])->name('unexpectedRepeatedGetList');
 
 			Route::get('report/file/{filepath}', [ReportController::class, 'getExportFile'])->name('getExportFile');
 		});

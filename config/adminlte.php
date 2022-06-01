@@ -418,6 +418,12 @@ return [
 					'can'  => 'is_superadmin',
 					'icon' => 'far fa-circle nav-icon',
 				],
+				[
+					'text' => 'Спонтанные / Повторные',
+					'url'  => '/report/unexpected-repeated',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-circle nav-icon',
+				],
             ],
         ],
 		[

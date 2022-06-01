@@ -343,6 +343,85 @@ class ReportController extends Controller {
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
 	}
 	
+	public function unexpectedRepeatedIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-unexpected-repeated');
+		
+		return view('admin.report.unexpected-repeated.index', [
+			'page' => $page,
+		]);
+	}
+	
+	public function unexpectedRepeatedGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+		}
+		
+		$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
+			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			//->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
+			->get();
+		
+		$eventItems = [];
+		foreach ($events as $event) {
+			if (!isset($eventItems[$event->location_id])) {
+				$eventItems[$event->location_id] = [];
+			}
+			if (!isset($eventItems[$event->location_id][$event->flight_simulator_id])) {
+				$eventItems[$event->location_id][$event->flight_simulator_id] = [
+					'is_unexpected_flight' => 0,
+					'is_repeated_flight' => 0,
+				];
+			}
+			
+			if ($event->is_unexpected_flight) {
+				++$eventItems[$event->location_id][$event->flight_simulator_id]['is_unexpected_flight'];
+			}
+			if ($event->is_repeated_flight) {
+				++$eventItems[$event->location_id][$event->flight_simulator_id]['is_repeated_flight'];
+			}
+		}
+		
+		$cities = $this->cityRepo->getList($this->request->user());
+		
+		$data = [
+			'eventItems' => $eventItems,
+			'cities' => $cities,
+		];
+		
+		/*$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-personal-selling-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new PersonalSellingReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}*/
+		
+		$VIEW = view('admin.report.unexpected-repeated.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
+	}
+	
 	/**
 	 * @param $fileName
 	 * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\StreamedResponse
