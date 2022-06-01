@@ -911,14 +911,14 @@ class DealController extends Controller
 		if ($promocodeId) {
 			$promocode = Promocode::find($promocodeId);
 			if (!$promocode) {
-				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден!']);
 			}
 		}
 
 		if ($promocodeUuid) {
 			$promocode = HelpFunctions::getEntityByUuid(Promocode::class, $promocodeUuid);
 			if (!$promocode) {
-				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
+				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден.']);
 			}
 		}
 		
