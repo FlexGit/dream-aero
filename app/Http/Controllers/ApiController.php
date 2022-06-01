@@ -1815,7 +1815,7 @@ class ApiController extends Controller
 		$date = date('Y-m-d');
 		
 		//\DB::connection()->enableQueryLog();
-		$promocode = Promocode::where('number', $number)
+		$promocode = Promocode::whereRaw('lower(number) = "' . mb_strtolower($number) . '"')
 			/*->whereRelation('cities', 'cities.id', '=', $cityId)*/
 			->where('is_active', true)
 			->where(function ($query) use ($date) {
@@ -2819,6 +2819,20 @@ class ApiController extends Controller
 			}
 
 			//\Log::debug($promocode->type . ' - ' . $isCertificatePurchase . ' - ' . $promocode->contractor_id . ' - ' . $contractor->id . ' - ' . $promocode->location_id . ' - ' . $location->id . ' - ' . $promocode->flight_simulator_id . ' - ' . $simulator->id);
+			
+			// для неперсональных промокодов проверяем доступность для Бронирования или Покупки Сертификата
+			if (!$promocode->contractor_id) {
+				$dataJson = $promocode->data_json ? (array)$promocode->data_json : [];
+				if ($isCertificatePurchase) {
+					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
+				}
+				else {
+					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
+				}
+				if (!$isDiscountAllow) {
+					return $this->responseError('Промокод не найден', 400);
+				}
+			}
 
 			if ($promocode->type == Promocode::SIMULATOR_TYPE && !$isCertificatePurchase) {
 				if ($promocode->contractor_id != $contractor->id

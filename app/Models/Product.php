@@ -319,13 +319,22 @@ class Product extends Model
 		// скидка по промокоду/акции/клиента действует только для типов тарифов Regular и Ultimate
 		if ($this->productType && in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
 			// сидка по промокоду
-			$discount = ($promocode && $promocode->discount) ? $promocode->discount : null;
-			if ($discount) {
-				$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
-
-				return ($amount > 0) ? (round($amount) + $score) : 0;
+			if ($promocode) {
+				$dataJson = $promocode->data_json ? (array)$promocode->data_json : [];
+				if ($isCertificatePurchase) {
+					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
+				}
+				else {
+					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
+				}
+				$discount = $promocode->discount ?? null;
+				if ($isDiscountAllow && $discount && (!$promocode->location_id || $promocode->location_id == $locationId)) {
+					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+					
+					return ($amount > 0) ? (round($amount) + $score) : 0;
+				}
 			}
-
+			
 			// скидка по указанной акции
 			if ($promo) {
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
