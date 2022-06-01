@@ -145,7 +145,7 @@ class EventController extends Controller
 					$amount = 0;
 					$paymentMethodNames = $billStatusAliases = [];
 					$promo = $promocode = null;
-
+					
 					// инфа о сертификате
 					if ($certificate) {
 						$certificateData = $certificate->data_json;
@@ -222,6 +222,10 @@ class EventController extends Controller
 					// описание
 					if ($event->description) {
 						$title .= '. ' . $event->description;
+					}
+					// инфа о прикрепленном к событию документе
+					if (is_array($event->data_json) && array_key_exists('doc_file_path', $event->data_json) && $event->data_json['doc_file_path']) {
+						$title .= '. Прикреплен документ';
 					}
 					
 					$allDay = false;
