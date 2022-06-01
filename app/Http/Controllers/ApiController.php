@@ -1814,7 +1814,7 @@ class ApiController extends Controller
 
 		$date = date('Y-m-d');
 		
-		//\DB::connection()->enableQueryLog();
+		\DB::connection()->enableQueryLog();
 		$promocode = Promocode::whereRaw('lower(number) = "' . mb_strtolower($number) . '"')
 			/*->whereRelation('cities', 'cities.id', '=', $cityId)*/
 			->where('is_active', true)
@@ -1827,12 +1827,13 @@ class ApiController extends Controller
 					->orWhereNull('active_to_at');
 			})
 			->first();
+		\Log::debug(\DB::getQueryLog());
 		if (!$promocode) {
 			return $this->responseError('Промокод не найден', 400);
 		}
 
 		$contractorPromocodeWasUsed = $promocode->contractors()->where('contractor_id', $contractor->id)->exists();
-		\Log::debug('contractorPromocodeWasUsed - ' . $contractorPromocodeWasUsed);
+		//\Log::debug('contractorPromocodeWasUsed - ' . $contractorPromocodeWasUsed);
 		if ($contractorPromocodeWasUsed) {
 			return $this->responseError('Промокод уже был применен', 400);
 		}
