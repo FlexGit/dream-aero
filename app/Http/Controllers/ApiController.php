@@ -2833,6 +2833,9 @@ class ApiController extends Controller
 				if (!$isDiscountAllow) {
 					return $this->responseError('Промокод не найден', 400);
 				}
+				if ($promocode->location_id && $promocode->location_id != $location->id) {
+					return $this->responseError('Промокод недоступен для выбранной локации', 400);
+				}
 			}
 
 			if ($promocode->type == Promocode::SIMULATOR_TYPE && !$isCertificatePurchase) {
