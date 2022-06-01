@@ -196,13 +196,13 @@ $(function(){
 
 	$(document).on('click', '.button-tab[data-modal]', function() {
 		if ($(this).data('modal') === 'certificate') {
-			$('.button-tab[data-modal="certificate"]').removeClass('button-pipaluk-orange').addClass('button-pipaluk-green');
-			$('.button-tab[data-modal="booking"]').removeClass('button-pipaluk-green').addClass('button-pipaluk-orange');
+			$('.button-tab[data-modal="certificate"]').removeClass('button-pipaluk-unactive');
+			$('.button-tab[data-modal="booking"]').addClass('button-pipaluk-unactive');
 
 			certificateForm($(this).data('product-alias'));
 		} else if ($(this).data('modal') === 'booking') {
-			$('.button-tab[data-modal="certificate"]').removeClass('button-pipaluk-green').addClass('button-pipaluk-orange');
-			$('.button-tab[data-modal="booking"]').removeClass('button-pipaluk-orange').addClass('button-pipaluk-green');
+			$('.button-tab[data-modal="booking"]').removeClass('button-pipaluk-unactive');
+			$('.button-tab[data-modal="certificate"]').addClass('button-pipaluk-unactive');
 
 			bookingForm($(this).data('product-alias'), $(this).data('product-type-alias'));
 		}

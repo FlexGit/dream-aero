@@ -60,7 +60,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		
 		$recipients = $bcc = [];
 		$recipients[] = $city->email;
-		$bcc[] = env('DEV_EMAIL');
+		/*$bcc[] = env('DEV_EMAIL');*/
 		
 		$subject = env('APP_NAME') . ': оплата Счета ' . $this->bill->number;
 		
@@ -68,7 +68,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->to($recipients);
-			$message->bcc($bcc);
+			/*$message->bcc($bcc);*/
 		});
 		
 		$failures = Mail::failures();
