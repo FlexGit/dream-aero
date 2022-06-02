@@ -190,7 +190,7 @@
 							<div>
 								@if($position->is_certificate_purchase)
 									<div class="font-weight-bold">Покупка сертификата</div>
-									<div class="d-inline-block font-weight-bold">
+									<div class="d-inline-block">
 										<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/certificate/{{ $position->id }}/edit" data-action="/deal_position/certificate/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку сертификата {{ $position->number }}">{{ $position->number }}</a>
 									</div>
 									<div class="d-inline-block ml-2">
@@ -200,7 +200,7 @@
 									@if($position->location)
 										@if($position->certificate)
 											<div class="font-weight-bold">Бронирование по сертификату</div>
-											<div class="d-inline-block font-weight-bold">
+											<div class="d-inline-block">
 												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование по сертификату {{ $position->number }}">{{ $position->number }}</a>
 											</div>
 											<div class="d-inline-block ml-2">
@@ -208,7 +208,7 @@
 											</div>
 										@else
 											<div class="font-weight-bold">Бронирование</div>
-											<div class="d-inline-block font-weight-bold">
+											<div class="d-inline-block">
 												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование {{ $position->number }}">{{ $position->number }}</a>
 											</div>
 											<div class="d-inline-block ml-2">
@@ -217,7 +217,7 @@
 										@endif
 									@else
 										<div class="font-weight-bold">Покупка товара / услуги</div>
-										<div class="d-inline-block font-weight-bold">
+										<div class="d-inline-block">
 											<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/product/{{ $position->id }}/edit" data-action="/deal_position/product/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на покупку товара / услуги {{ $position->number }}">{{ $position->number }}</a>
 										</div>
 										<div class="d-inline-block ml-2">
@@ -254,7 +254,7 @@
 											<i class="far fa-file-alt" title="Файл Сертификата"></i>
 										</a>
 									@endif
-									<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
+									<a href="javascript:void(0)" class="font-weight-bold" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
 										{{ $position->certificate->number ?: 'без номера' }}
 									</a>
 									@if($position->certificate->product_id)
