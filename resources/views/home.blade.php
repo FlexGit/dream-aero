@@ -222,15 +222,15 @@
 								<div class="reviews-item">
 									<div class="reviews-body wow">
 										<p class="reviews-text">
-											{{ strip_tags($review['preview_text']) }}
+											{{ strip_tags($review->preview_text) }}
 										</p>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="reviews-author wow">
-									<span class="reviews-name">{{ $review['title'] }}{{ $review->city ? ' | ' . $review->city->name : '' }}</span>
-									<span class="reviews-sent">@lang('main.home.отправлено') {{ $review['created_at'] }}</span>
+									<span class="reviews-name">{{ $review->title }}{{ $review->city ? ' | ' . $review->city->name : '' }}</span>
+									<span class="reviews-sent">@lang('main.home.отправлено') {{ $review->created_at->format('d.m.Y') }}</span>
 									<button type="button" class="reviews-prev"></button>
 									<button type="button" class="reviews-next"></button>
 								</div>
