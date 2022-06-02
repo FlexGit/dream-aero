@@ -349,10 +349,10 @@ class Product extends Model
 					
 					return ($amount > 0) ? (round($amount) + $score) : 0;
 				}
-				if ($promo->alias == 'birthday') {
+				/*if ($promo->alias == 'birthday') {
 					\Log::debug($isDiscountAllow . ' - ' . $amount);
 					\Log::debug($discount);
-				}
+				}*/
 			}
 
 			$date = date('Y-m-d');
