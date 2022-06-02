@@ -150,6 +150,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('event/{uuid}/file', [EventController::class, 'getFlightInvitationFile'])->name('getFlightInvitation');
 			Route::post('event/send', [EventController::class, 'sendFlightInvitation'])->name('sendFlightInvitation');
 			Route::get('event/{uuid}/doc/file', [EventController::class, 'getDocFile'])->name('getDocFile');
+			Route::post('event/{id}/doc/file/delete', [EventController::class, 'deleteDocFile'])->name('deleteDocFile');
 	
 			// Сделки
 			Route::get('deal/{id?}', [DealController::class, 'index'])->name('dealIndex');
@@ -419,6 +420,12 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			
 			Route::get('report/certificates', [ReportController::class, 'certificatesIndex'])->name('certificatesIndex');
 			Route::get('report/certificates/list/ajax', [ReportController::class, 'certificatesGetListAjax'])->name('certificatesGetList');
+			
+			Route::get('report/aeroflot/write-off', [ReportController::class, 'aeroflotWriteOffIndex'])->name('aeroflotWriteOffIndex');
+			Route::get('report/aeroflot/write-off/list/ajax', [ReportController::class, 'aeroflotWriteOffGetListAjax'])->name('aeroflotWriteOffGetList');
+
+			Route::get('report/aeroflot/accrual', [ReportController::class, 'aeroflotAccrualIndex'])->name('aeroflotAccrualIndex');
+			Route::get('report/aeroflot/accrual/list/ajax', [ReportController::class, 'aeroflotAccrualGetListAjax'])->name('aeroflotAccrualGetList');
 			
 			Route::get('report/file/{filepath}', [ReportController::class, 'getExportFile'])->name('getExportFile');
 		});

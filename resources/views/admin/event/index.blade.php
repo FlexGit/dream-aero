@@ -1000,8 +1000,8 @@
 			$(document).on('click', '.js-comment-remove', function(e) {
 				if (!confirm($(this).data('confirm-text'))) return null;
 
-				var eventId = $(this).closest('form').find('#id').val();
-				commentId = $(this).data('comment-id');
+				var eventId = $(this).closest('form').find('#id').val(),
+					commentId = $(this).data('comment-id');
 
 				$.ajax({
 					url: '/event/' + eventId + '/comment/' + commentId + '/remove',
@@ -1012,6 +1012,35 @@
 							return null;
 						}
 
+						toastr.success(result.msg);
+
+						calendarArr.forEach(function (element, locationId) {
+							element.forEach(function (calendar, simulatorId) {
+								if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+									calendar.refetchEvents();
+								}
+							});
+						});
+					}
+				});
+			});
+
+			$(document).on('click', '.js-delete-doc-file', function(e) {
+				if (!confirm($(this).data('confirm-text'))) return null;
+
+				var eventId = $(this).closest('form').find('#id').val(),
+					$container = $(this).closest('form').find('.doc-file-container');
+
+				$.ajax({
+					url: '/event/' + eventId + '/doc/file/delete',
+					type: 'POST',
+					success: function (result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						$container.html('');
 						toastr.success(result.msg);
 
 						calendarArr.forEach(function (element, locationId) {

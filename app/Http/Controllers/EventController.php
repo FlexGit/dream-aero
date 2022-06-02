@@ -1045,6 +1045,41 @@ class EventController extends Controller
 		return response()->json(['status' => 'success', 'msg' => 'Комментарий успешно удален']);
 	}
 	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function deleteDocFile($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		$event = Event::find($id);
+		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
+		
+		$data = $event->data_json;
+		if(is_array($data)
+			&& array_key_exists('doc_file_path', $data)
+			&& $data['doc_file_path']) {
+			$data['doc_file_path'] = '';
+			$event->data_json = $data;
+			if (!$event->save()) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+
+			return response()->json(['status' => 'success', 'msg' => 'Файл успешно удален']);
+		}
+		
+		return response()->json(['status' => 'error', 'reason' => 'Файл не найден']);
+	}
+	
 	public function notified()
 	{
 		if (!$this->request->ajax()) {
