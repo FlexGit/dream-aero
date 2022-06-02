@@ -21,7 +21,7 @@
 								{{--<span style="color: green;">@lang('main.pay.redirect')</span>--}}
 								{!! $html !!}
 								<label for="name">Имя</label>
-								<input type="text" id="name" value="{{ $bill->contractor->fio() }}" class="popup-input" readonly style="font-size: 14px;">
+								<input type="text" id="name" value="{{ $deal->name }}" class="popup-input" readonly style="font-size: 14px;">
 								<label for="amount">Сумма к оплате</label>
 								<input type="text" id="amount" value="{{ $bill->amount }}" class="popup-input" readonly style="font-size: 14px;">
 

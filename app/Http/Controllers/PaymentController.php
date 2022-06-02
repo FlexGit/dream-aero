@@ -91,6 +91,7 @@ class PaymentController extends Controller
 			'page' => $page ?? new Content,
 			'city' => $city,
 			'bill' => $bill,
+			'deal' => $deal,
 			'html' => $paymentFormHtml ?? '',
 			'error' => '',
 			'payType' => $type ?? '',
