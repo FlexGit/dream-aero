@@ -254,7 +254,7 @@
 											<i class="far fa-file-alt" title="Файл Сертификата"></i>
 										</a>
 									@endif
-									<a href="javascript:void(0)" class="font-weight-bold" style="font-size: 14px;" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
+									<a href="javascript:void(0)" class="font-weight-bold" style="font-size: 16px;" data-toggle="modal" data-url="/certificate/{{ $position->certificate->id }}/edit" data-action="/certificate/{{ $position->certificate->id }}" data-method="PUT" data-title="Редактирование сертификата" data-type="certificate" title="Редактировать сертификат">
 										{{ $position->certificate->number ?: 'без номера' }}
 									</a>
 									@if($position->certificate->product_id)
