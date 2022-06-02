@@ -215,14 +215,14 @@
 		<div class="container">
 			<h2 class="block-title">@lang('main.home.отзывы')</h2>
 			<div class="reviews-carousel owl-carousel">
-				@foreach($reviews ?? [] as $review)
+				@foreach($reviews as $review)
 					<div class="item">
 						<div class="row">
 							<div class="col-md-8">
 								<div class="reviews-item">
 									<div class="reviews-body wow">
 										<p class="reviews-text">
-											{{ $review['preview_text'] }}
+											{{ strip_tags($review['preview_text']) }}
 										</p>
 									</div>
 								</div>

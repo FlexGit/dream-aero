@@ -56,7 +56,7 @@ class MainController extends Controller
 			$reviews = Content::where('is_active', true)
 				->where('version', Content::VERSION_RU)
 				->where('parent_id', $reviewParentContent->id)
-				->orderByDesc('created_at')
+				->latest()
 				->limit(10)
 				->get();
 		}
