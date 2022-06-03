@@ -442,8 +442,12 @@ class DealController extends Controller
 		$amount = $this->request->amount ?? 0;
 		$hasAeroflotCard = $this->request->has_aeroflot_card ?? 0;
 		$cardNumber = $this->request->aeroflot_card_number ?? null;
-		$bonusAmount = $this->request->aeroflot_bonus_amount ?? 0;
 		$transactionType = $this->request->transaction_type ?? null;
+		if ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
+			$bonusAmount = $this->request->aeroflot_bonus_amount ?? 0;
+		} else {
+			$bonusAmount = floor($amount / 50);
+		}
 		$contractorId = $this->request->contractor_id ?? 0;
 		$name = $this->request->name ?? '';
 		$email = $this->request->email ?? '';
@@ -638,7 +642,7 @@ class DealController extends Controller
 				$bill->currency_id = $currency->id ?? 0;
 				$bill->aeroflot_transaction_type = $transactionType;
 				$bill->aeroflot_card_number = $cardNumber;
-				$bill->aeroflot_bonus_amount = ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) ? $bonusAmount : 0;
+				$bill->aeroflot_bonus_amount = $bonusAmount ?? 0;
 				$bill->user_id = $this->request->user()->id ?? 0;
 				$bill->save();
 				
