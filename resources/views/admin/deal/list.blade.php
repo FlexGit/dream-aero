@@ -127,22 +127,27 @@
 										@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
 											<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
 										@else
-											<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+											<i class="fas fa-exclamation-triangle text-warning"></i> не оформлена
 										@endif
 									@endif
 									]
 								</div>
 							@elseif($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
-								Заявка на начисление миль
+								Заявка на начисление {{ $bill->aeroflot_bonus_amount ?? '' }} миль
 								<div>
 									[
 									@if($bill->aeroflot_status != 0)
 										<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
 									@else
 										@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-											<i class="fas fa-check text-success"></i> подтверждена
+											<i class="fas fa-check text-success"></i> начислено
 										@else
-											<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+											<i class="fas fa-exclamation-triangle text-warning"></i>
+											@if($bill->payed_at)
+												дата начисления {{ \Carbon\Carbon::parse($bill->payed_at)->addDays(14)->format('Y-m-d') }}
+											@else
+												ожидание оплаты Счета
+											@endif
 										@endif
 									@endif
 									]
