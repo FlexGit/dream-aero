@@ -9,7 +9,7 @@
 	<fieldset>
 		<div>
 			<div class="col-md-6">
-				@if($product && $product->productType && !in_array($product->productType->alias, [app('\App\Models\ProductType')::VIP_ALIAS]) && $product->alias != 'fly_no_fear')
+				@if($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS]))
 					<div class="switch_box">
 						<label class="switch">
 							<input type="checkbox" id="is_unified" name="is_unified" class="edit_field" value="1">
