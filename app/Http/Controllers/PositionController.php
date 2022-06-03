@@ -441,9 +441,9 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		if (!$product->validateFlightDate($flightAt)) {
+		/*if (!$product->validateFlightDate($flightAt)) {
 			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-		}
+		}*/
 
 		$location = Location::find($locationId);
 		if (!$location) {
@@ -851,9 +851,9 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		if (!$product->validateFlightDate($flightAt)) {
+		/*if (!$product->validateFlightDate($flightAt)) {
 			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-		}
+		}*/
 
 		$location = Location::find($locationId);
 		if (!$location) {

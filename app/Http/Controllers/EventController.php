@@ -591,9 +591,9 @@ class EventController extends Controller
 					$event->save();
 				break;
 				default:
-					if (!$product->validateFlightDate(Carbon::parse($startAt)->format('Y-m-d H:i'))) {
+					/*if (!$product->validateFlightDate(Carbon::parse($startAt)->format('Y-m-d H:i'))) {
 						return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-					}
+					}*/
 					
 					$data = [
 						'pilot_assessment' => $this->request->pilot_assessment ?? '',
@@ -777,9 +777,9 @@ class EventController extends Controller
 						$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)/*->addMinutes($product->duration ?? 0)*/->format('Y-m-d H:i');
 						
-						if (!$product->validateFlightDate($startAt)) {
+						/*if (!$product->validateFlightDate($startAt)) {
 							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}
+						}*/
 						
 						$event->city_id = $city ? $city->id : 0;
 						$event->location_id = $location ? $location->id : 0;
@@ -798,9 +798,9 @@ class EventController extends Controller
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at)->subMinutes($event->extra_time ?? 0)->format('Y-m-d H:i');
 						
-						if (!$product->validateFlightDate($startAt)) {
+						/*if (!$product->validateFlightDate($startAt)) {
 							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}
+						}*/
 					}
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
@@ -938,16 +938,16 @@ class EventController extends Controller
 						$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
 						
-						if (!$product->validateFlightDate($startAt)) {
+						/*if (!$product->validateFlightDate($startAt)) {
 							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}
+						}*/
 					} elseif ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at)->subMinutes($event->extra_time ?? 0)->format('Y-m-d H:i');
 						
-						if (!$product->validateFlightDate($startAt)) {
+						/*if (!$product->validateFlightDate($startAt)) {
 							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}
+						}*/
 					}
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
