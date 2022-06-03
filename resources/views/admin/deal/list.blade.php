@@ -130,7 +130,7 @@
 										<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
 									@else
 										@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-											<i class="fas fa-check text-success"></i> подтверждена
+											<i class="fas fa-check text-success"></i> мили списаны
 										@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
 											<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
 										@else
@@ -145,7 +145,7 @@
 										<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
 									@else
 										@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-											<i class="fas fa-check text-success"></i> начислено
+											<i class="fas fa-check text-success"></i> мили начислены
 										@else
 											<i class="fas fa-exclamation-triangle text-warning"></i>
 											@if($bill->payed_at)
