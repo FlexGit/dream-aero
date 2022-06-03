@@ -427,6 +427,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('report/aeroflot/accrual', [ReportController::class, 'aeroflotAccrualIndex'])->name('aeroflotAccrualIndex');
 			Route::get('report/aeroflot/accrual/list/ajax', [ReportController::class, 'aeroflotAccrualGetListAjax'])->name('aeroflotAccrualGetList');
 			
+			Route::get('report/contractor-self-made-payed-deals', [ReportController::class, 'contractorSelfMadePayedDealsIndex'])->name('contractorSelfMadePayedDealsIndex');
+			Route::get('report/contractor-self-made-payed-deals/list/ajax', [ReportController::class, 'contractorSelfMadePayedDealsGetListAjax'])->name('contractorSelfMadePayedDealsGetList');
+			
 			Route::get('report/file/{filepath}', [ReportController::class, 'getExportFile'])->name('getExportFile');
 		});
 	});

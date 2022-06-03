@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AeroflotAccrualReportExport;
+use App\Exports\AeroflotWriteOffReportExport;
+use App\Exports\ContractorSelfMadePayedDealsReportExport;
 use App\Exports\NpsReportExport;
 use App\Models\Bill;
 use App\Models\Certificate;
+use App\Models\City;
 use App\Models\Content;
-use App\Models\Deal;
 use App\Models\Event;
-use App\Models\Status;
+use App\Models\Location;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Repositories\CityRepository;
 use App\Repositories\PaymentRepository;
+use App\Services\AeroflotBonusService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\HelpFunctions;
@@ -516,6 +521,271 @@ class ReportController extends Controller {
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
 	}
 	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function aeroflotWriteOffIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-aeroflot-write-off');
+		
+		return view('admin.report.aeroflot.write-off.index', [
+			'page' => $page,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
+	public function aeroflotWriteOffGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+		}
+		//\DB::connection()->enableQueryLog();
+		$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER)
+			->where('aeroflot_state', AeroflotBonusService::PAYED_STATE)
+			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->get();
+		//\Log::debug(\DB::getQueryLog());
+		$items = [];
+		foreach ($bills as $bill) {
+			$billLocation = $bill->location;
+			$billCity = $billLocation ? $billLocation->city : null;
+			$deal = $bill->deal;
+			$contractor = $deal ? $deal->contractor : null;
+			$contractorCity = $contractor ? $contractor->city : null;
+			
+			if ($contractor && $contractor->email == env('DEV_EMAIL')) continue;
+			
+			$locationName = $billLocation ? $billLocation->name : '';
+			$cityName = $billCity ? $billCity->name : ($contractorCity ? $contractorCity->name : '');
+			
+			$items[$bill->id] = [
+				'partner_name' => AeroflotBonusService::PARTNER_NAME,
+				'city_name' => $cityName,
+				'location_name' => $locationName,
+				'transaction_order_id' => $bill->aeroflot_transaction_order_id,
+				'bill_created_at' => $bill->created_at,
+				'card_number' => $bill->aeroflot_card_number,
+				'bill_amount' => $bill->amount,
+				'bonus_amount' => $bill->aeroflot_bonus_amount,
+				'bonus_miles' => $bill->aeroflot_bonus_amount * 4,
+				'product_type_name' => 'Полет на авиатренажере',
+			];
+		}
+		
+		$data = [
+			'items' => $items,
+		];
+		
+		$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-aeroflot-write-off-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new AeroflotWriteOffReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}
+		
+		$VIEW = view('admin.report.aeroflot.write-off.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function aeroflotAccrualIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-aeroflot-accrual');
+		
+		return view('admin.report.aeroflot.accrual.index', [
+			'page' => $page,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
+	public function aeroflotAccrualGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+		}
+		//\DB::connection()->enableQueryLog();
+		$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS)
+			->where('aeroflot_state', AeroflotBonusService::PAYED_STATE)
+			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->get();
+		//\Log::debug(\DB::getQueryLog());
+		$items = [];
+		foreach ($bills as $bill) {
+			$billLocation = $bill->location;
+			$billCity = $billLocation ? $billLocation->city : null;
+			$deal = $bill->deal;
+			$contractor = $deal ? $deal->contractor : null;
+			$contractorCity = $contractor ? $contractor->city : null;
+			
+			if ($contractor && $contractor->email == env('DEV_EMAIL')) continue;
+			
+			$locationName = $billLocation ? $billLocation->name : '';
+			$cityName = $billCity ? $billCity->name : ($contractorCity ? $contractorCity->name : '');
+			
+			$items[$bill->id] = [
+				'transaction_order_id' => $bill->aeroflot_transaction_order_id,
+				'city_name' => $cityName,
+				'location_name' => $locationName,
+				'transaction_created_at' => $bill->transaction_created_at ? $bill->transaction_created_at->format('Y-m-d H:i:s') : '',
+				'bill_amount' => $bill->amount,
+				'bonus_miles' => $bill->aeroflot_bonus_amount,
+			];
+		}
+		
+		$data = [
+			'items' => $items,
+		];
+		
+		$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-aeroflot-accrual-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new AeroflotAccrualReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}
+		
+		$VIEW = view('admin.report.aeroflot.accrual.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function contractorSelfMadePayedDealsIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-contractor-self-made-payed-deals');
+		
+		return view('admin.report.contractor-self-made-payed-deals.index', [
+			'page' => $page,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
+	public function contractorSelfMadePayedDealsGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+		}
+		//\DB::connection()->enableQueryLog();
+		$bills = Bill::where('user_id', 0)
+			->whereRelation('paymentMethod', 'payment_methods.alias', '=', PaymentMethod::ONLINE_ALIAS)
+			->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
+			->where('payed_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('payed_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->get();
+		//\Log::debug(\DB::getQueryLog());
+		$items = [];
+		foreach ($bills as $bill) {
+			$deal = $bill->deal;
+			if ($deal->bills->count() > 1) continue;
+			
+			$contractor = $bill->contractor;
+			if ($contractor && $contractor->email == env('DEV_EMAIL')) continue;
+			
+			if (!isset($items[$bill->location_id])) {
+				$items[$bill->location_id] = [
+					'bill_count' => 0,
+					'bill_amount_sum' => 0,
+				];
+			}
+			++$items[$bill->location_id]['bill_count'];
+			$items[$bill->location_id]['bill_amount_sum'] += $bill->amount;
+		}
+
+		$cities = City::where('version', $user->version)
+			->get();
+		
+		$data = [
+			'items' => $items,
+			'cities' => $cities,
+		];
+		
+		$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-contractor-self-made-payed-deals-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new ContractorSelfMadePayedDealsReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}
+		
+		$VIEW = view('admin.report.contractor-self-made-payed-deals.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+
 	/**
 	 * @param $fileName
 	 * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\StreamedResponse

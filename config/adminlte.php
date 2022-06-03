@@ -430,6 +430,24 @@ return [
 					'can'  => 'is_superadmin',
 					'icon' => 'far fa-circle nav-icon',
 				],
+				[
+					'text' => 'Аэрофлот: списание',
+					'url'  => '/report/aeroflot/write-off',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-circle nav-icon',
+				],
+				[
+					'text' => 'Аэрофлот: начисление',
+					'url'  => '/report/aeroflot/accrual',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-circle nav-icon',
+				],
+				[
+					'text' => 'Самостоятельные оплаты',
+					'url'  => '/report/contractor-self-made-payed-deals',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-circle nav-icon',
+				],
             ],
         ],
 		[
