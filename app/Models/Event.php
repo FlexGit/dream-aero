@@ -85,6 +85,21 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereFlightInvitationSentAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereIsNotified($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUuid($value)
+ * @property int $shift_admin_id
+ * @property int $shift_pilot_id
+ * @property string|null $description
+ * @property int $pilot_id фактический пилот
+ * @property int $test_pilot_id пилот тестового полета
+ * @property int $employee_id сотрудник, осуществивший полет
+ * @property-read \App\Models\User|null $employee
+ * @property-read \App\Models\User|null $pilot
+ * @property-read \App\Models\User|null $testPilot
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereEmployeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event wherePilotId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereShiftAdminId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereShiftPilotId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereTestPilotId($value)
  */
 class Event extends Model
 {

@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 8.81.0.
+ * Generated for Laravel 8.83.14.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -2351,6 +2351,17 @@
                         return \Illuminate\View\Compilers\BladeCompiler::render($string, $data, $deleteCachedView);
         }
                     /**
+         * Render a component instance to HTML.
+         *
+         * @param \Illuminate\View\Component $component
+         * @return string 
+         * @static 
+         */ 
+        public static function renderComponent($component)
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::renderComponent($component);
+        }
+                    /**
          * Strip the parentheses from the given expression.
          *
          * @param string $expression
@@ -3912,50 +3923,6 @@
                         return $instance->macroCall($method, $parameters);
         }
                     /**
-         * Remove all items from the cache.
-         *
-         * @return bool 
-         * @static 
-         */ 
-        public static function flush()
-        {
-                        /** @var \Illuminate\Cache\FileStore $instance */
-                        return $instance->flush();
-        }
-                    /**
-         * Get the Filesystem instance.
-         *
-         * @return \Illuminate\Filesystem\Filesystem 
-         * @static 
-         */ 
-        public static function getFilesystem()
-        {
-                        /** @var \Illuminate\Cache\FileStore $instance */
-                        return $instance->getFilesystem();
-        }
-                    /**
-         * Get the working directory of the cache.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getDirectory()
-        {
-                        /** @var \Illuminate\Cache\FileStore $instance */
-                        return $instance->getDirectory();
-        }
-                    /**
-         * Get the cache key prefix.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getPrefix()
-        {
-                        /** @var \Illuminate\Cache\FileStore $instance */
-                        return $instance->getPrefix();
-        }
-                    /**
          * Get a lock instance.
          *
          * @param string $name
@@ -3966,7 +3933,7 @@
          */ 
         public static function lock($name, $seconds = 0, $owner = null)
         {
-                        /** @var \Illuminate\Cache\FileStore $instance */
+                        /** @var \Illuminate\Cache\RedisStore $instance */
                         return $instance->lock($name, $seconds, $owner);
         }
                     /**
@@ -3979,8 +3946,99 @@
          */ 
         public static function restoreLock($name, $owner)
         {
-                        /** @var \Illuminate\Cache\FileStore $instance */
+                        /** @var \Illuminate\Cache\RedisStore $instance */
                         return $instance->restoreLock($name, $owner);
+        }
+                    /**
+         * Remove all items from the cache.
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function flush()
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        return $instance->flush();
+        }
+                    /**
+         * Get the Redis connection instance.
+         *
+         * @return \Illuminate\Redis\Connections\Connection 
+         * @static 
+         */ 
+        public static function connection()
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        return $instance->connection();
+        }
+                    /**
+         * Get the Redis connection instance that should be used to manage locks.
+         *
+         * @return \Illuminate\Redis\Connections\Connection 
+         * @static 
+         */ 
+        public static function lockConnection()
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        return $instance->lockConnection();
+        }
+                    /**
+         * Specify the name of the connection that should be used to store data.
+         *
+         * @param string $connection
+         * @return void 
+         * @static 
+         */ 
+        public static function setConnection($connection)
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        $instance->setConnection($connection);
+        }
+                    /**
+         * Specify the name of the connection that should be used to manage locks.
+         *
+         * @param string $connection
+         * @return \Illuminate\Cache\RedisStore 
+         * @static 
+         */ 
+        public static function setLockConnection($connection)
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        return $instance->setLockConnection($connection);
+        }
+                    /**
+         * Get the Redis database instance.
+         *
+         * @return \Illuminate\Contracts\Redis\Factory 
+         * @static 
+         */ 
+        public static function getRedis()
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        return $instance->getRedis();
+        }
+                    /**
+         * Get the cache key prefix.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getPrefix()
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        return $instance->getPrefix();
+        }
+                    /**
+         * Set the cache key prefix.
+         *
+         * @param string $prefix
+         * @return void 
+         * @static 
+         */ 
+        public static function setPrefix($prefix)
+        {
+                        /** @var \Illuminate\Cache\RedisStore $instance */
+                        $instance->setPrefix($prefix);
         }
          
     }
@@ -8936,7 +8994,7 @@
                     /**
          * Push a new job onto the queue.
          *
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @param string|null $queue
          * @return mixed 
@@ -8965,7 +9023,7 @@
          * Push a new job onto the queue after a delay.
          *
          * @param \DateTimeInterface|\DateInterval|int $delay
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @param string|null $queue
          * @return mixed 
@@ -8980,7 +9038,7 @@
          * Push a new job onto the queue.
          *
          * @param string $queue
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @return mixed 
          * @static 
@@ -8995,7 +9053,7 @@
          *
          * @param string $queue
          * @param \DateTimeInterface|\DateInterval|int $delay
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @return mixed 
          * @static 
@@ -9066,6 +9124,83 @@
                         return $instance->setConnectionName($name);
         }
                     /**
+         * Release a reserved job back onto the queue.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\DatabaseJobRecord $job
+         * @param int $delay
+         * @return mixed 
+         * @static 
+         */ 
+        public static function release($queue, $job, $delay)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->release($queue, $job, $delay);
+        }
+                    /**
+         * Delete a reserved job from the queue.
+         *
+         * @param string $queue
+         * @param string $id
+         * @return void 
+         * @throws \Throwable
+         * @static 
+         */ 
+        public static function deleteReserved($queue, $id)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        $instance->deleteReserved($queue, $id);
+        }
+                    /**
+         * Delete a reserved job from the reserved queue and release it.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\DatabaseJob $job
+         * @param int $delay
+         * @return void 
+         * @static 
+         */ 
+        public static function deleteAndRelease($queue, $job, $delay)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        $instance->deleteAndRelease($queue, $job, $delay);
+        }
+                    /**
+         * Delete all of the jobs from the queue.
+         *
+         * @param string $queue
+         * @return int 
+         * @static 
+         */ 
+        public static function clear($queue)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->clear($queue);
+        }
+                    /**
+         * Get the queue or return the default.
+         *
+         * @param string|null $queue
+         * @return string 
+         * @static 
+         */ 
+        public static function getQueue($queue)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->getQueue($queue);
+        }
+                    /**
+         * Get the underlying database instance.
+         *
+         * @return \Illuminate\Database\Connection 
+         * @static 
+         */ 
+        public static function getDatabase()
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->getDatabase();
+        }
+                    /**
          * Get the backoff for an object-based queue handler.
          *
          * @param mixed $job
@@ -9074,7 +9209,7 @@
          */ 
         public static function getJobBackoff($job)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         return $instance->getJobBackoff($job);
         }
                     /**
@@ -9086,7 +9221,7 @@
          */ 
         public static function getJobExpiration($job)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         return $instance->getJobExpiration($job);
         }
                     /**
@@ -9098,7 +9233,7 @@
          */ 
         public static function createPayloadUsing($callback)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        \Illuminate\Queue\SyncQueue::createPayloadUsing($callback);
+                        \Illuminate\Queue\DatabaseQueue::createPayloadUsing($callback);
         }
                     /**
          * Get the container instance being used by the connection.
@@ -9108,7 +9243,7 @@
          */ 
         public static function getContainer()
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         return $instance->getContainer();
         }
                     /**
@@ -9120,7 +9255,7 @@
          */ 
         public static function setContainer($container)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         $instance->setContainer($container);
         }
          
@@ -12008,6 +12143,7 @@
      * @method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix)
      * @method static \Illuminate\Routing\RouteRegistrar scopeBindings()
      * @method static \Illuminate\Routing\RouteRegistrar where(array $where)
+     * @method static \Illuminate\Routing\RouteRegistrar withoutMiddleware(array|string $middleware)
      * @see \Illuminate\Routing\Router
      */ 
         class Route {
@@ -16200,11 +16336,12 @@
          * @param string $fileName
          * @param string|null $writerType
          * @param mixed $withHeadings
+         * @param array $responseHeaders
          * @static 
          */ 
-        public static function downloadExcel($fileName, $writerType = null, $withHeadings = false)
+        public static function downloadExcel($fileName, $writerType = null, $withHeadings = false, $responseHeaders = [])
         {
-                        return \Illuminate\Support\Collection::downloadExcel($fileName, $writerType, $withHeadings);
+                        return \Illuminate\Support\Collection::downloadExcel($fileName, $writerType, $withHeadings, $responseHeaders);
         }
                     /**
          * 
@@ -16225,7 +16362,71 @@
      
 }
 
-        namespace Facade\Ignition\Facades { 
+        namespace Intervention\Image\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class Image {
+                    /**
+         * Overrides configuration settings
+         *
+         * @param array $config
+         * @return self 
+         * @static 
+         */ 
+        public static function configure($config = [])
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->configure($config);
+        }
+                    /**
+         * Initiates an Image instance from different input types
+         *
+         * @param mixed $data
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function make($data)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->make($data);
+        }
+                    /**
+         * Creates an empty image canvas
+         *
+         * @param int $width
+         * @param int $height
+         * @param mixed $background
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function canvas($width, $height, $background = null)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->canvas($width, $height, $background);
+        }
+                    /**
+         * Create new cached image and run callback
+         * (requires additional package intervention/imagecache)
+         *
+         * @param \Closure $callback
+         * @param int $lifetime
+         * @param boolean $returnObj
+         * @return \Image 
+         * @static 
+         */ 
+        public static function cache($callback, $lifetime = null, $returnObj = false)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->cache($callback, $lifetime, $returnObj);
+        }
+         
+    }
+     
+}
+
+    namespace Facade\Ignition\Facades { 
             /**
      * Class Flare.
      *
@@ -16761,6 +16962,95 @@
      
 }
 
+    namespace Webklex\IMAP\Facades { 
+            /**
+     * Class Client
+     *
+     * @package Webklex\IMAP\Facades
+     */ 
+        class Client {
+                    /**
+         * Safely create a new client instance which is not listed in accounts
+         *
+         * @param array $config
+         * @return \Client 
+         * @throws Exceptions\MaskNotFoundException
+         * @static 
+         */ 
+        public static function make($config)
+        {
+                        /** @var \Webklex\PHPIMAP\ClientManager $instance */
+                        return $instance->make($config);
+        }
+                    /**
+         * Get a dotted config parameter
+         *
+         * @param string $key
+         * @param null $default
+         * @return mixed|null 
+         * @static 
+         */ 
+        public static function get($key, $default = null)
+        {
+                        return \Webklex\PHPIMAP\ClientManager::get($key, $default);
+        }
+                    /**
+         * Resolve a account instance.
+         *
+         * @param string $name
+         * @return \Client 
+         * @throws Exceptions\MaskNotFoundException
+         * @static 
+         */ 
+        public static function account($name = null)
+        {
+                        /** @var \Webklex\PHPIMAP\ClientManager $instance */
+                        return $instance->account($name);
+        }
+                    /**
+         * Get the name of the default account.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getDefaultAccount()
+        {
+                        /** @var \Webklex\PHPIMAP\ClientManager $instance */
+                        return $instance->getDefaultAccount();
+        }
+                    /**
+         * Set the name of the default account.
+         *
+         * @param string $name
+         * @return void 
+         * @static 
+         */ 
+        public static function setDefaultAccount($name)
+        {
+                        /** @var \Webklex\PHPIMAP\ClientManager $instance */
+                        $instance->setDefaultAccount($name);
+        }
+                    /**
+         * Merge the vendor settings with the local config
+         * 
+         * The default account identifier will be used as default for any missing account parameters.
+         * If however the default account is missing a parameter the package default account parameter will be used.
+         * This can be disabled by setting imap.default in your config file to 'false'
+         *
+         * @param array|string $config
+         * @return \Webklex\PHPIMAP\ClientManager 
+         * @static 
+         */ 
+        public static function setConfig($config)
+        {
+                        /** @var \Webklex\PHPIMAP\ClientManager $instance */
+                        return $instance->setConfig($config);
+        }
+         
+    }
+     
+}
+
     namespace Webpatser\Uuid { 
             /**
      * Class Uuid
@@ -16855,7 +17145,7 @@
          * DataTables using Query.
          *
          * @param \Illuminate\Database\Query\Builder|mixed $builder
-         * @return \Yajra\DataTables\DataTableAbstract|\Yajra\DataTables\QueryDataTable 
+         * @return \Yajra\DataTables\QueryDataTable|\Yajra\DataTables\DataTableAbstract 
          * @static 
          */ 
         public static function query($builder)
@@ -16867,7 +17157,7 @@
          * DataTables using Eloquent Builder.
          *
          * @param \Illuminate\Database\Eloquent\Builder|mixed $builder
-         * @return \Yajra\DataTables\DataTableAbstract|\Yajra\DataTables\EloquentDataTable 
+         * @return \Yajra\DataTables\EloquentDataTable|\Yajra\DataTables\DataTableAbstract 
          * @static 
          */ 
         public static function eloquent($builder)
@@ -16879,7 +17169,7 @@
          * DataTables using Collection.
          *
          * @param \Illuminate\Support\Collection|array $collection
-         * @return \Yajra\DataTables\DataTableAbstract|\Yajra\DataTables\CollectionDataTable 
+         * @return \Yajra\DataTables\CollectionDataTable|\Yajra\DataTables\DataTableAbstract 
          * @static 
          */ 
         public static function collection($collection)
@@ -16891,7 +17181,7 @@
          * DataTables using Collection.
          *
          * @param \Illuminate\Http\Resources\Json\AnonymousResourceCollection|array $collection
-         * @return \Yajra\DataTables\DataTableAbstract|\Yajra\DataTables\ApiResourceDataTable 
+         * @return \Yajra\DataTables\ApiResourceDataTable|\Yajra\DataTables\DataTableAbstract 
          * @static 
          */ 
         public static function resource($resource)
@@ -20550,8 +20840,10 @@ namespace  {
             class URL extends \Illuminate\Support\Facades\URL {}
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
+            class Image extends \Intervention\Image\Facades\Image {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
             class Excel extends \Maatwebsite\Excel\Facades\Excel {}
+            class Client extends \Webklex\IMAP\Facades\Client {}
             class Uuid extends \Webpatser\Uuid\Uuid {}
             class DataTables extends \Yajra\DataTables\Facades\DataTables {}
      

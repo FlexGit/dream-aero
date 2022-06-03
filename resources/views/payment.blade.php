@@ -25,20 +25,20 @@
 								<label for="amount">Сумма к оплате</label>
 								<input type="text" id="amount" value="{{ $bill->amount }}" class="popup-input" readonly style="font-size: 14px;">
 
-								@if($bill->position)
-									@if($bill->position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
-										@if($bill->position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-											<div style="color: #56BA76;font-weight: 600;margin: 10px;">Ваша скидка подтверждена и после использования миль составила {{ $bill->position->aeroflot_bonus_amount }} рублей</div>
-										@elseif($bill->position->aeroflot_state == app('\App\Services\AeroflotBonusService')::REGISTERED_STATE)
-											<div style="color:#ff8200;font-weight:600;margin:10px">Ваша скидка в размере {{ $bill->position->aeroflot_bonus_amount }} рублей пока не подтверждена. Пожалуйста, подождите и обновите статус позже!</div>
+								@if($bill)
+									@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
+										@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+											<div style="color: #56BA76;font-weight: 600;margin: 10px;">Ваша скидка подтверждена и после использования миль составила {{ $bill->aeroflot_bonus_amount }} рублей</div>
+										@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::REGISTERED_STATE)
+											<div style="color:#ff8200;font-weight:600;margin:10px">Ваша скидка в размере {{ $bill->aeroflot_bonus_amount }} рублей пока не подтверждена. Пожалуйста, подождите и обновите статус позже!</div>
 											<ul class="aerbonus_btns" style="padding-inline-start: 10px;">
-												<li class="js-use-retry" data-uuid="{{ $bill->position->uuid }}">Повторить попытку</li>
-												<li class="js-status-refresh" data-uuid="{{ $bill->position->uuid }}">Обновить статус</li>
+												<li class="js-use-retry" data-uuid="{{ $bill->uuid }}">Повторить попытку</li>
+												<li class="js-status-refresh" data-uuid="{{ $bill->uuid }}">Обновить статус</li>
 											</ul>
-										@elseif($bill->position->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
-											<div style="color: red;font-weight: 600;margin: 10px">Извините, Ваша скидка в размере {{ $bill->position->aeroflot_bonus_amount }} рублей была отклонена!</div>
+										@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
+											<div style="color: red;font-weight: 600;margin: 10px">Извините, Ваша скидка в размере {{ $bill->aeroflot_bonus_amount }} рублей была отклонена!</div>
 											<ul class="aerbonus_btns" style="padding-inline-start: 10px;">
-												<li class="js-use-retry" data-uuid="{{ $bill->position->uuid }}">Повторить попытку</li>
+												<li class="js-use-retry" data-uuid="{{ $bill->uuid }}">Повторить попытку</li>
 											</ul>
 										@endif
 									@else

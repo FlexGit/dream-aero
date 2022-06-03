@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
 use App\Models\City;
 use App\Models\Content;
 use App\Models\Deal;
+use App\Models\DealPosition;
 use App\Models\PaymentMethod;
+use App\Models\Product;
 use App\Models\Status;
 use App\Services\AeroflotBonusService;
 use App\Services\HelpFunctions;
@@ -74,14 +77,12 @@ class PaymentController extends Controller
 			]);
 		}
 		
-		$position = $bill->position;
 		// автоматическая проверка состояния заказа на списание милей, если такой есть
-		if ($position
-			&& $position->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER
-			&& $position->aeroflot_transaction_order_id
-			&& $position->aeroflot_status == 0
-			&& in_array($position->aeroflot_state, [AeroflotBonusService::REGISTERED_STATE, null])) {
-			$orderInfoResult = AeroflotBonusService::getOrderInfo($position);
+		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER
+			&& $bill->aeroflot_transaction_order_id
+			&& $bill->aeroflot_status == 0
+			&& in_array($bill->aeroflot_state, [AeroflotBonusService::REGISTERED_STATE, null])) {
+			$orderInfoResult = AeroflotBonusService::getOrderInfo($bill);
 			$bill = $bill->fresh();
 		}
 		
@@ -129,25 +130,30 @@ class PaymentController extends Controller
 				return 'FAIL';
 			}
 			
+			$bill = $bill->fresh();
+			
 			//dispatch(new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate));
 			$job = new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate);
 			$job->handle();
 			
+			/** @var DealPosition $position */
 			$position = $bill->position;
-			if ($position) {
-				$certificate = $position->certificate;
-				if ($position->is_certificate_purchase && $certificate) {
-					$certificate = $certificate->generateFile();
-					
-					//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
-					$job = new \App\Jobs\SendCertificateEmail($certificate);
-					$job->handle();
-				}
+			/** @var Certificate $certificate */
+			$certificate = $position ? $position->certificate : null;
+			if ($certificate && $position->is_certificate_purchase) {
+				// при выставлении даты оплаты генерим и дату окончания срока действия сертификата,
+				// если это счет на позицию покупки сертификата
+				/** @var Product $product */
+				$product = $certificate ? $certificate->product : null;
+				$certificatePeriod = ($product && $position->is_certificate_purchase && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
+				$certificate->expire_at = Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
+				$certificate->save();
+				$certificate = $certificate->fresh();
+				$certificate = $certificate->generateFile();
 				
-				// если было выбрано начисление бонусов Аэрофлот
-				/*if ($position->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS) {
-					AeroflotBonusService::authPoints($position);
-				}*/
+				//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+				$job = new \App\Jobs\SendCertificateEmail($certificate);
+				$job->handle();
 			}
 		}
 		

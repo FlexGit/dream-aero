@@ -45,6 +45,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|AeroflotBonusLog withTrashed()
  * @method static \Illuminate\Database\Query\Builder|AeroflotBonusLog withoutTrashed()
  * @mixin \Eloquent
+ * @property int $bill_id
+ * @property \Illuminate\Support\Carbon|null $transaction_created_at
+ * @property-read \App\Models\Bill|null $bill
+ * @method static \Illuminate\Database\Eloquent\Builder|AeroflotBonusLog whereBillId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AeroflotBonusLog whereTransactionCreatedAt($value)
  */
 class AeroflotBonusLog extends Model
 {
@@ -56,9 +61,10 @@ class AeroflotBonusLog extends Model
 	 * @var string[]
 	 */
 	protected $fillable = [
-		'deal_position_id',
+		'bill_id',
 		'transaction_order_id',
 		'transaction_type',
+		'transaction_created_at',
 		'amount',
 		'bonus_amount',
 		'card_number',
@@ -77,10 +83,11 @@ class AeroflotBonusLog extends Model
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
+		'transaction_created_at' => 'datetime:Y-m-d H:i:s',
 	];
 	
-	public function position()
+	public function bill()
 	{
-		return $this->hasOne(DealPosition::class, 'id', 'deal_position_id');
+		return $this->hasOne(Bill::class, 'id', 'bill_id');
 	}
 }

@@ -46,14 +46,6 @@
 						<i class="far fa-star"></i> {{ number_format($scoreAmount, 0, '.', ' ') }}
 					</div>
 				@endif
-				{{--@php($aeroflotBonusAmount = $deal->aeroflotBonusAmount())
-				@if($aeroflotBonusAmount)
-					<div class="d-inline-block" title="Скидка Аэрофлот Бонус">
-						<span class="pl-2 pr-2" style="background-color: #cfffba;">
-							<i class="fas fa-globe-americas"></i> {{ number_format($aeroflotBonusAmount, 0, '.', ' ') }}
-						</span>
-					</div>
-				@endif--}}
 				<div class="d-inline-block mt-1" title="Итого к оплате">
 					@if($balance < 0)
 						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ number_format($balance, 0, '.', ' ') }}</span>
@@ -71,41 +63,6 @@
 					</div>
 				</div>
 			@endif
-			@foreach($deal->positions as $position)
-				@if(!$position->aeroflot_transaction_type)
-					@continue
-				@endif
-
-				<div style="line-height: 1.0em;">
-					@if($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
-						Заявка на списание миль на сумму {{ number_format($position->aeroflot_bonus_amount, 0, '.', ' ') }} руб [
-						@if($position->aeroflot_status != 0)
-							<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
-						@else
-							@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-								<i class="fas fa-check text-success"></i> подтверждена
-							@elseif($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
-								<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
-							@else
-								<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
-							@endif
-						@endif
-						]
-					@elseif($position->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
-						Заявка на начисление миль [
-						@if($position->aeroflot_status != 0)
-							<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
-						@else
-							@if($position->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-								<i class="fas fa-check text-success"></i> подтверждена
-							@else
-								<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
-							@endif
-						@endif
-						]
-					@endif
-				</div>
-			@endforeach
 			<div class="d-flex justify-content-between mt-2">
 				<div title="Источник">
 					{{ isset(\App\Models\Deal::SOURCES[$deal->source]) ? \App\Models\Deal::SOURCES[$deal->source] : '' }}
@@ -156,6 +113,37 @@
 							@endif
 						@endif
 					</div>
+					@if($bill->aeroflot_transaction_type)
+						<div style="line-height: 1.0em;">
+							@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
+								Заявка на списание миль на сумму {{ number_format($bill->aeroflot_bonus_amount, 0, '.', ' ') }} руб [
+								@if($bill->aeroflot_status != 0)
+									<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
+								@else
+									@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+										<i class="fas fa-check text-success"></i> подтверждена
+									@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
+										<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
+									@else
+										<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+									@endif
+								@endif
+								]
+							@elseif($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
+								Заявка на начисление миль [
+								@if($bill->aeroflot_status != 0)
+									<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
+								@else
+									@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+										<i class="fas fa-check text-success"></i> подтверждена
+									@else
+										<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+									@endif
+								@endif
+								]
+							@endif
+						</div>
+					@endif
 					@if ($bill->status)
 						<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $bill->status->data_json ?? []) ? $bill->status->data_json['color'] : 'none' }};" title="Статус Счета">
 							{{ $bill->status->name }}

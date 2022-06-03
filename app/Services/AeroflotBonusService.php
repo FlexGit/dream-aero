@@ -6,7 +6,7 @@ require __DIR__ . '/../../afbonus/vendor/autoload.php';
 
 use AfService\AfService;
 use App\Models\AeroflotBonusLog;
-use App\Models\DealPosition;
+use App\Models\Bill;
 use App\Models\Product;
 use Request;
 
@@ -17,9 +17,10 @@ class AeroflotBonusService {
 	const PARTNER_ID = 5164734;
 	const LOCATION = '1IM';
 	const TERMINAL = 1;
+	const PARTNER_NAME = 'DREAM AERO';
 	
 	const REGISTERED_STATE = 0;
-	const PAYED_STATE = 2;
+	const PAYED_STATE = 2; // для Списания - оплачено, для Начисления - заявка принята
 	const CANCEL_STATE = 4;
 	
 	const TRANSACTION_TYPE_LIMITS = 'getInfo2';
@@ -30,32 +31,35 @@ class AeroflotBonusService {
 	const MILES_RATE = 4;
 	
 	/**
-	 * @param DealPosition $position
+	 * @param Bill $bill
 	 * @return mixed|null
 	 */
-	public static function registerOrder(DealPosition $position)
+	public static function registerOrder(Bill $bill)
 	{
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			
-			$dateTime = date('Ymdhis');
+			$dateTime = date('YmdHis');
 			$orderId = $dateTime . rand(10000, 99999);
+			
+			$position = $bill->position;
+			$product = $position ? $position->product : null;
 			
 			$request = [
 				'orderId' => $orderId,
-				'amount' => $position->aeroflot_bonus_amount * 100,
+				'amount' => $bill->aeroflot_bonus_amount * 100,
 				'currency' => self::CURRENCY_CODE,
-				'returnUrl' => Request::getSchemeAndHttpHost() . '/payment/' . ($position->bill->uuid ?? ''),
+				'returnUrl' => Request::getSchemeAndHttpHost() . '/payment/' . ($bill->uuid ?? ''),
 				'transactionDate' => $dateTime,
 				'cheque' => [
 					[
-						'product' => $position->product->alias ?? '',
+						'product' => $product ? $product->alias : $bill->number,
 						'quantity' => 1,
-						'amount' => $position->amount * 100,
+						'amount' => $bill->amount * 100,
 						'attributes' => [
 							[
 								'name' => 'AB_DISCOUNT',
-							 	'value' => $position->aeroflot_bonus_amount * 100
+							 	'value' => $bill->aeroflot_bonus_amount * 100
 							]
 						]
 					]
@@ -65,17 +69,17 @@ class AeroflotBonusService {
 			$result = $AfService->registerOrder($request);
 			$result = json_decode(json_encode($result), true);
 			
-			$position->aeroflot_transaction_order_id = $orderId;
-			$position->aeroflot_status = isset($result['status']['code']) ? $result['status']['code'] : null;
-			$position->save();
+			$bill->aeroflot_transaction_order_id = $orderId;
+			$bill->aeroflot_status = isset($result['status']['code']) ? $result['status']['code'] : null;
+			$bill->save();
 			
 			$fields = [
-				'deal_position_id' => $position->id,
+				'bill_id' => $bill->id,
 				'transaction_order_id' => $orderId,
 				'transaction_type' => 'registerOrder',
-				'amount' => $position->amount,
-				'bonus_amount' => $position->aeroflot_bonus_amount,
-				'card_number' => $position->aeroflot_card_number,
+				'amount' => $bill->amount,
+				'bonus_amount' => $bill->aeroflot_bonus_amount,
+				'card_number' => $bill->aeroflot_card_number,
 				'status' => isset($result['status']['code']) ? $result['status']['code'] : null,
 				'request' => json_encode($request),
 				'response' => json_encode($result),
@@ -91,18 +95,18 @@ class AeroflotBonusService {
 	}
 	
 	/**
-	 * @param DealPosition $position
+	 * @param Bill $bill
 	 * @return mixed|null
 	 */
-	public static function getOrderInfo(DealPosition $position)
+	public static function getOrderInfo(Bill $bill)
 	{
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			
-			$dateTime = date('Ymdhis');
+			$dateTime = date('YmdHis');
 			
 			$request = [
-				'orderId' => $position->aeroflot_transaction_order_id,
+				'orderId' => $bill->aeroflot_transaction_order_id,
 				'transactionDate' => $dateTime,
 			];
 			$result = $AfService->getOrderInfo($request);
@@ -111,33 +115,18 @@ class AeroflotBonusService {
 			$status = isset($result['status']['code']) ? $result['status']['code'] : null;
 			$state = isset($result['orderState']) ? $result['orderState'] : null;
 			
-			if ($position->aeroflot_status != $status || $position->aeroflot_state != $state) {
-				$position->aeroflot_status = $status;
-				$position->aeroflot_state = $state;
-				$position->save();
-			}
-			
-			if ($position->aeroflot_state == self::PAYED_STATE) {
-				$bill = $position->bill;
-				if ($bill) {
-					$amountDiff = $position->amount - $position->aeroflot_bonus_amount;
-					$bill->amount = ($amountDiff >= 0) ? $amountDiff : 0;
-					$bill->save();
-					
-					/*if ($bill->save()) {
-						//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
-						$job = new \App\Jobs\SendPayLinkEmail($bill);
-						$job->handle();
-					}*/
-				}
+			if ($bill->aeroflot_status != $status || $bill->aeroflot_state != $state) {
+				$bill->aeroflot_status = $status;
+				$bill->aeroflot_state = $state;
+				$bill->save();
 			}
 			
 			$fields = [
-				'deal_position_id' => $position->id,
-				'transaction_order_id' => $position->aeroflot_transaction_order_id,
+				'bill_id' => $bill->id,
+				'transaction_order_id' => $bill->aeroflot_transaction_order_id,
 				'transaction_type' => self::TRANSACTION_TYPE_ORDER_INFO,
-				'amount' => $position->amount,
-				'bonus_amount' => $position->aeroflot_bonus_amount,
+				'amount' => $bill->amount,
+				'bonus_amount' => $bill->aeroflot_bonus_amount,
 				'card_number' => isset($result['cardNumber']) ? $result['cardNumber'] : null,
 				'status' => isset($result['status']['code']) ? $result['status']['code'] : null,
 				'state' => isset($result['orderState']) ? $result['orderState'] : null,
@@ -165,7 +154,7 @@ class AeroflotBonusService {
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			
-			$dateTime = date('Ymdhis');
+			$dateTime = date('YmdHis');
 			$transactionId = $dateTime . rand(10000, 99999);
 			
 			$request = [
@@ -200,21 +189,21 @@ class AeroflotBonusService {
 	}
 	
 	/**
-	 * @param DealPosition $position
+	 * @param Bill $bill
 	 * @return mixed|null
 	 */
-	public static function authPoints(DealPosition $position)
+	public static function authPoints(Bill $bill)
 	{
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			
-			$dateTime = date('Ymdhis');
+			$dateTime = date('YmdHis');
 			$transactionId = $dateTime . rand(10000, 99999);
 			
 			$request = [
 				'transaction' => [
 					'id' => $transactionId,
-					'pan' => $position->aeroflot_card_number,
+					'pan' => $bill->aeroflot_card_number,
 					'dateTime' => $dateTime,
 					'extensions' => [
 						[
@@ -241,7 +230,7 @@ class AeroflotBonusService {
 								],
 								[
 									'name' => 'ORDER_ID',
-									'value' => $position->uuid
+									'value' => $bill->uuid
 								],
 								[
 									'name' => 'RECEIPT',
@@ -252,18 +241,18 @@ class AeroflotBonusService {
 					]
 				],
 				'currency' => self::CURRENCY_CODE,
-				'amount' => $position->amount * 100,
+				'amount' => $bill->amount * 100,
 				'payment' => [
 					[
 						'payMeans' => 'I',
-						'amount' => $position->amount * 100,
+						'amount' => $bill->amount * 100,
 					]
 				],
 				'cheque' => [
 					'item' => [
-						'product' => $position->product->alias,
+						'product' => $bill->product->alias,
 						'quantity' => 1,
-						'amount' => $position->amount * 100,
+						'amount' => $bill->amount * 100,
 					]
 				]
 			];
@@ -271,11 +260,11 @@ class AeroflotBonusService {
 			$result = json_decode(json_encode($result), true);
 			
 			$fields = [
-				'deal_position_id' => $position->id,
+				'bill_id' => $bill->id,
 				'transaction_order_id' => $transactionId,
 				'transaction_type' => self::TRANSACTION_TYPE_AUTH_POINTS,
-				'amount' => $position->amount,
-				'bonus_amount' => $position->aeroflot_bonus_amount,
+				'amount' => $bill->amount,
+				'bonus_amount' => $bill->aeroflot_bonus_amount,
 				'card_number' => isset($result['cardNumber']) ? $result['cardNumber'] : null,
 				'status' => isset($result['status']['code']) ? $result['status']['code'] : null,
 				'state' => isset($result['orderState']) ? $result['orderState'] : null,
@@ -300,7 +289,7 @@ class AeroflotBonusService {
 	{
 		try {
 			$log = new AeroflotBonusLog();
-			$log->deal_position_id = isset($fields['deal_position_id']) ? $fields['deal_position_id'] : 0;
+			$log->bill_id = isset($fields['bill_id']) ? $fields['bill_id'] : 0;
 			$log->transaction_order_id = isset($fields['transaction_order_id']) ? $fields['transaction_order_id'] : null;
 			$log->transaction_type = isset($fields['transaction_type']) ? $fields['transaction_type'] : null;
 			$log->amount = isset($fields['amount']) ? $fields['amount'] : 0;

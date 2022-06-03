@@ -32,12 +32,6 @@ class CreateDealPositionsTable extends Migration
 			$table->timestamp('invite_sent_at')->nullable()->comment('последняя дата отправки приглашения на e-mail');
 			$table->timestamp('certificate_sent_at')->nullable()->comment('последняя дата отправки сертификата на e-mail');
 			$table->string('source', 25)->nullable()->index()->comment('источник');
-			$table->string('aeroflot_transaction_type', 50)->index()->nullable()->comment('тип транзакции Аэрофлот Бонус');
-			$table->string('aeroflot_transaction_order_id')->nullable()->comment('id транзакции/заказа Аэрофлот Бонус');
-			$table->string('aeroflot_card_number', 50)->nullable()->comment('номер карты Аэрофлот Бонус');
-			$table->integer('aeroflot_bonus_amount')->default(0)->comment('сумма транзакции Аэрофлот Бонус');
-			$table->string('aeroflot_status', 25)->index()->nullable()->comment('статус транзакции Аэрофлот Бонус');
-			$table->string('aeroflot_state', 25)->index()->nullable()->comment('состояние транзакции списания милей Аэрофлот Бонус');
 			$table->string('uuid')->index()->nullable()->comment('uuid');
 			$table->integer('user_id')->default(0)->index()->comment('пользователь');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');

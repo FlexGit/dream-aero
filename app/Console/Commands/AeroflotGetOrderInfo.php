@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Bill;
 use App\Models\DealPosition;
 use App\Services\AeroflotBonusService;
 use Carbon\Carbon;
@@ -41,7 +42,7 @@ class AeroflotGetOrderInfo extends Command
     public function handle()
     {
     	//\Log::debug(\DB::connection()->enableQueryLog());
-    	$positions = DealPosition::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER)
+    	$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER)
 			->whereNotNull('aeroflot_transaction_order_id')
 			->where('aeroflot_status', 0)
 			->where(function ($query) {
@@ -50,8 +51,8 @@ class AeroflotGetOrderInfo extends Command
 			})
 			->get();
     	//\Log::debug(\DB::getQueryLog());
-    	foreach ($positions as $position) {
-			$orderInfoResult = AeroflotBonusService::getOrderInfo($position);
+    	foreach ($bills as $bill) {
+			$orderInfoResult = AeroflotBonusService::getOrderInfo($bill);
 		}
 			
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - aeroflot_order_info:get - OK');

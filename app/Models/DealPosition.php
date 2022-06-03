@@ -12,7 +12,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * App\Models\DealPosition
  *
  * @property int $id
- * @property string|null $number номер
+ * @property string|null $number
  * @property int $deal_id сделка
  * @property int $product_id продукт
  * @property int $certificate_id сертификат
@@ -25,23 +25,17 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property int $promo_id акция
  * @property int $promocode_id промокод
  * @property bool $is_certificate_purchase покупка сертификата
- * @property \datetime|null $flight_at дата и время полета
+ * @property \Illuminate\Support\Carbon|null $flight_at дата и время полета
  * @property string|null $source источник
- * @property string|null $aeroflot_transaction_type
- * @property string|null $aeroflot_transaction_order_id
- * @property string|null $aeroflot_card_number
- * @property int $aeroflot_bonus_amount
  * @property string|null $uuid
- * @property string|null $aeroflot_status
- * @property string|null $aeroflot_state
  * @property int $user_id пользователь
  * @property array|null $data_json дополнительная информация
- * @property \datetime|null $created_at
- * @property \datetime|null $updated_at
- * @property \datetime|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AeroflotBonusLog[] $aeroflotBonusLog
- * @property-read int|null $aeroflot_bonus_log_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Bill|null $bill
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Bill[] $bills
+ * @property-read int|null $bills_count
  * @property-read \App\Models\Certificate|null $certificate
  * @property-read \App\Models\City|null $city
  * @property-read \App\Models\Currency|null $currency
@@ -60,15 +54,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition newQuery()
  * @method static \Illuminate\Database\Query\Builder|DealPosition onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition query()
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotBonusAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotCardNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotState($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCertificateSentAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereCurrencyId($value)
@@ -113,12 +100,6 @@ class DealPosition extends Model
 		'is_certificate_purchase' => 'Покупка сертификата',
 		'flight_at' => 'Дата полета',
 		'source' => 'Источник',
-		'aeroflot_transaction_type' => 'Тип транзакции',
-		'aeroflot_transaction_order_id' => 'ID транзакции/заказа',
-		'aeroflot_card_number' => 'Номер карты',
-		'aeroflot_bonus_amount' => 'Сумма бонуса',
-		'aeroflot_status' => 'Статус операции',
-		'aeroflot_state' => 'Состояние заказа',
 		'uuid' => 'Uuid',
 		'user_id' => 'Пользователь',
 		'data_json' => 'Дополнительная информация',
@@ -165,12 +146,6 @@ class DealPosition extends Model
 		'user_id',
 		'source',
 		'uuid',
-		'aeroflot_transaction_type',
-		'aeroflot_transaction_order_id',
-		'aeroflot_card_number',
-		'aeroflot_bonus_amount',
-		'aeroflot_status',
-		'aeroflot_state',
 		'data_json',
 	];
 
@@ -295,11 +270,6 @@ class DealPosition extends Model
 		return $this->hasMany(Bill::class, 'deal_position_id', 'id');
 	}
 	
-	public function aeroflotBonusLog()
-	{
-		return $this->hasMany(AeroflotBonusLog::class, 'deal_position_id', 'id');
-	}
-
 	/**
 	 * @return string
 	 */

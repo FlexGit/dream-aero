@@ -178,7 +178,7 @@ class DealController extends Controller
 				});
 			}
 			if (in_array('with_miles', $this->request->filter_advanced)) {
-				$deals = $deals->whereHas('positions', function ($query) {
+				$deals = $deals->whereHas('bills', function ($query) {
 					return $query->whereNotNull('aeroflot_transaction_type');
 				});
 			}
@@ -591,9 +591,6 @@ class DealController extends Controller
 			$position->promocode_id = ($promocodeId || $promocodeUuid) ? $promocode->id : 0;
 			$position->is_certificate_purchase = true;
 			$position->source = $source ?: Deal::ADMIN_SOURCE;
-			$position->aeroflot_transaction_type = $transactionType;
-			$position->aeroflot_card_number = $cardNumber;
-			$position->aeroflot_bonus_amount = ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) ? $bonusAmount : 0;
 			$position->user_id = $this->request->user()->id ?? 0;
 			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
@@ -639,6 +636,9 @@ class DealController extends Controller
 				$bill->status_id = $billStatus->id ?? 0;
 				$bill->amount = $amount;
 				$bill->currency_id = $currency->id ?? 0;
+				$bill->aeroflot_transaction_type = $transactionType;
+				$bill->aeroflot_card_number = $cardNumber;
+				$bill->aeroflot_bonus_amount = ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) ? $bonusAmount : 0;
 				$bill->user_id = $this->request->user()->id ?? 0;
 				$bill->save();
 				
@@ -652,7 +652,7 @@ class DealController extends Controller
 			if ($transactionType) {
 				switch ($transactionType) {
 					case AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER:
-						$registerOrderResult = AeroflotBonusService::registerOrder($position);
+						$registerOrderResult = AeroflotBonusService::registerOrder($bill);
 						if ($registerOrderResult['status']['code'] != 0) {
 							\DB::rollback();
 							
@@ -660,11 +660,6 @@ class DealController extends Controller
 							
 							return response()->json(['status' => 'error', 'reason' => 'Aeroflot Bonus: ' . $registerOrderResult['status']['description']]);
 						}
-						
-						/*if ($source == Deal::WEB_SOURCE) {
-							$job = new \App\Jobs\SendDealEmail($deal);
-							$job->handle();
-						}*/
 						
 						\DB::commit();
 						
@@ -677,11 +672,6 @@ class DealController extends Controller
 				$promocode->contractors()->save($contractor);
 			}
 			
-			/*if ($source == Deal::WEB_SOURCE) {
-				$job = new \App\Jobs\SendDealEmail($deal);
-				$job->handle();
-			}*/
-
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -691,11 +681,6 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		/*if (in_array($source, [Deal::MOB_SOURCE])) {
-			$job = new \App\Jobs\SendPayLinkEmail($bill);
-			$job->handle();
-		}*/
-
 		if (in_array($source, [Deal::WEB_SOURCE])) {
 			$paymentFormHtml = PayAnyWayService::generatePaymentForm($bill);
 			return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена! Перенаправляем на страницу оплаты. Пожалуйста, подождите...', 'html' => $paymentFormHtml]);

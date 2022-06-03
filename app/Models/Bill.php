@@ -67,6 +67,23 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read \App\Models\DealPosition|null $position
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereDealPositionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereLocationId($value)
+ * @property \Illuminate\Support\Carbon|null $success_payment_sent_at дата и время отправки уведомления об успешной оплате
+ * @property string|null $aeroflot_transaction_type
+ * @property string|null $aeroflot_transaction_order_id
+ * @property string|null $aeroflot_card_number
+ * @property int $aeroflot_bonus_amount
+ * @property string|null $aeroflot_status
+ * @property string|null $aeroflot_state
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AeroflotBonusLog[] $aeroflotBonusLog
+ * @property-read int|null $aeroflot_bonus_log_count
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotBonusAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotCardNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotTransactionOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotTransactionType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereSuccessPaymentSentAt($value)
  */
 class Bill extends Model
 {
@@ -88,6 +105,12 @@ class Bill extends Model
 		'payed_at' => 'Оплачено',
 		'link_sent_at' => 'Ссылка на оплату отправлена',
 		'success_payment_sent_at' => 'Уведомление об успешной оплате отправлено',
+		'aeroflot_transaction_type' => 'Тип транзакции',
+		'aeroflot_transaction_order_id' => 'ID транзакции/заказа',
+		'aeroflot_card_number' => 'Номер карты',
+		'aeroflot_bonus_amount' => 'Сумма бонуса',
+		'aeroflot_status' => 'Статус операции',
+		'aeroflot_state' => 'Состояние заказа',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
@@ -129,6 +152,12 @@ class Bill extends Model
 		'payed_at',
 		'link_sent_at',
 		'success_payment_sent_at',
+		'aeroflot_transaction_type',
+		'aeroflot_transaction_order_id',
+		'aeroflot_card_number',
+		'aeroflot_bonus_amount',
+		'aeroflot_status',
+		'aeroflot_state',
 		'user_id',
 		'data_json',
 	];
@@ -222,6 +251,11 @@ class Bill extends Model
 	public function location()
 	{
 		return $this->belongsTo(Location::class);
+	}
+	
+	public function aeroflotBonusLog()
+	{
+		return $this->hasMany(AeroflotBonusLog::class, 'bill_id', 'id');
 	}
 
 	/**

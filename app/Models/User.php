@@ -62,6 +62,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMiddlename($value)
  * @property string $version
  * @method static \Illuminate\Database\Eloquent\Builder|User whereVersion($value)
+ * @property \Illuminate\Support\Carbon|null $birthdate дата рождения
+ * @property string|null $phone Телефон
+ * @property string|null $position должность
+ * @property int $is_reserved признак резервного сотрудника
+ * @property int $is_official признак официального трудоустройства
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBirthdate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsOfficial($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsReserved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePosition($value)
  */
 class User extends Authenticatable
 {

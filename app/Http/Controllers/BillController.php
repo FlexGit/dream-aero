@@ -249,6 +249,10 @@ class BillController extends Controller
 			if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки  не найдена']);
 		}
 		
+		if (in_array($bill->status->alias, [Bill::PAYED_STATUS, Bill::PAYED_PROCESSING_STATUS]) && in_array($bill->paymentMethod->alias, [PaymentMethod::ONLINE_ALIAS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Оплаченный Счет со способом оплаты "Онлайн" недоступен для редактирования']);
+		}
+
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		if ($paymentMethodId) {
 			$paymentMethod = PaymentMethod::find($paymentMethodId);
@@ -261,6 +265,17 @@ class BillController extends Controller
 		$bill->currency_id = $this->request->currency_id ?? 0;
 		if ($status->alias == Bill::PAYED_STATUS && !$bill->payed_at) {
 			$bill->payed_at = Carbon::now()->format('Y-m-d H:i:s');
+
+			// при выставлении даты оплаты генерим и дату окончания срока действия сертификата,
+			// если это счет на позицию покупки сертификата
+			$position = $bill->position;
+			$certificate = $position ? $position->certificate : null;
+			$product = $certificate ? $certificate->product : null;
+			$certificatePeriod = ($product && $position->is_certificate_purchase && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
+			if ($certificate) {
+				$certificate->expire_at = Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
+				$certificate->save();
+			}
 		}
 		if (!$bill->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -291,6 +306,10 @@ class BillController extends Controller
 		$deal = $bill->deal;
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
+		if (in_array($bill->status->alias, [Bill::PAYED_STATUS, Bill::PAYED_PROCESSING_STATUS]) && in_array($bill->paymentMethod->alias, [PaymentMethod::ONLINE_ALIAS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Оплаченный Счет со способом оплаты "Онлайн" недоступен для удаления']);
+		}
+
 		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}

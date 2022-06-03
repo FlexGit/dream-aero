@@ -85,6 +85,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read int|null $scores_count
  * @property string|null $uuid
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereUuid($value)
+ * @property string|null $roistat номер визита Roistat
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereRoistat($value)
  */
 class Deal extends Model
 {
@@ -325,8 +327,8 @@ class Deal extends Model
 	public function aeroflotBonusWriteOffAmount()
 	{
 		$amount = 0;
-		foreach ($this->positions as $position) {
-			$aeroflotBonusAmount = ($position->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER && $position->aeroflot_state == AeroflotBonusService::PAYED_STATE) ? $position->aeroflot_bonus_amount : 0;
+		foreach ($this->bills as $bill) {
+			$aeroflotBonusAmount = ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER && $bill->aeroflot_state == AeroflotBonusService::PAYED_STATE) ? $bill->aeroflot_bonus_amount : 0;
 			
 			$amount += $aeroflotBonusAmount;
 		}

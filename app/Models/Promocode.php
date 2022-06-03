@@ -57,6 +57,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereLocationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereSentAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Promocode whereType($value)
+ * @property-read \App\Models\Location|null $location
  */
 class Promocode extends Model
 {
