@@ -28,7 +28,8 @@ class AeroflotBonusService {
 	const TRANSACTION_TYPE_ORDER_INFO = 'getOrderInfo';
 	const TRANSACTION_TYPE_AUTH_POINTS = 'authpoints';
 	
-	const MILES_RATE = 4;
+	const WRITEOFF_MILES_RATE = 4;
+	const ACCRUAL_MILES_RATE = 50;
 	
 	/**
 	 * @param Bill $bill

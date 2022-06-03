@@ -9,6 +9,7 @@ use App\Models\DealPosition;
 use App\Models\PaymentMethod;
 use App\Models\Deal;
 use App\Models\Status;
+use App\Services\AeroflotBonusService;
 use App\Services\HelpFunctions;
 use App\Services\PayAnyWayService;
 use Carbon\Carbon;
@@ -254,14 +255,19 @@ class BillController extends Controller
 		}
 
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
-		if ($paymentMethodId) {
-			$paymentMethod = PaymentMethod::find($paymentMethodId);
-		}
+		$amount = $this->request->amount ?? 0;
 		
 		$bill->deal_position_id = $position->id ?? 0;
 		$bill->payment_method_id = $paymentMethodId;
 		$bill->status_id = $this->request->status_id ?? 0;
-		$bill->amount = $this->request->amount;
+		$bill->amount = $amount;
+		if ($bill->status->alias == Bill::NOT_PAYED_STATUS
+			&& $bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS
+			&& !$bill->aeroflot_status
+			&& $bill->aeroflot_state != AeroflotBonusService::PAYED_STATE
+		) {
+			$bill->aeroflot_bonus_amount = floor($amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
+		}
 		$bill->currency_id = $this->request->currency_id ?? 0;
 		if ($status->alias == Bill::PAYED_STATUS && !$bill->payed_at) {
 			$bill->payed_at = Carbon::now()->format('Y-m-d H:i:s');
@@ -280,11 +286,6 @@ class BillController extends Controller
 		if (!$bill->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
-		
-		/*if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
-			$job = new \App\Jobs\SendPayLinkEmail($bill);
-			$job->handle();
-		}*/
 		
 		return response()->json(['status' => 'success']);
 	}
