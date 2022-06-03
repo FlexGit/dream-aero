@@ -116,31 +116,37 @@
 					@if($bill->aeroflot_transaction_type)
 						<div style="line-height: 1.0em;">
 							@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
-								Заявка на списание миль на сумму {{ number_format($bill->aeroflot_bonus_amount, 0, '.', ' ') }} руб [
-								@if($bill->aeroflot_status != 0)
-									<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
-								@else
-									@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-										<i class="fas fa-check text-success"></i> подтверждена
-									@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
+								Заявка на списание миль на сумму {{ number_format($bill->aeroflot_bonus_amount, 0, '.', ' ') }} руб
+								<div>
+									[
+									@if($bill->aeroflot_status != 0)
+										<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
+									@else
+										@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+											<i class="fas fa-check text-success"></i> подтверждена
+										@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
+											<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
+										@else
+											<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+										@endif
+									@endif
+									]
+								</div>
+							@elseif($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
+								Заявка на начисление миль
+								<div>
+									[
+									@if($bill->aeroflot_status != 0)
 										<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
 									@else
-										<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+										@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
+											<i class="fas fa-check text-success"></i> подтверждена
+										@else
+											<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
+										@endif
 									@endif
-								@endif
-								]
-							@elseif($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
-								Заявка на начисление миль [
-								@if($bill->aeroflot_status != 0)
-									<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
-								@else
-									@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
-										<i class="fas fa-check text-success"></i> подтверждена
-									@else
-										<i class="fas fa-exclamation-triangle text-warning"></i> ожидание
-									@endif
-								@endif
-								]
+									]
+								</div>
 							@endif
 						</div>
 					@endif
