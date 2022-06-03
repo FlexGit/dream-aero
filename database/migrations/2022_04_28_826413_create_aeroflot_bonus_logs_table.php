@@ -15,7 +15,7 @@ class CreateAeroflotBonusLogsTable extends Migration
     {
         Schema::create('aeroflot_bonus_logs', function (Blueprint $table) {
 			$table->id();
-			$table->integer('deal_position_id')->default(0)->index()->comment('позиция сделки');
+			$table->integer('bill_id')->default(0)->index()->comment('счет');
 			$table->string('transaction_order_id')->nullable()->index()->comment('ID транзакции/заказа');
 			$table->string('transaction_type')->nullable()->index()->comment('тип транзакции');
 			$table->integer('amount')->default(0)->comment('стоимость позиции сделки');
