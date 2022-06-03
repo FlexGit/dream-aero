@@ -126,7 +126,6 @@
 							@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
 								Заявка на списание миль на сумму {{ number_format($bill->aeroflot_bonus_amount, 0, '.', ' ') }} руб
 								<div>
-									[
 									@if($bill->aeroflot_status != 0)
 										<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
 									@else
@@ -138,12 +137,10 @@
 											<i class="fas fa-exclamation-triangle text-warning"></i> не оформлена
 										@endif
 									@endif
-									]
 								</div>
 							@elseif($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
 								Заявка на начисление {{ $bill->aeroflot_bonus_amount ?? '' }} миль
 								<div>
-									[
 									@if($bill->aeroflot_status != 0)
 										<i class="fas fa-exclamation-triangle text-danger"></i> отклонена
 									@else
@@ -158,7 +155,6 @@
 											@endif
 										@endif
 									@endif
-									]
 								</div>
 							@endif
 						</div>
