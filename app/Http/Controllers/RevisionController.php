@@ -140,6 +140,8 @@ class RevisionController extends Controller
 			$oldValue = $newValue = '';
 			if (substr($revision->key, strlen($revision->key) - 3) == '_id') {
 				$tableName = substr($revision->key, 0, strlen($revision->key) - 3);
+				if (!class_exists('App\Models\\' . \Str::studly(\Str::singular($tableName)))) continue;
+				
 				$entity = 'App\Models\\' . \Str::studly(\Str::singular($tableName));
 				if ($revision->old_value) {
 					$model = $entity::withTrashed()->find($revision->old_value);
