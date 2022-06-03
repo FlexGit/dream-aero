@@ -186,7 +186,7 @@ class Certificate extends Model
 			// vip
 			$certificateTemplateFilePath = 'certificate/template/VIP_' . mb_strtoupper($product->alias) . '.jpg';
 		} else {
-			$certificateTemplateFilePath = 'certificate/template/' . preg_replace("/[^A-Z]/", '', mb_strtoupper($product->alias)) . '_' . mb_strtoupper($city->alias) . '.jpg';
+			$certificateTemplateFilePath = 'certificate/template/' . preg_replace("/[^A-Z]/", '', mb_strtoupper($product->alias)) . '_' . $city ? mb_strtoupper($city->alias) : 'UNI' . '.jpg';
 		}
 		
 		if (!Storage::disk('private')->exists($certificateTemplateFilePath)) {
