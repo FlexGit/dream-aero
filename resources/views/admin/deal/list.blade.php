@@ -113,6 +113,14 @@
 							@endif
 						@endif
 					</div>
+					@if ($bill->status)
+						<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $bill->status->data_json ?? []) ? $bill->status->data_json['color'] : 'none' }};" title="Статус Счета">
+							{{ $bill->status->name }}
+						</div>
+						<div class="text-nowrap" style="line-height: 0.9em;" title="Дата оплаты">
+							{{ $bill->payed_at ? $bill->payed_at->format('Y-m-d H:i') : '' }}
+						</div>
+					@endif
 					@if($bill->aeroflot_transaction_type)
 						<div style="line-height: 1.0em;">
 							@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
@@ -153,14 +161,6 @@
 									]
 								</div>
 							@endif
-						</div>
-					@endif
-					@if ($bill->status)
-						<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $bill->status->data_json ?? []) ? $bill->status->data_json['color'] : 'none' }};" title="Статус Счета">
-							{{ $bill->status->name }}
-						</div>
-						<div class="text-nowrap" style="line-height: 0.9em;" title="Дата оплаты">
-							{{ $bill->payed_at ? $bill->payed_at->format('Y-m-d H:i') : '' }}
 						</div>
 					@endif
 				</div>
