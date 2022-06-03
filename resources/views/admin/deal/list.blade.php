@@ -122,7 +122,7 @@
 						</div>
 					@endif
 					@if($bill->aeroflot_transaction_type)
-						<div style="line-height: 1.0em;">
+						<div style="border: 1px solid;border-radius: 6px;padding: 4px 8px;background-color: #fff;">
 							@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
 								Заявка на списание миль на сумму {{ number_format($bill->aeroflot_bonus_amount, 0, '.', ' ') }} руб
 								<div>
