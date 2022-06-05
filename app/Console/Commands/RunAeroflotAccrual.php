@@ -4,12 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\Bill;
 use App\Models\Deal;
-use App\Models\Status;
 use App\Services\AeroflotBonusService;
-use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Throwable;
 
 class RunAeroflotAccrual extends Command
 {
@@ -44,6 +41,7 @@ class RunAeroflotAccrual extends Command
      */
     public function handle()
     {
+    	\DB::connection()->enableQueryLog();
     	$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS)
 			->whereNotNull('aeroflot_card_number')
 			->where('aeroflot_bonus_amount', '>', 0)
@@ -53,6 +51,7 @@ class RunAeroflotAccrual extends Command
 			->has('status')
 			->oldest()
 			->get();
+    	\Log::debug(\DB::getQueryLog());
     	/** @var Bill[] $bills */
 		foreach ($bills as $bill) {
 			if (!in_array($bill->status->alias, [Bill::PAYED_STATUS])) continue;
