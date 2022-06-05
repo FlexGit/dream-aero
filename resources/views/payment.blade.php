@@ -80,7 +80,7 @@
 										</label>
 									</div>
 
-									<div style="margin-top: 10px;margin-left: 18px;margin-right: 18px;">
+									<div style="margin-top: 10px;">
 										<div class="alert alert-success hidden" role="alert"></div>
 										<div class="alert alert-danger hidden" role="alert"></div>
 									</div>

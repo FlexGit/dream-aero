@@ -68,8 +68,8 @@ class AeroflotBonusController extends Controller {
 			<p>Сколько миль "Аэрофлот Бонус" Вы готовы списать?</p>
 			<p id="ab-error" style="color: red;"></p>
 			<div style="display: flex;">
-				<input style="width: 48%;border-bottom: 2px solid #828285;margin-top: 10px;" name="bonus_amount" data-min="' . $minLimit . '" data-max="' . $cardInfoResult['max_limit'] . '" id="bonus_amount" type="text" value="" placeholder="Введите сумму в рублях" required="">
-				<input style="width:48%;border-bottom: 2px solid #828285;margin-top:10px" readonly id="miles_amount" type="text" value="" required="">
+				<input style="width: 50%;border-bottom: 2px solid #828285;margin-top: 10px;" name="bonus_amount" data-min="' . $minLimit . '" data-max="' . $cardInfoResult['max_limit'] . '" id="bonus_amount" type="text" value="" placeholder="Введите сумму в рублях" required="">
+				<input style="width: 50%;border-bottom: 2px solid #828285;margin-top: 10px;" readonly id="miles_amount" type="text" value="" required="">
 			</div>
 			<p>1 рубль = 4 мили</p>
 			<i>Вы можете списать не менее 20% и не более 50% от стоимости тарифа</i>
@@ -223,7 +223,7 @@ class AeroflotBonusController extends Controller {
 		$uuid = $this->request->uuid ?? '';
 		$cardNumber = $this->request->card_number ?? '';
 		if (!$uuid || !$cardNumber) {
-			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры1')]);
 		}
 		
 		$bill = HelpFunctions::getEntityByUuid(Bill::class, $uuid);
@@ -231,7 +231,7 @@ class AeroflotBonusController extends Controller {
 		if (!$bill
 			|| $bill->amount <= 0
 		) {
-			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры2')]);
 		}
 		
 		if ($bill->aeroflot_transaction_type == AeroflotBonusService::REGISTERED_STATE) {

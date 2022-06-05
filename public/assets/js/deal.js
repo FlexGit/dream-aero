@@ -292,7 +292,6 @@ $(function() {
 
 		$bonusInfo.html(loader);
 
-		console.log($product.val());
 		$.ajax({
 			url: '/aeroflot-card/info',
 			type: 'POST',
@@ -303,7 +302,7 @@ $(function() {
 			},
 			dataType: 'json',
 			success: function (result) {
-				console.log(result);
+				//console.log(result);
 
 				if (result.status !== 'success') {
 					$bonusInfo.html('<p class="error">' + result.reason + '</p>');
