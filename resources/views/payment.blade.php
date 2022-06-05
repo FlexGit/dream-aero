@@ -42,6 +42,7 @@
 											</ul>
 										@endif
 									@else
+										@if($_SERVER['REMOTE_ADDR'] == '178.176.79.250')
 										@if(($bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
 											<div class="aeroflot_container" style="margin-left: 0;margin-right: 0;">
 												<div style="display: flex;">
@@ -62,6 +63,7 @@
 												<small class="aeroflot_note" style="display: none;font-size: 80%;">* @lang('main.modal-certificate.введите-номер-карты-аэрофлот-описание')</small>
 												<div class="aeroflot-buttons-container"></div>
 											</div>
+										@endif
 										@endif
 									@endif
 								@endif
