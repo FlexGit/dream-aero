@@ -107,6 +107,8 @@ class AeroflotBonusService {
 	 */
 	public static function getOrderInfo(Bill $bill)
 	{
+		if ($bill->aeroflot_state == self::PAYED_STATE) return null;
+		
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			
@@ -126,6 +128,9 @@ class AeroflotBonusService {
 			if ($bill->aeroflot_status != $status || $bill->aeroflot_state != $state) {
 				$bill->aeroflot_status = $status;
 				$bill->aeroflot_state = $state;
+				if ($state == self::PAYED_STATE) {
+					$bill->amount -= $bill->aeroflot_bonus_amount;
+				}
 			}
 			$bill->save();
 			
