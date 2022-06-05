@@ -314,7 +314,7 @@ $(function() {
 		});
 	});
 
-	$(document).on('blur', '#bonus_amount', function() {
+	$(document).on('keyup', '#bonus_amount', function() {
 		if (!checkMiles($(this))) {
 			return false;
 		}
