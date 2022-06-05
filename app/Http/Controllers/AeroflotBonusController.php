@@ -210,27 +210,27 @@ class AeroflotBonusController extends Controller {
 	}
 	
 	/**
-	 * Заявка на начисление миль при оплате по ссылке
+	 * Создание транзакции на начисление/списание миль при оплате по ссылке
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function scoring()
+	public function transaction()
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
 		
 		$uuid = $this->request->uuid ?? '';
+		$transactionType = $this->request->transaction_type ?? '';
 		$cardNumber = $this->request->card_number ?? '';
-		if (!$uuid || !$cardNumber) {
+		$bonusAmount = $this->request->card_number ?? 0;
+		
+		if (!$uuid || !$transactionType || !$cardNumber) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
 		}
 		
 		$bill = HelpFunctions::getEntityByUuid(Bill::class, $uuid);
-
-		if (!$bill
-			|| $bill->amount <= 0
-		) {
+		if (!$bill || $bill->amount <= 0) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
 		}
 		
@@ -238,10 +238,34 @@ class AeroflotBonusController extends Controller {
 			return response()->json(['status' => 'error', 'reason' => 'Начисление миль невозможно. Ранее уже было выбрано Списание']);
 		}
 		
-		$bill->aeroflot_transaction_type = AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS;
-		$bill->aeroflot_card_number = $cardNumber;
-		$bill->aeroflot_bonus_amount = floor($bill->amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
-		$bill->save();
+		switch ($transactionType) {
+			case AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER:
+				if (!$bonusAmount) {
+					return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
+				}
+				
+				$bill->aeroflot_transaction_type = $transactionType;
+				$bill->aeroflot_card_number = $cardNumber;
+				$bill->aeroflot_bonus_amount = $bonusAmount;
+				$bill->save();
+				$bill = $bill->fresh();
+				
+				$registerOrderResult = AeroflotBonusService::registerOrder($bill);
+				if ($registerOrderResult['status']['code'] != 0) {
+					\Log::debug('500 - Payment: ' . $registerOrderResult['status']['description']);
+					
+					return response()->json(['status' => 'error', 'reason' => 'Aeroflot Bonus: ' . $registerOrderResult['status']['description']]);
+				}
+				
+				return response()->json(['status' => 'success', 'message' => 'Перенаправляем на страницу "Аэрофлот Бонус"...', 'payment_url' => $registerOrderResult['paymentUrl']]);
+			break;
+			case AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS:
+				$bill->aeroflot_transaction_type = $transactionType;
+				$bill->aeroflot_card_number = $cardNumber;
+				$bill->aeroflot_bonus_amount = floor($bill->amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
+				$bill->save();
+			break;
+		}
 		
 		return response()->json(['status' => 'success', 'message' => '']);
 	}

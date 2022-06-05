@@ -143,15 +143,20 @@
 					return;
 				}
 
+				var transactionType = $('#use').hasClass('active') ? 'registerOrder' : 'authpoints',
+					bonusAmount = $('#bonus_amount').val();
+
 				$alertSuccess.addClass('hidden');
 				$alertError.text('').addClass('hidden');
 
 				$.ajax({
-					url: '/aeroflot-scoring',
+					url: '/aeroflot-transaction',
 					type: 'POST',
 					data: {
 						'uuid': $(this).data('uuid'),
+						'transaction_type': transactionType,
 						'card_number': cardNumber,
+						'bonus_amount': parseInt(bonusAmount),
 					},
 					dataType: 'json',
 					success: function (result) {
