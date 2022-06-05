@@ -223,7 +223,7 @@ class AeroflotBonusController extends Controller {
 		$uuid = $this->request->uuid ?? '';
 		$transactionType = $this->request->transaction_type ?? '';
 		$cardNumber = $this->request->card_number ?? '';
-		$bonusAmount = $this->request->card_number ?? 0;
+		$bonusAmount = $this->request->bonus_amount ?? 0;
 		
 		if (!$uuid || !$transactionType || !$cardNumber) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
