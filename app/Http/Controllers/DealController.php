@@ -1429,7 +1429,7 @@ class DealController extends Controller
 					->get();
 				foreach ($scores as $item) {
 					$score = new Score();
-					$score->score = $item->score;
+					$score->score = abs($item->score);
 					$score->type = Score::SCORING_TYPE;
 					$score->contractor_id = $item->contractor_id;
 					$score->deal_id = $item->deal_id;
