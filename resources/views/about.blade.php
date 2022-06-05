@@ -143,7 +143,7 @@
 								<td>ТРЦ «Космопорт» (ул. Дыбенко, 30)</td>
 								<td>&nbsp;</td>
 							</tr>
-							<tr style="background-color: #f0f0f0;">
+							<tr>
 								<td class="tdcity"><a href="/kzn/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Казань</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
