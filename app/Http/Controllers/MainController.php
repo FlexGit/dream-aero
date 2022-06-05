@@ -567,6 +567,9 @@ class MainController extends Controller
 		$cityAlias = $this->request->alias ?? '';
 		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?? City::MSK_ALIAS);
+		if (!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		}
 		
 		$cityName = \App::isLocale('en') ? $city->name_en : $city->name;
 		

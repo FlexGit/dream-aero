@@ -84,6 +84,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotTransactionOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotTransactionType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereSuccessPaymentSentAt($value)
+ * @property \Illuminate\Support\Carbon|null $aeroflot_transaction_created_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotTransactionCreatedAt($value)
  */
 class Bill extends Model
 {
@@ -107,6 +109,7 @@ class Bill extends Model
 		'success_payment_sent_at' => 'Уведомление об успешной оплате отправлено',
 		'aeroflot_transaction_type' => 'Тип транзакции',
 		'aeroflot_transaction_order_id' => 'ID транзакции/заказа',
+		'aeroflot_transaction_created_at' => 'Дата и время создания транзакции',
 		'aeroflot_card_number' => 'Номер карты',
 		'aeroflot_bonus_amount' => 'Сумма бонуса',
 		'aeroflot_status' => 'Статус операции',
@@ -154,6 +157,7 @@ class Bill extends Model
 		'success_payment_sent_at',
 		'aeroflot_transaction_type',
 		'aeroflot_transaction_order_id',
+		'aeroflot_transaction_created_at',
 		'aeroflot_card_number',
 		'aeroflot_bonus_amount',
 		'aeroflot_status',
@@ -175,6 +179,7 @@ class Bill extends Model
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
 		'data_json' => 'array',
+		'aeroflot_transaction_created_at' => 'datetime:Y-m-d H:i:s',
 	];
 	
 	public static function boot() {

@@ -675,7 +675,7 @@ class ReportController extends Controller {
 				'transaction_order_id' => $bill->aeroflot_transaction_order_id,
 				'city_name' => $cityName,
 				'location_name' => $locationName,
-				'transaction_created_at' => $bill->transaction_created_at ? $bill->transaction_created_at->format('Y-m-d H:i:s') : '',
+				'transaction_created_at' => $bill->aeroflot_transaction_created_at ? $bill->aeroflot_transaction_created_at->format('Y-m-d H:i:s') : '',
 				'bill_amount' => $bill->amount,
 				'bonus_miles' => $bill->aeroflot_bonus_amount,
 			];

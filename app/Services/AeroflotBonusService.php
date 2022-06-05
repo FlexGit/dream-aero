@@ -8,6 +8,7 @@ use AfService\AfService;
 use App\Models\AeroflotBonusLog;
 use App\Models\Bill;
 use App\Models\Product;
+use Carbon\Carbon;
 use Request;
 
 class AeroflotBonusService {
@@ -71,12 +72,14 @@ class AeroflotBonusService {
 			$result = json_decode(json_encode($result), true);
 			
 			$bill->aeroflot_transaction_order_id = $orderId;
+			$bill->aeroflot_transaction_created_at = Carbon::parse($dateTime)->format('Y-m-d H:i:s');
 			$bill->aeroflot_status = isset($result['status']['code']) ? $result['status']['code'] : null;
 			$bill->save();
 			
 			$fields = [
 				'bill_id' => $bill->id,
 				'transaction_order_id' => $orderId,
+				'transaction_created_at' => Carbon::parse($dateTime)->format('Y-m-d H:i:s'),
 				'transaction_type' => 'registerOrder',
 				'amount' => $bill->amount,
 				'bonus_amount' => $bill->aeroflot_bonus_amount,
@@ -116,15 +119,17 @@ class AeroflotBonusService {
 			$status = isset($result['status']['code']) ? $result['status']['code'] : null;
 			$state = isset($result['orderState']) ? $result['orderState'] : null;
 			
+			$bill->aeroflot_transaction_created_at = Carbon::parse($dateTime)->format('Y-m-d H:i:s');
 			if ($bill->aeroflot_status != $status || $bill->aeroflot_state != $state) {
 				$bill->aeroflot_status = $status;
 				$bill->aeroflot_state = $state;
-				$bill->save();
 			}
+			$bill->save();
 			
 			$fields = [
 				'bill_id' => $bill->id,
 				'transaction_order_id' => $bill->aeroflot_transaction_order_id,
+				'transaction_created_at' => Carbon::parse($dateTime)->format('Y-m-d H:i:s'),
 				'transaction_type' => self::TRANSACTION_TYPE_ORDER_INFO,
 				'amount' => $bill->amount,
 				'bonus_amount' => $bill->aeroflot_bonus_amount,
@@ -260,9 +265,13 @@ class AeroflotBonusService {
 			$result = $AfService->authpoints($request);
 			$result = json_decode(json_encode($result), true);
 			
+			$bill->aeroflot_transaction_created_at = Carbon::parse($dateTime)->format('Y-m-d H:i:s');
+			$bill->save();
+
 			$fields = [
 				'bill_id' => $bill->id,
 				'transaction_order_id' => $transactionId,
+				'transaction_created_at' => Carbon::parse($dateTime)->format('Y-m-d H:i:s'),
 				'transaction_type' => self::TRANSACTION_TYPE_AUTH_POINTS,
 				'amount' => $bill->amount,
 				'bonus_amount' => $bill->aeroflot_bonus_amount,
@@ -292,6 +301,7 @@ class AeroflotBonusService {
 			$log = new AeroflotBonusLog();
 			$log->bill_id = isset($fields['bill_id']) ? $fields['bill_id'] : 0;
 			$log->transaction_order_id = isset($fields['transaction_order_id']) ? $fields['transaction_order_id'] : null;
+			$log->transaction_created_at = isset($fields['transaction_created_at']) ? $fields['transaction_created_at'] : null;
 			$log->transaction_type = isset($fields['transaction_type']) ? $fields['transaction_type'] : null;
 			$log->amount = isset($fields['amount']) ? $fields['amount'] : 0;
 			$log->bonus_amount = isset($fields['bonus_amount']) ? $fields['bonus_amount'] : 0;
