@@ -36,7 +36,6 @@
 				<div class="row">
 					<div class="col-md-12 about-simulator">
 						@lang('main.o-trenazhere.авиасимулятор-в-точности-воспроизводит-нюансы-управления')
-						<br>
 						<div id="tvyouframe" style="margin-top: 20px;">
 							<div id="youtuber">
 								<iframe src="https://www.youtube.com/embed/lifbJ-35Obg?rel=0&autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="youvideo"></iframe>
@@ -56,7 +55,7 @@
 								<td colspan="2">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Москва</td>
+								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
 								<td class="halfnhalf" rowspan="4"><a href="/msk/contacts"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Москва</span><br>ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
 							</tr>
 							<tr>
