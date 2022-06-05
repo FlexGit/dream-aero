@@ -36,6 +36,7 @@
 				<div class="row">
 					<div class="col-md-12 about-simulator">
 						@lang('main.o-trenazhere.авиасимулятор-в-точности-воспроизводит-нюансы-управления')
+						<br>
 						<div id="tvyouframe" style="margin-top: 20px;">
 							<div id="youtuber">
 								<iframe src="https://www.youtube.com/embed/lifbJ-35Obg?rel=0&autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="youvideo"></iframe>
