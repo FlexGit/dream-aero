@@ -134,11 +134,11 @@
 
 			$(document).on('click', '.js-pay-btn', function() {
 				var $popup = $(this).closest('.popup'),
-					cardNumber = $popup.find('#aeroflot_card').val(),
+					$cardNumber = $popup.find('#aeroflot_card'),
 					$alertSuccess = $popup.find('.alert-success'),
 					$alertError = $popup.find('.alert-danger');
 
-				if (!cardNumber.length) {
+				if ($cardNumber === undefined || !$cardNumber.val().length) {
 					$('#pay_form').submit();
 					return;
 				}
@@ -155,7 +155,7 @@
 					data: {
 						'uuid': $(this).data('uuid'),
 						'transaction_type': transactionType,
-						'card_number': cardNumber,
+						'card_number': $cardNumber.val(),
 						'bonus_amount': parseInt(bonusAmount),
 					},
 					dataType: 'json',
