@@ -233,7 +233,9 @@ class AeroflotBonusController extends Controller {
 		if (!$bill || $bill->amount <= 0) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
 		}
-		
+		if ($bill->status->alias != Bill::NOT_PAYED_STATUS) {
+			return response()->json(['status' => 'error', 'reason' => trans('main.pay.счет-оплачен')]);
+		}
 		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
 			return response()->json(['status' => 'error', 'reason' => 'Начисление миль невозможно. Ранее уже было выбрано Списание']);
 		}
