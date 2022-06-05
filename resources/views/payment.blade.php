@@ -85,7 +85,7 @@
 										<div class="alert alert-danger hidden" role="alert"></div>
 									</div>
 
-									<button type="button" class="popup-submit button-pipaluk button-pipaluk-grey js-pay-btn" style="margin-top: 20px;" disabled><i>@lang('main.common.оплатить')</i></button>
+									<button type="button" class="popup-submit button-pipaluk button-pipaluk-grey js-pay-btn" data-uuid="{{ $bill->uuid }}" style="margin-top: 20px;" disabled><i>@lang('main.common.оплатить')</i></button>
 								</div>
 							@endif
 						</fieldset>

@@ -223,7 +223,7 @@ class AeroflotBonusController extends Controller {
 		$uuid = $this->request->uuid ?? '';
 		$cardNumber = $this->request->card_number ?? '';
 		if (!$uuid || !$cardNumber) {
-			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры1')]);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
 		}
 		
 		$bill = HelpFunctions::getEntityByUuid(Bill::class, $uuid);
@@ -231,7 +231,7 @@ class AeroflotBonusController extends Controller {
 		if (!$bill
 			|| $bill->amount <= 0
 		) {
-			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры2')]);
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
 		}
 		
 		if ($bill->aeroflot_transaction_type == AeroflotBonusService::REGISTERED_STATE) {
