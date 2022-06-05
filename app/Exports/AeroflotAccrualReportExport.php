@@ -34,7 +34,8 @@ class AeroflotAccrualReportExport implements FromView, WithColumnFormatting, Sho
 	public function columnFormats(): array
 	{
 		return [
-			'A' => NumberFormat::FORMAT_NUMBER,
+			'E' => NumberFormat::FORMAT_NUMBER,
+			'F' => NumberFormat::FORMAT_NUMBER,
 		];
 	}
 }
