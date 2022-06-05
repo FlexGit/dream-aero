@@ -34,6 +34,7 @@ class AeroflotAccrualReportExport implements FromView, WithColumnFormatting, Sho
 	public function columnFormats(): array
 	{
 		return [
+			'A' => \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2,
 			'E' => NumberFormat::FORMAT_NUMBER,
 			'F' => NumberFormat::FORMAT_NUMBER,
 		];

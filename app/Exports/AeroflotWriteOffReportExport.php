@@ -34,7 +34,10 @@ class AeroflotWriteOffReportExport implements FromView, WithColumnFormatting, Sh
 	public function columnFormats(): array
 	{
 		return [
-			'D' => NumberFormat::FORMAT_NUMBER,
+			'D' => \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2,
+			'G' => NumberFormat::FORMAT_NUMBER,
+			'H' => NumberFormat::FORMAT_NUMBER,
+			'I' => NumberFormat::FORMAT_NUMBER,
 		];
 	}
 }
