@@ -61,7 +61,7 @@
 								<td style="background-color: #f0f0f0;">ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
 							</tr>
 							<tr>
-								<td class="tdcity"><a href="/msk/contacts#veg"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
+								<td class="tdcity"><a href="/msk/contacts#location-veg"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr>
@@ -71,7 +71,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/msk/contacts#bus"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
+								<td class="tdcity"><a href="/msk/contacts#location-bus"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
 								<td></td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
@@ -80,13 +80,13 @@
 							</tr>
 							<tr>
 								<td class="tdcity"><a href="/spb/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Санкт-Петербург</td>
-								<td class="halfnhalf_white" rowspan="4"><a href="/spb/contacts#ohta"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Санкт-Петербург</span><br>ТРЦ "Охта Молл" (Брантовская дор., 3)</td>
+								<td class="halfnhalf_white" rowspan="4"><a href="/spb/contacts#location-ohta"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Санкт-Петербург</span><br>ТРЦ "Охта Молл" (Брантовская дор., 3)</td>
 							</tr>
 							<tr>
 								<td>ТРК "РИО" (ул. Фучика д.2).</td>
 							</tr>
 							<tr>
-								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/spb/contacts#land"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Санкт-Петербург</td>
+								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/spb/contacts#location-land"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Санкт-Петербург</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr>
@@ -105,7 +105,7 @@
 							</tr>
 							<tr style="background-color: #f0f0f0;">
 								<td class="tdcity"><a href="/ekb/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Екатеринбург</td>
-								<td class="tdcity"><a href="/ekb/contacts#greenwich"><img src="{{ asset('img/a320.png') }}" width="120" alt=""></a>Екатеринбург</td>
+								<td class="tdcity"><a href="/ekb/contacts#location-greenwich"><img src="{{ asset('img/a320.png') }}" width="120" alt=""></a>Екатеринбург</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
 								<td>ТРЦ "Алатырь" (ул. Малышева, 5)</td>
