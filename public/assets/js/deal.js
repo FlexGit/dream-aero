@@ -292,6 +292,7 @@ $(function() {
 
 		$bonusInfo.html(loader);
 
+		console.log($product.val());
 		$.ajax({
 			url: '/aeroflot-card/info',
 			type: 'POST',
