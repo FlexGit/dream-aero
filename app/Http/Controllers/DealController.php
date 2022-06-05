@@ -547,7 +547,7 @@ class DealController extends Controller
 		} elseif ($contractorEmail = $this->request->email ?? '') {
 			$contractor = Contractor::whereRaw('LOWER(email) = (?)', [mb_strtolower($contractorEmail)])
 				->first();
-			if ($contractor) {
+			if ($contractor && !in_array($source, [Contractor::WEB_SOURCE, Contractor::MOB_SOURCE])) {
 				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
 			}
 		}
@@ -967,7 +967,7 @@ class DealController extends Controller
 		} elseif ($email) {
 			$contractor = Contractor::whereRaw('LOWER(email) = ?', [mb_strtolower($email)])
 				->first();
-			if ($contractor) {
+			if ($contractor && !in_array($source, [Contractor::WEB_SOURCE, Contractor::MOB_SOURCE])) {
 				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
 			}
 		}
@@ -1237,7 +1237,7 @@ class DealController extends Controller
 		} elseif ($email) {
 			$contractor = Contractor::whereRaw('LOWER(email) = ?', [mb_strtolower($email)])
 				->first();
-			if ($contractor) {
+			if ($contractor && !in_array($source, [Contractor::WEB_SOURCE, Contractor::MOB_SOURCE])) {
 				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
 			}
 		}
