@@ -264,9 +264,11 @@ class AeroflotBonusController extends Controller {
 				$bill->aeroflot_card_number = $cardNumber;
 				$bill->aeroflot_bonus_amount = floor($bill->amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
 				$bill->save();
+				
+				return response()->json(['status' => 'success', 'message' => 'Перенаправляем на страницу оплаты...']);
 			break;
 		}
 		
-		return response()->json(['status' => 'success', 'message' => '']);
+		return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 	}
 }

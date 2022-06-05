@@ -167,7 +167,12 @@
 							return;
 						}
 
-						//$alertSuccess.text(result.message).removeClass('hidden');
+						$alertSuccess.text(result.message).removeClass('hidden');
+
+						if (result.payment_url !== undefined) {
+							window.location.href = result.payment_url;
+							return;
+						}
 
 						$('#pay_form').submit();
 					}
