@@ -545,8 +545,11 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 			}
 		} elseif ($contractorEmail = $this->request->email ?? '') {
-			$contractor = Contractor::where('email', $contractorEmail)
+			$contractor = Contractor::whereRaw('LOWER(email) = (?)', [mb_strtolower($contractorEmail)])
 				->first();
+			if ($contractor) {
+				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
+			}
 		}
 		
 		try {
@@ -962,8 +965,11 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 			}
 		} elseif ($email) {
-			$contractor = Contractor::where('email', $email)
+			$contractor = Contractor::whereRaw('LOWER(email) = ?', [mb_strtolower($email)])
 				->first();
+			if ($contractor) {
+				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
+			}
 		}
 		
 		if ($certificateId) {
@@ -1222,7 +1228,20 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 			}
 		}
-
+		
+		if ($contractorId) {
+			$contractor = Contractor::find($contractorId);
+			if (!$contractor) {
+				return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+			}
+		} elseif ($email) {
+			$contractor = Contractor::whereRaw('LOWER(email) = ?', [mb_strtolower($email)])
+				->first();
+			if ($contractor) {
+				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
+			}
+		}
+		
 		$data = [];
 		if ($comment) {
 			$data['comment'] = $comment;
@@ -1230,19 +1249,14 @@ class DealController extends Controller
 
 		try {
 			\DB::beginTransaction();
-
-			if ($contractorId) {
-				$contractor = Contractor::find($contractorId);
-				if (!$contractor) {
-					return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
-				}
-			} else {
+			
+			if (!$contractor) {
 				$contractor = new Contractor();
 				$contractor->name = $name;
 				$contractor->email = $email;
 				$contractor->phone = $phone;
 				$contractor->city_id = $cityId;
-				$contractor->source = Contractor::ADMIN_SOURCE;
+				$contractor->source = $source ?: Contractor::ADMIN_SOURCE;
 				$contractor->user_id = $this->request->user()->id ?? 0;
 				$contractor->save();
 			}
