@@ -54,7 +54,7 @@
 								<td colspan="2">&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
+								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/msk/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
 								<td class="halfnhalf" rowspan="4"><a href="/msk/contacts"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Москва</span><br>ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
 							</tr>
 							<tr>
