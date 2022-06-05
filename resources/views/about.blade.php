@@ -345,6 +345,9 @@
 			font-weight: 700;
 			font-size: 16px;
 		}
+		#airboeing .tdcity {
+			color: #FF8200;
+		}
 		#airboeing td {
 			width: 50%;
 			text-align: left;
