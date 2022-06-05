@@ -42,7 +42,6 @@
 							</div>
 						</div>
 						<br>
-						<br>
 						<h2>@lang('main.o-trenazhere.какие-тренажеры-мы-предлагаем')</h2>
 						<br>
 						<table id="airboeing">
@@ -349,6 +348,9 @@
 		#airboeing td {
 			width: 50%;
 			text-align: left;
+		}
+		td.halfnhalf {
+			background: linear-gradient(to bottom, #f0f0f0 0%, #f0f0f0 50%, white 50%, white 100%);
 		}
 	</style>
 @endpush
