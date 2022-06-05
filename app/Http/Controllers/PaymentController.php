@@ -38,6 +38,7 @@ class PaymentController extends Controller
 	{
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'payment');
 		
 		$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, PaymentMethod::ONLINE_ALIAS);
 		$notPayedStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
