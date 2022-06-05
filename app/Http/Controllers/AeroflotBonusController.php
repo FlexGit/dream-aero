@@ -124,7 +124,7 @@ class AeroflotBonusController extends Controller {
 	}
 	
 	/**
-	 * Повторная попытка создать заказ на списание милей
+	 * Повторная попытка создать заказ на списание миль
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
@@ -158,7 +158,7 @@ class AeroflotBonusController extends Controller {
 	}
 	
 	/**
-	 * Обновление состояния заказа на списание милей
+	 * Обновление состояния заказа на списание миль
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
@@ -207,5 +207,42 @@ class AeroflotBonusController extends Controller {
 		}
 		
 		return response()->json(['status' => 'error', 'reason' => 'Скидка "Аэрофлот Бонус" не подтверждена. Неизвестная ошибка.']);
+	}
+	
+	/**
+	 * Заявка на начисление миль при оплате по ссылке
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function scoring()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$uuid = $this->request->uuid ?? '';
+		$cardNumber = $this->request->card_number ?? '';
+		if (!$uuid || !$cardNumber) {
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
+		}
+		
+		$bill = HelpFunctions::getEntityByUuid(Bill::class, $uuid);
+
+		if (!$bill
+			|| $bill->amount <= 0
+		) {
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
+		}
+		
+		if ($bill->aeroflot_transaction_type == AeroflotBonusService::REGISTERED_STATE) {
+			return response()->json(['status' => 'error', 'reason' => 'Начисление миль невозможно. Ранее уже было выбрано Списание']);
+		}
+		
+		$bill->aeroflot_transaction_type = AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS;
+		$bill->aeroflot_card_number = $cardNumber;
+		$bill->aeroflot_bonus_amount = floor($bill->amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
+		$bill->save();
+		
+		return response()->json(['status' => 'success', 'message' => '']);
 	}
 }

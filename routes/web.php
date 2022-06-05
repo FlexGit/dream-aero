@@ -584,6 +584,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	Route::post('deal/booking', [DealController::class, 'storeBooking'])->name('dealBookingStore');
 	Route::post('aeroflot-use/retry', [AeroflotBonusController::class, 'useRetry'])->name('useRetry');
 	Route::post('aeroflot-use/refresh', [AeroflotBonusController::class, 'useRefresh'])->name('useRefresh');
+	Route::post('aeroflot-scoring', [AeroflotBonusController::class, 'scoring'])->name('scoring');
 	
 	Route::get('test/parse/file', [TestController::class, 'parseFile']);
 	

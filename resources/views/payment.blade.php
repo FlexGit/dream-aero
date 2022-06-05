@@ -42,7 +42,7 @@
 											</ul>
 										@endif
 									@else
-										@if($_SERVER['REMOTE_ADDR'] == '178.176.79.250')
+										@if($_SERVER['REMOTE_ADDR'] == '79.165.99.239')
 										@if(($bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
 											<div class="aeroflot_container" style="margin-left: 0;margin-right: 0;">
 												<div style="display: flex;">
@@ -130,7 +130,40 @@
 			});
 
 			$(document).on('click', '.js-pay-btn', function() {
-				$('#pay_form').submit();
+				var $popup = $(this).closest('.popup'),
+					cardNumber = $popup.find('#aeroflot_card').val(),
+					$alertSuccess = $popup.find('.alert-success'),
+					$alertError = $popup.find('.alert-danger');
+
+				if (!cardNumber.length) {
+					$('#pay_form').submit();
+					return;
+				}
+
+				$alertSuccess.addClass('hidden');
+				$alertError.text('').addClass('hidden');
+
+				$.ajax({
+					url: '/aeroflot-scoring',
+					type: 'POST',
+					data: {
+						'uuid': $(this).data('uuid'),
+						'card_number': cardNumber,
+					},
+					dataType: 'json',
+					success: function (result) {
+						if (result.status !== 'success') {
+							if (result.reason) {
+								$alertError.text(result.reason).removeClass('hidden');
+							}
+							return;
+						}
+
+						//$alertSuccess.text(result.message).removeClass('hidden');
+
+						$('#pay_form').submit();
+					}
+				});
 			});
 
 
