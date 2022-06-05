@@ -24,7 +24,7 @@
 								<input type="text" id="name" value="{{ $deal->name }}" class="popup-input" readonly style="font-size: 14px;">
 								<label for="amount">Сумма к оплате</label>
 								<input type="text" id="amount" value="{{ $bill->amount }}" class="popup-input" readonly style="font-size: 14px;">
-
+								<input type="hidden" id="product" value="{{ ($bill->position && $bill->position->product) ? $bill->position->product->id : 0 }}">
 								@if($bill)
 									@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
 										@if($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::PAYED_STATE)
