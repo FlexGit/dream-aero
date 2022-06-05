@@ -1496,6 +1496,10 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
+		if ($flightDate) {
+			$flightDate = str_replace('/', '.', $flightDate);
+		}
+		
 		// Если дата - выходный день или праздник, меняем Regular на Ultimate
 		if ($flightDate && (in_array(date('w', strtotime(Carbon::parse($flightDate)->format('d.m.Y'))), [0, 6]) || in_array(Carbon::parse($flightDate)->format('d.m.Y'), Deal::HOLIDAYS))) {
 			$product = Product::where('alias', ProductType::ULTIMATE_ALIAS . '_' . $product->duration)
