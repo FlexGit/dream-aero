@@ -45,15 +45,132 @@
 						<br>
 						<h2>@lang('main.o-trenazhere.какие-тренажеры-мы-предлагаем')</h2>
 						<br>
-						<div style="display: flex;justify-content: space-between;">
+						<table id="airboeing">
+							<tbody>
+							<tr>
+								<td class="simtype">Авиатренажерный центр BOEING 737 NG</td>
+								<td class="simtype">Авиатренажерный центр AIRBUS A320</td>
+							</tr>
+							<tr>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+							<tr>
+								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Москва</td>
+								<td class="halfnhalf" rowspan="4"><a href="/msk/contacts"><img src="{{ asset('img/a320.png') }}" alt="AIRBUS A320"></a><span class="tdcity">Москва</span><br>ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
+							</tr>
+							<tr>
+								<td style="background-color: #f0f0f0;">ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
+							</tr>
+							<tr>
+								<td class="tdcity"><a href="/msk/contacts#veg"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Москва</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr>
+								<td>ТРК VEGAS Кунцево (56 км МКАД)</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td class="tdcity"><a href="/msk/contacts#bus"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Москва</td>
+								<td></td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td>ТРЦ COLUMBUS (ул.Кировоградская, д.13А)</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td class="tdcity"><a href="/spb/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Санкт-Петербург</td>
+								<td class="halfnhalf_white" rowspan="4"><a href="/spb/contacts#ohta"><img src="{{ asset('img/a320.png') }}" alt="AIRBUS A320"></a><span class="tdcity">Санкт-Петербург</span><br>ТРЦ "Охта Молл" (Брантовская дор., 3)</td>
+							</tr>
+							<tr>
+								<td>ТРК "РИО" (ул. Фучика д.2).</td>
+							</tr>
+							<tr>
+								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/spb/contacts#land"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Санкт-Петербург</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr>
+								<td style="background-color: #f0f0f0;">ТРК "ПИТЕРЛЭНД" (Приморский пр., д. 72)</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td class="tdcity"><a href="/vrn/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Воронеж</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr>
+								<td>ТРЦ "Центр Галереи Чижова" (Кольцовская ул., д. 35а)</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td class="tdcity"><a href="/ekb/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Екатеринбург</td>
+								<td class="tdcity"><a href="/ekb/contacts#greenwich"><img src="{{ asset('img/a320.png') }}" alt=""></a>Екатеринбург</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td>ТРЦ "Алатырь" (ул. Малышева, 5)</td>
+								<td>ТРЦ "Гринвич" (ул. 8 Марта, д. 46)</td>
+							</tr>
+							<tr>
+								<td class="tdcity"><a href="/krd/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Краснодар</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr>
+								<td>ТРК "СБС Мегамолл" (ул. Уральская, 79/1)</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td class="tdcity"><a href="/nsk/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Новосибирск</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td>ТРЦ «Сибирский молл» (ул. Фрунзе, 238)</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td class="tdcity"><a href="/nnv/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Нижний Новгород</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr>
+								<td>ТРЦ "Жар-Птица" (Советская пл., 5)</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td class="tdcity"><a href="/sam/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Самара</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td>ТРЦ «Космопорт» (ул. Дыбенко, 30)</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td class="tdcity"><a href="/kzn/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Казань</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td>ТРК «Парк Хаус» (пр-т. Хусаина Ямашева, 46/33)</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td class="tdcity"><a href="/khv/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Хабаровск</td>
+								<td class="tdcity">&nbsp;</td>
+							</tr>
+							<tr style="background-color: #f0f0f0;">
+								<td>ТРЦ «Brosko Mall» (ул. Пионерская, 2В)</td>
+								<td>&nbsp;</td>
+							</tr>
+							</tbody>
+						</table>
+						{{--<div style="display: flex;justify-content: space-between;">
 							@foreach($flightSimulators as $flightSimulator)
 								<div>
 									<h4 style="font-size: 24px;margin-bottom: 40px;">@lang('main.o-trenazhere.авиатренажерный-центр') {{ $flightSimulator->name }}</h4>
 									<ul>
 									@foreach($flightSimulator->locations as $location)
-										{{--@if ($location->city && $location->city->version != Request::get('cityVersion'))
+										--}}{{--@if ($location->city && $location->city->version != Request::get('cityVersion'))
 											@continue
-										@endif--}}
+										@endif--}}{{--
 										<li>
 											<span style="font-size: 18px;">{{ $location->name }}</span>
 											@if ($location->data_json)
@@ -80,7 +197,7 @@
 								</ul>
 								</div>
 							@endforeach
-						</div>
+						</div>--}}
 
 						<h2>@lang('main.o-trenazhere.что-мы-предлагаем')</h2>
 
