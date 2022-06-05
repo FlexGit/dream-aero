@@ -355,6 +355,9 @@
 		td.halfnhalf {
 			background: linear-gradient(to bottom, #f0f0f0 0%, #f0f0f0 50%, white 50%, white 100%);
 		}
+		td.halfnhalf_white {
+			background: linear-gradient(to bottom, white 0%, white 50%, #f0f0f0 50%, #f0f0f0 100%);
+		}
 	</style>
 @endpush
 
