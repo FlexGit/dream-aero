@@ -147,7 +147,7 @@
 								<td class="tdcity"><a href="/kzn/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Казань</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
-							<tr style="background-color: #f0f0f0;">
+							<tr>
 								<td>ТРК «Парк Хаус» (пр-т. Хусаина Ямашева, 46/33)</td>
 								<td>&nbsp;</td>
 							</tr>
