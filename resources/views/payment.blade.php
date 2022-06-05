@@ -138,11 +138,6 @@
 					$alertSuccess = $popup.find('.alert-success'),
 					$alertError = $popup.find('.alert-danger');
 
-				if ($cardNumber === undefined || !$cardNumber.val().length) {
-					$('#pay_form').submit();
-					return;
-				}
-
 				var transactionType = $('#use').hasClass('active') ? 'registerOrder' : 'authpoints',
 					bonusAmount = $('#bonus_amount').val();
 

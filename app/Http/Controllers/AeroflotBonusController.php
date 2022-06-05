@@ -225,7 +225,7 @@ class AeroflotBonusController extends Controller {
 		$cardNumber = $this->request->card_number ?? '';
 		$bonusAmount = $this->request->bonus_amount ?? 0;
 		
-		if (!$uuid || !$transactionType || !$cardNumber) {
+		if (!$uuid) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
 		}
 		
@@ -233,44 +233,48 @@ class AeroflotBonusController extends Controller {
 		if (!$bill || $bill->amount <= 0) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
 		}
+		
 		if ($bill->status->alias != Bill::NOT_PAYED_STATUS) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.pay.счет-оплачен')]);
 		}
-		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
-			return response()->json(['status' => 'error', 'reason' => 'Начисление миль невозможно. Ранее уже было выбрано Списание']);
-		}
 		
-		switch ($transactionType) {
-			case AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER:
-				if (!$bonusAmount) {
-					return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
-				}
-				
-				$bill->aeroflot_transaction_type = $transactionType;
-				$bill->aeroflot_card_number = $cardNumber;
-				$bill->aeroflot_bonus_amount = $bonusAmount;
-				$bill->save();
-				$bill = $bill->fresh();
-				
-				$registerOrderResult = AeroflotBonusService::registerOrder($bill);
-				if ($registerOrderResult['status']['code'] != 0) {
-					\Log::debug('500 - Payment: ' . $registerOrderResult['status']['description']);
+		if ($transactionType && $cardNumber) {
+			if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
+				return response()->json(['status' => 'error', 'reason' => 'Начисление миль невозможно. Ранее уже было выбрано Списание']);
+			}
+			
+			switch ($transactionType) {
+				case AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER:
+					if (!$bonusAmount) {
+						return response()->json(['status' => 'error', 'reason' => trans('main.error.некорректные-параметры')]);
+					}
 					
-					return response()->json(['status' => 'error', 'reason' => 'Aeroflot Bonus: ' . $registerOrderResult['status']['description']]);
-				}
-				
-				return response()->json(['status' => 'success', 'message' => 'Перенаправляем на страницу "Аэрофлот Бонус"...', 'payment_url' => $registerOrderResult['paymentUrl']]);
-			break;
-			case AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS:
-				$bill->aeroflot_transaction_type = $transactionType;
-				$bill->aeroflot_card_number = $cardNumber;
-				$bill->aeroflot_bonus_amount = floor($bill->amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
-				$bill->save();
-				
-				return response()->json(['status' => 'success', 'message' => 'Перенаправляем на страницу оплаты...']);
-			break;
+					$bill->aeroflot_transaction_type = $transactionType;
+					$bill->aeroflot_card_number = $cardNumber;
+					$bill->aeroflot_bonus_amount = $bonusAmount;
+					$bill->save();
+					$bill = $bill->fresh();
+					
+					$registerOrderResult = AeroflotBonusService::registerOrder($bill);
+					if ($registerOrderResult['status']['code'] != 0) {
+						\Log::debug('500 - Payment: ' . $registerOrderResult['status']['description']);
+						
+						return response()->json(['status' => 'error', 'reason' => 'Aeroflot Bonus: ' . $registerOrderResult['status']['description']]);
+					}
+					
+					return response()->json(['status' => 'success', 'message' => 'Перенаправляем на страницу "Аэрофлот Бонус"...', 'payment_url' => $registerOrderResult['paymentUrl']]);
+				break;
+				case AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS:
+					$bill->aeroflot_transaction_type = $transactionType;
+					$bill->aeroflot_card_number = $cardNumber;
+					$bill->aeroflot_bonus_amount = floor($bill->amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
+					$bill->save();
+					
+					return response()->json(['status' => 'success', 'message' => 'Перенаправляем на страницу оплаты...']);
+				break;
+			}
 		}
 		
-		return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		return response()->json(['status' => 'error', 'reason' => 'Перенаправляем на страницу оплаты...']);
 	}
 }
