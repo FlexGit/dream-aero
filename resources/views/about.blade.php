@@ -56,13 +56,13 @@
 							</tr>
 							<tr>
 								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Москва</td>
-								<td class="halfnhalf" rowspan="4"><a href="/msk/contacts"><img src="{{ asset('img/a320.png') }}" alt="AIRBUS A320"></a><span class="tdcity">Москва</span><br>ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
+								<td class="halfnhalf" rowspan="4"><a href="/msk/contacts"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Москва</span><br>ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
 							</tr>
 							<tr>
 								<td style="background-color: #f0f0f0;">ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
 							</tr>
 							<tr>
-								<td class="tdcity"><a href="/msk/contacts#veg"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Москва</td>
+								<td class="tdcity"><a href="/msk/contacts#veg"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr>
@@ -72,7 +72,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/msk/contacts#bus"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Москва</td>
+								<td class="tdcity"><a href="/msk/contacts#bus"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
 								<td></td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
@@ -80,14 +80,14 @@
 								<td></td>
 							</tr>
 							<tr>
-								<td class="tdcity"><a href="/spb/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Санкт-Петербург</td>
-								<td class="halfnhalf_white" rowspan="4"><a href="/spb/contacts#ohta"><img src="{{ asset('img/a320.png') }}" alt="AIRBUS A320"></a><span class="tdcity">Санкт-Петербург</span><br>ТРЦ "Охта Молл" (Брантовская дор., 3)</td>
+								<td class="tdcity"><a href="/spb/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Санкт-Петербург</td>
+								<td class="halfnhalf_white" rowspan="4"><a href="/spb/contacts#ohta"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Санкт-Петербург</span><br>ТРЦ "Охта Молл" (Брантовская дор., 3)</td>
 							</tr>
 							<tr>
 								<td>ТРК "РИО" (ул. Фучика д.2).</td>
 							</tr>
 							<tr>
-								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/spb/contacts#land"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Санкт-Петербург</td>
+								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/spb/contacts#land"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Санкт-Петербург</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr>
@@ -97,7 +97,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="tdcity"><a href="/vrn/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Воронеж</td>
+								<td class="tdcity"><a href="/vrn/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Воронеж</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr>
@@ -105,15 +105,15 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/ekb/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Екатеринбург</td>
-								<td class="tdcity"><a href="/ekb/contacts#greenwich"><img src="{{ asset('img/a320.png') }}" alt=""></a>Екатеринбург</td>
+								<td class="tdcity"><a href="/ekb/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Екатеринбург</td>
+								<td class="tdcity"><a href="/ekb/contacts#greenwich"><img src="{{ asset('img/a320.png') }}" width="120" alt=""></a>Екатеринбург</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
 								<td>ТРЦ "Алатырь" (ул. Малышева, 5)</td>
 								<td>ТРЦ "Гринвич" (ул. 8 Марта, д. 46)</td>
 							</tr>
 							<tr>
-								<td class="tdcity"><a href="/krd/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Краснодар</td>
+								<td class="tdcity"><a href="/krd/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Краснодар</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr>
@@ -121,7 +121,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/nsk/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Новосибирск</td>
+								<td class="tdcity"><a href="/nsk/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Новосибирск</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
@@ -129,7 +129,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr>
-								<td class="tdcity"><a href="/nnv/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Нижний Новгород</td>
+								<td class="tdcity"><a href="/nnv/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Нижний Новгород</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr>
@@ -137,7 +137,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/sam/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Самара</td>
+								<td class="tdcity"><a href="/sam/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Самара</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
@@ -145,7 +145,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/kzn/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Казань</td>
+								<td class="tdcity"><a href="/kzn/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Казань</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
@@ -153,7 +153,7 @@
 								<td>&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/khv/contacts"><img src="{{ asset('img/plane1.png') }}" alt=""></a>Хабаровск</td>
+								<td class="tdcity"><a href="/khv/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Хабаровск</td>
 								<td class="tdcity">&nbsp;</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
