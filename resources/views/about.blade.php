@@ -338,6 +338,18 @@
 			text-transform: uppercase;
 			font-size: 20px;
 		}
+		#airboeing {
+			width: 98%;
+		}
+		#airboeing .simtype {
+			color: #FF8200;
+			font-weight: 700;
+			font-size: 16px;
+		}
+		#airboeing td {
+			width: 50%;
+			text-align: left;
+		}
 	</style>
 @endpush
 
