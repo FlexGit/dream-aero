@@ -275,6 +275,6 @@ class AeroflotBonusController extends Controller {
 			}
 		}
 		
-		return response()->json(['status' => 'error', 'reason' => 'Перенаправляем на страницу оплаты...']);
+		return response()->json(['status' => 'success', 'message' => 'Перенаправляем на страницу оплаты...']);
 	}
 }
