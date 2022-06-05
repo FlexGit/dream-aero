@@ -32,6 +32,9 @@ class AeroflotBonusService {
 	const WRITEOFF_MILES_RATE = 4;
 	const ACCRUAL_MILES_RATE = 50;
 	
+	const BOOKING_ACCRUAL_AFTER_DAYS = 14;
+	const CERTIFICATE_PURCHASE_ACCRUAL_AFTER_DAYS = 60;
+	
 	/**
 	 * @param Bill $bill
 	 * @return mixed|null
@@ -265,7 +268,10 @@ class AeroflotBonusService {
 			$result = $AfService->authpoints($request);
 			$result = json_decode(json_encode($result), true);
 			
+			$bill->aeroflot_transaction_order_id = $transactionId;
 			$bill->aeroflot_transaction_created_at = Carbon::parse($dateTime)->format('Y-m-d H:i:s');
+			$bill->aeroflot_status = isset($result['status']['code']) ? $result['status']['code'] : null;
+			$bill->aeroflot_state = isset($result['orderState']) ? $result['orderState'] : null;
 			$bill->save();
 
 			$fields = [
