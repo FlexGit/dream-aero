@@ -105,7 +105,7 @@
 							</tr>
 							<tr style="background-color: #f0f0f0;">
 								<td class="tdcity"><a href="/ekb/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Екатеринбург</td>
-								<td class="tdcity"><a href="/ekb/contacts#location-greenwich"><img src="{{ asset('img/a320.png') }}" width="120" alt=""></a>Екатеринбург</td>
+								<td class="tdcity"><a href="/ekb/contacts#location-grn"><img src="{{ asset('img/a320.png') }}" width="120" alt=""></a>Екатеринбург</td>
 							</tr>
 							<tr style="background-color: #f0f0f0;">
 								<td>ТРЦ "Алатырь" (ул. Малышева, 5)</td>
