@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
@@ -12,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class AeroflotAccrualReportExport implements FromView, WithColumnFormatting, ShouldAutoSize
+class AeroflotAccrualReportExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, WithColumnFormatting, ShouldAutoSize, WithCustomValueBinder
 {
 	private $data;
 
@@ -34,9 +35,6 @@ class AeroflotAccrualReportExport implements FromView, WithColumnFormatting, Sho
 	public function columnFormats(): array
 	{
 		return [
-			'A' => \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC,
-			'E' => NumberFormat::FORMAT_NUMBER,
-			'F' => NumberFormat::FORMAT_NUMBER,
 		];
 	}
 }
