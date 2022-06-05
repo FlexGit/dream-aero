@@ -69,11 +69,13 @@ class RunAeroflotAccrual extends Command
 			
 			// с момента оплаты должно пройти не менее заданного кол-ва дней
 			// (разного для бронирования и покупки сертификата)
+			\Log::debug($position->is_certificate_purchase . ' - ' . $bill->payed_at->format('Y-m-d H:i:s') . ' - ' . Carbon::now()->format('Y-m-d H:i:s'));
 			if ((!$position->is_certificate_purchase && Carbon::parse($bill->payed_at)->addDays(AeroflotBonusService::BOOKING_ACCRUAL_AFTER_DAYS)->gt(Carbon::now()))
 				|| ($position->is_certificate_purchase && Carbon::parse($bill->payed_at)->addDays(AeroflotBonusService::CERTIFICATE_PURCHASE_ACCRUAL_AFTER_DAYS)->gt(Carbon::now()))
 			) {
 				continue;
 			}
+			\Log::debug('5');
 			
 			\Log::debug($bill->aeroflot_transaction_order_id);
 			//$result = AeroflotBonusService::authPoints($bill);
