@@ -30,7 +30,7 @@
 					{{ $item['transaction_order_id'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
-					{{ $item['bill_created_at'] }}
+					{{ $item['transaction_created_at'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ $item['card_number'] }}

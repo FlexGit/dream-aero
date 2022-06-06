@@ -585,7 +585,7 @@ class ReportController extends Controller {
 				'city_name' => $cityName,
 				'location_name' => $locationName,
 				'transaction_order_id' => $bill->aeroflot_transaction_order_id,
-				'bill_created_at' => $bill->created_at,
+				'transaction_created_at' => $bill->aeroflot_transaction_created_at,
 				'card_number' => $bill->aeroflot_card_number,
 				'bill_amount' => $bill->amount + $bill->aeroflot_bonus_amount,
 				'bonus_amount' => $bill->aeroflot_bonus_amount,
