@@ -22,7 +22,12 @@
 										Сумма к оплате по Счёту {{ $bill->number }}
 										@if($bill->position)
 											@if($bill->position->product)
-												за продукт "{{ $bill->position->product->name }}"
+												@if($bill->position->is_certificate_purchase)
+													за Сертификат по тарифу
+												@else
+													за полет по тарифу
+												@endif
+												"{{ $bill->position->product->name }}"
 											@endif
 										@endif
 										составляет {{ $bill->amount }} рублей.<br>
