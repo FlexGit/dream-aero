@@ -587,7 +587,7 @@ class ReportController extends Controller {
 				'transaction_order_id' => $bill->aeroflot_transaction_order_id,
 				'bill_created_at' => $bill->created_at,
 				'card_number' => $bill->aeroflot_card_number,
-				'bill_amount' => $bill->amount,
+				'bill_amount' => $bill->amount + $bill->aeroflot_bonus_amount,
 				'bonus_amount' => $bill->aeroflot_bonus_amount,
 				'bonus_miles' => $bill->aeroflot_bonus_amount * 4,
 				'product_type_name' => 'Полет на авиатренажере',
