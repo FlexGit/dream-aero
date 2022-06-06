@@ -1,49 +1,76 @@
-@foreach ($certificates as $certificate)
-<tr class="odd" data-id="{{ $certificate->id }}">
-	{{--<td class="text-center align-middle">{{ $loop->iteration }}</td>--}}
-	<td class="align-middle text-center">
-		<i class="far fa-file-alt"></i> {{ $certificate->number }}
-		@if ($certificate->status)
-			<div class="p-0 pl-2 pr-2 text-center" style="background-color: {{ array_key_exists('color', $certificate->status->data_json ?? []) ? $certificate->status->data_json['color'] : 'none' }};">{{ $certificate->status->name }}</div>
-		@endif
-	</td>
-	<td class="align-middle">
-		@if ($certificate->contractor)
-			<div>
-				<a href="">{{ $certificate->contractor->name . ' ' . $certificate->contractor->lastname }}</a>
-			</div>
-			@if ($certificate->contractor->phone)
-				<div>
-					<i class="fas fa-mobile-alt"></i> {{ $certificate->contractor->phone }}
-				</div>
-			@endif
-			@if ($certificate->contractor->email)
-				<div>
-					<i class="far fa-envelope"></i> {{ $certificate->contractor->email }}
-				</div>
-			@endif
-		@endif
-	</td>
-	<td class="align-middle text-center">
-		{{ $certificate->product->name }}
-	</td>
-	<td class="align-middle text-center">
-		@if($certificate->is_unified)
-			Любой город
-		@else
-			{{ $certificate->city ? $certificate->city->name : '' }}
-		@endif
-	</td>
-	<td class="align-middle text-center">
-		{{ $certificate->expire_at ? $certificate->expire_at->format('Y-m-d H:i') : '' }}
-	</td>
-	<td class="text-center text-nowrap align-middle">
-		<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $certificate->id }}/edit" data-action="/certificate/{{ $certificate->id }}" data-id="{{ $certificate->id }}" data-method="PUT" data-title="Редактирование" title="Редактировать">
-			<i class="fa fa-edit" aria-hidden="true"></i>
-		</a>
-		<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $certificate->id }}/delete" data-action="/certificate/{{ $certificate->id }}" data-method="DELETE" data-title="Удаление" title="Удалить">
-			<i class="fa fa-trash" aria-hidden="true"></i>
-		</a>
-	</td>
-</tr>
-@endforeach
+@if(count($certificateItems))
+	@foreach($certificateItems ?? [] as $certificateId => $certificateItem)
+		<tr class="odd" data-id="{{ $certificateId }}">
+			<td class="align-middle text-center">
+				{{ $certificateItem['number'] }}
+			</td>
+			<td class="align-middle text-center">
+				{{ $certificateItem['created_at'] }}
+			</td>
+			<td class="align-middle text-center">
+				{{ $certificateItem['certificate_product_name'] }}
+				@if($certificateItem['certificate_product_name'] != $certificateItem['position_product_name'])
+					<br>
+					Продукт в позиции изменен на {{ $certificateItem['position_product_name'] }}
+				@endif
+			</td>
+			<td class="align-middle text-right">
+				{{ number_format($certificateItem['position_amount'], 0, '.', ' ') }}
+			</td>
+			<td class="align-middle text-center">
+				{{ $certificateItem['city_name'] }}
+			</td>
+			<td class="align-middle text-center">
+				{{ $certificateItem['expire_at'] }}
+			</td>
+			<td class="align-middle text-center">
+				{{ $certificateItem['certificate_status_name'] }}
+			</td>
+			{{--<td class="align-middle text-center">
+			</td>--}}
+			<td class="align-middle text-center">
+				@if($certificateItem['bill_number'])
+					{{ $certificateItem['bill_number'] }}
+					<br>
+					{{ $certificateItem['bill_payment_method_name'] }}
+					<br>
+					@if($certificateItem['bill_status_alias'] == app('\App\Models\Bill')::PAYED_STATUS)
+						<span class="pl-2 pr-2" style="background-color: #e9ffc9;">{{ $certificateItem['bill_status_name'] }}</span>
+					@else
+						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ $certificateItem['bill_status_name'] }}</span>
+					@endif
+				@endif
+			</td>
+			<td class="align-middle text-left">
+				@if($certificateItem['comment'] || $certificateItem['certificate_whom'] || $certificateItem['certificate_whom_phone'])
+					<div style="border: 1px solid;border-radius: 6px;padding: 4px 8px;background-color: #fff;">
+						@if($certificateItem['comment'])
+							<div title="Комментарий">
+								<i class="far fa-comment-dots"></i>&nbsp;
+								<span><i>{{ $certificateItem['comment'] }}</i></span>
+							</div>
+						@endif
+						@if($certificateItem['certificate_whom'])
+							<div title="Для кого Сертификат (имя)">
+								<i class="fas fa-user"></i>&nbsp;
+								<span><i>{{ $certificateItem['certificate_whom']}}</i></span>
+							</div>
+						@endif
+						@if($certificateItem['certificate_whom_phone'])
+							<div title="Для кого Сертификат (телефон)">
+								<i class="fas fa-mobile-alt"></i>&nbsp;
+								<span><i>{{ $certificateItem['certificate_whom_phone']}}</i></span>
+							</div>
+						@endif
+						@if($certificateItem['delivery_address'])
+							<div title="Адрес доставки">
+								<i class="fas fa-truck"></i>&nbsp;
+								<span><i>{{ $certificateItem['delivery_address'] }}</i></span>
+							</div>
+						@endif
+					</div>
+				@endif
+			</td>
+		</tr>
+	@endforeach
+@endif

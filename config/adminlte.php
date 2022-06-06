@@ -257,14 +257,15 @@ return [
 			'label'       => '',
 			'label_color' => '',
 		],
-		/*[
+		[
 			'key'         => 'certificate',
-			'text'        => 'Сертификаты',
-			'url'         => '/certificate',
-			'icon'        => 'far fa-fw fa-file-alt',
+			'text' 		  => 'Сертификаты',
+			'url'  		  => '/certificate',
+			'can'  		  => 'is_admin',
+			'icon' 		  => 'far fa-fw fa-file-alt',
 			'label'       => '',
 			'label_color' => '',
-		],*/
+		],
 		[
 			'key'         => 'contractor',
 			'text'        => 'Контрагенты',
@@ -421,12 +422,6 @@ return [
 				[
 					'text' => 'Спонтанные / Повторные',
 					'url'  => '/report/unexpected-repeated',
-					'can'  => 'is_superadmin',
-					'icon' => 'far fa-circle nav-icon',
-				],
-				[
-					'text' => 'Сертификаты',
-					'url'  => '/report/certificates',
 					'can'  => 'is_superadmin',
 					'icon' => 'far fa-circle nav-icon',
 				],

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CertificateExport;
+use App\Models\Content;
 use App\Models\DealPosition;
 use App\Models\PaymentMethod;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Validator;
@@ -15,22 +18,26 @@ use App\Models\Location;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Status;
+use App\Repositories\CityRepository;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CertificateController extends Controller
 {
 	private $request;
+	private $cityRepo;
 	
 	/**
 	 * @param Request $request
 	 */
-	public function __construct(Request $request) {
+	public function __construct(Request $request, CityRepository $cityRepo) {
 		$this->request = $request;
+		$this->cityRepo = $cityRepo;
 	}
 	
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
-	public function index()
+	/*public function index()
 	{
 		$cities = City::orderBy('name')
 			->get();
@@ -47,12 +54,12 @@ class CertificateController extends Controller
 			'productTypes' => $productTypes,
 			'statuses' => $statuses,
 		]);
-	}
+	}*/
 	
 	/**
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getListAjax()
+	/*public function getListAjax()
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
@@ -96,6 +103,141 @@ class CertificateController extends Controller
 		$VIEW = view('admin.certificate.list', ['certificates' => $certificates]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}*/
+	
+	public function index()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'certificate');
+		
+		if ($user->isSuperAdmin()) {
+			$cities = $this->cityRepo->getList($user);
+		} elseif ($user->isAdmin()) {
+			$userCity = $user->city;
+			$locations = $userCity ? $userCity->locations : new Collection([]);
+		}
+		
+		return view('admin.certificate.index', [
+			'page' => $page,
+			'cities' => $user->isSuperAdmin() ? $cities : new Collection([]),
+			'locations' => $user->isAdmin() ? $locations : new Collection([]),
+			'user' => $user,
+		]);
+	}
+	
+	public function getListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+
+		if (!$user->isAdminOrHigher()) {
+			abort(404);
+		}
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$cityId = ($this->request->filter_city_id != 'all') ? $this->request->filter_city_id : null;
+		$locationId = $this->request->filter_location_id ?? 0;
+		$filterPaymentType = $this->request->filter_payment_type ?? '';
+		$searchDoc = $this->request->search_doc ?? '';
+		$id = $this->request->id ?? 0;
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+		}
+		
+		//\DB::connection()->enableQueryLog();
+		$certificates = Certificate::where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'));
+		if ($searchDoc) {
+			$certificates = $certificates->where('number', 'like', '%' . $searchDoc . '%');
+		}
+		if ($user->isSuperAdmin()) {
+			if (!is_null($cityId)) {
+				$certificates = $certificates->where('city_id', $cityId);
+			}
+		} else {
+			$userCityId = $user->city ? $user->city->id : 0;
+			$certificates = $certificates->whereIn('city_id', [$userCityId, 0]);
+		}
+		$certificates = $certificates->has('product')
+			->has('position')
+			->latest();
+		if ($id) {
+			$certificates = $certificates->where('id', '<', $id);
+		}
+		$certificates = $certificates->limit(20)->get();
+		//\Log::debug(\DB::getQueryLog());
+		
+		$certificateItems = [];
+		/** @var Certificate[] $certificates */
+		foreach ($certificates as $certificate) {
+			$position = $certificate->position;
+			$positionBill = $position->bill;
+			if ($locationId && $positionBill && $positionBill->location_id != $locationId) continue;
+			if ($filterPaymentType && $positionBill) {
+				if ($filterPaymentType == 'self_made' && $positionBill->user_id) continue;
+				elseif ($filterPaymentType == 'admin_made' && !$positionBill->user_id) continue;
+			}
+			
+			$positionProduct = $position ? $position->product : null;
+			$positionBillStatus = ($positionBill && $positionBill->status) ? $positionBill->status : null;
+			$positionBillPaymentMethod = ($positionBill && $positionBill->paymentMethod) ? $positionBill->paymentMethod : null;
+			$certificateProduct = $certificate->product;
+			$certificateCity = $certificate->city;
+			$certificateStatus = $certificate->status ?? null;
+			
+			$comment = ($position && isset($position->data_json['comment']) && $position->data_json['comment']) ? $position->data_json['comment'] : '';
+			$certificateWhom = ($position && isset($position->data_json['certificate_whom']) && $position->data_json['certificate_whom']) ? $position->data_json['certificate_whom'] : '';
+			$certificateWhomPhone = ($position && isset($position->data_json['certificate_whom_phone']) && $position->data_json['certificate_whom_phone']) ? $position->data_json['certificate_whom_phone'] : '';
+			$deliveryAddress = ($position && isset($position->data_json['delivery_address']) && $position->data_json['delivery_address']) ? $position->data_json['delivery_address'] : '';
+			
+			$certificateItems[$certificate->id] = [
+				'number' => $certificate->number,
+				'created_at' => $certificate->created_at,
+				'city_name' => $certificateCity ? $certificateCity->name : 'Действует в любом городе',
+				'certificate_product_name' => $certificateProduct ? $certificateProduct->name : '',
+				'position_product_name' => $positionProduct ? $positionProduct->name : '',
+				'position_amount' => $position ? $position->amount : 0,
+				'comment' => $comment,
+				'certificate_whom' => $certificateWhom,
+				'certificate_whom_phone' => $certificateWhomPhone,
+				'delivery_address' => $deliveryAddress,
+				'expire_at' => $certificate->expire_at ? Carbon::parse($certificate->expire_at)->format('Y-m-d') : 'бессрочно',
+				'certificate_status_name' => $certificateStatus ? $certificateStatus->name : '',
+				'bill_number' => $positionBill ? $positionBill->number : '',
+				'bill_status_alias' => $positionBillStatus ? $positionBillStatus->alias : '',
+				'bill_status_name' => $positionBillStatus ? $positionBillStatus->name : '',
+				'bill_payment_method_name' => $positionBillPaymentMethod ? $positionBillPaymentMethod->name : '',
+			];
+		}
+		
+		$data = [
+			'certificateItems' => $certificateItems,
+		];
+		
+		$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-aeroflot-write-off-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new CertificateExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}
+		
+		$VIEW = view('admin.certificate.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}
 	
 	/**

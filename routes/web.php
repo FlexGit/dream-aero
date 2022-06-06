@@ -190,6 +190,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('certificate/{uuid}/file', [CertificateController::class, 'getCertificateFile'])->name('getCertificate');
 			Route::post('certificate/send', [CertificateController::class, 'sendCertificate'])->name('sendCertificate');
 			
+			Route::get('certificate', [CertificateController::class, 'index'])->name('certificatesIndex');
+			Route::get('certificate/list/ajax', [CertificateController::class, 'getListAjax'])->name('certificatesGetList');
+			
 			// Счета
 			Route::post('bill', [BillController::class, 'store']);
 			Route::put('bill/{id}', [BillController::class, 'update']);
@@ -417,9 +420,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			
 			Route::get('report/unexpected-repeated', [ReportController::class, 'unexpectedRepeatedIndex'])->name('unexpectedRepeatedIndex');
 			Route::get('report/unexpected-repeated/list/ajax', [ReportController::class, 'unexpectedRepeatedGetListAjax'])->name('unexpectedRepeatedGetList');
-			
-			Route::get('report/certificates', [ReportController::class, 'certificatesIndex'])->name('certificatesIndex');
-			Route::get('report/certificates/list/ajax', [ReportController::class, 'certificatesGetListAjax'])->name('certificatesGetList');
 			
 			Route::get('report/aeroflot/write-off', [ReportController::class, 'aeroflotWriteOffIndex'])->name('aeroflotWriteOffIndex');
 			Route::get('report/aeroflot/write-off/list/ajax', [ReportController::class, 'aeroflotWriteOffGetListAjax'])->name('aeroflotWriteOffGetList');

@@ -23,85 +23,83 @@
 				<div class="card-body">
 					<div class="table-filter d-sm-flex mb-2">
 						<div class="form-group">
-							<label for="search_doc">Сертификат</label>
+							<div>
+								<label for="search_doc">Сертификат</label>
+							</div>
 							<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Номер">
 						</div>
-						<div class="form-group pl-2">
-							<label for="search_contractor">Контрагент</label>
-							<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="Имя, E-mail, Телефон">
+						<div class="form-group ml-3">
+							<label for="filter_date_from_at">Дата создания</label>
+							<div class="d-flex">
+								<div>
+									<input type="date" class="form-control" id="filter_date_from_at" name="filter_date_from_at" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" style="width: 200px;">
+								</div>
+								<div class="ml-2">-</div>
+								<div class="ml-2">
+									<input type="date" class="form-control" id="filter_date_to_at" name="filter_date_to_at" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" style="width: 200px;">
+								</div>
+							</div>
 						</div>
-						<div class="form-group pl-2">
-							<label for="filter_status_id">Статус</label>
-							<select class="form-control" id="filter_status_id" name="filter_status_id">
-								<option value="0">Все</option>
-								@foreach($statuses ?? [] as $status)
-									<option value="{{ $status->id }}">{{ $status->name }}</option>
-								@endforeach
-							</select>
+						@if($user->isSuperAdmin())
+							<div class="form-group ml-3">
+								<label for="filter_city_id">Город</label>
+								<div>
+									<select class="form-control" id="filter_city_id" name="filter_city_id">
+										<option value="all"></option>
+										<option value="0">Действует в любом городе</option>
+										@foreach($cities ?? [] as $city)
+											<option value="{{ $city->id }}">{{ $city->name }}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+						@endif
+						@if($user->isAdmin() && $locations->count() > 1)
+							<div class="form-group ml-3">
+								<label for="filter_location_id">Локация по Счету</label>
+								<div>
+									<select class="form-control" id="filter_location_id" name="filter_location_id">
+										<option value="0"></option>
+										@foreach($locations as $location)
+											<option value="{{ $location->id }}">{{ $location->name }}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+						@endif
+						<div class="form-group ml-3">
+							<label for="filter_payment_type">Тип оплаты</label>
+							<div>
+								<select class="form-control" id="filter_payment_type" name="filter_payment_type">
+									<option value=""></option>
+									<option value="self_made">Самостоятельно клиентом</option>
+									<option value="admin_made">С помощью Администратора</option>
+								</select>
+							</div>
 						</div>
-						<div class="form-group pl-2">
-							<label for="filter_city_id">Город</label>
-							<select class="form-control" id="filter_city_id" name="filter_city_id">
-								<option value="0">Все</option>
-								@foreach($cities ?? [] as $city)
-									<option value="{{ $city->id }}">{{ $city->name }}</option>
-								@endforeach
-							</select>
-						</div>
-						<div class="form-group pl-2">
-							<label for="filter_product_type_id">Тип тарифа</label>
-							<select class="form-control" id="filter_product_type_id" name="filter_product_type_id">
-								<option value="0">Все</option>
-								@foreach($productTypes ?? [] as $productType)
-									@if($productType->alias == App\Models\ProductType::SERVICES_ALIAS)
-										@continue
-									@endif
-									<option value="{{ $productType->id }}">{{ $productType->name }}</option>
-								@endforeach
-							</select>
-						</div>
-						<div class="form-group align-self-end text-right ml-auto pl-2">
-							{{--<a href="javascript:void(0)" data-toggle="modal" data-url="/order/add" data-action="/order" data-method="POST" data-title="Создание" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>--}}
+						<div class="form-group ml-3" style="padding-top: 31px;">
+							{{--<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>--}}
+							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
 						</div>
 					</div>
-					<table id="certificateTable" class="table table-hover table-sm table-bordered table-striped">
+					<table id="certificateTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
-							{{--<th class="text-center">#</th>--}}
-							<th class="text-center">Сертификат</th>
-							<th class="text-center">Контрагент</th>
-							<th class="text-center">Тариф</th>
-							<th class="text-center">Город</th>
-							<th class="text-center">Срок действия</th>
-							<th class="text-center"></th>
+							<th class="ext-center align-middle">Номер</th>
+							<th class="align-middle">Дата создания</th>
+							<th class="align-middle">Продукт</th>
+							<th class="align-middle">Стоимость</th>
+							<th class="align-middle">Город</th>
+							<th class="align-middle">Срок действия</th>
+							<th class="align-middle">Статус</th>
+							<th class="align-middle">Счет</th>
+							<th class="align-middle">Комментарий</th>
 						</tr>
 						</thead>
-						<tbody>
+						<tbody class="body">
 						</tbody>
 					</table>
 				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="load_more"></div>
-
-	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="modalLabel">Редактирование</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<form id="certificate">
-					<div class="modal-body"></div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-						<button type="submit" class="btn btn-primary">Подтвердить</button>
-					</div>
-				</form>
 			</div>
 		</div>
 	</div>
@@ -109,36 +107,53 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
-			function getList(loadMore) {
-				var $selector = $('#certificateTable tbody');
+			function getList(loadMore, isExport) {
+				var $selector = $('#certificateTable tbody'),
+					$btn = /*isExport ? */$('#export_btn')/* : $('#show_btn')*/,
+					$loader = $('<i class="fas fa-circle-notch fa-spin"></i>');
 
 				var $tr = $('tr.odd[data-id]:last'),
 					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
 
+				$btn.attr('disabled', true);
+
+				if (!loadMore && !isExport) {
+					$selector.html($loader);
+				}
+
 				$.ajax({
-					url: '{{ route('certificateList') }}',
+					url: '{{ route('certificatesGetList') }}',
 					type: 'GET',
 					dataType: 'json',
 					data: {
-						"filter_status_id": $('#filter_status_id').val(),
-						"filter_city_id": $('#filter_city_id').val(),
-						"filter_product_type_id": $('#filter_product_type_id').val(),
-						"search_contractor": $('#search_contractor').val(),
-						"search_doc": $('#search_doc').val(),
-						"id": id
+						'filter_date_from_at': $('#filter_date_from_at').val(),
+						'filter_date_to_at': $('#filter_date_to_at').val(),
+						'filter_city_id': $('#filter_city_id').val(),
+						'filter_location_id': $('#filter_location_id').val(),
+						'filter_payment_type': $('#filter_payment_type').val(),
+						'search_doc': $('#search_doc').val(),
+						'id': id,
+						'is_export': isExport,
 					},
 					success: function(result) {
+						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
+							return;
+						}
+
+						$btn.attr('disabled', false);
+
+						if (result.fileName) {
+							window.location.href = '/report/file/' + result.fileName;
 							return;
 						}
 
@@ -158,109 +173,20 @@
 				})
 			}
 
-			getList(false);
+			getList(false, false);
 
-			$(document).on('click', '[data-url]', function(e) {
-				e.preventDefault();
-
-				var url = $(this).data('url'),
-					action = $(this).data('action'),
-					method = $(this).data('method'),
-					title = $(this).data('title');
-
-				if (!url) {
-					toastr.error('Некорректные параметры');
-					return null;
-				}
-
-				$('.modal .modal-title, .modal .modal-body').empty();
-
-				$.ajax({
-					url: url,
-					type: 'GET',
-					dataType: 'json',
-					success: function(result) {
-						if (result.status === 'error') {
-							toastr.error(result.reason);
-							return null;
-						}
-
-						if (action && method) {
-							$('#modal form').attr('action', action).attr('method', method);
-							$('button[type="submit"]').show();
-						} else {
-							$('button[type="submit"]').hide();
-						}
-						$('#modal .modal-title').text(title);
-						$('#modal .modal-body').html(result.html);
-						$('#modal').modal('show');
-					}
-				});
+			$(document).on('change', '#filter_date_from_at, #filter_date_to_at, #filter_city_id, #filter_location_id, #filter_payment_type', function(e) {
+				getList(false, false);
 			});
 
-			$(document).on('submit', '#certificate', function(e) {
-				e.preventDefault();
-
-				var action = $(this).attr('action'),
-					method = $(this).attr('method'),
-					data = $(this).serializeArray();
-
-				$.ajax({
-					url: action,
-					type: method,
-					data: data,
-					success: function(result) {
-						if (result.status !== 'success') {
-							toastr.error(result.reason);
-							return;
-						}
-
-						var msg = 'Заказ успешно ';
-						if (method === 'POST') {
-							msg += 'создан';
-						} else if (method === 'PUT') {
-							msg += 'сохранен';
-						} else if (method === 'DELETE') {
-							msg += 'удален';
-						}
-
-						$('#modal').modal('hide');
-						getList(false);
-						toastr.success(msg);
-					}
-				});
-			});
-
-			$(document).on('show.bs.modal', '#modal', function(e) {
-				$('#contractor').autocomplete({
-					serviceUrl: '{{ route('contractorSearch') }}',
-					minChars: 3,
-					showNoSuggestionNotice: true,
-					noSuggestionNotice: 'Ничего не найдено',
-					type: 'POST',
-					dataType: 'json',
-					onSelect: function (suggestion) {
-						//getContractorList(1, suggestion.value);
-					}
-				}).keyup(function() {
-					if (!$(this).val().length) {
-						//getContractorList(1,null);
-					}
-				});
-			});
-
-			$(document).on('shown.bs.modal', '#modal', function(e) {
-				$('#contractor').focus();
-			});
-
-			$(document).on('change', '#filter_status_id, #filter_city_id, #filter_product_type_id', function(e) {
-				getList(false);
-			});
-
-			$(document).on('keyup', '#search_contractor, #search_doc', function(e) {
+			$(document).on('keyup', '#search_doc', function(e) {
 				if ($.inArray(e.keyCode, [33, 34]) !== -1) return;
 
-				getList(false);
+				getList(false, false);
+			});
+
+			$(document).on('click', '#export_btn', function(e) {
+				getList(false, true);
 			});
 
 			$.fn.isInViewport = function () {
