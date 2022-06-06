@@ -228,7 +228,7 @@ class CertificateController extends Controller
 		
 		$reportFileName = '';
 		if ($isExport) {
-			$reportFileName = 'report-aeroflot-write-off-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$reportFileName = 'certificate-' . $user->id . '-' . date('YmdHis') . '.xlsx';
 			$exportResult = Excel::store(new CertificateExport($data), 'report/' . $reportFileName);
 			if (!$exportResult) {
 				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
