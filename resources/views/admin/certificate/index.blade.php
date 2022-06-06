@@ -77,7 +77,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group ml-3" style="padding-top: 31px;">
+						<div class="form-group ml-3 text-nowrap" style="padding-top: 31px;">
 							{{--<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>--}}
 							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
 						</div>
