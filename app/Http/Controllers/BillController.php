@@ -216,9 +216,8 @@ class BillController extends Controller
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
-		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER
-			&& $bill->aeroflot_state == AeroflotBonusService::PAYED_STATE) {
-			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для редактирования. Списаны мили "Аэрофлот Бонус"']);
+		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
+			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для редактирования. Заявка на списание миль "Аэрофлот Бонус"']);
 		}
 		
 		$deal = $bill->deal;
@@ -309,9 +308,8 @@ class BillController extends Controller
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
-		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER
-			&& $bill->aeroflot_state == AeroflotBonusService::PAYED_STATE) {
-			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для удаления. Списаны мили "Аэрофлот Бонус"']);
+		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
+			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для удаления. Заявка на списание миль "Аэрофлот Бонус"']);
 		}
 		
 		$deal = $bill->deal;
