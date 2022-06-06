@@ -90,9 +90,11 @@
 							<th class="align-middle">Продукт</th>
 							<th class="align-middle">Стоимость</th>
 							<th class="align-middle">Город</th>
-							<th class="align-middle">Срок действия</th>
 							<th class="align-middle">Статус</th>
-							<th class="align-middle">Счет</th>
+							<th class="align-middle">Срок действия</th>
+							<th class="align-middle">Номер Счета</th>
+							<th class="align-middle">Статус Счета</th>
+							<th class="align-middle">Способ оплаты</th>
 							<th class="align-middle">Комментарий</th>
 						</tr>
 						</thead>

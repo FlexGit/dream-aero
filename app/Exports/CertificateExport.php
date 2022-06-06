@@ -24,7 +24,7 @@ class CertificateExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder
 	
 	public function view(): View
 	{
-		return view('admin.certificate.list', $this->data);
+		return view('admin.certificate.export', $this->data);
 	}
 	
 	public function array(): array

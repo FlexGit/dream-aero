@@ -21,24 +21,28 @@
 				{{ $certificateItem['city_name'] }}
 			</td>
 			<td class="align-middle text-center">
+				{{ $certificateItem['certificate_status_name'] }}
+			</td>
+			<td class="align-middle text-center">
 				{{ $certificateItem['expire_at'] }}
 			</td>
 			<td class="align-middle text-center">
-				{{ $certificateItem['certificate_status_name'] }}
-			</td>
-			{{--<td class="align-middle text-center">
-			</td>--}}
-			<td class="align-middle text-center">
 				@if($certificateItem['bill_number'])
 					{{ $certificateItem['bill_number'] }}
-					<br>
-					{{ $certificateItem['bill_payment_method_name'] }}
-					<br>
+				@endif
+			</td>
+			<td class="align-middle text-center text-nowrap">
+				@if($certificateItem['bill_number'])
 					@if($certificateItem['bill_status_alias'] == app('\App\Models\Bill')::PAYED_STATUS)
 						<span class="pl-2 pr-2" style="background-color: #e9ffc9;">{{ $certificateItem['bill_status_name'] }}</span>
 					@else
 						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ $certificateItem['bill_status_name'] }}</span>
 					@endif
+				@endif
+			</td>
+			<td class="align-middle text-center">
+				@if($certificateItem['bill_number'])
+					{{ $certificateItem['bill_payment_method_name'] }}
 				@endif
 			</td>
 			<td class="align-middle text-left">
