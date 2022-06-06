@@ -176,7 +176,10 @@ class CertificateController extends Controller
 		if ($id) {
 			$certificates = $certificates->where('id', '<', $id);
 		}
-		$certificates = $certificates->limit(20)->get();
+		if (!$isExport) {
+			$certificates = $certificates->limit(20);
+		}
+		$certificates = $certificates->get();
 		//\Log::debug(\DB::getQueryLog());
 		
 		$certificateItems = [];
