@@ -62,7 +62,7 @@ class AeroflotBonusController extends Controller {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.повторите-позже')]);
 		}
 		
-		$minLimit = floor($amount / 100 * 20);
+		$minLimit = floor($amount / 100 * 10);
 
 		$html = '
 			<p>Сколько миль "Аэрофлот Бонус" Вы готовы списать?</p>
@@ -72,7 +72,7 @@ class AeroflotBonusController extends Controller {
 				<input style="width: 50%;border-bottom: 2px solid #828285;margin-top: 10px;" readonly id="miles_amount" type="text" value="" required="">
 			</div>
 			<p>1 рубль = 4 мили</p>
-			<i>Вы можете списать не менее 20% и не более 50% от стоимости тарифа</i>
+			<i>Вы можете списать не менее 10% и не более 50% от стоимости тарифа</i>
 		';
 		
 		return response()->json(['status' => 'success', 'html' => $html]);
