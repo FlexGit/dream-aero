@@ -2903,7 +2903,7 @@ class ApiController extends Controller
 			$deal->name = $this->request->name;
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
-			$deal->city_id =  /*$city ? $city->id : 0*/(!$isUnified && $city) ? $city->id : 0;
+			$deal->city_id =  $city ? $city->id : 0/*(!$isUnified && $city) ? $city->id : 0*/;
 			$deal->source = Deal::MOB_SOURCE;
 			$dealData = [];
 			/*$dealData['comment'] = $this->request->comment;
@@ -2924,7 +2924,7 @@ class ApiController extends Controller
 				$position->flight_simulator_id = $simulator ? $simulator->id : 0;
 				$position->flight_at = $flightDateCarbon->format('Y-m-d H:i');
 			} else {
-				$position->city_id = (!$isUnified && $city) ? $city->id : 0;
+				$position->city_id = /*(!$isUnified && */$city/*)*/ ? $city->id : 0;
 			}
 			$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
 			$position->currency_id = $currency ? $currency->id : 0;

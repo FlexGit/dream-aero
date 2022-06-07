@@ -214,7 +214,7 @@ class DealController extends Controller
 			});
 		}
 		if (!$user->isSuperAdmin() && $user->city) {
-			$deals = $deals->whereIn('city_id', [$user->city->id, 0]);
+			$deals = $deals->where('city_id', $user->city->id);
 		}
 		if ($id) {
 			$deals = $deals->where('id', '<', $id);
@@ -569,7 +569,7 @@ class DealController extends Controller
 			$certificate = new Certificate();
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			$certificate->status_id = $certificateStatus->id ?? 0;
-			$certificate->city_id = $isUnified ? 0 : $cityId;
+			$certificate->city_id = $isUnified ? 0 : ($cityId ?: $this->request->user()->city_id);
 			$certificate->product_id = $product->id ?? 0;
 			$certificatePeriod = ($product && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
 			$certificate->expire_at = Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
@@ -579,7 +579,7 @@ class DealController extends Controller
 			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 			$deal->status_id = $dealStatus->id ?? 0;
 			$deal->contractor_id = $contractor->id ?? 0;
-			$deal->city_id = $isUnified ? 0 : $cityId;
+			$deal->city_id = /*$isUnified ? 0 : */$cityId ?: $this->request->user()->city_id;
 			$deal->name = $name;
 			$deal->phone = $phone;
 			$deal->email = $email;
@@ -593,7 +593,7 @@ class DealController extends Controller
 			$position->duration = $product->duration ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
-			$position->city_id = $isUnified ? 0 : $cityId;
+			$position->city_id = /*$isUnified ? 0 : */$cityId ?: $this->request->user()->city_id;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = ($promocodeId || $promocodeUuid) ? $promocode->id : 0;
 			$position->is_certificate_purchase = true;
@@ -991,7 +991,7 @@ class DealController extends Controller
 						$contractor->name = $name;
 						$contractor->email = $email;
 						$contractor->phone = $phone;
-						$contractor->city_id = $cityId;
+						$contractor->city_id = $cityId ?: $this->request->user()->city_id;
 						$contractor->source = $source ?: Contractor::ADMIN_SOURCE;
 						$contractor->user_id = $this->request->user()->id ?? 0;
 						$contractor->save();
@@ -1001,7 +1001,7 @@ class DealController extends Controller
 					$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 					$deal->status_id = $dealStatus->id ?? 0;
 					$deal->contractor_id = $contractor->id ?? 0;
-					$deal->city_id = $cityId;
+					$deal->city_id = $cityId ?: $this->request->user()->city_id;
 					$deal->name = $name;
 					$deal->phone = $phone;
 					$deal->email = $email;
@@ -1015,7 +1015,7 @@ class DealController extends Controller
 					$position->duration = $product->duration ?? 0;
 					$position->amount = $amount;
 					$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
-					$position->city_id = $cityId;
+					$position->city_id = $cityId ?: $this->request->user()->city_id;
 					$position->location_id = $location->id ?? 0;
 					$position->flight_simulator_id = $simulator->id ?? 0;
 					$position->promo_id = $promo->id ?? 0;
@@ -1079,7 +1079,7 @@ class DealController extends Controller
 							$contractor->name = $name;
 							$contractor->email = $email;
 							$contractor->phone = $phone;
-							$contractor->city_id = $cityId;
+							$contractor->city_id = $cityId ?: $this->request->user()->city_id;
 							$contractor->source = $source ?: Contractor::ADMIN_SOURCE;
 							$contractor->user_id = $this->request->user()->id ?? 0;
 							$contractor->save();
@@ -1090,7 +1090,7 @@ class DealController extends Controller
 						$event->contractor_id = $contractor->id ?? 0;
 						$event->deal_id = $deal->id ?? 0;
 						$event->deal_position_id = $position->id ?? 0;
-						$event->city_id = $cityId;
+						$event->city_id = $cityId ?: $this->request->user()->city_id;
 						$event->location_id = $location->id ?? 0;
 						$event->flight_simulator_id = $simulator->id ?? 0;
 						$event->start_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
@@ -1113,7 +1113,7 @@ class DealController extends Controller
 				case Event::EVENT_TYPE_USER_FLIGHT:
 					$event = new Event();
 					$event->event_type = $eventType;
-					$event->city_id = $cityId;
+					$event->city_id = $cityId ?: $this->request->user()->city_id;
 					$event->location_id = $location->id ?? 0;
 					$event->flight_simulator_id = $simulator->id ?? 0;
 					$event->user_id = $this->request->user()->id ?? 0;
@@ -1255,7 +1255,7 @@ class DealController extends Controller
 				$contractor->name = $name;
 				$contractor->email = $email;
 				$contractor->phone = $phone;
-				$contractor->city_id = $cityId;
+				$contractor->city_id = $cityId ?: $this->request->user()->city_id;
 				$contractor->source = $source ?: Contractor::ADMIN_SOURCE;
 				$contractor->user_id = $this->request->user()->id ?? 0;
 				$contractor->save();
@@ -1265,7 +1265,7 @@ class DealController extends Controller
 			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 			$deal->status_id = $dealStatus->id ?? 0;
 			$deal->contractor_id = $contractor->id ?? 0;
-			$deal->city_id = $cityId;
+			$deal->city_id = $cityId ?: $this->request->user()->city_id;
 			$deal->name = $name;
 			$deal->phone = $phone;
 			$deal->email = $email;
@@ -1277,7 +1277,7 @@ class DealController extends Controller
 			$position->product_id = $product->id ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
-			$position->city_id = $cityId;
+			$position->city_id = $cityId ?: $this->request->user()->city_id;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = $promocodeId ? $promocode->id : 0;
 			$position->source = Deal::ADMIN_SOURCE;
