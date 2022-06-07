@@ -345,4 +345,26 @@ class HelpFunctions {
 		return $timeParts[0] * 3600 + $timeParts[1] * 60 + (isset($timeParts[2]) ? $timeParts[2] : 0);
 	}
 	
+	/**
+	 * @param $time
+	 * @return float|int
+	 */
+	public static function mailGetTimeMinutes($time)
+	{
+		$timeParts = explode(':', $time);
+		return $timeParts[0] * 60 + $timeParts[1] + (isset($timeParts[2]) ? $timeParts[2] / 60 : 0);
+	}
+	
+	/**
+	 * @param $minutes
+	 * @return string
+	 */
+	public static function minutesToTime($minutes)
+	{
+		$h = floor($minutes / 60);
+		$m = $minutes % 60;
+		$s = 0;
+		
+		return sprintf('%02d:%02d:%02d', $h, $m, $s);
+	}
 }

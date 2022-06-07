@@ -13,11 +13,13 @@ use App\Models\Content;
 use App\Models\Event;
 use App\Models\Location;
 use App\Models\PaymentMethod;
+use App\Models\PlatformData;
 use App\Models\User;
 use App\Repositories\CityRepository;
 use App\Repositories\PaymentRepository;
 use App\Services\AeroflotBonusService;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Services\HelpFunctions;
 use Illuminate\Support\Facades\Storage;
@@ -689,6 +691,134 @@ class ReportController extends Controller {
 		}
 		
 		$VIEW = view('admin.report.contractor-self-made-payed-deals.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function platformIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-platform');
+		
+		return view('admin.report.platform.index', [
+			'page' => $page,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
+	public function platformGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d');
+			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d');
+		}
+		//\DB::connection()->enableQueryLog();
+		$platformDatas = PlatformData::where('data_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d'))
+			->where('data_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d'))
+			->get();
+		//\Log::debug(\DB::getQueryLog());
+		
+		$items = $locationSum = $daySum = [];
+		foreach ($platformDatas as $platformData) {
+			if (!isset($items[$platformData->location_id])) {
+				$items[$platformData->location_id] = [];
+			}
+			if (!isset($items[$platformData->location_id][$platformData->flight_simulator_id])) {
+				$items[$platformData->location_id][$platformData->flight_simulator_id] = [];
+			}
+			if (!isset($items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at])) {
+				$items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at] = [
+					'id' => $platformData->id,
+					'total_up' => HelpFunctions::mailGetTimeMinutes($platformData->total_up),
+					'user_total_up' => HelpFunctions::mailGetTimeMinutes($platformData->user_total_up),
+					'in_air_no_motion' => HelpFunctions::mailGetTimeMinutes($platformData->in_air_no_motion),
+					'in_air_no_motion_diff' => HelpFunctions::mailGetTimeSeconds($platformData->user_total_up) - HelpFunctions::mailGetTimeSeconds($platformData->total_up),
+					'comment' => $platformData->comment,
+					/*'notes' => $row['notes'],*/
+				];
+				
+				$dateFormated = date('d.m.Y', strtotime($platformData->data_at));
+				$year = date('Y', strtotime($dateFormated));
+				$month = date('m', strtotime($dateFormated));
+				
+				$locationSum[$year][$month][$platformData->location_id][$platformData->flight_simulator_id]['server_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->total_up);
+				$locationSum[$year][$month][$platformData->location_id][$platformData->flight_simulator_id]['admin_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->user_total_up);
+				
+				$daySum[$dateFormated]['server_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->total_up);
+				$daySum[$dateFormated]['admin_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->user_total_up);
+			}
+		}
+		
+		$cities = City::where('version', $user->version)
+			->get();
+		
+		$days = CarbonPeriod::create($dateFromAt, $dateToAt);
+		
+		$months = [
+			'01' => 'Январь',
+			'02' => 'Февраль',
+			'03' => 'Март',
+			'04' => 'Апрель',
+			'05' => 'Май',
+			'06' => 'Июнь',
+			'07' => 'Июль',
+			'08' => 'Август',
+			'09' => 'Сентябрь',
+			'10' => 'Октябрь',
+			'11' => 'Ноябрь',
+			'12' => 'Декабрь'
+		];
+		
+		$periods = [];
+		foreach ($days as $day) {
+			$year = date('Y', strtotime($day));
+			$month = date('m', strtotime($day));
+			$periods[] = $year . '-' . $month;
+		}
+		$periods = array_unique($periods);
+		
+		$data = [
+			'items' => $items,
+			'locationSum' => $locationSum,
+			'daySum' => $daySum,
+			'cities' => $cities,
+			'days' => $days,
+			'months' => $months,
+			'periods' => $periods,
+		];
+		
+		$reportFileName = '';
+		/*if ($isExport) {
+			$reportFileName = 'report-platform-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new PlatformReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}*/
+		
+		$VIEW = view('admin.report.platform.list', $data);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}

@@ -414,6 +414,12 @@ return [
 					'icon' => 'far fa-circle nav-icon',
                 ],
 				[
+					'text' => 'Показания платформы',
+					'url'  => '/report/platform',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-circle nav-icon',
+				],
+				[
 					'text' => 'Личные продажи',
 					'url'  => '/report/personal-selling',
 					'can'  => 'is_superadmin',
