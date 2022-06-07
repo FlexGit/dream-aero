@@ -12,6 +12,8 @@
 					@if($deal->contractor)
 						@if($deal->contractor->email != app('\App\Models\Contractor')::ANONYM_EMAIL)
 							[<a href="/contractor/{{ $deal->contractor_id }}" target="_blank">{{ $deal->contractor->fio() }}</a>]
+						@else
+							[{{ $deal->contractor->fio() }}]
 						@endif
 					@endif
 				</div>
