@@ -115,7 +115,7 @@ class LoadPlatformData extends Command
 			if (!$locationId || !$simulatorId) return 0;
 			
 			$platformData = PlatformData::where('location_id', $locationId)
-				->where('location_id', $simulatorId)
+				->where('flight_simulator_id', $simulatorId)
 				->where('data_at', $dataAt)
 				->first();
 			if (!$platformData) {
