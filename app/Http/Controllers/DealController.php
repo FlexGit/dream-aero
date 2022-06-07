@@ -445,8 +445,8 @@ class DealController extends Controller
 		$transactionType = $this->request->transaction_type ?? null;
 		if ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
 			$bonusAmount = $this->request->aeroflot_bonus_amount ?? 0;
-		} else {
-			$bonusAmount = floor($amount / 50);
+		} elseif ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS) {
+			$bonusAmount = floor($amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
 		}
 		$contractorId = $this->request->contractor_id ?? 0;
 		$name = $this->request->name ?? '';
