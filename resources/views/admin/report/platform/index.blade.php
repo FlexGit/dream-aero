@@ -51,6 +51,10 @@
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
 	<style>
+		.wrapper {
+			width: fit-content;
+			min-width: 100%;
+		}
 		.platform-data-table thead th {
 			position: sticky;
 			top: 140px;
