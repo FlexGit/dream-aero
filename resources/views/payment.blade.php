@@ -43,7 +43,7 @@
 											@endif
 										@else
 											{{--@if($_SERVER['REMOTE_ADDR'] == '79.165.99.239')--}}
-											@if(($bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
+											@if(($bill->position && $bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
 													<input type="hidden" id="product" value="{{ ($bill->position && $bill->position->product) ? $bill->position->product->id : 0 }}">
 
 													<div class="aeroflot_container" style="margin-left: 0;margin-right: 0;">
