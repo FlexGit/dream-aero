@@ -32,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Dispatcher $events)
     {
+		error_reporting(E_ALL ^ E_NOTICE);
+		
 		Password::defaults(function () {
 			return Password::min(8)
 				->letters()

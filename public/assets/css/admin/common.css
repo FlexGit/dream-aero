@@ -1,3 +1,7 @@
+.wrapper {
+	width: fit-content;
+	min-width: 100%;
+}
 input[readonly]{
 	background-color: transparent !important;
 }
@@ -114,3 +118,11 @@ input[readonly]{
 .nps-event {
 	cursor: help;
 }
+/*
+.platform-data-table tr td {
+	position: relative;
+}
+.platform-data-table tr td:first-child {
+	z-index: 99999;
+	position: sticky;
+}*/

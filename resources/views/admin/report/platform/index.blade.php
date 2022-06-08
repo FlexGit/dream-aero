@@ -40,7 +40,7 @@
 							{{--<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>--}}
 						</div>
 					</div>
-					<div id="reportTable" style="display: flex;"></div>
+					<div id="reportTable"></div>
 				</div>
 			</div>
 		</div>
@@ -50,6 +50,19 @@
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
+	<style>
+		.platform-data-table thead th {
+			position: sticky;
+			top: 140px;
+			z-index: 999;
+			background-color: #fff;
+		}
+		/*.platform-data-table tbody td:first-child {
+			position: sticky;
+			left: 0;
+			background-color: #fff;
+		}*/
+	</style>
 @stop
 
 @section('js')
@@ -105,6 +118,14 @@
 			$(document).on('click', '#export_btn', function(e) {
 				getList(true);
 			});
+
+			$('.platform-data-table').scroll(function() {
+				$('tbody tr td:nth-child(1)').css('left', $(this).scrollLeft());
+			});
+
+			function scrollToElement(element) {
+				$(window).scrollTop(element.offset().top).scrollLeft(element.offset().left);
+			}
 		});
 	</script>
 @stop

@@ -730,17 +730,33 @@ class ReportController extends Controller {
 		$dateToAt = $this->request->filter_date_to_at ?? '';
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
 		
-		if (!$dateFromAt && !$dateToAt) {
-			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d');
-			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d');
-		}
+		$items = $locationSum = $daySum = $durationData = [];
+		
 		//\DB::connection()->enableQueryLog();
+		$events = Event::selectRaw('location_id, flight_simulator_id, SUBSTRING(start_at,1,10) as filght_date, SUM(TIMESTAMPDIFF(MINUTE, start_at, stop_at) + extra_time) as flight_duration, SUM(TIMESTAMPDIFF(MINUTE, simulator_up_at, simulator_down_at)) as admin_flight_duration')
+			->whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT, Event::EVENT_TYPE_USER_FLIGHT])
+			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->groupBy('location_id')
+			->groupBy('flight_simulator_id')
+			->groupBy('filght_date')
+			->get();
+		foreach ($events as $event) {
+			$dateFormated = date('Y-m-d', strtotime($event->filght_date));
+			$year = date('Y', strtotime($dateFormated));
+			$month = date('m', strtotime($dateFormated));
+			
+			$durationData[$event->location_id][$event->flight_simulator_id][$dateFormated] = $event->flight_duration;
+			$locationSum[$year][$month][$event->location_id][$event->flight_simulator_id]['calendar_time'][] = $event->flight_duration;
+			$daySum[$dateFormated]['calendar_time'][] = $event->flight_duration;
+		}
+		
 		$platformDatas = PlatformData::where('data_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d'))
 			->where('data_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d'))
+			->oldest()
 			->get();
 		//\Log::debug(\DB::getQueryLog());
 		
-		$items = $locationSum = $daySum = [];
 		foreach ($platformDatas as $platformData) {
 			if (!isset($items[$platformData->location_id])) {
 				$items[$platformData->location_id] = [];
@@ -751,30 +767,40 @@ class ReportController extends Controller {
 			if (!isset($items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at])) {
 				$items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at] = [
 					'id' => $platformData->id,
-					'total_up' => HelpFunctions::mailGetTimeMinutes($platformData->total_up),
-					'user_total_up' => HelpFunctions::mailGetTimeMinutes($platformData->user_total_up),
-					'in_air_no_motion' => HelpFunctions::mailGetTimeMinutes($platformData->in_air_no_motion),
-					'in_air_no_motion_diff' => HelpFunctions::mailGetTimeSeconds($platformData->user_total_up) - HelpFunctions::mailGetTimeSeconds($platformData->total_up),
+					'total_up' => $platformData->total_up ? HelpFunctions::mailGetTimeMinutes($platformData->total_up) : 0,
+					'user_total_up' => $platformData->user_total_up ? HelpFunctions::mailGetTimeMinutes($platformData->user_total_up) : 0,
+					'in_air_no_motion' => $platformData->in_air_no_motion ? HelpFunctions::mailGetTimeMinutes($platformData->in_air_no_motion) : 0,
+					'in_air_no_motion_diff' => ($platformData->user_total_up ? HelpFunctions::mailGetTimeSeconds($platformData->user_total_up) : 0) - ($platformData->total_up ? HelpFunctions::mailGetTimeSeconds($platformData->total_up) : 0),
 					'comment' => $platformData->comment,
 					/*'notes' => $row['notes'],*/
 				];
 				
-				$dateFormated = date('d.m.Y', strtotime($platformData->data_at));
+				$dateFormated = date('Y-m-d', strtotime($platformData->data_at));
 				$year = date('Y', strtotime($dateFormated));
 				$month = date('m', strtotime($dateFormated));
 				
-				$locationSum[$year][$month][$platformData->location_id][$platformData->flight_simulator_id]['server_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->total_up);
-				$locationSum[$year][$month][$platformData->location_id][$platformData->flight_simulator_id]['admin_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->user_total_up);
+				$locationSum[$year][$month][$platformData->location_id][$platformData->flight_simulator_id]['total_up'][] = $platformData->total_up ? HelpFunctions::mailGetTimeMinutes($platformData->total_up) : 0;
+				$locationSum[$year][$month][$platformData->location_id][$platformData->flight_simulator_id]['user_total_up'][] = $platformData->user_total_up ? HelpFunctions::mailGetTimeMinutes($platformData->user_total_up) : 0;
 				
-				$daySum[$dateFormated]['server_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->total_up);
-				$daySum[$dateFormated]['admin_time'][] = HelpFunctions::mailGetTimeMinutes($platformData->user_total_up);
+				$daySum[$dateFormated]['total_up'][] = $platformData->total_up ? HelpFunctions::mailGetTimeMinutes($platformData->total_up) : 0;
+				$daySum[$dateFormated]['user_total_up'][] = $platformData->user_total_up ? HelpFunctions::mailGetTimeMinutes($platformData->user_total_up) : 0;
 			}
 		}
+		
+		//\Log::debug($durationData);
+		//\Log::debug($locationSum);
 		
 		$cities = City::where('version', $user->version)
 			->get();
 		
-		$days = CarbonPeriod::create($dateFromAt, $dateToAt);
+		$carbonDays = CarbonPeriod::create($dateFromAt, $dateToAt)->toArray();
+		
+		$days = $periods = [];
+		foreach ($carbonDays as $carbonDay) {
+			$days[] = $carbonDay->format('Y-m-d');
+			$periods[] = $carbonDay->format('Y') . '-' . $carbonDay->format('m');
+		}
+		$periods = array_unique($periods);
 		
 		$months = [
 			'01' => 'Январь',
@@ -791,18 +817,11 @@ class ReportController extends Controller {
 			'12' => 'Декабрь'
 		];
 		
-		$periods = [];
-		foreach ($days as $day) {
-			$year = date('Y', strtotime($day));
-			$month = date('m', strtotime($day));
-			$periods[] = $year . '-' . $month;
-		}
-		$periods = array_unique($periods);
-		
 		$data = [
 			'items' => $items,
 			'locationSum' => $locationSum,
 			'daySum' => $daySum,
+			'durationData' => $durationData,
 			'cities' => $cities,
 			'days' => $days,
 			'months' => $months,

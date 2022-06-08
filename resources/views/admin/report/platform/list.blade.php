@@ -4,11 +4,11 @@
 		$yearSource = $periodArr[0];
 		$monthSource = $periodArr[1];
 	@endphp
-	<table class="table table-sm table-bordered table-striped table-data">
-		<tbody>
+	<table class="table table-sm table-bordered table-striped platform-data-table {{--table-data--}}" style="width: auto;">
+		<thead>
 		<tr>
-			<th>{{ $months[$monthSource] . ', ' . $yearSource }}</th>
-			<th>Итого за период</th>
+			<th nowrap>{{ $months[$monthSource] . ', ' . $yearSource }}</th>
+			<th nowrap>Итого за период</th>
 			@foreach($days as $day)
 				@php
 					$year = date('Y', strtotime($day));
@@ -17,9 +17,11 @@
 				@if($yearSource != $year || $monthSource != $month)
 					@continue
 				@endif
-				<th>{{ $day }}</th>
+				<th nowrap>{{ \Carbon\Carbon::parse($day)->format('d.m.Y') }}</th>
 			@endforeach
-
+		</tr>
+		</thead>
+		<tbody>
 			@foreach($cities as $city)
 				@foreach($city->locations as $location)
 					@foreach($location->simulators as $simulator)
@@ -29,33 +31,23 @@
 							$pointCalendarTimeSum = array_sum($locationSum[$yearSource][$monthSource][$location->id][$simulator->id]['calendar_time'] ?? []);
 						@endphp
 						<tr>
-							<td>{{ $city->name }} {{ $location->name }} {{ $simulator->name }}</td>
-							<td style="vertical-align: top;background-color: #fffcc4;text-align: left !important;line-height: 1.7em;">
-								@if($pointServerTimeSum)
-									<div class="txt" style="white-space: nowrap;">
-										<i class="fa fa-desktop"></i>
-										{{ app('\App\Services\HelpFunctions')::minutesToTime($pointServerTimeSum) }}
-										@if($pointCalendarTimeSum)
-											<span style="font-size: 13px;">[{{ round(($pointServerTimeSum * 100 / $pointCalendarTimeSum), 2) }}%]</span>
-										@endif
-									</div>
-								@endif
-								@if($pointAdminTimeSum)
-									<div class="txt" style="white-space: nowrap;">
-										<i class="fa fa-user-circle"></i>
-										{{ app('\App\Services\HelpFunctions')::minutesToTime($pointAdminTimeSum) }}
-										@if($pointCalendarTimeSum)
-											<span style="font-size: 13px;">[{{ round(($pointAdminTimeSum * 100 / $pointCalendarTimeSum), 2) }}%]</span>
-										@endif
-									</div>
-								@endif
-								@if($pointCalendarTimeSum)
-									<div class="txt" style="white-space: nowrap;">
-										<i class="fa fa-calendar"></i>
-										{{ app('\App\Services\HelpFunctions')::minutesToTime($pointCalendarTimeSum) }}
-										<span style="font-size: 13px;">[100%]</span>
-									</div>
-								@endif
+							<td nowrap>{{ $city->name }}<br>{{ $location->name }}<br>{{ $simulator->name }}</td>
+							<td nowrap class="text-left" style="background-color: #fffcc4;">
+								<div>
+									<i class="fa fa-desktop"></i>
+									{{ app('\App\Services\HelpFunctions')::minutesToTime($pointServerTimeSum) }}
+									<small>[{{ round(($pointServerTimeSum * 100 / $pointCalendarTimeSum), 2) }}%]</small>
+								</div>
+								<div>
+									<i class="fa fa-user-circle"></i>
+									{{ app('\App\Services\HelpFunctions')::minutesToTime($pointAdminTimeSum) }}
+									<small>[{{ round(($pointAdminTimeSum * 100 / $pointCalendarTimeSum), 2) }}%]</small>
+								</div>
+								<div>
+									<i class="fa fa-calendar"></i>
+									{{ app('\App\Services\HelpFunctions')::minutesToTime($pointCalendarTimeSum) }}
+									<small>[100%]</small>
+								</div>
 							</td>
 
 							@foreach($days as $day)
@@ -72,68 +64,69 @@
 									@php
 										$tdStyle = $tdClass = $tdianm = $matcss = '';
 									@endphp
-									@if($items[$location->id][$simulator->id][$day]['in_air_no_motion_diff'] <= -1800 || $items[$location->id][$simulator->id][$day]['in_air_no_motion_diff'] >= 1800 || app('\App\Services\HelpFunctions')::mailGetTimeSeconds($items[$location->id][$simulator->id][$day]['in_air_no_motion']) >= 600)
+
+									{{--@if(isset($items[$location->id][$simulator->id][$day]) && ($items[$location->id][$simulator->id][$day]['in_air_no_motion_diff'] <= -1800 || $items[$location->id][$simulator->id][$day]['in_air_no_motion_diff'] >= 1800 || $items[$location->id][$simulator->id][$day]['in_air_no_motion'] >= 600))
 										@php
 											$tdStyle = 'color: #fff;background-color: #d23c3c;';
 											$tdianm = ' data-ianm="1"';
 										@endphp
-									@endif
-									@if($_POST['id_note'] == $items[$location->id][$simulator->id][$day]['id'])
+									@endif--}}
+									{{--@if($_POST['id_note'] == $items[$location->id][$simulator->id][$day]['id'])
 										@php
 											$tdClass .= ' scrollto';
 										@endphp
-									@endif
+									@endif--}}
 
-									<td id="{{ $items[$location->id][$simulator->id][$day]['id'] . '"' . $tdianm . ' data-srv="' . app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['total_up']) . '" data-mng="' . app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['user_total_up']) . '" data-calendar_time="' . app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) . '" data-comm="' . $items[$location->id][$simulator->id][$day]['comment'] . '" data-ndate="' . $day . ' (' . $location->name . ' ' . $simulator->name . ')" data-href="#tabsdiv" class="pointer popup-open ' . $tdClass . '" style="' . $tdStyle . 'text-align: left !important;line-height: 1.7em;vertical-align: top;padding-left: 20px;" onclick="update(this.id) }}">
+									<td nowrap {{--id="{{ (isset($items[$location->id][$simulator->id][$day]['id']) ? $items[$location->id][$simulator->id][$day]['id'] : '') . $tdianm . ' data-srv="' . (isset($items[$location->id][$simulator->id][$day]['total_up']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['total_up']) : 0) . '" data-mng="' . (isset($items[$location->id][$simulator->id][$day]['user_total_up']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['user_total_up']) : 0) . '" data-calendar_time="' . (isset($durationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) : 0) . '" data-comm="' . (isset($items[$location->id][$simulator->id][$day]['comment']) ? $items[$location->id][$simulator->id][$day]['comment'] : '') . '" data-ndate="' . $day . ' (' . $location->name . ' ' . $simulator->name . ')" data-href="#tabsdiv" class="pointer popup-open ' . $tdClass . '" style="' . $tdStyle . 'text-align: left !important;line-height: 1.7em;vertical-align: top;padding-left: 20px;" onclick="update(this.id)" }}"--}}>
 										{{--notes--}}
-										{{--@if(isset($items[$location->id][$simulator->id][$day]['comment']))
+										@if(isset($items[$location->id][$simulator->id][$day]['comment']))
 											<i class="fa fa-bell-o notes"></i>
-										@endif--}}
+										@endif
 
 										{{--total_up--}}
 										<div class="js-platform-srv">
-											<div class="txt" style="white-space: nowrap;">
+											<div>
 												<i class="fa fa-desktop"></i>
-												{{ $items[$location->id][$simulator->id][$day]['total_up'] ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['total_up']) : '<small>нет данных</small>' }}
-												@if($items[$location->id][$simulator->id][$day]['total_up'] && $durationData[$location->id][$simulator->id][$day])
-													<span style="font-size: 13px;">[{{ round(($items[$location->id][$simulator->id][$day]['total_up'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</span>
+												{!! isset($items[$location->id][$simulator->id][$day]['total_up']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['total_up']) : '<small>нет данных</small>' !!}
+												@if(isset($items[$location->id][$simulator->id][$day]['total_up']) && isset($durationData[$location->id][$simulator->id][$day]))
+													<small>[{{ round(($items[$location->id][$simulator->id][$day]['total_up'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</small>
 												@endif
 											</div>
 										</div>
 
 										{{--user_total_up--}}
 										<div class="js-platform-admin">
-											<div class="txt" style="white-space: nowrap;">
+											<div>
 												<i class="fa fa-user-circle"></i>
-												{{ $items[$location->id][$simulator->id][$day]['user_total_up'] ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['user_total_up']) : '<small>нет данных</small>' }}
-												@if($items[$location->id][$simulator->id][$day]['user_total_up'] && $durationData[$location->id][$simulator->id][$day])
-													<span style="font-size: 13px;">[{{ round(($items[$location->id][$simulator->id][$day]['user_total_up'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</span>
+												{!! isset($items[$location->id][$simulator->id][$day]['user_total_up']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['user_total_up']) : '<small>нет данных</small>' !!}
+												@if(isset($items[$location->id][$simulator->id][$day]['user_total_up']) && isset($durationData[$location->id][$simulator->id][$day]))
+													<small>[{{ round(($items[$location->id][$simulator->id][$day]['user_total_up'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</small>
 												@endif
 											</div>
 										</div>
 
 										{{--calendar_time--}}
 										<div class="js-platform-calendar">
-											<div class="txt" style="white-space: nowrap;">
+											<div>
 												<i class="fa fa-calendar"></i>
-												{{ $durationData[$location->id][$simulator->id][$day] ? app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) . ' <span style="font-size: 13px;">[100%]</span> ' : '<small>нет данных</small>' }}
+												{!! isset($durationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) . ' <span style="font-size: 13px;">[100%]</span> ' : '<small>нет данных</small>' !!}
 											</div>
 										</div>
 
 										{{--in_air_no_motion--}}
-										@if(app('\App\Services\HelpFunctions')::mailGetTimeSeconds($items[$location->id][$simulator->id][$day]['in_air_no_motion']) >= 600)
-											<div class="IANM" style="color: #edf263;font-weight: normal;">
+										@if(isset($items[$location->id][$simulator->id][$day]['in_air_no_motion']) && $items[$location->id][$simulator->id][$day]['in_air_no_motion'] >= 10)
+											<div class="IANM text-danger">
 												<i class="fa fa-plane"></i> {{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['in_air_no_motion']) }}
 											</div>
 										@endif
 
 										{{--comment--}}
 										<div class="js-platform-comment">
-											@if($items[$location->id][$simulator->id][$day]['comment'])
+											@if(isset($items[$location->id][$simulator->id][$day]['comment']))
 												<hr>
-												<div class="txt" style="line-height: 1.0em;">
+												<div style="line-height: 1.0em;">
 													<i class="fa fa-comment"></i>
-													<span style="font-size: 13px;">{{ $items[$location->id][$simulator->id][$day]['comment'] }}</span>
+													<small>{{ $items[$location->id][$simulator->id][$day]['comment'] }}</small>
 												</div>
 											@endif
 										</div>
@@ -147,7 +140,8 @@
 				@endforeach
 			@endforeach
 			<tr>
-				<th colspan="2" style="text-align: right;background-color: #fffcc4;">Итого</th>
+				<th style="background-color: #fffcc4;"></th>
+				<th class="align-middle text-center" style="background-color: #fffcc4;">Итого</th>
 				@foreach($days as $day)
 					@php
 						$year = date('Y', strtotime($day));
@@ -161,80 +155,29 @@
 						$dayAdminTimeSum = array_sum($daySum[$day]['user_total_up'] ?? []);
 						$dayCalendarTimeSum = array_sum($daySum[$day]['calendar_time'] ?? []);
 					@endphp
-					<th style="padding-left: 20px;vertical-align: top;text-align: left !important;background-color: #fffcc4;line-height: 1.7em;">
-						<div class="txt" style="white-space: nowrap;">
+					<th nowrap class="text-left" style="background-color: #fffcc4;">
+						<div>
 							<i class="fa fa-desktop"></i>
-							{{ $dayServerTimeSum ? app('\App\Services\HelpFunctions')::minutesToTime($dayServerTimeSum) : '<small>нет данных</small>' }}
+							{!! $dayServerTimeSum ? app('\App\Services\HelpFunctions')::minutesToTime($dayServerTimeSum) : '<small>нет данных</small>' !!}
 							@if($dayServerTimeSum && $dayCalendarTimeSum)
-								<span style="font-size: 13px;">[{{ round(($dayServerTimeSum * 100 / $dayCalendarTimeSum), 2) }}%]</span>
+								<small>[{{ round(($dayServerTimeSum * 100 / $dayCalendarTimeSum), 2) }}%]</small>
 							@endif
 						</div>
-						@if($dayAdminTimeSum)
-							<div class="txt" style="white-space: nowrap;">
-								<i class="fa fa-user-circle"></i>
-								{{ $dayAdminTimeSum ? app('\App\Services\HelpFunctions')::minutesToTime($dayAdminTimeSum) : '<small>нет данных</small>' }}
-								@if($dayAdminTimeSum && $dayCalendarTimeSum)
-									<span style="font-size: 13px;">[{{ round(($dayAdminTimeSum * 100 / $dayCalendarTimeSum), 2) }}%]</span>
-								@endif
-							</div>
-						@endif
-						@if($dayCalendarTimeSum)
-							<div class="txt" style="white-space: nowrap;">
-								<i class="fa fa-calendar"></i>
-								{{ $dayCalendarTimeSum ? app('\App\Services\HelpFunctions')::minutesToTime($dayCalendarTimeSum) : '<small>нет данных</small>' }}
-								<span style="font-size: 13px;">[100%]</span>
-							</div>
-						@endif
+						<div>
+							<i class="fa fa-user-circle"></i>
+							{!! $dayAdminTimeSum ? app('\App\Services\HelpFunctions')::minutesToTime($dayAdminTimeSum) : '<small>нет данных</small>' !!}
+							@if($dayAdminTimeSum && $dayCalendarTimeSum)
+								<span style="font-size: 13px;">[{{ round(($dayAdminTimeSum * 100 / $dayCalendarTimeSum), 2) }}%]</span>
+							@endif
+						</div>
+						<div>
+							<i class="fa fa-calendar"></i>
+							{!! $dayCalendarTimeSum ? app('\App\Services\HelpFunctions')::minutesToTime($dayCalendarTimeSum) : '<small>нет данных</small>' !!}
+							<span style="font-size: 13px;">[100%]</span>
+						</div>
 					</th>
 				@endforeach
 			</tr>
 		</tbody>
 	</table>
 @endforeach
-
-{{--
-@foreach ($cities as $city)
-<table class="table table-sm table-bordered table-striped table-data">
-	<tbody>
-		<tr>
-			<td colspan="100" class="align-top text-center">{{ $city->name }}</td>
-			</tr>
-			<tr>
-				@foreach($users as $user)
-					@if($user->city_id != $city->id || !isset($userNps[$user->id]))
-						@continue
-					@endif
-					<td class="align-top text-center" data-user-role="{{ $user->role }}" style="height: 100%;">
-						<table class="table table-hover table-sm">
-							<tr>
-								<td nowrap>{{ $user->fioFormatted() }}</td>
-							</tr>
-							<tr>
-								<td class="bg-info">{{ $userNps[$user->id] }}%</td>
-							</tr>
-							<tr>
-								<td class="bg-success text-white">{{ $userAssessments[$user->id]['good'] }}</td>
-							</tr>
-							<tr>
-								<td class="bg-warning text-dark">{{ $userAssessments[$user->id]['neutral'] }}</td>
-							</tr>
-							<tr>
-								<td class="bg-danger text-white">{{ $userAssessments[$user->id]['bad'] }}</td>
-							</tr>
-							@foreach($eventItems[$user->id] ?? [] as $eventItem)
-								@if (!$eventItem['assessment'])
-									@continue
-								@endif
-								<tr>
-									<td class="nps-event" data-uuid="{{ $eventItem['uuid'] }}" title="{{ $eventItem['interval'] }}">
-										<span @if($eventItem['assessment_state']) class="text-{{ $eventItem['assessment_state'] }}" @endif>{{ $eventItem['assessment'] }}</span>
-									</td>
-								</tr>
-							@endforeach
-						</table>
-					</td>
-				@endforeach
-			</tr>
-		</tbody>
-	</table>
-@endforeach--}}
