@@ -175,6 +175,8 @@
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
+	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css">
+	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=' . time()) }}">
 @stop
@@ -188,6 +190,8 @@
 	<script src="{{ asset('js/admin/bootstrap-datepicker.ru.min.js') }}"></script>
 	<script src="{{ asset('js/admin/popper.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
+	<script src="https://unpkg.com/@popperjs/core@2"></script>
+	<script src="https://unpkg.com/tippy.js@6"></script>
 	<script src="{{ asset('js/admin/common.js?v=' . time()) }}"></script>
 	<script>
 		$(function(){
@@ -349,7 +353,7 @@
 							url = info.allDay ? '/event/0/add/shift' : '/deal/booking/add',
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						$(info.el).tooltip('hide');
+						//$(info.el).tooltip('hide');
 
 						$modalDialog.find('form').attr('id', type);
 						$modalDialog.addClass('modal-lg');
@@ -386,7 +390,7 @@
 						});
 					},
 					eventClick: function (info) {
-						$(info.el).tooltip('hide');
+						//$(info.el).tooltip('hide');
 
 						if ($(info.jsEvent.target).hasClass('event-close-btn')) {
 							return;
@@ -458,7 +462,7 @@
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						$(info.el).tooltip('hide');
+						//$(info.el).tooltip('hide');
 
 						//console.log($(info.event)[0]._def.extendedProps);
 						$.ajax({
@@ -485,7 +489,7 @@
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						$(info.el).tooltip('hide');
+						//$(info.el).tooltip('hide');
 
 						$.ajax({
 							url: '/event/' + id,
@@ -537,16 +541,23 @@
 								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + moment(value['date']).utc().format('DD.MM.YYYY H:mm:ss') + '</div>'
 						});
 
-						$(info.el).tooltip({
+						/*$(info.el).tooltip({
 							title: data,
 							placement: 'top',
 							trigger: 'hover',
 							container: 'body',
 							html: true
-						});
+						});*/
+						if (data) {
+							tippy(info.el, {
+								content: data,
+								theme: 'light',
+								allowHTML: true,
+							});
+						}
 					},
 					eventMouseLeave: function (info) {
-						$(info.el).tooltip('hide');
+						//$(info.el).tooltip('hide');
 					},
 					eventDataTransform: function (event) {
 						if (event.allDay) {

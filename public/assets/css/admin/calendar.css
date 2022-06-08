@@ -98,10 +98,10 @@ td.fc-daygrid-day {
 	padding: 8px 10px 0;
 	box-shadow: 2px 2px 4px 0 rgba(161, 161, 161, 1);
 }
-.tooltip .tooltip-inner .comment {
+.comment {
 	padding-bottom: 4px;
 }
-.tooltip .tooltip-inner .comment-sign {
+.comment-sign {
 	border-top: 1px solid #777;
 	padding-top: 2px;
 	padding-bottom: 10px;
