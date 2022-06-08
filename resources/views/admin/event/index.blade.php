@@ -349,6 +349,8 @@
 							url = info.allDay ? '/event/0/add/shift' : '/deal/booking/add',
 							$modalDialog = $('.modal').find('.modal-dialog');
 
+						$(info.el).tooltip('hide');
+
 						$modalDialog.find('form').attr('id', type);
 						$modalDialog.addClass('modal-lg');
 
@@ -384,6 +386,8 @@
 						});
 					},
 					eventClick: function (info) {
+						$(info.el).tooltip('hide');
+
 						if ($(info.jsEvent.target).hasClass('event-close-btn')) {
 							return;
 						}
@@ -399,7 +403,7 @@
 							type = $(this).data('event_type'),
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						console.log(title);
+						//console.log(title);
 						if ((title.indexOf('Тестовый') !== -1)
 							|| (title.indexOf('Уборка') !== -1)
 							|| (title.indexOf('Перерыв') !== -1)
@@ -407,8 +411,6 @@
 						) {
 							return;
 						}
-
-						$(info.el).tooltip('hide');
 
 						$modalDialog.find('form').attr('id', type);
 						//$modalDialog.removeClass('modal-lg');
