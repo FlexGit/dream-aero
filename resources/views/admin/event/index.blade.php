@@ -176,7 +176,7 @@
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
 	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css">
-	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css">
+	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css">
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=' . time()) }}">
 @stop
@@ -551,7 +551,7 @@
 						if (data) {
 							tippy(info.el, {
 								content: data,
-								theme: 'light',
+								theme: 'light-border',
 								allowHTML: true,
 							});
 						}
