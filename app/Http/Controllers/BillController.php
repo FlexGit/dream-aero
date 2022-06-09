@@ -311,7 +311,7 @@ class BillController extends Controller
 		$user = \Auth::user();
 		
 		if ($user->isAdmin() && $user->location_id && $bill->location_id && $user->location_id != $bill->location_id) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа для удаления Счета']);
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа на удаление Счета']);
 		}
 		
 		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {

@@ -318,14 +318,15 @@ class Product extends Model
 		
 		// скидка по промокоду/акции/клиента действует только для типов тарифов Regular и Ultimate
 		if ($this->productType && in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
-			// сидка по промокоду
+			// скидка по промокоду
 			if ($promocode) {
 				$dataJson = $promocode->data_json ? (array)$promocode->data_json : [];
+				// персональные промокоды на другой тип тренажера доступны только действуют только на бронирование
 				if ($isCertificatePurchase) {
-					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
+					$isDiscountAllow = ($promocode->type == Promocode::SIMULATOR_TYPE) ? false : (array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false);
 				}
 				else {
-					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
+					$isDiscountAllow = ($promocode->type == Promocode::SIMULATOR_TYPE) ? true : (array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false);
 				}
 				$discount = $promocode->discount ?? null;
 				if ($isDiscountAllow && $discount && (!$promocode->location_id || $promocode->location_id == $locationId)) {
