@@ -354,6 +354,7 @@
 							$modalDialog = $('.modal').find('.modal-dialog');
 
 						//$(info.el).tooltip('hide');
+						tippy.hideAll();
 
 						$modalDialog.find('form').attr('id', type);
 						$modalDialog.addClass('modal-lg');
@@ -391,6 +392,7 @@
 					},
 					eventClick: function (info) {
 						//$(info.el).tooltip('hide');
+						tippy.hideAll();
 
 						if ($(info.jsEvent.target).hasClass('event-close-btn')) {
 							return;
@@ -463,6 +465,7 @@
 							end = $(info.event)[0]._instance.range.end;
 
 						//$(info.el).tooltip('hide');
+						tippy.hideAll();
 
 						//console.log($(info.event)[0]._def.extendedProps);
 						$.ajax({
@@ -490,6 +493,7 @@
 							end = $(info.event)[0]._instance.range.end;
 
 						//$(info.el).tooltip('hide');
+						tippy.hideAll();
 
 						$.ajax({
 							url: '/event/' + id,
@@ -558,6 +562,7 @@
 					},
 					eventMouseLeave: function (info) {
 						//$(info.el).tooltip('hide');
+						tippy.hideAll();
 					},
 					eventDataTransform: function (event) {
 						if (event.allDay) {
