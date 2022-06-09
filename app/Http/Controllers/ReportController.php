@@ -6,6 +6,7 @@ use App\Exports\AeroflotAccrualReportExport;
 use App\Exports\AeroflotWriteOffReportExport;
 use App\Exports\ContractorSelfMadePayedDealsReportExport;
 use App\Exports\NpsReportExport;
+use App\Exports\PlatformDataReportExport;
 use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\City;
@@ -835,13 +836,13 @@ class ReportController extends Controller {
 		];
 		
 		$reportFileName = '';
-		/*if ($isExport) {
-			$reportFileName = 'report-platform-' . $user->id . '-' . date('YmdHis') . '.xlsx';
-			$exportResult = Excel::store(new PlatformReportExport($data), 'report/' . $reportFileName);
+		if ($isExport) {
+			$reportFileName = 'report-platform-data-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new PlatformDataReportExport($data), 'report/' . $reportFileName);
 			if (!$exportResult) {
 				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 			}
-		}*/
+		}
 		
 		$VIEW = view('admin.report.platform.list', $data);
 		
