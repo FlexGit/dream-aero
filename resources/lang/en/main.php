@@ -210,9 +210,9 @@ return [
 	'price.сертификат-на-vip-полет' => 'Certificate for VIP flight with pilot :name. <b>Flying in Moscow</b>.
 <br>Two guests with a certificate, valid for one year.',
 	'price.подготовьтесь-к-полёту' => 'BE 100% READY FOR YOUR FLIGHT',
-	'price.выберите-программу' => 'Select a flight <a href=":link" target="_blank">program</a> that meets your interests.',
-	'price.внимательно-ознакомьтесь' => 'Read carefully the <a href=":link" target="_blank">rules you must follow</a> during the flight.',
-	'price.пройдите-инструктаж' => 'Take the <a href=":link" target="_blank">short pre-flight briefing</a> to learn the basics of flight instruments and piloting.',
+	'price.выберите-программу' => 'Select a flight <a href=":link" target="_blank" rel="noopener noreferrer">program</a> that meets your interests.',
+	'price.внимательно-ознакомьтесь' => 'Read carefully the <a href=":link" target="_blank" rel="noopener noreferrer">rules you must follow</a> during the flight.',
+	'price.пройдите-инструктаж' => 'Take the <a href=":link" target="_blank" rel="noopener noreferrer">short pre-flight briefing</a> to learn the basics of flight instruments and piloting.',
 	'price.курс-пилота' => 'AVIATION MEMBERSHIP',
 	'price.курс-пилота2' => 'PACKAGE',
 	'price.часов' => 'hours',
