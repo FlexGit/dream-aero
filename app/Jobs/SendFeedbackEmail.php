@@ -38,9 +38,9 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 		$city = $contractor->city;
 		
 		$recipients = $bcc = [];
-		if ($city && $city->email) {
+		/*if ($city && $city->email) {
 			$recipients[] = $city->email;
-		}
+		}*/
 		$recipients[] = env('ADMIN_EMAIL');
 		$bcc[] = env('DEV_EMAIL');
 
