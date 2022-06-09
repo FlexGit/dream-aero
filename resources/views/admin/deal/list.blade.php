@@ -48,6 +48,11 @@
 						<i class="far fa-star"></i> {{ number_format($scoreAmount, 0, '.', ' ') }}
 					</div>
 				@endif
+				@if($position->promocode)
+					<div class="d-inline-block" title="Промокод">
+						<i class="fas fa-tag"></i> {{ ($position->promocode && $position->promocode->discount) ? $position->promocode->discount->valueFormatted() : '-' }}
+					</div>
+				@endif
 				<div class="d-inline-block mt-1" title="Итого к оплате">
 					@if($balance < 0)
 						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ number_format($balance, 0, '.', ' ') }}</span>
