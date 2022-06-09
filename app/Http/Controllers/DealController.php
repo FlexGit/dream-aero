@@ -174,12 +174,12 @@ class DealController extends Controller
 		if ($this->request->filter_advanced) {
 			if (in_array('with_promo', $this->request->filter_advanced)) {
 				$deals = $deals->whereHas('positions', function ($query) {
-					return $query->where('promo_id', '!=', 0);
+					return $query->has('promo');
 				});
 			}
 			if (in_array('with_promocode', $this->request->filter_advanced)) {
 				$deals = $deals->whereHas('positions', function ($query) {
-					return $query->where('promocode_id', '!=', 0);
+					return $query->has('promocode');
 				});
 			}
 			if (in_array('with_score', $this->request->filter_advanced)) {
