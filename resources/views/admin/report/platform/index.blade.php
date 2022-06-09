@@ -79,7 +79,9 @@
 					btn = isExport ? $('#export_btn') : $('#show_btn'),
 					$loader = $('<i class="fas fa-circle-notch fa-spin"></i>');
 
-				$selector.html($loader);
+				if (!isExport) {
+					$selector.html($loader);
+				}
 				btn.attr('disabled', true);
 
 				$.ajax({

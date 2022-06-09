@@ -774,11 +774,8 @@ class ReportController extends Controller {
 				$items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at] = [
 					'id' => $platformData->id,
 					'platform_time' => $platformData->total_up ? HelpFunctions::mailGetTimeMinutes($platformData->total_up) : 0,
-					/*'user_total_up' => $platformData->user_total_up ? HelpFunctions::mailGetTimeMinutes($platformData->user_total_up) : 0,*/
 					'ianm_time' => $platformData->in_air_no_motion ? HelpFunctions::mailGetTimeMinutes($platformData->in_air_no_motion) : 0,
-					/*'in_air_no_motion_diff' => ($platformData->user_total_up ? HelpFunctions::mailGetTimeSeconds($platformData->user_total_up) : 0) - ($platformData->total_up ? HelpFunctions::mailGetTimeSeconds($platformData->total_up) : 0),*/
 					'comment' => $platformData->comment,
-					/*'notes' => $row['notes'],*/
 				];
 				
 				$dateFormated = date('Y-m-d', strtotime($platformData->data_at));
@@ -838,7 +835,7 @@ class ReportController extends Controller {
 		$reportFileName = '';
 		if ($isExport) {
 			$reportFileName = 'report-platform-data-' . $user->id . '-' . date('YmdHis') . '.xlsx';
-			$exportResult = Excel::store(new PlatformDataReportExport($data), 'report/' . $reportFileName);
+			$exportResult = Excel::store(new PlatformDataReportExport($data, $periods), 'report/' . $reportFileName);
 			if (!$exportResult) {
 				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 			}

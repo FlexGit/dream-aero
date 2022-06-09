@@ -2,39 +2,40 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
-use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Sheet;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
-
-class PlatformDataReportExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, WithColumnFormatting, ShouldAutoSize, WithCustomValueBinder
+class PlatformDataReportExport implements WithMultipleSheets
 {
+	use Exportable;
+	
 	private $data;
+	private $periods;
 
-	public function __construct($data)
+	public function __construct(array $data, array $periods)
 	{
 		$this->data = $data;
+		$this->periods = $periods;
 	}
 	
-	public function view(): View
-	{
-		return view('admin.report.platform.export', $this->data);
-	}
-	
+	/**
+	 * @return array
+	 */
 	public function array(): array
 	{
 		return $this->data;
 	}
 	
-	public function columnFormats(): array
+	/**
+	 * @return array
+	 */
+	public function sheets(): array
 	{
-		return [
-		];
+		$sheets = [];
+		foreach ($this->periods as $period) {
+			$sheets[] = new PlatformDataPeriodReportExport($this->data, $period);
+		}
+		
+		return $sheets;
 	}
 }
