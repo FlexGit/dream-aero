@@ -172,6 +172,16 @@ class DealController extends Controller
 			});
 		}
 		if ($this->request->filter_advanced) {
+			if (in_array('with_promo', $this->request->filter_advanced)) {
+				$deals = $deals->whereHas('positions', function ($query) {
+					return $query->where('promo_id', '!=', 0);
+				});
+			}
+			if (in_array('with_promocode', $this->request->filter_advanced)) {
+				$deals = $deals->whereHas('positions', function ($query) {
+					return $query->where('promocode_id', '!=', 0);
+				});
+			}
 			if (in_array('with_score', $this->request->filter_advanced)) {
 				$deals = $deals->whereHas('scores', function ($query) {
 					return $query->where('type', '=', Score::USED_TYPE);
