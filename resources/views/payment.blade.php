@@ -43,28 +43,30 @@
 											@endif
 										@else
 											{{--@if($_SERVER['REMOTE_ADDR'] == '79.165.99.239')--}}
-											@if(($bill->position && $bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
-													<input type="hidden" id="product" value="{{ ($bill->position && $bill->position->product) ? $bill->position->product->id : 0 }}">
+											@if($bill->position)
+												@if(($bill->position->product && $bill->position->product->productType && in_array($bill->position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($bill->position->product->alias != 'fly_no_fear')) || !$bill->position->product)
+														<input type="hidden" id="product" value="{{ ($bill->position && $bill->position->product) ? $bill->position->product->id : 0 }}">
 
-													<div class="aeroflot_container" style="margin-left: 0;margin-right: 0;">
-													<div style="display: flex;">
-														<div class="switch_box" style="align-items: normal;margin-bottom: 0;">
-															<label class="switch" style="margin-top: 3px;margin-right: 10px;">
-																<input type="checkbox" name="has_aeroflot_card" class="edit_field" value="1">
-																<span class="slider round"></span>
-															</label><span style="font-size: 14px;">@lang('main.modal-certificate.есть-карта-аэрофлот')</span>
-														</div>
-														<div style="display: flex;width: 100%;">
-															<div style="width: 100%;">
-																<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" style="display: none;margin-bottom: 0;padding-top: 0;padding-bottom: 0;font-size: 13px;">
+														<div class="aeroflot_container" style="margin-left: 0;margin-right: 0;">
+														<div style="display: flex;">
+															<div class="switch_box" style="align-items: normal;margin-bottom: 0;">
+																<label class="switch" style="margin-top: 3px;margin-right: 10px;">
+																	<input type="checkbox" name="has_aeroflot_card" class="edit_field" value="1">
+																	<span class="slider round"></span>
+																</label><span style="font-size: 14px;">@lang('main.modal-certificate.есть-карта-аэрофлот')</span>
 															</div>
-															<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-aeroflot-card-btn" style="display: none;width: 45px;height: 33px;"><i>Ok</i></button>
-															<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-aeroflot-card-remove" style="display: none;margin: 6px 0 0 2px;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>
+															<div style="display: flex;width: 100%;">
+																<div style="width: 100%;">
+																	<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" style="display: none;margin-bottom: 0;padding-top: 0;padding-bottom: 0;font-size: 13px;">
+																</div>
+																<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-aeroflot-card-btn" style="display: none;width: 45px;height: 33px;"><i>Ok</i></button>
+																<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-aeroflot-card-remove" style="display: none;margin: 6px 0 0 2px;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>
+															</div>
 														</div>
+														<small class="aeroflot_note" style="display: none;font-size: 80%;">* @lang('main.modal-certificate.введите-номер-карты-аэрофлот-описание')</small>
+														<div class="aeroflot-buttons-container"></div>
 													</div>
-													<small class="aeroflot_note" style="display: none;font-size: 80%;">* @lang('main.modal-certificate.введите-номер-карты-аэрофлот-описание')</small>
-													<div class="aeroflot-buttons-container"></div>
-												</div>
+												@endif
 											@endif
 											{{--@endif--}}
 										@endif
