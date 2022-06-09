@@ -54,6 +54,11 @@
 							<i class="fas fa-tag"></i> {{ ($position->promocode && $position->promocode->discount) ? $position->promocode->discount->valueFormatted() : '-' }}
 						</div>
 					@endif
+					@if($position->promo)
+						<div class="d-inline-block" title="Акция">
+							<i class="fas fa-tag"></i> {{ ($position->promo && $position->promo->discount) ? $position->promo->discount->valueFormatted() : '-' }}
+						</div>
+					@endif
 				@endforeach
 				<div class="d-inline-block mt-1" title="Итого к оплате">
 					@if($balance < 0)
