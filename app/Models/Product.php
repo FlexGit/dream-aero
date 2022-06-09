@@ -269,9 +269,9 @@ class Product extends Model
 		}
 		
 		// баллы в расчете стоимости из моб. не учитываем
-		if ($source == Deal::MOB_SOURCE && $score) {
+		//if ($source == Deal::MOB_SOURCE && $score) {
 			$score = 0;
-		}
+		//}
 		
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
 
