@@ -308,6 +308,12 @@ class BillController extends Controller
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
+		$user = \Auth::user();
+		
+		if ($user->isAdmin() && $user->location_id && $bill->location_id && $user->location_id != $bill->location_id) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа для удаления Счета']);
+		}
+		
 		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
 			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для удаления. Заявка на списание миль "Аэрофлот Бонус"']);
 		}
