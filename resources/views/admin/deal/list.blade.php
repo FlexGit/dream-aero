@@ -56,7 +56,7 @@
 					@endif
 					@if($position->promo)
 						<div class="d-inline-block" title="Акция">
-							<i class="fas fa-tag"></i> {{ ($position->promo && $position->promo->discount) ? $position->promo->discount->valueFormatted() : '-' }}
+							<i class="fas fa-percent"></i> {{ ($position->promo && $position->promo->discount) ? $position->promo->discount->valueFormatted() : '-' }}
 						</div>
 					@endif
 				@endforeach
