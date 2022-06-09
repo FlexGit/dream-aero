@@ -2171,7 +2171,7 @@ class ApiController extends Controller
 			return $this->responseError('Некорректная стоимость тарифа', 400);
 		}
 		
-		// если указаны баллы на списание (только для мобилки)
+		// если указаны баллы на списание (только для моб)
 		if ($score > 0) {
 			$amount -= $score;
 			if ($amount < 0) $amount = 0;
