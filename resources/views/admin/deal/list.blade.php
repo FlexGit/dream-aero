@@ -37,7 +37,7 @@
 					@if($deal->contractor && $deal->contractor->city)
 						@if($deal->contractor->city->version == app('\App\Models\City')::RU_VERSION)
 							<i class="fas fa-ruble-sign"></i>
-						@elseif($position->currency->alias == app('\App\Models\Currency')::EN_VERSION)
+						@elseif($deal->contractor->city->version == app('\App\Models\Currency')::EN_VERSION)
 							<i class="fas fa-dollar-sign"></i>
 						@endif
 					@endif
@@ -48,11 +48,13 @@
 						<i class="far fa-star"></i> {{ number_format($scoreAmount, 0, '.', ' ') }}
 					</div>
 				@endif
-				@if($position->promocode)
-					<div class="d-inline-block" title="Промокод">
-						<i class="fas fa-tag"></i> {{ ($position->promocode && $position->promocode->discount) ? $position->promocode->discount->valueFormatted() : '-' }}
-					</div>
-				@endif
+				@foreach($deal->positions as $position)
+					@if($position->promocode)
+						<div class="d-inline-block" title="Промокод">
+							<i class="fas fa-tag"></i> {{ ($position->promocode && $position->promocode->discount) ? $position->promocode->discount->valueFormatted() : '-' }}
+						</div>
+					@endif
+				@endforeach
 				<div class="d-inline-block mt-1" title="Итого к оплате">
 					@if($balance < 0)
 						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ number_format($balance, 0, '.', ' ') }}</span>
@@ -186,7 +188,7 @@
 					</td>
 					<td class="col-1"></td>
 				</tr>
-				@foreach($deal->positions ?? [] as $position)
+				@foreach($deal->positions as $position)
 					<tr>
 						<td class="small">
 							<div>
