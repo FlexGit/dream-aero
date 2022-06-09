@@ -89,7 +89,7 @@
 								</div>
 								<select class="form-control" id="filter_advanced" name="filter_advanced[]" multiple="multiple">
 									<option value="with_score">Со списанием баллов</option>
-									<option value="with_miles">Со списанием милей "Аэрофлот Бонус"</option>
+									<option value="with_miles">С транзакцией "Аэрофлот Бонус"</option>
 								</select>
 							</div>
 							<div class="form-group align-self-end ml-auto pl-2 text-nowrap">
