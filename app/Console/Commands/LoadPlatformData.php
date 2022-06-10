@@ -114,6 +114,7 @@ class LoadPlatformData extends Command
 			//\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
 			
+			$platformDataExists = false;
 			$platformData = PlatformData::where('location_id', $locationId)
 				->where('flight_simulator_id', $simulatorId)
 				->where('data_at', $dataAt)
@@ -123,12 +124,19 @@ class LoadPlatformData extends Command
 				$platformData->location_id = $locationId;
 				$platformData->flight_simulator_id = $simulatorId;
 				$platformData->data_at = Carbon::parse($dataAt)->format('Y-m-d');
+			} else {
+				$platformDataExists = true;
 			}
 			$platformData->total_up = Carbon::parse($totalUp)->format('H:i:s');
 			$platformData->in_air_no_motion = Carbon::parse($inAirNoMotion)->format('H:i:s');
 			if (!$platformData->save()) return 0;
 			
 			//\Log::debug($platformData->toArray());
+			
+			if ($platformDataExists) {
+				$platformLogsDeleted = PlatformLog::where('platform_data_id', $platformData->id)
+					->delete();
+			}
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
