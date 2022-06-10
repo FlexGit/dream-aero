@@ -45,6 +45,26 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalLabel"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="platform">
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+						<button type="submit" class="btn btn-primary">Подтвердить</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 @stop
 
 @section('css')
@@ -116,6 +136,68 @@
 			}
 
 			getList(false);
+
+			$(document).on('click', '[data-url]', function(e) {
+				e.preventDefault();
+
+				var url = $(this).data('url'),
+					action = $(this).data('action'),
+					method = $(this).data('method'),
+					title = $(this).data('title');
+
+				if (!url) {
+					toastr.error('Некорректные параметры');
+					return null;
+				}
+
+				$('.modal .modal-title, .modal .modal-body').empty();
+
+				$.ajax({
+					url: url,
+					type: 'GET',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						if (action && method) {
+							$('#modal form').attr('action', action).attr('method', method);
+							$('button[type="submit"]').show();
+						} else {
+							$('button[type="submit"]').hide();
+						}
+						$('#modal .modal-title').text(title);
+						$('#modal .modal-body').html(result.html);
+						$('#modal').modal('show');
+					}
+				});
+			});
+
+			$(document).on('submit', '#platform', function(e) {
+				e.preventDefault();
+
+				var action = $(this).attr('action'),
+					method = $(this).attr('method'),
+					data = $(this).serializeArray();
+
+				$.ajax({
+					url: action,
+					type: method,
+					data: data,
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						$('#modal').modal('hide');
+						getList(false);
+						toastr.success('Комментарий успешно сохранен');
+					}
+				});
+			});
 
 			$(document).on('click', '#show_btn', function(e) {
 				getList(false);

@@ -420,6 +420,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			
 			Route::get('report/platform', [ReportController::class, 'platformIndex'])->name('platformIndex');
 			Route::get('report/platform/list/ajax', [ReportController::class, 'platformGetListAjax'])->name('platformList');
+			Route::get('report/platform/modal/{location_id}/{simulator_id}/{date}', [ReportController::class, 'platformModalEdit'])->name('platformModalEdit');
+			Route::post('report/platform', [ReportController::class, 'platformModalUpdate'])->name('platformModalUpdate');
 
 			Route::get('report/personal-selling', [ReportController::class, 'personalSellingIndex'])->name('personalSellingIndex');
 			Route::get('report/personal-selling/list/ajax', [ReportController::class, 'personalSellingGetListAjax'])->name('personalSellingList');

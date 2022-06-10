@@ -12,14 +12,17 @@ use App\Models\Certificate;
 use App\Models\City;
 use App\Models\Content;
 use App\Models\Event;
+use App\Models\FlightSimulator;
 use App\Models\Location;
 use App\Models\PaymentMethod;
 use App\Models\PlatformData;
+use App\Models\PlatformLog;
 use App\Models\User;
 use App\Repositories\CityRepository;
 use App\Repositories\PaymentRepository;
 use App\Services\AeroflotBonusService;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Services\HelpFunctions;
@@ -727,6 +730,10 @@ class ReportController extends Controller {
 		
 		$user = \Auth::user();
 		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
 		$dateFromAt = $this->request->filter_date_from_at ?? '';
 		$dateToAt = $this->request->filter_date_to_at ?? '';
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
@@ -844,6 +851,106 @@ class ReportController extends Controller {
 		$VIEW = view('admin.report.platform.list', $data);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+	
+	/**
+	 * @param $locationId
+	 * @param $simulatorId
+	 * @param $date
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function platformModalEdit($locationId, $simulatorId, $date)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$location = Location::find($locationId);
+		$simulator = FlightSimulator::find($simulatorId);
+		
+		$items = [];
+		
+		$platformData = PlatformData::where('location_id', $locationId)
+			->where('flight_simulator_id', $simulatorId)
+			->where('data_at', $date)
+			->first();
+		
+		if ($platformData) {
+			$platformLogs = PlatformLog::where('platform_data_id', $platformData->id)
+				->orderBy('start_at')
+				->get();
+		}
+		foreach ($platformLogs as $platformLog) {
+			$items[Carbon::parse($platformLog->start_at)->format('H')][$platformLog->action_type][] = Carbon::parse($platformLog->start_at)->format('H:i') . ' - ' . Carbon::parse($platformLog->stop_at)->format('H:i');
+		}
+		
+		$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT, Event::EVENT_TYPE_USER_FLIGHT])
+			->where('location_id', $locationId)
+			->where('flight_simulator_id', $simulatorId)
+			->where('start_at', '>=', Carbon::parse($date)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('start_at', '<=', Carbon::parse($date)->endOfDay()->format('Y-m-d H:i:s'))
+			->orderBy('start_at')
+			->get();
+		foreach ($events as $event) {
+			$items[Carbon::parse($event->simulator_up_at)->format('H')]['admin'][] = /*$event->id . ' - ' . */Carbon::parse($event->simulator_up_at )->format('H:i') . ' - ' . Carbon::parse($event->simulator_down_at)->format('H:i');
+			$items[Carbon::parse($event->start_at)->format('H')]['calendar'][] = /*$event->id . ' - ' . */Carbon::parse($event->start_at)->format('H:i') . ' - ' . Carbon::parse($event->stop_at)->addMinutes($event->extra_time)->format('H:i');
+		}
+		
+		$intervals = CarbonInterval::hour()->toPeriod(Carbon::parse($date . ' 09:00:00'), Carbon::parse($date . ' 23:59:59'));
+		
+		/*\Log::debug($locationId);
+		\Log::debug($simulatorId);
+		\Log::debug($date);
+		\Log::debug($items);*/
+		
+		$data = [
+			'location' => $location,
+			'simulator' => $simulator,
+			'date' => $date,
+			'platformData' => $platformData,
+			'items' => $items,
+			'intervals' => $intervals,
+		];
+		
+		$VIEW = view('admin.report.platform.modal.edit', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function platformModalUpdate()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$id = $this->request->id ?? 0;
+		
+		$platformData = PlatformData::find($id);
+		if (!$platformData) return response()->json(['status' => 'error', 'reason' => 'Показания платформы не найдены']);
+		
+		$comment = $this->request->comment ?? '';
+		
+		$platformData->comment = $comment;
+		if(!$platformData->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		return response()->json(['status' => 'success']);
 	}
 
 	/**
