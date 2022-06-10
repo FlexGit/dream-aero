@@ -898,7 +898,7 @@ class ReportController extends Controller {
 			->orderBy('start_at')
 			->get();
 		foreach ($events as $event) {
-			$items[Carbon::parse($event->simulator_up_at)->format('H')]['admin'][] = /*$event->id . ' - ' . */Carbon::parse($event->simulator_up_at )->format('H:i') . ' - ' . Carbon::parse($event->simulator_down_at)->format('H:i');
+			$items[Carbon::parse($event->simulator_up_at)->format('H')]['admin'][] = (($user->id == 1) ? $event->id . ' - ' : '') . Carbon::parse($event->simulator_up_at )->format('H:i') . ' - ' . Carbon::parse($event->simulator_down_at)->format('H:i');
 			$items[Carbon::parse($event->start_at)->format('H')]['calendar'][] = /*$event->id . ' - ' . */Carbon::parse($event->start_at)->format('H:i') . ' - ' . Carbon::parse($event->stop_at)->addMinutes($event->extra_time)->format('H:i');
 		}
 		
