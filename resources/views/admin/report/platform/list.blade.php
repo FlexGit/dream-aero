@@ -67,7 +67,7 @@
 								@endif
 
 								@if(isset($items[$location->id][$simulator->id][$day]) || isset($durationData[$location->id][$simulator->id][$day]))
-									<td nowrap data-toggle="modal" data-url="/report/platform/modal/{{ $location->id }}/{{ $simulator->id }}/{{ $day }}" data-action="/report/platform" data-method="POST" data-title="Данные за {{ $day }}" title="Посмотреть" style="max-width: 100px;white-space: normal;">
+									<td nowrap data-toggle="modal" data-url="/report/platform/modal/{{ $location->id }}/{{ $simulator->id }}/{{ $day }}" data-action="/report/platform" data-method="POST" data-title="Данные за {{ $day }}" title="Посмотреть" style="max-width: 150px;white-space: normal;">
 										<div class="js-platform-srv">
 											<div>
 												<i class="fa fa-desktop"></i>
