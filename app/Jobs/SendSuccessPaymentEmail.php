@@ -39,7 +39,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		$contractor = $deal->contractor;
 		if (!$contractor) return null;
 		
-		$city = $contractor->city;
+		$city = $deal->city ?: $contractor->city;
 		if (!$city) return null;
 		if (!$city->email) return null;
 		
