@@ -231,7 +231,12 @@ class DealController extends Controller
 		}
 		$deals = $deals->limit(20)->get();
 
-		$VIEW = view('admin.deal.list', ['deals' => $deals]);
+		$data = [
+			'deals' => $deals,
+			'user' => $user,
+		];
+		
+		$VIEW = view('admin.deal.list', $data);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
@@ -527,7 +532,7 @@ class DealController extends Controller
 					
 					// проверяем лимиты по карте и на бэке тоже
 					$cardInfoResult = AeroflotBonusService::getCardInfo($cardNumber, $product, $amount);
-					$minLimit = floor($amount / 100 * 20);
+					$minLimit = floor($amount / 100 * 10);
 					if ($bonusAmount > $cardInfoResult['max_limit'] && $bonusAmount < $minLimit) {
 						return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы')]);
 					}

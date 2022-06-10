@@ -26,7 +26,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-6">
+	<div class="col">
 		<div class="form-group">
 			<label for="payment_method_id">Способ оплаты</label>
 			<select class="form-control" id="payment_method_id" name="payment_method_id">
@@ -37,25 +37,15 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-6">
+	<div class="col">
 		<div class="form-group">
 			<label for="amount">Сумма</label>
 			<input type="number" class="form-control" id="amount" name="amount" value="{{ $bill->amount }}" placeholder="Сумма">
 		</div>
 	</div>
-	{{--<div class="col-3">
-		<div class="form-group">
-			<label for="currency_id">Валюта</label>
-			<select class="form-control" id="currency_id" name="currency_id">
-				@foreach($currencies ?? [] as $currency)
-					<option value="{{ $currency->id }}" @if($currency->id == $bill->currency_id) selected @endif>{{ $currency->name }}</option>
-				@endforeach
-			</select>
-		</div>
-	</div>--}}
 </div>
 <div class="row">
-	<div class="col-6">
+	<div class="col">
 		<div class="form-group">
 			<label for="position_id">Позиция</label>
 			<select class="form-control" id="position_id" name="position_id">
@@ -66,7 +56,7 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-6">
+	<div class="col">
 		@if ($bill->paymentMethod)
 			@if ($bill->paymentMethod->alias == app('\App\Models\PaymentMethod')::ONLINE_ALIAS)
 				<div class="form-group">
@@ -75,10 +65,16 @@
 						[ <a href="{{ (($bill->deal && $bill->deal->city && $bill->deal->city->version == app('\App\Models\City')::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid }}" target="_blank">открыть</a> ]
 					</div>
 					@if($bill->link_sent_at)
-						<div>ссылка отправлена: {{ \Carbon\Carbon::parse($bill->link_sent_at)->format('Y-m-d H:i:s') }}</div>
+						<div>
+							ссылка на оплату отправлена:<br>
+							{{ \Carbon\Carbon::parse($bill->link_sent_at)->format('Y-m-d H:i:s') }}
+						</div>
 					@endif
 					@if($bill->success_payment_sent_at)
-						<div>уведомление об оплате отправлено: {{ \Carbon\Carbon::parse($bill->success_payment_sent_at)->format('Y-m-d H:i:s') }}</div>
+						<div>
+							уведомление об оплате отправлено:<br>
+							{{ \Carbon\Carbon::parse($bill->success_payment_sent_at)->format('Y-m-d H:i:s') }}
+						</div>
 					@endif
 				</div>
 			@endif

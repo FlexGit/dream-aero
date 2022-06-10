@@ -126,10 +126,13 @@
 								@endif
 							@endif
 						@endif
+						@if($user->isSuperadmin() && $bill->status && $bill->status->alias == app('\App\Models\Bill')::PAYED_STATUS)
+							&nbsp;&nbsp;<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $bill->id }}/miles/accrual" data-action="/bill/miles/accrual" data-method="POST" data-type="aeroflot" data-title="Аэрофлот Бонус" title="Аэрофлот Бонус"><i class="fas fa-globe"></i></a>
+						@endif
 					</div>
 					@if ($bill->status)
-						<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $bill->status->data_json ?? []) ? $bill->status->data_json['color'] : 'none' }};" title="Статус Счета">
-							{{ $bill->status->name }}
+						<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $bill->status->data_json ?? []) ? $bill->status->data_json['color'] : 'none' }};">
+							<span title="Статус Счета">{{ $bill->status->name }}</span>
 						</div>
 						<div class="text-nowrap" style="line-height: 0.9em;" title="Дата оплаты">
 							{{ $bill->payed_at ? $bill->payed_at->format('Y-m-d H:i') : '' }}
@@ -398,11 +401,11 @@
 												</div>
 												@if ($comment->updatedUser)
 													<div class="text-right text-nowrap mb-2">
-														<small>Изменил: {{ $comment->updatedUser->name }} {{ \Carbon\Carbon::parse($comment->updated_at)->format('Y-m-d H:i') }}</small>
+														<small>Изменено: {{ $comment->updatedUser->name }} {{ \Carbon\Carbon::parse($comment->updated_at)->format('Y-m-d H:i') }}</small>
 													</div>
 												@elseif ($comment->createdUser)
 													<div class="text-right text-nowrap mb-2">
-														<small>Создал: {{ $comment->createdUser->name }} {{ \Carbon\Carbon::parse($comment->created_at)->format('Y-m-d H:i') }}</small>
+														<small>Создано: {{ $comment->createdUser->name }} {{ \Carbon\Carbon::parse($comment->created_at)->format('Y-m-d H:i') }}</small>
 													</div>
 												@endif
 											@endforeach

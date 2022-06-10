@@ -194,6 +194,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('certificate/list/ajax', [CertificateController::class, 'getListAjax'])->name('certificatesGetList');
 			
 			// Счета
+			Route::get('bill/{id}/miles/accrual', [BillController::class, 'accrualAeroflotMilesModal'])->name('accrualAeroflotMilesModal');
+			Route::post('bill/miles/accrual', [BillController::class, 'accrualAeroflotMiles'])->name('accrualAeroflotMiles');
+
 			Route::post('bill', [BillController::class, 'store']);
 			Route::put('bill/{id}', [BillController::class, 'update']);
 			Route::delete('bill/{id}', [BillController::class, 'delete']);
@@ -202,7 +205,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('bill/{id}/edit', [BillController::class, 'edit']);
 	
 			Route::post('bill/paylink/send', [BillController::class, 'sendPayLink'])->name('sendPayLink');
-	
+			
 			// Скидки
 			Route::get('discount', [DiscountController::class, 'index'])->name('discountIndex');
 			Route::get('discount/list/ajax', [DiscountController::class, 'getListAjax'])->name('discountList');

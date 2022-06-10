@@ -273,7 +273,7 @@
 				});
 			});
 
-			$(document).on('submit', '#deal, #position, #bill, #certificate, #event', function(e) {
+			$(document).on('submit', '#deal, #position, #bill, #certificate, #event, #aeroflot', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -329,6 +329,8 @@
 							} else if (method === 'PUT') {
 								msg += 'сохранено';
 							}
+						} else if (formId === 'aeroflot') {
+							msg = 'заявка на начисление миль успешно создана';
 						}
 
 						$('#modal').modal('hide');

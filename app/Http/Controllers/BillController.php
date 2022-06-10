@@ -311,7 +311,7 @@ class BillController extends Controller
 		$user = \Auth::user();
 		
 		if ($user->isAdmin() && $user->location_id && $bill->location_id && $user->location_id != $bill->location_id) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа на удаление Счета']);
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
 		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
@@ -379,5 +379,92 @@ class BillController extends Controller
 		$job->handle();
 		
 		return response()->json(['status' => 'success', 'message' => 'Задание на отправку Ссылки на оплату принято']);
+	}
+	
+	public function accrualAeroflotMilesModal($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$bill = Bill::find($id);
+		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
+		
+		$VIEW = view('admin.bill.modal.accrual-miles', [
+			'bill' => $bill,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function accrualAeroflotMiles()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		$rules = [
+			'id' => 'required|numeric|min:0|not_in:0',
+			'card_number' => 'required',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'id' => 'Счет',
+				'card_number' => 'Номер карты',
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+		
+		$id = $this->request->id ?? 0;
+		$cardNumber = $this->request->card_number ?? '';
+		
+		$bill = Bill::find($id);
+		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
+		
+		if ($bill->status->alias != Bill::PAYED_STATUS) {
+			return response()->json(['status' => 'error', 'reason' => 'Счет не оплачен']);
+		}
+		
+		if ($bill->amount <= 0) {
+			return response()->json(['status' => 'error', 'reason' => 'Некорректная сумма Счета']);
+		}
+		
+		$position = $bill->position;
+		if (!$position) {
+			return response()->json(['status' => 'error', 'reason' => 'К Счету не привязана позиция']);
+		}
+
+		if (!$position->is_certificate_purchase && Carbon::parse($bill->payed_at)->addDays(AeroflotBonusService::BOOKING_ACCRUAL_AFTER_DAYS)->lte(Carbon::now())) {
+			return response()->json(['status' => 'error', 'reason' => 'Срок начисления миль по Счету истек']);
+		}
+		
+		if ($position->is_certificate_purchase && Carbon::parse($bill->payed_at)->addDays(AeroflotBonusService::CERTIFICATE_PURCHASE_ACCRUAL_AFTER_DAYS)->lte(Carbon::now())) {
+			return response()->json(['status' => 'error', 'reason' => 'Срок начисления миль по Счету истек']);
+		}
+		
+		$product = $position->product;
+		if (!$product) {
+			return response()->json(['status' => 'error', 'reason' => 'К позиции не привязан продукт']);
+		}
+		
+		$bill->aeroflot_transaction_type = AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS;
+		$bill->aeroflot_card_number = $cardNumber;
+		$bill->aeroflot_bonus_amount = floor($bill->amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
+		if (!$bill->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		return response()->json(['status' => 'success', 'message' => 'Заявка на начисление ' . $bill->aeroflot_bonus_amount . ' миль успешно создана']);
 	}
 }
