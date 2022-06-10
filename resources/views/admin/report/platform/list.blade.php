@@ -96,7 +96,7 @@
 											</div>
 										@endif
 
-										@if(isset($items[$location->id][$simulator->id][$day]['comment']))
+										@if(isset($items[$location->id][$simulator->id][$day]['comment']) && $items[$location->id][$simulator->id][$day]['comment'])
 											<div class="js-platform-comment" style="line-height: 0.8em;">
 												<i class="fa fa-comment text-warning"></i>
 												<small>{{ $items[$location->id][$simulator->id][$day]['comment'] }}</small>
