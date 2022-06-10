@@ -68,49 +68,40 @@
 
 								@if(isset($items[$location->id][$simulator->id][$day]) || isset($durationData[$location->id][$simulator->id][$day]))
 									<td nowrap data-toggle="modal" data-url="/report/platform/modal/{{ $location->id }}/{{ $simulator->id }}/{{ $day }}" data-action="/report/platform" data-method="POST" data-title="Данные за {{ $day }}" title="Посмотреть" style="max-width: 200px;white-space: normal;">
-										<div class="js-platform-srv">
-											<div>
-												<i class="fa fa-desktop"></i>
-												{!! isset($items[$location->id][$simulator->id][$day]['platform_time']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['platform_time']) : '<small>нет данных</small>' !!}
-												@if(isset($items[$location->id][$simulator->id][$day]['platform_time']) && isset($durationData[$location->id][$simulator->id][$day]))
-													<small>[{{ round(($items[$location->id][$simulator->id][$day]['platform_time'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</small>
-												@endif
-											</div>
+										<div class="js-platform-srv" style="white-space: nowrap;">
+											<i class="fa fa-desktop"></i>
+											{!! isset($items[$location->id][$simulator->id][$day]['platform_time']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['platform_time']) : '<small>нет данных</small>' !!}
+											@if(isset($items[$location->id][$simulator->id][$day]['platform_time']) && isset($durationData[$location->id][$simulator->id][$day]))
+												<small>[{{ round(($items[$location->id][$simulator->id][$day]['platform_time'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</small>
+											@endif
 										</div>
 
-										<div class="js-platform-admin">
-											<div>
-												<i class="fas fa-user"></i>
-												{!! isset($userDurationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($userDurationData[$location->id][$simulator->id][$day]) : '<small>нет данных</small>' !!}
-												@if(isset($userDurationData[$location->id][$simulator->id][$day]) && isset($durationData[$location->id][$simulator->id][$day]))
-													<small>[{{ round(($userDurationData[$location->id][$simulator->id][$day] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</small>
-												@endif
-											</div>
+										<div class="js-platform-admin" style="white-space: nowrap;">
+											<i class="fas fa-user"></i>
+											{!! isset($userDurationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($userDurationData[$location->id][$simulator->id][$day]) : '<small>нет данных</small>' !!}
+											@if(isset($userDurationData[$location->id][$simulator->id][$day]) && isset($durationData[$location->id][$simulator->id][$day]))
+												<small>[{{ round(($userDurationData[$location->id][$simulator->id][$day] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]</small>
+											@endif
 										</div>
 
-										<div class="js-platform-calendar">
-											<div>
-												<i class="far fa-calendar-alt"></i>
-												{!! isset($durationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) . ' <span style="font-size: 13px;">[100%]</span> ' : '<small>нет данных</small>' !!}
-											</div>
+										<div class="js-platform-calendar" style="white-space: nowrap;">
+											<i class="far fa-calendar-alt"></i>
+											{!! isset($durationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) . ' <span style="font-size: 13px;">[100%]</span> ' : '<small>нет данных</small>' !!}
 										</div>
 
 										@if(isset($items[$location->id][$simulator->id][$day]['ianm_time']) && $items[$location->id][$simulator->id][$day]['ianm_time'] >= 10)
-											<div class="IANM text-danger">
+											<div class="IANM text-danger" style="white-space: nowrap;">
 												<span class="font-weight-bold">IANM:</span>
 												{{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['ianm_time']) }}
 											</div>
 										@endif
 
-										<div class="js-platform-comment">
-											@if(isset($items[$location->id][$simulator->id][$day]['comment']))
-												<hr>
-												<div style="line-height: 0.8em;">
-													<i class="fa fa-comment text-warning"></i>
-													<small>{{ $items[$location->id][$simulator->id][$day]['comment'] }}</small>
-												</div>
-											@endif
-										</div>
+										@if(isset($items[$location->id][$simulator->id][$day]['comment']))
+											<div class="js-platform-comment" style="line-height: 0.8em;">
+												<i class="fa fa-comment text-warning"></i>
+												<small>{{ $items[$location->id][$simulator->id][$day]['comment'] }}</small>
+											</div>
+										@endif
 									</td>
 								@else
 									<td></td>
