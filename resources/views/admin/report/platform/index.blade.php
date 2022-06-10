@@ -86,6 +86,9 @@
 			left: 0;
 			background-color: #fff;
 		}*/
+		table tr td[data-url] {
+			cursor: help;
+		}
 	</style>
 @stop
 
