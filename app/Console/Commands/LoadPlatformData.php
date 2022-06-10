@@ -84,7 +84,7 @@ class LoadPlatformData extends Command
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
 			//\Log::debug('dataAt = ' . $dataAt);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
-			\Log::debug('dataAt = ' . $dataAt);
+			//\Log::debug('dataAt = ' . $dataAt);
 			if (!$dataAt) return 0;
 
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
@@ -128,7 +128,7 @@ class LoadPlatformData extends Command
 			$platformData->in_air_no_motion = Carbon::parse($inAirNoMotion)->format('H:i:s');
 			if (!$platformData->save()) return 0;
 			
-			\Log::debug($platformData->toArray());
+			//\Log::debug($platformData->toArray());
 			
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
