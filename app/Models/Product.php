@@ -252,7 +252,8 @@ class Product extends Model
 	public function calcAmount($contractorId, $cityId, $source = 'api', $isFree = false, $locationId = 0, $paymentMethodId = 0, $promoId = 0, $promocodeId = 0, $certificateId = 0, $isUnified = false, $isAirlineMilesPurchase = false, $score = 0, $isCertificatePurchase = false)
 	{
 		if ($isFree) return 0;
-
+		
+		$certificateProductAmount = 0;
 		if (!$isCertificatePurchase && $certificateId && $locationId) {
 			$date = date('Y-m-d');
 			$location = Location::find($locationId);
@@ -266,6 +267,15 @@ class Product extends Model
 						->orWhereNull('expire_at');
 				})->find($certificateId);
 			if ($certificate) return 0;
+			
+			$certificate = Certificate::find($certificateId);
+			$certificateProduct = $certificate->product;
+			if ($certificateProduct && $certificateProduct->alias != $this->alias) {
+				$certificateCityProduct = $certificateProduct->cities()->where('cities_products.is_active', true)->find($cityId);
+				if ($certificateCityProduct && $certificateCityProduct->pivot) {
+					$certificateProductAmount = $certificateCityProduct->pivot->price;
+				}
+			}
 		}
 
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
@@ -300,6 +310,12 @@ class Product extends Model
 		
 		// базовая стоимость продукта
 		$amount = $cityProduct->pivot->price;
+		
+		// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
+		// то вычисляем разницу для доплаты
+		if ($amount > $certificateProductAmount) {
+			$amount -= $certificateProductAmount;
+		}
 
 		// скидка на продукт
 		$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];
