@@ -993,9 +993,8 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
 			}
 		}
-		
-		// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
-		// то вычисляем разницу для доплаты
+
+		\Log::debug($amount . ' - ' . $certificateProductAmount);
 		$amount -= $certificateProductAmount;
 		if ($amount < 0) $amount = 0;
 		
