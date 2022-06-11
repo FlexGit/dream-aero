@@ -122,9 +122,12 @@ class Bill extends Model
 	const NOT_PAYED_STATUS = 'bill_not_payed';
 	const PAYED_PROCESSING_STATUS = 'bill_payed_processing';
 	const PAYED_STATUS = 'bill_payed';
+	const CANCELED_STATUS = 'bill_canceled';
 	const STATUSES = [
 		self::NOT_PAYED_STATUS,
+		self::PAYED_PROCESSING_STATUS,
 		self::PAYED_STATUS,
+		self::CANCELED_STATUS,
 	];
 	
 	const CASH_PAYMENT_METHOD = 'cash';

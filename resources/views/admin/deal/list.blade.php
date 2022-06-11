@@ -118,7 +118,7 @@
 						{{ number_format($bill->amount, 0, '.', ' ') }}
 						@if($bill->paymentMethod)
 							[{{ $bill->paymentMethod->name }}]
-							@if ($bill->paymentMethod->alias == app('\App\Models\PaymentMethod')::ONLINE_ALIAS)
+							@if ($bill->paymentMethod->alias == app('\App\Models\PaymentMethod')::ONLINE_ALIAS && $bill->status && $bill->status->alias == app('\App\Models\Bill')::NOT_PAYED_STATUS)
 								@if ($bill->link_sent_at)
 									<a href="javascript:void(0)" class="js-send-pay-link ml-2" data-id="{{ $bill->id }}" title="Ссылка на оплату отправлена {{ $bill->link_sent_at }}"><i class="far fa-envelope-open"></i></a>
 								@else
