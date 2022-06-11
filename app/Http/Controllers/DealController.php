@@ -868,7 +868,7 @@ class DealController extends Controller
 		$employeeId = $this->request->employee_id ?? 0;
 		$pilotId = $this->request->pilot_id ?? 0;
 		
-		\Log::debug($this->request);
+		//\Log::debug($this->request);
 		
 		/*if (!in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE]) && in_array($eventType, Event::EVENT_TYPE_DEAL) && !$isValidFlightDate) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
@@ -996,9 +996,9 @@ class DealController extends Controller
 			}
 		}
 
-		\Log::debug($amount . ' - ' . $certificateProductAmount);
-		$amount -= $certificateProductAmount;
-		if ($amount < 0) $amount = 0;
+		//\Log::debug($amount . ' - ' . $certificateProductAmount);
+		//$amount -= $certificateProductAmount;
+		//if ($amount < 0) $amount = 0;
 		
 		$data = [];
 		if ($comment) {
