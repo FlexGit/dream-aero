@@ -937,7 +937,7 @@ class DealController extends Controller
 			}
 		}
 		
-		$certificateId = 0;
+		$certificateId = $certificateProductAmount = 0;
 		if ($certificateNumber || $certificateUuid) {
 			$date = date('Y-m-d');
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
@@ -972,6 +972,13 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);
 			}
 			$certificateId = $certificate->id;
+			$certificateProduct = $certificate->product;
+			if ($certificateProduct && $certificateProduct->alias != $product->alias) {
+				$certificateCityProduct = $certificateProduct->cities()->where('cities_products.is_active', true)->find($cityId);
+				if ($certificateCityProduct && $certificateCityProduct->pivot) {
+					$certificateProductAmount = $certificateCityProduct->pivot->price;
+				}
+			}
 		}
 		
 		if ($contractorId) {
@@ -988,6 +995,12 @@ class DealController extends Controller
 		}
 		
 		if ($certificateId) {
+			// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
+			// то вычисляем разницу для доплаты
+			if ($certificateProductAmount && $amount > $certificateProductAmount) {
+				$amount -= $certificateProductAmount;
+			}
+		} else {
 			$amount = 0;
 		}
 		

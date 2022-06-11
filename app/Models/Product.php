@@ -313,7 +313,7 @@ class Product extends Model
 		
 		// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
 		// то вычисляем разницу для доплаты
-		if ($amount > $certificateProductAmount) {
+		if ($certificateProductAmount && $amount > $certificateProductAmount) {
 			$amount -= $certificateProductAmount;
 		}
 
