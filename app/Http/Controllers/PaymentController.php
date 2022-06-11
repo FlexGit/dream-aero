@@ -36,39 +36,32 @@ class PaymentController extends Controller
 	 */
 	public function payment($uuid, $type = null)
 	{
-		$cityAlias = $this->request->session()->get('cityAlias');
-		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'payment');
-		
-		$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, PaymentMethod::ONLINE_ALIAS);
-		$notPayedStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
-		
 		$bill = Bill::where('uuid', $uuid)
 			->where('location_id', '!=', 0)
 			->first();
 		if (!$bill) {
 			abort(404);
 		}
+
 		if ($bill->amount <= 0) {
 			abort(404);
 		}
+
 		$deal = $bill->deal;
 		if (!$deal) {
 			abort(404);
 		}
+
 		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
 			abort(404);
 		}
-		if ($bill->paymentMethod->alias != $onlinePaymentMethod->alias) {
-			return view('payment', [
-				'page' => $page ?? new Content,
-				'city' => $city,
-				'html' => '',
-				'error' => trans('main.pay.счет-способ-оплаты'),
-				'payType' => '',
-			]);
-		}
-		if ($bill->status->alias != $notPayedStatus->alias || $bill->payed_at != null) {
+		
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'payment');
+
+		$billStatus = $bill->status;
+		if (!$billStatus || $billStatus->alias != Bill::NOT_PAYED_STATUS || $bill->payed_at != null) {
 			return view('payment', [
 				'page' => $page ?? new Content,
 				'city' => $city,
@@ -78,6 +71,17 @@ class PaymentController extends Controller
 			]);
 		}
 		
+		$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, PaymentMethod::ONLINE_ALIAS);
+		if ($bill->paymentMethod->alias != $onlinePaymentMethod->alias) {
+			return view('payment', [
+				'page' => $page ?? new Content,
+				'city' => $city,
+				'html' => '',
+				'error' => trans('main.pay.счет-способ-оплаты'),
+				'payType' => '',
+			]);
+		}
+
 		// автоматическая проверка состояния заказа на списание милей, если такой есть
 		if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER
 			&& $bill->aeroflot_transaction_order_id
