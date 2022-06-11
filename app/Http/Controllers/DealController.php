@@ -994,6 +994,7 @@ class DealController extends Controller
 			}
 		}
 		
+		\Log::debug($certificateId . ' - ' . $amount . ' - ' . $certificateProductAmount);
 		if ($certificateId) {
 			// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
 			// то вычисляем разницу для доплаты
