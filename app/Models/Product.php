@@ -313,9 +313,8 @@ class Product extends Model
 		
 		// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
 		// то вычисляем разницу для доплаты
-		if ($certificateProductAmount && $amount > $certificateProductAmount) {
-			$amount -= $certificateProductAmount;
-		}
+		$amount -= $certificateProductAmount;
+		if ($amount < 0) $amount = 0;
 
 		// скидка на продукт
 		$dataJson = $cityProduct->pivot->data_json ? (array)$cityProduct->pivot->data_json : [];

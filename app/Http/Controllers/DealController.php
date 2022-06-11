@@ -997,9 +997,8 @@ class DealController extends Controller
 		if ($certificateId) {
 			// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
 			// то вычисляем разницу для доплаты
-			if ($certificateProductAmount && $amount > $certificateProductAmount) {
-				$amount -= $certificateProductAmount;
-			}
+			$amount -= $certificateProductAmount;
+			if ($amount < 0) $amount = 0;
 		} else {
 			$amount = 0;
 		}
