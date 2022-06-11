@@ -95,9 +95,9 @@
 						<div class="d-inline-block font-weight-bold">
 							<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $bill->id }}/edit" data-action="/bill/{{ $bill->id }}" data-method="PUT" data-title="Редактирование счета" data-type="bill" title="Редактировать счет">{{ $bill->number }}</a>
 						</div>
-						<div class="d-inline-block ml-2">
+						{{--<div class="d-inline-block ml-2">
 							<a href="javascript:void(0)" class="js-remove-bill" data-id="{{ $bill->id }}" title="Удалить счет"><i class="fas fa-times" style="color: #aaa;"></i></a>
-						</div>
+						</div>--}}
 					</div>
 					<div class="text-nowrap" style="line-height: 0.9em;" title="Дата создания">
 						от {{ $bill->created_at ? $bill->created_at->format('Y-m-d H:i') : '' }}
