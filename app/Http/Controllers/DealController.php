@@ -994,9 +994,10 @@ class DealController extends Controller
 			}
 		}
 		
-		if ($certificateId) {
-			$amount = 0;
-		}
+		// если это бронирование по Сертификату, выбран иной тариф, и стоимомть текущего тарифа больше,
+		// то вычисляем разницу для доплаты
+		$amount -= $certificateProductAmount;
+		if ($amount < 0) $amount = 0;
 		
 		$data = [];
 		if ($comment) {
