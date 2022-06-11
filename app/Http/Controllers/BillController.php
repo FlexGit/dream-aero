@@ -216,6 +216,11 @@ class BillController extends Controller
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
+		$billStatus = $bill->status;
+		if ($billStatus && $billStatus->alias == Bill::CANCELED_STATUS) {
+			return response()->json(['status' => 'error', 'reason' => 'Счет в текущем статусе недоступен для редактирования']);
+		}
+		
 		/*if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
 			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для редактирования. Заявка на списание миль "Аэрофлот Бонус"']);
 		}*/
