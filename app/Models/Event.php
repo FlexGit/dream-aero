@@ -378,7 +378,7 @@ class Event extends Model
 			$font->size(35);
 			$font->color('#000000');
 		});
-		if ($addressLength > 55) {
+		/*if ($addressLength > 55) {
 			$addressTemp = HelpFunctions::wordWrapLimit($address, 55);
 			$flightInvitationFile->text($addressTemp, 220, 985, function ($font) use ($fontPath) {
 				$font->file($fontPath);
@@ -396,7 +396,7 @@ class Event extends Model
 				$font->size(24);
 				$font->color('#000000');
 			});
-		}
+		}*/
 		
 		$flightInvitationFileName = $this->uuid . '.jpg';
 		if (!$flightInvitationFile->save(storage_path('app/private/invitation/' . $flightInvitationFileName))) {
