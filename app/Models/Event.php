@@ -378,25 +378,35 @@ class Event extends Model
 			$font->size(35);
 			$font->color('#000000');
 		});
-		/*if ($addressLength > 55) {
-			$addressTemp = HelpFunctions::wordWrapLimit($address, 55);
-			$flightInvitationFile->text($addressTemp, 220, 985, function ($font) use ($fontPath) {
+		if ($addressLength > 50) {
+			$addressTemp = HelpFunctions::wordWrapLimit($address, 50);
+			$flightInvitationFile->text($addressTemp, 50, 1570, function ($font) use ($fontPath) {
 				$font->file($fontPath);
 				$font->size(24);
-				$font->color('#000000');
+				$font->color('#ffffff');
 			});
-			$flightInvitationFile->text(HelpFunctions::wordWrapLimit($address, 55, mb_strlen($addressTemp) + 1) . ', тел. ' . $phone, 220, 1008, function ($font) use ($fontPath) {
+			$flightInvitationFile->text(HelpFunctions::wordWrapLimit($address, 50, mb_strlen($addressTemp) + 1), 50, 1600, function ($font) use ($fontPath) {
 				$font->file($fontPath);
 				$font->size(24);
-				$font->color('#000000');
+				$font->color('#ffffff');
+			});
+			$flightInvitationFile->text($phone, 50, 1630, function ($font) use ($fontPath) {
+				$font->file($fontPath);
+				$font->size(24);
+				$font->color('#ffffff');
 			});
 		} else {
-			$flightInvitationFile->text($address . ', ' . $phone, 220, 1006, function ($font) use ($fontPath) {
+			$flightInvitationFile->text($address, 50, 1600, function ($font) use ($fontPath) {
 				$font->file($fontPath);
 				$font->size(24);
-				$font->color('#000000');
+				$font->color('#ffffff');
 			});
-		}*/
+			$flightInvitationFile->text($phone, 50, 1630, function ($font) use ($fontPath) {
+				$font->file($fontPath);
+				$font->size(24);
+				$font->color('#ffffff');
+			});
+		}
 		
 		$flightInvitationFileName = $this->uuid . '.jpg';
 		if (!$flightInvitationFile->save(storage_path('app/private/invitation/' . $flightInvitationFileName))) {
