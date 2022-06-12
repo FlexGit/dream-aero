@@ -361,6 +361,7 @@ class Event extends Model
 		
 		$address = array_key_exists('address', $location->data_json) ? $location->data_json['address'] : '';
 		$addressLength = mb_strlen($address);
+		$phone = array_key_exists('phone', $location->data_json) ? $location->data_json['phone'] : '';
 		
 		$flightInvitationTemplateFilePath = Storage::disk('private')->path('invitation/template/' . $flightInvitationTemplateFileName);
 		
@@ -384,13 +385,13 @@ class Event extends Model
 				$font->size(24);
 				$font->color('#000000');
 			});
-			$flightInvitationFile->text(HelpFunctions::wordWrapLimit($address, 55, mb_strlen($addressTemp) + 1), 220, 1008, function ($font) use ($fontPath) {
+			$flightInvitationFile->text(HelpFunctions::wordWrapLimit($address, 55, mb_strlen($addressTemp) + 1) . ', ' . $phone, 220, 1008, function ($font) use ($fontPath) {
 				$font->file($fontPath);
 				$font->size(24);
 				$font->color('#000000');
 			});
 		} else {
-			$flightInvitationFile->text($address, 220, 1006, function ($font) use ($fontPath) {
+			$flightInvitationFile->text($address . ', ' . $phone, 220, 1006, function ($font) use ($fontPath) {
 				$font->file($fontPath);
 				$font->size(24);
 				$font->color('#000000');
