@@ -1,3 +1,7 @@
+@php
+	$address = array_key_exists('address', $location->data_json) ? $location->data_json['address'] : '';
+	$phone = array_key_exists('phone', $location->data_json) ? $location->data_json['phone'] : '';
+@endphp
 <table width="100%" bgcolor="#F2F3FC" cellpadding="0" cellspacing="0" border="0">
 	<tbody>
 	<tr>
@@ -18,7 +22,7 @@
 									<p style="margin:15px 30px 33px;text-align:left;font-size:16px;line-height:30px;color:#484a42;">
 										<b>Здравствуйте{{ $name ? ', ' . $name : '' }}!</b></p>
 									<p style="margin:15px 30px 33px;text-align:left;font-size:14px;line-height:30px;color:#484a42;">
-										Мы рады сообщить, что Вы записаны на полет на авиатренажере Dream Aero.<br>Будем рады видеть Вас {{ $flightDate }} в {{ $location->name ?? '' }} ({{ $simulator->name ?? '' }}).
+										Мы рады сообщить, что Вы записаны на полет на авиатренажере Dream Aero {{ $simulator->name ?? '' }}.<br>Будем рады видеть Вас {{ $flightDate }} по адресу {{ $address }}, тел. {{ $phone }}.
 										{{--@if($amount > 0 && $payLink)
 											<br>
 											Сумма к оплате {{ $amount }} рублей.

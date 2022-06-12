@@ -385,7 +385,7 @@ class Event extends Model
 				$font->size(24);
 				$font->color('#000000');
 			});
-			$flightInvitationFile->text(HelpFunctions::wordWrapLimit($address, 55, mb_strlen($addressTemp) + 1) . ', ' . $phone, 220, 1008, function ($font) use ($fontPath) {
+			$flightInvitationFile->text(HelpFunctions::wordWrapLimit($address, 55, mb_strlen($addressTemp) + 1) . ', тел. ' . $phone, 220, 1008, function ($font) use ($fontPath) {
 				$font->file($fontPath);
 				$font->size(24);
 				$font->color('#000000');
