@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Deal;
 use App\Models\Status;
 use App\Models\Token;
+use Carbon\Carbon;
 
 class HelpFunctions {
 	
@@ -366,5 +367,56 @@ class HelpFunctions {
 		$s = 0;
 		
 		return sprintf('%02d:%02d:%02d', $h, $m, $s);
+	}
+	
+	/**
+	 * @param $startAt
+	 * @param $stopAt
+	 * @param $interval
+	 * @param $items
+	 * @return int|string
+	 */
+	public static function getHourInterval($startAt, $stopAt, $interval, $items)
+	{
+		foreach ($items ?? [] as $hourInterval => $item) {
+			if ((Carbon::parse($item['start_at'])->gte(Carbon::parse($startAt)) && Carbon::parse($item['start_at'])->lt(Carbon::parse($stopAt)))
+				|| (Carbon::parse($item['stop_at'])->gt(Carbon::parse($startAt)) && Carbon::parse($item['stop_at'])->lte(Carbon::parse($stopAt)))
+				|| (Carbon::parse($startAt)->gte(Carbon::parse($item['start_at'])) && Carbon::parse($startAt)->lt(Carbon::parse($item['stop_at'])))
+			) {
+				return $hourInterval;
+			}
+		}
+		
+		return $interval;
+	}
+	
+	/**
+	 * Обрезание строки по слову целиком с учетом лимита и оффсета символов.
+	 * ВНИМАНИЕ: Функция подменяет двойные пробелы на одинарные!
+	 *
+	 * @param $str
+	 * @param $limit
+	 * @param int $offset
+	 * @return string
+	 */
+	public static function wordWrapLimit($str, $limit = 0, $offset = 0) {
+		$str = preg_replace('/\s+/u', ' ', $str);
+		if (intval($offset)) $str = mb_substr($str, intval($offset));
+		if (!$limit) return trim($str);
+		
+		$words = preg_split('/\s+/', $str, -1, PREG_SPLIT_NO_EMPTY);
+		$outStr = '';
+		
+		foreach ($words as $i => $word) {
+			// минимум одно слово нужно вписать, иначе могут появиться бесконечные циклы обработки на словах длинее $limit
+			if ($i == 0) {
+				$outStr = $word;
+			} else {
+				if (mb_strlen($outStr . ' ' . $word) > $limit) break;
+				$outStr .= ' ' . $word;
+			}
+		}
+		
+		return $outStr;
 	}
 }

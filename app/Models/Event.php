@@ -351,10 +351,16 @@ class Event extends Model
 		$productType = $product->productType;
 		if (!$productType) return null;
 		
+		$location = $this->location;
+		if (!$location) return null;
+		
 		$flightInvitationTemplateFileName = 'INVITE_' . $simulatorAlias . '.jpg';
 		if (!Storage::disk('private')->exists('invitation/template/' . $flightInvitationTemplateFileName)) {
 			return null;
 		}
+		
+		$address = array_key_exists('address', $location->data_json) ? $location->data_json['address'] : '';
+		$addressLength = mb_strlen($address);
 		
 		$flightInvitationTemplateFilePath = Storage::disk('private')->path('invitation/template/' . $flightInvitationTemplateFileName);
 		
@@ -371,6 +377,25 @@ class Event extends Model
 			$font->size(35);
 			$font->color('#000000');
 		});
+		if ($addressLength > 55) {
+			$addressTemp = HelpFunctions::wordWrapLimit($address, 55);
+			$flightInvitationFile->text($addressTemp, 220, 985, function ($font) use ($fontPath) {
+				$font->file($fontPath);
+				$font->size(24);
+				$font->color('#000000');
+			});
+			$flightInvitationFile->text(HelpFunctions::wordWrapLimit($address, 55, mb_strlen($addressTemp) + 1), 220, 1008, function ($font) use ($fontPath) {
+				$font->file($fontPath);
+				$font->size(24);
+				$font->color('#000000');
+			});
+		} else {
+			$flightInvitationFile->text($address, 220, 1006, function ($font) use ($fontPath) {
+				$font->file($fontPath);
+				$font->size(24);
+				$font->color('#000000');
+			});
+		}
 		
 		$flightInvitationFileName = $this->uuid . '.jpg';
 		if (!$flightInvitationFile->save(storage_path('app/private/invitation/' . $flightInvitationFileName))) {
