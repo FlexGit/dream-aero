@@ -1080,6 +1080,9 @@ class EventController extends Controller
 		return response()->json(['status' => 'error', 'reason' => 'Файл не найден']);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function notified()
 	{
 		if (!$this->request->ajax()) {
@@ -1110,6 +1113,9 @@ class EventController extends Controller
 		return response()->json(['status' => 'success', 'msg' => 'Уведомление по событию успешно сохранено']);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function sendFlightInvitation()
 	{
 		if (!$this->request->ajax()) {

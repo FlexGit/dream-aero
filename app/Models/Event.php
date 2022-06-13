@@ -258,10 +258,12 @@ class Event extends Model
 		Event::saved(function (Event $event) {
 			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
 				if (($event->getOriginal('start_at') && $event->start_at != $event->getOriginal('start_at')) || ($event->getOriginal('stop_at') && $event->stop_at != $event->getOriginal('stop_at'))) {
+					$user = \Auth::user();
+					
 					$eventComment = new EventComment();
 					$eventComment->name = 'Перенос с ' . Carbon::parse($event->getOriginal('start_at'))->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->getOriginal('stop_at'))->format('d.m.Y H:i') . ' на ' . Carbon::parse($event->start_at)->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->stop_at)->format('d.m.Y H:i');
 					$eventComment->event_id = $event->id;
-					$eventComment->created_by = $event->user_id;
+					$eventComment->created_by = $user ? $user->id : 0;
 					$eventComment->save();
 				}
 			}
