@@ -129,7 +129,7 @@ class Product extends Model
 			'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
 			'is_hit' => (bool)$cityProduct->pivot->is_hit,
 			'is_unified' => in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]),
-			'icon_file_path' => (is_array($this->data_json) && array_key_exists('icon_file_path', $this->data_json)) ? \URL::to('/upload/' . $this->data_json['icon_file_path']) : null,
+			'icon_file_path' => (is_array($this->data_json) && array_key_exists('icon_file_path', $this->data_json)) ? \URL::to('/upload/mob/' . $this->data_json['icon_file_path']) : null,
 			'is_booking_allow' => (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) ? true : false,
 			'is_certificate_purchase_allow' => (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) ? true : false,
 			'tariff_type' => $this->productType ? $this->productType->format() : null,
