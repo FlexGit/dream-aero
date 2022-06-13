@@ -483,6 +483,14 @@
 									info.revert();
 									return;
 								}
+
+								calendarArr.forEach(function (element, locationId) {
+									element.forEach(function (calendar, simulatorId) {
+										if ($('.calendar-container[data-location-id="' + locationId + '"][data-simulator-id="' + simulatorId + '"]').is(':visible')) {
+											calendar.refetchEvents();
+										}
+									});
+								});
 							}
 						});
 					},
@@ -542,7 +550,7 @@
 
 						$.each(comments, function (index, value) {
 							data += '<div class="comment">' + value['name'] + '</div>' +
-								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + moment(value['date']).utc().format('DD.MM.YYYY H:mm:ss') + '</div>'
+								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + value['date'] + '</div>'
 						});
 
 						/*$(info.el).tooltip({

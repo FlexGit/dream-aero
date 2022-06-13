@@ -297,7 +297,7 @@ class EventController extends Controller
 				$commentData[] = [
 					'name' => $comment->name,
 					'user' => $userName,
-					'date' => $comment->updated_at,
+					'date' => $comment->updated_at->format('d.m.Y H:i'),
 					'wasUpdated' => ($comment->created_at != $comment->updated_at) ? 'изменено' : 'создано',
 				];
 			}
