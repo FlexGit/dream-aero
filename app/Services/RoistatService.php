@@ -86,7 +86,7 @@ class RoistatService {
 				->throw();
 			$result = $response->body();
 			
-			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Rsponse: ' . $response);
+			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Response: ' . $response);
 			
 			return null;
 		} catch (\Throwable $e) {
@@ -108,22 +108,20 @@ class RoistatService {
 		/** @var Status[] $statuses */
 		foreach ($statuses as $status) {
 			switch ($status->alias) {
-				case Deal::CREATED_STATUS:
-				case Deal::IN_WORK_STATUS:
-				case Deal::PAUSED_STATUS:
-					$type = 'progress';
+				case Deal::CONFIRMED_STATUS:
+					$type = 'paid';
 				break;
 				case Deal::RETURNED_STATUS:
 				case Deal::CANCELED_STATUS:
 					$type = 'canceled';
 				break;
-				case Deal::CONFIRMED_STATUS:
-					$type = 'paid';
+				default:
+					$type = 'progress';
 				break;
 			}
 			
 			$data[] = [
-				'id' => $status->id,
+				'id' => (string)$status->id,
 				'name' => $status->name,
 				'type' => $type,
 			];
@@ -137,7 +135,7 @@ class RoistatService {
 				->throw();
 			$result = $response->body();
 			
-			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Rsponse: ' . $response);
+			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Response: ' . $response);
 			
 			return null;
 		} catch (\Throwable $e) {
@@ -161,7 +159,7 @@ class RoistatService {
 				->throw();
 			$result = $response->body();
 			
-			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Rsponse: ' . $response);
+			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Response: ' . $response);
 			
 			return null;
 		} catch (\Throwable $e) {
