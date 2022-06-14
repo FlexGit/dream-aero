@@ -454,7 +454,7 @@ $(function() {
 		yaCounter46672077.reachGoal('SendOrder');
 		gtag_report_conversion();
 
-		$(this).removeClass('button-pipaluk-orange').addClass('button-pipaluk-grey').prop('disabled', true);
+		//$(this).removeClass('button-pipaluk-orange').addClass('button-pipaluk-grey').prop('disabled', true);
 		$alertSuccess.html('').addClass('hidden');
 		$alertError.text('').addClass('hidden');
 		$('.field-error').removeClass('field-error');
@@ -486,7 +486,7 @@ $(function() {
 			success: function (result) {
 				console.log(result);
 
-				$(this).removeClass('button-pipaluk-grey').addClass('button-pipaluk-orange').prop('disabled', false);
+				//$(this).removeClass('button-pipaluk-grey').addClass('button-pipaluk-orange').prop('disabled', false);
 
 				if (result.status !== 'success') {
 					if (result.reason) {
