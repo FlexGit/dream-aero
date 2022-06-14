@@ -117,6 +117,12 @@ return [
 			'path' => storage_path('logs/payanyway.log'),
 			'level' => 'info',
 		],
+
+		'roistat' => [
+			'driver' => 'single',
+			'path' => storage_path('logs/roistat.log'),
+			'level' => 'info',
+		],
     ],
 
 ];
