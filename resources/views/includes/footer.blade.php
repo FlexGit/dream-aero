@@ -90,6 +90,14 @@
 	<script async type="text/javascript">
 		!function(){var e={"token":"{{ $city->phone ?? '+74955328737' }}","position":"right","bottomSpacing":"20","callToActionMessage":"","displayOn":"mobile","subtitle":"","message":{"name":"Dream Aero","content":"Здравствуйте, чем мы можем помочь?"}},t=document.location.protocol+"//bothelp.io",o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=t+"/widget-folder/widget-whatsapp-chat.js",o.onload=function(){BhWidgetWhatsappChat.init(e)};var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(o,n)}();
 	</script>
+	<script>
+		(function(w, d, s, h, id) {
+			w.roistatProjectId = id; w.roistatHost = h;
+			var p = d.location.protocol == "https:" ? "https://" : "http://";
+			var u = /^.*roistat_visit=[^;]+(.*)?$/.test(d.cookie) ? "/dist/module.js" : "/api/site/1.0/"+id+"/init?referrer="+encodeURIComponent(d.location.href);
+			var js = d.createElement(s); js.charset="UTF-8"; js.async = 1; js.src = p+h+u; var js2 = d.getElementsByTagName(s)[0]; js2.parentNode.insertBefore(js, js2);
+		})(window, document, 'script', 'cloud.roistat.com', '652bc3ea3565d8a054248cd1487f8a4c');
+	</script>
 </footer>
 
 <div class="go-up"></div>
