@@ -485,6 +485,9 @@ $(function() {
 			dataType: 'json',
 			success: function (result) {
 				console.log(result);
+
+				$(this).removeClass('button-pipaluk-grey').addClass('button-pipaluk-orange').prop('disabled', false);
+
 				if (result.status !== 'success') {
 					if (result.reason) {
 						$alertError.text(result.reason).removeClass('hidden');
@@ -496,7 +499,6 @@ $(function() {
 							$('#' + fieldId).addClass('field-error');
 						});
 					}
-					$(this).removeClass('button-pipaluk-grey').addClass('button-pipaluk-orange').prop('disabled', false);
 					return;
 				}
 
