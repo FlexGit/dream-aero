@@ -42,7 +42,7 @@ class RoistatSetStatuses extends Command
 		$roistat = new RoistatService();
 		$roistat->setStatuses();
     
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - deal_city:set - OK');
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - roistat:set_statuses - OK');
     	
         return 0;
     }
