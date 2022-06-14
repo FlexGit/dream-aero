@@ -341,7 +341,7 @@
 							//toastr.error('Ошибка при загрузке событий!');
 						}
 					},
-					eventOverlap: true,
+					eventOverlap: false,
 					dateClick: function (info) {
 						var action = info.allDay ? '/event' : '/deal/booking',
 							method = 'POST',
