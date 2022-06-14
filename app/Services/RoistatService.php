@@ -83,8 +83,7 @@ class RoistatService {
 				->timeout(5)
 				->withHeaders($this->headers)
 				->post(self::BASE_URL . '/project/add-orders?project=' . self::PROJECT_NUMBER, $data)
-				->throw()
-				->json();
+				->throw();
 			$result = $response->body();
 			
 			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Rsponse: ' . $response);
@@ -135,8 +134,7 @@ class RoistatService {
 				->timeout(5)
 				->withHeaders($this->headers)
 				->post(self::BASE_URL . '/project/set-statuses?project=' . self::PROJECT_NUMBER, $data)
-				->throw()
-				->json();
+				->throw();
 			$result = $response->body();
 			
 			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Rsponse: ' . $response);
@@ -160,8 +158,7 @@ class RoistatService {
 				->timeout(5)
 				->withHeaders($this->headers)
 				->post(self::BASE_URL . '/project/integration/order/' . $deal->id . '/status/update?project=' . self::PROJECT_NUMBER, $data)
-				->throw()
-				->json();
+				->throw();
 			$result = $response->body();
 			
 			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Rsponse: ' . $response);
