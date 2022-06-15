@@ -470,8 +470,8 @@ class DealController extends Controller
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$roistatVisit = ($source == Deal::WEB_SOURCE) ? ($this->request->cookie('roistat_visit') ?? null) : ($this->request->roistat_visit ?? null);
 		
+		\Log::debug($this->request->cookie('roistat_visit'));
 		\Log::debug($_COOKIE['roistat_visit']);
-		\Log::debug($_COOKIE);
 		
 		$product = Product::find($productId);
 		if (!$product) {
