@@ -67,6 +67,62 @@
 		</div>
 	</div>
 </div>
+@if($deal->data_json)
+	<div class="row">
+		<div class="col">
+			<div class="form-group">
+				<label for="phone">Дополнительная информация</label>
+				@foreach($deal->data_json ?? [] as $key => $value)
+					@if(!$value)
+						@continue
+					@endif
+
+					<div>
+						@switch($key)
+							@case('number')
+								Повторная заявка по сделке
+							@break
+							@case('title')
+								Заголовок
+							@break
+							@case('text')
+								Текст уведомления
+							@break
+							@case('name')
+								Имя
+							@break
+							@case('phone')
+								Телефон
+							@break
+							@case('email')
+								E-mail
+							@break
+							@case('visit')
+								Номер визита
+							@break
+							@case('created_date')
+								Дата и время получения лида
+							@break
+							@case('token')
+								Токен
+							@break
+							@case('action')
+								Тип события
+							@break
+							@case('user')
+								Пользователь
+							@break
+							@case('data')
+								Страница захвата
+							@break
+						@endswitch
+						: {{ $value }}
+					</div>
+				@endforeach
+			</div>
+		</div>
+	</div>
+@endif
 {{--<div class="row">
 	<div class="col-8">
 		<label for="comment">Комментарий</label>

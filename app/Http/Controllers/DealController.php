@@ -1609,7 +1609,7 @@ class DealController extends Controller
 		if ($source == Deal::ROISTAT_SOURCE) {
 			$deal->roistat = $visit;
 		}
-		$deal->data_json = json_encode($dataJson, JSON_UNESCAPED_UNICODE);
+		$deal->data_json = $dataJson;
 		if (!$deal->save()) {
 			return response()->json([
 				'status' => 'error',
@@ -1667,7 +1667,7 @@ class DealController extends Controller
 		$deal->phone = $phone;
 		$deal->email = $email;
 		$deal->source = $source ?? '';
-		$deal->data_json = json_encode($dataJson, JSON_UNESCAPED_UNICODE);
+		$deal->data_json = $dataJson;
 		if (!$deal->save()) {
 			return response()->json([
 				'status' => 'error',
