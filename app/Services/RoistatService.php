@@ -60,7 +60,7 @@ class RoistatService {
 				$data[$i]['fields']['user'] = $user->fioFormatted();
 			}
 			if ($dealCity) {
-				$data[$i]['fields']['city'] = $$dealCity->name;
+				$data[$i]['fields']['city'] = $dealCity->name;
 			}
 			
 			$data[$i]['products'] = [];
