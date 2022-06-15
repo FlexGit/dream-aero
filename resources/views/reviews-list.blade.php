@@ -22,7 +22,7 @@
 										@foreach($reviews as $item)
 											<div class="item">
 												<div class="row">
-													<div class="col-md-8">
+													<div class="col-md-7">
 														<div class="reviews-item">
 															<div class="reviews-body wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
 																<p class="reviews-text">
@@ -38,7 +38,7 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-md-4">
+													<div class="col-md-5">
 														<div class="reviews-author wow fadeIn" data-wow-delay="1s" data-wow-duration="2s" style="visibility: visible; animation-duration: 2s; animation-delay: 1s; animation-name: fadeIn;">
 															<span class="reviews-name">{{ $item->title }}{{ $item->city ? ' | ' . $item->city->name : '' }}</span>
 															<span class="reviews-sent">@lang('main.reviews.отправлено'): {{ $item->created_at->format('d.m.Y') }}</span>
