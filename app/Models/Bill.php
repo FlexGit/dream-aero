@@ -207,8 +207,9 @@ class Bill extends Model
 		});
 
 		Bill::saved(function (Bill $bill) {
+			$deal = $bill->deal;
+
 			if ($bill->user && $bill->created_at != $bill->updated_at) {
-				$deal = $bill->deal;
 				$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 				if ($deal->status_id == $createdStatus->id) {
 					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
@@ -216,6 +217,28 @@ class Bill extends Model
 						$deal->status_id = $inWorkStatus->id;
 						$deal->save();
 					}
+				}
+			}
+
+			if ($deal->status
+				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::CONFIRMED_STATUS])
+				&& $deal->balance() >= 0
+			) {
+				$confirmedStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CONFIRMED_STATUS);
+				if ($confirmedStatus) {
+					$deal->status_id = $confirmedStatus->id;
+					$deal->save();
+				}
+			}
+			
+			if ($deal->status
+				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::IN_WORK_STATUS])
+				&& $deal->balance() < 0
+			) {
+				$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
+				if ($inWorkStatus) {
+					$deal->status_id = $inWorkStatus->id;
+					$deal->save();
 				}
 			}
 		});
