@@ -42,7 +42,7 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 			$recipients[] = $city->email;
 		}*/
 		$recipients[] = env('ADMIN_EMAIL');
-		$bcc[] = env('DEV_EMAIL');
+		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'fio' => $this->fio,
@@ -59,7 +59,7 @@ class SendFeedbackEmail extends Job implements ShouldQueue {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->to($recipients);
-			$message->bcc($bcc);
+			//$message->bcc($bcc);
 		});
 	}
 }
