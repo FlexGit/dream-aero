@@ -726,6 +726,8 @@ class EventController extends Controller
 		$userId = $this->request->user_id ?? 0;
 		$pilotId = $this->request->pilot_id ?? 0;
 		$employeeId = $this->request->employee_id ?? 0;
+		$locationId = $this->request->location_id ?? 0;
+		$simulatorId = $this->request->flight_simulator_id ?? 0;
 		$position = null;
 
 		switch ($event->event_type) {
@@ -793,7 +795,6 @@ class EventController extends Controller
 		
 		try {
 			\DB::beginTransaction();
-			
 			switch ($event->event_type) {
 				case Event::EVENT_TYPE_DEAL:
 					if ($this->request->source == Event::EVENT_SOURCE_DEAL) {
@@ -805,8 +806,8 @@ class EventController extends Controller
 						}*/
 						
 						$event->city_id = $city ? $city->id : 0;
-						$event->location_id = $location ? $location->id : 0;
-						$event->flight_simulator_id = $simulator ? $simulator->id : 0;
+						$event->location_id = $locationId ?: ($location ? $location->id : 0);
+						$event->flight_simulator_id = $simulatorId ?: ($simulator ? $simulator->id : 0);
 						$event->extra_time = (int)$this->request->extra_time;
 						$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
 						$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
@@ -830,10 +831,14 @@ class EventController extends Controller
 					if (isset($city)) {
 						$event->city_id = $city->id;
 					}
-					if (isset($location)) {
+					if (isset($locationId)) {
+						$event->location_id = $locationId;
+					} elseif (isset($location)) {
 						$event->location_id = $location->id;
 					}
-					if (isset($simulator)) {
+					if (isset($simulatorId)) {
+						$event->flight_simulator_id = $simulatorId;
+					} elseif (isset($simulator)) {
 						$event->flight_simulator_id = $simulator->id;
 					}
 					

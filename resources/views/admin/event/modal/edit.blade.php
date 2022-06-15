@@ -1,7 +1,7 @@
 <input type="hidden" id="id" name="id" value="{{ $event->id }}">
 <input type="hidden" id="comment_id" name="comment_id">
 {{--<input type="hidden" id="position_id" name="position_id" value="{{ $event->deal_position_id }}">--}}
-{{--<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $event->flight_simulator_id ?? 0 }}">--}}
+<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $event->flight_simulator_id ?? 0 }}">
 <input type="hidden" id="source" name="source" value="{{ app('\App\Models\Event')::EVENT_SOURCE_DEAL }}">
 
 @switch($event->event_type)
@@ -95,6 +95,20 @@
 							</select>
 						</div>
 					</div>
+					@if($event->city && $event->city->locations->count() > 1)
+						<div class="col-4">
+							<div class="form-group">
+								<label for="location_id">Локация</label>
+								<select class="form-control" id="location_id" name="location_id">
+									@foreach($event->city->locations as $location)
+										@foreach($location->simulators as $simulator)
+											<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($event->location_id == $location->id && $event->flight_simulator_id == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
+										@endforeach
+									@endforeach
+								</select>
+							</div>
+						</div>
+					@endif
 				</div>
 				<div class="row">
 					<div class="col-8">
