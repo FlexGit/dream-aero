@@ -162,6 +162,11 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('deal/booking/add', [DealController::class, 'addBooking']);
 			Route::get('deal/product/add', [DealController::class, 'addProduct']);
 			Route::get('deal/{id}/edit', [DealController::class, 'edit']);
+			
+			// Webhook для расширенной информации о Сделке
+			Route::get('deal/webhook/{source}/extended', [DealController::class, 'dealExtendedWebhook']);
+			// Webhook для создания Сделки
+			Route::get('deal/webhook/{source}', [DealController::class, 'dealWebhook']);
 	
 			// Позиции сделки
 			Route::post('deal_position/certificate', [PositionController::class, 'storeCertificate']);

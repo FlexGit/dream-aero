@@ -130,11 +130,13 @@ class Deal extends Model
 	const CALENDAR_SOURCE = 'calendar';
 	const WEB_SOURCE = 'web';
 	const MOB_SOURCE = 'api';
+	const ROISTAT_SOURCE = 'roistat';
 	const SOURCES = [
 		self::ADMIN_SOURCE => 'Админка',
 		self::CALENDAR_SOURCE => 'Календарь',
 		self::WEB_SOURCE => 'Web',
 		self::MOB_SOURCE => 'Mob',
+		self::ROISTAT_SOURCE => 'Roistat',
 	];
 	
 	const HOLIDAYS = [

@@ -1560,4 +1560,124 @@ class DealController extends Controller
 		
 		return response()->json(['status' => 'success', 'amount' => $amount, 'baseAmount' => $baseAmount, 'certificateUuid' => $certificateUuid, 'certificateId' => $certificateId]);
 	}
+	
+	/**
+	 * @param $source
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function dealWebhook($source)
+	{
+		$name = $this->request->name ?? null;
+		$phone = $this->request->phone ?? null;
+		$email = $this->request->email ?? null;
+		$visit = $this->request->visit ?? null;
+		$id = $this->request->id ?? null;
+		$title = $this->request->title ?? null;
+		$text = $this->request->text ?? null;
+		$data = $this->request->data ?? null;
+		$createdDate = $this->request->created_date ?? null;
+		$user = $this->request->user ?? null;
+		$token = $this->request->token ?? null;
+		$action = $this->request->action ?? null;
+		
+		if (!$visit) {
+			return response()->json([
+				'status' => 'error',
+				'order_id' => null,
+			]);
+		}
+		
+		$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+
+		$dataJson = [
+			'id' => $id,
+			'title' => $title,
+			'text' => $text,
+			'data' => $data,
+			'createdDate' => $createdDate,
+			'user' => $user,
+			'token' => $token,
+			'action' => $action,
+		];
+		
+		$deal = new Deal();
+		$deal->status_id = $dealStatus->id ?? 0;
+		$deal->name = $name;
+		$deal->phone = $phone;
+		$deal->email = $email;
+		$deal->source = $source ?? '';
+		if ($source == Deal::ROISTAT_SOURCE) {
+			$deal->roistat = $visit;
+		}
+		$deal->data_json = json_encode($dataJson, JSON_UNESCAPED_UNICODE);
+		if (!$deal->save()) {
+			return response()->json([
+				'status' => 'error',
+				'order_id' => null,
+			]);
+		}
+		
+		return response()->json([
+			'status' => 'ok',
+			'order_id' => $deal->id,
+		]);
+	}
+	
+	/**
+	 * @param $source
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function dealExtendedWebhook($source)
+	{
+		$dealId = $this->request->leadId ?? 0;
+		
+		if (!$dealId) {
+			return response()->json([
+				'status' => 'error',
+				'order_id' => null,
+			]);
+		}
+
+		$deal = Deal::find($dealId);
+		
+		$number = $deal->number ?? null;
+		$name = $deal->name ?? null;
+		$phone = $deal->phone ?? null;
+		$email = $deal->email ?? null;
+		$title = $this->request->title ?? null;
+		$text = $this->request->text ?? null;
+		$action = $this->request->action ?? null;
+		$user = $this->request->user ?? null;
+		$token = $this->request->token ?? null;
+		
+		$dataJson = [
+			'number' => $number,
+			'title' => $title,
+			'text' => $text,
+			'user' => $user,
+			'token' => $token,
+			'action' => $action,
+		];
+		
+		$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
+
+		$deal = new Deal();
+		$deal->status_id = $dealStatus->id ?? 0;
+		$deal->name = $name;
+		$deal->phone = $phone;
+		$deal->email = $email;
+		$deal->source = $source ?? '';
+		$deal->data_json = json_encode($dataJson, JSON_UNESCAPED_UNICODE);
+		if (!$deal->save()) {
+			return response()->json([
+				'status' => 'error',
+				'order_id' => null,
+			]);
+		}
+		
+		return response()->json([
+			'status' => 'ok',
+			'order_id' => $deal->id,
+		]);
+	}
 }
