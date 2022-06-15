@@ -56,12 +56,12 @@ class RoistatService {
 					'source' => Deal::SOURCES[$deal->source],
 				],*/
 			];
-			if ($user) {
+			/*if ($user) {
 				$data[$i]['fields']['user'] = $user->fioFormatted();
 			}
 			if ($dealCity) {
 				$data[$i]['fields']['city'] = $dealCity->name;
-			}
+			}*/
 			
 			$data[$i]['products'] = [];
 			$j = 0;
