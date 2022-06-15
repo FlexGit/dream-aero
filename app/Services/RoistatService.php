@@ -50,14 +50,18 @@ class RoistatService {
 				'price' => (string)$deal->amount(),
 				'client_id' => (string)$deal->contractor_id,
 				'fields' => [
-					'user' => $user ? $user->fioFormatted() : '',
 					'name' => $deal->name,
 					'phone' => $deal->phoneFormatted(),
 					'email' => $deal->email,
-					'city' => $dealCity ? $dealCity->name : '',
 					'source' => Deal::SOURCES[$deal->source],
 				],
 			];
+			if ($user) {
+				$data[$i]['fields']['user'] = $user->fioFormatted();
+			}
+			if ($dealCity) {
+				$data[$i]['fields']['city'] = $$dealCity->name;
+			}
 			
 			$data[$i]['products'] = [];
 			$j = 0;
@@ -68,13 +72,14 @@ class RoistatService {
 				if (!$product) continue;
 				
 				$productType = $product->productType;
+				if (!$productType) continue;
 				
 				$data[$i]['products'][$j] = [
 					'id' => (string)$product->id,
 					'name' => $product->name,
 					'quantity' => 1,
 					'price' => $position->amount,
-					'category' => json_encode(['level1' => $productType ? $productType->name : '']),
+					'category' => json_encode(['level1' => $productType->name]),
 				];
 			}
 			
