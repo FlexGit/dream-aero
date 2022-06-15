@@ -221,7 +221,7 @@ class CertificateController extends Controller
 				'certificate_product_name' => $certificateProduct ? $certificateProduct->name : '',
 				'position_product_name' => $positionProduct ? $positionProduct->name : '',
 				'position_amount' => $position ? $position->amount : 0,
-				'comment' => $comment . ($oldData ? '. Данные из старой системы: ' . $oldData : ''),
+				'comment' => $comment . ($oldData ? ' Данные из старой системы: ' . $oldData : ''),
 				'certificate_whom' => $certificateWhom,
 				'certificate_whom_phone' => $certificateWhomPhone,
 				'delivery_address' => $deliveryAddress,
