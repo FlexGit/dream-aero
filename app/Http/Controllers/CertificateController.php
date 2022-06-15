@@ -217,7 +217,7 @@ class CertificateController extends Controller
 			$certificateItems[$certificate->id] = [
 				'number' => $certificate->number,
 				'created_at' => $certificate->created_at,
-				'city_name' => $certificateCity ? $certificateCity->name : 'Действует в любом городе',
+				'city_name' => $certificateCity ? $certificateCity->name : (isset($certificate->data_json['sell_date']) ? '' : 'Действует в любом городе'),
 				'certificate_product_name' => $certificateProduct ? $certificateProduct->name : '',
 				'position_product_name' => $positionProduct ? $positionProduct->name : '',
 				'position_amount' => $position ? $position->amount : 0,
