@@ -152,7 +152,7 @@ class CertificateController extends Controller
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
 		
 		if (!$dateFromAt && !$dateToAt) {
-			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateFromAt = Carbon::now()->subYear()->format('Y-m-d H:i:s');
 			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 		}
 		

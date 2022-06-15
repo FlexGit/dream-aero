@@ -32,7 +32,7 @@
 							<label for="filter_date_from_at">Дата создания</label>
 							<div class="d-flex">
 								<div>
-									<input type="date" class="form-control" id="filter_date_from_at" name="filter_date_from_at" value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" style="width: 200px;">
+									<input type="date" class="form-control" id="filter_date_from_at" name="filter_date_from_at" value="{{ \Carbon\Carbon::now()->subYear()->format('Y-m-d') }}" style="width: 200px;">
 								</div>
 								<div class="ml-2">-</div>
 								<div class="ml-2">
