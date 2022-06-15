@@ -26,8 +26,9 @@ class RoistatService {
 	{
 		$data = [];
 		
-		// Сделки, созданные или измененные за последние сутки
-		$deals = Deal::where('updated_at', '>=', Carbon::now()->subDay())
+		// Сделки с номером визита Roistat, созданные или измененные за последние сутки
+		$deals = Deal::whereNotNull('roistat')
+			->where('updated_at', '>=', Carbon::now()->subDay())
 			->oldest()
 			->get();
 		
