@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
 		Commands\AddContractorScore::class,
 		Commands\SendPromocodeAfterFlightEmail::class,
 		Commands\LoadPlatformData::class,
+		Commands\Roistat\RoistatAddDeals::class,
 	];
 
 	/**
@@ -96,6 +97,14 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/commands/platform_data_load.log');
 		$schedule->command('platform_data:load')
 			->everyThirtyMinutes()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// Загрузка Сделок в Roistat
+		$filePath = storage_path('logs/commands/roistat.log');
+		$schedule->command('roistat:add_deals')
+			->hourly()
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
