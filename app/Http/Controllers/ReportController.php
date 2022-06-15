@@ -934,6 +934,15 @@ class ReportController extends Controller {
 					unset($items['admin'][$interval->format('H')][$index]);
 				}
 			}
+			
+			// X-Plane
+			foreach ($items[PlatformLog::IN_AIR_ACTION_TYPE][$interval->format('H')] ?? [] as $index => $item) {
+				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
+				if ($calendarHourInterval != $interval->format('H')) {
+					$items[PlatformLog::IN_AIR_ACTION_TYPE][$calendarHourInterval][$index] = $item;
+					unset($items[PlatformLog::IN_AIR_ACTION_TYPE][$interval->format('H')][$index]);
+				}
+			}
 		}
 
 		//\Log::debug($items);
