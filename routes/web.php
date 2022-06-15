@@ -114,7 +114,12 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 			->middleware('auth')
 			->name('logout');
-
+		
+		// Webhook для расширенной информации о Сделке
+		Route::get('deal/webhook/{source}/extended', [DealController::class, 'dealExtendedWebhook']);
+		// Webhook для создания Сделки
+		Route::get('deal/webhook/{source}', [DealController::class, 'dealWebhook']);
+		
 		Route::group(['middleware' => ['auth', 'usercheck']], function () {
 			// Контрагенты
 			Route::get('contractor/add', [ContractorController::class, 'add']);
@@ -163,11 +168,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('deal/product/add', [DealController::class, 'addProduct']);
 			Route::get('deal/{id}/edit', [DealController::class, 'edit']);
 			
-			// Webhook для расширенной информации о Сделке
-			Route::get('deal/webhook/{source}/extended', [DealController::class, 'dealExtendedWebhook']);
-			// Webhook для создания Сделки
-			Route::get('deal/webhook/{source}', [DealController::class, 'dealWebhook']);
-	
 			// Позиции сделки
 			Route::post('deal_position/certificate', [PositionController::class, 'storeCertificate']);
 			Route::put('deal_position/certificate/{id}', [PositionController::class, 'updateCertificate']);
