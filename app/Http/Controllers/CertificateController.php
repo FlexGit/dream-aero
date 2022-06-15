@@ -170,9 +170,9 @@ class CertificateController extends Controller
 			$userCityId = $user->city ? $user->city->id : 0;
 			$certificates = $certificates->whereIn('city_id', [$userCityId, 0]);
 		}
-		$certificates = $certificates->has('product')
+		$certificates = $certificates->/*has('product')
 			->has('position')
-			->latest();
+			->*/latest();
 		if ($id) {
 			$certificates = $certificates->where('id', '<', $id);
 		}
@@ -186,7 +186,7 @@ class CertificateController extends Controller
 		/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {
 			$position = $certificate->position;
-			$positionBill = $position->bill;
+			$positionBill = $position ? $position->bill : null;
 			if ($locationId && $positionBill && $positionBill->location_id != $locationId) continue;
 			if ($filterPaymentType && $positionBill) {
 				if ($filterPaymentType == 'self_made' && $positionBill->user_id) continue;
