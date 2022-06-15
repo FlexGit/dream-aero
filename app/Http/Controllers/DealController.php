@@ -468,10 +468,7 @@ class DealController extends Controller
 		$source = $this->request->source ?? '';
 		$isUnified = $this->request->is_unified ?? 0;
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
-		$roistatVisit = ($source == Deal::WEB_SOURCE) ? ($this->request->cookie('roistat_visit') ?? null) : ($this->request->roistat_visit ?? null);
-		
-		\Log::debug($this->request->cookie('roistat_visit'));
-		\Log::debug($_COOKIE['roistat_visit']);
+		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
 		
 		$product = Product::find($productId);
 		if (!$product) {
@@ -871,9 +868,7 @@ class DealController extends Controller
 		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;*/
 		$employeeId = $this->request->employee_id ?? 0;
 		$pilotId = $this->request->pilot_id ?? 0;
-		$roistatVisit = ($source == Deal::WEB_SOURCE) ? ($this->request->cookie('roistat_visit') ?? null) : ($this->request->roistat_visit ?? null);
-		
-		//\Log::debug($this->request);
+		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
 		
 		/*if (!in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE]) && in_array($eventType, Event::EVENT_TYPE_DEAL) && !$isValidFlightDate) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
@@ -1215,7 +1210,7 @@ class DealController extends Controller
 		$email = $this->request->email ?? '';
 		$phone = $this->request->phone ?? '';
 		$source = $this->request->source ?? '';
-		$roistatVisit = ($source == Deal::WEB_SOURCE) ? ($this->request->cookie('roistat_visit') ?? null) : ($this->request->roistat_visit ?? null);
+		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
 		
 		$city = $this->cityRepo->getById($cityId);
 		if (!$city) {
@@ -1432,9 +1427,6 @@ class DealController extends Controller
 				$deal->contractor_id = $contractorId;
 			}
 			$deal->roistat = $roistatVisit;
-			/*if ($cityId) {
-				$deal->city_id = $cityId;
-			}*/
 			$deal->save();
 			
 			if ($contractorId) {
