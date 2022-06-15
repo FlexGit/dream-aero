@@ -205,6 +205,15 @@ class CertificateController extends Controller
 			$certificateWhomPhone = ($position && isset($position->data_json['certificate_whom_phone']) && $position->data_json['certificate_whom_phone']) ? $position->data_json['certificate_whom_phone'] : '';
 			$deliveryAddress = ($position && isset($position->data_json['delivery_address']) && $position->data_json['delivery_address']) ? $position->data_json['delivery_address'] : '';
 			
+			$oldData = '';
+			$oldData .= (isset($certificate->data_json['sell_date']) && $certificate->data_json['sell_date']) ? 'Дата продажи: ' . $certificate->data_json['sell_date'] : '';
+			$oldData .= (isset($certificate->data_json['duration']) && $certificate->data_json['duration']) ? ', длительность: ' . $certificate->data_json['duration'] : '';
+			$oldData .= (isset($certificate->data_json['amount']) && $certificate->data_json['amount']) ? ', стоимость: ' . $certificate->data_json['amount'] : '';
+			$oldData .= (isset($certificate->data_json['location']) && $certificate->data_json['location']) ? ', локация: ' . $certificate->data_json['location'] : '';
+			$oldData .= (isset($certificate->data_json['payment_method']) && $certificate->data_json['payment_method']) ? ', способ оплаты: ' . $certificate->data_json['payment_method'] : '';
+			$oldData .= (isset($certificate->data_json['status']) && $certificate->data_json['status']) ? ', статус: ' . $certificate->data_json['status'] : '';
+			$oldData .= (isset($certificate->data_json['comment']) && $certificate->data_json['comment']) ? ', комментарий: ' . $certificate->data_json['comment'] : '';
+			
 			$certificateItems[$certificate->id] = [
 				'number' => $certificate->number,
 				'created_at' => $certificate->created_at,
@@ -212,7 +221,7 @@ class CertificateController extends Controller
 				'certificate_product_name' => $certificateProduct ? $certificateProduct->name : '',
 				'position_product_name' => $positionProduct ? $positionProduct->name : '',
 				'position_amount' => $position ? $position->amount : 0,
-				'comment' => $comment,
+				'comment' => $comment . ($oldData ? '. Данные из старой системы: ' . $oldData : ''),
 				'certificate_whom' => $certificateWhom,
 				'certificate_whom_phone' => $certificateWhomPhone,
 				'delivery_address' => $deliveryAddress,
