@@ -242,14 +242,14 @@ class EventController extends Controller
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:
-					$title = $event->start_at->format('H:i') . ' - ' . $event->stop_at->format('H:i') . ' ' . Event::EVENT_TYPES[Event::EVENT_TYPE_SHIFT_ADMIN] . ' ' . $event->user->fioFormatted();
+					$title = $event->start_at->format('H:i') . ' - ' . $event->stop_at->format('H:i') . ' администратор ' . $event->user->fioFormatted();
 					$allDay = true;
 					if ($data && isset($data['shift_admin'])) {
 						$color = $data['shift_admin'];
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_PILOT:
-					$title = $event->start_at->format('H:i') . ' - ' . $event->stop_at->format('H:i') . ' ' . Event::EVENT_TYPES[Event::EVENT_TYPE_SHIFT_PILOT] . ' ' . $event->user->fioFormatted();
+					$title = $event->start_at->format('H:i') . ' - ' . $event->stop_at->format('H:i') . ' пилот ' . $event->user->fioFormatted();
 					$allDay = true;
 					if ($data && isset($data['shift_pilot'])) {
 						$color = $data['shift_pilot'];
