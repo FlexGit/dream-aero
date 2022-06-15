@@ -49,12 +49,12 @@ class RoistatService {
 				'roistat' => $deal->roistat,
 				'price' => (string)$deal->amount(),
 				'client_id' => (string)$deal->contractor_id,
-				'fields' => [
+				/*'fields' => [
 					'name' => $deal->name,
 					'phone' => $deal->phoneFormatted(),
 					'email' => $deal->email,
 					'source' => Deal::SOURCES[$deal->source],
-				],
+				],*/
 			];
 			if ($user) {
 				$data[$i]['fields']['user'] = $user->fioFormatted();
