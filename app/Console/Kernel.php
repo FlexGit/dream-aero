@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
 		Commands\SendFlightInvitationEmail::class,
 		Commands\AddContractorScore::class,
 		Commands\SendPromocodeAfterFlightEmail::class,
+		Commands\LoadPlatformData::class,
 	];
 
 	/**
@@ -94,7 +95,7 @@ class Kernel extends ConsoleKernel
 		// загрузка данных платформы из письма
 		$filePath = storage_path('logs/commands/platform_data_load.log');
 		$schedule->command('platform_data:load')
-			->hourly()
+			->everyThirtyMinutes()
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
