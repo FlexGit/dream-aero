@@ -49,19 +49,19 @@ class RoistatService {
 				'roistat' => $deal->roistat,
 				'price' => (string)$deal->amount(),
 				'client_id' => (string)$deal->contractor_id,
-				/*'fields' => [
+				'fields' => [
 					'name' => $deal->name,
 					'phone' => $deal->phoneFormatted(),
 					'email' => $deal->email,
 					'source' => Deal::SOURCES[$deal->source],
-				],*/
+				],
 			];
-			/*if ($user) {
+			if ($user) {
 				$data[$i]['fields']['user'] = $user->fioFormatted();
 			}
 			if ($dealCity) {
 				$data[$i]['fields']['city'] = $dealCity->name;
-			}*/
+			}
 			
 			$data[$i]['products'] = [];
 			$j = 0;
@@ -79,7 +79,9 @@ class RoistatService {
 					'name' => $product->name,
 					'quantity' => 1,
 					'price' => $position->amount,
-					'category' => json_encode(['level1' => $productType->name]),
+					'category' => [
+						'level1' => $productType->name,
+					],
 				];
 			}
 			
