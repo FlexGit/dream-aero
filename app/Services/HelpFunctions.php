@@ -376,14 +376,16 @@ class HelpFunctions {
 	 * @param $items
 	 * @return int|string
 	 */
-	public static function getHourInterval($startAt, $stopAt, $interval, $items)
+	public static function getHourInterval($startAt, $interval, $items)
 	{
-		foreach ($items ?? [] as $hourInterval => $item) {
-			if ((Carbon::parse($item['start_at'])->gte(Carbon::parse($startAt)) && Carbon::parse($item['start_at'])->lt(Carbon::parse($stopAt)))
-				|| (Carbon::parse($item['stop_at'])->gt(Carbon::parse($startAt)) && Carbon::parse($item['stop_at'])->lte(Carbon::parse($stopAt)))
-				|| (Carbon::parse($startAt)->gte(Carbon::parse($item['start_at'])) && Carbon::parse($startAt)->lt(Carbon::parse($item['stop_at'])))
-			) {
-				return $hourInterval;
+		foreach ($items ?? [] as $hourInterval => $value) {
+			foreach ($value as $index => $item) {
+				// если разница менее 20 мин, то подтягиваем событие к событию календаря
+				if (Carbon::parse($item['start_at'])->gte(Carbon::parse($startAt))
+					&& Carbon::parse($item['start_at'])->subMinutes(20)->lte(Carbon::parse($startAt))
+				) {
+					return $hourInterval;
+				}
 			}
 		}
 		

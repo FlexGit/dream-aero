@@ -19,37 +19,37 @@
 			<tr>
 				<td class="align-middle text-center">{{ $interval->format('H') }}</td>
 				<td class="align-top text-center">
-					@if(isset($items[$interval->format('H')]['ianm']))
-						@foreach ($items[$interval->format('H')]['ianm'] as $item)
-							<div>{{ $item }}</div>
+					@if(isset($items['ianm'][$interval->format('H')]))
+						@foreach ($items['ianm'][$interval->format('H')] as $item)
+							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
 						@endforeach
 					@endif
 				</td>
 				<td class="align-top text-center">
-					@if(isset($items[$interval->format('H')]['in_air']))
-						@foreach ($items[$interval->format('H')]['in_air'] as $item)
-							<div>{{ $item }}</div>
+					@if(isset($items['in_air'][$interval->format('H')]))
+						@foreach ($items['in_air'][$interval->format('H')] as $item)
+							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
 						@endforeach
 					@endif
 				</td>
 				<td class="align-top text-center">
-					@if(isset($items[$interval->format('H')]['in_up']))
-						@foreach ($items[$interval->format('H')]['in_up'] as $item)
-							<div>{{ $item }}</div>
+					@if(isset($items['in_up'][$interval->format('H')]))
+						@foreach ($items['in_up'][$interval->format('H')] as $item)
+							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
 						@endforeach
 					@endif
 				</td>
 				<td class="align-top text-center">
-					@if(isset($items[$interval->format('H')]['admin']))
-						@foreach ($items[$interval->format('H')]['admin'] as $item)
-							<div>{{ $item }}</div>
+					@if(isset($items['admin'][$interval->format('H')]))
+						@foreach ($items['admin'][$interval->format('H')] as $item)
+							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
 						@endforeach
 					@endif
 				</td>
 				<td class="align-top text-center">
-					@if(isset($items[$interval->format('H')]['calendar']))
-						@foreach ($items[$interval->format('H')]['calendar'] as $item)
-							<div>{{ $item }}</div>
+					@if(isset($items['calendar'][$interval->format('H')]))
+						@foreach ($items['calendar'][$interval->format('H')] as $item)
+							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
 						@endforeach
 					@endif
 				</td>

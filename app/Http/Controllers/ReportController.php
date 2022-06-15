@@ -876,20 +876,7 @@ class ReportController extends Controller {
 		
 		$items = [];
 		
-		$platformData = PlatformData::where('location_id', $locationId)
-			->where('flight_simulator_id', $simulatorId)
-			->where('data_at', $date)
-			->first();
-		
-		if ($platformData) {
-			$platformLogs = PlatformLog::where('platform_data_id', $platformData->id)
-				->orderBy('start_at')
-				->get();
-		}
-		foreach ($platformLogs as $platformLog) {
-			$items[Carbon::parse($platformLog->start_at)->format('H')][$platformLog->action_type][] = Carbon::parse($platformLog->start_at)->format('H:i') . ' - ' . Carbon::parse($platformLog->stop_at)->format('H:i');
-		}
-		
+		// события календаря и админа
 		$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT, Event::EVENT_TYPE_USER_FLIGHT])
 			->where('location_id', $locationId)
 			->where('flight_simulator_id', $simulatorId)
@@ -898,16 +885,58 @@ class ReportController extends Controller {
 			->orderBy('start_at')
 			->get();
 		foreach ($events as $event) {
-			$items[Carbon::parse($event->simulator_up_at)->format('H')]['admin'][] = (($user->id == 1) ? $event->id . ' - ' : '') . Carbon::parse($event->simulator_up_at )->format('H:i') . ' - ' . Carbon::parse($event->simulator_down_at)->format('H:i');
-			$items[Carbon::parse($event->start_at)->format('H')]['calendar'][] = /*$event->id . ' - ' . */Carbon::parse($event->start_at)->format('H:i') . ' - ' . Carbon::parse($event->stop_at)->addMinutes($event->extra_time)->format('H:i');
+			$items['admin'][Carbon::parse($event->simulator_up_at)->format('H')][] = [
+				'start_at' => Carbon::parse($event->simulator_up_at )->format('H:i'),
+				'stop_at' => Carbon::parse($event->simulator_down_at)->format('H:i'),
+			];
+			$items['calendar'][Carbon::parse($event->start_at)->format('H')][] = [
+				'start_at' => Carbon::parse($event->start_at)->format('H:i'),
+				'stop_at' => Carbon::parse($event->stop_at)->addMinutes($event->extra_time)->format('H:i'),
+			];
+		}
+		
+		// события платформы
+		$platformData = PlatformData::where('location_id', $locationId)
+			->where('flight_simulator_id', $simulatorId)
+			->where('data_at', $date)
+			->first();
+		if ($platformData) {
+			$platformLogs = PlatformLog::where('platform_data_id', $platformData->id)
+				->orderBy('start_at')
+				->get();
+		}
+		foreach ($platformLogs ?? [] as $platformLog) {
+			$items[$platformLog->action_type][Carbon::parse($platformLog->start_at)->format('H')][] = [
+				'start_at' => Carbon::parse($platformLog->start_at)->format('H:i'),
+				'stop_at' => Carbon::parse($platformLog->stop_at)->format('H:i'),
+			];
 		}
 		
 		$intervals = CarbonInterval::hour()->toPeriod(Carbon::parse($date . ' 09:00:00'), Carbon::parse($date . ' 23:59:59'));
-		
-		/*\Log::debug($locationId);
-		\Log::debug($simulatorId);
-		\Log::debug($date);
-		\Log::debug($items);*/
+
+		// собираем разные типы одного события в один интервал,
+		// если из-за небольших расхождений по времени они попали в разные интервалы
+		foreach ($intervals as $interval) {
+			// сервер
+			foreach ($items[PlatformLog::IN_UP_ACTION_TYPE][$interval->format('H')] ?? [] as $index => $item) {
+				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
+				if ($calendarHourInterval != $interval->format('H')) {
+					$items[PlatformLog::IN_UP_ACTION_TYPE][$calendarHourInterval][$index] = $item;
+					unset($items[PlatformLog::IN_UP_ACTION_TYPE][$interval->format('H')][$index]);
+				}
+			}
+			
+			// админ
+			foreach ($items['admin'][$interval->format('H')] ?? [] as $index => $item) {
+				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
+				if ($calendarHourInterval != $interval->format('H')) {
+					$items['admin'][$calendarHourInterval][$index] = $item;
+					unset($items['admin'][$interval->format('H')][$index]);
+				}
+			}
+		}
+
+		//\Log::debug($items);
 		
 		$data = [
 			'location' => $location,
