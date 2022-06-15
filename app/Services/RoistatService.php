@@ -42,13 +42,13 @@ class RoistatService {
 			$dealCity = $deal->city;
 			
 			$data[$i] = [
-				'id' => $deal->id,
+				'id' => (string)$deal->id,
 				'name' => $deal->number,
 				'date_create' => $deal->created_at,
-				'status' => $dealStatus ? $dealStatus->id : 0,
+				'status' => $dealStatus ? (string)$dealStatus->id : 0,
 				'roistat' => $deal->roistat,
-				'price' => $deal->amount(),
-				'client_id' => $deal->contractor_id,
+				'price' => (string)$deal->amount(),
+				'client_id' => (string)$deal->contractor_id,
 				'fields' => [
 					'user' => $user ? $user->fioFormatted() : '',
 					'name' => $deal->name,
@@ -65,10 +65,12 @@ class RoistatService {
 			/** @var DealPosition[] $positions */
 			foreach ($positions as $position) {
 				$product = $position->product;
+				if (!$product) continue;
+				
 				$productType = $product->productType;
 				
 				$data[$i]['products'][$j] = [
-					'id' => $product->id,
+					'id' => (string)$product->id,
 					'name' => $product->name,
 					'quantity' => 1,
 					'price' => $position->amount,
@@ -85,7 +87,7 @@ class RoistatService {
 				->withHeaders($this->headers)
 				->post(self::BASE_URL . '/project/add-orders?project=' . self::PROJECT_NUMBER, $data)
 				->throw();
-			$result = $response->body();
+			//$result = $response->body();
 			
 			\Log::channel('roistat')->info(__METHOD__ . 'Request: ' . json_encode($data) . ' : Response: ' . $response);
 			
