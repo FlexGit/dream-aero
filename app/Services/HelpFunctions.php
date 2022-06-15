@@ -380,9 +380,9 @@ class HelpFunctions {
 	{
 		foreach ($items ?? [] as $hourInterval => $value) {
 			foreach ($value as $index => $item) {
-				// если разница менее 20 мин, то подтягиваем событие к событию календаря
+				// если разница менее 29 мин, то подтягиваем событие к событию календаря
 				if (Carbon::parse($item['start_at'])->gte(Carbon::parse($startAt))
-					&& Carbon::parse($item['start_at'])->subMinutes(20)->lte(Carbon::parse($startAt))
+					&& Carbon::parse($item['start_at'])->subMinutes(29)->lte(Carbon::parse($startAt))
 				) {
 					return $hourInterval;
 				}
