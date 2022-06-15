@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Comment;
+use Throwable;
 use Validator;
 
 class EventController extends Controller
@@ -241,14 +242,14 @@ class EventController extends Controller
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:
-					$title = $event->user->fio();
+					$title = $event->start_at->format('H:i') . ' - ' . $event->stop_at->format('H:i') . ' ' . Event::EVENT_TYPES[Event::EVENT_TYPE_SHIFT_ADMIN] . ' ' . $event->user->fioFormatted();
 					$allDay = true;
 					if ($data && isset($data['shift_admin'])) {
 						$color = $data['shift_admin'];
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_PILOT:
-					$title = $event->user->fioFormatted();
+					$title = $event->start_at->format('H:i') . ' - ' . $event->stop_at->format('H:i') . ' ' . Event::EVENT_TYPES[Event::EVENT_TYPE_SHIFT_PILOT] . ' ' . $event->user->fioFormatted();
 					$allDay = true;
 					if ($data && isset($data['shift_pilot'])) {
 						$color = $data['shift_pilot'];
@@ -441,12 +442,18 @@ class EventController extends Controller
 				->orderBy('name')
 				->get();
 			
+			$employees = User::where('enable', true)
+				->orderBy('lastname')
+				->orderBy('name')
+				->get();
+			
 			$VIEW = view('admin.event.modal.edit', [
 				'event' => $event,
 				'comments' => $commentData,
 				'productTypes' => $productTypes,
 				'cities' => $cities,
 				'pilots' => $pilots,
+				'employees' => $employees,
 				'shifts' => $shifts,
 				'user' => $user,
 			]);
@@ -717,6 +724,9 @@ class EventController extends Controller
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
 		$userId = $this->request->user_id ?? 0;
+		$pilotId = $this->request->pilot_id ?? 0;
+		$employeeId = $this->request->employee_id ?? 0;
+		$position = null;
 
 		switch ($event->event_type) {
 			case Event::EVENT_TYPE_DEAL:
@@ -729,32 +739,45 @@ class EventController extends Controller
 					return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 				}
 			break;
+			case Event::EVENT_TYPE_TEST_FLIGHT:
+				if (!$pilotId) {
+					return response()->json(['status' => 'error', 'reason' => 'Пилот обязательно для заполнения']);
+				}
+			break;
+			case Event::EVENT_TYPE_USER_FLIGHT:
+				if (!$employeeId) {
+					return response()->json(['status' => 'error', 'reason' => 'Сотрудник обязательно для заполнения']);
+				}
+			break;
 			case Event::EVENT_TYPE_SHIFT_ADMIN:
 			case Event::EVENT_TYPE_SHIFT_PILOT:
-				if (!$event->user) {
+				/*if (!$event->user) {
 					return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
-				}
+				}*/
 			
 				$shiftUser = 'shift_' . $this->request->shift_user;
 				$startAt = Carbon::parse($event->start_at)->format('Y-m-d') . ' ' . $this->request->start_at_time;
 				$stopAt = Carbon::parse($event->stop_at)->format('Y-m-d') . ' ' . $this->request->stop_at_time;
-
 				if (Carbon::parse($startAt)->gte(Carbon::parse($stopAt))) {
 					return response()->json(['status' => 'error', 'reason' => 'Время окончания смены должно быть больше времени начала']);
 				}
-	
+			
+				//\DB::connection()->enableQueryLog();
 				$existingEvent = Event::where('event_type', $shiftUser)
 					->where('start_at', '<', Carbon::parse($stopAt)->format('Y-m-d H:i'))
 					->where('stop_at', '>', Carbon::parse($startAt)->format('Y-m-d H:i'))
-					->where('id', '<>', $event->id)
+					->where('location_id', $event->location_id)
+					->where('flight_simulator_id', $event->flight_simulator_id)
+					->where('id', '!=', $event->id)
 					->first();
+				//\Log::debug(\DB::getQueryLog());
 				if ($existingEvent) {
 					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . $existingEvent->user->fio()]);
 				}
 			break;
 		}
 		
-		if ($this->request->source == Event::EVENT_SOURCE_DEAL) {
+		if ($this->request->source == Event::EVENT_SOURCE_DEAL && $position) {
 			if (!$location = $position->location) {
 				return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 			}
@@ -792,7 +815,7 @@ class EventController extends Controller
 						$event->admin_assessment = (int)$this->request->admin_assessment;
 						$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;
 						$event->simulator_down_at = $this->request->simulator_down_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_down_at)->format('Y-m-d H:i') : null;
-						$event->pilot_id = $this->request->pilot_id ?? 0;
+						$event->pilot_id = $pilotId;
 						$event->description = $this->request->description ?? null;
 					} else if ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
@@ -848,14 +871,23 @@ class EventController extends Controller
 				break;
 				case Event::EVENT_TYPE_BREAK:
 				case Event::EVENT_TYPE_CLEANING:
+					$event->start_at = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
+					$event->stop_at = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d H:i');
+					$event->save();
+				break;
+				case Event::EVENT_TYPE_USER_FLIGHT:
+					$event->start_at = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
+					$event->stop_at = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d H:i');
+					$event->employee_id = $employeeId;
+					$event->save();
+				break;
 				case Event::EVENT_TYPE_TEST_FLIGHT:
-					if ($this->request->start_at && $this->request->stop_at) {
-						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
-						$stopAt = Carbon::parse($this->request->stop_at)->format('Y-m-d H:i');
-						$event->start_at = $startAt;
-						$event->stop_at = $stopAt;
-						$event->save();
-					}
+					$event->start_at = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
+					$event->stop_at = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d H:i');
+					$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;;
+					$event->simulator_down_at = $this->request->simulator_down_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_down_at)->format('Y-m-d H:i') : null;
+					$event->test_pilot_id = $pilotId;
+					$event->save();
 				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:
 				case Event::EVENT_TYPE_SHIFT_PILOT:
@@ -921,7 +953,9 @@ class EventController extends Controller
 				$existingEvent = Event::where('event_type', $event->event_type)
 					->where('start_at', '<', Carbon::parse($stopAt)->format('Y-m-d H:i'))
 					->where('stop_at', '>', Carbon::parse($startAt)->format('Y-m-d H:i'))
-					->where('id', '<>', $event->id)
+					->where('location_id', $event->location_id)
+					->where('flight_simulator_id', $event->flight_simulator_id)
+					->where('id', '!=', $event->id)
 					->first();
 				if ($existingEvent) {
 					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . $existingEvent->user->fio()]);

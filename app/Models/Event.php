@@ -157,7 +157,7 @@ class Event extends Model
 		self::EVENT_TYPE_SHIFT_PILOT => 'Смена пилота',
 		self::EVENT_TYPE_BREAK => 'Перерыв',
 		self::EVENT_TYPE_CLEANING => 'Уборка',
-		self::EVENT_TYPE_TEST_FLIGHT => 'Тестовый',
+		self::EVENT_TYPE_TEST_FLIGHT => 'Тестовый полет',
 		self::EVENT_TYPE_USER_FLIGHT => 'Сотрудник',
 	];
 	
@@ -256,7 +256,7 @@ class Event extends Model
 		});*/
 		
 		Event::saved(function (Event $event) {
-			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
+			/*if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {*/
 				if (($event->getOriginal('start_at') && $event->start_at != $event->getOriginal('start_at')) || ($event->getOriginal('stop_at') && $event->stop_at != $event->getOriginal('stop_at'))) {
 					$user = \Auth::user();
 					
@@ -266,7 +266,7 @@ class Event extends Model
 					$eventComment->created_by = $user ? $user->id : 0;
 					$eventComment->save();
 				}
-			}
+			/*}*/
 		});
 		
 		Event::deleting(function (Event $event) {

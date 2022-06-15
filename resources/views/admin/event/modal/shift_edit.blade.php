@@ -1,6 +1,6 @@
 <input type="hidden" id="id" name="id" value="{{ $event->id }}">
 
-<div class="row">
+{{--<div class="row">
 	<div class="col-4">
 		<div class="form-group">
 			<div class="custom-control">
@@ -17,13 +17,13 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div>--}}
 <div class="row">
 	<div class="col-6">
 		<div class="form-group">
 			<label for="user_id">Пользователь</label>
 			<select class="form-control js-shift-user" id="user_id" name="user_id">
-				<option></option>
+				{{--<option></option>--}}
 				@foreach($users as $user)
 					@if($user->role == app('\App\Models\User')::ROLE_SUPERADMIN)
 						@continue

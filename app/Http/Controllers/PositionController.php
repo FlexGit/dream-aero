@@ -421,7 +421,9 @@ class PositionController extends Controller
 		$amount = $this->request->amount ?? 0;
 		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
 		$certificateNumber = $this->request->certificate ?? '';
+		$certificateUuid = $this->request->certificate_uuid ?? '';
 		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
+		$isIndefinitely = $this->request->is_indefinitely ?? 0;
 		
 		if (!$isValidFlightDate) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
@@ -478,26 +480,36 @@ class PositionController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Промокод не найден']);
 			}
 		}
-
-		if ($certificateNumber) {
+		
+		$certificateId = $certificateProductAmount = 0;
+		if ($certificateNumber || $certificateUuid) {
 			$date = date('Y-m-d');
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			
 			// проверка сертификата на валидность
-			$certificate = Certificate::whereIn('city_id', [$city->id, 0])
-				->where('status_id', $certificateStatus->id)
-				->where('product_id', $product->id)
-				->where(function ($query) use ($date) {
-					$query->where('expire_at', '>=', $date)
-						->orWhereNull('expire_at');
-				})
-				->where('number', $certificateNumber)
-				->first();
-			if (!$certificate) {
-				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден или не соответствует выбранным параметрам']);
+			if ($certificateNumber) {
+				$certificate = Certificate::whereIn('city_id', [$city->id, 0])
+					->where('number', $certificateNumber)
+					->first();
+			} elseif ($certificateUuid) {
+				$certificate = HelpFunctions::getEntityByUuid(Certificate::class, $certificateUuid);
 			}
-			if (!$certificate->wasUsed()) {
+			if (!$certificate) {
+				return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
+			}
+			if ($certificate->wasUsed()) {
 				return response()->json(['status' => 'error', 'reason' => 'Сертификат уже был ранее использован']);
+			}
+			if ($certificate->expire_at && Carbon::parse($certificate->expire_at)->lt($date) && !$isIndefinitely) {
+				return response()->json(['status' => 'error', 'reason' => 'Срок действия Сертификата истек']);
+			}
+			$certificateId = $certificate->id;
+			$certificateProduct = $certificate->product;
+			if ($certificateProduct && $certificateProduct->alias != $product->alias) {
+				$certificateCityProduct = $certificateProduct->cities()->where('cities_products.is_active', true)->find($city->id);
+				if ($certificateCityProduct && $certificateCityProduct->pivot) {
+					$certificateProductAmount = $certificateCityProduct->pivot->price;
+				}
 			}
 		}
 		

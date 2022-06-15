@@ -391,7 +391,6 @@
 						});
 					},
 					eventClick: function (info) {
-						//$(info.el).tooltip('hide');
 						tippy.hideAll();
 
 						if ($(info.jsEvent.target).hasClass('event-close-btn')) {
@@ -410,13 +409,13 @@
 							$modalDialog = $('.modal').find('.modal-dialog');
 
 						//console.log(title);
-						if ((title.indexOf('Тестовый') !== -1)
+						/*if ((title.indexOf('Тестовый') !== -1)
 							|| (title.indexOf('Уборка') !== -1)
 							|| (title.indexOf('Перерыв') !== -1)
 							|| (title.indexOf('Сотрудник') !== -1)
 						) {
 							return;
-						}
+						}*/
 
 						$modalDialog.find('form').attr('id', type);
 						//$modalDialog.removeClass('modal-lg');
@@ -443,7 +442,8 @@
 								} else {
 									$submit.addClass('hidden');
 								}
-								$('#modal .modal-title').text((allDay ? 'Смена' : 'Событие') + ' "' + title + '"');
+								//$('#modal .modal-title').text((allDay ? 'Смена' : 'Событие') + ' "' + title + '"');
+								$('#modal .modal-title').text('Событие "' + title + '"');
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
@@ -1095,70 +1095,60 @@
 
 				switch (value) {
 					case 'test_flight':
-						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#certificate_number').closest('.row').hide();
 						$form.find('#contractor_search').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						//$form.find('#flight_date_stop_at').val('');
-						//$form.find('#flight_time_stop_at').val('');
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').removeClass('hidden');
 						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'user_flight':
-						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#certificate_number').closest('.row').hide();
 						$form.find('#contractor_search').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						//$form.find('#flight_date_stop_at').val('');
-						//$form.find('#flight_time_stop_at').val('');
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').removeClass('hidden');
 						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'break':
-						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#certificate_number').closest('.row').hide();
 						$form.find('#contractor_search').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						//$form.find('#flight_date_stop_at').val('');
-						//$form.find('#flight_time_stop_at').val('');
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'cleaning':
-						$form.find('#payment_method_id').closest('.row').hide();
+						$form.find('#certificate_number').closest('.row').hide();
 						$form.find('#contractor_search').closest('.row').hide();
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
-						//$form.find('#flight_date_stop_at').val('');
-						//$form.find('#flight_time_stop_at').val('');
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
 						$form.find('.js-event-stop-at').text('');
 						break;
 					case 'deal':
-						$form.find('#payment_method_id').closest('.row').show();
+						$form.find('#certificate_number').closest('.row').show();
 						$form.find('#contractor_search').closest('.row').show();
 						$form.find('#email').closest('.row').show();
 						$form.find('#product_id').closest('.row').show();
 						$form.find('#comment').closest('.row').show();
 						$form.find('#extra_time').closest('.row').show();
-						//$form.find('#flight_date_stop_at').val('');
-						//$form.find('#flight_time_stop_at').val('');
 						$form.find('#flight_date_stop_at').closest('.js-duration').addClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');

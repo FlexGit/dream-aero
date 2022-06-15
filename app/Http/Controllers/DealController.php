@@ -293,12 +293,10 @@ class DealController extends Controller
 		$promos = $this->promoRepo->getList($user, true, true, [Promo::MOB_REGISTRATION_SCORES_ALIAS]);
 		$promocodes = $this->promocodeRepo->getList($user);
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList();
-		$employees = User::where('enable', true);
-		/*if ($user->city_id) {
-			$employees = $employees->whereIn('city_id', [$user->city_id, 0]);
-		}*/
-		$employees = $employees->get();
-		
+		$employees = User::where('enable', true)
+			->orderBy('lastname')
+			->orderBy('name')
+			->get();
 		$pilots = User::where('enable', true);
 		if ($user->city_id) {
 			$pilots = $pilots->whereIn('city_id', [$user->city_id, 0]);
@@ -470,6 +468,7 @@ class DealController extends Controller
 		$source = $this->request->source ?? '';
 		$isUnified = $this->request->is_unified ?? 0;
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
+		$roistatVisit = ($source == Deal::WEB_SOURCE) ? ($this->request->cookie('roistat_visit') ?? null) : ($this->request->roistat_visit ?? null);
 		
 		$product = Product::find($productId);
 		if (!$product) {
@@ -600,6 +599,7 @@ class DealController extends Controller
 			$deal->email = $email;
 			$deal->source = $source ?: Deal::ADMIN_SOURCE;
 			$deal->user_id = $this->request->user()->id ?? 0;
+			$deal->roistat = $roistatVisit;
 			$deal->save();
 			
 			$position = new DealPosition();
@@ -867,6 +867,7 @@ class DealController extends Controller
 		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;*/
 		$employeeId = $this->request->employee_id ?? 0;
 		$pilotId = $this->request->pilot_id ?? 0;
+		$roistatVisit = ($source == Deal::WEB_SOURCE) ? ($this->request->cookie('roistat_visit') ?? null) : ($this->request->roistat_visit ?? null);
 		
 		//\Log::debug($this->request);
 		
@@ -947,12 +948,6 @@ class DealController extends Controller
 			// проверка сертификата на валидность
 			if ($certificateNumber) {
 				$certificate = Certificate::whereIn('city_id', [$cityId, 0])
-					/*->whereIn('status_id', [$certificateStatus->id, 0])
-					->whereIn('product_id', [$product->id, 0])
-					->where(function ($query) use ($date) {
-						$query->where('expire_at', '>=', $date)
-							->orWhereNull('expire_at');
-					})*/
 					->where('number', $certificateNumber)
 					->first();
 			} elseif ($certificateUuid) {
@@ -1031,6 +1026,7 @@ class DealController extends Controller
 					$deal->email = $email;
 					$deal->source = $source ?: Deal::ADMIN_SOURCE;
 					$deal->user_id = $this->request->user()->id ?? 0;
+					$deal->roistat = $roistatVisit;
 					$deal->save();
 					
 					$position = new DealPosition();
@@ -1215,6 +1211,7 @@ class DealController extends Controller
 		$email = $this->request->email ?? '';
 		$phone = $this->request->phone ?? '';
 		$source = $this->request->source ?? '';
+		$roistatVisit = ($source == Deal::WEB_SOURCE) ? ($this->request->cookie('roistat_visit') ?? null) : ($this->request->roistat_visit ?? null);
 		
 		$city = $this->cityRepo->getById($cityId);
 		if (!$city) {
@@ -1295,6 +1292,7 @@ class DealController extends Controller
 			$deal->email = $email;
 			$deal->user_id = $this->request->user()->id ?? 0;
 			$deal->source = $source ?: Deal::ADMIN_SOURCE;
+			$deal->roistat = $roistatVisit;
 			$deal->save();
 
 			$position = new DealPosition();
@@ -1417,6 +1415,7 @@ class DealController extends Controller
 		$name = $this->request->name ?? '';
 		$email = $this->request->email ?? '';
 		$phone = $this->request->phone ?? '';
+		$roistatVisit = $this->request->roistat_visit ?? null;
 		
 		try {
 			\DB::beginTransaction();
@@ -1428,6 +1427,7 @@ class DealController extends Controller
 			if ($contractorId) {
 				$deal->contractor_id = $contractorId;
 			}
+			$deal->roistat = $roistatVisit;
 			/*if ($cityId) {
 				$deal->city_id = $cityId;
 			}*/

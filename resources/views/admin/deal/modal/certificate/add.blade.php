@@ -3,13 +3,30 @@
 <input type="hidden" id="amount" name="amount">
 
 <div class="row">
-	<div class="col">
+	<div class="col-6">
 		<div class="form-group">
 			<label for="contractor_search">Поиск контрагента</label>
 			<input type="email" class="form-control" id="contractor_search" name="email" placeholder="Поиск по ФИО, E-mail, телефону">
 			<div class="js-contractor-container hidden">
 				<span class="js-contractor"></span> <i class="fas fa-times js-contractor-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
 			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="form-group">
+			<label for="payment_method_id">Способ оплаты</label>
+			<select class="form-control" id="payment_method_id" name="payment_method_id">
+				<option value="">---</option>
+				@foreach($paymentMethods ?? [] as $paymentMethod)
+					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="form-group">
+			<label for="roistat_visit">Номер визита Roistat</label>
+			<input type="text" class="form-control" id="roistat_visit" name="roistat_visit" placeholder="Номер">
 		</div>
 	</div>
 </div>
@@ -44,7 +61,7 @@
 		<div class="form-group">
 			<label for="city_id">Город</label>
 			<select class="form-control" id="city_id" name="city_id">
-				<option value=""></option>
+				<option value="">---</option>
 				<option value="0">Любой</option>
 				@foreach($cities ?? [] as $city)
 					<option value="{{ $city->id }}">{{ $city->name }}</option>
@@ -56,7 +73,7 @@
 		<div class="form-group">
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
-				<option></option>
+				<option value="">---</option>
 				@foreach($products ?? [] as $productTypeName => $productId)
 					<optgroup label="{{ $productTypeName }}">
 						@foreach($productId as $product)
@@ -71,7 +88,7 @@
 		<div class="form-group">
 			<label for="promo_id">Акция</label>
 			<select class="form-control" id="promo_id" name="promo_id">
-				<option value=""></option>
+				<option value="">---</option>
 				@foreach($promos ?? [] as $promo)
 					<option value="{{ $promo->id }}">{{ $promo->valueFormatted() }}</option>
 				@endforeach
@@ -82,7 +99,7 @@
 		<div class="form-group">
 			<label for="promocode_id">Промокод</label>
 			<select class="form-control" id="promocode_id" name="promocode_id">
-				<option value=""></option>
+				<option value="">---</option>
 				@foreach($promocodes ?? [] as $promocode)
 					<option value="{{ $promocode->id }}">{{ $promocode->valueFormatted() }}</option>
 				@endforeach
@@ -91,30 +108,17 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col">
-		<div class="form-group">
-			<label for="payment_method_id">Способ оплаты</label>
-			<select class="form-control" id="payment_method_id" name="payment_method_id">
-				<option value=""></option>
-				@foreach($paymentMethods ?? [] as $paymentMethod)
-					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
-				@endforeach
-			</select>
-		</div>
+	<div class="col-3">
+		<label for="certificate_whom">Для кого (имя)</label>
+		<input type="text" class="form-control" id="certificate_whom" name="certificate_whom" placeholder="Имя">
 	</div>
-	<div class="col">
-		<label for="certificate_whom">Для кого Cертификат (имя)</label>
-		<input type="text" class="form-control" id="certificate_whom" name="certificate_whom">
+	<div class="col-3">
+		<label for="certificate_whom_phone">Для кого (телефон)</label>
+		<input type="text" class="form-control" id="certificate_whom_phone" name="certificate_whom_phone" placeholder="+71234567890">
 	</div>
-	<div class="col">
-		<label for="certificate_whom_phone">Для кого Сертификат (телефон)</label>
-		<input type="text" class="form-control" id="certificate_whom_phone" name="certificate_whom_phone">
-	</div>
-</div>
-<div class="row">
-	<div class="col">
+	<div class="col-6">
 		<label for="delivery_address">Адрес доставки</label>
-		<textarea class="form-control" id="delivery_address" name="delivery_address" rows="1"></textarea>
+		<textarea class="form-control" id="delivery_address" name="delivery_address" rows="1" placeholder="Адрес доставка"></textarea>
 	</div>
 </div>
 <div class="row mt-3">

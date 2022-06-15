@@ -54,13 +54,30 @@
 	<input type="hidden" name="event_type" value="{{ app('\App\Models\Event')::EVENT_TYPE_DEAL }}">
 @endif
 <div class="row">
-	<div class="col">
+	<div class="col-6">
 		<div class="form-group">
 			<label for="contractor_search">Поиск контрагента</label>
 			<input type="email" class="form-control" id="contractor_search" name="email" placeholder="Поиск по ФИО, E-mail, телефону">
 			<div class="js-contractor-container hidden">
 				<span class="js-contractor"></span> <i class="fas fa-times js-contractor-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
 			</div>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="form-group">
+			<label for="payment_method_id">Способ оплаты</label>
+			<select class="form-control" id="payment_method_id" name="payment_method_id">
+				<option value="">---</option>
+				@foreach($paymentMethods ?? [] as $paymentMethod)
+					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col-3">
+		<div class="form-group">
+			<label for="roistat_visit">Номер визита Roistat</label>
+			<input type="text" class="form-control" id="roistat_visit" name="roistat_visit" placeholder="Номер">
 		</div>
 	</div>
 </div>
@@ -96,7 +113,7 @@
 		<div class="form-group">
 			<label for="location_id">Локация</label>
 			<select class="form-control" id="location_id" name="location_id">
-				<option value="0"></option>
+				<option value="0">---</option>
 				@foreach($cities ?? [] as $city)
 					<optgroup label="{{ $city->name }}">
 						@foreach($city->locations ?? [] as $location)
@@ -114,7 +131,7 @@
 		<div class="form-group">
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
-				<option value="0"></option>
+				<option value="0">---</option>
 				@foreach($products ?? [] as $productTypeName => $productId)
 					<optgroup label="{{ $productTypeName }}">
 						@foreach($productId as $product)
@@ -129,7 +146,7 @@
 		<div class="form-group">
 			<label for="promo_id">Акция</label>
 			<select class="form-control" id="promo_id" name="promo_id">
-				<option value="0"></option>
+				<option value="0">---</option>
 				@foreach($promos ?? [] as $promo)
 					<option value="{{ $promo->id }}">{{ $promo->valueFormatted() }}</option>
 				@endforeach
@@ -140,7 +157,7 @@
 		<div class="form-group">
 			<label for="promocode_id">Промокод</label>
 			<select class="form-control" id="promocode_id" name="promocode_id">
-				<option value="0"></option>
+				<option value="0">---</option>
 				@foreach($promocodes ?? [] as $promocode)
 					<option value="{{ $promocode->id }}">{{ $promocode->valueFormatted() }}</option>
 				@endforeach
@@ -149,7 +166,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-9">
+	<div class="col">
 		<div class="form-group">
 			<label for="certificate_number">Поиск по номеру Сертификата</label>
 			<input type="text" class="form-control" id="certificate_number" name="certificate_number" placeholder="Сертификат">
@@ -160,17 +177,6 @@
 					<label class="custom-control-label font-weight-normal" for="is_indefinitely">Не учитывать ограничение по сроку действия</label>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="col-3">
-		<div class="form-group">
-			<label for="payment_method_id">Способ оплаты</label>
-			<select class="form-control" id="payment_method_id" name="payment_method_id">
-				<option value=""></option>
-				@foreach($paymentMethods ?? [] as $paymentMethod)
-					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
-				@endforeach
-			</select>
 		</div>
 	</div>
 </div>
@@ -193,7 +199,7 @@
 			<label for="flight_date_stop_at">Дата и время окончания</label>
 			<div class="d-flex">
 				<input type="date" class="form-control" id="flight_date_stop_at" name="flight_date_stop_at" value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->format('Y-m-d') : '' }}">
-				<input type="time" class="form-control ml-2" id="flight_time_stop_at" name="flight_time_stop_at" {{--value="{{ $flightAt ? \Carbon\Carbon::parse($flightAt)->addMinutes(30)->format('H:i') : '' }}"--}}>
+				<input type="time" class="form-control ml-2" id="flight_time_stop_at" name="flight_time_stop_at">
 			</div>
 		</div>
 	</div>

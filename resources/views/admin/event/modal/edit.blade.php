@@ -47,37 +47,6 @@
 						</div>
 					</div>
 				@endif
-				{{--<div class="form-group">
-					<label for="product_id">Продукт</label>
-					<select class="form-control js-product" id="product_id" name="product_id">
-						<option></option>
-						@foreach($productTypes ?? [] as $productType)
-							@if ($productType->alias == 'services')
-								@continue
-							@endif
-							<optgroup label="{{ $productType->name }}">
-								@foreach($productType->products ?? [] as $product)
-									<option value="{{ $product->id }}" data-product_type_id="{{ $product->product_type_id }}" @if($event->dealPosition && $product->id == $event->dealPosition->product_id) selected @endif>{{ $product->name }}</option>
-								@endforeach
-							</optgroup>
-						@endforeach
-					</select>
-				</div>
-				<div class="form-group">
-					<label for="location_id">Локация</label>
-					<select class="form-control" id="location_id" name="location_id">
-						<option value="0"></option>
-						@foreach($cities ?? [] as $city)
-							<optgroup label="{{ $city->name }}">
-								@foreach($city->locations ?? [] as $location)
-									@foreach($location->simulators ?? [] as $simulator)
-										<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($event->location_id == $location->id && $event->flight_simulator_id == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
-									@endforeach
-								@endforeach
-							</optgroup>
-						@endforeach
-					</select>
-				</div>--}}
 				<div class="row mt-3">
 					<div class="col">
 						<div class="form-group">
@@ -108,7 +77,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col">
+					<div class="col-4">
 						<div class="form-group">
 							<label for="is_repeated_flight">Повторный полет</label>
 							<select class="form-control" id="is_repeated_flight" name="is_repeated_flight">
@@ -117,7 +86,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="col">
+					<div class="col-4">
 						<div class="form-group">
 							<label for="is_unexpected_flight">Спонтанный полет</label>
 							<select class="form-control" id="is_unexpected_flight" name="is_unexpected_flight">
@@ -128,7 +97,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col">
+					<div class="col-8">
 						<div class="form-group">
 							<label for="description">Описание</label>
 							<textarea class="form-control" id="description" name="description" rows="3" placeholder="Введите текст">{{ $event->description ?? '' }}</textarea>
@@ -329,21 +298,26 @@
 									</div>
 								@endif
 							@endif
+							@if($event->deal->roistat)
+								<hr>
+								<div class="text-center font-weight-bold">Номер визита Roistat</div>
+								<div>{{ $event->deal->roistat }}</div>
+							@endif
 						@endif
 					</div>
 				</div>
 			</div>
 			<div class="tab-pane fade" id="simulator">
 				<div class="row mt-3">
-					<div class="col">
+					<div class="col-4">
 						<div class="form-group">
-							<label for="simulator_up">Время поднятия платформы</label>
+							<label for="simulator_up_at">Время поднятия платформы</label>
 							<input type="time" class="form-control" id="simulator_up_at" name="simulator_up_at" value="{{ $event->simulator_up_at ? $event->simulator_up_at->format('H:i') : '' }}">
 						</div>
 					</div>
-					<div class="col">
+					<div class="col-4">
 						<div class="form-group">
-							<label for="simulator_down">Время опускания платформы</label>
+							<label for="simulator_down_at">Время опускания платформы</label>
 							<input type="time" class="form-control" id="simulator_down_at" name="simulator_down_at" value="{{ $event->simulator_down_at ? $event->simulator_down_at->format('H:i') : '' }}">
 						</div>
 					</div>
@@ -351,7 +325,7 @@
 			</div>
 			<div class="tab-pane fade" id="assessment">
 				<div class="row mt-3">
-					<div class="col">
+					<div class="col-4">
 						<div class="form-group">
 							<label for="pilot_assessment">Оценка пилота</label>
 							<select class="form-control" id="pilot_assessment" name="pilot_assessment">
@@ -362,7 +336,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="col">
+					<div class="col-4">
 						<div class="form-group">
 							<label for="admin_assessment">Оценка админа</label>
 							<select class="form-control" id="admin_assessment" name="admin_assessment">
@@ -425,7 +399,7 @@
 			</div>
 			<div class="tab-pane fade" id="pilot">
 				<div class="row pl-3 pr-3 mt-4">
-					<div class="col">
+					<div class="col-4">
 						<label>Пилоты смены</label>
 						<div>
 							@foreach ($shifts as $shift)
@@ -435,7 +409,7 @@
 							@endforeach
 						</div>
 					</div>
-					<div class="col">
+					<div class="col-4">
 						<div class="form-group">
 							<label for="pilot_id">Фактический пилот</label>
 							<select class="form-control" id="pilot_id" name="pilot_id">
@@ -467,5 +441,141 @@
 				</div>
 			</div>
 		</div>
+	@break
+	@case(app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT)
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="{{ asset('#flight') }}">Полет</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="{{ asset('#simulator') }}">Платформа</a>
+		</li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane container fade in show active" id="flight">
+			@if($user->email == env('DEV_EMAIL'))
+				<div class="row mt-3">
+					<div class="col">
+						<div class="form-group">
+							<label>Uuid</label>
+							<div class="d-flex">
+								{{ $event->uuid }}
+							</div>
+						</div>
+					</div>
+				</div>
+			@endif
+			<div class="row mt-3">
+				<div class="col">
+					<div class="form-group">
+						<label>Дата и время начала полета</label>
+						<div class="d-flex">
+							<input type="date" class="form-control" name="start_at_date" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('Y-m-d') : '' }}" placeholder="Дата начала полета">
+							<input type="time" class="form-control ml-2" name="start_at_time" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('H:i') : '' }}" placeholder="Время начала полета">
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group">
+						<label>Дата и время окончания полета</label>
+						<div class="d-flex">
+							<input type="date" class="form-control" name="stop_at_date" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('Y-m-d') : '' }}" placeholder="Дата окончания полета">
+							<input type="time" class="form-control ml-2" name="stop_at_time" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('H:i') : '' }}" placeholder="Время окончания полета">
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group">
+						<label for="pilot_id">Пилот</label>
+						<select class="form-control" id="pilot_id" name="pilot_id">
+							<option value="0">---</option>
+							@foreach($pilots as $pilot)
+								<option value="{{ $pilot->id }}" @if($event->test_pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane fade" id="simulator">
+			<div class="row mt-3">
+				<div class="col-4">
+					<div class="form-group">
+						<label for="simulator_up_at">Время поднятия платформы</label>
+						<input type="time" class="form-control" id="simulator_up_at" name="simulator_up_at" value="{{ $event->simulator_up_at ? $event->simulator_up_at->format('H:i') : '' }}">
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="form-group">
+						<label for="simulator_down_at">Время опускания платформы</label>
+						<input type="time" class="form-control" id="simulator_down_at" name="simulator_down_at" value="{{ $event->simulator_down_at ? $event->simulator_down_at->format('H:i') : '' }}">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	@break
+	@case(app('\App\Models\Event')::EVENT_TYPE_BREAK)
+	@case(app('\App\Models\Event')::EVENT_TYPE_CLEANING)
+	@case(app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT)
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="{{ asset('#flight') }}">Полет</a>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane container fade in show active" id="flight">
+				@if($user->email == env('DEV_EMAIL'))
+					<div class="row mt-3">
+						<div class="col">
+							<div class="form-group">
+								<label>Uuid</label>
+								<div class="d-flex">
+									{{ $event->uuid }}
+								</div>
+							</div>
+						</div>
+					</div>
+				@endif
+				<div class="row mt-3">
+					<div class="col">
+						<div class="form-group">
+							<label>Дата и время начала полета</label>
+							<div class="d-flex">
+								<input type="date" class="form-control" name="start_at_date" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('Y-m-d') : '' }}" placeholder="Дата начала полета">
+								<input type="time" class="form-control ml-2" name="start_at_time" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('H:i') : '' }}" placeholder="Время начала полета">
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group">
+							<label>Дата и время окончания полета</label>
+							<div class="d-flex">
+								<input type="date" class="form-control" name="stop_at_date" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('Y-m-d') : '' }}" placeholder="Дата окончания полета">
+								<input type="time" class="form-control ml-2" name="stop_at_time" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('H:i') : '' }}" placeholder="Время окончания полета">
+							</div>
+						</div>
+					</div>
+					@if($event->event_type == app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT)
+						<div class="col">
+							<div class="form-group">
+								<label for="employee_id">Сотрудник</label>
+								<select class="form-control" id="employee_id" name="employee_id">
+									<option value="0">---</option>
+									@foreach($employees as $employee)
+										<option value="{{ $employee->id }}" @if($event->employee_id == $employee->id) selected @endif>{{ $employee->fio() }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+					@endif
+				</div>
+			</div>
+		</div>
+	@break
+	@case(app('\App\Models\Event')::EVENT_TYPE_SHIFT_ADMIN)
+	@case(app('\App\Models\Event')::EVENT_TYPE_SHIFT_PILOT)
 	@break
 @endswitch
