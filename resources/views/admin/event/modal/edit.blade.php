@@ -366,7 +366,7 @@
 			<div class="tab-pane fade" id="comments">
 				<div class="pl-2 pr-2" style="line-height: 1.1em;">
 					@foreach($comments ?? [] as $comment)
-						<div class="d-flex justify-content-between mt-2 mb-2 pt-2">
+						<div class="d-flex justify-content-between mt-2 mb-2 pt-2 js-comment-container">
 							<div style="width: 93%;">
 								<div class="mb-0">
 									<span class="comment-text" data-comment-id="{{ $comment['id'] }}">{{ $comment['name'] }}</span>

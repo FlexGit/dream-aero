@@ -1027,7 +1027,8 @@
 				if (!confirm($(this).data('confirm-text'))) return null;
 
 				var eventId = $(this).closest('form').find('#id').val(),
-					commentId = $(this).data('comment-id');
+					commentId = $(this).data('comment-id'),
+					$commentContainer = $(this).closest('.js-comment-container');
 
 				$.ajax({
 					url: '/event/' + eventId + '/comment/' + commentId + '/remove',
@@ -1039,6 +1040,8 @@
 						}
 
 						toastr.success(result.msg);
+
+						$commentContainer.remove();
 
 						calendarArr.forEach(function (element, locationId) {
 							element.forEach(function (calendar, simulatorId) {
