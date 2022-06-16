@@ -172,9 +172,9 @@
 												дата начисления
 												@if($billPosition)
 													@if($billPosition->is_certificate_purchase)
-														{{ \Carbon\Carbon::parse($bill->payed_at)->addDays(app('\App\Models\AeroflotBonusService')::CERTIFICATE_PURCHASE_ACCRUAL_AFTER_DAYS)->format('Y-m-d') }}
+														{{ \Carbon\Carbon::parse($bill->payed_at)->addDays(app('\App\Services\AeroflotBonusService')::CERTIFICATE_PURCHASE_ACCRUAL_AFTER_DAYS)->format('Y-m-d') }}
 													@else
-														{{ \Carbon\Carbon::parse($bill->payed_at)->addDays(app('\App\Models\AeroflotBonusService')::BOOKING_ACCRUAL_AFTER_DAYS)->format('Y-m-d') }}
+														{{ \Carbon\Carbon::parse($bill->payed_at)->addDays(app('\App\Services\AeroflotBonusService')::BOOKING_ACCRUAL_AFTER_DAYS)->format('Y-m-d') }}
 													@endif
 												@endif
 											@else
