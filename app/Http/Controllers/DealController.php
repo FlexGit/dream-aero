@@ -856,6 +856,9 @@ class DealController extends Controller
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
 		$flightAt = str_replace('/', '.', $flightAt);
+		$flightAt = str_replace(',', '', $flightAt);
+		$flightAt = str_replace(' AM', '', $flightAt);
+		$flightAt = str_replace(' PM', '', $flightAt);
 		$flightStopAt = ($this->request->flight_date_stop_at ?? '') . ' ' . ($this->request->flight_time_stop_at ?? '');
 		$locationId = $this->request->location_id ?? 0;
 		$simulatorId = $this->request->flight_simulator_id ?? 0;
