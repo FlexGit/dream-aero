@@ -512,6 +512,15 @@
 				getList(false);
 			});
 
+			$(document).on('change', '#payment_method_id', function(e) {
+				var $isPaid = $('#is_paid');
+				if ($(this).find(':selected').data('alias') === 'online') {
+					$isPaid.prop('checked', false).prop('disabled', true);
+				} else {
+					$isPaid.prop('disabled', false);
+				}
+			});
+
 			/*$(document).on('change', '.js-product', function(e) {
 				if ($(this).data('currency') == 'USD') {
 					$('.fa-dollar-sign').removeClass('hidden');

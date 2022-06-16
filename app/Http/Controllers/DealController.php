@@ -469,6 +469,7 @@ class DealController extends Controller
 		$isUnified = $this->request->is_unified ?? 0;
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
+		$isPaid = (bool)$this->request->is_paid;
 		
 		$product = Product::find($productId);
 		if (!$product) {
@@ -623,7 +624,8 @@ class DealController extends Controller
 			if ($amount) {
 				$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 				$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
-
+				$billPayedStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::PAYED_STATUS);
+				
 				if ($this->request->user()) {
 					if ($this->request->user()->city && $this->request->user()->city->version == City::EN_VERSION) {
 						$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
@@ -655,7 +657,7 @@ class DealController extends Controller
 				$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : ($paymentMethodId ?? 0);
-				$bill->status_id = $billStatus->id ?? 0;
+				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
 				$bill->amount = $amount;
 				$bill->currency_id = $currency->id ?? 0;
 				$bill->aeroflot_transaction_type = $transactionType;
@@ -869,6 +871,7 @@ class DealController extends Controller
 		$employeeId = $this->request->employee_id ?? 0;
 		$pilotId = $this->request->pilot_id ?? 0;
 		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
+		$isPaid = (bool)$this->request->is_paid;
 		
 		/*if (!in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE]) && in_array($eventType, Event::EVENT_TYPE_DEAL) && !$isValidFlightDate) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
@@ -1050,6 +1053,7 @@ class DealController extends Controller
 					if ($amount) {
 						$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 						$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+						$billPayedStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::PAYED_STATUS);
 						
 						if ($city->version == City::EN_VERSION) {
 							$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
@@ -1069,7 +1073,7 @@ class DealController extends Controller
 						$bill->deal_position_id = $position->id ?? 0;
 						$bill->location_id = $billLocationId;
 						$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
-						$bill->status_id = $billStatus->id ?? 0;
+						$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
 						$bill->amount = $amount;
 						$bill->currency_id = $currency->id ?? 0;
 						$bill->user_id = $this->request->user()->id ?? 0;
@@ -1211,6 +1215,7 @@ class DealController extends Controller
 		$phone = $this->request->phone ?? '';
 		$source = $this->request->source ?? '';
 		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
+		$isPaid = (bool)$this->request->is_paid;
 		
 		$city = $this->cityRepo->getById($cityId);
 		if (!$city) {
@@ -1316,6 +1321,7 @@ class DealController extends Controller
 			if ($amount) {
 				$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 				$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
+				$billPayedStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::PAYED_STATUS);
 				
 				if ($city->version == City::EN_VERSION) {
 					$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
@@ -1335,7 +1341,7 @@ class DealController extends Controller
 				$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
-				$bill->status_id = $billStatus->id ?? 0;
+				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
 				$bill->amount = $amount;
 				$bill->currency_id = $currency->id ?? 0;
 				$bill->user_id = $this->request->user()->id ?? 0;

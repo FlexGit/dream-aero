@@ -63,18 +63,26 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-3">
+	<div class="col-2">
 		<div class="form-group">
 			<label for="payment_method_id">Способ оплаты</label>
 			<select class="form-control" id="payment_method_id" name="payment_method_id">
 				<option value="">---</option>
 				@foreach($paymentMethods ?? [] as $paymentMethod)
-					<option value="{{ $paymentMethod->id }}">{{ $paymentMethod->name }}</option>
+					<option value="{{ $paymentMethod->id }}" data-alias="{{ $paymentMethod->alias }}">{{ $paymentMethod->name }}</option>
 				@endforeach
 			</select>
 		</div>
 	</div>
-	<div class="col-3">
+	<div class="col-2 text-center">
+		<div class="form-group" style="margin-top: 40px;">
+			<div class="custom-control custom-switch custom-control">
+				<input type="checkbox" id="is_paid" name="is_paid" value="1" class="custom-control-input">
+				<label class="custom-control-label font-weight-normal" for="is_paid">Счет оплачен</label>
+			</div>
+		</div>
+	</div>
+	<div class="col-2">
 		<div class="form-group">
 			<label for="roistat_visit">Номер визита Roistat</label>
 			<input type="text" class="form-control" id="roistat_visit" name="roistat_visit" placeholder="Номер">
