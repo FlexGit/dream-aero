@@ -197,6 +197,10 @@ class DealController extends Controller
 			$deals = $deals->where(function ($query) {
 				$query->where('number', 'like', '%' . $this->request->search_doc . '%')
 					->orWhere('uuid', $this->request->search_doc)
+					->orWhere('name', 'like', '%' . $this->request->search_doc . '%')
+					->orWhere('email', 'like', '%' . $this->request->search_doc . '%')
+					->orWhere('phone', 'like', '%' . $this->request->search_doc . '%')
+					->orWhere('id', $this->request->search_doc)
 					->orWhereRelation('positions', function ($query) {
 						return $query->where('number', 'like', '%' . $this->request->search_doc . '%')
 							->orWhereHas('certificate', function ($query) {
@@ -205,10 +209,17 @@ class DealController extends Controller
 					})
 					->orWhereHas('bills', function ($q) {
 						return $q->where('bills.number', 'like', '%' . $this->request->search_doc . '%');
+					})
+					->orWhereHas('contractor', function ($query) {
+						return $query->where('name', 'like', '%' . $this->request->search_doc . '%')
+							->orWhere('lastname', 'like', '%' . $this->request->search_doc . '%')
+							->orWhere('email', 'like', '%' . $this->request->search_doc . '%')
+							->orWhere('phone', 'like', '%' . $this->request->search_doc . '%')
+							->orWhere('id', $this->request->search_doc);
 					});
 			});
 		}
-		if ($this->request->search_contractor) {
+		/*if ($this->request->search_contractor) {
 			$deals = $deals->where(function ($query) {
 				$query->where('name', 'like', '%' . $this->request->search_contractor . '%')
 					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
@@ -222,7 +233,7 @@ class DealController extends Controller
 							->orWhere('id', $this->request->search_contractor);
 					});
 			});
-		}
+		}*/
 		if (!$user->isSuperAdmin() && $user->city) {
 			$deals = $deals->where('city_id', $user->city->id);
 		}

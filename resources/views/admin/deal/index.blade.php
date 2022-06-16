@@ -23,18 +23,18 @@
 				<div class="card-body">
 					<div class="table-filter mb-2">
 						<div class="d-sm-flex">
-							<div class="form-group">
+							<div class="form-group" style="width: 270px;">
 								<div>
-									<label for="search_doc">Документ</label>
+									<label for="search_doc">Поиск</label>
 								</div>
-								<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Номер">
+								<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Документ, ФИО, E-mail, Телефон">
 							</div>
-							<div class="form-group ml-2">
+							{{--<div class="form-group ml-2">
 								<div>
 									<label for="search_contractor">Контрагент</label>
 								</div>
 								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="ФИО, E-mail, Телефон">
-							</div>
+							</div>--}}
 							<div class="form-group ml-2">
 								<div>
 									<label for="filter_status_id">Статус</label>
