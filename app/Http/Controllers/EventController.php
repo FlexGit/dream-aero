@@ -826,6 +826,10 @@ class EventController extends Controller
 							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
 						}*/
 					}
+					// сброс отметки об уведомлении, если перенос на другой день
+					if ($event->start_at->format('d') != Carbon::parse($startAt)->format('d')) {
+						$event->notification_type = null;
+					}
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
 					if (isset($city)) {
@@ -987,6 +991,10 @@ class EventController extends Controller
 						/*if (!$product->validateFlightDate($startAt)) {
 							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
 						}*/
+					}
+					// сброс отметки об уведомлении, если перенос на другой день
+					if ($event->start_at->format('d') != Carbon::parse($startAt)->format('d')) {
+						$event->notification_type = null;
 					}
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
