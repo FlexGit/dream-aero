@@ -831,12 +831,12 @@ class EventController extends Controller
 					if (isset($city)) {
 						$event->city_id = $city->id;
 					}
-					if (isset($locationId)) {
+					if (isset($locationId) && $locationId) {
 						$event->location_id = $locationId;
 					} elseif (isset($location)) {
 						$event->location_id = $location->id;
 					}
-					if (isset($simulatorId)) {
+					if (isset($simulatorId) && $simulatorId) {
 						$event->flight_simulator_id = $simulatorId;
 					} elseif (isset($simulator)) {
 						$event->flight_simulator_id = $simulator->id;
