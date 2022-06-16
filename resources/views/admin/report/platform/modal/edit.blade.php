@@ -1,4 +1,4 @@
-<input type="hidden" id="id" name="id" value="{{ $platformData->id }}">
+<input type="hidden" id="id" name="id" value="{{ $platformData ? $platformData->id : 0}}">
 
 <div class="text-center font-weight-bold mb-3">
 	{{ $location->name }} {{ $simulator->name }}
@@ -60,6 +60,6 @@
 <div class="row">
 	<div class="col">
 		<label for="comment">Комментарий</label>
-		<textarea class="form-control" id="comment" name="comment" rows="3">{{ $platformData->comment ?? '' }}</textarea>
+		<textarea class="form-control" id="comment" name="comment" rows="3">{{ $platformData ? $platformData->comment : '' }}</textarea>
 	</div>
 </div>
