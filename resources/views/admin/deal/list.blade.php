@@ -90,6 +90,9 @@
 		</td>
 		<td class="text-center align-top d-none d-xl-table-cell small">
 			@foreach($deal->bills ?? [] as $bill)
+				@php
+					$billPosition = $bill->position;
+				@endphp
 				<div class="mb-3">
 					<div>
 						<div class="d-inline-block font-weight-bold">
@@ -166,7 +169,14 @@
 										@else
 											<i class="fas fa-exclamation-triangle text-warning"></i>
 											@if($bill->payed_at)
-												дата начисления {{ \Carbon\Carbon::parse($bill->payed_at)->addDays(14)->format('Y-m-d') }}
+												дата начисления
+												@if($billPosition)
+													@if($billPosition->is_certificate_purchase)
+														{{ \Carbon\Carbon::parse($bill->payed_at)->addDays(app('\App\Models\AeroflotBonusService')::CERTIFICATE_PURCHASE_ACCRUAL_AFTER_DAYS)->format('Y-m-d') }}
+													@else
+														{{ \Carbon\Carbon::parse($bill->payed_at)->addDays(app('\App\Models\AeroflotBonusService')::BOOKING_ACCRUAL_AFTER_DAYS)->format('Y-m-d') }}
+													@endif
+												@endif
 											@else
 												ожидание оплаты Счета
 											@endif
