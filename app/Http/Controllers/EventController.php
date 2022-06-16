@@ -234,6 +234,10 @@ class EventController extends Controller
 					if ($data) {
 						// если к позиции привязан счет, то он должен быть оплачен
 						// иначе проверяем чтобы вся сделка была оплачена
+						if ($event->uuid == 'b80af530-ed46-11ec-86bb-f9eb3db41422') {
+							\Log::debug($billStatusAliases);
+							\Log::debug($balance);
+						}
 						if ($billStatusAliases) {
 							$color = (in_array(Bill::NOT_PAYED_STATUS, $billStatusAliases) || in_array(Bill::PAYED_PROCESSING_STATUS, $billStatusAliases)) ? $data['deal'] : $data['deal_paid'];
 						} else {
