@@ -221,7 +221,7 @@ class Bill extends Model
 			}
 
 			if ($deal->status
-				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::CONFIRMED_STATUS])
+				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::CONFIRMED_STATUS, Deal::PAUSED_STATUS])
 				&& $deal->balance() >= 0
 			) {
 				$confirmedStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CONFIRMED_STATUS);
@@ -232,7 +232,7 @@ class Bill extends Model
 			}
 			
 			if ($deal->status
-				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::IN_WORK_STATUS])
+				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::IN_WORK_STATUS, Deal::PAUSED_STATUS])
 				&& $deal->balance() < 0
 			) {
 				$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
