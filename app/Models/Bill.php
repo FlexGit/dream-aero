@@ -224,6 +224,7 @@ class Bill extends Model
 				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::CONFIRMED_STATUS, Deal::PAUSED_STATUS])
 				&& $deal->balance() >= 0
 			) {
+				\Log::debug($deal->status->alias . ' - ' . $deal->balance());
 				$confirmedStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CONFIRMED_STATUS);
 				if ($confirmedStatus) {
 					$deal->status_id = $confirmedStatus->id;
