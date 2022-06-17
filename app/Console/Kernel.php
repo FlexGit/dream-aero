@@ -96,7 +96,7 @@ class Kernel extends ConsoleKernel
 		// загрузка данных платформы из письма
 		$filePath = storage_path('logs/commands/platform_data_load.log');
 		$schedule->command('platform_data:load')
-			->everyThirtyMinutes()
+			->hourly()
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
