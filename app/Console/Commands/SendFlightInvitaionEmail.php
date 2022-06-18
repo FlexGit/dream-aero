@@ -65,10 +65,13 @@ class SendFlightInvitationEmail extends Command
 			/** @var Bill $bill */
 			$bill = $position->bill;
 			if ($bill) {
+				$billStatus = $bill->status;
 				// если к позиции привязан счет, то он должен быть оплачен
-				if ($bill->status->alias != Bill::PAYED_STATUS) continue;
+				if ($billStatus && $billStatus->alias != Bill::PAYED_STATUS) continue;
+				
+				$paymentMethod = $bill->paymentMethod;
 				// и со способом оплаты "Онлайн"
-				if ($bill->paymentMethod->alias != Bill::ONLINE_PAYMENT_METHOD) continue;
+				if ($paymentMethod && $paymentMethod->alias != Bill::ONLINE_PAYMENT_METHOD) continue;
 			} else {
 				// если к позиции не привязан счет, то вся сделка должна быть оплачена
 				$balance = $deal->balance();
