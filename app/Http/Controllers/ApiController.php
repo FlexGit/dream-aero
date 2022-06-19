@@ -2867,6 +2867,8 @@ class ApiController extends Controller
 				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
 				$certificate->city_id = /*$city ? $city->id : 0*/(!$isUnified && $city) ? $city->id : 0;
 				$certificate->product_id = $product ? $product->id : 0;
+				$certificatePeriod = ($product && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
+				$certificate->expire_at = Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
 				$certificate->save();
 			} else {
 				if ($certificateNumber) {
