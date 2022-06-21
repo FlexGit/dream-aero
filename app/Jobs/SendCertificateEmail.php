@@ -76,6 +76,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$peopleCount = ($productType->alias == ProductType::VIP_ALIAS) ? 2 : 3;
 
 		$certificateRulesTemplateFilePath = Storage::disk('private')->path('rule/RULES_CERTIFICATE_TEMPLATE.jpg');
+		\Log::debug($certificateRulesTemplateFilePath);
 		$certificateRulesFileName = Image::make($certificateRulesTemplateFilePath)->encode('jpg');
 
 		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-Medium.ttf');
