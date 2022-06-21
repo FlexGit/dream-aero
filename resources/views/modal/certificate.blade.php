@@ -1,6 +1,3 @@
-@php
-	$data = $cityProduct ? json_decode($cityProduct->data_json, true) : [];
-@endphp
 <div>
 	<p class="popup-description">
 		@if($product->alias == 'fly_no_fear')
@@ -147,7 +144,7 @@
 			<label class="cont">
 				@lang('main.modal-certificate.я-согласен') <a href="{{ url('rules-dreamaero') }}" target="_blank">@lang('main.modal-certificate.с-условиями')</a> @lang('main.modal-certificate.пользования-сертификатом-такими-как'):
 				<br>
-				@lang('main.modal-certificate.сертификат-действует') {{ array_key_exists('certificate_period', $data) ? $data['certificate_period'] : 6 }} @lang('main.modal-certificate.месяцев-со-дня-покупки');
+				@lang('main.modal-certificate.сертификат-действует') {{ $period }} @lang('main.modal-certificate.месяцев-со-дня-покупки');
 				<br>
 				@if($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::VIP_ALIAS]))
 					@lang('main.modal-certificate.в-кабине-может-присутствовать-2')
