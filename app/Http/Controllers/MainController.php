@@ -132,6 +132,7 @@ class MainController extends Controller
 			$product = Product::where('alias', $productAlias)
 				->first();
 			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+			\Log::debug($city->id);
 			\Log::debug($cityProduct);
 			$dataJson = json_decode($cityProduct->data_json, true);
 			$period = (is_array($dataJson) && array_key_exists('certificate_period', $dataJson)) ? $dataJson['certificate_period'] : 6;
@@ -145,7 +146,7 @@ class MainController extends Controller
 		$VIEW = view('modal.certificate', [
 			'city' => $city,
 			'product' => isset($product) ? $product : new Product(),
-			'period' => $period,
+			'period' => isset($period) ? $period : 6,
 			'products' => $products ?? [],
 		]);
 		
