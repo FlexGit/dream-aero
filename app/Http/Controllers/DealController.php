@@ -669,6 +669,7 @@ class DealController extends Controller
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : ($paymentMethodId ?? 0);
 				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
+				$bill->payed_at = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? Carbon::now()->format('Y-m-d H:i:s') : null;
 				$bill->amount = $amount;
 				$bill->currency_id = $currency->id ?? 0;
 				$bill->aeroflot_transaction_type = $transactionType;
@@ -1088,6 +1089,7 @@ class DealController extends Controller
 						$bill->location_id = $billLocationId;
 						$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
 						$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
+						$bill->payed_at = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? Carbon::now()->format('Y-m-d H:i:s') : null;
 						$bill->amount = $amount;
 						$bill->currency_id = $currency->id ?? 0;
 						$bill->user_id = $this->request->user()->id ?? 0;
@@ -1356,6 +1358,7 @@ class DealController extends Controller
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
 				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
+				$bill->payed_at = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? Carbon::now()->format('Y-m-d H:i:s') : null;
 				$bill->amount = $amount;
 				$bill->currency_id = $currency->id ?? 0;
 				$bill->user_id = $this->request->user()->id ?? 0;
