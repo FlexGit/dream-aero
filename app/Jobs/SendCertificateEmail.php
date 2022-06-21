@@ -68,7 +68,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			$cityPhone = $city->phone;
 			$certificateRulesFileName = 'RULES_' . mb_strtoupper($city->alias) . '.jpg';
 		} else {
-			$cityPhone = env('UNI_CITY_PHONE');
+			$cityPhone = ' ' . env('UNI_CITY_PHONE');
 			$certificateRulesFileName = 'RULES_UNI.jpg';
 			$city = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 		}
