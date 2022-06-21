@@ -232,6 +232,22 @@ class Certificate extends Model
 				} else {
 					switch ($city->alias) {
 						case City::MSK_ALIAS:
+							$certificateFile->text($this->number, 835, 121, function ($font) use ($fontPath) {
+								$font->file($fontPath);
+								$font->size(22);
+								$font->color('#000000');
+							});
+							$certificateFile->text($bill->payed_at->format('d.m.Y'), 1300, 121, function ($font) use ($fontPath) {
+								$font->file($fontPath);
+								$font->size(22);
+								$font->color('#000000');
+							});
+							$certificateFile->text($product->duration ?? '-', 355, 1200, function ($font) use ($fontPath) {
+								$font->file($fontPath);
+								$font->size(46);
+								$font->color('#000000');
+							});
+						break;
 						case City::SPB_ALIAS:
 							$certificateFile->text($this->number, 840, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
