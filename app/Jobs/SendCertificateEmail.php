@@ -4,11 +4,15 @@ namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
 use App\Models\Certificate;
+use App\Models\City;
+use App\Models\ProductType;
+use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Mail;
 
 class SendCertificateEmail extends Job implements ShouldQueue {
@@ -41,6 +45,12 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$deal = $position->deal;
 		if (!$deal) return null;
 		
+		$product = $position->product;
+		if (!$product) return null;
+		
+		$productType = $product->productType;
+		if (!$productType) return null;
+		
 		$contractor = $deal->contractor;
 		if (!$contractor) return null;
 		
@@ -55,10 +65,41 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		
 		$city = $this->certificate->city;
 		if ($city) {
-			$rulesFileName = 'RULES_' . mb_strtoupper($city->alias);
+			$cityPhone = $city->phone;
 		} else {
-			$rulesFileName = 'RULES_MAIN';
+			$cityPhone = env('UNI_CITY_PHONE');
+			$city = HelpFunctions::getEntityByAlias(City::class, City::MSK_ALIAS);
 		}
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		$dataJson = json_decode($cityProduct->pivot->data_json, true);
+		$period = (is_array($dataJson) && array_key_exists('certificate_period', $dataJson)) ? $dataJson['certificate_period'] : 6;
+		$peopleCount = ($productType->alias == ProductType::VIP_ALIAS) ? 2 : 3;
+
+		$certificateRulesTemplateFilePath = Storage::disk('private')->path('rule/RULES_CERTIFICATE_TEMPLATE.jpg');
+		$certificateRulesFileName = Image::make($certificateRulesTemplateFilePath)->encode('jpg');
+
+		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-Medium.ttf');
+		$certificateRulesFileName->text($period, 135, 185, function ($font) use ($fontPath) {
+			$font->file($fontPath);
+			$font->size(24);
+			$font->color('#000000');
+		});
+		$certificateRulesFileName->text($peopleCount, 435, 485, function ($font) use ($fontPath) {
+			$font->file($fontPath);
+			$font->size(24);
+			$font->color('#000000');
+		});
+		
+		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-ExtraBold.ttf');
+		$certificateRulesFileName->text($cityPhone ?? '', 635, 685, function ($font) use ($fontPath) {
+			$font->file($fontPath);
+			$font->size(24);
+			$font->color('#000000');
+		});
+		
+		/*if ($city) {
+			$rulesFileName = 'RULES_' . mb_strtoupper($city->alias);
+		}*/
 		
 		$messageData = [
 			'certificate' => $this->certificate,
@@ -74,11 +115,12 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 
 		$subject = env('APP_NAME') . ': сертификат на полет';
 		
-		Mail::send(['html' => "admin.emails.send_certificate"], $messageData, function ($message) use ($subject, $recipients, $rulesFileName, $bcc) {
+		Mail::send(['html' => "admin.emails.send_certificate"], $messageData, function ($message) use ($subject, $recipients, $certificateRulesFileName, $bcc) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->attach(Storage::disk('private')->path($this->certificate->data_json['certificate_file_path']));
-			$message->attach(Storage::disk('private')->path('rule/' . $rulesFileName . '.jpg'));
+			$message->attach(Storage::disk('private')->path('rule/RULES_MAIN.jpg'));
+			$message->attach(Storage::disk('private')->path('rule/' . $certificateRulesFileName));
 			$message->to($recipients);
 			$message->bcc($bcc);
 		});
