@@ -133,7 +133,7 @@ class MainController extends Controller
 				->first();
 			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
 			$dataJson = json_decode($cityProduct->data_json, true);
-			$period = array_key_exists('certificate_period', $dataJson) ? $dataJson['certificate_period'] : 6;
+			$period = (is_array($dataJson) && array_key_exists('certificate_period', $dataJson)) ? $dataJson['certificate_period'] : 6;
 		} else {
 			$products = $city->products()
 				->orderBy('product_type_id')
