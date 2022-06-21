@@ -82,19 +82,19 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$certificateRulesFile = Image::make($certificateRulesTemplateFilePath)->encode('jpg');
 
 		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-Medium.ttf');
-		$certificateRulesFile->text($period, 342, 251, function ($font) use ($fontPath) {
+		$certificateRulesFile->text($period, 341, 250, function ($font) use ($fontPath) {
 			$font->file($fontPath);
 			$font->size(20);
 			$font->color('#000000');
 		});
-		$certificateRulesFile->text($peopleCount, 780, 312, function ($font) use ($fontPath) {
+		$certificateRulesFile->text($peopleCount, 782, 312, function ($font) use ($fontPath) {
 			$font->file($fontPath);
 			$font->size(20);
 			$font->color('#000000');
 		});
 		
 		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-ExtraBold.ttf');
-		$certificateRulesFile->text($cityPhone ?? '', 635, 405, function ($font) use ($fontPath) {
+		$certificateRulesFile->text($cityPhone ?? '', 635, 408, function ($font) use ($fontPath) {
 			$font->file($fontPath);
 			$font->size(20);
 			$font->color('#000000');
