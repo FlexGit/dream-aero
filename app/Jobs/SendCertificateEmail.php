@@ -82,31 +82,27 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$certificateRulesFile = Image::make($certificateRulesTemplateFilePath)->encode('jpg');
 
 		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-Medium.ttf');
-		\Log::debug($fontPath);
-		$certificateRulesFile->text($period, 135, 185, function ($font) use ($fontPath) {
+		$certificateRulesFile->text($period, 270, 230, function ($font) use ($fontPath) {
 			$font->file($fontPath);
-			$font->size(24);
+			$font->size(20);
 			$font->color('#000000');
 		});
-		$certificateRulesFile->text($peopleCount, 435, 485, function ($font) use ($fontPath) {
+		$certificateRulesFile->text($peopleCount, 300, 785, function ($font) use ($fontPath) {
 			$font->file($fontPath);
-			$font->size(24);
+			$font->size(20);
 			$font->color('#000000');
 		});
 		
 		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-ExtraBold.ttf');
-		\Log::debug($fontPath);
-		$certificateRulesFile->text($cityPhone ?? '', 635, 685, function ($font) use ($fontPath) {
+		$certificateRulesFile->text($cityPhone ?? '', 625, 385, function ($font) use ($fontPath) {
 			$font->file($fontPath);
-			$font->size(24);
+			$font->size(20);
 			$font->color('#000000');
 		});
 		
 		if (!$certificateRulesFile->save(storage_path('app/private/rule/' . $certificateRulesFileName))) {
 			return null;
 		}
-		
-		\Log::debug($certificateRulesFileName);
 
 		$messageData = [
 			'certificate' => $this->certificate,
