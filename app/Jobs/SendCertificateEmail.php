@@ -95,7 +95,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		});
 		
 		$fontPath = public_path('assets/fonts/Montserrat/Montserrat-ExtraBold.ttf');
-		$certificateRulesFile->text($cityPhone ?? '', 655, 406, function ($font) use ($fontPath) {
+		$certificateRulesFile->text($cityPhone ?? '', 657, 406, function ($font) use ($fontPath) {
 			$font->file($fontPath);
 			$font->size(17);
 			$font->color('#000000');
