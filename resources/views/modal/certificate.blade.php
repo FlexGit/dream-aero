@@ -144,7 +144,7 @@
 			<label class="cont">
 				@lang('main.modal-certificate.я-согласен') <a href="{{ url('rules-dreamaero') }}" target="_blank">@lang('main.modal-certificate.с-условиями')</a> @lang('main.modal-certificate.пользования-сертификатом-такими-как'):
 				<br>
-				@lang('main.modal-certificate.сертификат-действует') {{ ($product && is_array($product->data_json) && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6 }} @lang('main.modal-certificate.месяцев-со-дня-покупки');
+				@lang('main.modal-certificate.сертификат-действует') {{ ($cityProduct && is_array($cityProduct->data_json) && array_key_exists('certificate_period', $cityProduct->data_json)) ? $cityProduct->data_json['certificate_period'] : 6 }} @lang('main.modal-certificate.месяцев-со-дня-покупки');
 				<br>
 				@if($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::VIP_ALIAS]))
 					@lang('main.modal-certificate.в-кабине-может-присутствовать-2')
