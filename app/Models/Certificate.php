@@ -176,7 +176,7 @@ class Certificate extends Model
 		
 		$bill = $position->bill;
 		if (!$bill) return null;
-		//if (!$bill->payed_at) return null;
+		if (!$bill->payed_at) return null;
 		
 		$billStatus = $bill->status;
 		if (!$billStatus) return null;
