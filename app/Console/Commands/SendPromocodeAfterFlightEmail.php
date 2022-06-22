@@ -47,9 +47,9 @@ class SendPromocodeAfterFlightEmail extends Command
      */
     public function handle()
     {
-    	// проверяем все полеты за последний час
+    	// проверяем все полеты с начала дня до текущего момента
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
-			->whereBetween('stop_at', [Carbon::now()->startOfDay(), Carbon::now()->endOfDay()])
+			->whereBetween('stop_at', [Carbon::now()->startOfDay(), Carbon::now()])
 			->get();
     	foreach ($events as $event) {
     		if (!$event->contractor_id) continue;
