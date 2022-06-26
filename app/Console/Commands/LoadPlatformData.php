@@ -64,7 +64,7 @@ class LoadPlatformData extends Command
 		
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $query->/*unseen()->*/since(Carbon::now()->subDay())->get();
+		$messages = $query->/*unseen()->*/since(/*Carbon::now()->subDay()*/'17.06.2022')->get();
 	
 		\Log::debug('messages = ' . count($messages));
 		
@@ -86,7 +86,7 @@ class LoadPlatformData extends Command
 			//\Log::debug($raw);
 			
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
-			\Log::debug('dataAt = ' . $dataAt);
+			//\Log::debug('dataAt = ' . $dataAt);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
 			\Log::debug('dataAt = ' . $dataAt);
 			if (!$dataAt) return 0;

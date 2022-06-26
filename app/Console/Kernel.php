@@ -94,12 +94,12 @@ class Kernel extends ConsoleKernel
 			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 
 		// загрузка данных платформы из письма
-		$filePath = storage_path('logs/commands/platform_data_load.log');
+		/*$filePath = storage_path('logs/commands/platform_data_load.log');
 		$schedule->command('platform_data:load')
 			->everyMinute()
 			->runInBackground()
 			->appendOutputTo($filePath)
-			->emailOutputOnFailure(env('DEV_EMAIL'));
+			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 		
 		// Загрузка Сделок в Roistat
 		$filePath = storage_path('logs/commands/roistat.log');
