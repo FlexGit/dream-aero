@@ -43,7 +43,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="roistat_visit">Номер визита Roistat</label>
-			<input type="text" class="form-control" id="roistat_visit" name="roistat_visit" value="{{ $deal->roistat }}" placeholder="Номер" @if($deal->source == app('\App\Models\Deal')::WEB_SOURCE) disabled @endif>
+			<input type="text" class="form-control" id="roistat_visit" name="roistat_visit" value="{{ $deal->roistat }}" placeholder="Номер" {{--@if($deal->source == app('\App\Models\Deal')::WEB_SOURCE)--}} disabled {{--@endif--}}>
 		</div>
 	</div>
 </div>
