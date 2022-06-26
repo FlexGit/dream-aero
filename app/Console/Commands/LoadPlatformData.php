@@ -60,20 +60,16 @@ class LoadPlatformData extends Command
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		$query = $folder->query();
 		
-		\Log::debug(Carbon::now()->subDay());
-		
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $query->/*unseen()->*/since(/*Carbon::now()->subDay()*/'18.06.2022')->get();
+		$messages = $query->/*unseen()->*/since(Carbon::now()->subDay())->get();
 	
-		\Log::debug('messages = ' . count($messages));
-		
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Attribute $subject */
 			$subject = $message->getSubject();
-			\Log::debug($subject);
+			//\Log::debug($subject);
 
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var string|null $body */
@@ -88,7 +84,7 @@ class LoadPlatformData extends Command
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
 			//\Log::debug('dataAt = ' . $dataAt);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
-			\Log::debug('dataAt = ' . $dataAt);
+			//\Log::debug('dataAt = ' . $dataAt);
 			if (!$dataAt) return 0;
 
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
