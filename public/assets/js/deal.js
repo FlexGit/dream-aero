@@ -74,7 +74,9 @@ $(function() {
 										//value.setHours(value.getHours() + Math.round(value.getMinutes()/30) - 1);
 										value.setSeconds(0);
 
-										$('#flight_date').val(value.toLocaleString());
+										//console.log(value.toLocaleString('ru-RU'));
+
+										$('#flight_date').val(value.toLocaleString('ru-RU'));
 
 										calcAmount();
 									},
@@ -484,7 +486,7 @@ $(function() {
 			data: data,
 			dataType: 'json',
 			success: function (result) {
-				console.log(result);
+				//console.log(result);
 
 				//$(this).removeClass('button-pipaluk-grey').addClass('button-pipaluk-orange').prop('disabled', false);
 

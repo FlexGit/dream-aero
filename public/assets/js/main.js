@@ -263,7 +263,11 @@ $(function(){
 					validateOnBlur: false,
 					onChangeDateTime: function (value) {
 						value.setSeconds(0);
-						$('#flight_date').val(value.toLocaleString());
+
+						//console.log(value.toLocaleString('ru-RU'));
+
+						$('#flight_date').val(value.toLocaleString('ru-RU'));
+
 						calcAmount();
 					},
 					disabledWeekDays: weekDays,
@@ -458,7 +462,7 @@ function calcAmount() {
 		source: 'web',
 	};
 
-	console.log(data);
+	//console.log(data);
 
 	$.ajax({
 		type: 'GET',
@@ -466,7 +470,7 @@ function calcAmount() {
 		data: data,
 		dataType: 'json',
 		success: function(result) {
-			console.log(result);
+			//console.log(result);
 			if (result.status !== 'success') {
 				return;
 			}
