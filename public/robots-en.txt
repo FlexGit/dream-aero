@@ -172,5 +172,7 @@ disallow: /sam/professionalnaya-pomoshh
 disallow: /sam/oferta-dreamaero.pdf
 disallow: /sam/successresult
 
+Clean-param: MNT_TRANSACTION_ID
+
 Sitemap: https://en.dream-aero.ru/sitemap.xml
 Host: en.dream-aero.ru
