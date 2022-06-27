@@ -216,8 +216,10 @@ class BillController extends Controller
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
+		$user = \Auth::user();
+		
 		$billStatus = $bill->status;
-		if ($billStatus && $billStatus->alias == Bill::CANCELED_STATUS) {
+		if ($billStatus && $billStatus->alias == Bill::CANCELED_STATUS && !$user->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Счет в текущем статусе недоступен для редактирования']);
 		}
 		
