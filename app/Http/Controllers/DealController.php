@@ -391,6 +391,7 @@ class DealController extends Controller
 		$VIEW = view('admin.deal.modal.edit', [
 			'deal' => $deal,
 			'statuses' => $statuses,
+			'user' => $user,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -649,7 +650,7 @@ class DealController extends Controller
 				}
 				
 				if ($source == Deal::WEB_SOURCE) {
-					$billLocation = $city->getLocationForBill();
+					$billLocation = $city->getLocationForBill($product);
 					if (!$billLocation) {
 						\DB::rollback();
 						

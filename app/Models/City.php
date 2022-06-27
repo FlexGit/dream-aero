@@ -195,14 +195,20 @@ class City extends Model
 		$phoneCleared = preg_replace( '/[^0-9]/', '', $this->phone);
 		return '+' . mb_substr($phoneCleared, 0, 1) . ' (' . mb_substr($phoneCleared, 1, 3) . ') ' . mb_substr($phoneCleared, 4, 3) . '-' . mb_substr($phoneCleared, 7, 2) . '-' . mb_substr($phoneCleared, 9, 2);
 	}
-	
+
 	/**
 	 * Распределение оплат между локациями города
 	 *
-	 * @return mixed|null
+	 * @param Product|null $product
+	 * @return Location|Location[]|\Illuminate\Database\Eloquent\Collection|Model|mixed|string|null
 	 */
-	public function getLocationForBill()
+	public function getLocationForBill($product = null)
 	{
+		// по VIP-тарифам Леха и Окань вешаем все оплаты на Columbus
+		if (in_array($product->alias, [Product::OKAN_ALIAS, Product::LEKHA_ALIAS])) {
+			return HelpFunctions::getEntityByAlias(Location::class, Location::BUS_LOCATION);
+		}
+		
 		$locations = $this->locations()
 			->where('is_active', true)
 			->whereNotNull('pay_account_number')

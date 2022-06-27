@@ -54,6 +54,8 @@ class Product extends Model
 	const BASIC_ALIAS = 'basic';
 	const ADVANCED_ALIAS = 'advanced';
 	const EXPERT_ALIAS = 'expert';
+	const OKAN_ALIAS = 'okan';
+	const LEKHA_ALIAS = 'lekha';
 	
 	/**
 	 * The attributes that are mass assignable.

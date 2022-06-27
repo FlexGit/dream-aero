@@ -85,6 +85,7 @@ class Location extends Model
 	protected $revisionCreationsEnabled = true;*/
 	
 	const AFI_LOCATION = 'afi';
+	const BUS_LOCATION = 'bus';
 	
 	/**
 	 * The attributes that are mass assignable.

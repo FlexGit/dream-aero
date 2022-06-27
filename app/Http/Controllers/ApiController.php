@@ -2955,7 +2955,7 @@ class ApiController extends Controller
 			
 			// создание Счета
 			if ($isCertificatePurchase) {
-				$billLocation = $city->getLocationForBill();
+				$billLocation = $city->getLocationForBill($product);
 				if (!$billLocation) {
 					\DB::rollback();
 					Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');

@@ -6,11 +6,11 @@
 	<div class="row">
 		<div class="col">
 			<div class="form-group">
-				@if($deal->contractor->email == app('\App\Models\Contractor')::ANONYM_EMAIL)
+				@if($deal->contractor->email == app('\App\Models\Contractor')::ANONYM_EMAIL || $user->isSuperAdmin())
 					<label for="contractor_search">Поиск контрагента</label>
 					<input type="email" class="form-control" id="contractor_search" value="{{ $deal->contractor ? $deal->contractor->email : '' }}" placeholder="Поиск по ФИО, E-mail, телефону" {{ $deal->contractor ? 'disabled' : '' }}>
 					<div class="js-contractor-container {{ $deal->contractor ? '' : 'hidden' }}">
-						<span class="js-contractor">Привязан контрагент: {{ $deal->contractor->fio() }}</span> <i class="fas fa-times js-contractor-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
+						<span class="js-contractor">Привязан контрагент: {{ $deal->contractor->fio() . ' [' . ($deal->contractor->email ? $deal->contractor->email . ', ' : '') . ($deal->contractor->phone ? $deal->contractor->phone . ', ' : '') . ($deal->contractor->city ? $deal->contractor->city->name : '') . ']' }}</span> <i class="fas fa-times js-contractor-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
 					</div>
 				@else
 					<label>Контрагент</label>
