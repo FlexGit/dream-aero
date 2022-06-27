@@ -60,7 +60,7 @@
 							<div style="clear: both;"></div>
 							<div class="ajax-container">
 								@foreach($gallery as $item)
-									<a href="{{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? $item->data_json['video_url'] : (array_key_exists('photo_preview_file_path', $item->data_json) ? '/upload/' . $item->data_json['photo_preview_file_path'] : '#') }}" class="fancybox {{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? 'is_video' : 'is_photo' }}" data-fancybox-type="iframe" rel="gallery1" title="">
+									<a href="{{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? $item->data_json['video_url'] : (array_key_exists('photo_preview_file_path', $item->data_json) ? '/upload/' . $item->data_json['photo_preview_file_path'] : '#') }}" class="fancybox @if(array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) is_video @else is_photo @endif" @if(array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) data-fancybox-type="iframe" @endif rel="gallery1" title="">
 										<div class="ajax-item vilet" style="background: #ebebef url('/upload/{{ array_key_exists('photo_preview_file_path', $item->data_json) ? $item->data_json['photo_preview_file_path'] : '' }}') center center / contain no-repeat;">
 											@if(array_key_exists('video_url', $item->data_json) && $item->data_json['video_url'])
 												<img src="{{ asset('img/play.png') }}" class="playimg" alt="">
