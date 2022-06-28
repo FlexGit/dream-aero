@@ -230,7 +230,7 @@ class BillController extends Controller
 		$deal = $bill->deal;
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
-		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS]) && !$user->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}
 		
@@ -258,10 +258,10 @@ class BillController extends Controller
 		$positionId = $this->request->position_id ?? 0;
 		if ($positionId) {
 			$position = DealPosition::find($positionId);
-			if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки  не найдена']);
+			if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
 		}
 		
-		if (in_array($bill->status->alias, [Bill::PAYED_STATUS, Bill::PAYED_PROCESSING_STATUS]) && in_array($bill->paymentMethod->alias, [PaymentMethod::ONLINE_ALIAS])) {
+		if (in_array($bill->status->alias, [Bill::PAYED_STATUS, Bill::PAYED_PROCESSING_STATUS]) && in_array($bill->paymentMethod->alias, [PaymentMethod::ONLINE_ALIAS]) && !$user->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Оплаченный Счет со способом оплаты "Онлайн" недоступен для редактирования']);
 		}
 
