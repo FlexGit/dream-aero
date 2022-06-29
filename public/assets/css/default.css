@@ -276,8 +276,23 @@ h1.block-title:after {
 	margin-top: 20px;
 }
 
-@media screen and (max-width: 700px){
+@media screen and (max-width: 700px) {
 	.popup-promo {
 		width: 70%;
+	}
+}
+
+.whatsapp-container {
+	display: none;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 100;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+	.whatsapp-container {
+		display: block;
 	}
 }

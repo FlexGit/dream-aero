@@ -88,9 +88,14 @@
 		VK.Widgets.CommunityMessages("vk_community_messages", 65405270, {widgetPosition: "left",disableExpandChatSound: "1",disableNewMessagesSound: "1",tooltipButtonText: "Есть вопрос?"});
 	</script>
 	@if($city->whatsapp)
-		<script async type="text/javascript">
+		{{--<script async type="text/javascript">
 			!function(){var e={"token":"{{ $city->whatsapp }}","position":"right","bottomSpacing":"20","callToActionMessage":"","displayOn":"mobile","subtitle":"","message":{"name":"Dream Aero","content":"Здравствуйте, чем мы можем помочь?"}},t=document.location.protocol+"//bothelp.io",o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=t+"/widget-folder/widget-whatsapp-chat.js",o.onload=function(){BhWidgetWhatsappChat.init(e)};var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(o,n)}();
-		</script>
+		</script>--}}
+		<div class="whatsapp-container">
+			<a href="https://wa.clck.bar/{{ preg_replace('/[^0-9.]+/', '', $city->whatsapp) }}" target="_blank">
+				<img src="{{ asset('img/whatsapp.png') }}" alt="">
+			</a>
+		</div>
 	@endif
 	<script>
 		(function(w, d, s, h, id) {
