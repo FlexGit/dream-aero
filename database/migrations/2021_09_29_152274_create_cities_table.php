@@ -18,6 +18,9 @@ class CreateCitiesTable extends Migration
             $table->id();
             $table->string('name', 50)->comment('наименование');
 			$table->string('alias', 50)->comment('алиас');
+			$table->string('email', 255)->nullable()->comment('e-mail');
+			$table->string('phone', 50)->nullable()->comment('телефон');
+			$table->string('whatsapp', 50)->nullable()->comment('whatsapp');
 			$table->string('version', 25)->default('ru')->index()->comment('версия');
 			$table->string('timezone', 50)->nullable()->comment('временная зона');
 			$table->integer('sort')->default(0)->comment('сортировка');

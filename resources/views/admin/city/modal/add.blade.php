@@ -16,6 +16,10 @@
 	<input type="text" class="form-control" id="phone" name="phone" placeholder="Телефон">
 </div>
 <div class="form-group">
+	<label for="whatsapp">Whatsapp</label>
+	<input type="text" class="form-control" id="whatsapp" name="whatsapp" placeholder="Whatsapp">
+</div>
+<div class="form-group">
 	<label for="version">Версия</label>
 	<select class="form-control" id="version" name="version">
 		@foreach(app('\App\Models\City')::VERSIONS ?? [] as $version)

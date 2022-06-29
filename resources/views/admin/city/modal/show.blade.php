@@ -21,6 +21,10 @@
 			<td>{{ $city->phone }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Whatsapp</td>
+			<td>{{ $city->whatsapp }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Версия</td>
 			<td>{{ $city->version }}</td>
 		</tr>

@@ -6,7 +6,6 @@ use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\City
@@ -58,7 +57,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class City extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
+	use HasFactory, SoftDeletes;
 	
 	const DEFAULT_CITY_NAME = 'Москва';
 	const DEFAULT_CITY_NAME_EN = 'Moscow';
@@ -73,7 +72,6 @@ class City extends Model
 	const EKB_ALIAS = 'ekb';
 	const NSK_ALIAS = 'nsk';
 	const KHV_ALIAS = 'khv';
-	/*const UAE_ALIAS = 'uae';*/
 	const DC_ALIAS = 'dc';
 	
 	const RU_ALIASES = [
@@ -113,21 +111,6 @@ class City extends Model
 		self::DC_ALIAS => 'Washington DC',
 	];
 	
-	/*const ATTRIBUTES = [
-		'name' => 'Наименование',
-		'alias' => 'Алиас',
-		'version' => 'Версия сайта',
-		'timezone' => 'Временная зона',
-		'is_active' => 'Активность',
-		'data_json' => 'Дополнительная информация',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
-	
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -141,6 +124,7 @@ class City extends Model
 		'timezone',
 		'email',
 		'phone',
+		'whatsapp',
 		'sort',
 		'is_active',
 		'data_json',

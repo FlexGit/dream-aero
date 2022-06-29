@@ -169,6 +169,7 @@ class CityController extends Controller
 		$city->alias = $this->request->alias;
 		$city->email = $this->request->email;
 		$city->phone = $this->request->phone;
+		$city->whatsapp = $this->request->whatsapp;
 		$city->version = $this->request->version;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {
@@ -219,6 +220,7 @@ class CityController extends Controller
 		$city->alias = $this->request->alias;
 		$city->email = $this->request->email;
 		$city->phone = $this->request->phone;
+		$city->whatsapp = $this->request->whatsapp;
 		$city->version = $this->request->version;
 		$city->is_active = $this->request->is_active;
 		if (!$city->save()) {

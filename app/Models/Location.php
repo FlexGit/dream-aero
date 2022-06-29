@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Location
@@ -58,31 +57,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Location extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
-	
-	/*const ATTRIBUTES = [
-		'name' => 'Наименование',
-		'alias' => 'Алиас',
-		'legal_entity_id' => 'Юр. лицо',
-		'city_id' => 'Город',
-		'sort' => 'Сортировка',
-		'data_json' => 'Дополнительная информация',
-		'address' => 'Адрес',
-		'working_ours' => 'Рабочие часы',
-		'phone' => 'Телефон',
-		'email' => 'E-mail',
-		'map_link' => 'Ссылка на карту',
-		'skype' => 'Skype',
-		'whatsapp' => 'WhatsApp',
-		'scheme_file_path' => 'Путь к файлу схемы',
-		'is_active' => 'Признак активности',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
+	use HasFactory, SoftDeletes;
 	
 	const AFI_LOCATION = 'afi';
 	const BUS_LOCATION = 'bus';
