@@ -13,11 +13,11 @@ class Kernel extends ConsoleKernel
 	 * @var array
 	 */
 	protected $commands = [
+		Commands\LoadPlatformData::class,
 		Commands\SendCertificateEmail::class,
 		Commands\SendFlightInvitationEmail::class,
 		Commands\AddContractorScore::class,
 		Commands\SendPromocodeAfterFlightEmail::class,
-		Commands\LoadPlatformData::class,
 		Commands\Roistat\RoistatAddDeals::class,
 	];
 
@@ -29,6 +29,14 @@ class Kernel extends ConsoleKernel
 	 */
 	protected function schedule(Schedule $schedule)
 	{
+		// загрузка данных платформы из письма
+		$filePath = storage_path('logs/commands/platform_data.log');
+		$schedule->command('platform_data:load')
+			->hourly()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+
 		// запуск демона для обработки задач из очереди
 		$filePath = storage_path('logs/queue_worker.log');
 		$schedule->command('queue:work --daemon')
@@ -93,14 +101,6 @@ class Kernel extends ConsoleKernel
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 
-		// загрузка данных платформы из письма
-		$filePath = storage_path('logs/commands/platform_data_load.log');
-		$schedule->command('platform_data:load')
-			->hourly()
-			->runInBackground()
-			->appendOutputTo($filePath)
-			->emailOutputOnFailure(env('DEV_EMAIL'));
-		
 		// Загрузка Сделок в Roistat
 		$filePath = storage_path('logs/commands/roistat.log');
 		$schedule->command('roistat:add_deals')
