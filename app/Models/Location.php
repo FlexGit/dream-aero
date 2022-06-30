@@ -133,6 +133,7 @@ class Location extends Model
 			'skype' => array_key_exists('skype', $data) ? $data['skype'] : null,
 			'whatsapp' => array_key_exists('whatsapp', $data) ? $data['whatsapp'] : null,
 			'map_link' => array_key_exists('map_link', $data) ? $data['map_link'] : null,
+			'review_map_link' => array_key_exists('review_map_link', $data) ? $data['review_map_link'] : null,
 			'scheme_file_path' => array_key_exists('scheme_file_path', $data) ? \URL::to('/upload/' . $data['scheme_file_path']) : null,
 			'flight_simulators' => $simulators,
 			/*'is_active' => $this->is_active,*/

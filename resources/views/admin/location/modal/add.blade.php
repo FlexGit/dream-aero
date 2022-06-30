@@ -62,8 +62,12 @@
 	<input type="text" class="form-control form-control-sm" id="whatsapp" name="whatsapp" placeholder="WhatsApp">
 </div>
 <div class="form-group">
-	<label for="map_link">Ссылка на карту</label>
-	<textarea class="form-control form-control-sm" id="map_link" name="map_link" rows="2"></textarea>
+	<label for="map_link">Ссылка на карту (Контакты)</label>
+	<textarea class="form-control form-control-sm" id="map_link" name="map_link" rows="5"></textarea>
+</div>
+<div class="form-group">
+	<label for="review_map_link">Ссылка на карту (Отзывы)</label>
+	<textarea class="form-control form-control-sm" id="review_map_link" name="review_map_link" rows="5"></textarea>
 </div>
 <div class="form-group">
 	<label for="scheme_file">Путь к файлу план-схемы</label>

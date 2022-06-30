@@ -244,6 +244,7 @@ class LocationController extends Controller
 			'phone' => $this->request->phone,
 			'email' => $this->request->email,
 			'map_link' => $this->request->map_link,
+			'review_map_link' => $this->request->review_map_link,
 			'skype' => $this->request->skype,
 			'whatsapp' => $this->request->whatsapp,
 			'scheme_file_path' => $isFileUploaded ? 'scheme/' . $file->getClientOriginalName() : '',
@@ -325,6 +326,7 @@ class LocationController extends Controller
 		$data['phone'] = $this->request->phone;
 		$data['email'] = $this->request->email;
 		$data['map_link'] = $this->request->map_link;
+		$data['review_map_link'] = $this->request->review_map_link;
 		$data['skype'] = $this->request->skype;
 		$data['whatsapp'] = $this->request->whatsapp;
 		$data['scheme_file_path'] = $isFileUploaded ? 'scheme/' . $file->getClientOriginalName() : '';

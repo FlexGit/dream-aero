@@ -109,8 +109,12 @@
 	<input type="text" class="form-control form-control-sm" id="whatsapp" name="whatsapp" value="{{ array_key_exists('whatsapp', $location->data_json) ? $location->data_json['whatsapp'] : '' }}" placeholder="WhatsApp">
 </div>
 <div class="form-group">
-	<label for="map_link">Ссылка на карту</label>
+	<label for="map_link">Ссылка на карту (Контакты)</label>
 	<textarea class="form-control form-control-sm" id="map_link" name="map_link" rows="5">{{ array_key_exists('map_link', $location->data_json) ? $location->data_json['map_link'] : '' }}</textarea>
+</div>
+<div class="form-group">
+	<label for="review_map_link">Ссылка на карту (Отзывы)</label>
+	<textarea class="form-control form-control-sm" id="review_map_link" name="review_map_link" rows="5">{{ array_key_exists('review_map_link', $location->data_json) ? $location->data_json['review_map_link'] : '' }}</textarea>
 </div>
 <div class="form-group">
 	<label for="scheme_file">Путь к файлу план-схемы</label>
