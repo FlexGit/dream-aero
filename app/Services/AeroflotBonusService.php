@@ -292,6 +292,7 @@ class AeroflotBonusService {
 				'request' => json_encode($request),
 				'response' => json_encode($result),
 			];
+			\Log::debug($fields);
 			self::addLog($fields);
 			
 			return $result;
