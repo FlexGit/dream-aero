@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
 		Commands\AddContractorScore::class,
 		Commands\SendPromocodeAfterFlightEmail::class,
 		Commands\Roistat\RoistatAddDeals::class,
+		Commands\RunAeroflotAccrual::class,
 	];
 
 	/**
@@ -104,6 +105,14 @@ class Kernel extends ConsoleKernel
 		// Загрузка Сделок в Roistat
 		$filePath = storage_path('logs/commands/roistat.log');
 		$schedule->command('roistat:add_deals')
+			->hourly()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// Начисление миль Аэрофлот Бонус
+		$filePath = storage_path('logs/commands/aeroflot_accrual.log');
+		$schedule->command('aeroflot_accrual:run')
 			->hourly()
 			->runInBackground()
 			->appendOutputTo($filePath)

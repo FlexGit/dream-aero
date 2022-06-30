@@ -72,8 +72,6 @@ class RunAeroflotAccrual extends Command
 				continue;
 			}
 			
-			//\Log::debug($bill->id);
-			
 			$result = AeroflotBonusService::authPoints($bill);
 		}
 			
