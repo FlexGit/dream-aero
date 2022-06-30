@@ -214,6 +214,10 @@ class AeroflotBonusService {
 			$dateTime = date('YmdHis');
 			$transactionId = $dateTime . rand(10000, 99999);
 			
+			$position = $bill->position;
+			$product = $position ? $position->product : null;
+			if (!$product) return null;
+			
 			$request = [
 				'transaction' => [
 					'id' => $transactionId,
@@ -264,7 +268,7 @@ class AeroflotBonusService {
 				],
 				'cheque' => [
 					'item' => [
-						'product' => $bill->product->alias,
+						'product' => $product->alias ?? '',
 						'quantity' => 1,
 						'amount' => $bill->amount * 100,
 					]
