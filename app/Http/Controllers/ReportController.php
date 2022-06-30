@@ -564,13 +564,13 @@ class ReportController extends Controller {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
 			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 		}
-		//\DB::connection()->enableQueryLog();
+		\DB::connection()->enableQueryLog();
 		$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS)
 			->where('aeroflot_status', 0)
 			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			->get();
-		//\Log::debug(\DB::getQueryLog());
+		\Log::debug(\DB::getQueryLog());
 		$items = [];
 		foreach ($bills as $bill) {
 			$billLocation = $bill->location;
