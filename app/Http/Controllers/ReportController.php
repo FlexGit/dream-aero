@@ -566,7 +566,7 @@ class ReportController extends Controller {
 		}
 		//\DB::connection()->enableQueryLog();
 		$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS)
-			->where('aeroflot_state', AeroflotBonusService::PAYED_STATE)
+			->where('aeroflot_status', 0)
 			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			->get();
