@@ -72,8 +72,11 @@ class RunAeroflotAccrual extends Command
 				continue;
 			}
 			
-			//\Log::debug($bill->aeroflot_transaction_order_id);
-			//$result = AeroflotBonusService::authPoints($bill);
+			\Log::debug($bill->aeroflot_transaction_order_id);
+			
+			$result = AeroflotBonusService::authPoints($bill);
+			
+			break;
 		}
 			
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - aeroflot_accrual:run - OK');
