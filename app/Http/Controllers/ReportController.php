@@ -1009,7 +1009,8 @@ class ReportController extends Controller {
 	public function platformLoadData()
 	{
 		\Artisan::call('platform_data:load');
+		$output = \Artisan::output();
 		
-		return response()->json(['status' => 'success']);
+		return response()->json(['status' => 'success', 'result' => $output]);
 	}
 }
