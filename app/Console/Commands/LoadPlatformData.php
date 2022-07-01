@@ -122,7 +122,7 @@ class LoadPlatformData extends Command
 			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
 			$attachments = $message->getAttachments();
 			foreach ($attachments as $attachment) {
-				$attachmentPath = './storage/app/private/attachments/';
+				$attachmentPath = $_SERVER['DOCUMENT_ROOT'] . '/storage/app/private/attachments/';
 				$attachmentName = $dataAt . '.' . $locationId . '.' . $simulatorId . '.txt';
 
 				/** @var \Webklex\PHPIMAP\Attachment $attachment */
