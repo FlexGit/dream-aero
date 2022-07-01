@@ -128,6 +128,9 @@ class Event extends Model
 		'simulator_down_at' => 'Время опускания платформы',
 		'flight_invitation_sent_at' => 'Дата отправки приглашения на полет',
 		'pilot_id' => 'Фактический пилот',
+		'test_pilot_id' => 'Пилот тестового полета',
+		'employee_id' => 'Сотрудник, осуществивший полет',
+		'feedback_email_sent_at' => 'дата и время отправки письма с просьбой оставить отзыв о полете',
 		'uuid' => 'Uuid',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
@@ -194,6 +197,7 @@ class Event extends Model
 		'pilot_id',
 		'test_pilot_id',
 		'employee_id',
+		'feedback_email_sent_at',
 		'uuid',
 		'data_json',
 	];
@@ -214,6 +218,7 @@ class Event extends Model
 		'flight_invitation_sent_at' => 'datetime:Y-m-d H:i',
 		'data_json' => 'array',
 		'is_notified' => 'boolean',
+		'feedback_email_sent_at' => 'datetime:Y-m-d H:i',
 	];
 	
 	public static function boot()
