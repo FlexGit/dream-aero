@@ -13,6 +13,7 @@ use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use App\Models\Contractor;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MainController;
@@ -423,6 +424,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('report/nps', [ReportController::class, 'npsIndex'])->name('npsIndex');
 			Route::get('report/nps/list/ajax', [ReportController::class, 'npsGetListAjax'])->name('npsList');
 			
+			Route::get('report/platform/load', [ReportController::class, 'platformLoadData'])->name('platformLoadData');
 			Route::get('report/platform', [ReportController::class, 'platformIndex'])->name('platformIndex');
 			Route::get('report/platform/list/ajax', [ReportController::class, 'platformGetListAjax'])->name('platformList');
 			Route::get('report/platform/modal/{location_id}/{simulator_id}/{date}', [ReportController::class, 'platformModalEdit'])->name('platformModalEdit');
@@ -598,6 +600,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	Route::post('aeroflot-use/retry', [AeroflotBonusController::class, 'useRetry'])->name('useRetry');
 	Route::post('aeroflot-use/refresh', [AeroflotBonusController::class, 'useRefresh'])->name('useRefresh');
 	Route::post('aeroflot-transaction', [AeroflotBonusController::class, 'transaction'])->name('transaction');
+	Route::get('unsubscribe/{uuid}', [Contractor::class, 'unsubscribe'])->name('unsubscribe');
 	
 	Route::get('test/parse/file', [TestController::class, 'parseFile']);
 	

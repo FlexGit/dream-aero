@@ -1005,4 +1005,9 @@ class ReportController extends Controller {
 		
 		return Storage::disk('private')->download('report/' . $fileName);
 	}
+	
+	public function platformLoadData()
+	{
+		\Artisan::call('platform_data:load');
+	}
 }

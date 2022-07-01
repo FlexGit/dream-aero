@@ -38,6 +38,7 @@
 						<div class="form-group ml-3" style="padding-top: 31px;">
 							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>
 							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
+							<button type="button" id="load_btn" class="btn btn-info">Загрузить данные</button>
 						</div>
 					</div>
 					<div id="reportTable"></div>
@@ -208,6 +209,26 @@
 
 			$(document).on('click', '#export_btn', function(e) {
 				getList(true);
+			});
+
+			$(document).on('click', '#load_btn', function(e) {
+				var $btn = $('#load_btn');
+
+				$btn.attr('disabled', true);
+
+				$.ajax({
+					url: '{{ route('platformLoadData') }}',
+					type: 'GET',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						$btn.attr('disabled', false);
+					}
+				});
 			});
 
 			$('.platform-data-table').scroll(function() {
