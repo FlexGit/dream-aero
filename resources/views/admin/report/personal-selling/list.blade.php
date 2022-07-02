@@ -64,7 +64,7 @@
 								<td class="align-top text-center font-weight-bold">Статус счета</td>
 								<td class="align-top text-center font-weight-bold">Сумма счета</td>
 								<td class="align-top text-center font-weight-bold">Дата оплаты счета</td>
-								<td class="align-top text-center font-weight-bold">Локация оплаты счета</td>
+								<td class="align-top text-center font-weight-bold">Локация счета</td>
 								<td class="align-top text-center font-weight-bold">Номер сделки</td>
 								<td class="align-top text-center font-weight-bold">Статус сделки</td>
 							</tr>
