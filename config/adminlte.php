@@ -405,7 +405,7 @@ return [
         [
             'text'    => 'Аналитика',
             'icon'    => 'far fa-fw fa-file-excel',
-			'can'	  => 'is_superadmin',
+			'can'	  => 'is_admin',
             'submenu' => [
                 [
                     'text' => 'NPS',
@@ -422,7 +422,7 @@ return [
 				[
 					'text' => 'Личные продажи',
 					'url'  => '/report/personal-selling',
-					'can'  => 'is_superadmin',
+					'can'  => 'is_admin',
 					'icon' => 'far fa-circle nav-icon',
 				],
 				[

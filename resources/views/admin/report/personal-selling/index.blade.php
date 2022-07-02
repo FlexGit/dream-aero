@@ -37,7 +37,7 @@
 						</div>
 						<div class="form-group ml-3" style="padding-top: 31px;">
 							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>
-							{{--<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>--}}
+							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
 						</div>
 					</div>
 					<div id="reportTable"></div>
@@ -62,8 +62,10 @@
 					$btn = isExport ? $('#export_btn') : $('#show_btn'),
 					$loader = $('<i class="fas fa-circle-notch fa-spin"></i>');
 
-				$selector.html($loader);
 				$btn.attr('disabled', true);
+				if (!isExport) {
+					$selector.html($loader);
+				}
 
 				$.ajax({
 					url: '{{ route('personalSellingList') }}',
@@ -81,16 +83,17 @@
 							return;
 						}
 
-						if (result.html) {
-							$selector.html(result.html);
-						} else {
-							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
-						}
-
 						$btn.attr('disabled', false);
 
 						if (result.fileName) {
 							window.location.href = '/report/file/' + result.fileName;
+							return;
+						}
+
+						if (result.html) {
+							$selector.html(result.html);
+						} else {
+							$selector.html('<tr><td colspan="30" class="text-center">Ничего не найдено</td></tr>');
 						}
 					}
 				})

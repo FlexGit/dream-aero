@@ -6,6 +6,7 @@ use App\Exports\AeroflotAccrualReportExport;
 use App\Exports\AeroflotWriteOffReportExport;
 use App\Exports\ContractorSelfMadePayedDealsReportExport;
 use App\Exports\NpsReportExport;
+use App\Exports\PersonalSellingReportExport;
 use App\Exports\PlatformDataReportExport;
 use App\Models\Bill;
 use App\Models\Certificate;
@@ -222,7 +223,7 @@ class ReportController extends Controller {
 	{
 		$user = \Auth::user();
 		
-		if (!$user->isSuperAdmin()) {
+		if (!$user->isAdminOrHigher()) {
 			abort(404);
 		}
 		
@@ -255,15 +256,27 @@ class ReportController extends Controller {
 			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			//->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
 			->get();
+		if ($user->isAdmin()) {
+			$bills = $bills->where('user_id', $user->id);
+		}
 		
-		$billItems = $paymentMethodSumItems = $dealIds = [];
-		$totalSum = 0;
+		$totalItems = $billItems = $paymentMethodSumItems = $dealIds = [];
+		$totalSum = $i = 0;
 		foreach ($bills as $bill) {
-			if (!isset($billItems[$bill->location_id])) {
-				$billItems[$bill->location_id] = [];
-			}
-			if (!isset($billItems[$bill->location_id][$bill->user_id])) {
-				$billItems[$bill->location_id][$bill->user_id] = [
+			$deal = $bill->deal;
+			
+			$billItems[$bill->user_id][$i] = [
+				'bill_number' => $bill->number,
+				'bill_status' => $bill->status ? $bill->status->name : '-',
+				'bill_amount' => $bill->amount,
+				'bill_payed_at' => $bill->payed_at ? $bill->payed_at->format('Y-m-d H:i:s') : '-',
+				'bill_location' => $bill->location ? $bill->location->name : '-',
+				'deal_number' => $deal->number,
+				'deal_status' => $deal->status ? $deal->status->name : '-',
+			];
+			
+			if (!isset($totalItems[$bill->user_id])) {
+				$totalItems[$bill->user_id] = [
 					'bill_count' => 0,
 					'bill_sum' => 0,
 					'payed_bill_count' => 0,
@@ -278,26 +291,28 @@ class ReportController extends Controller {
 			}
 			
 			// кол-во счетов
-			++$billItems[$bill->location_id][$bill->user_id]['bill_count'];
+			++$totalItems[$bill->user_id]['bill_count'];
 			// сумма счетов
-			$billItems[$bill->location_id][$bill->user_id]['bill_sum'] += $bill->amount;
+			$totalItems[$bill->user_id]['bill_sum'] += $bill->amount;
 			if ($bill->status && $bill->status->alias == Bill::PAYED_STATUS) {
 				// кол-во оплаченных счетов
-				++$billItems[$bill->location_id][$bill->user_id]['payed_bill_count'];
+				++$totalItems[$bill->user_id]['payed_bill_count'];
 				// сумма оплаченных счетов
-				$billItems[$bill->location_id][$bill->user_id]['payed_bill_sum'] += $bill->amount;
+				$totalItems[$bill->user_id]['payed_bill_sum'] += $bill->amount;
 				// сумма оплаченных счетов конкретного способа оплаты
 				$paymentMethodSumItems[$bill->payment_method_id] += $bill->amount;
 				$totalSum += $bill->amount;
 			}
 			$deal = $bill->deal;
-			if ($deal && !in_array($bill->deal_id, $billItems[$bill->location_id][$bill->user_id]['deal_ids'])) {
-				$billItems[$bill->location_id][$bill->user_id]['deal_ids'][] = $deal->id;
+			if ($deal && !in_array($bill->deal_id, $totalItems[$bill->user_id]['deal_ids'])) {
+				$totalItems[$bill->user_id]['deal_ids'][] = $deal->id;
 				// кол-во сделок
-				++$billItems[$bill->location_id][$bill->user_id]['deal_count'];
+				++$totalItems[$bill->user_id]['deal_count'];
 				// сумма сделок
-				$billItems[$bill->location_id][$bill->user_id]['deal_sum'] += $deal->amount();
+				$totalItems[$bill->user_id]['deal_sum'] += $deal->amount();
 			}
+			
+			++$i;
 		}
 		
 		$shiftItems = [];
@@ -305,6 +320,9 @@ class ReportController extends Controller {
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			->get();
+		if ($user->isAdmin()) {
+			$shifts = $shifts->where('user_id', $user->id);
+		}
 		foreach ($shifts as $shift) {
 			if (!isset($shiftItems[$shift->user_id])) {
 				$shiftItems[$shift->user_id] = 0;
@@ -314,45 +332,49 @@ class ReportController extends Controller {
 		
 		$userItems = [];
 		$users = User::where('enable', true)
-			->where('role', User::ROLE_ADMIN)
+			->whereIn('role', [User::ROLE_ADMIN, User::ROLE_SUPERADMIN])
 			->orderBy('lastname')
 			->orderBy('name')
 			->orderBy('middlename')
 			->get();
+		if ($user->isAdmin()) {
+			$users = $users->where('id', $user->id);
+		}
 		foreach ($users as $user) {
-			if (!$user->location_id) continue;
-			
-			$userItems[$user->location_id][] = [
+			$userItems[] = [
 				'id' => $user->id,
 				'fio' => $user->fioFormatted(),
+				'role' => User::ROLES[$user->role],
+				'city_name' => $user->city ? $user->city->name : '',
 			];
 		}
 		
-		$cities = $this->cityRepo->getList($this->request->user());
+		/*$cities = $this->cityRepo->getList($this->request->user());*/
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
 		
 		$data = [
 			'billItems' => $billItems,
+			'totalItems' => $totalItems,
 			'paymentMethodSumItems' => $paymentMethodSumItems,
 			'totalSum' => $totalSum,
 			'shiftItems' => $shiftItems,
 			'userItems' => $userItems,
-			'cities' => $cities,
+			/*'cities' => $cities,*/
 			'paymentMethods' => $paymentMethods,
 		];
 		
-		/*$reportFileName = '';
+		$reportFileName = '';
 		if ($isExport) {
 			$reportFileName = 'report-personal-selling-' . $user->id . '-' . date('YmdHis') . '.xlsx';
 			$exportResult = Excel::store(new PersonalSellingReportExport($data), 'report/' . $reportFileName);
 			if (!$exportResult) {
 				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 			}
-		}*/
+		}
 		
 		$VIEW = view('admin.report.personal-selling.list', $data);
 		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}
 	
 	public function unexpectedRepeatedIndex()
