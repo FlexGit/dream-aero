@@ -93,7 +93,7 @@ class Deal extends Model
 	use HasFactory, SoftDeletes, RevisionableTrait;
 	
 	const ATTRIBUTES = [
-		'number' => 'Нмер',
+		'number' => 'Номер',
 		'status_id' => 'Статус',
 		'contractor_id' => 'Контрагент',
 		'city_id' => 'Город',

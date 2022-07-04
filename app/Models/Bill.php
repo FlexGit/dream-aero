@@ -193,7 +193,7 @@ class Bill extends Model
 			$bill->uuid = $bill->generateUuid();
 			$bill->save();
 			
-			if ($bill->user) {
+			if ($bill->user_id) {
 				$deal = $bill->deal;
 				$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 				if ($deal->status_id == $createdStatus->id) {
@@ -209,7 +209,7 @@ class Bill extends Model
 		Bill::saved(function (Bill $bill) {
 			$deal = $bill->deal;
 
-			if ($bill->user && $bill->created_at != $bill->updated_at) {
+			if ($bill->user_id && $bill->created_at != $bill->updated_at) {
 				$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 				if ($deal->status_id == $createdStatus->id) {
 					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
