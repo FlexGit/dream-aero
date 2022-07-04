@@ -59,7 +59,7 @@ class LoadPlatformData extends Command
 		
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $query->/*unseen()->*/since(Carbon::now()->subDay())->get();
+		$messages = $query->/*unseen()->*/since(Carbon::now()->subDays(5))->get();
 	
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
