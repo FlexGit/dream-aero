@@ -222,6 +222,7 @@ class Deal extends Model
 			if ($deal->user_id) {
 				$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
 				if ($inWorkStatus) {
+					\Log::debug(777);
 					$deal->status_id = $inWorkStatus->id;
 					$deal->save();
 				}
@@ -230,6 +231,7 @@ class Deal extends Model
 
 		Deal::saved(function (Deal $deal) {
 			if (!$deal->user_id && $deal->source == Deal::ADMIN_SOURCE) {
+				\Log::debug(888);
 				$deal->user_id = \Auth::user()->id;
 				$deal->save();
 			}

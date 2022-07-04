@@ -183,6 +183,7 @@ class DealPosition extends Model
 				if ($deal->status_id == $createdStatus->id) {
 					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
 					if ($inWorkStatus) {
+						\Log::debug(555);
 						$deal->status_id = $inWorkStatus->id;
 						$deal->save();
 					}
