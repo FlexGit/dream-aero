@@ -177,13 +177,12 @@ class DealPosition extends Model
 				$dealPosition->user_id = \Auth::user()->id;
 				$dealPosition->save();
 			}
-			if ($dealPosition->user_id && $dealPosition->created_at != $dealPosition->updated_at) {
+			if ($dealPosition->user && $dealPosition->created_at != $dealPosition->updated_at) {
 				$deal = $dealPosition->deal;
 				$createdStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 				if ($deal->status_id == $createdStatus->id) {
 					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
 					if ($inWorkStatus) {
-						\Log::debug(555);
 						$deal->status_id = $inWorkStatus->id;
 						$deal->save();
 					}

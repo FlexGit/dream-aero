@@ -199,7 +199,6 @@ class Bill extends Model
 				if ($deal->status_id == $createdStatus->id) {
 					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
 					if ($inWorkStatus) {
-						\Log::debug(111);
 						$deal->status_id = $inWorkStatus->id;
 						$deal->save();
 					}
@@ -215,7 +214,6 @@ class Bill extends Model
 				if ($deal->status_id == $createdStatus->id) {
 					$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
 					if ($inWorkStatus) {
-						\Log::debug(222);
 						$deal->status_id = $inWorkStatus->id;
 						$deal->save();
 					}
@@ -228,23 +226,21 @@ class Bill extends Model
 			) {
 				$confirmedStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CONFIRMED_STATUS);
 				if ($confirmedStatus) {
-					\Log::debug(333);
 					$deal->status_id = $confirmedStatus->id;
 					$deal->save();
 				}
 			}
 			
-			if ($deal->status
+			/*if ($deal->status
 				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::IN_WORK_STATUS, Deal::PAUSED_STATUS])
 				&& $deal->balance() < 0
 			) {
 				$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
 				if ($inWorkStatus) {
-					\Log::debug(444);
 					$deal->status_id = $inWorkStatus->id;
 					$deal->save();
 				}
-			}
+			}*/
 		});
 	}
 
