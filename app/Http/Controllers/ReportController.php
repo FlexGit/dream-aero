@@ -8,6 +8,7 @@ use App\Exports\ContractorSelfMadePayedDealsReportExport;
 use App\Exports\NpsReportExport;
 use App\Exports\PersonalSellingReportExport;
 use App\Exports\PlatformDataReportExport;
+use App\Exports\SpontaneousRepeatedReportExport;
 use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\City;
@@ -442,18 +443,18 @@ class ReportController extends Controller {
 			'cities' => $cities,
 		];
 		
-		/*$reportFileName = '';
+		$reportFileName = '';
 		if ($isExport) {
-			$reportFileName = 'report-personal-selling-' . $user->id . '-' . date('YmdHis') . '.xlsx';
-			$exportResult = Excel::store(new PersonalSellingReportExport($data), 'report/' . $reportFileName);
+			$reportFileName = 'report-spontaneous-repeated-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new SpontaneousRepeatedReportExport($data), 'report/' . $reportFileName);
 			if (!$exportResult) {
 				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 			}
-		}*/
+		}
 		
 		$VIEW = view('admin.report.unexpected-repeated.list', $data);
 		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW/*, 'fileName' => $reportFileName*/]);
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}
 	
 	/**
