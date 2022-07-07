@@ -947,7 +947,7 @@ class ReportController extends Controller {
 			foreach ($items[PlatformLog::IN_UP_ACTION_TYPE][$interval->format('H')] ?? [] as $index => $item) {
 				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
 				if ($calendarHourInterval != $interval->format('H')) {
-					$items[PlatformLog::IN_UP_ACTION_TYPE][$calendarHourInterval][$index] = $item;
+					$items[PlatformLog::IN_UP_ACTION_TYPE][$calendarHourInterval][] = $item;
 					unset($items[PlatformLog::IN_UP_ACTION_TYPE][$interval->format('H')][$index]);
 				}
 			}
@@ -956,7 +956,7 @@ class ReportController extends Controller {
 			foreach ($items['admin'][$interval->format('H')] ?? [] as $index => $item) {
 				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
 				if ($calendarHourInterval != $interval->format('H')) {
-					$items['admin'][$calendarHourInterval][$index] = $item;
+					$items['admin'][$calendarHourInterval][] = $item;
 					unset($items['admin'][$interval->format('H')][$index]);
 				}
 			}
@@ -965,7 +965,7 @@ class ReportController extends Controller {
 			foreach ($items[PlatformLog::IN_AIR_ACTION_TYPE][$interval->format('H')] ?? [] as $index => $item) {
 				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
 				if ($calendarHourInterval != $interval->format('H')) {
-					$items[PlatformLog::IN_AIR_ACTION_TYPE][$calendarHourInterval][$index] = $item;
+					$items[PlatformLog::IN_AIR_ACTION_TYPE][$calendarHourInterval][] = $item;
 					unset($items[PlatformLog::IN_AIR_ACTION_TYPE][$interval->format('H')][$index]);
 				}
 			}
