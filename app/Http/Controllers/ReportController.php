@@ -949,6 +949,7 @@ class ReportController extends Controller {
 				if ($calendarHourInterval != $interval->format('H')) {
 					$items[PlatformLog::IN_UP_ACTION_TYPE][$calendarHourInterval][] = $item;
 					unset($items[PlatformLog::IN_UP_ACTION_TYPE][$interval->format('H')][$index]);
+					sort($items[PlatformLog::IN_UP_ACTION_TYPE][$calendarHourInterval]);
 				}
 			}
 			
@@ -958,6 +959,7 @@ class ReportController extends Controller {
 				if ($calendarHourInterval != $interval->format('H')) {
 					$items['admin'][$calendarHourInterval][] = $item;
 					unset($items['admin'][$interval->format('H')][$index]);
+					sort($items['admin'][$calendarHourInterval]);
 				}
 			}
 			
@@ -967,6 +969,7 @@ class ReportController extends Controller {
 				if ($calendarHourInterval != $interval->format('H')) {
 					$items[PlatformLog::IN_AIR_ACTION_TYPE][$calendarHourInterval][] = $item;
 					unset($items[PlatformLog::IN_AIR_ACTION_TYPE][$interval->format('H')][$index]);
+					sort($items[PlatformLog::IN_AIR_ACTION_TYPE][$calendarHourInterval]);
 				}
 			}
 		}
