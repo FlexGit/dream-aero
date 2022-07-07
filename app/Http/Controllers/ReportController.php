@@ -68,6 +68,8 @@ class ReportController extends Controller {
 			abort(404);
 		}
 		
+		\Log::debug('label1' . date('H:i:s'));
+		
 		$user = \Auth::user();
 		
 		$dateFromAt = $this->request->filter_date_from_at ?? '';
@@ -89,6 +91,8 @@ class ReportController extends Controller {
 		}
 		$events = $events->orderBy('start_at')
 			->get();
+		
+		\Log::debug('label2' . date('H:i:s'));
 		
 		$userAssessments = $eventItems = [];
 		foreach ($events as $event) {
@@ -178,6 +182,8 @@ class ReportController extends Controller {
 			}
 		}
 		
+		\Log::debug('label3' . date('H:i:s'));
+		
 		$userNps = [];
 		foreach ($userAssessments as $userId => $assessment) {
 			$goodBadDiff = $assessment['good'] - $assessment['bad'];
@@ -252,6 +258,8 @@ class ReportController extends Controller {
 			
 			$reportFileName = 'report-nps-' . $user->id . '-' . date('YmdHis') . '.xlsx';
 			Storage::disk('private')->put('report/' . $reportFileName, $content);
+			
+			\Log::debug('label4' . date('H:i:s'));
 			
 			return response()->json(['status' => 'success', 'fileName' => $reportFileName]);
 		}
