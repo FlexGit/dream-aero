@@ -935,7 +935,7 @@ class ReportController extends Controller {
 		}
 		
 		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
-			\Log::debug($items);
+			\Log::debug($items[PlatformLog::IN_UP_ACTION_TYPE]);
 		}
 		
 		$intervals = CarbonInterval::hour()->toPeriod(Carbon::parse($date . ' 09:00:00'), Carbon::parse($date . ' 23:59:59'));
@@ -970,8 +970,10 @@ class ReportController extends Controller {
 				}
 			}
 		}
-
-		//\Log::debug($items);
+		
+		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
+			\Log::debug($items[PlatformLog::IN_UP_ACTION_TYPE]);
+		}
 		
 		$data = [
 			'location' => $location,
