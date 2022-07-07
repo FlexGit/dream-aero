@@ -66,10 +66,15 @@
 								if (isset($items[$location->id][$simulator->id][$day]['ianm_time']) && $items[$location->id][$simulator->id][$day]['ianm_time'] >= 10) {
 									$ianmStyle = 'background-color: #dc3545;color: #ffffff;';
 								}
+
+								$mwpStyle = '';
+								if (isset($items[$location->id][$simulator->id][$day]['mwp_time']) && $items[$location->id][$simulator->id][$day]['mwp_time']) {
+									$mwpStyle = 'background-color: #dc3545;color: #ffffff;';
+								}
 							@endphp
 
 							{{--@if(isset($items[$location->id][$simulator->id][$day]) || isset($durationData[$location->id][$simulator->id][$day]))--}}
-								<td style="border: 1px solid #000;{{ $ianmStyle }}">
+								<td style="border: 1px solid #000;{{ $ianmStyle }}{{ $mwpStyle }}">
 									Сервер: {!! isset($items[$location->id][$simulator->id][$day]['platform_time']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['platform_time']) : ' нет данных' !!}
 									@if(isset($items[$location->id][$simulator->id][$day]['platform_time']) && isset($durationData[$location->id][$simulator->id][$day]))
 										[{{ round(($items[$location->id][$simulator->id][$day]['platform_time'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]
