@@ -232,9 +232,9 @@ class ReportController extends Controller {
 					}
 					$activeSheet->getStyle('A1:Z500')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 					$activeSheet->getStyle('A2:Z2')->getFont()->setBold(true)->getColor()->setRGB('17a2b8');
-					$activeSheet->getStyle('A3:Z3')->getFont()->setBold(true)->getColor()->setARGB('28a745');
-					$activeSheet->getStyle('A4:Z4')->getFont()->setBold(true)->getColor()->setARGB('ffc107');
-					$activeSheet->getStyle('A5:Z5')->getFont()->setBold(true)->getColor()->setARGB('dc3545');
+					$activeSheet->getStyle('A3:Z3')->getFont()->setBold(true)->getColor()->setRGB('28a745');
+					$activeSheet->getStyle('A4:Z4')->getFont()->setBold(true)->getColor()->setRGB('ffc107');
+					$activeSheet->getStyle('A5:Z5')->getFont()->setBold(true)->getColor()->setRGB('dc3545');
 					
 					++$i;
 				}
