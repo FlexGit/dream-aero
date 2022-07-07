@@ -12,6 +12,7 @@
 		<th nowrap>Сервер</th>
 		<th nowrap>Админ</th>
 		<th nowrap>Календарь</th>
+		<th nowrap>MWP</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -49,6 +50,13 @@
 				<td class="align-top text-center">
 					@if(isset($items['calendar'][$interval->format('H')]))
 						@foreach ($items['calendar'][$interval->format('H')] as $item)
+							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
+						@endforeach
+					@endif
+				</td>
+				<td class="align-top text-center">
+					@if(isset($items['mwp'][$interval->format('H')]))
+						@foreach ($items['mwp'][$interval->format('H')] as $item)
 							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
 						@endforeach
 					@endif

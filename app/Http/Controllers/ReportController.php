@@ -934,17 +934,39 @@ class ReportController extends Controller {
 			->where('flight_simulator_id', $simulatorId)
 			->where('data_at', $date)
 			->first();
-		if ($platformData) {
+		/*if ($platformData) {
 			$platformLogs = PlatformLog::where('platform_data_id', $platformData->id)
 				->orderBy('start_at')
 				->get();
-		}
-		foreach ($platformLogs ?? [] as $platformLog) {
-			$items[$platformLog->action_type][Carbon::parse($platformLog->start_at)->format('H')][] = [
-				'start_at' => Carbon::parse($platformLog->start_at)->format('H:i'),
-				'stop_at' => Carbon::parse($platformLog->stop_at)->format('H:i'),
+		}*/
+		foreach ($platformData->logs ?? [] as $log) {
+			$items[$log->action_type][Carbon::parse($log->start_at)->format('H')][] = [
+				'start_at' => Carbon::parse($log->start_at)->format('H:i'),
+				'stop_at' => Carbon::parse($log->stop_at)->format('H:i'),
 			];
+			
+			// для расчета MWP (Motion Without Permit)
+			if ($log->action_type != PlatformLog::IN_UP_ACTION_TYPE) continue;
+			
+			$currentMwps = [];
+			foreach ($events as $event) {
+				$currentMwps[] = (Carbon::parse($platformData->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) > PlatformLog::MWP_MINUTE_LAG
+					&& Carbon::parse($platformData->data_at . ' ' . $log->stop_at)->diffInMinutes(Carbon::parse($event->stop_at)->addMinutes($event->extra_time)) > PlatformLog::MWP_MINUTE_LAG
+				) ? 1 : 0;
+			}
+			if (!empty($currentMwps) && in_array(0, $currentMwps)) continue;
+			
+			//\Log::debug($log->start_at . ' - ' . $log->stop_at);
+			
+			/*if (HelpFunctions::mailGetTimeMinutes($log->stop_at) - HelpFunctions::mailGetTimeMinutes($log->start_at) > PlatformLog::MWP_LIMIT) {*/
+				$items[PlatformLog::MWP_ACTION_TYPE][Carbon::parse($log->start_at)->format('H')][] = [
+					'start_at' => Carbon::parse($log->start_at)->format('H:i'),
+					'stop_at' => Carbon::parse($log->stop_at)->format('H:i'),
+				];
+			/*}*/
 		}
+		
+		//\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
 		
 		/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
 			\Log::debug($items[PlatformLog::IN_UP_ACTION_TYPE]);
@@ -965,6 +987,16 @@ class ReportController extends Controller {
 				}
 			}
 			
+			// mwp
+			foreach ($items[PlatformLog::MWP_ACTION_TYPE][$interval->format('H')] ?? [] as $index => $item) {
+				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
+				if ($calendarHourInterval != $interval->format('H')) {
+					$items[PlatformLog::MWP_ACTION_TYPE][$calendarHourInterval][] = $item;
+					unset($items[PlatformLog::MWP_ACTION_TYPE][$interval->format('H')][$index]);
+					sort($items[PlatformLog::MWP_ACTION_TYPE][$calendarHourInterval]);
+				}
+			}
+
 			// админ
 			foreach ($items['admin'][$interval->format('H')] ?? [] as $index => $item) {
 				$calendarHourInterval = HelpFunctions::getHourInterval($item['start_at'], $interval->format('H'), $items['calendar']);
@@ -986,6 +1018,7 @@ class ReportController extends Controller {
 			}
 		}
 		
+		//\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
 		/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
 			\Log::debug($items[PlatformLog::IN_UP_ACTION_TYPE]);
 		}*/

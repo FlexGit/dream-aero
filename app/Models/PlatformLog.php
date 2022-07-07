@@ -43,6 +43,7 @@ class PlatformLog extends Model
 	const IN_AIR_ACTION_TYPE = 'in_air';
 	const IN_UP_ACTION_TYPE = 'in_up';
 	const IANM_ACTION_TYPE = 'ianm';
+	const MWP_ACTION_TYPE = 'mwp';
 	
 	const MWP_MINUTE_LAG = 8;
 	const MWP_LIMIT = 3;
