@@ -103,11 +103,11 @@ class PlatformData extends Model
 			$currentMwps = [];
 			foreach ($events as $event) {
 				if ($locationId == 1) {
-					\Log::debug($this->data_at . ' ' . $log->start_at . ' - ' . $event->start_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) . ' || ' . $this->data_at . ' ' . $log->stop_at . ' - ' . $event->stop_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes($event->stop_at));
+					\Log::debug($this->data_at . ' ' . $log->start_at . ' - ' . $event->start_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) . ' || ' . $this->data_at . ' ' . $log->stop_at . ' - ' . $event->stop_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes($event->stop_at) . ' || ' . $event->extra_time);
 				}
 				
 				$currentMwps[] = (Carbon::parse($this->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) > PlatformLog::MWP_MINUTE_LAG
-					&& Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes($event->stop_at) > PlatformLog::MWP_MINUTE_LAG
+					&& Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes(Carbon::parse($event->stop_at)->addMinutes($event->extra_time)) > PlatformLog::MWP_MINUTE_LAG
 				) ? 1 : 0;
 			}
 			
