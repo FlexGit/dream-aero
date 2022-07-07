@@ -89,6 +89,11 @@
 										IANM: {{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['ianm_time']) }}
 									@endif
 
+									@if(isset($items[$location->id][$simulator->id][$day]['mwp_time']) && $items[$location->id][$simulator->id][$day]['mwp_time'])
+										<br>
+										MWP: {{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['mwp_time']) }}
+									@endif
+
 									@if(isset($items[$location->id][$simulator->id][$day]['comment']))
 										<br>
 										Комментарий: {{ $items[$location->id][$simulator->id][$day]['comment'] }}
