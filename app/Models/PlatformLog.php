@@ -44,6 +44,9 @@ class PlatformLog extends Model
 	const IN_UP_ACTION_TYPE = 'in_up';
 	const IANM_ACTION_TYPE = 'ianm';
 	
+	const MWP_MINUTE_LAG = 8;
+	const MWP_LIMIT = 3;
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *

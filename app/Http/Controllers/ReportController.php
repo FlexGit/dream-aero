@@ -800,10 +800,22 @@ class ReportController extends Controller {
 				$items[$platformData->location_id][$platformData->flight_simulator_id] = [];
 			}
 			if (!isset($items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at])) {
+				// для расчета MWP (Motion Without Permit)
+				$calendarEvents = Event::where('location_id', $platformData->location_id)
+					->where('flight_simulator_id', $platformData->flight_simulator_id)
+					->whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT, Event::EVENT_TYPE_USER_FLIGHT])
+					->where('start_at', '>=', Carbon::parse($platformData->data_at)->startOfDay()->format('Y-m-d H:i:s'))
+					->where('start_at', '<=', Carbon::parse($platformData->data_at)->endOfDay()->format('Y-m-d H:i:s'))
+					->orderBy('start_at')
+					->get();
+				
+				$mwp = $platformData->mwp($calendarEvents/*, $platformData->location_id*/);
+				
 				$items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at] = [
 					'id' => $platformData->id,
 					'platform_time' => $platformData->total_up ? HelpFunctions::mailGetTimeMinutes($platformData->total_up) : 0,
 					'ianm_time' => $platformData->in_air_no_motion ? HelpFunctions::mailGetTimeMinutes($platformData->in_air_no_motion) : 0,
+					'mwp_time' => $mwp,
 					'comment' => $platformData->comment,
 				];
 				
@@ -846,7 +858,7 @@ class ReportController extends Controller {
 			'09' => 'Сентябрь',
 			'10' => 'Октябрь',
 			'11' => 'Ноябрь',
-			'12' => 'Декабрь'
+			'12' => 'Декабрь',
 		];
 		
 		$data = [
@@ -934,9 +946,9 @@ class ReportController extends Controller {
 			];
 		}
 		
-		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
+		/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
 			\Log::debug($items[PlatformLog::IN_UP_ACTION_TYPE]);
-		}
+		}*/
 		
 		$intervals = CarbonInterval::hour()->toPeriod(Carbon::parse($date . ' 09:00:00'), Carbon::parse($date . ' 23:59:59'));
 
@@ -974,9 +986,9 @@ class ReportController extends Controller {
 			}
 		}
 		
-		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
+		/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239' && $location->id == 1 && $simulator->id == 1) {
 			\Log::debug($items[PlatformLog::IN_UP_ACTION_TYPE]);
-		}
+		}*/
 		
 		$data = [
 			'location' => $location,

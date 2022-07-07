@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -79,5 +81,49 @@ class PlatformData extends Model
 	public function simulator()
 	{
 		return $this->hasOne(FlightSimulator::class, 'id', 'flight_simulator_id');
+	}
+	
+	public function logs()
+	{
+		return $this->hasMany(PlatformLog::class, 'platform_data_id', 'id');
+	}
+	
+	/**
+	 * Подсчет времени Motion without permit
+	 *
+	 * @param $events
+	 * @return float|int
+	 */
+	public function mwp($events/*, $locationId*/)
+	{
+		$mwp = 0;
+		foreach ($this->logs as $log) {
+			if ($log->action_type != PlatformLog::IN_UP_ACTION_TYPE) continue;
+			
+			$currentMwps = [];
+			foreach ($events as $event) {
+				/*if ($locationId == 5) {
+					\Log::debug($this->data_at . ' ' . $log->start_at . ' - ' . $event->start_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) . ' || ' . $this->data_at . ' ' . $log->stop_at . ' - ' . $event->stop_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes($event->stop_at));
+				}*/
+				
+				$currentMwps[] = (Carbon::parse($this->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) > PlatformLog::MWP_MINUTE_LAG
+					&& Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes($event->stop_at) > PlatformLog::MWP_MINUTE_LAG
+				) ? 1 : 0;
+			}
+			
+			/*if ($locationId == 5) {
+				\Log::debug($currentMwps);
+			}*/
+			
+			if (!empty($currentMwps) && in_array(0, $currentMwps)) continue;
+			
+			/*if ($locationId == 5) {
+				\Log::debug('mwp: ' . $log->start_at . ' - ' . $log->stop_at);
+			}*/
+			
+			$mwp += HelpFunctions::mailGetTimeMinutes($log->stop_at) - HelpFunctions::mailGetTimeMinutes($log->start_at);
+		}
+		
+		return $mwp > PlatformLog::MWP_LIMIT ? $mwp : 0;
 	}
 }
