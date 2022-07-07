@@ -809,7 +809,7 @@ class ReportController extends Controller {
 					->orderBy('start_at')
 					->get();
 				
-				$mwp = $platformData->mwp($calendarEvents/*, $platformData->location_id*/);
+				$mwp = $platformData->mwp($calendarEvents, $platformData->location_id);
 				
 				$items[$platformData->location_id][$platformData->flight_simulator_id][$platformData->data_at] = [
 					'id' => $platformData->id,
