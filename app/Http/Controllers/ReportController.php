@@ -31,6 +31,7 @@ use App\Services\HelpFunctions;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ReportController extends Controller {
 	private $request;
@@ -198,6 +199,63 @@ class ReportController extends Controller {
 
 		$cities = $this->cityRepo->getList($this->request->user());
 		
+		if ($isExport) {
+			$xls = new Spreadsheet();
+			$sheetIndex = 0;
+			foreach ($cities as $city) {
+				$xls->createSheet($sheetIndex);
+				$xls->setActiveSheetIndex($sheetIndex);
+				$activeSheet = $xls->getActiveSheet();
+				$activeSheet->setTitle($city->name);
+				
+				$i = 1;
+				foreach($users as $user) {
+					if ($user->city_id != $city->id || !isset($userNps[$user->id])) continue;
+					
+					$activeSheet->setCellValueByColumnAndRow($i, 1, $user->fioFormatted());
+					$activeSheet->setCellValueByColumnAndRow($i, 2, $userNps[$user->id] . '%');
+					$activeSheet->setCellValueByColumnAndRow($i, 3, $userAssessments[$user->id]['good']);
+					$activeSheet->setCellValueByColumnAndRow($i, 4, $userAssessments[$user->id]['neutral']);
+					$activeSheet->setCellValueByColumnAndRow($i, 5, $userAssessments[$user->id]['bad']);
+					
+					$j = 6;
+					foreach ($eventItems[$user->id] ?? [] as $eventItem) {
+						if (!$eventItem['assessment']) continue;
+						
+						$activeSheet->setCellValueByColumnAndRow($i, $j, $eventItem['assessment']);
+						
+						++$j;
+					}
+					
+					for($col = 'A';$col !== 'Z';$col++) {
+						$activeSheet->getColumnDimension($col)->setAutoSize(true);
+					}
+					$activeSheet->getStyle('A1:Z500')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+					$activeSheet->getStyle('A2:Z2')->getFont()->setBold(true)->getColor()->setRGB('17a2b8');
+					$activeSheet->getStyle('A3:Z3')->getFont()->setBold(true)->getColor()->setARGB('28a745');
+					$activeSheet->getStyle('A4:Z4')->getFont()->setBold(true)->getColor()->setARGB('ffc107');
+					$activeSheet->getStyle('A5:Z5')->getFont()->setBold(true)->getColor()->setARGB('dc3545');
+					
+					++$i;
+				}
+				
+				++$sheetIndex;
+			}
+			
+			$xls->setActiveSheetIndex(0);
+			$writer = new Xlsx($xls);
+
+			ob_start();
+			$writer->save('php://output');
+			$content = ob_get_contents();
+			ob_end_clean();
+			
+			$reportFileName = 'report-nps-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			Storage::disk('private')->put('report/' . $reportFileName, $content);
+			
+			return response()->json(['status' => 'success', 'fileName' => $reportFileName]);
+		}
+		
 		$data = [
 			'eventItems' => $eventItems,
 			'users' => $users,
@@ -205,19 +263,10 @@ class ReportController extends Controller {
 			'userAssessments' => $userAssessments,
 			'userNps' => $userNps,
 		];
-		
-		$reportFileName = '';
-		if ($isExport) {
-			$reportFileName = 'report-nps-' . $user->id . '-' . date('YmdHis') . '.xlsx';
-			$exportResult = Excel::store(new NpsReportExport($data), 'report/' . $reportFileName);
-			if (!$exportResult) {
-				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-			}
-		}
-		
+
 		$VIEW = view('admin.report.nps.list', $data);
 		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	public function personalSellingIndex()

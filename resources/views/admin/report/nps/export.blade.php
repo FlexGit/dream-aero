@@ -26,27 +26,17 @@
 							<tr>
 								<td>{{ $userAssessments[$user->id]['bad'] }}</td>
 							</tr>
-							@foreach($events as $event)
-								@php
-									$assessment = 0;
-									if ($user->isAdmin()) {
-										if ($event->user_id != $user->id) continue;
-
-										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_ADMIN);
-									} elseif($user->isPilot()) {
-										if ($event->pilot_id != $user->id) continue;
-
-										$assessment = $event->getAssessment(app('\App\Models\User')::ROLE_PILOT);
-									}
-									$assessmentState = $event->getAssessmentState($assessment);
-									if (!$assessment) continue;
-								@endphp
+							@foreach($eventItems[$user->id] ?? [] as $eventItem)
+								@if (!$eventItem['assessment'])
+									@continue
+								@endif
 								<tr>
 									<td>
-										{{ $assessment }}
+										{{ $eventItem['assessment'] }}
 									</td>
 								</tr>
 							@endforeach
+
 						</table>
 					</td>
 				@endforeach
