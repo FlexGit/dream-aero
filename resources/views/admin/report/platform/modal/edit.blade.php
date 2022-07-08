@@ -57,7 +57,10 @@
 				<td class="align-top text-center">
 					@if(isset($items['mwp'][$interval->format('H')]))
 						@foreach ($items['mwp'][$interval->format('H')] as $item)
-							<div>{{ $item['start_at'] }} - {{ $item['stop_at'] }}</div>
+							@if(!$item['mwp_time'])
+								@continue
+							@endif
+							<div class="bg-danger" style="height: 100%;color: #fff;">{{ app('\App\Services\HelpFunctions')::minutesToTime($item['mwp_time']) }}</div>
 						@endforeach
 					@endif
 				</td>

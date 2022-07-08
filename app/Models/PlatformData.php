@@ -92,38 +92,89 @@ class PlatformData extends Model
 	 * Подсчет времени Motion without permit
 	 *
 	 * @param $events
-	 * @return float|int
+	 * @return array
 	 */
-	public function mwp($events, $locationId)
+	public function mwp($events = [])
 	{
-		$mwp = 0;
+		foreach ($events ?? [] as $index => $event) {
+			if (!isset($event[$index - 1])) continue;
+			
+			if ($event['start_at'] == $events[$index - 1]['stop_at']) {
+				$events[$index - 1]['stop_at'] = $event['stop_at'];
+				unset($events[$index]);
+			}
+		}
+		array_values($events);
+		
+		$items = [];
 		foreach ($this->logs as $log) {
 			if ($log->action_type != PlatformLog::IN_UP_ACTION_TYPE) continue;
+			if (!Carbon::parse($log->start_at)->diffInMinutes($log->stop_at)) continue;
 			
-			$currentMwps = [];
+			$serverStartAt = Carbon::parse($this->data_at . ' ' . $log->start_at);
+			$serverStartAtWithLag = Carbon::parse($this->data_at . ' ' . $log->start_at)->addMinutes(PlatformLog::MWP_MINUTE_LAG);
+			$serverStopAt = Carbon::parse($this->data_at . ' ' . $log->stop_at);
+			$serverStopAtWithLag = Carbon::parse($this->data_at . ' ' . $log->stop_at)->subMinutes(PlatformLog::MWP_MINUTE_LAG);
+			
 			foreach ($events as $event) {
-				if ($locationId == 1) {
-					//\Log::debug($this->data_at . ' ' . $log->start_at . ' - ' . $event->start_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) . ' || ' . $this->data_at . ' ' . $log->stop_at . ' - ' . $event->stop_at . ' - ' . Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes($event->stop_at) . ' || ' . $event->extra_time);
+				$eventStopAtWithExtraTime = Carbon::parse($event['stop_at'])->addMinutes($event['extra_time'])->format('Y-m-d H:i:s');
+				
+				// время подъема сервера попадает в интервал события,
+				// и время опускания сервера попадает в интервал события
+				if (($serverStartAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStartAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
+					&& ($serverStopAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStopAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
+				) {
+					$items[Carbon::parse($log->start_at)->format('H')][$log->id] = 0;
+					break;
 				}
 				
-				$currentMwps[] = (Carbon::parse($this->data_at . ' ' . $log->start_at)->diffInMinutes($event->start_at) > PlatformLog::MWP_MINUTE_LAG
-					&& Carbon::parse($this->data_at . ' ' . $log->stop_at)->diffInMinutes(Carbon::parse($event->stop_at)->addMinutes($event->extra_time)) > PlatformLog::MWP_MINUTE_LAG
-				) ? 1 : 0;
+				// время подъема сервера попадает в интервал события,
+				// и время опускания сервера позже времени окончания события
+				if (($serverStartAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStartAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
+					&& ($serverStopAt->gt($eventStopAtWithExtraTime) || $serverStopAtWithLag->gt($eventStopAtWithExtraTime))
+					&& ($serverStopAt->diffInMinutes($eventStopAtWithExtraTime) < 30)
+				) {
+					$items[Carbon::parse($log->start_at)->format('H')][$log->id] = $serverStopAt->diffInMinutes($eventStopAtWithExtraTime);
+					break;
+				}
+				
+				// время опускания сервера попадает в интервал события,
+				// и время подъема сервера раньше времени начала события
+				if (($serverStopAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStopAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
+					&& ($serverStartAt->lt($event['start_at']) || $serverStartAtWithLag->lt($event['start_at']))
+					&& ($serverStartAt->diffInMinutes($event['start_at']) < 30)
+				) {
+					$items[Carbon::parse($log->start_at)->format('H')][$log->id] = $serverStartAt->diffInMinutes($event['start_at']);
+					break;
+				}
+				
+				// время подъема сервера раньше времени начала события,
+				// и время опускания сервера позже времени окончания события
+				if (($serverStartAt->lt($event['start_at']) || $serverStartAtWithLag->lt($event['start_at']))
+					&& ($serverStopAt->gt($eventStopAtWithExtraTime) || $serverStopAtWithLag->gt($eventStopAtWithExtraTime))
+				) {
+					$items[Carbon::parse($log->start_at)->format('H')][$log->id] = $serverStartAt->diffInMinutes($event['start_at']) + $serverStopAt->diffInMinutes($eventStopAtWithExtraTime);
+					break;
+				}
 			}
 			
-			if ($locationId == 1) {
-				//\Log::debug($currentMwps);
+			// данный элемент сервера уже был ранее сопоставлен событию календаря
+			if (isset($items[Carbon::parse($log->start_at)->format('H')][$log->id])) continue;
+			
+			foreach ($events as $event) {
+				// время подъема сервера не попадает в интервал события,
+				// и время опускания сервера не попадает в интервал события
+				if (!$serverStartAt->isBetween($event['start_at'], $eventStopAtWithExtraTime)
+					&& !$serverStartAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime)
+					&& !$serverStopAt->isBetween($event['start_at'], $eventStopAtWithExtraTime)
+					&& !$serverStopAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime)
+				) {
+					$items[Carbon::parse($log->start_at)->format('H')][$log->id] = Carbon::parse($log->stop_at)->diffInMinutes($log->start_at);
+					break;
+				}
 			}
-			
-			if (!empty($currentMwps) && in_array(0, $currentMwps)) continue;
-			
-			if ($locationId == 1) {
-				//\Log::debug('mwp: ' . $log->start_at . ' - ' . $log->stop_at);
-			}
-			
-			$mwp += HelpFunctions::mailGetTimeMinutes($log->stop_at) - HelpFunctions::mailGetTimeMinutes($log->start_at);
 		}
 		
-		return $mwp > PlatformLog::MWP_LIMIT ? $mwp : 0;
+		return $items;
 	}
 }

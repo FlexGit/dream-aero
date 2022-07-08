@@ -364,9 +364,10 @@ class HelpFunctions {
 	{
 		$h = floor($minutes / 60);
 		$m = $minutes % 60;
-		$s = 0;
+		//$s = 0;
 		
-		return sprintf('%02d:%02d:%02d', $h, $m, $s);
+		//return sprintf('%02d:%02d:%02d', $h, $m, $s);
+		return sprintf('%02d:%02d', $h, $m);
 	}
 	
 	/**
