@@ -97,14 +97,15 @@ class PlatformData extends Model
 	public function mwp($events = [])
 	{
 		foreach ($events ?? [] as $index => $event) {
-			if (!isset($event[$index - 1])) continue;
+			if (!isset($events[$index - 1])) continue;
 			
 			if ($event['start_at'] == $events[$index - 1]['stop_at']) {
+				//\Log::debug($index . ' - ' . $event['start_at'] . ' - ' . ($index - 1) . ' - ' . $events[$index - 1]['stop_at']);
 				$events[$index - 1]['stop_at'] = $event['stop_at'];
-				unset($events[$index]);
+				$events[$index]['start_at'] = $events[$index - 1]['start_at'];
 			}
 		}
-		array_values($events);
+		$events = array_values($events);
 		
 		$items = [];
 		foreach ($this->logs as $log) {
