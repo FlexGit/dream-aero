@@ -985,17 +985,17 @@ class ReportController extends Controller {
 			];
 		}
 		
-		/*foreach ($events ?? [] as $index => $event) {
-			if (!isset($events[$index + 1])) continue;
+		foreach ($events ?? [] as $index => $event) {
+			if (!isset($events[$index - 1])) continue;
 			
-			if ($event['stop_at'] == $events[$index + 1]['start_at']) {
+			if ($event['start_at'] == $events[$index - 1]['stop_at']) {
 				//\Log::debug($index . ' - ' . $event['start_at'] . ' - ' . ($index - 1) . ' - ' . $events[$index - 1]['stop_at']);
-				$events[$index + 1]['start_at'] = $event['start_at'];
-				unset($events[$index]);
+				$events[$index - 1]['stop_at'] = $event['stop_at'];
+				$events[$index]['start_at'] = $events[$index - 1]['start_at'];
 			}
 		}
 		$events = array_values($events);
-		\Log::debug($events);*/
+		//\Log::debug($events);
 		
 		// события платформы
 		$platformData = PlatformData::where('location_id', $locationId)
