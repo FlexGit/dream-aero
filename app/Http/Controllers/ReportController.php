@@ -988,10 +988,11 @@ class ReportController extends Controller {
 		foreach ($events ?? [] as $index => $event) {
 			if (!isset($events[$index - 1])) continue;
 			
-			if ($event['start_at'] == $events[$index - 1]['stop_at']) {
+			if (Carbon::parse($event['start_at'])->eq(Carbon::parse($events[$index - 1]['stop_at'])->addMinutes($events[$index - 1]['extra_time']))) {
 				//\Log::debug($index . ' - ' . $event['start_at'] . ' - ' . ($index - 1) . ' - ' . $events[$index - 1]['stop_at']);
 				$events[$index - 1]['stop_at'] = $event['stop_at'];
-				$events[$index]['start_at'] = $events[$index - 1]['start_at'];
+				$events[$index - 1]['extra_time'] = $event['extra_time'];
+				//$events[$index]['start_at'] = $events[$index - 1]['start_at'];
 			}
 		}
 		$events = array_values($events);
@@ -1021,7 +1022,7 @@ class ReportController extends Controller {
 				$eventStopAtWithExtraTime = Carbon::parse($event['stop_at'])->addMinutes($event['extra_time'])->format('Y-m-d H:i:s');
 				
 				//\Log::debug('Server: ' . $log->start_at . ' - ' . $log->stop_at);
-				//\Log::debug('Server: ' . $event->start_at . ' - ' . $eventStopAtWithExtraTime);
+				//\Log::debug('Server: ' . $event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
 				
 				// время подъема сервера попадает в интервал события,
 				// и время опускания сервера попадает в интервал события
