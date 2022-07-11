@@ -1276,6 +1276,7 @@ class ApiController extends Controller
 		}
 
 		$tariffs = Product::where('product_type_id', $tariffTypeId)
+			->where('is_active', true)
 			->whereRelation('cities', 'cities.id', '=', $city->id)
 			->get();
 		
@@ -1373,7 +1374,8 @@ class ApiController extends Controller
 			}
 		}
 
-		$tariff = Product::whereRelation('cities', 'cities.id', '=', $city->id)
+		$tariff = Product::where('is_active', true)
+			->whereRelation('cities', 'cities.id', '=', $city->id)
 			->find($tariffId);
 		if (!$tariff) {
 			return $this->responseError('Тариф не найден', 400);
@@ -2261,7 +2263,8 @@ class ApiController extends Controller
 		
 		// Если дата - выходный день или праздник, меняем Regular на Ultimate
 		if ($flightDate && (in_array(date('w', strtotime(Carbon::parse($flightDate)->format('d.m.Y'))), [0, 6]) || in_array(Carbon::parse($flightDate)->format('d.m.Y'), Deal::HOLIDAYS))) {
-			$product = Product::where('alias', ProductType::ULTIMATE_ALIAS . '_' . $product->duration)
+			$product = Product::where('is_active', true)
+				->where('alias', ProductType::ULTIMATE_ALIAS . '_' . $product->duration)
 				->first();
 		}
 		

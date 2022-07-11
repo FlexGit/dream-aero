@@ -81,6 +81,7 @@ class Product extends Model
 		'created_at' => 'datetime:Y-m-d H:i:s',
 		'updated_at' => 'datetime:Y-m-d H:i:s',
 		'deleted_at' => 'datetime:Y-m-d H:i:s',
+		'is_active' => 'boolean',
 		'data_json' => 'array',
 	];
 	
