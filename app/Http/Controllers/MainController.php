@@ -1095,7 +1095,9 @@ class MainController extends Controller
 		foreach ($productTypes as $productType) {
 			$products[mb_strtoupper($productType->alias)] = [];
 			
-			foreach ($productType->products ?? [] as $product) {
+			foreach ($productType->products as $product) {
+				if (!$product->is_active) continue;
+				
 				foreach ($cityProducts ?? [] as $cityProduct) {
 					if ($product->id != $cityProduct->id) continue;
 					
