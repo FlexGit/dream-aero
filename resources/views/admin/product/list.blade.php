@@ -16,9 +16,9 @@
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/product/{{ $product->id }}/edit" data-action="/product/{{ $product->id }}" data-id="{{ $product->id }}" data-method="PUT" data-title="Редактирование" title="Редактировать">
 			<i class="fa fa-edit" aria-hidden="true"></i>
 		</a>&nbsp;&nbsp;&nbsp;
-		<a href="javascript:void(0)" data-toggle="modal" data-url="/product/{{ $product->id }}/delete" data-action="/product/{{ $product->id }}" data-id="2" data-method="DELETE" data-title="Удаление" title="Удалить">
+		{{--<a href="javascript:void(0)" data-toggle="modal" data-url="/product/{{ $product->id }}/delete" data-action="/product/{{ $product->id }}" data-id="2" data-method="DELETE" data-title="Удаление" title="Удалить">
 			<i class="fa fa-trash" aria-hidden="true"></i>
-		</a>
+		</a>--}}
 	</td>
 </tr>
 @endforeach
