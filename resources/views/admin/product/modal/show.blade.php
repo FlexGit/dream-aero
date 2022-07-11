@@ -31,6 +31,10 @@
 			<td>{{ isset($product->data_json['description']) ? $product->data_json['description'] : '' }}</td>
 		</tr>
 		<tr class="odd">
+			<td>Активность</td>
+			<td>{{ $product->is_active ? 'Да' : 'Нет' }}</td>
+		</tr>
+		<tr class="odd">
 			<td>Дата создания</td>
 			<td>{{ $product->created_at }}</td>
 		</tr>

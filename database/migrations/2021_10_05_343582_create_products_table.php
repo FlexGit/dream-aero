@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
 			$table->integer('product_type_id')->default(0)->index()->comment('тип продукта');
 			$table->integer('employee_id')->default(0)->index()->comment('пилот');
 			$table->integer('duration')->comment('длительность полёта, мин.');
+			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();

@@ -219,6 +219,7 @@ class ProductController extends Controller
 		$product->product_type_id = $this->request->product_type_id;
 		$product->user_id = $this->request->user_id ?? 0;
 		$product->duration = $this->request->duration ?? 0;
+		$product->is_active = $this->request->is_active;
 		$data = [];
 		$data['description'] = $this->request->description ?? null;
 		if ($isIconFileUploaded) {
@@ -277,6 +278,7 @@ class ProductController extends Controller
 		$product->product_type_id = $this->request->product_type_id;
 		$product->user_id = $this->request->user_id ?? 0;
 		$product->duration = $this->request->duration ?? 0;
+		$product->is_active = $this->request->is_active;
 		$data = $product->data_json;
 		$data['description'] = $this->request->description ?? null;
 		if ($isIconFileUploaded) {

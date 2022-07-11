@@ -31,8 +31,9 @@
 						<tr>
 							<th class="text-center">Наименование</th>
 							<th class="text-center">Алиас</th>
-							<th class="text-center text-nowrap d-none d-md-table-cell">Тип тарифа</th>
-							<th class="text-center text-nowrap d-none d-lg-table-cell">Длительность, мин</th>
+							<th class="text-center text-nowrap">Тип тарифа</th>
+							<th class="text-center text-nowrap">Длительность, мин</th>
+							<th class="text-center">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>

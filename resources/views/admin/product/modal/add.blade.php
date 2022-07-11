@@ -41,3 +41,11 @@
 	<label for="description">Описание</label>
 	<textarea class="form-control" id="description" name="description" rows="5"></textarea>
 </div>
+<div class="form-group">
+	<label for="is_active">Активность</label>
+	<select class="form-control form-control-sm" id="is_active" name="is_active">
+		<option value="1" selected>Да</option>
+		<option value="0">Нет</option>
+	</select>
+</div>
+
