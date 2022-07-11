@@ -861,6 +861,9 @@ class ReportController extends Controller {
 					->toArray();
 				//\Log::debug($calendarEvents);
 				
+				// группировка событий календаря по времени
+				$calendarEvents = $platformData->groupEvents($calendarEvents, 1);
+				
 				$mwpItems = $platformData->mwp($calendarEvents);
 				$mwp = 0;
 				foreach ($mwpItems as $hour => $log) {
@@ -985,24 +988,15 @@ class ReportController extends Controller {
 			];
 		}
 		
-		foreach ($events ?? [] as $index => $event) {
-			if (!isset($events[$index - 1])) continue;
-			
-			if (Carbon::parse($event['start_at'])->eq(Carbon::parse($events[$index - 1]['stop_at'])->addMinutes($events[$index - 1]['extra_time']))) {
-				//\Log::debug($index . ' - ' . $event['start_at'] . ' - ' . ($index - 1) . ' - ' . $events[$index - 1]['stop_at']);
-				$events[$index - 1]['stop_at'] = $event['stop_at'];
-				$events[$index - 1]['extra_time'] = $event['extra_time'];
-				//$events[$index]['start_at'] = $events[$index - 1]['start_at'];
-			}
-		}
-		$events = array_values($events);
-		//\Log::debug($events);
-		
-		// события платформы
 		$platformData = PlatformData::where('location_id', $locationId)
 			->where('flight_simulator_id', $simulatorId)
 			->where('data_at', $date)
 			->first();
+		
+		// группировка событий календаря по времени
+		$events = $platformData->groupEvents($events, 1);
+		
+		// события платформы
 		foreach ($platformData->logs as $log) {
 			$items[$log->action_type][Carbon::parse($log->start_at)->format('H')][] = [
 				'start_at' => Carbon::parse($log->start_at)->format('H:i'),

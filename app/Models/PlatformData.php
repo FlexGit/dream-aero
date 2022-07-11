@@ -96,18 +96,6 @@ class PlatformData extends Model
 	 */
 	public function mwp($events = [])
 	{
-		foreach ($events ?? [] as $index => $event) {
-			if (!isset($events[$index - 1])) continue;
-			
-			if (Carbon::parse($event['start_at'])->eq(Carbon::parse($events[$index - 1]['stop_at'])->addMinutes($events[$index - 1]['extra_time']))) {
-				//\Log::debug($index . ' - ' . $event['start_at'] . ' - ' . ($index - 1) . ' - ' . $events[$index - 1]['stop_at']);
-				$events[$index - 1]['stop_at'] = $event['stop_at'];
-				$events[$index - 1]['extra_time'] = $event['extra_time'];
-				//$events[$index]['start_at'] = $events[$index - 1]['start_at'];
-			}
-		}
-		$events = array_values($events);
-		
 		$items = [];
 		foreach ($this->logs as $log) {
 			if ($log->action_type != PlatformLog::IN_UP_ACTION_TYPE) continue;
@@ -178,5 +166,29 @@ class PlatformData extends Model
 		}
 		
 		return $items;
+	}
+	
+	/**
+	 * Группировка событий календаря по времени
+	 *
+	 * @param $events
+	 * @return array
+	 */
+	public function groupEvents($events, $iteration = 1) {
+		foreach ($events ?? [] as $index => $event) {
+			if (!isset($events[$index - 1])) continue;
+			
+			if (Carbon::parse($event['start_at'])->eq(Carbon::parse($events[$index - 1]['stop_at'])->addMinutes($events[$index - 1]['extra_time']))) {
+				$events[$index - 1]['stop_at'] = $event['stop_at'];
+				$events[$index - 1]['extra_time'] = $event['extra_time'];
+				unset($events[$index]);
+
+				$events = self::groupEvents(array_values($events), ++$iteration);
+				
+				return array_values($events);
+			}
+		}
+		
+		return array_values($events);
 	}
 }
