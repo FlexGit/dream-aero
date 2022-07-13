@@ -579,9 +579,12 @@ class DealController extends Controller
 			}
 		}
 		
-		$roistatDeal = Deal::whereNotNull('roistat')
-			->where('roistat', '!=', 'unknown')
-			->first();
+		if ($contractor) {
+			$roistatDeal = Deal::where('contractor_id', $contractor->id)
+				->whereNotNull('roistat')
+				->where('roistat', '!=', 'unknown')
+				->first();
+		}
 		
 		try {
 			\DB::beginTransaction();
@@ -1022,9 +1025,12 @@ class DealController extends Controller
 			$data['comment'] = $comment;
 		}
 		
-		$roistatDeal = Deal::whereNotNull('roistat')
-			->where('roistat', '!=', 'unknown')
-			->first();
+		if ($contractor) {
+			$roistatDeal = Deal::where('contractor_id', $contractor->id)
+				->whereNotNull('roistat')
+				->where('roistat', '!=', 'unknown')
+				->first();
+		}
 		
 		try {
 			\DB::beginTransaction();
@@ -1297,9 +1303,12 @@ class DealController extends Controller
 			$data['comment'] = $comment;
 		}
 		
-		$roistatDeal = Deal::whereNotNull('roistat')
-			->where('roistat', '!=', 'unknown')
-			->first();
+		if ($contractor) {
+			$roistatDeal = Deal::where('contractor_id', $contractor->id)
+				->whereNotNull('roistat')
+				->where('roistat', '!=', 'unknown')
+				->first();
+		}
 		
 		try {
 			\DB::beginTransaction();
