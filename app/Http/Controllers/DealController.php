@@ -1438,7 +1438,7 @@ class DealController extends Controller
 		$name = $this->request->name ?? '';
 		$email = $this->request->email ?? '';
 		$phone = $this->request->phone ?? '';
-		//$roistatVisit = $this->request->roistat_visit ?? null;
+		$roistatVisit = $this->request->roistat_visit ?? null;
 		
 		try {
 			\DB::beginTransaction();
@@ -1450,7 +1450,7 @@ class DealController extends Controller
 			if ($contractorId) {
 				$deal->contractor_id = $contractorId;
 			}
-			//$deal->roistat = $roistatVisit;
+			$deal->roistat = $roistatVisit;
 			$deal->save();
 			
 			if ($contractorId) {
