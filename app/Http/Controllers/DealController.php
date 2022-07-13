@@ -579,6 +579,10 @@ class DealController extends Controller
 			}
 		}
 		
+		$roistatDeal = Deal::whereNotNull('roistat')
+			->where('roistat', '!=', 'unknown')
+			->first();
+		
 		try {
 			\DB::beginTransaction();
 
@@ -612,7 +616,7 @@ class DealController extends Controller
 			$deal->email = $email;
 			$deal->source = $source ?: Deal::ADMIN_SOURCE;
 			$deal->user_id = $this->request->user()->id ?? 0;
-			$deal->roistat = $roistatVisit;
+			$deal->roistat = $roistatVisit ?: ($roistatDeal ? $roistatDeal->roistat : null);
 			$deal->save();
 			
 			$position = new DealPosition();
@@ -1017,7 +1021,11 @@ class DealController extends Controller
 		if ($comment) {
 			$data['comment'] = $comment;
 		}
-
+		
+		$roistatDeal = Deal::whereNotNull('roistat')
+			->where('roistat', '!=', 'unknown')
+			->first();
+		
 		try {
 			\DB::beginTransaction();
 
@@ -1044,7 +1052,7 @@ class DealController extends Controller
 					$deal->email = $email;
 					$deal->source = $source ?: Deal::ADMIN_SOURCE;
 					$deal->user_id = $this->request->user()->id ?? 0;
-					$deal->roistat = $roistatVisit;
+					$deal->roistat = $roistatVisit ?: ($roistatDeal ? $roistatDeal->roistat : null);
 					$deal->save();
 					
 					$position = new DealPosition();
@@ -1288,7 +1296,11 @@ class DealController extends Controller
 		if ($comment) {
 			$data['comment'] = $comment;
 		}
-
+		
+		$roistatDeal = Deal::whereNotNull('roistat')
+			->where('roistat', '!=', 'unknown')
+			->first();
+		
 		try {
 			\DB::beginTransaction();
 			
@@ -1313,7 +1325,7 @@ class DealController extends Controller
 			$deal->email = $email;
 			$deal->user_id = $this->request->user()->id ?? 0;
 			$deal->source = $source ?: Deal::ADMIN_SOURCE;
-			$deal->roistat = $roistatVisit;
+			$deal->roistat = $roistatVisit ?: ($roistatDeal ? $roistatDeal->roistat : null);
 			$deal->save();
 
 			$position = new DealPosition();
