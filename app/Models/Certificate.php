@@ -174,18 +174,13 @@ class Certificate extends Model
 		$position = $this->position;
 		if (!$position) return null;
 		
-		$deal = $position->deal;
-		if (!$deal) return null;
+		$bill = $position->bill;
+		if (!$bill) return null;
+		if (!$bill->payed_at) return null;
 		
-		if ($deal->balance() < 0) {
-			$bill = $position->bill;
-			if (!$bill) return null;
-			if (!$bill->payed_at) return null;
-			
-			$billStatus = $bill->status;
-			if (!$billStatus) return null;
-			if ($billStatus->alias != Bill::PAYED_STATUS) return null;
-		}
+		$billStatus = $bill->status;
+		if (!$billStatus) return null;
+		if ($billStatus->alias != Bill::PAYED_STATUS) return null;
 		
 		$product = $this->product;
 		if (!$product) return null;
