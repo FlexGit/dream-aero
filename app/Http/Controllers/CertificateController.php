@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CertificateExport;
+use App\Models\Bill;
 use App\Models\Content;
 use App\Models\DealPosition;
 use App\Models\PaymentMethod;
@@ -490,6 +491,14 @@ class CertificateController extends Controller
 		
 		$certificate = Certificate::find($this->request->certificate_id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
+		
+		$bill = $position->bill;
+		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
+		if (!$bill->payed_at) return response()->json(['status' => 'error', 'reason' => 'Счет не оплачен']);
+		
+		$billStatus = $bill->status;
+		if (!$billStatus) return response()->json(['status' => 'error', 'reason' => 'Счет не оплачен']);
+		if ($billStatus->alias != Bill::PAYED_STATUS) return response()->json(['status' => 'error', 'reason' => 'Счет не оплачен']);
 		
 		//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
 		$job = new \App\Jobs\SendCertificateEmail($certificate);
