@@ -121,7 +121,7 @@ class BillController extends Controller
 			'deal_id' => 'required|numeric|min:0|not_in:0',
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
-			'amount' => 'required|numeric|min:0|not_in:0',
+			'amount' => 'required|numeric|min:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -237,7 +237,7 @@ class BillController extends Controller
 		$rules = [
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
-			'amount' => 'required|numeric|min:0|not_in:0',
+			'amount' => 'required|numeric|min:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
