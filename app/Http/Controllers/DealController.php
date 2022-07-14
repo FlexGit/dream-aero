@@ -579,13 +579,6 @@ class DealController extends Controller
 			}
 		}
 		
-		if ($contractor) {
-			$roistatDeal = Deal::where('contractor_id', $contractor->id)
-				->whereNotNull('roistat')
-				->where('roistat', '!=', 'unknown')
-				->first();
-		}
-		
 		try {
 			\DB::beginTransaction();
 
@@ -599,7 +592,12 @@ class DealController extends Controller
 				$contractor->user_id = $this->request->user()->id ?? 0;
 				$contractor->save();
 			}
-
+			
+			$roistatDeal = Deal::where('contractor_id', $contractor->id)
+				->whereNotNull('roistat')
+				->where('roistat', '!=', 'unknown')
+				->first();
+			
 			$certificate = new Certificate();
 			$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
 			$certificate->status_id = $certificateStatus->id ?? 0;
@@ -1025,13 +1023,6 @@ class DealController extends Controller
 			$data['comment'] = $comment;
 		}
 		
-		if ($contractor) {
-			$roistatDeal = Deal::where('contractor_id', $contractor->id)
-				->whereNotNull('roistat')
-				->where('roistat', '!=', 'unknown')
-				->first();
-		}
-		
 		try {
 			\DB::beginTransaction();
 
@@ -1047,6 +1038,11 @@ class DealController extends Controller
 						$contractor->user_id = $this->request->user()->id ?? 0;
 						$contractor->save();
 					}
+					
+					$roistatDeal = Deal::where('contractor_id', $contractor->id)
+						->whereNotNull('roistat')
+						->where('roistat', '!=', 'unknown')
+						->first();
 					
 					$deal = new Deal();
 					$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
@@ -1303,13 +1299,6 @@ class DealController extends Controller
 			$data['comment'] = $comment;
 		}
 		
-		if ($contractor) {
-			$roistatDeal = Deal::where('contractor_id', $contractor->id)
-				->whereNotNull('roistat')
-				->where('roistat', '!=', 'unknown')
-				->first();
-		}
-		
 		try {
 			\DB::beginTransaction();
 			
@@ -1323,7 +1312,12 @@ class DealController extends Controller
 				$contractor->user_id = $this->request->user()->id ?? 0;
 				$contractor->save();
 			}
-
+			
+			$roistatDeal = Deal::where('contractor_id', $contractor->id)
+				->whereNotNull('roistat')
+				->where('roistat', '!=', 'unknown')
+				->first();
+			
 			$deal = new Deal();
 			$dealStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::CREATED_STATUS);
 			$deal->status_id = $dealStatus->id ?? 0;
