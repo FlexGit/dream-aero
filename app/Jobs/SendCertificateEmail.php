@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
+use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\City;
 use App\Models\ProductType;
@@ -44,6 +45,14 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		
 		$deal = $position->deal;
 		if (!$deal) return null;
+		
+		$bill = $position->bill;
+		if (!$bill) return null;
+		if (!$bill->payed_at) return null;
+		
+		$billStatus = $bill->status;
+		if (!$billStatus) return null;
+		if ($billStatus->alias != Bill::PAYED_STATUS) return null;
 		
 		$product = $position->product;
 		if (!$product) return null;
