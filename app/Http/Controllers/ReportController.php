@@ -994,7 +994,7 @@ class ReportController extends Controller {
 			->first();
 		
 		// группировка событий календаря по времени
-		$events = $platformData->groupEvents($events, 1);
+		$events = $platformData ? $platformData->groupEvents($events, 1) : [];
 		
 		// события платформы
 		foreach ($platformData->logs as $log) {
