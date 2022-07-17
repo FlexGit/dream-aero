@@ -22,7 +22,13 @@
 								</div>
 								<div class="bottom-inf">
 									<p class="bold">@lang('main.price.подарить-сертификат')</p>
-									<p>@lang('main.price.владелец-подарочного-сертификата')</p>
+									<p>
+										@if(count($locationItems) > 1)
+											@lang('main.price.владелец-подарочного-сертификата-несколько-локаций', ['locationItems' => implode(', ', $locationItems)])
+										@else
+											@lang('main.price.владелец-подарочного-сертификата-одна-локация')
+										@endif
+									</p>
 								</div>
 								<div class="ab-inf">
 									<p class="bold">@lang('main.price.аэрофлот-бонус')</p>

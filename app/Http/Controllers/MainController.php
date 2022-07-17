@@ -533,6 +533,11 @@ class MainController extends Controller
 			}
 		}
 		
+		$locationItems = [];
+		foreach ($city->locations as $location) {
+			$locationItems[] = $location->name;
+		}
+		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'prices_' . $city->alias);
 		
 		return view('price', [
@@ -541,6 +546,7 @@ class MainController extends Controller
 			'page' => $page ?? new Content,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
+			'locationItems' => $locationItems,
 		]);
 	}
 	
