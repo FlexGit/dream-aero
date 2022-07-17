@@ -1,5 +1,5 @@
 <div class="gl-default uk-modal-dialog">
-    <span class="city">Ваш город — <b class="gl-city-name_ru">{{ $city->name }}</b></span>
+    <span class="city" data-current-alias="{{ $city->alias }}">Ваш город — <b class="gl-city-name_ru">{{ $city->name }}</b></span>
 	<span class="btn-yes">Да</span>
 	<span class="btn-change">Изменить</span>
 	<ul class="gl-change-list" style="display: none;">
