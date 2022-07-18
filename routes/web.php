@@ -481,6 +481,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
 		Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
 		
+		Route::get('nezabyivaemyie-emoczii', [MainController::class, 'unforgettableEmotions'])->name('unforgettable-emotions');
+		Route::get('professionalnaya-pomoshh', [MainController::class, 'professionalHelp'])->name('professional-help');
+		Route::get('pogruzhenie-v-mir-aviaczii', [MainController::class, 'immersionAviationWorld'])->name('pogruzhenie-v-mir-aviaczii');
 		Route::get('lechenie-aerofobii', [MainController::class, 'flyNoFear'])->name('lechenie-aerofobii');
 		
 		Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
@@ -556,6 +559,11 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::get('vipflight', [MainController::class, 'vipFlight'])->name('vip-flight');
 		Route::get('sertbuy', [MainController::class, 'certificateForm'])->name('certificate-form');
+		
+		Route::get('nezabyivaemyie-emoczii', [MainController::class, 'unforgettableEmotions'])->name('unforgettable-emotions');
+		Route::get('professionalnaya-pomoshh', [MainController::class, 'professionalHelp'])->name('professional-help');
+		Route::get('pogruzhenie-v-mir-aviaczii', [MainController::class, 'immersionAviationWorld'])->name('pogruzhenie-v-mir-aviaczii');
+		Route::get('lechenie-aerofobii', [MainController::class, 'flyNoFear'])->name('lechenie-aerofobii');
 		
 		Route::post('promocode/verify', [MainController::class, 'promocodeVerify']);
 		

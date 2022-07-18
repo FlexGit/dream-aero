@@ -351,7 +351,51 @@ return [
 	
 	'offer.title' => 'Public offer',
 	
+	'unforgettable-emotions.title' => 'Unforgettable emotions and impressions',
+	'unforgettable-emotions.preview' => '<p>Do you want to feel like a pilot of a passenger airliner? You will say that this is impossible, time has passed, and dreams of heaven have remained in the distant past? Nothing happened. At Dream Aero, everyone can fly with the help of a flight simulator.</p><p>In terms of sensations and effects, the flight simulator creates a 100% accurate reality. Entering the cockpit of the flight simulator, you find yourself in a new, wonderful world of aviation.</p>',
+	'unforgettable-emotions.text' => '<h1>I\'m a pilot!</h1>
+<p>The virtual reality of flight conveys the nuances of air travel so accurately that it is not so difficult to imagine yourself as a real pilot. An experienced instructor will be in the co-pilot\'s seat, who will help you understand the intricacies of aircraft control and save you from mistakes.</p>
+<p>The cockpit, control panels, levers, steering wheel and other equipment are real, exactly the same as installed in a real aircraft.</p>
+<ul>
+<li>Mobile platform connected to the computer reacts to every action of the pilot. When the plane moves along the runway, you will even feel the joints on the concrete pavement, feel the moment of liftoff from the ground with your whole body, react to acceleration, drop in altitude, rolls and falls into air pockets.</li>
+<li>The cockpit glazing is actually a high-tech panoramic video system. On panoramic screens, a real picture of the area is visualized. You can independently choose almost any airport in the world from where you would like to take off and where you want to land. The reliability of visual information is emphasized by the appropriate voice acting, repeating all the sounds that can be heard on the plane during takeoff, flight, landing.</li>
+<li>You can take two friends with you into the cockpit, who will be present during the operation of the flight simulator as passengers. Some of Dream Aero\'s clients admit that flying as a passenger is no less interesting than being a pilot whose attention is absorbed by the process of control. Friends have time to feel all the nuances of dynamics, visualization and voice acting.</li>
+</ul>
+<p>It is difficult to describe in words the explosion of emotions experienced by a person holding the steering wheel or sidestick of a real airliner. He feels like he actually controls the flight of a huge steel machine. Just remember the excitement that gripped you when you first sat behind the wheel of a car, and then multiply this feeling by 10 or better by 100.</p>
+<p>Flying above the clouds is the cherished dream of many. With our flight simulator, you can realize the cherished desires that originate in childhood or early adolescence. A certificate for a flight simulator is a great gift for a loved one. Make sure that doing miracles with your own hands is not difficult at all. Book a flight on a flight simulator with Dream Aero, and give the opportunity to feel like a pilot of a passenger liner to your best friend to fulfill his dream and cause a storm of unforgettable emotions.</p>',
+	
+	'professional-help.title' => 'Professional assistance',
+	'professional-help.preview' => '<p>Enjoy a safe and fascinating flight aboard our flight simulator while accompanied by one of our experienced instructors. Our instructors have extensive piloting experience and know all the nuances of safely flying a large aircraft.</p>',
+	'professional-help.text' => '<h2>Flight Simulator / Cockpit Environment</h2>
+<p>The cockpit simulator is equipped just like the cockpit of a real aircraft. The pilot seats, control panels, displays, panoramic glass and steering wheel create the impression of a real flight. You will take the captain’s seat, while your instructor will serves as your first officer.</p>
+<p>The seats in the second row are for your friends or family. A maximum of 4 people may be present in the cockpit at a time: 3 guests and 1 instructor. Do not worry; you will do all the flying. Our pilot instructor will correct your actions ever so slightly and intervene only in the event of a mishap or hazard. When we say “hazard”, we mean only virtual hazards, of course. Your life will not be in danger at any time throughout your simulation experience.</p>
+<h2>Piloting Challenges</h2>
+<p>You will learn to appreciate how difficult a pilot’s job is. The sheer number of instruments and all the flickering lights will make your head spin. Every instrument on the panel in front of you will need a share of your attention. Add to that, our dynamic and moving platform, which imitates the vibration of the aircraft, every twist and turn, acceleration during takeoff and deceleration when landing.</p>
+<p>The panoramic display will show real-life landscapes that a pilot would see while up in the sky. Pilots who use the simulator to train for their flights say that the simulator’s visual experience is very similar to that of flying in real life.</p>
+<p>When you fly for the first time, you may be too occupied with controlling the aircraft and therefore won’t find the time to take in the scenery. In these situations, the guidance of a pilot instructor will be most valuable.</p>
+<h2 class="western">Professional Adviсe</h2>
+<p>Your instructor will adviсe you on flight sequences as well as the logic of piloting an aircraft. You will learn why you must warm up the engines, monitor your plane’s flaps, when you should switch on autopilot, and much more. By the end of your first session, you will have an understanding of what the crew of a passenger airliner does in various situations.</p>
+<p>Understanding the essence of piloting operations helps many people cope with aerophobia and uncontrollable panic attacks. Our pilot instructors are calm, collect, and a symbol of real professionalism. Visitors will feel confident in the presence of our pilot instructors and support staff. We pride ourselves on being role models for everyone, inside and outside of aviation.</p>',
+	
+	'immersion-aviation-world.title' => 'Immersion in the world of aviation',
+	'immersion-aviation-world.preview' => '<p>Are you open to new experiences? If so, then why not try piloting a passenger airliner? Dream Aero offers you a virtual trip in the cockpit of our flight simulator.</p>',
+	'immersion-aviation-world.text' => '<h2>Accurate and true-to-life visualization</h2>
+<p>Visual effects and tactile impressions combine to provide a very authentic flight experience. Behind the panoramic glass of the cockpit is a state-of-the-art video display system.</p>
+<ul>
+<li>Sitting in the captain’s seat, the pilot sees what a pilot would see during a real flight.</li>
+<li>The image on the screen will change as the aircraft changes its position.</li>
+<li>The system includes a complete geographic model of the globe, with all rivers, lakes, seas, and mountain ranges held in the computer’s memory. The approach zones of all major airports are accurately represented in our system.</li>
+<li>Choose any place you wish to visit. You can choose locations you’ve never been to, or places where you’ll recognize every building or bush. Choose any destination in the world!</li>
+</ul>
+<p>Flying above mountains or flying over seas can differ greatly, both in optics and in how you pilot the aircraft. In the first officer’s seat, your instructor will help you navigate the plane safely above mountain tops. When flying over seas, you will need to fly at a certain altitude and be prepared for frequently changing air flows.</p>
+<p>A half hour or even a full hour of training is not enough to become a real pilot, but you will certainly learn to appreciate the complexities and nature of a pilot’s work. Piloting the plane will help many people deal with aerophobia and any travel-related anxiety. After your simulation experience, you will at least get a general idea of what a pilot does when the plane takes off, when you experience turbulence, sharp turns, and when landing the plane.</p>
+<p>Share the joy of this new experience with your family and friends. Take two friends along in the passenger seats behind you, so they can enjoy all the visual and sound effects of your flight. They may by all means take a turn at the wheel themselves and learn to fly the aircraft!</p>
+<p>Book a session on our simulator and enjoy the romantic spirit of flying from the captain’s perspective.</p>
+<h2>True-to-life, without limitations</h2>
+<p>Our flight simulators fly in all weather conditions. Thunderstorms, hurricanes, thick fog or heavy snow will not be an obstacle. There are no delays when flying with Dream Aero - our airline arrives at any location, precisely on time.</p>',
+	
 	'lechenie-aerofobii.title' => 'Treatment of aerophobia',
+	'lechenie-aerofobii.preview' => '<p>Many people are afraid of flying. This is a normal reaction when placed in an uncomfortable environment. Most people can easily keep these fears under control, but when fear takes hold, you experience what is known as a phobia. Phobias have a profoundly negative effect on our lives, and they must be addressed as serious concerns. Phobias are often detached from objective reality, and in many instances are irrational. Someone with aerophobia may have never flown before, but nevertheless, that person may be fearful. Comparably, they may be aware that riding in a car is much more dangerous, yet, they still may be unable to overcome their phobia.</p>',
 	
 	'pay.не-указан-номер-счета' => 'For the selected city, the account number of the payment system is not specified',
 	'pay.счет-не-найден' => 'Invoice number not found',

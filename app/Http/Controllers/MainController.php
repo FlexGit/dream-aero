@@ -384,6 +384,45 @@ class MainController extends Controller
 			'cityAlias' => $cityAlias,
 		]);
 	}
+	
+	public function unforgettableEmotions()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'nezabyivaemyie-emoczii');
+		
+		return view('unforgettable-emotions', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+	
+	public function professionalHelp()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'professionalnaya-pomoshh');
+		
+		return view('professional-help', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
+	
+	public function immersionAviationWorld()
+	{
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'pogruzhenie-v-mir-aviaczii');
+		
+		return view('immersion-aviation-world', [
+			'page' => $page ?? new Content,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+		]);
+	}
 
 	public function flyNoFear()
 	{
