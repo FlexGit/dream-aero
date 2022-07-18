@@ -865,6 +865,9 @@ class ReportController extends Controller {
 				$calendarEvents = $platformData->groupEvents($calendarEvents, 1);
 				
 				$mwpItems = $platformData->mwp($calendarEvents);
+				/*if ($platformData->location_id == 18) {
+					\Log::debug($mwpItems);
+				}*/
 				$mwp = 0;
 				foreach ($mwpItems as $hour => $log) {
 					foreach ($log as $mwpValue) {
@@ -969,9 +972,9 @@ class ReportController extends Controller {
 		$items = [];
 		
 		// события календаря и админа
-		$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT, Event::EVENT_TYPE_USER_FLIGHT])
-			->where('location_id', $locationId)
+		$events = Event::where('location_id', $locationId)
 			->where('flight_simulator_id', $simulatorId)
+			->whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT, Event::EVENT_TYPE_USER_FLIGHT])
 			->where('start_at', '>=', Carbon::parse($date)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('start_at', '<=', Carbon::parse($date)->endOfDay()->format('Y-m-d H:i:s'))
 			->orderBy('start_at')
@@ -1108,7 +1111,7 @@ class ReportController extends Controller {
 			}
 		}
 		
-		$intervals = CarbonInterval::hour()->toPeriod(Carbon::parse($date . ' 09:00:00'), Carbon::parse($date . ' 23:59:59'));
+		$intervals = CarbonInterval::hour()->toPeriod(Carbon::parse($date . ' 08:00:00'), Carbon::parse($date . ' 23:59:59'));
 
 		// собираем разные типы одного события в один интервал,
 		// если из-за небольших расхождений по времени они попали в разные интервалы
