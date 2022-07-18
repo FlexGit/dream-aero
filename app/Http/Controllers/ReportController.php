@@ -879,7 +879,7 @@ class ReportController extends Controller {
 					'id' => $platformData->id,
 					'platform_time' => $platformData->total_up ? HelpFunctions::mailGetTimeMinutes($platformData->total_up) : 0,
 					'ianm_time' => $platformData->in_air_no_motion ? HelpFunctions::mailGetTimeMinutes($platformData->in_air_no_motion) : 0,
-					'mwp_time' => $mwp,
+					'mwp_time' => ($mwp >= 10) ? $mwp : 0,
 					'comment' => $platformData->comment,
 				];
 				
