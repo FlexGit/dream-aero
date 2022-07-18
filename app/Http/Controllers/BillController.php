@@ -179,6 +179,9 @@ class BillController extends Controller
 			$bill->location_id = /*$location->id*/$this->request->user()->location_id ?? 0;
 			$bill->payment_method_id = $paymentMethodId;
 			$bill->status_id = $this->request->status_id ?? 0;
+			if ($status->alias == Bill::PAYED_STATUS) {
+				$bill->payed_at = Carbon::now()->format('Y-m-d H:i:s');
+			}
 			$bill->amount = $this->request->amount ?? 0;
 			$bill->currency_id = $this->request->currency_id ?? 0;
 			$bill->user_id = $this->request->user()->id;
