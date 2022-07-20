@@ -479,6 +479,16 @@ $(function(){
 			}
 		});
 	});
+
+	$(document).on('click', '.js-expanded-link', function() {
+		var $container = $('.js-expanded-container');
+
+		if ($container.hasClass('hidden')) {
+			$container.removeClass('hidden');
+		} else {
+			$container.addClass('hidden');
+		}
+	});
 });
 
 function bodyPadding(){
