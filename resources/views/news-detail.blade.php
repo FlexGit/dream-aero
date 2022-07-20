@@ -22,6 +22,10 @@
 
 								<div class="clearfix"></div>
 
+								@if($news->alias == 'kurs-future-pilot')
+									@include('forms.feedback')
+								@endif
+
 								<div class="rating rating_active">
 									<div class="rating__best">
 										<div class="rating__current" data-id="{{ $news->id }}" style="display: block; width: calc(130px * {{ $news->rating_value / 5 }});"></div>
@@ -33,7 +37,6 @@
 									</div>
 								</div>
 								<div itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating" style="font-size: 14px; padding-top: 3px; padding-bottom: 3px;">
-
 									@lang('main.news.рейтинг'): <b class="rating-value">{{ $news->rating_value }}</b>/5 - <b itemprop="ratingCount" class="rating-count">{{ $news->rating_count }}</b>
 									<img src="{{ asset('img/vote.png') }}" style="width: 20px;" alt="">
 									<meta itemprop="bestRating" content="5">

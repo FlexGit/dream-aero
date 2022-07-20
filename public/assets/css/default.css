@@ -300,3 +300,70 @@ h1.block-title:after {
 		display: block;
 	}
 }
+
+.content .feedback .form {
+	text-align: center;
+	margin-top: 65px;
+	padding-bottom: 81px;
+	position: relative;
+}
+.content .feedback .form:before {
+	content: "";
+	width: 100%;
+	left: 0;
+	top: 0;
+	height: 100%;
+	display: block;
+	position: absolute;
+	background-color: #ff8200;
+}
+.content .feedback .form form {
+	padding-top: 60px;
+	z-index: 1;
+	position: relative;
+}
+.content .feedback .form input[type="text"],
+.content .feedback .form input[type="email"],
+.content .feedback .form input[type="tel"] {
+	width: 84%;
+	padding: 0 0 4px 10px;
+	border: 0;
+	border-bottom: 2px solid #fff;
+	color: #fff;
+	background: none;
+	font-size: 11px;
+	letter-spacing: .5px;
+	margin-bottom: 24px;
+}
+.content .feedback .form textarea {
+	width: 84%;
+	height: 140px;
+	font-size: 11px;
+	letter-spacing: .5px;
+	color: #fff;
+	margin-top: 17px;
+	padding: 7px 0 4px 10px;
+	border: 0;
+	border-bottom: 2px solid #fff;
+	background: rgba(255,255,255,.2);
+}
+.content .feedback .form button {
+	width: 220px;
+	color: #ff8200;
+	display: block;
+	font-family: "GothamProMedium";
+	font-size: 14px;
+	letter-spacing: .2px;
+	margin: 50px 0 0 36%;
+	padding: 20px 0;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	transition: all .5s ease 0s;
+	vertical-align: top;
+	background-color: transparent;
+	border: 0;
+}
+::placeholder {
+	color: #fff;
+}

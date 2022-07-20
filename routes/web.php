@@ -521,6 +521,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
 		Route::post('question', [MainController::class, 'question'])->name('questionStore');
+		Route::post('feedback', [MainController::class, 'feedback'])->name('feedbackStore');
 		
 		Route::group(['middleware' => ['citycheck']], function () {
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
@@ -594,6 +595,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
 		Route::post('question', [MainController::class, 'question'])->name('questionStore');
+		Route::post('feedback', [MainController::class, 'feedback'])->name('feedbackStore');
 		
 		Route::group(['middleware' => ['citycheck']], function () {
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');

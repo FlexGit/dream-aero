@@ -290,7 +290,7 @@ $(function(){
 
 	$(document).on('change', 'input[name="consent"]', function() {
 		var $popup = $(this).closest('.popup, .form'),
-			$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-callback-btn, .js-review-btn, .js-question-btn');
+			$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-callback-btn, .js-review-btn, .js-question-btn, .js-feedback-btn');
 		if ($(this).is(':checked')) {
 			$btn.removeClass('button-pipaluk-grey')
 				.addClass('button-pipaluk-orange')
@@ -384,6 +384,52 @@ $(function(){
 
 				$alertSuccess.removeClass('hidden');
 				$popup.find('#name, #email, #body').val('');
+			}
+		});
+	});
+
+	$(document).on('click', '.js-feedback-btn', function() {
+		var $popup = $(this).closest('form'),
+			name = $popup.find('#name').val(),
+			phone = $popup.find('#phone').val(),
+			email = $popup.find('#email').val(),
+			body = $popup.find('#body').val(),
+			$alertSuccess = $popup.find('.alert-success'),
+			$alertError = $popup.find('.alert-danger');
+
+		var data = {
+			'name': name,
+			'phone': phone,
+			'email': email,
+			'body': body,
+		};
+
+		$.ajax({
+			url: '/feedback',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function (result) {
+				$alertSuccess.addClass('hidden');
+				$alertError.text('').addClass('hidden');
+				$('.border-error').removeClass('border-error');
+
+				if (result.status !== 'success') {
+					if (result.reason) {
+						$alertError.text(result.reason).removeClass('hidden');
+					}
+					if (result.errors) {
+						const entries = Object.entries(result.errors);
+						entries.forEach(function (item, key) {
+							var fieldId = item[0];
+							$('#' + fieldId).addClass('border-error');
+						});
+					}
+					return;
+				}
+
+				$alertSuccess.removeClass('hidden');
+				$popup.find('#name, #phone, #email, #body').val('');
 			}
 		});
 	});

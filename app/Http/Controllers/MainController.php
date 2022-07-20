@@ -1121,6 +1121,48 @@ class MainController extends Controller
 	}
 	
 	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function feedback()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$rules = [
+			'name' => 'required',
+			'phone' => 'required',
+			'email' => 'required|email',
+			'body' => 'required',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'name' => trans('main.feedback.как-вас-зовут'),
+				'phone' => trans('main.feedback.ваш-телефон'),
+				'email' => trans('main.feedback.ваш-email'),
+				'body' => trans('main.feedback.введите-сообщение'),
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
+		}
+		
+		$name = trim(strip_tags($this->request->name));
+		$phone = trim(strip_tags($this->request->phone));
+		$email = trim(strip_tags($this->request->email));
+		$body = trim(strip_tags($this->request->body));
+		
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		
+		//dispatch(new \App\Jobs\SendQuestionEmail($name, $email, $body));
+		$job = new \App\Jobs\SendPersonalFeedbackEmail($name, $phone, $email, $body, $city ? $city->name : '');
+		$job->handle();
+		
+		return response()->json(['status' => 'success']);
+	}
+
+	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
 	public function vipFlight()

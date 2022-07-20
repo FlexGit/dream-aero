@@ -100,6 +100,12 @@ return [
 	'question.введите-сообщение' => 'ENTER YOUR MESSAGE',
 	'question.сообщение-успешно-отправлено' => 'Your message has been sent successfully!',
 	
+	'feedback.как-вас-зовут' => 'WHAT IS YOUR NAME?',
+	'feedback.ваш-телефон' => 'YOUR PHONE NUMBER',
+	'feedback.ваш-email' => 'YOUR E-MAIL',
+	'feedback.введите-сообщение' => 'ENTER YOUR MESSAGE',
+	'feedback.сообщение-успешно-отправлено' => 'Your message has been sent successfully!',
+	
 	'o-trenazhere.title' => 'ABOUT THE SIMULATOR',
 	'o-trenazhere.забронировать' => 'Book a flight',
 	'o-trenazhere.компания-предлагает-вам-отправиться-в-полет' => 'Dream Aero invites you to “take to the skies” on our passenger airliner flight simulator. Almost all parameters of our flight simulator meet the Doc 9625 ICAO FSTD Type VII requirements, which allow us to offer an authentic experience of flying a plane, suitable even for real-life pilots.',
