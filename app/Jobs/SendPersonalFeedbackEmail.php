@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
-use App\Models\Contractor;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,16 +12,19 @@ class SendPersonalFeedbackEmail extends Job implements ShouldQueue {
 	use InteractsWithQueue, SerializesModels, ReleaseHelperTrait;
 
 	protected $name;
+	protected $parentName;
+	protected $age;
 	protected $phone;
 	protected $email;
 	protected $messageText;
 	protected $cityName;
 
-	public function __construct($name, $phone, $email, $messageText, $cityName) {
+	public function __construct($name, $parentName, $age, $phone, $email, $cityName) {
 		$this->name = $name;
+		$this->parentName = $parentName;
+		$this->age = $age;
 		$this->phone = $phone;
 		$this->email = $email;
-		$this->messageText = $messageText;
 		$this->cityName = $cityName;
 	}
 	
@@ -31,13 +33,14 @@ class SendPersonalFeedbackEmail extends Job implements ShouldQueue {
 	 */
 	public function handle() {
 		$recipients = [];
-		$recipients[] = env('ADMIN_EMAIL');
+		$recipients[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'name' => $this->name ?? '',
+			'parentName' => $this->parentName ?? '',
+			'age' => $this->age ?? '',
 			'phone' => $this->phone ?? '',
 			'email' => $this->email ?? '',
-			'messageText' => $this->messageText ?? '',
 			'cityName' => $this->cityName ?? '',
 		];
 

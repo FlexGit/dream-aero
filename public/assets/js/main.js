@@ -391,17 +391,21 @@ $(function(){
 	$(document).on('click', '.js-feedback-btn', function() {
 		var $popup = $(this).closest('form'),
 			name = $popup.find('#name').val(),
+			parentName = $popup.find('#parent_name').val(),
+			age = $popup.find('#age').val(),
 			phone = $popup.find('#phone').val(),
 			email = $popup.find('#email').val(),
-			body = $popup.find('#body').val(),
+			/*body = $popup.find('#body').val(),*/
 			$alertSuccess = $popup.find('.alert-success'),
 			$alertError = $popup.find('.alert-danger');
 
 		var data = {
 			'name': name,
+			'parent_name': parentName,
+			'age': age,
 			'phone': phone,
 			'email': email,
-			'body': body,
+			/*'body': body,*/
 		};
 
 		$.ajax({
@@ -429,7 +433,7 @@ $(function(){
 				}
 
 				$alertSuccess.removeClass('hidden');
-				$popup.find('#name, #phone, #email, #body').val('');
+				$popup.find('#name, #parent_name, #age, #phone, #email').val('');
 			}
 		});
 	});

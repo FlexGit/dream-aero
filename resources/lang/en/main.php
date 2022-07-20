@@ -100,10 +100,12 @@ return [
 	'question.введите-сообщение' => 'ENTER YOUR MESSAGE',
 	'question.сообщение-успешно-отправлено' => 'Your message has been sent successfully!',
 	
-	'feedback.как-вас-зовут' => 'WHAT IS YOUR NAME?',
-	'feedback.ваш-телефон' => 'YOUR PHONE NUMBER',
-	'feedback.ваш-email' => 'YOUR E-MAIL',
-	'feedback.введите-сообщение' => 'ENTER YOUR MESSAGE',
+	'feedback.как-вас-зовут' => 'Participant name',
+	'feedback.имя-родителя' => 'Parent\'s name',
+	'feedback.возраст-участника' => 'Participant age',
+	'feedback.ваш-телефон' => 'Phone number',
+	'feedback.ваш-email' => 'E-mail',
+	'feedback.введите-сообщение' => 'Enter your message',
 	'feedback.сообщение-успешно-отправлено' => 'Your message has been sent successfully!',
 	
 	'o-trenazhere.title' => 'ABOUT THE SIMULATOR',

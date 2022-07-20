@@ -1131,32 +1131,33 @@ class MainController extends Controller
 		
 		$rules = [
 			'name' => 'required',
+			'age' => 'required',
 			'phone' => 'required',
 			'email' => 'required|email',
-			'body' => 'required',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
 				'name' => trans('main.feedback.как-вас-зовут'),
+				'age' => trans('main.feedback.возраст-участника'),
 				'phone' => trans('main.feedback.ваш-телефон'),
 				'email' => trans('main.feedback.ваш-email'),
-				'body' => trans('main.feedback.введите-сообщение'),
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
 		}
 		
 		$name = trim(strip_tags($this->request->name));
+		$parentName = trim(strip_tags($this->request->parent_name));
+		$age = trim(strip_tags($this->request->age));
 		$phone = trim(strip_tags($this->request->phone));
 		$email = trim(strip_tags($this->request->email));
-		$body = trim(strip_tags($this->request->body));
 		
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		//dispatch(new \App\Jobs\SendQuestionEmail($name, $email, $body));
-		$job = new \App\Jobs\SendPersonalFeedbackEmail($name, $phone, $email, $body, $city ? $city->name : '');
+		$job = new \App\Jobs\SendPersonalFeedbackEmail($name, $parentName, $age, $phone, $email, $city ? $city->name : '');
 		$job->handle();
 		
 		return response()->json(['status' => 'success']);
