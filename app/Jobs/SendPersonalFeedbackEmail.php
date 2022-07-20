@@ -33,7 +33,7 @@ class SendPersonalFeedbackEmail extends Job implements ShouldQueue {
 	 */
 	public function handle() {
 		$recipients = [];
-		$recipients[] = env('DEV_EMAIL');
+		$recipients[] = env('ADMIN_EMAIL');
 
 		$messageData = [
 			'name' => $this->name ?? '',
