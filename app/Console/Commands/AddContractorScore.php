@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Event;
+use App\Models\ProductType;
 use App\Models\Score;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -53,6 +54,10 @@ class AddContractorScore extends Command
 		
 			$product = $position->product;
 			if (!$product) continue;
+		
+			$productType = $product->productType;
+			if (!$productType) continue;
+			if (!in_array($productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) continue;
 		
 			$city = $position->city;
 			if (!$city) continue;
