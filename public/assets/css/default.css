@@ -364,6 +364,6 @@ h1.block-title:after {
 	background-color: transparent;
 	border: 0;
 }
-.feedback::-moz-placeholder {
+.feedback input::-webkit-input-placeholder {
 	color: #fff;
 }
