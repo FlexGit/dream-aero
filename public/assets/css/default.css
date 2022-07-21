@@ -384,4 +384,9 @@ h1.block-title:after {
 	.content .feedback .form button {
 		margin: 50px auto;
 	}
+	.content .feedback .form input[type="text"],
+	.content .feedback .form input[type="email"],
+	.content .feedback .form input[type="tel"] {
+		font-size: 16px;
+	}
 }
