@@ -364,7 +364,6 @@ h1.block-title:after {
 	background-color: transparent;
 	border: 0;
 }
-/*
-::placeholder {
+.feedback::placeholder {
 	color: #fff;
-}*/
+}
