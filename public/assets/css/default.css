@@ -371,6 +371,7 @@ h1.block-title:after {
 	.article .article-content .item img {
 		width: 100%;
 		height: auto;
+		margin: 0;
 	}
 	.consent-container {
 		margin-left: 15px;
@@ -380,7 +381,7 @@ h1.block-title:after {
 	.alert {
 		line-height: 1.3;
 	}
-	.feedback .form button {
+	.content .feedback .form button {
 		margin: 50px auto;
 	}
 }
