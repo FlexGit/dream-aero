@@ -302,6 +302,14 @@
 										Сертификат {{ $position->certificate->status->name }}
 									</div>
 								@endif
+								@if(isset($position->certificate->data_json['comment']) && $position->certificate->data_json['comment'])
+									<div style="border: 1px solid;border-radius: 6px;padding: 4px 8px;background-color: #fff;">
+										<div title="Комментарий" class="text-left">
+											<i class="far fa-comment-dots"></i>
+											<span><i>{{ $position->certificate->data_json['comment'] }}</i></span>
+										</div>
+									</div>
+								@endif
 							@endif
 							@if(is_array($position->data_json) && ((array_key_exists('comment', $position->data_json) && $position->data_json['comment']) || (array_key_exists('certificate_whom', $position->data_json) && $position->data_json['certificate_whom']) || (array_key_exists('certificate_whom_phone', $position->data_json) && $position->data_json['certificate_whom_phone']) || (array_key_exists('delivery_address', $position->data_json) && $position->data_json['delivery_address'])))
 								<div class="text-left mt-2">

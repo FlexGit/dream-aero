@@ -444,6 +444,9 @@ class CertificateController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
+		$data = $certificate->data_json;
+		$data['comment'] = $this->request->comment;
+		$certificate->data_json = $data;
 		$certificate->status_id = $this->request->status_id;
 		if (!$certificate->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

@@ -19,6 +19,10 @@
 		@endforeach
 	</select>
 </div>
+<div class="form-group">
+	<label for="comment">Комментарий</label>
+	<textarea class="form-control" id="comment" name="comment">{{ isset($certificate->data_json['comment']) ? $certificate->data_json['comment'] : '' }}</textarea>
+</div>
 @if($certificate->product_id)
 	<div class="form-group">
 		<label for="file">Файл</label>
