@@ -443,7 +443,7 @@ class DealController extends Controller
 				'phone' => ['required', 'valid_phone'],
 				'product_id' => ['required', 'numeric', 'min:0', 'not_in:0'],
 			];
-			if ($user->isAdminOBOrHigher()) {
+			if ($user && $user->isAdminOBOrHigher()) {
 				$rules['bill_location_id'] = ['required', 'numeric', 'min:0', 'not_in:0'];
 			}
 			
@@ -453,7 +453,7 @@ class DealController extends Controller
 				'phone' => 'Телефон',
 				'product_id' => 'Продукт',
 			];
-			if ($user->isAdminOBOrHigher()) {
+			if ($user && $user->isAdminOBOrHigher()) {
 				$attrNames['bill_location_id'] = 'Локация счета';
 			}
 			$validator = Validator::make($this->request->all(), $rules)
@@ -627,7 +627,7 @@ class DealController extends Controller
 			$deal->source = $source ?: Deal::ADMIN_SOURCE;
 			$deal->user_id = $this->request->user()->id ?? 0;
 			$deal->roistat = $roistatVisit ?: ($roistatDeal ? $roistatDeal->roistat : null);
-			$deal->bill_location_id = $user->isAdminOBOrHigher() ? ($this->request->bill_location_id ?? 0) : 0;
+			$deal->bill_location_id = ($user && $user->isAdminOBOrHigher()) ? ($this->request->bill_location_id ?? 0) : 0;
 			$deal->save();
 			
 			$position = new DealPosition();
@@ -675,7 +675,7 @@ class DealController extends Controller
 					}
 					$billLocationId = $billLocation->id;
 				} else {
-					$billLocationId = $user->isAdminOBOrHigher() ? ($this->request->bill_location_id ?? 0) : ($this->request->user()->location_id ?? 0);
+					$billLocationId = ($user && $user->isAdminOBOrHigher()) ? ($this->request->bill_location_id ?? 0) : ($this->request->user()->location_id ?? 0);
 				}
 				
 				$bill = new Bill();
@@ -792,7 +792,7 @@ class DealController extends Controller
 						'flight_date_at' => ['required', 'date'],
 						'flight_time_at' => ['required'],
 					];
-					if ($user->isAdminOBOrHigher()) {
+					if ($user && $user->isAdminOBOrHigher()) {
 						$rules['bill_location_id'] = ['required', 'numeric', 'min:0', 'not_in:0'];
 					}
 					
@@ -805,7 +805,7 @@ class DealController extends Controller
 						'flight_date_at' => 'Дата начала',
 						'flight_time_at' => 'Время начала',
 					];
-					if ($user->isAdminOBOrHigher()) {
+					if ($user && $user->isAdminOBOrHigher()) {
 						$attrNames['bill_location_id'] = 'Локация счета';
 					}
 					$validator = Validator::make($this->request->all(), $rules)
@@ -1068,7 +1068,7 @@ class DealController extends Controller
 					$deal->source = $source ?: Deal::ADMIN_SOURCE;
 					$deal->user_id = $this->request->user()->id ?? 0;
 					$deal->roistat = $roistatVisit ?: ($roistatDeal ? $roistatDeal->roistat : null);
-					$deal->bill_location_id = $user->isAdminOBOrHigher() ? ($this->request->bill_location_id ?? 0) : 0;
+					$deal->bill_location_id = ($user && $user->isAdminOBOrHigher()) ? ($this->request->bill_location_id ?? 0) : 0;
 					$deal->save();
 					
 					$position = new DealPosition();
@@ -1104,7 +1104,7 @@ class DealController extends Controller
 						if ($source == Deal::WEB_SOURCE) {
 							$billLocationId = $location->id ?? 0;
 						} else {
-							$billLocationId = $user->isAdminOBOrHigher() ? ($this->request->bill_location_id ?? 0) : ($this->request->user()->location_id ?? 0);
+							$billLocationId = ($user && $user->isAdminOBOrHigher()) ? ($this->request->bill_location_id ?? 0) : ($this->request->user()->location_id ?? 0);
 						}
 						
 						$bill = new Bill();
@@ -1226,7 +1226,7 @@ class DealController extends Controller
 			'product_id' => ['required', 'numeric', 'min:0', 'not_in:0'],
 			'city_id' => ['required', 'numeric', 'min:0', 'not_in:0'],
 		];
-		if ($user->isAdminOBOrHigher()) {
+		if ($user && $user->isAdminOBOrHigher()) {
 			$rules['bill_location_id'] = ['required', 'numeric', 'min:0', 'not_in:0'];
 		}
 
@@ -1237,7 +1237,7 @@ class DealController extends Controller
 			'product_id' => 'Продукт',
 			'city_id' => 'Город',
 		];
-		if ($user->isAdminOBOrHigher()) {
+		if ($user && $user->isAdminOBOrHigher()) {
 			$attrNames['bill_location_id'] = 'Локация счета';
 		}
 		$validator = Validator::make($this->request->all(), $rules)
@@ -1346,7 +1346,7 @@ class DealController extends Controller
 			$deal->user_id = $this->request->user()->id ?? 0;
 			$deal->source = $source ?: Deal::ADMIN_SOURCE;
 			$deal->roistat = $roistatVisit ?: ($roistatDeal ? $roistatDeal->roistat : null);
-			$deal->bill_location_id = $user->isAdminOBOrHigher() ? ($this->request->bill_location_id ?? 0) : 0;
+			$deal->bill_location_id = ($user && $user->isAdminOBOrHigher()) ? ($this->request->bill_location_id ?? 0) : 0;
 			$deal->save();
 
 			$position = new DealPosition();
@@ -1382,7 +1382,7 @@ class DealController extends Controller
 				if ($source == Deal::WEB_SOURCE) {
 					$billLocationId = 0;
 				} else {
-					$billLocationId = $user->isAdminOBOrHigher() ? ($this->request->bill_location_id ?? 0) : ($this->request->user()->location_id ?? 0);
+					$billLocationId = ($user && $user->isAdminOBOrHigher()) ? ($this->request->bill_location_id ?? 0) : ($this->request->user()->location_id ?? 0);
 				}
 				
 				$bill = new Bill();
@@ -1444,7 +1444,7 @@ class DealController extends Controller
 			'phone' => ['required'],
 			'status_id' => ['required', 'numeric', 'min:0', 'not_in:0'],
 		];
-		if ($user->isAdminOBOrHigher()) {
+		if ($user && $user->isAdminOBOrHigher()) {
 			$rules['bill_location_id'] = ['required', 'numeric', 'min:0', 'not_in:0'];
 		}
 		
@@ -1454,7 +1454,7 @@ class DealController extends Controller
 			'phone' => 'Телефон',
 			'status_id' => 'Статус',
 		];
-		if ($user->isAdminOBOrHigher()) {
+		if ($user && $user->isAdminOBOrHigher()) {
 			$attrNames['bill_location_id'] = 'Локация счета';
 		}
 		$validator = Validator::make($this->request->all(), $rules)
@@ -1481,7 +1481,7 @@ class DealController extends Controller
 				$deal->contractor_id = $contractorId;
 			}
 			$deal->roistat = $roistatVisit;
-			$deal->bill_location_id = $user->isAdminOBOrHigher() ? ($this->request->bill_location_id ?? 0) : 0;
+			$deal->bill_location_id = ($user && $user->isAdminOBOrHigher()) ? ($this->request->bill_location_id ?? 0) : 0;
 			$deal->save();
 			
 			if ($contractorId) {
