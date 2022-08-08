@@ -109,6 +109,7 @@ class Deal extends Model
 		'deleted_at' => 'Удалено',
 		'comment' => 'Комментарий',
 		'uuid' => 'Uuid',
+		'bill_location_id' => 'Локация счета',
 	];
 	
 	const CREATED_STATUS = 'deal_created';
@@ -197,6 +198,7 @@ class Deal extends Model
 		'roistat',
 		'uuid',
 		'data_json',
+		'bill_location_id',
 	];
 
 	/**
@@ -276,7 +278,12 @@ class Deal extends Model
 	{
 		return $this->hasOne(City::class, 'id', 'city_id');
 	}
-
+	
+	public function billLocation()
+	{
+		return $this->hasOne(Location::class, 'id', 'bill_location_id');
+	}
+	
 	public function scores()
 	{
 		return $this->hasMany(Score::class, 'deal_id', 'id');
@@ -287,7 +294,7 @@ class Deal extends Model
 	 */
 	public function generateNumber()
 	{
-		return 'D' . date('y') . /*$alias . $productTypeAlias . $productDuration .*/ sprintf('%05d', $this->id);
+		return 'D' . date('y') . sprintf('%05d', $this->id);
 	}
 	
 	/**
@@ -295,8 +302,6 @@ class Deal extends Model
 	 */
 	public function format()
 	{
-		//$data = $this->data_json ?? [];
-		
 		return [
 			'id' => $this->id,
 			'number' => $this->number,

@@ -67,6 +67,29 @@
 		</div>
 	</div>
 </div>
+
+@if($user->isAdminOBOrHigher())
+	<div class="row">
+		<div class="col-6">
+			<div class="form-group">
+				<label for="bill_location_id">Локация счета</label>
+				<select class="form-control" id="bill_location_id" name="bill_location_id">
+					<option value="0">---</option>
+					@foreach($cities ?? [] as $city)
+						<optgroup label="{{ $city->name }}">
+							@foreach($city->locations ?? [] as $location)
+								@foreach($location->simulators ?? [] as $simulator)
+									<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($location->id == $deal->bill_location_id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
+								@endforeach
+							@endforeach
+						</optgroup>
+					@endforeach
+				</select>
+			</div>
+		</div>
+	</div>
+@endif
+
 @if($deal->data_json)
 	<div class="row">
 		<div class="col">

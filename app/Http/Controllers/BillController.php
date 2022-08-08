@@ -116,7 +116,9 @@ class BillController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$user = \Auth::user();
+		
 		$rules = [
 			'deal_id' => 'required|numeric|min:0|not_in:0',
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
@@ -156,27 +158,15 @@ class BillController extends Controller
 		}
 		
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
-		if ($paymentMethodId) {
-			$paymentMethod = PaymentMethod::find($paymentMethodId);
-		}
-
+		
 		try {
 			\DB::beginTransaction();
-			
-			/*$location = $deal->city ? $deal->city->getLocationForBill() : null;
-			if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS && !$location) {
-				\DB::rollback();
-				
-				Log::debug('500 - Bill Create: Не найден номер счета платежной системы');
-				
-				return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
-			}*/
 			
 			$bill = new Bill();
 			$bill->contractor_id = $deal->contractor->id ?? 0;
 			$bill->deal_id = $deal->id ?? 0;
 			$bill->deal_position_id = $position->id ?? 0;
-			$bill->location_id = /*$location->id*/$this->request->user()->location_id ?? 0;
+			$bill->location_id = $user->isAdminOBOrHigher() ? $deal->bill_location_id : ($this->request->user()->location_id ?? 0);
 			$bill->payment_method_id = $paymentMethodId;
 			$bill->status_id = $this->request->status_id ?? 0;
 			if ($status->alias == Bill::PAYED_STATUS) {

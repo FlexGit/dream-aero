@@ -79,10 +79,12 @@ class User extends Authenticatable
 
     const ROLE_SUPERADMIN = 'superadmin';
     const ROLE_ADMIN = 'admin';
+	const ROLE_ADMIN_OB = 'admin_ob';
 	const ROLE_PILOT = 'pilot';
     const ROLES = [
     	self::ROLE_SUPERADMIN => 'Суперадмин',
 		self::ROLE_ADMIN => 'Админ',
+		self::ROLE_ADMIN_OB => 'Админ ОБ',
 		self::ROLE_PILOT => 'Пилот',
 	];
  
@@ -142,6 +144,14 @@ class User extends Authenticatable
 	{
 		return $this->role == self::ROLE_SUPERADMIN;
 	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isAdminOB()
+	{
+		return $this->role == self::ROLE_ADMIN_OB;
+	}
 
 	/**
 	 * @return bool
@@ -154,9 +164,17 @@ class User extends Authenticatable
 	/**
 	 * @return bool
 	 */
+	public function isAdminOBOrHigher()
+	{
+		return in_array($this->role, [self::ROLE_ADMIN_OB, self::ROLE_SUPERADMIN]);
+	}
+
+	/**
+	 * @return bool
+	 */
 	public function isAdminOrHigher()
 	{
-		return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_SUPERADMIN]);
+		return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_ADMIN_OB, self::ROLE_SUPERADMIN]);
 	}
 
 	/**

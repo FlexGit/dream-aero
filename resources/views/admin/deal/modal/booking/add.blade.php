@@ -119,7 +119,7 @@
 	{{--@if($user->isSuperAdmin())--}}
 	<div class="col">
 		<div class="form-group">
-			<label for="location_id">Локация</label>
+			<label for="location_id">Локация полета</label>
 			<select class="form-control" id="location_id" name="location_id">
 				<option value="0">---</option>
 				@foreach($cities ?? [] as $city)
@@ -267,6 +267,29 @@
 		</div>
 	</div>
 </div>
+
+@if($user->isAdminOBOrHigher())
+	<div class="row mt-3">
+		<div class="col-6">
+			<div class="form-group">
+				<label for="bill_location_id">Локация счета</label>
+				<select class="form-control" id="bill_location_id" name="bill_location_id">
+					<option value="0">---</option>
+					@foreach($cities ?? [] as $city)
+						<optgroup label="{{ $city->name }}">
+							@foreach($city->locations ?? [] as $location)
+								@foreach($location->simulators ?? [] as $simulator)
+									<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} ({{ $simulator->name }})</option>
+								@endforeach
+							@endforeach
+						</optgroup>
+					@endforeach
+				</select>
+			</div>
+		</div>
+	</div>
+@endif
+
 <div class="row">
 	<div class="col-8">
 		<label for="comment">Комментарий</label>

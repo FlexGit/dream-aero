@@ -24,6 +24,7 @@ class CreateDealsTable extends Migration
 			$table->string('email')->comment('e-mail');
 			$table->string('uuid')->nullable()->comment('uuid');
 			$table->integer('user_id')->default(0)->index()->comment('пользователь');
+			$table->integer('bill_location_id')->default(0)->index()->comment('локация счета');
 			$table->string('source', 25)->nullable()->comment('источник');
 			$table->string('roistat')->nullable()->comment('номер визита Roistat');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
