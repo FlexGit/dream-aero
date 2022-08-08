@@ -40,6 +40,8 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
+    Redirect 301 /pravila https://dream-aero.ru/rules-dreamaero
+
     # 301 Redirects from old CRM
     Redirect 301 /news.html https://dream-aero.ru/msk
     #Redirect 301 /index.html https://dream-aero.ru/msk

@@ -175,6 +175,7 @@ disallow: /sam/successresult
 Clean-param: MNT_TRANSACTION_ID
 Clean-param: etext
 Clean-param: utm_medium
+Clean-param: filtertype
 
 Sitemap: https://en.dream-aero.ru/sitemap.xml
 Host: en.dream-aero.ru
