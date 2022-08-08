@@ -1254,4 +1254,22 @@ class MainController extends Controller
 			'products' => $products ?? [],
 		]);
 	}
+	
+	public function turborss()
+	{
+		$parentNews = HelpFunctions::getEntityByAlias(Content::class, 'news');
+		
+		$items = Content::where('parent_id', $parentNews->id)
+			->where('is_active', true)
+			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->latest()
+			->get();
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'news');
+		
+		return response()->view('turborss', [
+			'items' => $items,
+			'page' => $page,
+		])->header('Content-Type', 'text/xml');
+	}
 }
