@@ -173,6 +173,8 @@ disallow: /sam/oferta-dreamaero.pdf
 disallow: /sam/successresult
 
 Clean-param: MNT_TRANSACTION_ID
+Clean-param: etext
+Clean-param: utm_medium
 
 Sitemap: https://dream-aero.ru/sitemap.xml
 Host: dream-aero.ru
