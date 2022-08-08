@@ -67,7 +67,6 @@
 		</div>
 	</div>
 	<input type="hidden" id="city_id" name="city_id" value="{{ isset($city) ? $city->id : 1 }}">
-
 	<!-- Yandex.Metrika counter -->
 	<script type="text/javascript" >
 		(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -83,7 +82,6 @@
 	</script>
 	<noscript><div><img src="https://mc.yandex.ru/watch/46672077" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 	<!-- /Yandex.Metrika counter -->
-
 	<script type="text/javascript">
 		!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?160",t.onload=function(){VK.Retargeting.Init("VK-RTRG-210070-4QPJt"),VK.Retargeting.Hit()},document.head.appendChild(t)}();
 	</script>
@@ -95,14 +93,13 @@
 	<script async type="text/javascript">
 		VK.Widgets.CommunityMessages("vk_community_messages", 65405270, {widgetPosition: "left",disableExpandChatSound: "1",disableNewMessagesSound: "1",tooltipButtonText: "Есть вопрос?"});
 	</script>
-
-	@if(isset($city) && $city->whatsapp)
+	{{--@if(isset($city) && $city->whatsapp)
 		<div class="whatsapp-container">
 			<a href="https://wa.clck.bar/{{ preg_replace('/[^0-9.]+/', '', $city->whatsapp) }}" target="_blank">
 				<img src="{{ asset('img/whatsapp.png') }}" alt="">
 			</a>
 		</div>
-	@endif
+	@endif--}}
 	<script>
 		(function(w, d, s, h, id) {
 			w.roistatProjectId = id; w.roistatHost = h;
@@ -111,6 +108,7 @@
 			var js = d.createElement(s); js.charset="UTF-8"; js.async = 1; js.src = p+h+u; var js2 = d.getElementsByTagName(s)[0]; js2.parentNode.insertBefore(js, js2);
 		})(window, document, 'script', 'cloud.roistat.com', '652bc3ea3565d8a054248cd1487f8a4c');
 	</script>
+	<script src="//code.jivosite.com/widget/UROFgkAk3l" async></script>
 </footer>
 
 <div class="go-up"></div>
