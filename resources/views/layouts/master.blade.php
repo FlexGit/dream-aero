@@ -14,7 +14,7 @@
 	@if(app('\App')::isLocale('en'))
 		<meta name="yandex-verification" content="22062a6cc890fbc8" />
 	@else
-		<meta name="yandex-verification" content="26119517b8383ec4" />
+		<meta name="yandex-verification" content="f4eea6c4fd831d31" />
 	@endif
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<script>
