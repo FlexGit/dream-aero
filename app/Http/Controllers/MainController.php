@@ -783,9 +783,9 @@ class MainController extends Controller
 		
 		if ($alias) {
 			$news = Content::where('alias', $alias)
-				->where('is_active', true)
+				/*->where('is_active', true)
 				->whereIn('city_id', [$city->id, 0])
-				->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+				->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))*/
 				->first();
 			
 			if (!$news) {
