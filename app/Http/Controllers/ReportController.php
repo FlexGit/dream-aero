@@ -382,7 +382,7 @@ class ReportController extends Controller {
 		
 		$userItems = [];
 		$users = User::where('enable', true)
-			->whereIn('role', [User::ROLE_ADMIN, User::ROLE_SUPERADMIN])
+			->whereIn('role', [User::ROLE_ADMIN, User::ROLE_ADMIN_OB, User::ROLE_SUPERADMIN])
 			->orderBy('lastname')
 			->orderBy('name')
 			->orderBy('middlename')
