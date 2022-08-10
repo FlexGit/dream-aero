@@ -476,7 +476,7 @@ $(function() {
 			'promocode_uuid': promocode_uuid,
 			'has_aeroflot_card': $hasAeroflotCard ? 1 : 0,
 			'aeroflot_card_number': $hasAeroflotCard ? $aeroflotCardNumber : '',
-			'aeroflot_bonus_amount': $hasAeroflotCard ? $aeroflotBonusAmount : 0,
+			'aeroflot_bonus_amount': ($hasAeroflotCard && !isNaN($aeroflotBonusAmount)) ? $aeroflotBonusAmount : 0,
 			'transaction_type': $hasAeroflotCard ? $('#transaction_type').val() : '',
 		};
 
