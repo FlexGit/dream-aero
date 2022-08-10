@@ -30,14 +30,6 @@ class Kernel extends ConsoleKernel
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		// загрузка данных платформы из письма
-		$filePath = storage_path('logs/commands/platform_data.log');
-		$schedule->command('platform_data:load')
-			->hourly()
-			->runInBackground()
-			->appendOutputTo($filePath)
-			->emailOutputOnFailure(env('DEV_EMAIL'));
-
 		// запуск демона для обработки задач из очереди
 		$filePath = storage_path('logs/queue_worker.log');
 		$schedule->command('queue:work --daemon')
@@ -54,6 +46,14 @@ class Kernel extends ConsoleKernel
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
 		
+		// загрузка данных платформы из письма
+		$filePath = storage_path('logs/commands/platform_data.log');
+		$schedule->command('platform_data:load')
+			->everyTwoHours()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+
 		// отправка контрагенту сертификата на полет
 		$filePath = storage_path('logs/commands/certificate_email.log');
 		$schedule->command('certificate_email:send')

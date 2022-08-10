@@ -43,6 +43,7 @@ class LoadPlatformData extends Command
      */
     public function handle()
     {
+    	\Log::debug('load platform data: label 1');
 		$locations = Location::get();
 		
 		/** @var \Webklex\PHPIMAP\Client $client */
@@ -62,6 +63,7 @@ class LoadPlatformData extends Command
 		$messages = $query->since(Carbon::now()->subDays(14))->get();
 		//$messages = $query->since('25.07.2022')->get();
 	
+		\Log::debug('load platform data: label 2');
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
 			/** @var \Webklex\PHPIMAP\Message $message */
@@ -79,6 +81,7 @@ class LoadPlatformData extends Command
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
 			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
 			
+			\Log::debug('load platform data: label 3');
 			$locationId = $simulatorId = 0;
 			$letterNames = [];
 			foreach ($locations as $location) {
@@ -96,7 +99,7 @@ class LoadPlatformData extends Command
 				}
 			}
 			if (!$locationId || !$simulatorId) return 0;
-			
+			\Log::debug('load platform data: label 4');
 			$platformDataExists = false;
 			$platformData = PlatformData::where('location_id', $locationId)
 				->where('flight_simulator_id', $simulatorId)
@@ -113,7 +116,7 @@ class LoadPlatformData extends Command
 			$platformData->total_up = Carbon::parse($totalUp)->format('H:i:s');
 			$platformData->in_air_no_motion = Carbon::parse($inAirNoMotion)->format('H:i:s');
 			if (!$platformData->save()) return 0;
-			
+			\Log::debug('load platform data: label 5');
 			if ($platformDataExists) {
 				$platformLogsDeleted = PlatformLog::where('platform_data_id', $platformData->id)
 					->delete();
@@ -182,7 +185,7 @@ class LoadPlatformData extends Command
 					}
 				}
 			}
-			
+			\Log::debug('load platform data: label 6');
 			/** @var \Webklex\PHPIMAP\Message $message */
 			$message->setFlag('Seen');
 		}
