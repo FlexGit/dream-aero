@@ -45,10 +45,13 @@ class LoadPlatformData extends Command
     {
     	\Log::debug('load platform data: label 1');
 		$locations = Location::get();
-		
+		\Log::debug('load platform data: label 1.1');
 		/** @var \Webklex\PHPIMAP\Client $client */
 		$client = Client::account('default');
+		\Log::debug('load platform data: label 1.2');
 		$client->connect();
+	
+		\Log::debug('load platform data: label 1.3');
 	
 		/** @var \Webklex\PHPIMAP\Client $client */
 		/** @var \Webklex\PHPIMAP\Folder $folder */
