@@ -478,7 +478,7 @@ class DealController extends Controller
 		$cardNumber = $this->request->aeroflot_card_number ?? null;
 		$transactionType = $this->request->transaction_type ?? null;
 		if ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
-			$bonusAmount = $this->request->aeroflot_bonus_amount ?? 0;
+			$bonusAmount = ($this->request->aeroflot_bonus_amount && $this->request->aeroflot_bonus_amount != 'NaN') ? $this->request->aeroflot_bonus_amount : 0;
 		} elseif ($transactionType == AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS) {
 			$bonusAmount = floor($amount / AeroflotBonusService::ACCRUAL_MILES_RATE);
 		}
