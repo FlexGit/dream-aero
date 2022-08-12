@@ -55,15 +55,15 @@ class LoadPlatformData extends Command
 	
 		/** @var \Webklex\PHPIMAP\Client $client */
 		/** @var \Webklex\PHPIMAP\Folder $folder */
-		$folder = $client->getFolderByName(env('IMAP_DEFAULT_FOLDER'));
-	
+		$folder = $client->getFolderByName('DreamAeroSrv'); //env('IMAP_DEFAULT_FOLDER')
+		\Log::debug('load platform data: label 1.4');
 		/** @var \Webklex\PHPIMAP\Folder $folder */
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		$query = $folder->query();
-		
+		\Log::debug('load platform data: label 1.5');
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$messages = $query->since(Carbon::now()->subDays(14))->get();
+		$messages = $query->since(Carbon::now()->subDays(1))->get();
 		//$messages = $query->since('25.07.2022')->get();
 	
 		\Log::debug('load platform data: label 2');
