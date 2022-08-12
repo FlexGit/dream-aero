@@ -281,9 +281,9 @@ class BillController extends Controller
 			$position = $bill->position;
 			$certificate = $position ? $position->certificate : null;
 			$product = $certificate ? $certificate->product : null;
-			$certificatePeriod = ($product && $position->is_certificate_purchase && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
+			$certificatePeriod = ($product && $product->validity && $position->is_certificate_purchase) ? $product->validity : '';
 			if ($certificate) {
-				$certificate->expire_at = Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
+				$certificate->expire_at = $certificatePeriod ? Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
 				$certificate->save();
 			}
 		}

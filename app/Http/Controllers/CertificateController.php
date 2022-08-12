@@ -562,14 +562,14 @@ class CertificateController extends Controller
 			}
 			
 			if (!$certificate->product_id) {
-				$certificateInfo = (isset($data['sell_date']) ? 'от ' . $data['sell_date'] : '') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . (isset($data['duration']) ? ' на ' . $data['duration'] . ' мин' : '') . (isset($data['amount']) ? ' за ' . $data['amount'] . ' руб' : '') . (isset($data['payment_method']) ? ' (' . $data['payment_method'] . ')' : '') . (isset($data['location']) ? '. ' . $data['location'] : '') . (isset($data['status']) ? '. ' . $data['status'] : '') . ((isset($data['comment']) && $data['comment']) ? ', ' . $data['comment'] : '');
+				$certificateInfo = (isset($data['sell_date']) ? 'от ' . $data['sell_date'] : '') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - бессрочно') . (isset($data['duration']) ? ' на ' . $data['duration'] . ' мин' : '') . (isset($data['amount']) ? ' за ' . $data['amount'] . ' руб' : '') . (isset($data['payment_method']) ? ' (' . $data['payment_method'] . ')' : '') . (isset($data['location']) ? '. ' . $data['location'] : '') . (isset($data['status']) ? '. ' . $data['status'] : '') . ((isset($data['comment']) && $data['comment']) ? ', ' . $data['comment'] : '');
 			} else {
 				//$position = $certificate->position()->where('is_certificate_purchase', true)->first();
 				$product = $certificate->product;
 				$city = $certificate->city;
 				$status = $certificate->status;
 				
-				$certificateInfo = $certificate->created_at->format('d.m.Y') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - без срока') . (isset($dataPosition['certificate_whom']) ? ' (' . $dataPosition['certificate_whom'] : '') . (isset($dataPosition['certificate_whom_phone']) ? ', ' . $dataPosition['certificate_whom_phone'] : '') . ')' . ($product ? ' на ' . $product->duration . ' мин (' . $product->name . ')' : '') . ($city ? '. ' . $city->name : '') . ($status ? '. ' . $status->name : '');
+				$certificateInfo = $certificate->created_at->format('d.m.Y') . ($certificate->expire_at ? ' до ' . $certificate->expire_at->format('d.m.Y') : ' - бессрочно') . (isset($dataPosition['certificate_whom']) ? ' (' . $dataPosition['certificate_whom'] : '') . (isset($dataPosition['certificate_whom_phone']) ? ', ' . $dataPosition['certificate_whom_phone'] : '') . ')' . ($product ? ' на ' . $product->duration . ' мин (' . $product->name . ')' : '') . ($city ? '. ' . $city->name : '') . ($status ? '. ' . $status->name : '');
 			}
 			
 			$date = date('Y-m-d');

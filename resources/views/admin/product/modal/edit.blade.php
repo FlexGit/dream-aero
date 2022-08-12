@@ -22,6 +22,10 @@
 	<select class="form-control" id="duration" name="duration" data-duration="{{ $product->duration }}">
 	</select>
 </div>
+<div class="form-group">
+	<label for="validity">Срок действия сертификата, мес</label>
+	<input type="text" class="form-control" id="validity" name="validity" value="{{ $product->validity }}">
+</div>
 @if($product->productType && $product->productType->alias == app('\App\Models\ProductType')::VIP_ALIAS)
 	<div class="form-group">
 		<label for="user_id">Пилот</label>

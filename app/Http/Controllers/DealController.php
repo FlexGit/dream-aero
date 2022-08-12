@@ -612,8 +612,8 @@ class DealController extends Controller
 			$certificate->status_id = $certificateStatus->id ?? 0;
 			$certificate->city_id = ($isUnified || !$cityId) ? 0 : $cityId;
 			$certificate->product_id = $product->id ?? 0;
-			$certificatePeriod = ($product && array_key_exists('certificate_period', $product->data_json)) ? $product->data_json['certificate_period'] : 6;
-			$certificate->expire_at = Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s');
+			$certificatePeriod = ($product && $product->validity) ? $product->validity : '';
+			$certificate->expire_at = $certificatePeriod ? Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
 			$certificate->save();
 			
 			$deal = new Deal();

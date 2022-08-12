@@ -68,6 +68,7 @@ class Product extends Model
 		'product_type_id',
 		'user_id',
 		'duration',
+		'validity',
 		'is_active',
 		'data_json',
 	];

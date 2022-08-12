@@ -22,6 +22,10 @@
 	</select>
 </div>
 <div class="form-group">
+	<label for="validity">Срок действия сертификата, мес</label>
+	<input type="text" class="form-control" id="validity" name="validity">
+</div>
+<div class="form-group">
 	<label for="user_id">Пилот</label>
 	<select class="form-control" id="user_id" name="user_id">
 		@foreach($pilots ?? [] as $pilot)

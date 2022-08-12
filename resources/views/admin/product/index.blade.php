@@ -33,6 +33,7 @@
 							<th class="text-center">Алиас</th>
 							<th class="text-center text-nowrap">Тип тарифа</th>
 							<th class="text-center text-nowrap">Длительность, мин</th>
+							<th class="text-center text-nowrap">Срок действие сертификата, мес</th>
 							<th class="text-center">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>

@@ -20,6 +20,10 @@
 			<td>Длительность, мин</td>
 			<td>{{ $product->duration }}</td>
 		</tr>
+		<tr class="odd">
+			<td>Срок действия сертификата, мес</td>
+			<td>{{ $product->validity }}</td>
+		</tr>
 		@if($product->productType && $product->productType->alias == app('\App\Models\ProductType')::VIP_ALIAS)
 			<tr class="odd">
 				<td>Пилот</td>
