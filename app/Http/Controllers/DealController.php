@@ -1579,6 +1579,9 @@ class DealController extends Controller
 		if ($flightDate && (in_array(date('w', strtotime(Carbon::parse($flightDate)->format('d.m.Y'))), [0, 6]) || in_array(Carbon::parse($flightDate)->format('d.m.Y'), Deal::HOLIDAYS))) {
 			$product = Product::where('alias', ProductType::ULTIMATE_ALIAS . '_' . $product->duration)
 				->first();
+			if (!$product) {
+				return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+			}
 		}
 		
 		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($cityId);
