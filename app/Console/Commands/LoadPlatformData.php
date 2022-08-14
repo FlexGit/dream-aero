@@ -63,7 +63,7 @@ class LoadPlatformData extends Command
 		\Log::debug('load platform data: label 1.5');
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		$since = Carbon::now()->subDays(1)->format('d.m.Y');
+		$since = Carbon::now()->subDays(2)->format('d.m.Y');
 		\Log::debug('load platform data: label 1.6: ' . $since);
 		$messages = $query->since($since)->get();
 		//$messages = $query->since('25.07.2022')->get();
