@@ -65,7 +65,11 @@ class LoadPlatformData extends Command
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
 		$since = Carbon::now()->subDays(1);
 		\Log::debug('load platform data: label 1.6: ' . $since);
-		$messages = $query->since('12.07.2022')->get();
+		\Log::debug($query->since($since)->getQuery());
+		\Log::debug($query->since($since)->getRawQuery());
+		\Log::debug('hasErrors: ' . $query->since($since)->hasErrors());
+		\Log::debug('errors: ' . $query->since($since)->errors());
+		$messages = $query->since($since)->get();
 		//$messages = $query->since('25.07.2022')->get();
 		\Log::debug('load platform data: label 2');
 
