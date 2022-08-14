@@ -68,7 +68,7 @@ class LoadPlatformData extends Command
 		\Log::debug($query->since($since)->getQuery());
 		\Log::debug($query->since($since)->getRawQuery());
 		\Log::debug('hasErrors: ' . $query->since($since)->hasErrors());
-		\Log::debug('errors: ' . $query->since($since)->errors());
+		\Log::debug($query->since($since)->errors());
 		$messages = $query->since($since)->get();
 		//$messages = $query->since('25.07.2022')->get();
 		\Log::debug('load platform data: label 2');
