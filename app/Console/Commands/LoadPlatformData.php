@@ -52,7 +52,7 @@ class LoadPlatformData extends Command
 	
 		/** @var \Webklex\PHPIMAP\Client $client */
 		/** @var \Webklex\PHPIMAP\Folder $folder */
-		$folder = $client->getFolderByName('DreamAeroSrv'); //env('IMAP_DEFAULT_FOLDER')
+		$folder = $client->getFolderByName('DreamAeroSrv');
 
 		/** @var \Webklex\PHPIMAP\Folder $folder */
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
