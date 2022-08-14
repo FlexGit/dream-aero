@@ -65,7 +65,7 @@ class LoadPlatformData extends Command
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
 		/*$since = Carbon::now()->subDays(2)->format('d.m.Y');
 		\Log::debug('load platform data: label 1.6: ' . $since);*/
-		$messages = $query->all()/*since($since)*//*->limit(1)*/->get();
+		$messages = $query->all()/*since($since)*/->limit(3)->get();
 		//$messages = $query->since('25.07.2022')->get();
 		\Log::debug('load platform data: label 2');
 
@@ -193,7 +193,7 @@ class LoadPlatformData extends Command
 			\Log::debug('load platform data: label 6');
 			/** @var \Webklex\PHPIMAP\Message $message */
 			//$message->setFlag('Seen');
-			$message = $message->move('DreamAeroSrvOld');
+			$message->move('DreamAeroSrvOld');
 			\Log::debug('load platform data: label 7');
 		}
 		\Log::debug('load platform data: label 8');
