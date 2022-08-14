@@ -43,31 +43,25 @@ class LoadPlatformData extends Command
      */
     public function handle()
     {
-    	\Log::debug('load platform data: label 1');
 		$locations = Location::get();
-		\Log::debug('load platform data: label 1.1');
+
 		/** @var \Webklex\PHPIMAP\Client $client */
 		$client = Client::account('default');
-		\Log::debug('load platform data: label 1.2');
+
 		$client->connect();
-	
-		\Log::debug('load platform data: label 1.3');
 	
 		/** @var \Webklex\PHPIMAP\Client $client */
 		/** @var \Webklex\PHPIMAP\Folder $folder */
 		$folder = $client->getFolderByName('DreamAeroSrv'); //env('IMAP_DEFAULT_FOLDER')
-		\Log::debug('load platform data: label 1.4');
+
 		/** @var \Webklex\PHPIMAP\Folder $folder */
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		$query = $folder->query();
-		\Log::debug('load platform data: label 1.5');
+
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-		/*$since = Carbon::now()->subDays(2)->format('d.m.Y');
-		\Log::debug('load platform data: label 1.6: ' . $since);*/
+		/*$since = Carbon::now()->subDays(2)->format('d.m.Y');*/
 		$messages = $query->all()/*since($since)*/->limit(2)->get();
-		//$messages = $query->since('25.07.2022')->get();
-		\Log::debug('load platform data: label 2');
 
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
@@ -86,7 +80,6 @@ class LoadPlatformData extends Command
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
 			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
 			
-			\Log::debug('load platform data: label 3');
 			$locationId = $simulatorId = 0;
 			$letterNames = [];
 			foreach ($locations as $location) {
@@ -104,7 +97,7 @@ class LoadPlatformData extends Command
 				}
 			}
 			if (!$locationId || !$simulatorId) return 0;
-			\Log::debug('load platform data: label 4');
+
 			$platformDataExists = false;
 			$platformData = PlatformData::where('location_id', $locationId)
 				->where('flight_simulator_id', $simulatorId)
@@ -121,7 +114,7 @@ class LoadPlatformData extends Command
 			$platformData->total_up = Carbon::parse($totalUp)->format('H:i:s');
 			$platformData->in_air_no_motion = Carbon::parse($inAirNoMotion)->format('H:i:s');
 			if (!$platformData->save()) return 0;
-			\Log::debug('load platform data: label 5');
+
 			if ($platformDataExists) {
 				$platformLogsDeleted = PlatformLog::where('platform_data_id', $platformData->id)
 					->delete();
@@ -190,13 +183,11 @@ class LoadPlatformData extends Command
 					}
 				}
 			}
-			\Log::debug('load platform data: label 6');
+
 			/** @var \Webklex\PHPIMAP\Message $message */
 			//$message->setFlag('Seen');
 			$message->move('DreamAeroSrvOld');
-			\Log::debug('load platform data: label 7');
 		}
-		\Log::debug('load platform data: label 8');
 	
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - platform_data:load - OK');
     	
