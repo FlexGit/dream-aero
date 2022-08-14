@@ -194,8 +194,9 @@ class LoadPlatformData extends Command
 			/** @var \Webklex\PHPIMAP\Message $message */
 			$message->setFlag('Seen');
 			$message->move('DreamAeroSrvOld');
+			\Log::debug('load platform data: label 7');
 		}
-		\Log::debug('load platform data: label 7');
+		\Log::debug('load platform data: label 8');
 	
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - platform_data:load - OK');
     	
