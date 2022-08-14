@@ -22,7 +22,7 @@ return [
     | Set to 'false' [boolean] to disable this functionality.
     |
     */
-    'default' => env('IMAP_DEFAULT_ACCOUNT', 'default'),
+    'default' => /*env('IMAP_DEFAULT_ACCOUNT', */'default'/*)*/,
 
     /*
     |--------------------------------------------------------------------------
@@ -47,14 +47,14 @@ return [
     'accounts' => [
 
         'default' => [// account identifier
-            'host'  => env('IMAP_HOST', 'localhost'),
-            'port'  => env('IMAP_PORT', 993),
-            'protocol'  => env('IMAP_PROTOCOL', 'imap'), //might also use imap, [pop3 or nntp (untested)]
-            'encryption'    => env('IMAP_ENCRYPTION', 'ssl'), // Supported: false, 'ssl', 'tls', 'notls', 'starttls'
-            'validate_cert' => env('IMAP_VALIDATE_CERT', true),
-            'username' => env('IMAP_USERNAME', 'root@example.com'),
-            'password' => env('IMAP_PASSWORD', ''),
-            'authentication' => env('IMAP_AUTHENTICATION', null),
+            'host'  => /*env('IMAP_HOST', 'localhost')*/'imap.yandex.ru',
+            'port'  => /*env('IMAP_PORT', 993)*/993,
+            'protocol'  => /*env('IMAP_PROTOCOL', 'imap')*/'imap', //might also use imap, [pop3 or nntp (untested)]
+            'encryption'    => /*env('IMAP_ENCRYPTION', 'ssl')*/'ssl', // Supported: false, 'ssl', 'tls', 'notls', 'starttls'
+            'validate_cert' => /*env('IMAP_VALIDATE_CERT', true)*/true,
+            'username' => /*env('IMAP_USERNAME', 'root@example.com')*/'platform@dream-aero.com',
+            'password' => /*env('IMAP_PASSWORD', '')*/'8rdo|dEH',
+            'authentication' => /*env('IMAP_AUTHENTICATION', null)*/null,
             'proxy' => [
                 'socket' => null,
                 'request_fulluri' => false,
