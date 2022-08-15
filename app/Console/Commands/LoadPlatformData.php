@@ -185,7 +185,7 @@ class LoadPlatformData extends Command
 			}
 
 			/** @var \Webklex\PHPIMAP\Message $message */
-			//$message->setFlag('Seen');
+			$message->setFlag('Seen');
 			$message->move('DreamAeroSrvOld');
 		}
 	
