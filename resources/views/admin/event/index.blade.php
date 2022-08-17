@@ -620,7 +620,7 @@
 					|| stopAt.getTime() - simulatorDownAt.getTime() > 20 * 60 * 1000
 					|| simulatorDownAt.getTime() - stopAt.getTime() > 20 * 60 * 1000
 				) {
-					toastr.info('Внимание! Разница времени поднятия или опускания платформы превышает 20 мин.<br><br><button type="button" class="btn btn-success js-submit">Продолжить</button>', '', {
+					toastr.info('Внимание! Разница времени поднятия или опускания платформы события и Администратора превышает 20 мин.<br><br><button type="button" class="btn btn-success js-submit">Продолжить</button>', '', {
 						allowHtml: true,
 						timeOut: 0,
 						extendedTimeOut: 0,
