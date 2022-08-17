@@ -738,7 +738,7 @@ class EventController extends Controller
 			case Event::EVENT_TYPE_DEAL:
 				$position = DealPosition::find($event->deal_position_id);
 				if (!$position) {
-				return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
+					return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
 				}
 				
 				if (!$product = $position->product) {

@@ -603,17 +603,49 @@
 			$(document).on('submit', '#deal, #event', function(e) {
 				e.preventDefault();
 
-				var action = $(this).attr('action'),
-					method = $(this).attr('method'),
-					formId = $(this).attr('id'),
-					$docFile = $('#doc_file');
+				var $form = $(this),
+					startAtDate = $form.find('input[name="start_at_date"]').val(),
+					stopAtDate = $form.find('input[name="stop_at_date"]').val(),
+					startAtTime = $form.find('input[name="start_at_time"]').val(),
+					stopAtTime = $form.find('input[name="stop_at_time"]').val(),
+					startAt = new Date(startAtDate + ' ' + startAtTime),
+					stopAt = new Date(stopAtDate + ' ' + stopAtTime),
+					simulatorUpAtTime = $form.find('input[name="simulator_up_at"]').val(),
+					simulatorDownAtTime = $form.find('input[name="simulator_down_at"]').val(),
+					simulatorUpAt = new Date(startAtDate + ' ' + simulatorUpAtTime),
+					simulatorDownAt = new Date(stopAtDate + ' ' + simulatorDownAtTime);
 
-				var formData = new FormData($(this)[0]);
+				if (startAt.getTime() - simulatorUpAt.getTime() > 20 * 60 * 1000
+					|| simulatorUpAt.getTime() - startAt.getTime() > 20 * 60 * 1000
+					|| stopAt.getTime() - simulatorDownAt.getTime() > 20 * 60 * 1000
+					|| simulatorDownAt.getTime() - stopAt.getTime() > 20 * 60 * 1000
+				) {
+					toastr.info('Внимание! Разница времени поднятия или опускания платформы превышает 20 мин.<br><br><button type="button" class="btn btn-success js-submit">Продолжить</button>', '', {
+						allowHtml: true,
+						timeOut: 0,
+						extendedTimeOut: 0,
+						onShown: function () {
+							$(document).on('click', '.js-submit', function () {
+								formSubmit($form);
+							});
+						}
+					});
+					return false;
+				}
+
+				formSubmit($form);
+			});
+
+			function formSubmit($form) {
+				var action = $form.attr('action'),
+					method = $form.attr('method'),
+					$docFile = $('#doc_file'),
+					formData = new FormData($form[0]),
+					realMethod = method;
+
 				if ($docFile.val()) {
 					formData.append('doc_file', $docFile.prop('files')[0]);
 				}
-
-				var realMethod = method;
 				if (method === 'PUT') {
 					formData.append('_method', 'PUT');
 					realMethod = 'POST';
@@ -646,7 +678,7 @@
 						toastr.success('Событие успешно ' + ((method === 'POST') ? 'создано' : 'сохранено'));
 					}
 				});
-			});
+			}
 
 			$(document).on('change', '#location_id', function(e) {
 				$('#flight_simulator_id').val($(this).find(':selected').data('simulator_id'));
@@ -722,6 +754,10 @@
 				if ($form.attr('id') === 'deal') {
 					$('#contractor_search').focus();
 				}
+			});
+
+			$(document).on('hide.bs.modal', '#modal', function() {
+				toastr.clear();
 			});
 
 			$(document).on('click', '.js-contractor-delete', function() {
