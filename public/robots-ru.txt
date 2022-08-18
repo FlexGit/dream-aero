@@ -176,6 +176,7 @@ Clean-param: MNT_TRANSACTION_ID
 Clean-param: etext
 Clean-param: utm_medium
 Clean-param: filtertype
+Clean-param: external_browser_redirect
 
 Sitemap: https://dream-aero.ru/sitemap.xml
 Host: dream-aero.ru
