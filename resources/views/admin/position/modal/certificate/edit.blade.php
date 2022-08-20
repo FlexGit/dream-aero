@@ -1,5 +1,7 @@
 <input type="hidden" id="id" name="id" value="{{ $position->id }}">
 <input type="hidden" id="contractor_id" name="contractor_id" value="{{ $position->deal ? $position->deal->contractor_id : 0 }}">
+<input type="hidden" id="is_certificate_purchase" name="is_certificate_purchase" value="{{ $position->is_certificate_purchase }}">
+<input type="hidden" id="is_unified" name="is_unified" value="{{ $position->is_unified }}">
 <input type="hidden" id="amount" name="amount" value="{{ $position->amount }}">
 
 <div class="row">
