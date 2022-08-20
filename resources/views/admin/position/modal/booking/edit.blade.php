@@ -1,7 +1,7 @@
 <input type="hidden" id="id" name="id" value="{{ $position->id }}">
 <input type="hidden" id="contractor_id" name="contractor_id" value="{{ $position->deal ? $position->deal->contractor_id : 0 }}">
 <input type="hidden" id="amount" name="amount" value="{{ $position->amount }}">
-<input type="hidden" id="score" name="score" value="{{ $position->score ? $position->score->score : 0 }}">
+<input type="hidden" id="score" name="score" value="{{ ($position->score && $position->score->type == 'used') ? $position->score->score : 0 }}">
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $position->flight_simulator_id }}">
 <input type="hidden" id="is_certificate_purchase" name="is_certificate_purchase" value="0">
 
