@@ -1,7 +1,7 @@
 <input type="hidden" id="id" name="id" value="{{ $position->id }}">
 <input type="hidden" id="contractor_id" name="contractor_id" value="{{ $position->deal ? $position->deal->contractor_id : 0 }}">
 <input type="hidden" id="is_certificate_purchase" name="is_certificate_purchase" value="{{ $position->is_certificate_purchase }}">
-<input type="hidden" id="is_unified" name="is_unified" value="{{ $position->is_unified }}">
+<input type="hidden" id="is_unified" name="is_unified" value="{{ $position->certificate->city_id ? 0 : 1 }}">
 <input type="hidden" id="amount" name="amount" value="{{ $position->amount }}">
 
 <div class="row">
@@ -11,7 +11,7 @@
 			<select class="form-control" id="city_id" name="city_id">
 				<option value="0">Любой</option>
 				@foreach($cities ?? [] as $city)
-					<option value="{{ $city->id }}" @if($city->id == $position->city_id) selected @endif>{{ $city->name }}</option>
+					<option value="{{ $city->id }}" @if($city->id == $position->certificate->city_id) selected @endif>{{ $city->name }}</option>
 				@endforeach
 			</select>
 		</div>
