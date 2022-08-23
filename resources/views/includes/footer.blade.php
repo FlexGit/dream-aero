@@ -82,7 +82,7 @@
 	</script>
 	<noscript><div><img src="https://mc.yandex.ru/watch/46672077" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 	<!-- /Yandex.Metrika counter -->
-	<script type="text/javascript">
+	{{--<script type="text/javascript">
 		!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?160",t.onload=function(){VK.Retargeting.Init("VK-RTRG-210070-4QPJt"),VK.Retargeting.Hit()},document.head.appendChild(t)}();
 	</script>
 	<noscript>
@@ -92,7 +92,7 @@
 	<div class="lazy" id="vk_community_messages"></div>
 	<script async type="text/javascript">
 		VK.Widgets.CommunityMessages("vk_community_messages", 65405270, {widgetPosition: "left",disableExpandChatSound: "1",disableNewMessagesSound: "1",tooltipButtonText: "Есть вопрос?"});
-	</script>
+	</script>--}}
 	{{--@if(isset($city) && $city->whatsapp)
 		<div class="whatsapp-container">
 			<a href="https://wa.clck.bar/{{ preg_replace('/[^0-9.]+/', '', $city->whatsapp) }}" target="_blank">
