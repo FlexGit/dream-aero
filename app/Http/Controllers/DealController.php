@@ -605,6 +605,7 @@ class DealController extends Controller
 			$roistatDeal = Deal::where('contractor_id', $contractor->id)
 				->whereNotNull('roistat')
 				->where('roistat', '!=', 'unknown')
+				->where('email', '!=', Contractor::ANONYM_EMAIL)
 				->first();
 			
 			$certificate = new Certificate();
@@ -1055,6 +1056,7 @@ class DealController extends Controller
 					$roistatDeal = Deal::where('contractor_id', $contractor->id)
 						->whereNotNull('roistat')
 						->where('roistat', '!=', 'unknown')
+						->where('email', '!=', Contractor::ANONYM_EMAIL)
 						->first();
 					
 					$deal = new Deal();
@@ -1333,6 +1335,7 @@ class DealController extends Controller
 			$roistatDeal = Deal::where('contractor_id', $contractor->id)
 				->whereNotNull('roistat')
 				->where('roistat', '!=', 'unknown')
+				->where('email', '!=', Contractor::ANONYM_EMAIL)
 				->first();
 			
 			$deal = new Deal();
