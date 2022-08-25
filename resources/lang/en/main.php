@@ -409,6 +409,7 @@ return [
 	'pay.счет-не-найден' => 'Invoice number not found',
 	'pay.счет-способ-оплаты' => 'Incorrect payment method for the specified Invoice',
 	'pay.счет-оплачен' => 'Incorrect invoice status',
+	'pay.счет-в-статусе' => 'Invoice status is ":status_name"',
 	'pay.redirect' => 'Redirecting to payment page...',
 	'payment.счет-успешно-оплачен' => 'Invoice # :number paid successfully!',
 	'payment.cертификат-не-найден' => 'Flight certificate not found. Please call us at: :phone.',

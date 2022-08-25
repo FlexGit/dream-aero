@@ -46,6 +46,11 @@ class PaymentController extends Controller
 		if ($bill->amount <= 0) {
 			abort(404);
 		}
+		
+		$billStatus = $bill->status;
+		if (!$billStatus) {
+			abort(404);
+		}
 
 		$deal = $bill->deal;
 		if (!$deal) {
@@ -60,13 +65,12 @@ class PaymentController extends Controller
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'payment');
 
-		$billStatus = $bill->status;
-		if (!$billStatus || $billStatus->alias != Bill::NOT_PAYED_STATUS || $bill->payed_at != null) {
+		if ($billStatus->alias != Bill::NOT_PAYED_STATUS) {
 			return view('payment', [
 				'page' => $page ?? new Content,
 				'city' => $city,
 				'html' => '',
-				'error' => trans('main.pay.счет-оплачен'),
+				'error' => trans('main.pay.счет-в-статусе', ['status_name' => $billStatus->name]),
 				'payType' => '',
 			]);
 		}
