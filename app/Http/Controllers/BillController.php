@@ -263,7 +263,7 @@ class BillController extends Controller
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$amount = $this->request->amount ?? 0;
 		
-		$bill->deal_position_id = $position->id ?? 0;
+		$bill->deal_position_id = ($status->alias == Bill::CANCELED_STATUS) ? 0 : ($position->id ?? 0);
 		$bill->payment_method_id = $paymentMethodId;
 		$bill->status_id = $this->request->status_id ?? 0;
 		$bill->amount = $amount;
