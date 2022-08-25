@@ -124,6 +124,7 @@ class BillController extends Controller
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
 			'amount' => 'required|numeric|min:0',
+			'position_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -132,6 +133,7 @@ class BillController extends Controller
 				'payment_method_id' => 'Способ оплаты',
 				'status_id' => 'Статус',
 				'amount' => 'Сумма',
+				'position_id' => 'Позиция',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
@@ -231,6 +233,7 @@ class BillController extends Controller
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
 			'amount' => 'required|numeric|min:0',
+			'position_id' => 'required|numeric|min:0|not_in:0',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -238,6 +241,7 @@ class BillController extends Controller
 				'payment_method_id' => 'Способ оплаты',
 				'status_id' => 'Статус',
 				'amount' => 'Сумма',
+				'position_id' => 'Позиция',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
