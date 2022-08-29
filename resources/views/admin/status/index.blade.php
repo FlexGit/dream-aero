@@ -37,8 +37,8 @@
 						<tr>
 							<th class="text-center">Наименование</th>
 							<th class="text-center">Сущность</th>
-							<th class="text-center d-none d-sm-table-cell">Алиас</th>
-							<th class="text-center d-none d-md-table-cell">Дополнительная информация</th>
+							<th class="text-center">Алиас</th>
+							<th class="text-center">Дополнительная информация</th>
 							<th class="text-center"></th>
 						</tr>
 						</thead>

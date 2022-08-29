@@ -53,11 +53,11 @@
 						<thead>
 						<tr>
 							<th class="text-center">ФИО</th>
-							<th class="text-center d-none d-sm-table-cell">E-mail</th>
-							<th class="text-center d-none d-md-table-cell">Роль</th>
-							<th class="text-center d-none d-lg-table-cell">Город</th>
-							<th class="text-center d-none d-xl-table-cell">Локация</th>
-							<th class="text-center d-none d-xl-table-cell">Активность</th>
+							<th class="text-center">E-mail</th>
+							<th class="text-center">Роль</th>
+							<th class="text-center">Город</th>
+							<th class="text-center">Локация</th>
+							<th class="text-center">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>

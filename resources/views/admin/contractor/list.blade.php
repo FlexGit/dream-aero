@@ -45,7 +45,7 @@
 			</div>
 		</div>
 	</td>
-	<td class="align-middle d-none d-lg-table-cell">
+	<td class="align-middle">
 		<div class="col-12 text-nowrap">
 			<div class="d-inline-block col-6 align-top">
 				<div title="Время налета">
@@ -72,15 +72,7 @@
 			</div>
 		</div>
 	</td>
-	{{--<td class="text-center align-middle d-none d-xl-table-cell">
-		<div title="Баланс">
-			<i class="fas fa-coins"></i>
-			<span class="pl-2 pr-2" @if($balance < 0) style="background-color: #ffbdba;" @elseif($balance > 0) style="background-color: #e9ffc9;" @endif>
-				{{ number_format($balance, 0, '.', ' ') }}
-				</span>
-		</div>
-	</td>--}}
-	<td class="text-center align-middle d-none d-lg-table-cell">
+	<td class="text-center align-middle">
 		{{ $contractor->is_active ? 'Да' : 'Нет' }}
 	</td>
 	{{--<td class="text-center align-middle">

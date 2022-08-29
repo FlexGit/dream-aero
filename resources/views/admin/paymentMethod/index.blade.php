@@ -30,8 +30,8 @@
 						<thead>
 						<tr>
 							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Алиас</th>
-							<th class="text-center d-none d-md-table-cell">Активность</th>
+							<th class="text-center">Алиас</th>
+							<th class="text-center">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>

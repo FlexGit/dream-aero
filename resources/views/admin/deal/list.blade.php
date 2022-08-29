@@ -25,7 +25,7 @@
 				</div>
 			</div>
 		</td>
-		<td class="text-center align-top d-none d-sm-table-cell small">
+		<td class="text-center align-top small">
 			<div class="font-weight-bold" title="Номер сделки">
 				<a href="javascript:void(0)" data-toggle="modal" data-url="/deal/{{ $deal->id }}/edit" data-action="/deal/{{ $deal->id }}" data-title="Редактирование сделки" title="Редактировать сделку" data-method="PUT" data-type="deal">{{ $deal->number }}</a>
 			</div>
@@ -88,7 +88,7 @@
 				</div>
 			</div>
 		</td>
-		<td class="text-center align-top d-none d-xl-table-cell small">
+		<td class="text-center align-top small">
 			@foreach($deal->bills ?? [] as $bill)
 				@php
 					$billPosition = $bill->position;
@@ -192,7 +192,7 @@
 				<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $deal->id }}/add" data-action="/bill" data-method="POST" data-title="Создание счета" data-type="bill" title="Создать счет" class="btn btn-info btn-sm">Создать счет</a>
 			{{--@endif--}}
 		</td>
-		<td class="align-top text-center d-none d-md-table-cell">
+		<td class="align-top text-center">
 			<table class="table table-sm table-bordered table-striped mb-0">
 				<tr>
 					<td class="col-4 small font-weight-bold">

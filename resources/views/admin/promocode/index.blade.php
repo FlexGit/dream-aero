@@ -32,11 +32,11 @@
 								<th class="text-center">Номер</th>
 								<th class="text-center">Город</th>
 								<th class="text-center">Локация</th>
-								{{--<th class="text-center d-none d-sm-table-cell">Контрагент</th>--}}
-								<th class="text-center d-none d-md-table-cell">Скидка</th>
-								<th class="text-center d-none d-md-table-cell">Активность</th>
-								<th class="text-center d-none d-xl-table-cell">Дата начала активности</th>
-								<th class="text-center d-none d-xl-table-cell">Дата окончания активности</th>
+								{{--<th class="text-center">Контрагент</th>--}}
+								<th class="text-center">Скидка</th>
+								<th class="text-center">Активность</th>
+								<th class="text-center">Дата начала активности</th>
+								<th class="text-center">Дата окончания активности</th>
 								<th class="text-center">Действие</th>
 							</tr>
 						</thead>

@@ -31,9 +31,9 @@
 						<thead>
 							<tr>
 								<th class="text-center">Наименование</th>
-								<th class="text-center d-none d-sm-table-cell">Алиас</th>
-								<th class="text-center d-none d-lg-table-cell">Активность</th>
-								<th class="text-center d-none d-xl-table-cell">Публичная оферта</th>
+								<th class="text-center">Алиас</th>
+								<th class="text-center">Активность</th>
+								<th class="text-center">Публичная оферта</th>
 								<th class="text-center">Действие</th>
 							</tr>
 						</thead>

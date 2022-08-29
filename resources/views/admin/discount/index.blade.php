@@ -30,9 +30,9 @@
 						<thead>
 							<tr>
 								<th class="text-center">Размер скидки</th>
-								<th class="text-center d-none d-sm-table-cell">Фиксированная скидка</th>
-								<th class="text-center d-none d-md-table-cell">Валюта</th>
-								<th class="text-center d-none d-lg-table-cell">Активность</th>
+								<th class="text-center">Фиксированная скидка</th>
+								<th class="text-center">Валюта</th>
+								<th class="text-center">Активность</th>
 								<th class="text-center">Действие</th>
 							</tr>
 						</thead>

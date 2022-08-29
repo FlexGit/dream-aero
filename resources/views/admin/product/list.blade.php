@@ -2,15 +2,15 @@
 <tr class="odd">
 	{{--<td class="text-center align-middle">{{ $loop->iteration }}</td>--}}
 	<td class="align-middle"><a href="javascript:void(0)" data-toggle="modal" data-url="/product/{{ $product->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $product->name }}</a></td>
-	{{--<td class="text-center align-middle d-none d-sm-table-cell">{{ $product->is_active ? 'Да' : 'Нет' }}</td>--}}
-	{{--<td class="align-middle d-none d-sm-table-cell">{{ optional($product->city)->name ?? 'Все' }}</td>--}}
+	{{--<td class="text-center align-middle">{{ $product->is_active ? 'Да' : 'Нет' }}</td>--}}
+	{{--<td class="align-middle">{{ optional($product->city)->name ?? 'Все' }}</td>--}}
 	<td class="align-middle">{{ $product->alias }}</td>
 	<td class="align-middle">{{ $product->productType->name }}</td>
 	<td class="text-right align-middle">{{ $product->duration }}</td>
 	<td class="text-right align-middle">{{ $product->validity ?: 'бессрочно' }}</td>
 	<td class="text-center align-middle">{{ $product->is_active ? 'Да' : 'Нет' }}</td>
-	{{--<td class="text-right align-middle d-none d-xl-table-cell">{{ number_format($product->price, 0, '.', ' ') }}</td>
-	<td class="text-center align-middle d-none d-xl-table-cell">{{ $product->is_hit ? 'Да' : 'Нет' }}</td>--}}
+	{{--<td class="text-right align-middle">{{ number_format($product->price, 0, '.', ' ') }}</td>
+	<td class="text-center align-middle">{{ $product->is_hit ? 'Да' : 'Нет' }}</td>--}}
 	{{--<td class="text-center align-middle">{{ $product->created_at }}</td>
 	<td class="text-center align-middle">{{ $product->updated_at }}</td>--}}
 	<td class="text-center align-middle">

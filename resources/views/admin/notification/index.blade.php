@@ -30,8 +30,8 @@
 						<thead>
 						<tr>
 							<th class="text-center">Заголовок</th>
-							<th class="text-center d-none d-xl-table-cell">Город</th>
-							<th class="text-center d-none d-xl-table-cell">Активность</th>
+							<th class="text-center">Город</th>
+							<th class="text-center">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>

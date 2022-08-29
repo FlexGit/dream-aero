@@ -111,9 +111,9 @@
 						<thead>
 						<tr>
 							<th class="text-center">Контрагент</th>
-							<th class="text-center d-none d-sm-table-cell">Сделка</th>
-							<th class="text-center d-none d-xl-table-cell">Счета</th>
-							<th class="d-none d-xl-table-cell">
+							<th class="text-center">Сделка</th>
+							<th class="text-center">Счета</th>
+							<th>
 								<div class="d-sm-flex justify-content-between">
 									<div></div>
 									<div>

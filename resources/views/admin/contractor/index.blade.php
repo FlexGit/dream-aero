@@ -52,9 +52,8 @@
 						<thead>
 						<tr>
 							<th class="text-center">Контрагент</th>
-							<th class="text-center text-nowrap d-none d-sm-table-cell">Детали</th>
-							{{--<th class="text-center d-none d-xl-table-cell">Баланс</th>--}}
-							<th class="text-center d-none d-md-table-cell">Активность</th>
+							<th class="text-center text-nowrap">Детали</th>
+							<th class="text-center">Активность</th>
 						</tr>
 						</thead>
 						<tbody>

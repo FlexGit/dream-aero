@@ -10,11 +10,11 @@
 					<tr>
 						<th class="text-center align-middle">Продукт</th>
 						<th class="text-center align-middle">Стоимость</th>
-						<th class="text-center align-middle d-none d-sm-table-cell">Скидка</th>
-						<th class="text-center align-middle d-none d-md-table-cell">Баллы</th>
-						<th class="text-center align-middle d-none d-md-table-cell">Активность</th>
-						<th class="text-center align-middle d-none d-xl-table-cell">Хит</th>
-						<th class="text-center align-middle d-none d-xl-table-cell">Срок действия сертификата</th>
+						<th class="text-center align-middle">Скидка</th>
+						<th class="text-center align-middle">Баллы</th>
+						<th class="text-center align-middle">Активность</th>
+						<th class="text-center align-middle">Хит</th>
+						<th class="text-center align-middle">Срок действия сертификата</th>
 						<th class="text-center">Действие</th>
 					</tr>
 					</thead>
@@ -43,25 +43,25 @@
 							<td class="text-right align-middle">
 								{{ isset($citiesProductsData[$city->id][$product->id]) ? number_format($citiesProductsData[$city->id][$product->id]['price'], 0, '.', ' ') . ' ' . $citiesProductsData[$city->id][$product->id]['currency'] : '' }}
 							</td>
-							<td class="text-right align-middle d-none d-sm-table-cell">
+							<td class="text-right align-middle">
 								@if(isset($citiesProductsData[$city->id][$product->id]) && isset($citiesProductsData[$city->id][$product->id]['discount']))
 									{{ $citiesProductsData[$city->id][$product->id]['discount']['value'] }} {{ $citiesProductsData[$city->id][$product->id]['discount']['is_fixed'] ? '' : '%' }}
 								@endif
 							</td>
-							<td class="text-right align-middle d-none d-md-table-cell">
+							<td class="text-right align-middle">
 								{{ isset($citiesProductsData[$city->id][$product->id]) ? number_format($citiesProductsData[$city->id][$product->id]['score'], 0, '.', ' ') : '' }}
 							</td>
-							<td class="text-center align-middle d-none d-md-table-cell">
+							<td class="text-center align-middle">
 								@if(isset($citiesProductsData[$city->id][$product->id]))
 									{{ $citiesProductsData[$city->id][$product->id]['is_active'] ? 'Да' : 'Нет' }}
 								@endif
 							</td>
-							<td class="text-center align-middle d-none d-xl-table-cell">
+							<td class="text-center align-middle">
 								@if(isset($citiesProductsData[$city->id][$product->id]))
 									{{ $citiesProductsData[$city->id][$product->id]['is_hit'] ? 'Да' : 'Нет' }}
 								@endif
 							</td>
-							<td class="text-center align-middle d-none d-xl-table-cell">
+							<td class="text-center align-middle">
 								{{ $certificatePeriod }}
 							</td>
 							<td class="text-center align-middle">

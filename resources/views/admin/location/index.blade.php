@@ -48,11 +48,11 @@
 						<thead>
 						<tr>
 							<th class="text-center">Наименование</th>
-							<th class="text-center d-none d-sm-table-cell">Алиас</th>
-							<th class="text-center d-none d-md-table-cell">Авиатренажеры</th>
-							<th class="text-center d-none d-lg-table-cell">Город</th>
-							<th class="text-center d-none d-xl-table-cell">Юр.лицо</th>
-							<th class="text-center d-none d-xl-table-cell">Активность</th>
+							<th class="text-center">Алиас</th>
+							<th class="text-center">Авиатренажеры</th>
+							<th class="text-center">Город</th>
+							<th class="text-center">Юр.лицо</th>
+							<th class="text-center">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>
 						</thead>

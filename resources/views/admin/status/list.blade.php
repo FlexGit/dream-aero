@@ -4,8 +4,8 @@
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/status/{{ $status->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $status->name }}</a>
 	</td>
 	<td class="align-middle">{{ array_key_exists($status->type, $statusTypes) ? $statusTypes[$status->type] : $status->type }}</td>
-	<td class="text-center align-middle d-none d-sm-table-cell">{{ $status->alias }}</td>
-	<td class="align-middle d-none d-md-table-cell">
+	<td class="text-center align-middle">{{ $status->alias }}</td>
+	<td class="align-middle">
 	@if($status->type == 'contractor' && $status->flight_time)
 		Время налета: {{ number_format($status->flight_time, 0, '.', ' ') }} мин.
 	@endif
