@@ -1073,7 +1073,13 @@ class PositionController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
 		$position = DealPosition::find($id);
 		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
 		
@@ -1086,27 +1092,50 @@ class PositionController extends Controller
 		
 		$certificateFilePath = ($position->is_certificate_purchase && $position->certificate && is_array($position->certificate->data_json) && array_key_exists('certificate_file_path', $position->certificate->data_json)) ? $position->certificate->data_json['certificate_file_path'] : '';
 		
-		// если позицию удаляют, а по ней было списание баллов, то начисляем баллы обратно
-		$scores = Score::where('deal_position_id', $position->id)
-			->where('type', Score::USED_TYPE)
-			->get();
-		foreach ($scores as $item) {
-			$score = new Score();
-			$score->score = $item->score;
-			$score->type = Score::SCORING_TYPE;
-			$score->contractor_id = $item->contractor_id;
-			$score->deal_id = $item->deal_id;
-			$score->deal_position_id = $item->deal_position_id;
-			$score->user_id = $this->request->user()->id;
-			$score->save();
-		}
-		
-		if (!$position->delete()) {
+		try {
+			\DB::beginTransaction();
+			
+				// если позицию удаляют, а по ней было списание баллов, то начисляем баллы обратно
+			$scores = Score::where('deal_position_id', $position->id)
+				->where('type', Score::USED_TYPE)
+				->get();
+			foreach ($scores as $item) {
+				$score = new Score();
+				$score->score = $item->score;
+				$score->type = Score::SCORING_TYPE;
+				$score->contractor_id = $item->contractor_id;
+				$score->deal_id = $item->deal_id;
+				$score->deal_position_id = $item->deal_position_id;
+				$score->user_id = $this->request->user()->id;
+				$score->save();
+			}
+			
+			$event = $position->event;
+			
+			// если это позиция на бронирование полета, то удаляем и событие тоже
+			if (!$position->is_certificate_purchase && $event) {
+				$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
+				
+				$event->delete();
+				
+				if ($flightInvitationFilePath) {
+					Storage::disk('private')->delete($flightInvitationFilePath);
+				}
+			}
+			
+			$position->delete();
+			
+			if ($certificateFilePath) {
+				Storage::disk('private')->delete($certificateFilePath);
+			}
+
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			Log::debug('500 - Position Delete: ' . $e->getMessage());
+			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-		}
-		
-		if ($certificateFilePath) {
-			Storage::disk('private')->delete($certificateFilePath);
 		}
 
 		return response()->json(['status' => 'success']);
