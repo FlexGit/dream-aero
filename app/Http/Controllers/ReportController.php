@@ -269,6 +269,48 @@ class ReportController extends Controller {
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
+	public function flightLogIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-flight-log');
+		
+		return view('admin.report.flight-log.index', [
+			'page' => $page,
+		]);
+	}
+	
+	public function flightLogGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$dateFromAt = $this->request->filter_date_from_at ?? '';
+		$dateToAt = $this->request->filter_date_to_at ?? '';
+		$role = $this->request->filter_role ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		if (!$dateFromAt && !$dateToAt) {
+			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+			$dateToAt = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+		}
+		
+		
+		$data = [
+		];
+		
+		$VIEW = view('admin.report.flight-log.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
 	public function personalSellingIndex()
 	{
 		$user = \Auth::user();
@@ -302,8 +344,8 @@ class ReportController extends Controller {
 		}
 		
 		$bills = Bill::where('user_id', '!=', 0)
-			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
-			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->where('payed_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('payed_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			//->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
 			->get();
 		if ($user->isAdmin()) {
