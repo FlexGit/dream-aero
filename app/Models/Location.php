@@ -61,6 +61,7 @@ class Location extends Model
 	
 	const AFI_LOCATION = 'afi';
 	const BUS_LOCATION = 'bus';
+	const PITERLAND_LOCATION = 'land';
 	
 	/**
 	 * The attributes that are mass assignable.
