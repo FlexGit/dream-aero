@@ -35,7 +35,7 @@
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ $item['card_number'] }}
 				</td>
-				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
+				<td class="align-middle text-center">
 					{{ $item['bill_amount'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
