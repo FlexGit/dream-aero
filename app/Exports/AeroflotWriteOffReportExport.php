@@ -9,11 +9,14 @@ use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use Maatwebsite\Excel\Concerns\ToModel;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class AeroflotWriteOffReportExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, WithColumnFormatting, ShouldAutoSize, WithCustomValueBinder
+class AeroflotWriteOffReportExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, /*WithColumnFormatting,*/ ShouldAutoSize, WithCustomValueBinder
 {
 	private $data;
 
@@ -32,12 +35,35 @@ class AeroflotWriteOffReportExport extends \PhpOffice\PhpSpreadsheet\Cell\String
 		return $this->data;
 	}
 	
-	public function columnFormats(): array
+	/*public function columnFormats(): array
 	{
 		return [
 			'G' => NumberFormat::FORMAT_NUMBER,
 			'H' => NumberFormat::FORMAT_NUMBER,
 			'I' => NumberFormat::FORMAT_NUMBER,
 		];
+	}*/
+	
+	public function bindValue(Cell $cell, $value)
+	{
+		if ($cell->getColumn() == 'G') {
+			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
+			
+			return true;
+		}
+		if ($cell->getColumn() == 'H') {
+			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
+			
+			return true;
+		}
+		
+		if ($cell->getColumn() == 'I') {
+			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
+			
+			return true;
+		}
+
+		// else return default behavior
+		return parent::bindValue($cell, $value);
 	}
 }
