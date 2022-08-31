@@ -87,10 +87,10 @@
 	<label for="meta_description_en">Meta Description [EN]</label>
 	<textarea class="form-control" id="meta_description_en" name="meta_description_en"></textarea>
 </div>
-<div class="form-group">
+{{--<div class="form-group">
 	<label for="photo_preview_file">Шаблон сертификата</label>
 	<div class="custom-file">
 		<input type="file" class="custom-file-input" id="certificate_template_file_path" name="certificate_template_file_path">
 		<label class="custom-file-label" for="certificate_template_file_path">Выбрать файл</label>
 	</div>
-</div>
+</div>--}}

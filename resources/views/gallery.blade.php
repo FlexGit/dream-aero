@@ -98,7 +98,7 @@
 								</a>
 								<div class="title clearfix">
 									<img src="{{ asset('img/insta-white.png') }}" alt="insta">
-									<span>{{ $item->title }} <a href="{{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? $item->data_json['video_url'] : '#' }}">{{ strip_tags($item->preview_text) }}</a></span>
+									<span>{{ $item->title }} {{ $item->preview_text }}</span>
 								</div>
 							</div>
 						@endforeach
