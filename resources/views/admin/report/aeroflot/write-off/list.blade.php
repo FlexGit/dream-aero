@@ -36,7 +36,7 @@
 					{{ $item['card_number'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
-					{{ (int)$item['bill_amount'] }}
+					{{ number_format($item['bill_amount'], 0, '.', ' ') }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ (int)$item['bonus_amount'] }}
