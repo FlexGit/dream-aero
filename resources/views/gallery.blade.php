@@ -98,7 +98,7 @@
 								</a>
 								<div class="title clearfix">
 									<img src="{{ asset('img/insta-white.png') }}" alt="insta">
-									<span>{{ $item->title }} {{ $item->preview_text }}</span>
+									<span>{{ $item->title }} {!! $item->preview_text !!}</span>
 								</div>
 							</div>
 						@endforeach
