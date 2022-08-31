@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
+use Maatwebsite\Excel\DefaultValueBinder;
 
 class AeroflotWriteOffReportExport extends DefaultValueBinder implements FromView, ShouldAutoSize, WithColumnFormatting
 {
@@ -31,7 +31,7 @@ class AeroflotWriteOffReportExport extends DefaultValueBinder implements FromVie
 	public function columnFormats(): array
 	{
 		return [
-			'D' => '@',
+			'D' => NumberFormat::FORMAT_TEXT,
 			'G' => NumberFormat::FORMAT_NUMBER,
 			'H' => NumberFormat::FORMAT_NUMBER,
 			'I' => NumberFormat::FORMAT_NUMBER,
