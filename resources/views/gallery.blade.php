@@ -93,12 +93,12 @@
 					<div class="page_guests">
 						@foreach($guests as $item)
 							<div class="guest">
-								<a href="{{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? $item->data_json['video_url'] : '#' }}" target="_blank">
+								{{--<a href="{{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? $item->data_json['video_url'] : '#' }}" target="_blank">--}}
 									<img src="{{ (array_key_exists('photo_preview_file_path', $item->data_json) && $item->data_json['photo_preview_file_path']) ? '/upload/' . $item->data_json['photo_preview_file_path'] : '' }}" alt="">
-								</a>
+								{{--</a>--}}
 								<div class="title clearfix">
-									<img src="{{ asset('img/insta-white.png') }}" alt="insta">
-									<span>{{ $item->title }}</span> <a href="https://www.instagram.com/{{ strip_tags($item->preview_text) }}" target="_blank">{{ strip_tags($item->preview_text) }}</a>
+									{{--<img src="{{ asset('img/insta-white.png') }}" alt="insta">--}}
+									<span>{{ $item->title }}</span> {{--<a href="https://www.instagram.com/{{ strip_tags($item->preview_text) }}" target="_blank">{{ strip_tags($item->preview_text) }}</a>--}}
 								</div>
 							</div>
 						@endforeach
