@@ -99,7 +99,7 @@
 								<div class="title clearfix">
 									<img src="{{ asset('img/insta-white.png') }}" alt="insta">
 									<div style="display: flex;">
-										<span>{{ $item->title }}</span>
+										<div>{{ $item->title }}</div>
 										{!! $item->preview_text !!}
 									</div>
 								</div>
