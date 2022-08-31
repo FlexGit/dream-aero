@@ -36,13 +36,13 @@
 					{{ $item['card_number'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
-					{{ number_format($item['bill_amount'], 0, '.', ' ') }}
+					{{ $item['bill_amount'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
-					{{ (int)$item['bonus_amount'] }}
+					{{ $item['bonus_amount'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
-					{{ (int)$item['bonus_miles'] }}
+					{{ $item['bonus_miles'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ $item['product_type_name'] }}
