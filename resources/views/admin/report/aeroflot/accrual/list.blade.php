@@ -14,7 +14,7 @@
 		@foreach($items ?? [] as $item)
 			<tr>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
-					{{ $item['transaction_order_id'] }}
+					{{ '"' . $item['transaction_order_id'] . '"' }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ $item['city_name'] }}
