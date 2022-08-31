@@ -4,6 +4,10 @@ $.ajaxSetup({
 	}
 });
 
+$(document).on('change', '.custom-file-input', function() {
+	$(this).next('.custom-file-label').html($(this).val());
+});
+
 toastr.options = {
 	"closeButton": false,
 	"debug": false,

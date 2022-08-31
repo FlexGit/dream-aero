@@ -210,10 +210,6 @@
 				});
 			});
 
-			$(document).on('change', '.custom-file-input', function() {
-				$(this).next('.custom-file-label').html($(this).val());
-			});
-
 			$(document).on('change', '#filter_city_id, #filter_legal_entity_id', function(e) {
 				getList();
 			});
