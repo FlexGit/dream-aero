@@ -31,11 +31,11 @@ class AeroflotWriteOffReportExport extends DefaultValueBinder  implements FromVi
 	
 	public function bindValue(Cell $cell, $value)
 	{
-		if (in_array($cell->getColumn(), ['D','G','H','I']) && is_int($value)) {
+		/*if (in_array($cell->getColumn(), ['G','H','I']) && is_int($value)) {
 			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
 			
 			return true;
-		}
+		}*/
 
 		// else return default behavior
 		return parent::bindValue($cell, $value);
