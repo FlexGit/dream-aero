@@ -31,19 +31,19 @@ class AeroflotWriteOffReportExport extends DefaultValueBinder  implements FromVi
 	
 	public function bindValue(Cell $cell, $value)
 	{
-		if ($cell->getColumn() == 'G') {
+		if ($cell->getColumn() == 'G' && is_int($value)) {
 			\Log::debug($value);
 			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
 			
 			return true;
 		}
-		if ($cell->getColumn() == 'H') {
+		if ($cell->getColumn() == 'H' && is_int($value)) {
 			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
 			
 			return true;
 		}
 		
-		if ($cell->getColumn() == 'I') {
+		if ($cell->getColumn() == 'I' && is_int($value)) {
 			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
 			
 			return true;
