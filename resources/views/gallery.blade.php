@@ -96,7 +96,7 @@
 								{{--<a href="{{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? $item->data_json['video_url'] : '#' }}" target="_blank">--}}
 									<img src="{{ (array_key_exists('photo_preview_file_path', $item->data_json) && $item->data_json['photo_preview_file_path']) ? '/upload/' . $item->data_json['photo_preview_file_path'] : '' }}" alt="">
 								{{--</a>--}}
-								<div class="title clearfix" style="text-align: center;">
+								<div class="title clearfix">
 									{{--<img src="{{ asset('img/insta-white.png') }}" alt="insta">--}}
 									<span>{{ $item->title }}</span> {{--<a href="https://www.instagram.com/{{ strip_tags($item->preview_text) }}" target="_blank">{{ strip_tags($item->preview_text) }}</a>--}}
 								</div>
@@ -172,11 +172,12 @@
 
 		}
 		#dag-content .dag-guests .guests .title {
-			margin: 10px 10px 20px;
+			margin: 10px 0 20px;
 			font-size: 18px;
 			line-height: 20px;
 			color: #fff;
-			float: left;
+			/*float: left;*/
+			text-align: center;
 		}
 		#dag-content .dag-guests .guests .title img {
 			height: 20px;
