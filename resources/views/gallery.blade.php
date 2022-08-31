@@ -98,7 +98,7 @@
 								</a>
 								<div class="title clearfix">
 									<img src="{{ asset('img/insta-white.png') }}" alt="insta">
-									<span>{{ $item->title }}</span> <a href="https://www.instagram.com/{{ strip_tags($item->preview_text) }}">{{ '@' . strip_tags($item->preview_text) }}</a>
+									<span>{{ $item->title }}</span> <a href="https://www.instagram.com/{{ strip_tags($item->preview_text) }}">{{ strip_tags($item->preview_text) }}</a>
 								</div>
 							</div>
 						@endforeach
