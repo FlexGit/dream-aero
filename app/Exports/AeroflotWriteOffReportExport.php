@@ -31,6 +31,7 @@ class AeroflotWriteOffReportExport extends DefaultValueBinder implements FromVie
 	public function columnFormats(): array
 	{
 		return [
+			'D' => NumberFormat::FORMAT_TEXT,
 			'G' => NumberFormat::FORMAT_NUMBER,
 			'H' => NumberFormat::FORMAT_NUMBER,
 			'I' => NumberFormat::FORMAT_NUMBER,
