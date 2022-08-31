@@ -35,6 +35,8 @@ class AeroflotAccrualReportExport extends \PhpOffice\PhpSpreadsheet\Cell\StringV
 	public function columnFormats(): array
 	{
 		return [
+			'E' => NumberFormat::FORMAT_NUMBER,
+			'F' => NumberFormat::FORMAT_NUMBER,
 		];
 	}
 }
