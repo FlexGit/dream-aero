@@ -35,8 +35,8 @@ class AeroflotWriteOffReportExport extends \PhpOffice\PhpSpreadsheet\Cell\String
 	public function columnFormats(): array
 	{
 		return [
-			'G' => NumberFormat::FORMAT_TEXT,
-			'H' => '0.00',
+			'G' => NumberFormat::FORMAT_NUMBER,
+			'H' => NumberFormat::FORMAT_NUMBER,
 			'I' => NumberFormat::FORMAT_NUMBER,
 		];
 	}
