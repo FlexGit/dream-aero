@@ -3,14 +3,17 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use PhpOffice\PhpSpreadsheet\Cell\Cell;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
-use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class AeroflotWriteOffReportExport extends DefaultValueBinder  implements FromView, ShouldAutoSize, WithCustomValueBinder
+class AeroflotWriteOffReportExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, WithColumnFormatting, ShouldAutoSize, WithCustomValueBinder
 {
 	private $data;
 
@@ -29,15 +32,9 @@ class AeroflotWriteOffReportExport extends DefaultValueBinder  implements FromVi
 		return $this->data;
 	}
 	
-	public function bindValue(Cell $cell, $value)
+	public function columnFormats(): array
 	{
-		/*if (in_array($cell->getColumn(), ['G','H','I']) && is_int($value)) {
-			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
-			
-			return true;
-		}*/
-
-		// else return default behavior
-		return parent::bindValue($cell, $value);
+		return [
+		];
 	}
 }
