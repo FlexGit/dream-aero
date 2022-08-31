@@ -32,6 +32,7 @@ class AeroflotWriteOffReportExport extends DefaultValueBinder  implements FromVi
 	public function bindValue(Cell $cell, $value)
 	{
 		if ($cell->getColumn() == 'G') {
+			\Log::debug($value);
 			$cell->setValueExplicit($value, DataType::TYPE_NUMERIC);
 			
 			return true;
