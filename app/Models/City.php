@@ -194,9 +194,9 @@ class City extends Model
 		}
 		
 		// временно по СПБ вешаем все на Питерлэнд
-		if ($this->alias == City::SPB_ALIAS) {
+		/*if ($this->alias == City::SPB_ALIAS) {
 			return HelpFunctions::getEntityByAlias(Location::class, Location::PITERLAND_LOCATION);
-		}
+		}*/
 		
 		$locations = $this->locations()
 			->where('is_active', true)
