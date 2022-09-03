@@ -1,7 +1,5 @@
 <?php
 
-use App\Services\HelpFunctions;
-
 return [
 
     /*
@@ -244,7 +242,6 @@ return [
             'text'        => 'Календарь',
             'url'         => '/',
             'icon'        => 'far fa-fw fa-calendar-alt',
-			/*'can'	  => 'is_superadmin',*/
             'label'       => '',
             'label_color' => '',
         ],
@@ -378,14 +375,6 @@ return [
 				],
 			],
 		],
-		/*[
-			'text'        => 'Права доступа',
-			'url'         => '/access_right',
-			'icon'        => 'fas fa-fw fa-low-vision',
-			'can'	  => 'is_superadmin',
-			'label'       => '',
-			'label_color' => '',
-		],*/
 		[
 			'text'        => 'Уведомления',
 			'url'         => '/notification',
@@ -416,6 +405,12 @@ return [
 				[
 					'text' => 'Показания платформы',
 					'url'  => '/report/platform',
+					'can'  => 'is_superadmin',
+					'icon' => 'far fa-circle nav-icon',
+				],
+				[
+					'text' => 'Журнал учета налёта',
+					'url'  => '/report/flight_log',
 					'can'  => 'is_superadmin',
 					'icon' => 'far fa-circle nav-icon',
 				],
@@ -460,91 +455,48 @@ return [
 			'label_color' => '',
 		],
 		[
-			'text'    => 'Сайты',
+			'text'    => 'Сайт',
 			'icon'    => 'fas fa-sitemap',
 			'can'	  => 'is_superadmin',
 			'submenu' => [
 				[
-					'text' => 'dream-aero.ru',
-					'url'  => '#',
-					'submenu' => [
-						[
-							'text' => 'Новости',
-							'url'  => '/site/ru/news',
-							'icon' => '',
-							'can'  => 'is_superadmin',
-						],
-						[
-							'text' => 'Галерея',
-							'url'  => '/site/ru/gallery',
-							'icon' => '',
-							'can'  => 'is_superadmin',
-						],
-						[
-							'text' => 'Отзывы',
-							'url'  => '/site/ru/reviews',
-							'icon' => '',
-							'can'  => 'is_superadmin',
-						],
-						[
-							'text' => 'Гости',
-							'url'  => '/site/ru/guests',
-							'icon' => '',
-							'can'  => 'is_superadmin',
-						],
-						[
-							'text' => 'Страницы',
-							'url'  => '/site/ru/pages',
-							'icon' => '',
-							'can'  => 'is_superadmin',
-						],
-						[
-							'text' => 'Промобоксы',
-							'url'  => '/site/ru/promobox',
-							'icon' => '',
-							'can'  => 'is_superadmin',
-						],
-					],
+					'text' => 'Новости',
+					'url'  => '/site/ru/news',
+					'icon' => 'far fa-circle nav-icon',
+					'can'  => 'is_superadmin',
 				],
-				/*[
-					'text' => 'dream.aero',
-					'url'  => '#',
-					'submenu' => [
-						[
-							'text' => 'Новости',
-							'url'  => '/site/aero/news',
-							'icon' => '',
-						],
-						[
-							'text' => 'Галерея',
-							'url'  => '/site/aero/gellery',
-							'icon' => '',
-						],
-						[
-							'text' => 'Отзывы',
-							'url'  => '/site/aero/reviews',
-							'icon' => '',
-						],
-					],
-				],*/
+				[
+					'text' => 'Галерея',
+					'url'  => '/site/ru/gallery',
+					'icon' => 'far fa-circle nav-icon',
+					'can'  => 'is_superadmin',
+				],
+				[
+					'text' => 'Отзывы',
+					'url'  => '/site/ru/reviews',
+					'icon' => 'far fa-circle nav-icon',
+					'can'  => 'is_superadmin',
+				],
+				[
+					'text' => 'Гости',
+					'url'  => '/site/ru/guests',
+					'icon' => 'far fa-circle nav-icon',
+					'can'  => 'is_superadmin',
+				],
+				[
+					'text' => 'Страницы',
+					'url'  => '/site/ru/pages',
+					'icon' => 'far fa-circle nav-icon',
+					'can'  => 'is_superadmin',
+				],
+				[
+					'text' => 'Промобоксы',
+					'url'  => '/site/ru/promoboxes',
+					'icon' => 'far fa-circle nav-icon',
+					'can'  => 'is_superadmin',
+				],
 			],
 		],
-        /*['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],*/
     ],
 
     /*

@@ -10,6 +10,8 @@
 		$title = 'Гости';
 	} elseif($type == app('\App\Models\Content')::PAGES_TYPE) {
 		$title = 'Страницы';
+	} elseif($type == app('\App\Models\Content')::PROMOBOX_TYPE) {
+		$title = 'Промобоксы';
 	}
 @endphp
 
@@ -54,10 +56,19 @@
 						<tr>
 							<th class="text-center">@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя @else Заголовок @endif</th>
 							<th class="text-center">Город</th>
-							@if($type != app('\App\Models\Content')::PAGES_TYPE)
-								<th class="text-center">Дата публикации</th>
-								<th class="text-center">Активность</th>
-							@endif
+							@switch($type)
+								@case(app('\App\Models\Content')::PROMOBOX_TYPE)
+									<th class="text-center">Активность</th>
+									<th class="text-center">Дата начала активности</th>
+									<th class="text-center">Дата окончания активности</th>
+								@break
+								@case(app('\App\Models\Content')::PAGES_TYPE)
+								@break
+								@default
+									<th class="text-center">Дата публикации</th>
+									<th class="text-center">Активность</th>
+								@break
+							@endswitch
 							<th class="text-center"></th>
 						</tr>
 						</thead>

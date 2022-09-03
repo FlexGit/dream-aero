@@ -2,8 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Models\City;
+use App\Models\Content;
 use App\Models\Promo;
 use App\Models\User;
+use App\Services\HelpFunctions;
 
 class PromoRepository {
 	
@@ -48,5 +51,28 @@ class PromoRepository {
 		$promos = $promos->get();
 		
 		return $promos;
+	}
+	
+	/**
+	 * @param City $city
+	 * @return Content|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|object|null
+	 */
+	public function getActivePromobox(City $city)
+	{
+		$promoboxParentContent = HelpFunctions::getEntityByAlias(Content::class, Content::PROMOBOX_TYPE);
+		if (!$promoboxParentContent) return null;
+		
+		$date = date('Y-m-d');
+		
+		return Content::where('parent_id', $promoboxParentContent->id)
+			->where('is_active', true)
+			->where('published_at', '<=', $date)
+			->where(function ($query) use ($date) {
+				$query->where('published_end_at', '>=', $date)
+					->orWhereNull('published_end_at');
+			})
+			->whereIn('city_id', [$city->id, 0])
+			->orderByDesc('published_at')
+			->first();
 	}
 }

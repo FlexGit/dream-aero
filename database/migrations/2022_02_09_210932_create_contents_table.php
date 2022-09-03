@@ -31,7 +31,8 @@ class CreateContentsTable extends Migration
 			$table->text('meta_description_en')->nullable()->comment('meta Description En');
 			$table->boolean('is_active')->default(true)->index()->comment('признак активности');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
-			$table->timestamp('published_at')->nullable()->comment('дата публикации');
+			$table->date('published_at')->nullable()->comment('дата публикации');
+			$table->date('published_end_at')->nullable()->comment('дата окончания публикации');
 			$table->timestamps();
 			$table->softDeletes();
         });

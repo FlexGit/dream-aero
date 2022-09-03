@@ -8,7 +8,6 @@ use App\Models\Promo;
 use App\Models\Promocode;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\Content;
@@ -18,17 +17,20 @@ use App\Models\ProductType;
 use App\Models\Product;
 use App\Models\User;
 use Validator;
+use App\Repositories\PromoRepository;
 
 class MainController extends Controller
 {
 	private $request;
+	private $promoRepo;
 	
 	/**
 	 * @param Request $request
 	 */
-	public function __construct(Request $request)
+	public function __construct(Request $request, PromoRepository $promoRepo)
 	{
 		$this->request = $request;
+		$this->promoRepo = $promoRepo;
 	}
 	
 	/**
@@ -62,11 +64,13 @@ class MainController extends Controller
 		}
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'home_' . $city->alias);
-
+		$promobox = $this->promoRepo->getActivePromobox($city);
+		
 		return view('home', [
 			'users' => $users,
 			'reviews' => $reviews,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -246,10 +250,12 @@ class MainController extends Controller
 			->get();
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'about');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('about', [
 			'flightSimulators' => $flightSimulators,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -263,9 +269,11 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'virtual-tour');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('virtual-tour', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -279,9 +287,11 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'virtual-tour');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('virtual-tour-air', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -321,9 +331,11 @@ class MainController extends Controller
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'flight-gift');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('gift-flight', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -338,9 +350,11 @@ class MainController extends Controller
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'variantyi-poleta');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('flight-types', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -355,12 +369,14 @@ class MainController extends Controller
 	{
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-
+		$promobox = $this->promoRepo->getActivePromobox($city);
+		
 		if ($simulator && $simulator == 'boeing-737-ng') {
 			$page = HelpFunctions::getEntityByAlias(Content::class, 'instruction-737-ng');
 
 			return view('instruction-737-ng', [
 				'page' => $page ?? new Content,
+				'promobox' => $promobox,
 				'city' => $city,
 				'cityAlias' => $cityAlias,
 			]);
@@ -371,6 +387,7 @@ class MainController extends Controller
 
 			return view('instruction-a320', [
 				'page' => $page ?? new Content,
+				'promobox' => $promobox,
 				'city' => $city,
 				'cityAlias' => $cityAlias,
 			]);
@@ -380,6 +397,7 @@ class MainController extends Controller
 		
 		return view('instruction', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -390,9 +408,11 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'nezabyivaemyie-emoczii');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('unforgettable-emotions', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -403,9 +423,11 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'professionalnaya-pomoshh');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('professional-help', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -416,9 +438,11 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'pogruzhenie-v-mir-aviaczii');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('immersion-aviation-world', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -429,6 +453,7 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'lechenie-aerofobii');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		$productTypes = ProductType::where('is_active', true)
 			->where('version', $city->version)
@@ -477,6 +502,7 @@ class MainController extends Controller
 		
 		return view('lechenie-aerofobii', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'productTypes' => $productTypes,
@@ -504,10 +530,12 @@ class MainController extends Controller
 			->get();
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'contacts_' . $city->alias);
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('contacts', [
 			'locations' => $locations,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 		]);
@@ -530,8 +558,6 @@ class MainController extends Controller
 			->orderBy('name')
 			->get();
 		
-		$cityProducts = $city->products;
-		
 		$products = [];
 		foreach ($productTypes as $productType) {
 			$products[mb_strtoupper($productType->alias)] = [];
@@ -539,35 +565,34 @@ class MainController extends Controller
 			foreach ($productType->products ?? [] as $product) {
 				if (!$product->is_active) continue;
 				
-				foreach ($cityProducts ?? [] as $cityProduct) {
-					if ($product->id != $cityProduct->id) continue;
-					
-					$price = $cityProduct->pivot->price;
-					if ($cityProduct->pivot->discount) {
-						$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
-					}
-					
-					$pivotData = json_decode($cityProduct->pivot->data_json, true);
-					
-					$products[mb_strtoupper($productType->alias)][$product->alias] = [
-						'id' => $product->id,
-						'name' => $product->name,
-						'alias' => $product->alias,
-						'duration' => $product->duration,
-						'price' => round($price),
-						'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
-						'is_hit' => (bool)$cityProduct->pivot->is_hit,
-						'is_booking_allow' => false,
-						'is_certificate_purchase_allow' => false,
-						'icon_file_path' => (is_array($product->data_json) && array_key_exists('icon_file_path', $product->data_json)) ? $product->data_json['icon_file_path'] : '',
-					];
-					
-					if (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) {
-						$products[mb_strtoupper($productType->alias)][$product->alias]['is_booking_allow'] = true;
-					}
-					if (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) {
-						$products[mb_strtoupper($productType->alias)][$product->alias]['is_certificate_purchase_allow'] = true;
-					}
+				$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+				if (!$cityProduct) continue;
+				if (!$cityProduct->pivot) continue;
+				if (!$cityProduct->pivot->is_active) continue;
+				
+				$basePrice = $cityProduct->pivot->price;
+				$price = $product->calcAmount(0, $city->id, Deal::WEB_SOURCE, false, 0, 0, 0, 0, 0, false, false, 0, true);
+
+				$products[mb_strtoupper($productType->alias)][$product->alias] = [
+					'id' => $product->id,
+					'name' => $product->name,
+					'alias' => $product->alias,
+					'duration' => $product->duration,
+					'base_price' => $basePrice,
+					'price' => round($price),
+					'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : 'руб',
+					'is_hit' => (bool)$cityProduct->pivot->is_hit,
+					'is_booking_allow' => false,
+					'is_certificate_purchase_allow' => false,
+					'icon_file_path' => (is_array($product->data_json) && array_key_exists('icon_file_path', $product->data_json)) ? $product->data_json['icon_file_path'] : '',
+				];
+				
+				$pivotData = json_decode($cityProduct->pivot->data_json, true);
+				if (array_key_exists('is_booking_allow', $pivotData) && $pivotData['is_booking_allow']) {
+					$products[mb_strtoupper($productType->alias)][$product->alias]['is_booking_allow'] = true;
+				}
+				if (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) {
+					$products[mb_strtoupper($productType->alias)][$product->alias]['is_certificate_purchase_allow'] = true;
 				}
 			}
 		}
@@ -578,11 +603,13 @@ class MainController extends Controller
 		}
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'prices_' . $city->alias);
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('price', [
 			'productTypes' => $productTypes,
 			'products' => $products,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'locationItems' => $locationItems,
@@ -714,12 +741,14 @@ class MainController extends Controller
 			->get();
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'oferta');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('oferta', [
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'legalEntities' => $legalEntities,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 		]);
 	}
 	
@@ -732,11 +761,13 @@ class MainController extends Controller
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'rules');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('rules', [
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 		]);
 	}
 	
@@ -747,13 +778,14 @@ class MainController extends Controller
 	{
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'how-to-pay');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('how-to-pay', [
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 		]);
 	}
 	
@@ -780,6 +812,7 @@ class MainController extends Controller
 	{
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		if ($alias) {
 			$news = Content::where('alias', $alias)
@@ -796,26 +829,28 @@ class MainController extends Controller
 				'news' => $news,
 				'city' => $city,
 				'cityAlias' => $cityAlias,
-			]);
-		} else {
-			$parentNews = HelpFunctions::getEntityByAlias(Content::class, 'news');
-		
-			$news = Content::where('parent_id', $parentNews->id)
-				->where('is_active', true)
-				->whereIn('city_id', [$city->id, 0])
-				->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
-				->latest()
-				->get();
-			
-			$page = HelpFunctions::getEntityByAlias(Content::class, 'news');
-			
-			return view('news-list', [
-				'news' => $news,
-				'city' => $city,
-				'cityAlias' => $cityAlias,
-				'page' => $page ?? new Content,
+				'promobox' => $promobox,
 			]);
 		}
+
+		$parentNews = HelpFunctions::getEntityByAlias(Content::class, 'news');
+	
+		$news = Content::where('parent_id', $parentNews->id)
+			->where('is_active', true)
+			->whereIn('city_id', [$city->id, 0])
+			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->latest()
+			->get();
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'news');
+		
+		return view('news-list', [
+			'news' => $news,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+			'page' => $page ?? new Content,
+			'promobox' => $promobox,
+		]);
 	}
 	
 	/**
@@ -866,6 +901,7 @@ class MainController extends Controller
 	{
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		$date = date('Y-m-d');
 		
@@ -892,31 +928,33 @@ class MainController extends Controller
 				'promo' => $promo,
 				'city' => $city,
 				'cityAlias' => $cityAlias,
-			]);
-		} else {
-			$promos = Promo::where('is_active', true)
-				->where('is_published', true)
-				->whereIn('city_id', [$city->id, 0])
-				->where(function ($query) use ($date) {
-					$query->where('active_from_at', '<=', $date)
-						->orWhereNull('active_from_at');
-				})
-				->where(function ($query) use ($date) {
-					$query->where('active_to_at', '>=', $date)
-						->orWhereNull('active_to_at');
-				})
-				->latest()
-				->get();
-			
-			$page = HelpFunctions::getEntityByAlias(Content::class, 'promos');
-			
-			return view('promos-list', [
-				'promos' => $promos,
-				'city' => $city,
-				'cityAlias' => $cityAlias,
-				'page' => $page ?? new Content,
+				'promobox' => $promobox,
 			]);
 		}
+
+		$promos = Promo::where('is_active', true)
+			->where('is_published', true)
+			->whereIn('city_id', [$city->id, 0])
+			->where(function ($query) use ($date) {
+				$query->where('active_from_at', '<=', $date)
+					->orWhereNull('active_from_at');
+			})
+			->where(function ($query) use ($date) {
+				$query->where('active_to_at', '>=', $date)
+					->orWhereNull('active_to_at');
+			})
+			->latest()
+			->get();
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'promos');
+		
+		return view('promos-list', [
+			'promos' => $promos,
+			'city' => $city,
+			'cityAlias' => $cityAlias,
+			'page' => $page ?? new Content,
+			'promobox' => $promobox,
+		]);
 	}
 	
 	/**
@@ -946,6 +984,7 @@ class MainController extends Controller
 			->get();
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'gallery');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('gallery', [
 			'gallery' => $gallery,
@@ -953,6 +992,7 @@ class MainController extends Controller
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 		]);
 	}
 	
@@ -974,12 +1014,14 @@ class MainController extends Controller
 			->get();
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'reviews');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('reviews-list', [
 			'reviews' => $reviews,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 		]);
 	}
 	
@@ -1225,9 +1267,11 @@ class MainController extends Controller
 		}
 
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'vip');
+		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('vipflight', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'products' => $products,
 			'city' => $city,
 			'cityAlias' => $cityAlias,

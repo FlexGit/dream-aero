@@ -199,21 +199,34 @@ class ContentController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
-		$rules = [
-			'title' => ['required', 'min:3', 'max:250'],
-			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents'],
-			'published_at' => ['date'],
-			'photo_preview_file' => ['sometimes', 'image', 'max:10240', 'mimes:webp,png,jpg,jpeg'],
-		];
 		
-		$validator = Validator::make($this->request->all(), $rules)
-			->setAttributeNames([
-				'title' => 'Заголовок',
-				'alias' => 'Алиас',
-				'published_at' => 'Дата публикации',
-				'photo_preview_file' => 'Фото-превью',
-			]);
+		if ($type == Content::REVIEWS_TYPE) {
+			$rules = [
+				'title' => ['required', 'min:3', 'max:250'],
+				'published_at' => ['date'],
+			];
+			
+			$validator = Validator::make($this->request->all(), $rules)
+				->setAttributeNames([
+					'title' => 'Заголовок',
+					'published_at' => 'Дата публикации',
+				]);
+		} else {
+			$rules = [
+				'title' => ['required', 'min:3', 'max:250'],
+				'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/'],
+				'published_at' => ['date'],
+				'photo_preview_file' => ['sometimes', 'image', 'max:20480', 'mimes:webp,png,jpg,jpeg'],
+			];
+			
+			$validator = Validator::make($this->request->all(), $rules)
+				->setAttributeNames([
+					'title' => 'Заголовок',
+					'alias' => 'Alias',
+					'published_at' => 'Дата публикации',
+					'photo_preview_file' => 'Фото-превью',
+				]);
+		}
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
@@ -256,6 +269,7 @@ class ContentController extends Controller
 		$content->is_active = (bool)$this->request->is_active;
 		$content->data_json = $data;
 		$content->published_at = $this->request->published_at;
+		$content->published_end_at = $this->request->published_end_at ?? null;
 		if (!$content->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
@@ -291,7 +305,7 @@ class ContentController extends Controller
 			'title' => ['required', 'min:3', 'max:250'],
 			'alias' => ['required', 'min:3', 'max:250', 'regex:/([A-Za-z0-9\-]+)/', 'unique:contents,alias,' . $id],
 			'published_at' => ['date'],
-			'photo_preview_file' => ['sometimes', 'image', 'max:10240', 'mimes:webp,png,jpg,jpeg'],
+			'photo_preview_file' => ['sometimes', 'image', 'max:20480', 'mimes:webp,png,jpg,jpeg'],
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
@@ -334,6 +348,7 @@ class ContentController extends Controller
 			$content->data_json = $data;
 		}
 		$content->published_at = $this->request->published_at;
+		$content->published_end_at = $this->request->published_end_at ?? null;
 		if (!$content->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}

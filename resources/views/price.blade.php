@@ -79,7 +79,14 @@
 													@if($product['icon_file_path'])
 														<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
 													@endif
-													<div style="position: relative;margin-top: 42.5px">
+													<div style="position: relative;margin-top: 10px;">
+														<div style="margin-top: 10px;height: 30px;">
+															@if($product['base_price'] != $product['price'])
+																<b class="strikethrough" style="font-size: 18px;">
+																	{{ number_format($product['base_price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}
+																</b>
+															@endif
+														</div>
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</p>
 													</div>
 													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form_open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}" data-popup-type="product"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>
@@ -102,7 +109,7 @@
 													@if($product['icon_file_path'])
 														<img src="{{ '/upload/' . $product['icon_file_path'] }}" alt="">
 													@endif
-													<div style="position: relative;margin-top: 42.5px">
+													<div style="position: relative;margin-top: 40px;">
 														<p class="pr">{{ number_format($product['price'], 0, '.', ' ') }} {{ trans('main.common.' . $product['currency']) }}</p>
 													</div>
 													<a href="{{ url('#popup') }}" class="bron button-pipaluk button-pipaluk-orange popup-with-form form-open" data-type="{{ mb_strtoupper($productType->alias) }}" data-product-name="{{ $product['name'] }}" data-product-alias="{{ $product['alias'] }}" data-time="{{ $product['duration'] }}" data-title="{{ mb_strtoupper($productType->alias) }}" data-popup-type="product"><i>{{ $product['is_booking_allow'] ? trans('main.price.booking') : '' }}@if($product['is_booking_allow'] && $product['is_certificate_purchase_allow'])/@endif{{ $product['is_certificate_purchase_allow'] ? trans('main.price.certificate') : '' }}</i></a>

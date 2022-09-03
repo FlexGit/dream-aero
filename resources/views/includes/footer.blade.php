@@ -132,12 +132,6 @@
 	<div class="popup-container"></div>
 </div>
 
-{{--<div id="popup-promo-box" class="overlay">
-	<div class="popup popup-promo">
-		<a class="close" href="javascript:void(0)" onclick="localStorage.setItem('{{ $promobox->alias }}', true);">&times;</a>
-		<div class="content">
-			<h2>{{ $promobox->title }}</h2>
-			<a href="/news/{{ $promobox->alias }}" onclick="localStorage.setItem('{{ $promobox->alias }}', true);" class="obtain-button button-pipaluk button-pipaluk-orange"><i>подробнее</i></a>
-		</div>
-	</div>
-</div>--}}
+@if(isset($promobox))
+	@include('includes.promobox')
+@endif

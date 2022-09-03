@@ -100,5 +100,22 @@
 				}
 			});
 		});
+
+		var promoboxId = $('#promobox').data('alias'),
+			promobox = localStorage.getItem('promobox-' + promoboxId);
+
+		if (!promobox){
+			setTimeout(function() {
+				$('#promobox').css({'visibility': 'visible', 'opacity': 100});
+			}, 500);
+		}
+
+		$('.popup .close').on('click', function() {
+			$(this).closest('.overlay').css({'visibility': 'hidden', 'opacity': 0});
+		});
+
+		$('.js-promobox-btn').on('click', function() {
+			localStorage.setItem('promobox-' + $('#promobox').data('alias'), true);
+		});
 	});
 </script>
