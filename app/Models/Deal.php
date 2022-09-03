@@ -87,6 +87,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereUuid($value)
  * @property string|null $roistat номер визита Roistat
  * @method static \Illuminate\Database\Eloquent\Builder|Deal whereRoistat($value)
+ * @property int $bill_location_id
+ * @property-read \App\Models\Location|null $billLocation
+ * @method static \Illuminate\Database\Eloquent\Builder|Deal whereBillLocationId($value)
  */
 class Deal extends Model
 {

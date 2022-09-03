@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Deal;
+use App\Models\LockingPeriod;
 use App\Models\Status;
 use App\Models\Token;
 use Carbon\Carbon;
@@ -421,5 +422,28 @@ class HelpFunctions {
 		}
 		
 		return $outStr;
+	}
+	
+	/**
+	 * @param $userId
+	 * @param $locationId
+	 * @param $startAt
+	 * @param $stopAt
+	 * @param bool $isSelf
+	 * @return LockingPeriod|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+	 */
+	public static function getLockingPeriod($userId, $locationId, $startAt, $stopAt, $isSelf = false)
+	{
+		$lockingPeriod = LockingPeriod::where('location_id', $locationId)
+			->where('start_at', '<=', $stopAt)
+			->where('stop_at', '>=', $startAt);
+		if ($isSelf) {
+			$lockingPeriod = $lockingPeriod->where('user_id', $userId);
+		} else {
+			$lockingPeriod = $lockingPeriod->where('user_id', '!=', $userId);
+		}
+		$lockingPeriod = $lockingPeriod->first();
+		
+		return $lockingPeriod;
 	}
 }

@@ -54,6 +54,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|City wherePayAccountNumber($value)
  * @property string $name_en
  * @method static \Illuminate\Database\Eloquent\Builder|City whereNameEn($value)
+ * @property string|null $whatsapp
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereWhatsapp($value)
  */
 class City extends Model
 {

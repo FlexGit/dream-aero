@@ -12,6 +12,7 @@ use App\Models\Event;
 use App\Models\EventComment;
 use App\Models\FlightSimulator;
 use App\Models\Location;
+use App\Models\LockingPeriod;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductType;
@@ -1284,5 +1285,37 @@ class EventController extends Controller
 		$docFilePath = (is_array($event->data_json) && array_key_exists('doc_file_path', $event->data_json)) ? $event->data_json['doc_file_path'] : '';
 
 		return Storage::disk('private')->download($docFilePath);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function lockPeriod()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isAdminOrHigher()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
+		$locationId = $this->request->location_id ?? 0;
+		$startAt = $this->request->start_at ?? '';
+		$stopAt = $this->request->stop_at ?? '';
+		
+		$lockingPeriod = HelpFunctions::getLockingPeriod($user->id, $locationId, $startAt, $stopAt);
+		if ($lockingPeriod) {
+			return response()->json(['status' => 'error', 'reason' => 'Выбранный период пересекается с зарезервированным ранее периодом пользователя ' . ($lockingPeriod->user ? $lockingPeriod->user->fioFormatted() : '-')]);
+		}
+
+		$lockingPeriod = new LockingPeriod();
+		$lockingPeriod->location_id = $locationId;
+		$lockingPeriod->user_id = $user->id;
+		$lockingPeriod->start_at = $startAt;
+		$lockingPeriod->stop_at = $stopAt;
+		if (!$lockingPeriod->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		return response()->json(['status' => 'success', 'message' => 'Период ' . $startAt . ' - ' . Carbon::parse($stopAt)->format('H:i') . ' зарезервирован на ' . Event::LOCKING_PERIOD . ' мин.']);
 	}
 }

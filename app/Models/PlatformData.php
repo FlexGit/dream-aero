@@ -42,6 +42,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|PlatformData withTrashed()
  * @method static \Illuminate\Database\Query\Builder|PlatformData withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PlatformLog[] $logs
+ * @property-read int|null $logs_count
  */
 class PlatformData extends Model
 {

@@ -100,6 +100,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShiftAdminId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShiftPilotId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereTestPilotId($value)
+ * @property \Illuminate\Support\Carbon|null $feedback_email_sent_at дата и время отправки письма с просьбой оставить отзыв о полете
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereFeedbackEmailSentAt($value)
  */
 class Event extends Model
 {
@@ -166,6 +168,8 @@ class Event extends Model
 	
 	const NOTIFICATION_TYPE_SMS = 'sms';
 	const NOTIFICATION_TYPE_CALL = 'call';
+	
+	const LOCKING_PERIOD = 5; // 5 min
 	
 	/**
 	 * The attributes that are mass assignable.

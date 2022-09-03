@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
 		Commands\SendPromocodeAfterFlightEmail::class,
 		Commands\Roistat\RoistatAddDeals::class,
 		Commands\RunAeroflotAccrual::class,
+		Commands\UnlockPeriod::class,
 	];
 
 	/**
@@ -117,6 +118,11 @@ class Kernel extends ConsoleKernel
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// Начисление миль Аэрофлот Бонус
+		$schedule->command('period:unlock')
+			->everyMinute()
+			->runInBackground();
 	}
 
 	/**

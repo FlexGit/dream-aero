@@ -430,15 +430,15 @@
 				$('#certificate_uuid').val('');
 			});
 
-			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely', function() {
+			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely, #extra_time', function() {
 				calcProductAmount();
 
-				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at']) !== -1) {
+				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at', 'extra_time', 'location_id']) !== -1) {
 					validateFlightDate();
 				}
 			});
 
-			$(document).on('keyup', '#product_id, #flight_date_at, #flight_time_at', function() {
+			$(document).on('keyup', '#product_id, #flight_date_at, #flight_time_at, #extra_time, #location_id', function() {
 				validateFlightDate();
 			});
 
@@ -449,18 +449,28 @@
 			function validateFlightDate() {
 				var $eventStopElement = $('.js-event-stop-at'),
 					$isValidFlightDate = $('#is_valid_flight_date'),
+					$location = $('#location_id'),
 					$product = $('#product_id'),
 					$flightDate = $('#flight_date_at'),
 					$flightTime = $('#flight_time_at'),
+					$extraTime = $('#extra_time'),
 					duration = $product.find(':selected').data('duration');
 
 				if (($product.val() > 0) && duration && $flightDate.val().length && $flightTime.val().length) {
+
 					var flightStartAt = moment(new Date($flightDate.val() + 'T' + $flightTime.val()), 'DD.MM.YYYY HH:mm'),
-						flightStopAt = flightStartAt.add(duration, 'm');
+						flightStopAt = moment(flightStartAt).add(duration, 'm');
+
+					if ($extraTime.val().length) {
+						flightStopAt = flightStopAt.add($extraTime.val(), 'm');
+					}
 
 					if (!flightStopAt.isAfter($flightDate.val(), 'day')) {
 						$isValidFlightDate.val(1);
 						$eventStopElement.text('Окончание полета: ' + flightStopAt.format('DD.MM.YYYY HH:mm'));
+						if ($location.val().length) {
+							lockPeriod($location.val(), flightStartAt.format('YYYY-MM-DD HH:mm'), flightStopAt.format('YYYY-MM-DD HH:mm'));
+						}
 					} else {
 						$isValidFlightDate.val(0);
 						$eventStopElement.text('Некорректное начало полета');
@@ -469,6 +479,29 @@
 					$isValidFlightDate.val(0);
 					$eventStopElement.text('');
 				}
+			}
+
+			function lockPeriod(locationId, flightStartAt, flightStopAt) {
+				$.ajax({
+					url: "{{ route('lockPeriod') }}",
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						'location_id': locationId,
+						'start_at': flightStartAt,
+						'stop_at': flightStopAt,
+					},
+					success: function(result) {
+						//console.log(result);
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return false;
+						}
+
+						toastr.success(result.message);
+						return true;
+					}
+				});
 			}
 
 			function calcProductAmount() {

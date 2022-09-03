@@ -79,6 +79,18 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Query\Builder|DealPosition withTrashed()
  * @method static \Illuminate\Database\Query\Builder|DealPosition withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $aeroflot_transaction_type тип транзакции Аэрофлот Бонус
+ * @property string|null $aeroflot_transaction_order_id id транзакции/заказа Аэрофлот Бонус
+ * @property string|null $aeroflot_card_number номер карты Аэрофлот Бонус
+ * @property int $aeroflot_bonus_amount сумма транзакции Аэрофлот Бонус
+ * @property string|null $aeroflot_status статус транзакции Аэрофлот Бонус
+ * @property string|null $aeroflot_state состояние транзакции списания милей Аэрофлот Бонус
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotBonusAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotCardNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionType($value)
  */
 class DealPosition extends Model
 {

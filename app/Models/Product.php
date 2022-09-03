@@ -46,6 +46,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property int $employee_id пилот
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereEmployeeId($value)
+ * @property int $validity
+ * @property bool $is_active
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereValidity($value)
  */
 class Product extends Model
 {

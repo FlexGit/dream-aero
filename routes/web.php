@@ -157,7 +157,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::post('event/send', [EventController::class, 'sendFlightInvitation'])->name('sendFlightInvitation');
 			Route::get('event/{uuid}/doc/file', [EventController::class, 'getDocFile'])->name('getDocFile');
 			Route::post('event/{id}/doc/file/delete', [EventController::class, 'deleteDocFile'])->name('deleteDocFile');
-	
+			
+			Route::post('event/lock-period', [EventController::class, 'lockPeriod'])->name('lockPeriod');
+			
 			// Сделки
 			Route::get('deal/{id?}', [DealController::class, 'index'])->name('dealIndex');
 			Route::get('deal/list/ajax', [DealController::class, 'getListAjax'])->name('dealList');
@@ -429,7 +431,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('report/platform/list/ajax', [ReportController::class, 'platformGetListAjax'])->name('platformList');
 			Route::get('report/platform/modal/{location_id}/{simulator_id}/{date}', [ReportController::class, 'platformModalEdit'])->name('platformModalEdit');
 			Route::post('report/platform', [ReportController::class, 'platformModalUpdate'])->name('platformModalUpdate');
-
+			
+			Route::get('report/flight_log', [ReportController::class, 'flightLogIndex'])->name('flightLogIndex');
+			Route::get('report/flight_log/list/ajax', [ReportController::class, 'flightLogGetListAjax'])->name('flightLogList');
+			
 			Route::get('report/personal-selling', [ReportController::class, 'personalSellingIndex'])->name('personalSellingIndex');
 			Route::get('report/personal-selling/list/ajax', [ReportController::class, 'personalSellingGetListAjax'])->name('personalSellingList');
 			

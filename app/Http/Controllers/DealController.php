@@ -10,6 +10,7 @@ use App\Models\Currency;
 use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\FlightSimulator;
+use App\Models\LockingPeriod;
 use App\Models\PaymentMethod;
 use App\Models\Promo;
 use App\Models\Deal;
@@ -1031,7 +1032,15 @@ class DealController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Контрагент с таким E-mail уже существует']);
 			}
 		}
-
+		
+		if (in_array($source, [Deal::ADMIN_SOURCE, Deal::CALENDAR_SOURCE]) || !$source) {
+			// проверяем наличие блокировки другого пользователя
+			$lockingPeriod = HelpFunctions::getLockingPeriod($this->request->user()->id, $location->id, Carbon::parse($flightAt)->format('Y-m-d H:i'), Carbon::parse($flightAt)->addMinutes($product->duration ?? 0)->addMinutes($extraTime)->format('Y-m-d H:i'));
+			if ($lockingPeriod) {
+				return response()->json(['status' => 'error', 'reason' => 'Выбранный период пересекается с зарезервированным ранее периодом пользователя ' . ($lockingPeriod->user ? $lockingPeriod->user->fioFormatted() : '-')]);
+			}
+		}
+		
 		$data = [];
 		if ($comment) {
 			$data['comment'] = $comment;
@@ -1167,6 +1176,14 @@ class DealController extends Controller
 
 					if ($promocodeId || $promocodeUuid) {
 						$promocode->contractors()->save($contractor);
+					}
+					
+					if (in_array($source, [Deal::ADMIN_SOURCE, Deal::CALENDAR_SOURCE]) || !$source) {
+						// снимаем блокировку с периода
+						$lockingPeriod = HelpFunctions::getLockingPeriod($this->request->user()->id, $location->id, Carbon::parse($flightAt)->format('Y-m-d H:i'), Carbon::parse($flightAt)->addMinutes($product->duration ?? 0)->addMinutes($extraTime)->format('Y-m-d H:i'), true);
+						if ($lockingPeriod) {
+							$lockingPeriod->delete();
+						}
 					}
 				break;
 				case Event::EVENT_TYPE_BREAK:
