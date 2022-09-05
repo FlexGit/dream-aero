@@ -7,7 +7,7 @@
 
 @section('content')
 	<div class="main-block-full str">
-		@desktop
+		{{--@desktop--}}
 			<div class="video">
 				<video poster="{{ asset('img/mainpic.webp') }}" preload="auto" muted playsinline autoplay="autoplay" loop="loop">
 					<source src="{{ asset('video/mainvideo.mp4') }}" type="video/mp4">
@@ -16,7 +16,7 @@
 					<img src="{{ asset('img/mainpic.webp') }}" alt="" width="100%" height="100%">
 				</video>
 			</div>
-		@enddesktop
+		{{--@enddesktop--}}
 
 		<div class="container conthide">
 			<div class="mainpart">
