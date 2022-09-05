@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		<div class="image">
-			<img src="{{ asset('img/about-bg.webp') }}" alt="" width="100%" height="auto">
+			<img src="{{ asset('img/about-bg.webp') }}" alt="" width="955" height="536" style="width: 100%;height: auto;">
 		</div>
 	</div>
 
