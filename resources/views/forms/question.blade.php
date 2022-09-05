@@ -4,7 +4,7 @@
 			<div class="col-md-7">
 				<h2>@lang('main.question.у-вас-остались-вопросы')</h2>
 				<span>@lang('main.question.напишите-менеджеру-компании')</span>
-				<img src="{{ asset('img/bplane.webp') }}" alt="" width="100%" height="auto">
+				<img src="{{ asset('img/bplane.webp') }}" alt="" width="804" height="311" style="width: 100%;height: auto;">
 			</div>
 			<div class="col-md-5">
 				<div class="form wow fadeInRight" data-wow-duration="2s">

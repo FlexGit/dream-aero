@@ -3,9 +3,9 @@
 		<div class="footer-menu">
 			<a href="{{ url(Request::session()->get('cityAlias') ?? '/') }}" class="logo">
 				@if (App::isLocale('en'))
-					<img src="{{ asset('img/logo-eng-footer.png') }}" alt="logo">
+					<img src="{{ asset('img/logo-eng-footer.png') }}" alt="logo" width="152" height="57">
 				@else
-					<img src="{{ asset('img/logo-footer.webp') }}" alt="logo">
+					<img src="{{ asset('img/logo-footer.webp') }}" alt="logo" width="172" height="65">
 				@endif
 			</a>
 			<div class="social">
@@ -57,7 +57,7 @@
 		<div class="footer-menu">
 			<span {{ App::isLocale('en') ? 'style=margin-left:0;' : '' }}>
 				<a href="https://www.rossiya-airlines.com/" target="_blank">
-					<img style="width: 172px;margin:0 15px 15px 15px;" src="{{ asset('img/logo-white.webp') }}" alt="">
+					<img style="width: 172px;margin:0 15px 15px 15px;" src="{{ asset('img/logo-white.webp') }}" alt="" width="172" height="27">
 				</a>
 				<p style="color: white;margin-top: -5px;font-size: 9px">@lang('main.нижнее-меню.в-партнерстве-с-компанией-россия')</p>
 				<p class="advert" style="margin: 0;text-align: right;margin-top: 45px;">

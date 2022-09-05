@@ -43,7 +43,7 @@
 				</p>
 				<p style="margin: 15px;">
 					<a style="display: inline;" href="https://www.rossiya-airlines.com" target="_blank">
-						<img src="{{ asset('img/logo-white.webp') }}" alt="" width="172" height="auto">
+						<img src="{{ asset('img/logo-white.webp') }}" alt="" width="172" height="27">
 					</a>
 				</p>
 				<p class="rossya-white-label">
@@ -62,25 +62,25 @@
 			<ul class="row">
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('nezabyivaemyie-emoczii') }}">
-						<img src="{{ asset('img/airplane-shape.webp') }}" alt="" width="56" height="auto">
+						<img src="{{ asset('img/airplane-shape.webp') }}" alt="" width="56" height="58">
 						<span>@lang('main.home.незабываемые-эмоции-и-впечатления')</span>
 					</a>
 				</li>
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('professionalnaya-pomoshh') }}">
-						<img src="{{ asset('img/pilot-hat.webp') }}" alt="" width="66" height="auto">
+						<img src="{{ asset('img/pilot-hat.webp') }}" alt="" width="66" height="58">
 						<span>@lang('main.home.профессиональная-помощь-пилота')</span>
 					</a>
 				</li>
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('pogruzhenie-v-mir-aviaczii') }}">
-						<img src="{{ asset('img/pilot.webp') }}" alt="" width="61" height="auto">
+						<img src="{{ asset('img/pilot.webp') }}" alt="" width="61" height="58">
 						<span>@lang('main.home.погружение-в-мир-авиации')</span>
 					</a>
 				</li>
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('lechenie-aerofobii') }}">
-						<img src="{{ asset('img/cloud.webp') }}" alt="" width="61" height="auto">
+						<img src="{{ asset('img/cloud.webp') }}" alt="" width="61" height="58">
 						<span>@lang('main.home.лечение-аэрофобии')</span>
 					</a>
 				</li>
@@ -95,7 +95,7 @@
 			<ul class="row">
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico1.webp') }}" alt="" width="41" height="">
+						<img src="{{ asset('img/facts-ico1.webp') }}" alt="" width="41" height="39">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.динамическая-платформа')</span>
@@ -104,7 +104,7 @@
 				</li>
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico4.webp') }}" alt="" width="40" height="">
+						<img src="{{ asset('img/facts-ico4.webp') }}" alt="" width="40" height="40">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.визуализация-и-ощущения')</span>
@@ -113,7 +113,7 @@
 				</li>
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico3.webp') }}" alt="" width="42" height="">
+						<img src="{{ asset('img/facts-ico3.webp') }}" alt="" width="42" height="35">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.оборудование-и-приборы')</span>
@@ -122,7 +122,7 @@
 				</li>
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico2.webp') }}" alt="" width="40" height="">
+						<img src="{{ asset('img/facts-ico2.webp') }}" alt="" width="40" height="40">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.индивидуальный-подход')</span>
@@ -204,7 +204,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="img">
-						<img src="{{ asset('img/airbus-plane.webp') }}" alt="" width="100%" height="auto">
+						<img src="{{ asset('img/airbus-plane.webp') }}" alt="" width="555" height="239" style="width: 100%;height: auto;">
 					</div>
 				</div>
 			</div>

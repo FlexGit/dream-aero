@@ -22,9 +22,9 @@
 		<div>
 			<a href="{{ url(Request::session()->get('cityAlias') ?? '/') }}" class="logo">
 				@if (App::isLocale('en'))
-					<img src="{{ asset('img/logo-eng.png') }}" alt="logo">
+					<img src="{{ asset('img/logo-eng.png') }}" alt="logo" width="172" height="65">
 				@else
-					<img src="{{ asset('img/logo-new.webp') }}" alt="logo">
+					<img src="{{ asset('img/logo-new.webp') }}" alt="logo" width="172" height="64">
 				@endif
 			</a>
 		</div>
