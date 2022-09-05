@@ -145,24 +145,24 @@
 				</p>
 			</div>
 			<div class="item-left" id="varsL">
-				<img src="{{ asset('img/img1.webp') }}" alt="" width="100%" height="auto">
+				<img src="{{ asset('img/img1.webp') }}" alt="" width="692" height="402">
 				<span>@lang('main.home.посади-самолет-среди-австрийских-гор-инсбрука')</span>
 			</div>
 			<div class="item-right" id="varsR">
 				<div class="i-item">
-					<img src="{{ asset('img/img2.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/img2.webp') }}" alt="" width="475" height="286">
 					<span>@lang('main.home.насладись-живописными-пейзажами-лазурного-берега')</span>
 				</div>
 				<div class="i-item">
-					<img src="{{ asset('img/syyyx.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/syyyx.webp') }}" alt="" width="400" height="241">
 					<span>@lang('main.home.соверши-вираж-вокруг-самого-высокого-небоскреба-в-мире')</span>
 				</div>
 				<div class="i-item">
-					<img src="{{ asset('img/img3.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/img3.webp') }}" alt="" width="475" height="286">
 					<span>@lang('main.home.выбери-любой-маршрут-и-получи-удовольствие-от-полета')</span>
 				</div>
 				<div class="i-item">
-					<img src="{{ asset('img/img4.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/img4.webp') }}" alt="" width="475" height="286">
 					<span>@lang('main.home.пролети-над-величественными-небоскребами')</span>
 				</div>
 			</div>
