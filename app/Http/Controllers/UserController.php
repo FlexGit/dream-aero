@@ -309,7 +309,7 @@ class UserController extends Controller
 			}
 		}
 		
-		$data = [];
+		$data = $user->data_json;
 		
 		if($photoFile = $this->request->file('photo_file')) {
 			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
@@ -332,7 +332,6 @@ class UserController extends Controller
 		$user->is_reserved = (bool)$this->request->is_reserved;
 		$user->is_official = (bool)$this->request->is_official;
 		$user->enable = (bool)$this->request->enable;
-		$data = $user->data_json;
 		$user->data_json = $data;
 		if (!$user->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
