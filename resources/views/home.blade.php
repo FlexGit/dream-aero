@@ -10,8 +10,8 @@
 		<div class="video">
 			<video poster="{{ asset('img/mainpic.webp') }}" preload="auto" muted playsinline autoplay="autoplay" loop="loop">
 				<source src="{{ asset('video/mainvideo.mp4') }}" type="video/mp4">
-				<source src="{{ asset('video/mainvideo.webm') }}" type="video/webm">
-				<source src="{{ asset('video/mainvideo.ogv') }}" type="video/ogv">
+				{{--<source src="{{ asset('video/mainvideo.webm') }}" type="video/webm">
+				<source src="{{ asset('video/mainvideo.ogv') }}" type="video/ogv">--}}
 				<img src="{{ asset('img/mainpic.webp') }}" alt="" width="100%" height="100%">
 			</video>
 		</div>
