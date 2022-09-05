@@ -90,7 +90,7 @@
 	</div>
 </div>
 <div class="form-group">
-	<label>Путь к файлу фото</label>
+	<label>Фото</label>
 	<div class="custom-file">
 		<input type="file" class="custom-file-input" id="photo_file" name="photo_file">
 		<label class="custom-file-label" for="photo_file">Выбрать файл</label>

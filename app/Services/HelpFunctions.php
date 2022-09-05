@@ -446,4 +446,39 @@ class HelpFunctions {
 		
 		return $lockingPeriod;
 	}
+	
+	/**
+	 * @param $source
+	 * @param int $quality
+	 * @return string
+	 */
+	public static function webpImage($source, $quality = 70)
+	{
+		$dir = pathinfo($source, PATHINFO_DIRNAME);
+		$name = pathinfo($source, PATHINFO_FILENAME);
+		$path = $dir . DIRECTORY_SEPARATOR . $name . '.webp';
+		$info = getimagesize($source);
+		$isAlpha = false;
+		
+		if ($info['mime'] == 'image/jpeg') {
+			$image = imagecreatefromjpeg($source);
+		} elseif ($isAlpha = $info['mime'] == 'image/gif') {
+			$image = imagecreatefromgif($source);
+		} elseif ($isAlpha = $info['mime'] == 'image/png') {
+			$image = imagecreatefrompng($source);
+		} else {
+			return $source;
+		}
+		
+		if ($isAlpha) {
+			imagepalettetotruecolor($image);
+			imagealphablending($image, true);
+			imagesavealpha($image, true);
+		}
+		imagewebp($image, $path, $quality);
+		
+		unlink($source);
+		
+		return $path;
+	}
 }

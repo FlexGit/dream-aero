@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\User;
+use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
@@ -206,7 +207,6 @@ class UserController extends Controller
 		$rules = [
 			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
-			/*'email' => ['required', 'email', 'unique:users,email,NULL,id,deleted_at,NULL'],*/
 			'role' => ['required'],
 			'photo_file' => 'sometimes|image|max:1024',
 		];
@@ -215,7 +215,6 @@ class UserController extends Controller
 			->setAttributeNames([
 				'lastname' => 'Фамилия',
 				'name' => 'Имя',
-				/*'email' => 'E-mail',*/
 				'role' => 'Роль',
 				'photo_file' => 'Фото',
 			]);
@@ -232,12 +231,17 @@ class UserController extends Controller
 			}
 		}
 		
-		$isPhotoFileUploaded = false;
-		if($photoFile = $this->request->file('photo_file')) {
-			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
-		}
+		$data = [];
 		
 		$user = new User();
+		
+		if($photoFile = $this->request->file('photo_file')) {
+			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
+			if ($isPhotoFileUploaded) {
+				$data['photo_file_path'] = HelpFunctions::webpImage(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
+			}
+		}
+		
 		$user->lastname = $this->request->lastname;
 		$user->name = $this->request->name;
 		$user->middlename = $this->request->middlename ?? null;
@@ -253,10 +257,6 @@ class UserController extends Controller
 		$user->is_reserved = (bool)$this->request->is_reserved;
 		$user->is_official = (bool)$this->request->is_official;
 		$user->enable = (bool)$this->request->enable;
-		$data = [];
-		if ($isPhotoFileUploaded) {
-			$data['photo_file_path'] = 'user/photo/' . $photoFile->getClientOriginalName();
-		}
 		$user->data_json = $data;
 		if (!$user->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
@@ -285,7 +285,6 @@ class UserController extends Controller
 		$rules = [
 			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
-			/*'email' => ['sometimes', 'required', 'email', 'unique:users,email,' . $id . ',id,deleted_at,NULL'],*/
 			'role' => ['required'],
 			'photo_file' => ['sometimes', 'image', 'max:1024'],
 		];
@@ -294,7 +293,6 @@ class UserController extends Controller
 			->setAttributeNames([
 				'lastname' => 'Фамилия',
 				'name' => 'Имя',
-				/*'email' => 'E-mail',*/
 				'role' => 'Роль',
 				'photo_file' => 'Фото',
 			]);
@@ -310,10 +308,14 @@ class UserController extends Controller
 				return response()->json(['status' => 'error', 'reason' => 'Пользователь с таким E-mail уже существует']);
 			}
 		}
-
-		$isPhotoFileUploaded = false;
+		
+		$data = [];
+		
 		if($photoFile = $this->request->file('photo_file')) {
 			$isPhotoFileUploaded = $photoFile->move(public_path('upload/user/photo'), $photoFile->getClientOriginalName());
+			if ($isPhotoFileUploaded) {
+				$data['photo_file_path'] = HelpFunctions::webpImage('upload/user/photo/' . $photoFile->getClientOriginalName());
+			}
 		}
 		
 		$user->lastname = $this->request->lastname;
@@ -331,9 +333,6 @@ class UserController extends Controller
 		$user->is_official = (bool)$this->request->is_official;
 		$user->enable = (bool)$this->request->enable;
 		$data = $user->data_json;
-		if ($isPhotoFileUploaded) {
-			$data['photo_file_path'] = 'user/photo/' . $photoFile->getClientOriginalName();
-		}
 		$user->data_json = $data;
 		if (!$user->save()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
