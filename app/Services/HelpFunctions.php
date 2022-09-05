@@ -479,6 +479,9 @@ class HelpFunctions {
 		
 		unlink($source);
 		
+		\Log::debug($source);
+		\Log::debug($path);
+		
 		return $path;
 	}
 }
