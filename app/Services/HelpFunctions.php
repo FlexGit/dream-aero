@@ -479,6 +479,9 @@ class HelpFunctions {
 		
 		unlink($source);
 		
+		\Log::debug($path);
+		\Log::debug(str_replace('upload/', '', $path));
+		
 		return str_replace('upload/', '', $path);
 	}
 }
