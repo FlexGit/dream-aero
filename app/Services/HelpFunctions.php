@@ -460,6 +460,8 @@ class HelpFunctions {
 		$info = getimagesize($source);
 		$isAlpha = false;
 		
+		\Log::debug($info['mime']);
+		
 		if ($info['mime'] == 'image/jpeg') {
 			$image = imagecreatefromjpeg($source);
 		} elseif ($isAlpha = $info['mime'] == 'image/gif') {
