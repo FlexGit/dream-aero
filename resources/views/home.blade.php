@@ -204,7 +204,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="img">
-						<img src="{{ asset('img/airbus-plane.webp') }}" alt="" width="100%" height="auto">
+						<img src="{{ asset('img/airbus-plane.webp') }}" alt="" width="832" height="358" style="width: 100%;height: auto;">
 					</div>
 				</div>
 			</div>
