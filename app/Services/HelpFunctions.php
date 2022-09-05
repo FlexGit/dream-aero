@@ -460,8 +460,6 @@ class HelpFunctions {
 		$info = getimagesize($source);
 		$isAlpha = false;
 		
-		\Log::debug($info['mime']);
-		
 		if ($info['mime'] == 'image/jpeg') {
 			$image = imagecreatefromjpeg($source);
 		} elseif ($isAlpha = $info['mime'] == 'image/gif') {
@@ -469,7 +467,7 @@ class HelpFunctions {
 		} elseif ($isAlpha = $info['mime'] == 'image/png') {
 			$image = imagecreatefrompng($source);
 		} else {
-			return $source;
+			return str_replace('upload/', '', $source);
 		}
 		
 		if ($isAlpha) {
@@ -480,9 +478,6 @@ class HelpFunctions {
 		imagewebp($image, $path, $quality);
 		
 		unlink($source);
-		
-		\Log::debug($path);
-		\Log::debug(str_replace('upload/', '', $path));
 		
 		return str_replace('upload/', '', $path);
 	}
