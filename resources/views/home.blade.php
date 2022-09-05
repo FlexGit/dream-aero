@@ -7,14 +7,16 @@
 
 @section('content')
 	<div class="main-block-full str">
-		<div class="video">
-			<video poster="{{ asset('img/mainpic.webp') }}" preload="auto" muted playsinline autoplay="autoplay" loop="loop">
-				<source src="{{ asset('video/mainvideo.mp4') }}" type="video/mp4">
-				<source src="{{ asset('video/mainvideo.webm') }}" type="video/webm">
-				<source src="{{ asset('video/mainvideo.ogv') }}" type="video/ogv">
-				<img src="{{ asset('img/mainpic.webp') }}" alt="" width="100%" height="100%">
-			</video>
-		</div>
+		{{--@desktop--}}
+			<div class="video">
+				<video poster="{{ asset('img/mainpic.webp') }}" preload="auto" muted playsinline autoplay="autoplay" loop="loop">
+					<source src="{{ asset('video/mainvideo.mp4') }}" type="video/mp4">
+					<source src="{{ asset('video/mainvideo.webm') }}" type="video/webm">
+					<source src="{{ asset('video/mainvideo.ogv') }}" type="video/ogv">
+					<img src="{{ asset('img/mainpic.webp') }}" alt="" width="100%" height="100%">
+				</video>
+			</div>
+		{{--@enddesktop--}}
 
 		<div class="container conthide">
 			<div class="mainpart">
@@ -43,7 +45,7 @@
 				</p>
 				<p style="margin: 15px;">
 					<a style="display: inline;" href="https://www.rossiya-airlines.com" target="_blank">
-						<img src="{{ asset('img/logo-white.webp') }}" alt="" width="172" height="auto">
+						<img src="{{ asset('img/logo-white.webp') }}" alt="" width="172" height="27">
 					</a>
 				</p>
 				<p class="rossya-white-label">
@@ -62,25 +64,25 @@
 			<ul class="row">
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('nezabyivaemyie-emoczii') }}">
-						<img src="{{ asset('img/airplane-shape.webp') }}" alt="" width="56" height="auto">
+						<img src="{{ asset('img/airplane-shape.webp') }}" alt="" width="56" height="58">
 						<span>@lang('main.home.незабываемые-эмоции-и-впечатления')</span>
 					</a>
 				</li>
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('professionalnaya-pomoshh') }}">
-						<img src="{{ asset('img/pilot-hat.webp') }}" alt="" width="66" height="auto">
+						<img src="{{ asset('img/pilot-hat.webp') }}" alt="" width="66" height="58">
 						<span>@lang('main.home.профессиональная-помощь-пилота')</span>
 					</a>
 				</li>
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('pogruzhenie-v-mir-aviaczii') }}">
-						<img src="{{ asset('img/pilot.webp') }}" alt="" width="61" height="auto">
+						<img src="{{ asset('img/pilot.webp') }}" alt="" width="61" height="58">
 						<span>@lang('main.home.погружение-в-мир-авиации')</span>
 					</a>
 				</li>
 				<li class="col-md-3 col-sm-6">
 					<a href="{{ url('lechenie-aerofobii') }}">
-						<img src="{{ asset('img/cloud.webp') }}" alt="" width="61" height="auto">
+						<img src="{{ asset('img/cloud.webp') }}" alt="" width="61" height="58">
 						<span>@lang('main.home.лечение-аэрофобии')</span>
 					</a>
 				</li>
@@ -95,7 +97,7 @@
 			<ul class="row">
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico1.webp') }}" alt="" width="41" height="">
+						<img src="{{ asset('img/facts-ico1.webp') }}" alt="" width="41" height="39">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.динамическая-платформа')</span>
@@ -104,7 +106,7 @@
 				</li>
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico4.webp') }}" alt="" width="40" height="">
+						<img src="{{ asset('img/facts-ico4.webp') }}" alt="" width="40" height="40">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.визуализация-и-ощущения')</span>
@@ -113,7 +115,7 @@
 				</li>
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico3.webp') }}" alt="" width="42" height="">
+						<img src="{{ asset('img/facts-ico3.webp') }}" alt="" width="42" height="35">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.оборудование-и-приборы')</span>
@@ -122,7 +124,7 @@
 				</li>
 				<li class="col-md-3 wow">
 					<div class="ico">
-						<img src="{{ asset('img/facts-ico2.webp') }}" alt="" width="40" height="">
+						<img src="{{ asset('img/facts-ico2.webp') }}" alt="" width="40" height="40">
 					</div>
 					<div class="wow fadeInUp" data-wow-delay="0" data-wow-duration="2s">
 						<span>@lang('main.home.индивидуальный-подход')</span>
@@ -145,46 +147,48 @@
 				</p>
 			</div>
 			<div class="item-left" id="varsL">
-				<img src="{{ asset('img/img1.webp') }}" alt="" width="100%" height="auto">
+				<img src="{{ asset('img/img1.webp') }}" alt="" width="692" height="402" style="width: 100%;height: auto;">
 				<span>@lang('main.home.посади-самолет-среди-австрийских-гор-инсбрука')</span>
 			</div>
 			<div class="item-right" id="varsR">
 				<div class="i-item">
-					<img src="{{ asset('img/img2.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/img2.webp') }}" alt="" width="475" height="286" style="width: 100%;height: auto;">
 					<span>@lang('main.home.насладись-живописными-пейзажами-лазурного-берега')</span>
 				</div>
 				<div class="i-item">
-					<img src="{{ asset('img/syyyx.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/syyyx.webp') }}" alt="" width="400" height="241" style="width: 100%;height: auto;">
 					<span>@lang('main.home.соверши-вираж-вокруг-самого-высокого-небоскреба-в-мире')</span>
 				</div>
 				<div class="i-item">
-					<img src="{{ asset('img/img3.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/img3.webp') }}" alt="" width="475" height="286" style="width: 100%;height: auto;">
 					<span>@lang('main.home.выбери-любой-маршрут-и-получи-удовольствие-от-полета')</span>
 				</div>
 				<div class="i-item">
-					<img src="{{ asset('img/img4.webp') }}" alt="" width="100%" height="auto">
+					<img src="{{ asset('img/img4.webp') }}" alt="" width="475" height="286" style="width: 100%;height: auto;">
 					<span>@lang('main.home.пролети-над-величественными-небоскребами')</span>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="team">
-		<div class="container">
-			<h2 class="block-title">@lang('main.home.наша-команда')</h2>
-			<div class="owl-carousel">
-				@foreach($users as $user)
-					@if(!$user->data_json || !array_key_exists('photo_file_path', $user->data_json) || !$user->data_json['photo_file_path'])
-						@continue
-					@endif
-					<div>
-						<div class="img" style="background-image: url('/upload/{{ $user->data_json['photo_file_path'] }}');"></div>
-						<p>{{ trans('main.home.role.' . $user->role) }} <b>{{ $user['name'] }}</b></p>
-					</div>
-				@endforeach
+	@desktop
+		<div class="team">
+			<div class="container">
+				<h2 class="block-title">@lang('main.home.наша-команда')</h2>
+				<div class="owl-carousel">
+					@foreach($users as $user)
+						@if(!$user->data_json || !array_key_exists('photo_file_path', $user->data_json) || !$user->data_json['photo_file_path'])
+							@continue
+						@endif
+						<div>
+							<div class="img" style="background-image: url('/upload/{{ $user->data_json['photo_file_path'] }}');"></div>
+							<p>{{ trans('main.home.role.' . $user->role) }} <b>{{ $user['name'] }}</b></p>
+						</div>
+					@endforeach
+				</div>
 			</div>
 		</div>
-	</div>
+	@enddesktop
 
 	<div class="stock">
 		<div class="container">
@@ -204,7 +208,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="img">
-						<img src="{{ asset('img/airbus-plane.webp') }}" alt="" width="100%" height="auto">
+						<img src="{{ asset('img/airbus-plane.webp') }}" alt="" width="555" height="239" style="width: 150%;height: auto;">
 					</div>
 				</div>
 			</div>
