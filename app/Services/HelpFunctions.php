@@ -479,6 +479,6 @@ class HelpFunctions {
 		
 		unlink($source);
 		
-		return $path;
+		return str_replace('upload/', '', $path);
 	}
 }
