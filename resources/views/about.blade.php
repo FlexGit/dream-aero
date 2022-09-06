@@ -53,111 +53,177 @@
 							<tr>
 								<td colspan="2">&nbsp;</td>
 							</tr>
-							<tr>
-								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/msk/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
-								<td class="halfnhalf" rowspan="4"><a href="/msk/contacts"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Москва</span><br>ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('msk/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Москва</span>
+									<br>
+									ТРЦ "Афимолл Сити" (Пресненская наб., 2)
+								</td>
+								<td>
+									<a href="{{ url('msk/contacts') }}">
+										<img src="{{ asset('img/a320.png') }}" height="35" alt="AIRBUS A320"></a>
+									<span>Москва</span>
+									<br>
+									ТРЦ "Афимолл Сити" (Пресненская наб., 2)
+								</td>
 							</tr>
-							<tr>
-								<td style="background-color: #f0f0f0;">ТРЦ "Афимолл Сити" (Пресненская наб., 2)</td>
-							</tr>
-							<tr>
-								<td class="tdcity"><a href="/msk/contacts#location-veg"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
-								<td class="tdcity">&nbsp;</td>
-							</tr>
-							<tr>
-								<td>ТРК VEGAS Кунцево (56 км МКАД)</td>
-							</tr>
-							<tr>
-								<td>&nbsp;</td>
-							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/msk/contacts#location-bus"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Москва</td>
+							<tr class="even">
+								<td>
+									<a href="{{ url('msk/contacts#location-veg') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Москва</span>
+									<br>
+									ТРК VEGAS Кунцево (56 км МКАД)
+								</td>
 								<td></td>
 							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td>ТРЦ COLUMBUS (ул.Кировоградская, д.13А)</td>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('msk/contacts#location-bus') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Москва</span>
+									<br>
+									ТРЦ COLUMBUS (ул.Кировоградская, д.13А)
+								</td>
 								<td></td>
 							</tr>
-							<tr>
-								<td class="tdcity"><a href="/spb/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Санкт-Петербург</td>
-								<td class="halfnhalf_white" rowspan="4"><a href="/spb/contacts#location-ohta"><img src="{{ asset('img/a320.png') }}" width="120" alt="AIRBUS A320"></a><span class="tdcity">Санкт-Петербург</span><br>ТРЦ "Охта Молл" (Брантовская дор., 3)</td>
+							<tr class="even">
+								<td>
+									<a href="{{ url('msk/contacts#location-rio_msk') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Москва</span>
+									<br>
+									ТРЦ РИО Дмитровка (Дмитровское шоссе, д 163А)
+								</td>
+								<td></td>
 							</tr>
-							<tr>
-								<td>ТРК "РИО" (ул. Фучика д.2).</td>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('spb/contacts#location-ohta') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Санкт-Петербург</span>
+									<br>
+									ТРЦ "Охта Молл" (Брантовская дор., 3)
+								</td>
+								<td>
+									<a href="{{ url('spb/contacts#location-rio') }}">
+										<img src="{{ asset('img/a320.png') }}" height="35" alt="AIRBUS A320"></a>
+									<span>Санкт-Петербург</span>
+									<br>
+									ТРК "РИО" (ул. Фучика д.2)
+								</td>
 							</tr>
-							<tr>
-								<td class="tdcity" style="background-color: #f0f0f0;"><a href="/spb/contacts#location-land"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Санкт-Петербург</td>
-								<td class="tdcity">&nbsp;</td>
+							<tr class="even">
+								<td>
+									<a href="{{ url('spb/contacts#location-land') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Санкт-Петербург</span>
+									<br>
+									ТРК "ПИТЕРЛЭНД" (Приморский пр., д. 72)
+								</td>
+								<td></td>
 							</tr>
-							<tr>
-								<td style="background-color: #f0f0f0;">ТРК "ПИТЕРЛЭНД" (Приморский пр., д. 72)</td>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('vrn/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Воронеж</span>
+									<br>
+									ТРЦ "Центр Галереи Чижова" (Кольцовская ул., д. 35а)
+								</td>
+								<td></td>
 							</tr>
-							<tr>
-								<td>&nbsp;</td>
+							<tr class="even">
+								<td>
+									<a href="{{ url('ekb/contacts#location-ekb') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Екатеринбург</span>
+									<br>
+									ТРЦ "Алатырь" (ул. Малышева, 5)
+								</td>
+								<td>
+									<a href="{{ url('ekb/contacts#location-grn') }}">
+										<img src="{{ asset('img/a320.png') }}" height="35" alt="AIRBUS A320"></a>
+									<span>Екатеринбург</span>
+									<br>
+									ТРЦ "Гринвич" (ул. 8 Марта, д. 46)
+								</td>
 							</tr>
-							<tr>
-								<td class="tdcity"><a href="/vrn/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Воронеж</td>
-								<td class="tdcity">&nbsp;</td>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('krd/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Краснодар</span>
+									<br>
+									ТРК "СБС Мегамолл" (ул. Уральская, 79/1)
+								</td>
+								<td></td>
 							</tr>
-							<tr>
-								<td>ТРЦ "Центр Галереи Чижова" (Кольцовская ул., д. 35а)</td>
-								<td>&nbsp;</td>
+							<tr class="even">
+								<td>
+									<a href="{{ url('nsk/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Новосибирск</span>
+									<br>
+									ТРЦ «Сибирский молл» (ул. Фрунзе, 238)
+								</td>
+								<td></td>
 							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/ekb/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Екатеринбург</td>
-								<td class="tdcity"><a href="/ekb/contacts#location-grn"><img src="{{ asset('img/a320.png') }}" width="120" alt=""></a>Екатеринбург</td>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('nnv/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Нижний Новгород</span>
+									<br>
+									ТРЦ "Жар-Птица" (Советская пл., 5)
+								</td>
+								<td></td>
 							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td>ТРЦ "Алатырь" (ул. Малышева, 5)</td>
-								<td>ТРЦ "Гринвич" (ул. 8 Марта, д. 46)</td>
+							<tr class="even">
+								<td>
+									<a href="{{ url('sam/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Самара</span>
+									<br>
+									ТРЦ «Космопорт» (ул. Дыбенко, 30)
+								</td>
+								<td></td>
 							</tr>
-							<tr>
-								<td class="tdcity"><a href="/krd/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Краснодар</td>
-								<td class="tdcity">&nbsp;</td>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('kzn/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Казань</span>
+									<br>
+									ТРК «Парк Хаус» (пр-т. Хусаина Ямашева, 46/33)
+								</td>
+								<td></td>
 							</tr>
-							<tr>
-								<td>ТРК "СБС Мегамолл" (ул. Уральская, 79/1)</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/nsk/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Новосибирск</td>
-								<td class="tdcity">&nbsp;</td>
-							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td>ТРЦ «Сибирский молл» (ул. Фрунзе, 238)</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr>
-								<td class="tdcity"><a href="/nnv/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Нижний Новгород</td>
-								<td class="tdcity">&nbsp;</td>
-							</tr>
-							<tr>
-								<td>ТРЦ "Жар-Птица" (Советская пл., 5)</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/sam/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Самара</td>
-								<td class="tdcity">&nbsp;</td>
-							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td>ТРЦ «Космопорт» (ул. Дыбенко, 30)</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr>
-								<td class="tdcity"><a href="/kzn/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Казань</td>
-								<td class="tdcity">&nbsp;</td>
-							</tr>
-							<tr>
-								<td>ТРК «Парк Хаус» (пр-т. Хусаина Ямашева, 46/33)</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td class="tdcity"><a href="/khv/contacts"><img src="{{ asset('img/plane1.png') }}" width="120" alt=""></a>Хабаровск</td>
-								<td class="tdcity">&nbsp;</td>
-							</tr>
-							<tr style="background-color: #f0f0f0;">
-								<td>ТРЦ «Brosko Mall» (ул. Пионерская, 2В)</td>
-								<td>&nbsp;</td>
+							<tr class="even">
+								<td>
+									<a href="{{ url('khv/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Хабаровск</span>
+									<br>
+									ТРЦ «Brosko Mall» (ул. Пионерская, 2В)
+								</td>
+								<td></td>
 							</tr>
 							</tbody>
 						</table>
@@ -345,18 +411,19 @@
 			font-weight: 700;
 			font-size: 16px;
 		}
-		#airboeing .tdcity {
-			color: #FF8200;
-		}
 		#airboeing td {
 			width: 50%;
 			text-align: left;
+			padding: 15px 20px;
 		}
-		td.halfnhalf {
-			background: linear-gradient(to bottom, #f0f0f0 0%, #f0f0f0 50%, white 50%, white 100%);
+		#airboeing tr.odd td {
+			background-color: #f0f0f0;
 		}
-		td.halfnhalf_white {
-			background: linear-gradient(to bottom, white 0%, white 50%, #f0f0f0 50%, #f0f0f0 100%);
+		#airboeing tr.even td {
+			background-color: #fff;
+		}
+		#airboeing tr td span {
+			color: #FF8200;
 		}
 	</style>
 @endpush
