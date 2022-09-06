@@ -9,7 +9,6 @@
 				@endif
 			</a>
 			<div class="social">
-				{{--<a href="https://www.facebook.com/dreamaero/"  target="_block"><div class="icon-fb"></div></a>--}}
 				<a href="https://vk.com/dream.aero" target="_block"><div class="icon-vk"></div></a>
 				<a href="https://t.me/dreamaero" target="_block"><div class="icon-telegram"></div></a>
 				<a href="https://www.instagram.com/dream.aero/" target="_block"><div class="icon-inst"></div></a>
@@ -82,17 +81,6 @@
 	</script>
 	<noscript><div><img src="https://mc.yandex.ru/watch/46672077" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 	<!-- /Yandex.Metrika counter -->
-	{{--<script type="text/javascript">
-		!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?160",t.onload=function(){VK.Retargeting.Init("VK-RTRG-210070-4QPJt"),VK.Retargeting.Hit()},document.head.appendChild(t)}();
-	</script>
-	<noscript>
-		<img src="https://vk.com/rtrg?p=VK-RTRG-210070-4QPJt" style="position:fixed; left:-999px;" alt=""/>
-	</noscript>
-	<script type="text/javascript" src="//vk.com/js/api/openapi.js?152"></script>
-	<div class="lazy" id="vk_community_messages"></div>
-	<script async type="text/javascript">
-		VK.Widgets.CommunityMessages("vk_community_messages", 65405270, {widgetPosition: "left",disableExpandChatSound: "1",disableNewMessagesSound: "1",tooltipButtonText: "Есть вопрос?"});
-	</script>--}}
 	{{--@if(isset($city) && $city->whatsapp)
 		<div class="whatsapp-container">
 			<a href="https://wa.clck.bar/{{ preg_replace('/[^0-9.]+/', '', $city->whatsapp) }}" target="_blank">
@@ -112,20 +100,6 @@
 </footer>
 
 <div class="go-up"></div>
-
-<div class="modal fade" id="city_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-			</div>
-		</div>
-	</div>
-</div>
 
 <div class="mfp-hide popup ajax_form" id="popup" style="display: none;">
 	<button title="Close (Esc)" type="button" class="mfp-close">×</button>

@@ -455,10 +455,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	});
 
 	Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
-		Route::get('sitemap.xml', function () {
+		/*Route::get('sitemap.xml', function () {
 			header('Content-Type: text/xml; charset=UTF-8');
-			readfile(dirname(__FILE__) . '/../public/sitemap.xml');
-		});
+			readfile(dirname(__FILE__) . '/../public/sitemap-ru.xml');
+		});*/
 		Route::get('robots.txt', function () {
 			header('Content-Type: text/plain; charset=UTF-8');
 			readfile(dirname(__FILE__) . '/../public/robots-ru.txt');
@@ -498,7 +498,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('review/create', [MainController::class, 'reviewCreate']);
 		
-		Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
 		Route::get('city/change', [MainController::class, 'changeCity']);
 		
 		Route::post('payment/callback', [PaymentController::class, 'paymentCallback']);
@@ -520,6 +519,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
 		Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
 		Route::get('modal/review', [MainController::class, 'getReviewModal']);
+		Route::get('modal/city', [MainController::class, 'getCityModal']);
 		Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
 		Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
 		Route::get('modal/vip', [MainController::class, 'getVipFlightModal']);
@@ -529,6 +529,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::post('feedback', [MainController::class, 'feedback'])->name('feedbackStore');
 		
 		Route::get('turborss', [MainController::class, 'turborss']);
+		Route::get('sitemap.xml', [MainController::class, 'sitemap']);
 		
 		Route::group(['middleware' => ['citycheck']], function () {
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
@@ -538,10 +539,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	});
 	
 	Route::domain(env('DOMAIN_EN', 'en.dream-aero.ru'))->group(function () {
-		Route::get('sitemap.xml', function () {
+		/*Route::get('sitemap.xml', function () {
 			header('Content-Type: text/xml; charset=UTF-8');
 			readfile(dirname(__FILE__) . '/../public/sitemap-en.xml');
-		});
+		});*/
 		Route::get('robots.txt', function () {
 			header('Content-Type: text/plain; charset=UTF-8');
 			readfile(dirname(__FILE__) . '/../public/robots-en.txt');
@@ -580,7 +581,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('review/create', [MainController::class, 'reviewCreate']);
 		
-		Route::get('city/list/ajax', [MainController::class, 'getCityListAjax']);
 		Route::get('city/change', [MainController::class, 'changeCity']);
 		
 		Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
@@ -597,6 +597,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
 		Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
 		Route::get('modal/review', [MainController::class, 'getReviewModal']);
+		Route::get('modal/city', [MainController::class, 'getCityModal']);
 		Route::get('modal/scheme/{location_id}', [MainController::class, 'getSchemeModal']);
 		Route::get('modal/callback', [MainController::class, 'getCallbackModal']);
 		
@@ -605,6 +606,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::post('feedback', [MainController::class, 'feedback'])->name('feedbackStore');
 		
 		Route::get('turborss', [MainController::class, 'turborss']);
+		Route::get('sitemap.xml', [MainController::class, 'sitemap']);
 		
 		Route::group(['middleware' => ['citycheck']], function () {
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');

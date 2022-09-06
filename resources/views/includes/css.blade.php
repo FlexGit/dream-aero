@@ -1,6 +1,5 @@
-<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ asset('css/styles.min.css?v=' . time()) }}" rel="stylesheet" type="text/css" />
-<link href="{{ asset('css/default.css?v=' . time()) }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('css/styles.min.css?v=3') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('css/default.css?v=11') }}" rel="stylesheet" type="text/css" />
 
 <style type="text/css">
 	.modal-header {

@@ -91,7 +91,7 @@
 		</div>
 		<div class="flexy_column nav">
 			<div class="item">
-				<p class="gl-current-select" id="city" data-toggle="modal" data-target="#city_modal">
+				<a href="#popup" class="popup-with-form form_open gl-current-select" data-popup-type="city">
 					@if(Request::session()->get('cityName'))
 						{{ Request::session()->get('cityName') }}
 					@elseif(App::isLocale('en'))
@@ -99,7 +99,7 @@
 					@else
 						{{ app('\App\Models\City')::DEFAULT_CITY_NAME }}
 					@endif
-				</p>
+				</a>
 			</div>
 			<div>
 				<span class="phone">

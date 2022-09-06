@@ -6,9 +6,6 @@ use App\Models\Deal;
 use App\Models\LegalEntity;
 use App\Models\Promo;
 use App\Models\Promocode;
-use App\Services\HelpFunctions;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\Content;
 use App\Models\Location;
@@ -16,8 +13,12 @@ use App\Models\FlightSimulator;
 use App\Models\ProductType;
 use App\Models\Product;
 use App\Models\User;
-use Validator;
 use App\Repositories\PromoRepository;
+use App\Services\HelpFunctions;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Validator;
+use Browser;
 
 class MainController extends Controller
 {
@@ -44,13 +45,15 @@ class MainController extends Controller
 		}
 		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-		
-		// "Наша команда"
-		$users = User::where('enable', true)
-			->whereIn('city_id', [$city->id, 0])
-			->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
-			->orderBy('name')
-			->get();
+
+		if (Browser::isDesktop()) {
+			// "Наша команда"
+			$users = User::where('enable', true)
+				->whereIn('city_id', [$city->id, 0])
+				->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
+				->orderBy('name')
+				->get();
+		}
 
 		// Отзывы
 		$reviewParentContent = HelpFunctions::getEntityByAlias(Content::class, Content::REVIEWS_TYPE);
@@ -67,7 +70,7 @@ class MainController extends Controller
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('home', [
-			'users' => $users,
+			'users' => $users ?? [],
 			'reviews' => $reviews,
 			'page' => $page ?? new Content,
 			'promobox' => $promobox,
@@ -249,7 +252,7 @@ class MainController extends Controller
 		$flightSimulators = FlightSimulator::where('is_active', true)
 			->get();
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'about');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'o-trenajere');
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('about', [
@@ -330,7 +333,7 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'flight-gift');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'podarit-polet');
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('gift-flight', [
@@ -372,7 +375,7 @@ class MainController extends Controller
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		if ($simulator && $simulator == 'boeing-737-ng') {
-			$page = HelpFunctions::getEntityByAlias(Content::class, 'instruction-737-ng');
+			$page = HelpFunctions::getEntityByAlias(Content::class, 'instruktazh/boeing-737-ng');
 
 			return view('instruction-737-ng', [
 				'page' => $page ?? new Content,
@@ -383,7 +386,7 @@ class MainController extends Controller
 		}
 
 		if ($simulator && $simulator == 'airbus-a320') {
-			$page = HelpFunctions::getEntityByAlias(Content::class, 'instruction-a320');
+			$page = HelpFunctions::getEntityByAlias(Content::class, 'instruktazh/airbus-a320');
 
 			return view('instruction-a320', [
 				'page' => $page ?? new Content,
@@ -393,7 +396,7 @@ class MainController extends Controller
 			]);
 		}
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'instruction');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'instruktazh');
 		
 		return view('instruction', [
 			'page' => $page ?? new Content,
@@ -614,27 +617,6 @@ class MainController extends Controller
 			'cityAlias' => $cityAlias,
 			'locationItems' => $locationItems,
 		]);
-	}
-	
-	public function getCityListAjax()
-	{
-		if (!$this->request->ajax()) {
-			abort(404);
-		}
-		
-		$cityAlias = $this->request->session()->get('cityAlias', City::MSK_ALIAS);
-		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
-
-		$cities = City::where('is_active', true)
-			->where('version', $city->version)
-			->get();
-
-		$VIEW = view('city.list', [
-			'cities' => $cities,
-			'city' => $city,
-		]);
-		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
 	/**
@@ -946,7 +928,7 @@ class MainController extends Controller
 			->latest()
 			->get();
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'promos');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'vse-akcii');
 		
 		return view('promos-list', [
 			'promos' => $promos,
@@ -965,9 +947,8 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
-		$parentGallery = HelpFunctions::getEntityByAlias(Content::class, 'gallery');
-		
-		$gallery = Content::where('parent_id', $parentGallery->id)
+		$parentGallery = $page = HelpFunctions::getEntityByAlias(Content::class, 'galereya');
+		$gallery = Content::where('parent_id', $parentGallery ? $parentGallery->id : 0)
 			->where('is_active', true)
 			->whereIn('city_id', [$city->id, 0])
 			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
@@ -975,15 +956,13 @@ class MainController extends Controller
 			->get();
 		
 		$parentGuests = HelpFunctions::getEntityByAlias(Content::class, 'guests');
-		
-		$guests = Content::where('parent_id', $parentGuests->id)
+		$guests = Content::where('parent_id', $parentGuests ? $parentGuests->id : 0)
 			->where('is_active', true)
 			->whereIn('city_id', [$city->id, 0])
 			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
 			->latest()
 			->get();
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'gallery');
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('gallery', [
@@ -1085,6 +1064,31 @@ class MainController extends Controller
 		$VIEW = view('modal.review');
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function getCityModal()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$cityAlias = $this->request->session()->get('cityAlias', City::MSK_ALIAS);
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
+		
+		$cities = City::where('is_active', true)
+			->where('version', $city->version)
+			->get();
+		
+		$VIEW = view('modal.city', [
+			'cities' => $cities,
+			'city' => $city,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+		
 	}
 	
 	/**
@@ -1299,6 +1303,9 @@ class MainController extends Controller
 		]);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\Response
+	 */
 	public function turborss()
 	{
 		$parentNews = HelpFunctions::getEntityByAlias(Content::class, 'news');
@@ -1309,11 +1316,110 @@ class MainController extends Controller
 			->latest()
 			->get();
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'news');
-		
 		return response()->view('turborss', [
 			'items' => $items,
-			'page' => $page,
+		])->header('Content-Type', 'text/xml');
+	}
+	
+	/**
+	 * @return \Illuminate\Http\Response
+	 */
+	public function sitemap()
+	{
+		$items = [];
+		
+		$newsPage = HelpFunctions::getEntityByAlias(Content::class, 'news');
+		$items[] = [
+			'loc' => url($newsPage->alias),
+			'lastmod' => $newsPage->updated_at->tz('GMT')->toAtomString(),
+			'changefreq' => 'weekly',
+			'priority' => 1,
+		];
+
+		$promoPage = HelpFunctions::getEntityByAlias(Content::class, 'vse-akcii');
+		$items[] = [
+			'loc' => url($promoPage->alias),
+			'lastmod' => $promoPage->updated_at->tz('GMT')->toAtomString(),
+			'changefreq' => 'weekly',
+			'priority' => 1,
+		];
+		
+		$galleryPage = HelpFunctions::getEntityByAlias(Content::class, 'galereya');
+		$items[] = [
+			'loc' => url($galleryPage->alias),
+			'lastmod' => $galleryPage->updated_at->tz('GMT')->toAtomString(),
+			'changefreq' => 'weekly',
+			'priority' => 1,
+		];
+		
+		$reviewsPage = HelpFunctions::getEntityByAlias(Content::class, 'reviews');
+		$items[] = [
+			'loc' => url($reviewsPage->alias),
+			'lastmod' => $reviewsPage->updated_at->tz('GMT')->toAtomString(),
+			'changefreq' => 'weekly',
+			'priority' => 1,
+		];
+		
+		$parentPages = HelpFunctions::getEntityByAlias(Content::class, 'pages');
+		$pages = Content::where('parent_id', $parentPages->id)
+			->where('is_active', true)
+			->oldest()
+			->get();
+
+		foreach ($pages as $page) {
+			if (in_array($page->alias, [Content::GUESTS_TYPE, 'payment'])) continue;
+			if (mb_strpos($page->title, 'Админка') === -1) continue;
+			
+			$url = explode('_', $page->alias);
+			
+			$items[] = [
+				'loc' => url((isset($url[1]) ? $url[1] . '/' : '') . (($url[0] == 'home') ? '' : $url[0])),
+				'lastmod' => $page->updated_at->tz('GMT')->toAtomString(),
+				'changefreq' => 'weekly',
+				'priority' => 1,
+			];
+		}
+		
+		$parentNews = HelpFunctions::getEntityByAlias(Content::class, 'news');
+		$news = Content::where('parent_id', $parentNews->id)
+			->where('is_active', true)
+			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->latest()
+			->get();
+		
+		foreach ($news as $oneNews) {
+			$items[] = [
+				'loc' => url('news/' . $oneNews->alias),
+				'lastmod' => $oneNews->updated_at->tz('GMT')->toAtomString(),
+				'changefreq' => 'weekly',
+				'priority' => 1,
+			];
+		}
+		
+		$date = date('Y-m-d');
+		$promos = Promo::where('is_active', true)
+			->where('is_published', true)
+			->where(function ($query) use ($date) {
+				$query->where('active_from_at', '<=', $date)
+					->orWhereNull('active_from_at');
+			})
+			->where(function ($query) use ($date) {
+				$query->where('active_to_at', '>=', $date)
+					->orWhereNull('active_to_at');
+			})
+			->latest()
+			->get();
+		foreach ($promos as $promo) {
+			$items[] = [
+				'loc' => url('vse-akcii/' . $promo->alias),
+				'lastmod' => $promo->updated_at->tz('GMT')->toAtomString(),
+				'changefreq' => 'weekly',
+				'priority' => 1,
+			];
+		}
+		
+		return response()->view('sitemap', [
+			'items' => $items,
 		])->header('Content-Type', 'text/xml');
 	}
 }
