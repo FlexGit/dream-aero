@@ -1360,7 +1360,7 @@ class MainController extends Controller
 
 		foreach ($pages as $page) {
 			if (in_array($page->alias, [Content::GUESTS_TYPE, 'payment'])) continue;
-			if (mb_strpos($page->title, 'Админка') === -1) continue;
+			if (mb_strpos($page->title, 'Админка') !== -1) continue;
 			
 			$url = explode('_', $page->alias);
 			
