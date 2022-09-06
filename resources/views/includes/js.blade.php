@@ -4,37 +4,6 @@
 <script src="{{ asset('js/jquery.nice-select.js') }}"></script>
 <script src="{{ asset('js/main.js?v=13') }}"></script>
 
-<script>
-	(function() {
-		var ta = document.createElement('script'); ta.type = 'text/javascript'; ta.async = true;
-		ta.src = 'https://analytics.tiktok.com/i18n/pixel/sdk.js?sdkid=BTQQPEORQH54JI5RFPN0';
-		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(ta, s);
-	})();
-</script>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-952284596"></script>
-<script>
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-
-	gtag('config', 'AW-952284596');
-	function gtag_report_conversion(url) {
-		var callback = function () {
-			if (typeof(url) != 'undefined') {
-				window.location = url;
-			}
-		};
-		gtag('event', 'conversion', {
-			'send_to': 'AW-952284596/h9-ACL3c3MgBELTrisYD',
-			'transaction_id': '',
-			'event_callback': callback
-		});
-		return false;
-	}
-</script>
-
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript" >
 	(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -50,7 +19,6 @@
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/46672077" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
-
 <script>
 	(function(w, d, s, h, id) {
 		w.roistatProjectId = id; w.roistatHost = h;
