@@ -605,7 +605,7 @@ class MainController extends Controller
 			$locationItems[] = $location->name;
 		}
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'prices_' . $city->alias);
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'price_' . $city->alias);
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('price', [
