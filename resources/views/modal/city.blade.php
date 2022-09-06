@@ -1,11 +1,11 @@
 <div class="gl-default uk-modal-dialog">
-	<span class="city" data-current-alias="{{ $city->alias }}">Ваш город — <b class="gl-city-name_ru">{{ $city->name }}</b></span>
-	<span class="btn-yes popup-close">Да</span>
-	<span class="btn-change">Изменить</span>
+	<span class="city" data-current-alias="{{ $city->alias }}" data-choose-city-text="@lang('main.common.выберите-ваш-город')">@lang('main.common.ваш-город') — <b class="gl-city-name_ru">{{ App::isLocale('en') ? $city->name_en : $city->name }}</b></span>
+	<span class="btn-yes popup-close">@lang('main.common.да')</span>
+	<span class="btn-change">@lang('main.common.изменить')</span>
 	<ul class="gl-change-list" style="display: none;">
 		@foreach ($cities as $cityItem)
 			<li>
-				<span class="gl-list-location js-city" data-alias="{{ $cityItem->alias }}">{{ ($city->version == app('\App\Models\City')::EN_VERSION) ? $cityItem->name_en : $cityItem->name }}</span>
+				<span class="gl-list-location js-city" data-alias="{{ $cityItem->alias }}">{{ App::isLocale('en') ? $cityItem->name_en : $cityItem->name }}</span>
 			</li>
 		@endforeach
 		<div class="sep"></div>

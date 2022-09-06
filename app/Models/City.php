@@ -219,7 +219,7 @@ class City extends Model
 				->latest()->take(2)->pluck('location_id')->all();
 			
 			// если это город Москва
-			if ($this->alias == City::MSK_ALIAS) {
+			if ($this->alias == City::MSK_ALIAS && count($lastTwoBillsLocationIds) > 1) {
 				$afiLocation = HelpFunctions::getEntityByAlias(Location::class, Location::AFI_LOCATION);
 				// если последний Счет на Афимолл, а предпоследний не на Афимолл, то выставляем Счет снова на Афимолл
 				if ($afiLocation
@@ -231,8 +231,12 @@ class City extends Model
 			}
 			
 			// сдвигаем указатель в массиве локаций на следующую (или первую) локацию, на которую выставляем Счет
-			$lastBillLocationIdKey = array_search($lastTwoBillsLocationIds[0], $locationids);
-			$needLocationIdKey = isset($locationids[$lastBillLocationIdKey + 1]) ? $locationids[$lastBillLocationIdKey + 1] : $locationids[0];
+			if ($lastTwoBillsLocationIds) {
+				$lastBillLocationIdKey = array_search($lastTwoBillsLocationIds[0], $locationids);
+				$needLocationIdKey = isset($locationids[$lastBillLocationIdKey + 1]) ? $locationids[$lastBillLocationIdKey + 1] : $locationids[0];
+			} else {
+				$needLocationIdKey = $locationids[0];
+			}
 			$location = Location::find($needLocationIdKey);
 			
 			return $location;

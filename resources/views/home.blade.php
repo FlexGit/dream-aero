@@ -258,11 +258,6 @@
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
-	<style>
-		.fly_en, .give_en {
-			width: 320px !important;
-		}
-	</style>
 @endpush
 
 @push('scripts')
@@ -270,8 +265,4 @@
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
 	<script src="{{ asset('js/mainonly.js?' . time()) }}"></script>
 	<script src="{{ asset('js/deal.js?v=' . time()) }}"></script>
-	<script>
-		$(function() {
-		});
-	</script>
 @endpush

@@ -81,13 +81,6 @@
 	</script>
 	<noscript><div><img src="https://mc.yandex.ru/watch/46672077" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 	<!-- /Yandex.Metrika counter -->
-	{{--@if(isset($city) && $city->whatsapp)
-		<div class="whatsapp-container">
-			<a href="https://wa.clck.bar/{{ preg_replace('/[^0-9.]+/', '', $city->whatsapp) }}" target="_blank">
-				<img src="{{ asset('img/whatsapp.png') }}" alt="">
-			</a>
-		</div>
-	@endif--}}
 	<script>
 		(function(w, d, s, h, id) {
 			w.roistatProjectId = id; w.roistatHost = h;

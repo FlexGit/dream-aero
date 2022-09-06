@@ -1,3 +1,6 @@
+.fly_en, .give_en {
+	width: 320px !important;
+}
 .gl-current-select {
     color: #FF8200;
     cursor: pointer;

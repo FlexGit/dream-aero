@@ -649,7 +649,6 @@ class DealController extends Controller
 
 			$deal->positions()->save($position);
 			
-			
 			if ($amount) {
 				$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
 				$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);

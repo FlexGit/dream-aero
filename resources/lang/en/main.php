@@ -5,6 +5,10 @@ return [
 	'common.отправить' => 'Send',
 	'common.оплатить' => 'Pay online',
 	'common.мин' => 'min',
+	'common.ваш-город' => 'Your City',
+	'common.да' => 'Yes',
+	'common.изменить' => 'Change',
+	'common.выберите-ваш-город' => 'Choose Your City',
 	
 	'error.повторите-позже' => 'The operation cannot be completed at the moment, please try again later!',
 	'error.проверьте-правильность-заполнения-полей-формы' => 'Check that the form fields are filled in correctly',

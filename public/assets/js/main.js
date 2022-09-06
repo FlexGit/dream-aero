@@ -23,16 +23,7 @@ $(function(){
     	$('html, body').animate({
 			scrollTop: ($('#ourguestes').offset().top - 180)
 		},800);
-    } /*else if (url.match(/virttourair/)) {
-    	newContent('tourDIV','virttourair');
-    } else if (url.match(/virttourboeing/)) {
-    	newContent('tourDIV','virttourboeing');
     }
-
-	if (window.location.hash) {
-		var hash = window.location.hash.substring(1);
-		newContent('tourDIV',hash);
-	}*/
 
 	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 		Modile = $('#mainphone').text().replace('+7','8');
@@ -50,8 +41,6 @@ $(function(){
 	$('.noref').click(function() {
 		return false;
 	});
-
-	$('.airbo').append('dfdf');
 
 	$('select').niceSelect();
 
@@ -88,11 +77,11 @@ $(function(){
 		$('.main-menu').slideToggle(300);
 	});
 
-    $(document).on('click', '.have_promo', function() {
+    /*$(document).on('click', '.have_promo', function() {
 	    $(this).hide();
 	    $('.aeroflotbonus').hide();
 	    $(".promoblock").show();
-	});
+	});*/
 	
 	$(document).on('click', '.popup-close', function(e){
 		e.preventDefault();
@@ -120,7 +109,6 @@ $(function(){
 	});
 
 	bodyPadding();
-
 
 	$(document).on('click', '.popup-with-form[data-popup-type]', function(e) {
 		popup($(this));
@@ -494,32 +482,13 @@ $(function(){
 		}
 	});
 
-	$(document).on('click', '#city', function(e) {
-		e.preventDefault();
-
-		$('.modal .modal-title, .modal .modal-body').empty();
-
-		$.ajax({
-			url: '/city/list/ajax',
-			type: 'GET',
-			dataType: 'json',
-			success: function(result) {
-				$('#city_modal .modal-body').html(result.html);
-			}
-		});
-	});
-
 	$(document).on('click', '.btn-change', function(e) {
 		$container = $(this).closest('.uk-modal-dialog');
 		$container.removeClass('gl-default').addClass('gl-change-select');
-		$container.find('span.city').text('Выберите Ваш город');
+		$container.find('span.city').text($container.find('span.city').data('choose-city-text'));
 		$container.find('span.btn-yes').remove();
 		$container.find('span.btn-change').remove();
 		$container.find('ul.gl-change-list').show(300);
-	});
-
-	$(document).on('click', '.btn-yes', function(e) {
-		$('#city_modal').modal('hide');
 	});
 
 	$(document).on('click', '.js-city', function(e) {
@@ -535,8 +504,6 @@ $(function(){
 			},
 			success: function(result) {
 				if (result.status === 'success') {
-					$('#city_modal').modal('hide');
-
 					/*console.log(currentCityAlias);
 					console.log(result.cityAlias);
 					console.log(pathname);

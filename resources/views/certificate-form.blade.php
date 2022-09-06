@@ -179,11 +179,6 @@
 
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
-	<style>
-		.fly_en, .give_en {
-			width: 320px !important;
-		}
-	</style>
 @endpush
 
 @push('scripts')
