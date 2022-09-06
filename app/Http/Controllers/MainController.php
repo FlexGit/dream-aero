@@ -1336,14 +1336,6 @@ class MainController extends Controller
 			'priority' => 1,
 		];
 
-		$promoPage = HelpFunctions::getEntityByAlias(Content::class, 'vse-akcii');
-		$items[] = [
-			'loc' => url($promoPage->alias),
-			'lastmod' => $promoPage->updated_at->tz('GMT')->toAtomString(),
-			'changefreq' => 'weekly',
-			'priority' => 1,
-		];
-		
 		$galleryPage = HelpFunctions::getEntityByAlias(Content::class, 'galereya');
 		$items[] = [
 			'loc' => url($galleryPage->alias),
