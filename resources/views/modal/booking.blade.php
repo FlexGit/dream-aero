@@ -38,7 +38,9 @@
 		@else
 			<input type="hidden" id="product" name="product" value="{{ $product->id }}">
 		@endif
-		<input type="text" id="certificate_number" name="certificate_number" class="popup-input" placeholder="@lang('main.modal-booking.номер-сертификата')" style="display: none;">
+		<div class="col-md-12">
+			<input type="text" id="certificate_number" name="certificate_number" class="popup-input" placeholder="@lang('main.modal-booking.номер-сертификата')" style="display: none;">
+		</div>
 		<div class="col-md-6">
 			<div>
 				<input type="text" id="name" name="name" class="popup-input" placeholder="@lang('main.modal-booking.имя')">
