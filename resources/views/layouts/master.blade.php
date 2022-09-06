@@ -17,35 +17,6 @@
 		<meta name="yandex-verification" content="f4eea6c4fd831d31" />
 	@endif
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<script>
-		(function() {
-			var ta = document.createElement('script'); ta.type = 'text/javascript'; ta.async = true;
-			ta.src = 'https://analytics.tiktok.com/i18n/pixel/sdk.js?sdkid=BTQQPEORQH54JI5RFPN0';
-			var s = document.getElementsByTagName('script')[0];
-			s.parentNode.insertBefore(ta, s);
-		})();
-	</script>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=AW-952284596"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-
-		gtag('config', 'AW-952284596');
-		function gtag_report_conversion(url) {
-			var callback = function () {
-				if (typeof(url) != 'undefined') {
-					window.location = url;
-				}
-			};
-			gtag('event', 'conversion', {
-				'send_to': 'AW-952284596/h9-ACL3c3MgBELTrisYD',
-				'transaction_id': '',
-				'event_callback': callback
-			});
-			return false;
-		}
-	</script>
 
 	<!-- CSS -->
 	@include('includes.css')
