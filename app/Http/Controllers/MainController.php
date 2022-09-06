@@ -1335,7 +1335,7 @@ class MainController extends Controller
 		$newsPage = HelpFunctions::getEntityByAlias(Content::class, 'news');
 		$items[] = [
 			'loc' => url($newsPage->alias),
-			'lastmod' => $newsPage->updated_at->tz('GMT')->toAtomString(),
+			'lastmod' => $newsPage->updated_at ? $newsPage->updated_at->tz('GMT')->toAtomString() : Carbon::now()->tz('GMT')->toAtomString(),
 			'changefreq' => 'weekly',
 			'priority' => 1,
 		];
@@ -1343,7 +1343,7 @@ class MainController extends Controller
 		$galleryPage = HelpFunctions::getEntityByAlias(Content::class, 'galereya');
 		$items[] = [
 			'loc' => url($galleryPage->alias),
-			'lastmod' => $galleryPage->updated_at->tz('GMT')->toAtomString(),
+			'lastmod' => $galleryPage->updated_at ? $galleryPage->updated_at->tz('GMT')->toAtomString() : Carbon::now()->tz('GMT')->toAtomString(),
 			'changefreq' => 'weekly',
 			'priority' => 1,
 		];
@@ -1351,7 +1351,7 @@ class MainController extends Controller
 		$reviewsPage = HelpFunctions::getEntityByAlias(Content::class, 'reviews');
 		$items[] = [
 			'loc' => url($reviewsPage->alias),
-			'lastmod' => $reviewsPage->updated_at->tz('GMT')->toAtomString(),
+			'lastmod' => $reviewsPage->updated_at ? $reviewsPage->updated_at->tz('GMT')->toAtomString() : Carbon::now()->tz('GMT')->toAtomString(),
 			'changefreq' => 'weekly',
 			'priority' => 1,
 		];
@@ -1370,7 +1370,7 @@ class MainController extends Controller
 			
 			$items[] = [
 				'loc' => url((isset($url[1]) ? $url[1] . '/' : '') . (($url[0] == 'home') ? '' : $url[0])),
-				'lastmod' => $page->updated_at->tz('GMT')->toAtomString(),
+				'lastmod' => $page->updated_at ? $page->updated_at->tz('GMT')->toAtomString() : Carbon::now()->tz('GMT')->toAtomString(),
 				'changefreq' => 'weekly',
 				'priority' => 1,
 			];
@@ -1386,7 +1386,7 @@ class MainController extends Controller
 		foreach ($news as $oneNews) {
 			$items[] = [
 				'loc' => url('news/' . $oneNews->alias),
-				'lastmod' => $oneNews->updated_at->tz('GMT')->toAtomString(),
+				'lastmod' => $oneNews->updated_at ? $oneNews->updated_at->tz('GMT')->toAtomString() : Carbon::now()->tz('GMT')->toAtomString(),
 				'changefreq' => 'weekly',
 				'priority' => 1,
 			];
@@ -1408,7 +1408,7 @@ class MainController extends Controller
 		foreach ($promos as $promo) {
 			$items[] = [
 				'loc' => url('vse-akcii/' . $promo->alias),
-				'lastmod' => $promo->updated_at->tz('GMT')->toAtomString(),
+				'lastmod' => $promo->updated_at ? $promo->updated_at->tz('GMT')->toAtomString() : Carbon::now()->tz('GMT')->toAtomString(),
 				'changefreq' => 'weekly',
 				'priority' => 1,
 			];
