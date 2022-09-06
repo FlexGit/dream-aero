@@ -722,7 +722,7 @@ class MainController extends Controller
 			->where('is_active', true)
 			->get();
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'oferta');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'oferta-dreamaero');
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('oferta', [
@@ -742,7 +742,7 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'rules');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'rules-dreamaero');
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('rules', [
@@ -1270,7 +1270,7 @@ class MainController extends Controller
 			}
 		}
 
-		$page = HelpFunctions::getEntityByAlias(Content::class, 'vip');
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'vipflight');
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('vipflight', [
@@ -1295,8 +1295,12 @@ class MainController extends Controller
 			->orderBy('duration')
 			->get();
 		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'sertbuy');
+		$promobox = $this->promoRepo->getActivePromobox($city);
+		
 		return view('certificate-form', [
 			'page' => $page ?? new Content,
+			'promobox' => $promobox,
 			'city' => $city,
 			'product' => '',
 			'products' => $products ?? [],

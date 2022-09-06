@@ -479,7 +479,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('variantyi-poleta', [MainController::class, 'flightTypes'])->name('variantyi-poleta');
 		Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
 		Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
-		Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
 		Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
 		Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
 		
@@ -562,7 +561,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('variantyi-poleta', [MainController::class, 'flightTypes'])->name('variantyi-poleta');
 		Route::get('instruktazh/{simulator?}', [MainController::class, 'instruction'])->name('instruktazh');
 		Route::get('oferta-dreamaero', [MainController::class, 'oferta'])->name('oferta-dreamaero');
-		Route::get('pravila', [MainController::class, 'rules'])->name('pravila');
 		Route::get('rules-dreamaero', [MainController::class, 'rules'])->name('rules-dreamaero');
 		Route::get('how-to-pay', [MainController::class, 'howToPay'])->name('how-to-pay');
 		
