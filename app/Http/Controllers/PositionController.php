@@ -852,11 +852,11 @@ class PositionController extends Controller
 		$comment = $this->request->comment ?? '';
 		$amount = $this->request->amount ?? 0;
 		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
-		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
+		/*$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
 		
 		if (!$isValidFlightDate) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
-		}
+		}*/
 		
 		$product = Product::find($productId);
 		if (!$product) {
