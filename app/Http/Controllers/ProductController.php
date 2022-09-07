@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contractor;
 use App\Models\ProductType;
 use App\Models\Product;
 use App\Models\User;
@@ -344,5 +345,42 @@ class ProductController extends Controller
 		}
 
 		return response()->json(['status' => 'success']);
+	}
+	
+	public function getScore()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		if (!$this->request->user()->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		$contractorId = $this->request->contractor_id ?? 0;
+		$productId = $this->request->product_id ?? 0;
+		
+		if (!$contractorId || !$productId) {
+			return response()->json(['status' => 'error', 'reason' => 'Некорректные параметры']);
+		}
+		
+		$contractor = Contractor::find($contractorId);
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+		
+		$city = $contractor->city;
+		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		
+		$product = Product::find($productId);
+		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return response()->json(['status' => 'error', 'reason' => 'Цены продукта ' . $product->name . ' для города ' . $city->name . ' не назначены']);
+		}
+		
+		$scoreValue = $cityProduct->pivot->score ?? 0;
+		\Log::debug($scoreValue);
+		
+		return response()->json(['status' => 'success', 'score' => $scoreValue, 'duration' => $product->duration]);
 	}
 }

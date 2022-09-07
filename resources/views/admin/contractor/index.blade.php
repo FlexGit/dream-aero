@@ -227,11 +227,29 @@
 				});
 			});
 
-			$(document).on('show.bs.modal', '#modal', function(e) {
-			});
-
 			$(document).on('change', '#filter_city_id', function(e) {
 				getList(false);
+			});
+
+			$(document).on('change', '#product_id', function(e) {
+				$.ajax({
+					url: '{{ route('productScore') }}',
+					type: 'GET',
+					dataType: 'json',
+					data: {
+						"contractor_id": $('#contractor_id').val(),
+						"product_id": $('#product_id').val(),
+					},
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						$('#scoreValue').val(result.score);
+						$('#duration').val(result.duration);
+					}
+				})
 			});
 
 			$(document).on('keyup', '#search_contractor', function(e) {

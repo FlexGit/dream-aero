@@ -350,20 +350,23 @@ class ContractorController extends Controller
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
-
+		
+		$contractor = Contractor::find($contractorId);
+		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
+		
 		$productTypes = ProductType::where('is_active', true)
 			->whereIn('alias', [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS, ProductType::COURSES_ALIAS])
 			->orderBy('name')
 			->get();
 		
-		$scores = Score::where('contractor_id', $contractorId)
+		$scores = Score::where('contractor_id', $contractor->id)
 			->latest()
 			->get();
 
 		$VIEW = view('admin.contractor.modal.add_score', [
 			'productTypes' => $productTypes,
 			'scores' => $scores,
-			'contractorId' => $contractorId,
+			'contractor' => $contractor,
 			'user' => $this->request->user(),
 		]);
 
@@ -380,26 +383,15 @@ class ContractorController extends Controller
 		}
 
 		$rules = [
-			'product_id' => 'required|numeric|min:0|not_in:0',
 			'contractor_id' => 'required|numeric|min:0|not_in:0',
 		];
 
 		$validator = Validator::make($this->request->all(), $rules)
 			->setAttributeNames([
-				'product_id' => 'Продукт',
 				'contractor_id' => 'Контрагент',
 			]);
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
-		}
-
-		$product = Product::find($this->request->product_id);
-		if (!$product) {
-			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
-		}
-
-		if (!$product->duration) {
-			return response()->json(['status' => 'error', 'reason' => 'Длительность полета в продукте не указана']);
 		}
 
 		$contractor = Contractor::find($this->request->contractor_id);
@@ -407,33 +399,20 @@ class ContractorController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
 		}
 
-		if (!$contractor->city) {
-			return response()->json(['status' => 'error', 'reason' => 'Город контрагента не указан']);
-		}
-
-		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($contractor->city->id);
-		if (!$cityProduct || !$cityProduct->pivot) {
-			return response()->json(['status' => 'error', 'reason' => 'Цены продукта ' . $product->name . ' для города ' . $contractor->city->name . ' не назначены']);
-		}
-
-		if (!$cityProduct->pivot->score) {
-			return response()->json(['status' => 'error', 'reason' => 'Баллы для продукта ' . $product->name . ' и города ' . $contractor->city->name . ' не указаны']);
-		}
-		
 		$scoreValue = $flightTime = 0;
 		if ($this->request->operation_type == 'minus') {
 			if ($this->request->is_minus_score) {
-				$scoreValue = -1 * $cityProduct->pivot->score;
+				$scoreValue = -1 * $this->request->scoreValue;
 			}
 			if ($this->request->is_minus_flight_time) {
-				$flightTime = -1 * $product->duration;
+				$flightTime = -1 * $this->request->duration;
 			}
 		} else {
 			if ($this->request->is_minus_score) {
-				$scoreValue = $cityProduct->pivot->score;
+				$scoreValue = $this->request->scoreValue;
 			}
 			if ($this->request->is_minus_flight_time) {
-				$flightTime = $product->duration;
+				$flightTime = $this->request->duration;
 			}
 		}
 		

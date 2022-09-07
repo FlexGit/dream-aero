@@ -135,7 +135,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	
 			Route::get('contractor/{id}/score', [ContractorController::class, 'addScore']);
 			Route::post('contractor/{id}/score', [ContractorController::class, 'storeScore']);
-	
+			
 			// Очистка тестовых данных
 			//Route::get('/clear', [EventController::class, 'clear'])->name('clear');
 	
@@ -332,6 +332,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::put('product/{id}/icon/delete', [ProductController::class, 'deleteIcon']);
 	
 			Route::get('product/add', [ProductController::class, 'add']);
+			Route::get('product/score', [ProductController::class, 'getScore'])->name('productScore');
 			Route::get('product/{id}/edit', [ProductController::class, 'edit']);
 			Route::get('product/{id}/delete', [ProductController::class, 'confirm']);
 			Route::get('product/{id}/show', [ProductController::class, 'show']);

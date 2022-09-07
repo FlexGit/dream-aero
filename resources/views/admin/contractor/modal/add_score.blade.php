@@ -1,4 +1,4 @@
-<input type="hidden" id="contractor_id" name="contractor_id" value="{{ $contractorId ?? 0 }}">
+<input type="hidden" id="contractor_id" name="contractor_id" value="{{ $contractor->id }}">
 
 @if($user->isSuperadmin())
 	<div class="row">
@@ -18,6 +18,18 @@
 						</optgroup>
 					@endforeach
 				</select>
+			</div>
+		</div>
+		<div class="col">
+			<div class="form-group">
+				<label for="scoreValue">Баллы</label>
+				<input type="number" class="form-control" id="scoreValue" name="scoreValue" placeholder="Баллы">
+			</div>
+		</div>
+		<div class="col">
+			<div class="form-group">
+				<label for="duration">Время налета, мин</label>
+				<input type="number" class="form-control" id="duration" name="duration" placeholder="Время налета, мин">
 			</div>
 		</div>
 	</div>
