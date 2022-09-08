@@ -19,6 +19,7 @@ class CreateDealPositionsTable extends Migration
 			$table->integer('deal_id')->default(0)->index()->comment('сделка');
 			$table->integer('product_id')->default(0)->index()->comment('продукт');
 			$table->integer('certificate_id')->default(0)->index()->comment('сертификат');
+			$table->integer('price')->default(0)->comment('базовая стоимость продукта');
 			$table->integer('duration')->default(0)->comment('продолжительность полета');
 			$table->integer('amount')->default(0)->comment('стоимость');
 			$table->integer('currency_id')->default(0)->index()->comment('валюта');

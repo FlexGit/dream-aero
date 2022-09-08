@@ -91,6 +91,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionType($value)
+ * @property int $price базовая цена продукта
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition wherePrice($value)
  */
 class DealPosition extends Model
 {
@@ -101,6 +103,7 @@ class DealPosition extends Model
 		'deal_id' => 'Сделка',
 		'product_id' => 'Продукт',
 		'certificate_id' => 'Сертификат',
+		'price' => 'Базовая стоимость продукта',
 		'duration' => 'Длительность',
 		'amount' => 'Стоимость',
 		'currency_id' => 'Валюта',
@@ -133,7 +136,7 @@ class DealPosition extends Model
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
-	protected $dontKeepRevisionOf = ['source'];
+	protected $dontKeepRevisionOf = ['source', 'price'];
 	
 	/**
 	 * The attributes that are mass assignable.
@@ -145,6 +148,7 @@ class DealPosition extends Model
 		'deal_id',
 		'product_id',
 		'certificate_id',
+		'price',
 		'duration',
 		'amount',
 		'currency_id',

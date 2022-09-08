@@ -434,7 +434,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::post('report/platform', [ReportController::class, 'platformModalUpdate'])->name('platformModalUpdate');
 			
 			Route::get('report/flight_log', [ReportController::class, 'flightLogIndex'])->name('flightLogIndex');
-			Route::get('report/flight_log/list/ajax', [ReportController::class, 'flightLogGetListAjax'])->name('flightLogList');
+			Route::get('report/flight_log/list/ajax', [ReportController::class, 'flightLogGetListAjax'])->name('flightLogGetList');
 			
 			Route::get('report/personal-selling', [ReportController::class, 'personalSellingIndex'])->name('personalSellingIndex');
 			Route::get('report/personal-selling/list/ajax', [ReportController::class, 'personalSellingGetListAjax'])->name('personalSellingList');

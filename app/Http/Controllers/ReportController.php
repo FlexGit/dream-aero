@@ -5,20 +5,26 @@ namespace App\Http\Controllers;
 use App\Exports\AeroflotAccrualReportExport;
 use App\Exports\AeroflotWriteOffReportExport;
 use App\Exports\ContractorSelfMadePayedDealsReportExport;
+use App\Exports\FlightLogReportExport;
 use App\Exports\NpsReportExport;
 use App\Exports\PersonalSellingReportExport;
 use App\Exports\PlatformDataReportExport;
 use App\Exports\SpontaneousRepeatedReportExport;
 use App\Models\Bill;
+use App\Models\Product;
 use App\Models\Certificate;
 use App\Models\City;
 use App\Models\Content;
+use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\FlightSimulator;
 use App\Models\Location;
 use App\Models\PaymentMethod;
 use App\Models\PlatformData;
 use App\Models\PlatformLog;
+use App\Models\ProductType;
+use App\Models\Promo;
+use App\Models\Score;
 use App\Models\User;
 use App\Repositories\CityRepository;
 use App\Repositories\PaymentRepository;
@@ -32,6 +38,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Validator;
 
 class ReportController extends Controller {
 	private $request;
@@ -277,9 +284,12 @@ class ReportController extends Controller {
 			abort(404);
 		}
 		
+		$cities = $this->cityRepo->getList($this->request->user());
+		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-flight-log');
 		
 		return view('admin.report.flight-log.index', [
+			'cities' => $cities,
 			'page' => $page,
 		]);
 	}
@@ -292,9 +302,22 @@ class ReportController extends Controller {
 		
 		$user = \Auth::user();
 		
+		$rules = [
+			'filter_location_id' => 'required|numeric|min:0|not_in:0',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'filter_location_id' => 'Локация',
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+		
 		$dateFromAt = $this->request->filter_date_from_at ?? '';
 		$dateToAt = $this->request->filter_date_to_at ?? '';
-		$role = $this->request->filter_role ?? '';
+		$locationId = $this->request->filter_location_id ?? 0;
+		$simulatorId = $this->request->filter_simulator_id ?? 0;
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
 		
 		if (!$dateFromAt && !$dateToAt) {
@@ -302,13 +325,181 @@ class ReportController extends Controller {
 			$dateToAt = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 		}
 		
+		$now = Carbon::now()->format('Y-m-d H:i:s');
+		
+		$period = CarbonPeriod::create($dateFromAt, $dateToAt);
+		
+		$shiftItems = [];
+		//\DB::connection()->enableQueryLog();
+		$shits = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
+			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay())
+			->where('location_id', $locationId)
+			->where('flight_simulator_id', $simulatorId)
+			->orderBy('start_at')
+			->get();
+		//\Log::debug(\DB::getQueryLog());
+		foreach ($shits as $shift) {
+			/** @var User $shiftPilot */
+			$shiftPilot = $shift->user;
+			$shiftPilotFio = $shiftPilot ? $shiftPilot->fioFormatted() : '';
+			if ($shiftPilotFio) {
+				$shiftItems[Carbon::parse($shift->start_at)->format('d.m.Y')][] = $shiftPilotFio;
+			}
+		}
+		
+		//\Log::debug($shiftItems);
+		
+		//\DB::connection()->enableQueryLog();
+		$events = Event::where('start_at', '>=', $dateFromAt)
+			->where('start_at', '<=', $dateToAt)
+			->where('stop_at', '<', $now)
+			->whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT, Event::EVENT_TYPE_TEST_FLIGHT])
+			->where('location_id', $locationId)
+			->where('flight_simulator_id', $simulatorId)
+			->orderBy('start_at')
+			->get();
+		//\Log::debug(\DB::getQueryLog());
+		
+		$items = [];
+		foreach ($events as $event) {
+			/** @var DealPosition $position */
+			$position = $event->dealPosition;
+			$bills = $position ? $position->bills : [];
+			$promo = $position ? $position->promo : null;
+			$promocode = $position ? $position->promocode : null;
+			$product = $position ? $position->product : null;
+			$productType = $product ? $product->productType : null;
+			
+			$extendedText = '';
+
+			/*$extendedText .= $event->uuid;*/
+			/*$extendedText .= $position ? $position->number : '';*/
+			
+			if ($productType && in_array($productType->alias, [ProductType::COURSES_ALIAS, ProductType::VIP_ALIAS])) {
+				$extendedText .= $product->name;
+			}
+			
+			$pilotSum = $position ? $position->price : 0;
+			
+			$eventTypeText = '';
+			if ($event->event_type == Event::EVENT_TYPE_USER_FLIGHT) {
+				$eventTypeText .= 'Бесплатный полет сотрудника' . ($event->employee ? ' ' . $event->employee->fioFormatted() : '');
+				$pilotSum = $pilotSum * 0.8;
+			} elseif ($event->event_type == Event::EVENT_TYPE_TEST_FLIGHT) {
+				$eventTypeText .= 'Тестовый полет пилота' . ($event->testPilot ? ' ' . $event->testPilot->fioFormatted() : '');
+				$pilotSum = 0;
+			} else {
+				if ($promo && $promo->alias == Promo::DIRECTOR_ALIAS) {
+					$pilotSum = $pilotSum * 0.8;
+				}
+			}
+			$promoText = $promo ? ($promo->name . ($promo->discount ? ' (' . $promo->discount->valueFormatted(). ')' : '')) : '';
+			$promocodeText = $promocode ? ($promocode->number . ($promocode->discount ? ' (' . $promocode->discount->valueFormatted(). ')' : '')) : '';
+			$score = $position ? $position->score()->where('type', Score::USED_TYPE)->sum('score') : null;
+			$scoreText = $score ? $score . ' баллами' : '';
+			
+			$paidSum = 0;
+			$paymentMethods = [];
+			foreach ($bills as $bill) {
+				if (!$bill->status || in_array($bill->status->alias, [Bill::CANCELED_STATUS, Bill::NOT_PAYED_STATUS])) continue;
+				
+				$paidSum += $bill->amount;
+				if ($bill->paymentMethod) {
+					$paymentMethods[] = $bill->paymentMethod->name;
+				}
+			}
+			$paymentMethods = array_unique($paymentMethods);
+			
+			$certificateNumber = '';
+			$isOldCertificate = false;
+			if ($position) {
+				$certificate = $position->certificate;
+				if ($certificate) {
+					$certificateNumber = $certificate->number;
+					if ($certificate->product) {
+						$certificatePosition = DealPosition::where('is_certificate_purchase', true)
+							->where('certificate_id', $certificate->id)
+							->first();
+						$bills = $certificatePosition ? $certificatePosition->bills : [];
+						$promo = $certificatePosition ? $certificatePosition->promo : null;
+						$promocode = $certificatePosition ? $certificatePosition->promocode : null;
+						
+						$promoText = $promo ? ($promo->name . ($promo->discount ? ' (' . $promo->discount->valueFormatted(). ')' : '')) : '';
+						$promocodeText = $promocode ? ($promocode->number . ($promocode->discount ? ' (' . $promocode->discount->valueFormatted(). ')' : '')) : '';
+						$score = $certificatePosition ? $certificatePosition->score()->where('type', Score::USED_TYPE)->sum('score') : null;
+						$scoreText = $score ? $score . ' баллами' : '';
+						
+						foreach ($bills as $bill) {
+							if (!$bill->status || in_array($bill->status->alias, [Bill::CANCELED_STATUS, Bill::NOT_PAYED_STATUS])) continue;
+							
+							$paidSum += $bill->amount;
+						}
+					} else {
+						// сертификаты из старой системы
+						$certificateData = $certificate->data_json;
+						$paidSum += isset($certificateData['amount']) ? (int) str_replace(' ', '', $certificateData['amount']) : 0;
+						$isOldCertificate = true;
+					}
+				}
+			}
+			
+			// фактический пилот
+			$pilot = $event->pilot;
+			
+			if (!$pilot) {
+				// смена пилота
+				$pilotShiftEvent = Event::where('start_at', '<=', $event->start_at)
+					->where('stop_at', '>=', $event->start_at)
+					->where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+					->where('location_id', $locationId)
+					->where('flight_simulator_id', $simulatorId)
+					->first();
+				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
+			}
+			
+			$details = [
+				$certificateNumber,
+				$paymentMethods ? implode(', ', $paymentMethods) : ((!$certificateNumber && !$eventTypeText) ? 'счет не привязан к позиции' . ($position ? ' ' . $position->number : '') : ''),
+				$promoText,
+				$promocodeText,
+				$scoreText,
+				$eventTypeText,
+				$extendedText,
+			];
+			$details = array_filter($details);
+			
+			$items[Carbon::parse($event->start_at)->format('d.m.Y')][] = [
+				'start_at_date' => Carbon::parse($event->start_at)->format('d.m.Y'),
+				'start_at_time' => Carbon::parse($event->start_at)->format('H:i'),
+				'duration' => Carbon::parse($event->stop_at)->diffInMinutes(Carbon::parse($event->start_at)),
+				'paid_sum' => $paidSum,
+				'pilot_sum' => $pilotSum,
+				'details' => implode(', ', $details),
+				'pilot' => $pilot ? $pilot->fioFormatted() : '',
+				'deal_id' => $event->deal_id,
+				'is_old_certificate' => $isOldCertificate,
+			];
+		}
 		
 		$data = [
+			'items' => $items,
+			'dates' => $period->toArray(),
+			'shiftItems' => $shiftItems,
 		];
+		
+		$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-flight-log-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new FlightLogReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}
 		
 		$VIEW = view('admin.report.flight-log.list', $data);
 		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}
 	
 	public function personalSellingIndex()

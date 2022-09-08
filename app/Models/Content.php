@@ -61,6 +61,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $meta_description_en
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereMetaDescriptionEn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereMetaTitleEn($value)
+ * @property \datetime|null $published_end_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Content wherePublishedEndAt($value)
  */
 class Content extends Model
 {
