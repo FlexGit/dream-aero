@@ -325,6 +325,8 @@ class ReportController extends Controller {
 			$dateToAt = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 		}
 		
+		$location = Location::find($locationId);
+		
 		$now = Carbon::now()->format('Y-m-d H:i:s');
 		
 		$period = CarbonPeriod::create($dateFromAt, $dateToAt);
@@ -490,7 +492,7 @@ class ReportController extends Controller {
 		
 		$reportFileName = '';
 		if ($isExport) {
-			$reportFileName = 'report-flight-log-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$reportFileName = 'report-flight-log-' . $location->alias . '-' . $user->id . '-' . date('YmdHis') . '.xlsx';
 			$exportResult = Excel::store(new FlightLogReportExport($data), 'report/' . $reportFileName);
 			if (!$exportResult) {
 				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
