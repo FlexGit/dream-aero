@@ -136,7 +136,7 @@ class DealPosition extends Model
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
-	protected $dontKeepRevisionOf = ['source', 'price'];
+	protected $dontKeepRevisionOf = ['source'/*, 'price'*/];
 	
 	/**
 	 * The attributes that are mass assignable.
