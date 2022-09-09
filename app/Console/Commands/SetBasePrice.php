@@ -41,13 +41,14 @@ class SetBasePrice extends Command
     public function handle()
     {
     	// проверяем все полеты за последний час без пилота
-    	$positions = DealPosition::get();
+    	$positions = DealPosition::where('price', 0)
+			->get();
 		foreach ($positions as $position) {
 			/** @var Product $product */
 			$product = $position->product;
 			if (!$product) continue;
 
-			$cityId = $position->city_id ?? 1;
+			$cityId = $position->city_id ?: 1;
 			$cityProduct = $product->cities()->find($cityId);
 			if (!$cityProduct || !$cityProduct->pivot) continue;
 			
