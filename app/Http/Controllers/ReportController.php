@@ -541,9 +541,12 @@ class ReportController extends Controller {
 		}
 		
 		$bills = Bill::where('user_id', '!=', 0)
-			->where('payed_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
-			->where('payed_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
-			//->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
+			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->orWhere('payed_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
+			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->orWhere('payed_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
+			->orderBy('created_at')
+			->orderBy('payed_at')
 			->get();
 		if ($user->isAdmin()) {
 			$bills = $bills->where('user_id', $user->id);
@@ -552,6 +555,10 @@ class ReportController extends Controller {
 		$totalItems = $billItems = $paymentMethodSumItems = $dealIds = [];
 		$totalSum = $i = 0;
 		foreach ($bills as $bill) {
+			if ($bill->payed_at && !Carbon::parse($bill->payed_at)->between(Carbon::parse($dateFromAt)->startOfDay(), Carbon::parse($dateToAt)->endOfDay())) {
+				continue;
+			}
+			
 			$deal = $bill->deal;
 			
 			$billItems[$bill->user_id][$i] = [
