@@ -353,10 +353,10 @@ class ReportController extends Controller {
 		//\Log::debug($shiftItems);
 		
 		//\DB::connection()->enableQueryLog();
-		$events = Event::where('start_at', '>=', $dateFromAt)
-			->where('start_at', '<=', $dateToAt)
+		$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])
+			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
+			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay())
 			->where('stop_at', '<', $now)
-			->whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT, Event::EVENT_TYPE_TEST_FLIGHT])
 			->where('location_id', $locationId)
 			->where('flight_simulator_id', $simulatorId)
 			->orderBy('start_at')
@@ -372,6 +372,8 @@ class ReportController extends Controller {
 			$promocode = $position ? $position->promocode : null;
 			$product = $position ? $position->product : null;
 			$productType = $product ? $product->productType : null;
+			/** @var User $employee */
+			$employee = $event->employee;
 			
 			$extendedText = '';
 
@@ -386,11 +388,13 @@ class ReportController extends Controller {
 			
 			$eventTypeText = '';
 			if ($event->event_type == Event::EVENT_TYPE_USER_FLIGHT) {
-				$eventTypeText .= 'Бесплатный полет сотрудника' . ($event->employee ? ' ' . $event->employee->fioFormatted() : '');
-				$pilotSum = $pilotSum * 0.8;
-			} elseif ($event->event_type == Event::EVENT_TYPE_TEST_FLIGHT) {
+				$eventTypeText .= 'Бесплатный полет сотрудника' . ($employee ? ' ' . $employee->fioFormatted() : '');
+				if ($employee->isPilot()) {
+					$pilotSum = $pilotSum * 0.8;
+				}
+			/*} elseif ($event->event_type == Event::EVENT_TYPE_TEST_FLIGHT) {
 				$eventTypeText .= 'Тестовый полет пилота' . ($event->testPilot ? ' ' . $event->testPilot->fioFormatted() : '');
-				$pilotSum = 0;
+				$pilotSum = 0;*/
 			} else {
 				if ($promo && $promo->alias == Promo::DIRECTOR_ALIAS) {
 					$pilotSum = $pilotSum * 0.8;
@@ -451,9 +455,9 @@ class ReportController extends Controller {
 			
 			if (!$pilot) {
 				// смена пилота
-				$pilotShiftEvent = Event::where('start_at', '<=', $event->start_at)
+				$pilotShiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+					->where('start_at', '<=', $event->start_at)
 					->where('stop_at', '>=', $event->start_at)
-					->where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 					->where('location_id', $locationId)
 					->where('flight_simulator_id', $simulatorId)
 					->first();
