@@ -115,6 +115,7 @@ class Event extends Model
 		'city_id' => 'Город',
 		'location_id' => 'Локация',
 		'flight_simulator_id' => 'Авиатренажер',
+		'nominal_price' => 'Номинальная цена',
 		'user_id' => 'Пользователь',
 		'start_at' => 'Начало события',
 		'stop_at' => 'Окончание события',
@@ -142,7 +143,7 @@ class Event extends Model
 
 	protected $revisionForceDeleteEnabled = true;
 	protected $revisionCreationsEnabled = true;
-	protected $dontKeepRevisionOf = ['uuid', 'data_json'];
+	protected $dontKeepRevisionOf = ['uuid', 'data_json', 'nominal_price'];
 	
 	const EVENT_SOURCE_DEAL = 'deal';
 	const EVENT_SOURCE_CALENDAR = 'calendar';
@@ -186,6 +187,7 @@ class Event extends Model
 		'city_id',
 		'location_id',
 		'flight_simulator_id',
+		'nominal_price',
 		'start_at',
 		'stop_at',
 		'description',
@@ -471,5 +473,30 @@ class Event extends Model
 	public function getInterval()
 	{
 		return Carbon::parse($this->start_at)->format('Y-m-d H:i') . ' - ' .Carbon::parse($this->stop_at)->format('H:i');
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function nominalPrice()
+	{
+		if (!in_array($this->event_type, [Event::EVENT_TYPE_DEAL])) return 0;
+		
+		$position = $this->dealPosition;
+		if (!$position) return 0;
+		
+		$product = $position->product;
+		if (!$product) return 0;
+		
+		$productType = $product->productType;
+		if (!$productType) return 0;
+		
+		if ($product->productType->alias == ProductType::ULTIMATE_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
+			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_' . ($product->duration ?? 0));
+		}
+		$cityProduct = $product ? $product->cities()->find($this->city_id) : null;
+		if (!$cityProduct || !$cityProduct->pivot) return 0;
+		
+		return $cityProduct->pivot->price;
 	}
 }

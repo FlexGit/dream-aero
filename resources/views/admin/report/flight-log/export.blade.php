@@ -13,8 +13,8 @@
 	</thead>
 	<tbody>
 	@foreach($dates as $date)
-		@if(isset($items[$date->format('d.m.Y')]))
-			@foreach($items[$date->format('d.m.Y')] as $item)
+		@if(isset($items[$location->id][$simulator->id][$date->format('d.m.Y')]))
+			@foreach($items[$location->id][$simulator->id][$date->format('d.m.Y')] as $item)
 				<tr @if($item['is_old_certificate']) style="background-color: #ffc107;" @endif>
 					<td style="text-align: center;">
 						{{ $item['start_at_date'] }}

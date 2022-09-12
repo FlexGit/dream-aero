@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -11,8 +12,10 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class FlightLogReportExport extends DefaultValueBinder implements FromView, ShouldAutoSize, WithCustomValueBinder, WithTitle
+class FlightLogLocationReportExport extends DefaultValueBinder implements FromView, ShouldAutoSize, WithCustomValueBinder, WithTitle
 {
+	use Exportable;
+	
 	private $data;
 	private $location;
 	private $simulator;
@@ -24,6 +27,9 @@ class FlightLogReportExport extends DefaultValueBinder implements FromView, Shou
 		$this->simulator = $simulator;
 	}
 	
+	/**
+	 * @return View
+	 */
 	public function view(): View
 	{
 		$this->data['location'] = $this->location;
@@ -32,6 +38,9 @@ class FlightLogReportExport extends DefaultValueBinder implements FromView, Shou
 		return view('admin.report.flight-log.export', $this->data);
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function array(): array
 	{
 		return $this->data;
@@ -62,5 +71,4 @@ class FlightLogReportExport extends DefaultValueBinder implements FromView, Shou
 		// else return default behavior
 		return parent::bindValue($cell, $value);
 	}
-	
 }

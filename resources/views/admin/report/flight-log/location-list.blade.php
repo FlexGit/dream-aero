@@ -13,8 +13,17 @@
 	</thead>
 	<tbody>
 	@foreach($cities as $city)
+		@if ($cityId && $city->id != $cityId)
+			@continue
+		@endif
 		@foreach($city->locations as $location)
+			@if ($locationId && $location->id != $locationId)
+				@continue
+			@endif
 			@foreach($location->simulators as $simulator)
+				@if ($simulatorId && $simulator->id != $simulatorId)
+					@continue
+				@endif
 				<tr class="bg-secondary">
 					<td colspan="10" class="align-middle text-left">
 						{{ $city->name }} {{ $location->name }} {{ $simulator->alias }}

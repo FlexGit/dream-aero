@@ -25,10 +25,10 @@
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ $item['transaction_created_at'] }}
 				</td>
-				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
+				<td class="align-middle text-right" style="text-align: right;vertical-align: middle;">
 					{{ $item['bill_amount'] }}
 				</td>
-				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
+				<td class="align-middle text-right" style="text-align: right;vertical-align: middle;">
 					{{ $item['bonus_miles'] }}
 				</td>
 			</tr>

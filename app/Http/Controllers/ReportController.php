@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AeroflotAccrualReportExport;
 use App\Exports\AeroflotWriteOffReportExport;
 use App\Exports\ContractorSelfMadePayedDealsReportExport;
+use App\Exports\FlightLogMultipleSheetsReportExport;
 use App\Exports\FlightLogReportExport;
 use App\Exports\NpsReportExport;
 use App\Exports\PersonalSellingReportExport;
@@ -294,6 +295,11 @@ class ReportController extends Controller {
 		]);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
 	public function flightLogGetListAjax()
 	{
 		if (!$this->request->ajax()) {
@@ -301,18 +307,6 @@ class ReportController extends Controller {
 		}
 		
 		$user = \Auth::user();
-		
-		$rules = [
-			'filter_location_id' => 'required|numeric|min:0|not_in:0',
-		];
-		
-		$validator = Validator::make($this->request->all(), $rules)
-			->setAttributeNames([
-				'filter_location_id' => 'Локация',
-			]);
-		if (!$validator->passes()) {
-			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
-		}
 		
 		$dateFromAt = $this->request->filter_date_from_at ?? '';
 		$dateToAt = $this->request->filter_date_to_at ?? '';
@@ -325,41 +319,43 @@ class ReportController extends Controller {
 			$dateToAt = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 		}
 		
-		$location = Location::find($locationId);
-		
+		$location = $locationId ? Location::find($locationId) : null;
+		$simulator = $simulatorId ? FlightSimulator::find($simulatorId) : null;
+		$city = $location ? $location->city : null;
 		$now = Carbon::now()->format('Y-m-d H:i:s');
-		
 		$period = CarbonPeriod::create($dateFromAt, $dateToAt);
 		
 		$shiftItems = [];
 		//\DB::connection()->enableQueryLog();
-		$shits = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+		$shifts = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
-			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay())
-			->where('location_id', $locationId)
-			->where('flight_simulator_id', $simulatorId)
-			->orderBy('start_at')
+			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay());
+		if ($location && $simulator) {
+			$shifts = $shifts->where('location_id', $location->id)
+				->where('flight_simulator_id', $simulator->id);
+		}
+		$shifts = $shifts->orderBy('start_at')
 			->get();
 		//\Log::debug(\DB::getQueryLog());
-		foreach ($shits as $shift) {
+		foreach ($shifts as $shift) {
 			/** @var User $shiftPilot */
 			$shiftPilot = $shift->user;
 			$shiftPilotFio = $shiftPilot ? $shiftPilot->fioFormatted() : '';
 			if ($shiftPilotFio) {
-				$shiftItems[Carbon::parse($shift->start_at)->format('d.m.Y')][] = $shiftPilotFio;
+				$shiftItems[$shift->location_id][$shift->flight_simulator_id][Carbon::parse($shift->start_at)->format('d.m.Y')][] = $shiftPilotFio;
 			}
 		}
-		
-		//\Log::debug($shiftItems);
 		
 		//\DB::connection()->enableQueryLog();
 		$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
 			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay())
-			->where('stop_at', '<', $now)
-			->where('location_id', $locationId)
-			->where('flight_simulator_id', $simulatorId)
-			->orderBy('start_at')
+			->where('stop_at', '<', $now);
+		if ($location && $simulator) {
+			$events = $events->where('location_id', $location->id)
+				->where('flight_simulator_id', $simulator->id);
+		}
+		$events = $events->orderBy('start_at')
 			->get();
 		//\Log::debug(\DB::getQueryLog());
 		
@@ -384,7 +380,7 @@ class ReportController extends Controller {
 				$extendedText .= $product->name;
 			}
 			
-			$pilotSum = $position ? $position->price : 0;
+			$pilotSum = $event->nominal_price;
 			
 			$eventTypeText = '';
 			if ($event->event_type == Event::EVENT_TYPE_USER_FLIGHT) {
@@ -392,9 +388,6 @@ class ReportController extends Controller {
 				if ($employee->isPilot()) {
 					$pilotSum = $pilotSum * 0.8;
 				}
-			/*} elseif ($event->event_type == Event::EVENT_TYPE_TEST_FLIGHT) {
-				$eventTypeText .= 'Тестовый полет пилота' . ($event->testPilot ? ' ' . $event->testPilot->fioFormatted() : '');
-				$pilotSum = 0;*/
 			} else {
 				if ($promo && $promo->alias == Promo::DIRECTOR_ALIAS) {
 					$pilotSum = $pilotSum * 0.8;
@@ -457,10 +450,12 @@ class ReportController extends Controller {
 				// смена пилота
 				$pilotShiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 					->where('start_at', '<=', $event->start_at)
-					->where('stop_at', '>=', $event->start_at)
-					->where('location_id', $locationId)
-					->where('flight_simulator_id', $simulatorId)
-					->first();
+					->where('stop_at', '>=', $event->start_at);
+				if ($location && $simulator) {
+					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $location->id)
+						->where('flight_simulator_id', $simulator->id);
+				}
+				$pilotShiftEvent = $pilotShiftEvent->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
 			}
 			
@@ -475,7 +470,7 @@ class ReportController extends Controller {
 			];
 			$details = array_filter($details);
 			
-			$items[Carbon::parse($event->start_at)->format('d.m.Y')][] = [
+			$items[$event->location_id][$event->flight_simulator_id][Carbon::parse($event->start_at)->format('d.m.Y')][] = [
 				'start_at_date' => Carbon::parse($event->start_at)->format('d.m.Y'),
 				'start_at_time' => Carbon::parse($event->start_at)->format('H:i'),
 				'duration' => Carbon::parse($event->stop_at)->diffInMinutes(Carbon::parse($event->start_at)),
@@ -488,22 +483,36 @@ class ReportController extends Controller {
 			];
 		}
 		
+		$cities = $this->cityRepo->getList($user);
+		
 		$data = [
 			'items' => $items,
 			'dates' => $period->toArray(),
 			'shiftItems' => $shiftItems,
+			'cities' => $cities,
+			'cityId' => $city ? $city->id : 0,
+			'locationId' => $location ? $location->id : 0,
+			'simulatorId' => $simulator ? $simulator->id : 0,
 		];
 		
 		$reportFileName = '';
 		if ($isExport) {
-			$reportFileName = 'report-flight-log-' . $location->alias . '-' . $user->id . '-' . date('YmdHis') . '.xlsx';
-			$exportResult = Excel::store(new FlightLogReportExport($data), 'report/' . $reportFileName);
+			$reportFileName = 'report-flight-log-' . (($location && $simulator) ? $location->alias . '-' . $simulator->alias . '-' : '') . $user->id . '-' . date('YmdHis') . '.xlsx';
+			if ($location && $simulator) {
+				$exportResult = Excel::store(new FlightLogReportExport($data, $location, $simulator), 'report/' . $reportFileName);
+			} else {
+				$exportResult = Excel::store(new FlightLogMultipleSheetsReportExport($data, $cities), 'report/' . $reportFileName);
+			}
 			if (!$exportResult) {
 				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 			}
 		}
 		
-		$VIEW = view('admin.report.flight-log.list', $data);
+		if ($location && $simulator) {
+			$VIEW = view('admin.report.flight-log.location-list', $data);
+		} else {
+			$VIEW = view('admin.report.flight-log.list', $data);
+		}
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}

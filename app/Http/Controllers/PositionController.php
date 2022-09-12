@@ -939,6 +939,7 @@ class PositionController extends Controller
 				}
 				$event->location_id = $location->id ?? 0;
 				$event->flight_simulator_id = $simulator->id ?? 0;
+				$event->nominal_price = $event->nominalPrice();
 				$event->save();
 			}
 			

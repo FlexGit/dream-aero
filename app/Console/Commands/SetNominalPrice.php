@@ -6,7 +6,6 @@ use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\Product;
 use App\Models\ProductType;
-use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -44,8 +43,12 @@ class SetNominalPrice extends Command
     public function handle()
     {
     	// проверяем все полеты за последний час без пилота
-    	$events = Event::where('nominal_price', 0)
+		//\DB::connection()->enableQueryLog();
+    	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
+			->where('nominal_price', 0)
+			->orderBy('id')
 			->get();
+		//\Log::debug(\DB::getQueryLog());
 		foreach ($events as $event) {
 			/** @var DealPosition $position */
 			$position = $event->dealPosition;
@@ -57,17 +60,9 @@ class SetNominalPrice extends Command
 			
 			/** @var ProductType $productType */
 			$productType = $product->productType;
+			if (!$productType) continue;
 			
-			// если тариф Ultimate, а летали в будний день, то меняем тариф на Regular
-			if ($productType->alias == ProductType::ULTIMATE_ALIAS && in_array(Carbon::parse($event->start_at)->dayOfWeek, [0,6])) {
-				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS);
-			}
-
-			$cityId = $event->city_id;
-			$cityProduct = $product->cities()->find($cityId);
-			if (!$cityProduct || !$cityProduct->pivot) continue;
-			
-			$event->nominal_price = $cityProduct->pivot->price ?? 0;
+			$event->nominal_price = $event->nominalPrice();
 			$event->save();
 		}
 			

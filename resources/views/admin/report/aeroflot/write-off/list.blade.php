@@ -27,7 +27,7 @@
 					{{ $item['location_name'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
-					{{ '"' . $item['transaction_order_id'] . '"' }}
+					{{ $item['transaction_order_id'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ $item['transaction_created_at'] }}
@@ -35,13 +35,13 @@
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
 					{{ $item['card_number'] }}
 				</td>
-				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
+				<td class="align-middle text-right" style="text-align: right;vertical-align: middle;">
 					{{ $item['bill_amount'] }}
 				</td>
-				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
+				<td class="align-middle text-right" style="text-align: right;vertical-align: middle;">
 					{{ $item['bonus_amount'] }}
 				</td>
-				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">
+				<td class="align-middle text-right" style="text-align: right;vertical-align: middle;">
 					{{ $item['bonus_miles'] }}
 				</td>
 				<td class="align-middle text-center" style="text-align: center;vertical-align: middle;">

@@ -628,6 +628,7 @@ class EventController extends Controller
 					$event->pilot_id = $this->request->pilot ?? 0;
 					$event->user_id = $this->request->user()->id ?? 0;
 					$event->data_json = $data;
+					$event->nominal_price = $event->nominalPrice();
 					$event->save();
 					
 					/*if ($position->amount && $position->deal) {
@@ -860,6 +861,7 @@ class EventController extends Controller
 					if (isset($data)) {
 						$event->data_json = $data;
 					}
+					$event->nominal_price = $event->nominalPrice();
 					$event->save();
 					
 					$commentId = $this->request->comment_id ?? 0;
@@ -1003,6 +1005,7 @@ class EventController extends Controller
 					}
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
+					$event->nominal_price = $event->nominalPrice();
 					$event->save();
 				break;
 				case Event::EVENT_TYPE_BREAK:

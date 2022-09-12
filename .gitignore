@@ -15,3 +15,4 @@ yarn-error.log
 /.vscode
 /public/assets/img/news_img
 /public/upload
+/afbonus/logs.log

@@ -1168,6 +1168,7 @@ class DealController extends Controller
 						$event->extra_time = $extraTime;
 						$event->is_repeated_flight = $isRepeatedFlight;
 						$event->is_unexpected_flight = $isUnexpectedFlight;
+						$event->nominal_price = $event->nominalPrice();
 						$event->save();
 						
 						$position->event()->save($event);
