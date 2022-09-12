@@ -493,7 +493,10 @@ class Event extends Model
 		
 		if ($product->productType->alias == ProductType::ULTIMATE_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
 			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_' . ($product->duration ?? 0));
+		} elseif ($product->productType->alias == ProductType::REGULAR_ALIAS && in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
+			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_' . ($product->duration ?? 0));
 		}
+		
 		$cityProduct = $product ? $product->cities()->find($this->city_id) : null;
 		if (!$cityProduct || !$cityProduct->pivot) return 0;
 		
