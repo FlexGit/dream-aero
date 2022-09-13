@@ -40,7 +40,7 @@ class CreateEventsTable extends Migration
 			$table->integer('pilot_id')->default(0)->index()->comment('фактический пилот');
 			$table->integer('text_pilot_id')->default(0)->index()->comment('тестовый полет пилота');
 			$table->integer('employee_id')->default(0)->index()->comment('полет сотрудника');
-			$table->timestamp('feedback_email_sent_at')->nullable()->comment('дата и время отправки письма с просьбой оставить отзыв о полете');
+			$table->timestamp('leave_review_sent_at')->nullable()->comment('дата и время отправки письма с просьбой оставить отзыв о полете');
 			$table->string('uuid')->nullable();
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();

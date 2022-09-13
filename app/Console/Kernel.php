@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
 		Commands\Roistat\RoistatAddDeals::class,
 		Commands\RunAeroflotAccrual::class,
 		Commands\UnlockPeriod::class,
+		Commands\SendLeaveReviewEmail::class,
 	];
 
 	/**
@@ -123,6 +124,11 @@ class Kernel extends ConsoleKernel
 		$schedule->command('period:unlock')
 			->everyMinute()
 			->runInBackground();
+		
+		// отправка контрагенту письма с предложением оставить отзыв
+		/*$schedule->command('leave_review_email:send')
+			->everyMinute()
+			->runInBackground();*/
 	}
 
 	/**

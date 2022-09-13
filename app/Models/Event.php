@@ -100,7 +100,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShiftAdminId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereShiftPilotId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereTestPilotId($value)
- * @property \Illuminate\Support\Carbon|null $feedback_email_sent_at дата и время отправки письма с просьбой оставить отзыв о полете
+ * @property \Illuminate\Support\Carbon|null $leave_review_sent_at дата и время отправки письма с просьбой оставить отзыв о полете
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereFeedbackEmailSentAt($value)
  */
 class Event extends Model
@@ -133,7 +133,7 @@ class Event extends Model
 		'pilot_id' => 'Фактический пилот',
 		'test_pilot_id' => 'Пилот тестового полета',
 		'employee_id' => 'Сотрудник, осуществивший полет',
-		'feedback_email_sent_at' => 'дата и время отправки письма с просьбой оставить отзыв о полете',
+		'leave_review_sent_at' => 'дата и время отправки письма с просьбой оставить отзыв о полете',
 		'uuid' => 'Uuid',
 		'data_json' => 'Дополнительная информация',
 		'created_at' => 'Создано',
@@ -203,7 +203,7 @@ class Event extends Model
 		'pilot_id',
 		'test_pilot_id',
 		'employee_id',
-		'feedback_email_sent_at',
+		'leave_review_sent_at',
 		'uuid',
 		'data_json',
 	];
@@ -224,7 +224,7 @@ class Event extends Model
 		'flight_invitation_sent_at' => 'datetime:Y-m-d H:i',
 		'data_json' => 'array',
 		'is_notified' => 'boolean',
-		'feedback_email_sent_at' => 'datetime:Y-m-d H:i',
+		'leave_review_sent_at' => 'datetime:Y-m-d H:i',
 	];
 	
 	public static function boot()
@@ -339,6 +339,11 @@ class Event extends Model
 	{
 		return $this->hasMany(EventComment::class, 'event_id', 'id')
 			->latest();
+	}
+	
+	public function score()
+	{
+		return $this->hasOne(Score::class, 'id', 'event_id');
 	}
 	
 	/**
