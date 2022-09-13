@@ -500,4 +500,7 @@ return [
 	
 	'404.title' => 'Error 404',
 	'404.страница-не-найдена' => 'Page not found',
+	
+	'unsubscribe.title' => 'Unsubscribe',
+	'unsubscribe.text' => 'E-mail :email has been successfully removed from the mailing list',
 ];

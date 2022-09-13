@@ -14,7 +14,7 @@
 			<div class="article-content">
 				<div class="row">
 					<div class="item">
-						E-mail {{ $contractor->email ?? '' }} успешно удалён из рассылки
+						@lang('main.unsubscribe.text', ['email' => $contractor->email ?? ''])
 					</div>
 				</div>
 			</div>
