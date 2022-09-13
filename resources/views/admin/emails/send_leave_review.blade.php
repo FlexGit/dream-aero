@@ -87,7 +87,7 @@
 											<td height="100%" width="30" style="border-collapse:collapse;border-color:transparent;width:30px !important">&nbsp;</td>
 											<td valign="top" width="540" style="border-collapse:collapse;border-color:transparent;vertical-align:top">
 												<div style="color:#333333;font-size:16px;line-height:1.5;width:100%">
-													<img align="left" alt="123" border="0" src="{{ asset('img/leave_review_img1.jpg') }}" width="540" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none;">
+													<img align="left" alt="123" border="0" src="https://dream-aero.ru/assets/img/leave_review_img1.jpg" width="540" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none;">
 												</div>
 											</td>
 											<td height="100%" width="30" style="border-collapse:collapse;border-color:transparent;width:30px !important">&nbsp;</td>
@@ -280,7 +280,7 @@
 											<td height="100%" width="30" style="border-collapse:collapse;border-color:transparent;width:30px !important">&nbsp;</td>
 											<td valign="top" width="160" style="border-collapse:collapse;border-color:transparent;vertical-align:top">
 												<div style="color:#333333;font-size:16px;height:155;line-height:1.5;width:100%">
-													<img align="left" alt="letaemkurs_1" border="0" src="{{ asset('img/leave_review_img2.jpg') }}" width="160" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none">
+													<img align="left" alt="letaemkurs_1" border="0" src="https://dream-aero.ru/assets/img/leave_review_img2.jpg" width="160" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none">
 												</div>
 											</td>
 											<td height="100%" width="10" style="border-collapse:collapse;border-color:transparent;width:10px !important">&nbsp;</td>
@@ -343,7 +343,7 @@
 																<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border:0;border-collapse:collapse;color:#333;font-size:16px;line-height:1.5">
 																	<tbody>
 																	<tr style="border-color:transparent">
-																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="{{ url('lechenie-aerofobii?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback') }}" target="_blank" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" rel="noopener noreferrer">Подробнее</a></td>
+																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="https://dream-aero.ru/lechenie-aerofobii?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback" target="_blank" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" rel="noopener noreferrer">Подробнее</a></td>
 																	</tr>
 																	</tbody>
 																</table>
@@ -390,7 +390,7 @@
 											<td height="100%" width="30" style="border-collapse:collapse;border-color:transparent;width:30px !important">&nbsp;</td>
 											<td valign="top" width="160" style="border-collapse:collapse;border-color:transparent;vertical-align:top">
 												<div style="color:#333333;font-size:16px;height:199;line-height:1.5;width:100%">
-													<img align="left" alt="1_013f751a79c87e6b14" border="0" src="{{ asset('img/leave_review_img3.jpg') }}" width="160" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none">
+													<img align="left" alt="1_013f751a79c87e6b14" border="0" src="https://dream-aero.ru/assets/img/leave_review_img3.jpg" width="160" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none">
 												</div>
 											</td>
 											<td height="100%" width="10" style="border-collapse:collapse;border-color:transparent;width:10px !important">&nbsp;</td>
@@ -461,7 +461,7 @@
 																<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border:0;border-collapse:collapse;color:#333;font-size:16px;line-height:1.5">
 																	<tbody>
 																	<tr style="border-color:transparent">
-																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="{{ url('price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback') }}" target="_blank" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" rel="noopener noreferrer">Подробнее</a></td>
+																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="https://dream-aero.ru/price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback" target="_blank" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" rel="noopener noreferrer">Подробнее</a></td>
 																	</tr>
 																	</tbody>
 																</table>
@@ -508,7 +508,7 @@
 											<td height="100%" width="30" style="border-collapse:collapse;border-color:transparent;width:30px !important">&nbsp;</td>
 											<td valign="top" width="160" style="border-collapse:collapse;border-color:transparent;vertical-align:top">
 												<div style="color:#333333;font-size:16px;height:239;line-height:1.5;width:100%">
-													<img align="left" alt="321" border="0" src="{{ asset('img/leave_review_img4.jpg') }}" width="160" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none">
+													<img align="left" alt="321" border="0" src="https://dream-aero.ru/assets/img/leave_review_img4.jpg" width="160" style="border:0;height:auto;line-height:100%;margin:0;text-decoration:none">
 												</div>
 											</td>
 											<td height="100%" width="10" style="border-collapse:collapse;border-color:transparent;width:10px !important">&nbsp;</td>
@@ -577,7 +577,7 @@
 																<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border:0;border-collapse:collapse;color:#333;font-size:16px;line-height:1.5">
 																	<tbody>
 																	<tr style="border-color:transparent">
-																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="{{ url('price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback') }}" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" target="_blank" rel="noopener noreferrer">Подробнее</a></td>
+																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="https://dream-aero.ru/price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" target="_blank" rel="noopener noreferrer">Подробнее</a></td>
 																	</tr>
 																	</tbody>
 																</table>
@@ -618,7 +618,7 @@
 									<div style="color:#333;font-size:16px;line-height:1.5;padding:15px 30px 15px 30px">
 										<hr style="border-style:dashed none none none;border-top-color:#b2b2b2;border-width:1px 0 0 0;margin:0">
 										<span style="box-sizing:border-box;font-size:13px">Вы получили данную рассылку, так как являетесь клиентом или подписчиком Dream Aero.</span>
-										<p><a href="{{ url('unsubscribe?contractor_id=' . $event->contractor_id) }}" target="_blank" rel="noopener noreferrer">Отписаться от рассылки</a></p>
+										<p><a href="https://dream-aero.ru/unsubscribe?contractor_id={{ $event->contractor_id }}" target="_blank" rel="noopener noreferrer">Отписаться от рассылки</a></p>
 									</div>
 								</td>
 							</tr>
