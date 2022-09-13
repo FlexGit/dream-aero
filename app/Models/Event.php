@@ -343,7 +343,7 @@ class Event extends Model
 	
 	public function score()
 	{
-		return $this->hasOne(Score::class, 'id', 'event_id');
+		return $this->hasOne(Score::class, 'event_id', 'id');
 	}
 	
 	/**
