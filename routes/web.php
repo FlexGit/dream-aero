@@ -536,8 +536,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
 		});
-		
-		Route::get('unsubscribe/{uuid}', [Contractor::class, 'unsubscribe'])->name('unsubscribe');
 	});
 	
 	Route::domain(env('DOMAIN_EN', 'en.dream-aero.ru'))->group(function () {
@@ -614,8 +612,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
 		});
-		
-		Route::get('unsubscribe/{uuid}', [Contractor::class, 'unsubscribe'])->name('unsubscribe');
 	});
 
 	Route::get('deal/product/calc', [DealController::class, 'calcProductAmount'])->name('calcProductAmount');
@@ -624,8 +620,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	Route::post('aeroflot-use/retry', [AeroflotBonusController::class, 'useRetry'])->name('useRetry');
 	Route::post('aeroflot-use/refresh', [AeroflotBonusController::class, 'useRefresh'])->name('useRefresh');
 	Route::post('aeroflot-transaction', [AeroflotBonusController::class, 'transaction'])->name('transaction');
-	
 	Route::get('test/parse/file', [TestController::class, 'parseFile']);
+	Route::get('unsubscribe/{uuid}', [ContractorController::class, 'unsubscribe'])->name('unsubscribe');
 	
 	Route::fallback(function () {
 		abort(404);
