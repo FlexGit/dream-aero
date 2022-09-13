@@ -132,7 +132,7 @@
 															<p style="font-size:inherit;font-weight:normal;line-height:inherit;margin:0 0 10px 0;padding:0">
 																Недавно вы испытывали себя в роли пилота авиалайнера.
 																@if($event->score)
-																	Мы начислили вам за этот полет [{{ $event->score->score }}] баллов. Воспользоваться ими можно в нашем <a href="https://dream-aero.ru/news/prilozhenie-dreamaero" target="_blank" rel=" noopener noreferrer">мобильном приложении.</a>
+																	Мы начислили вам за этот полет {{ $event->score->score }} баллов. Воспользоваться ими можно в нашем <a href="https://dream-aero.ru/news/prilozhenie-dreamaero" target="_blank" rel=" noopener noreferrer">мобильном приложении.</a>
 																@endif
 																<br><br>
 																Вам понравилось у нас? Порекомендуете нас друзьям? Поделитесь впечатлениями, нам это очень важно!</p>
