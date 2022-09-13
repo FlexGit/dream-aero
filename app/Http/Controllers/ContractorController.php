@@ -433,6 +433,10 @@ class ContractorController extends Controller
 		return response()->json(['status' => 'success']);
 	}
 	
+	/**
+	 * @param $uuid
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
 	public function unsubscribe($uuid)
 	{
 		$contractor = HelpFunctions::getEntityByUuid(Contractor::class, $uuid);
@@ -449,6 +453,5 @@ class ContractorController extends Controller
 			'contractor' => $contractor,
 			'page' => $page,
 		]);
-
 	}
 }
