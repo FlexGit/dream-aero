@@ -48,7 +48,7 @@
 											<td valign="top" width="540" style="border-collapse:collapse;border-color:transparent;vertical-align:top">
 												<div align="center" style="color:#333333;font-size:16px;height:75;line-height:1.5;text-align:center;width:100%">
 													<div>
-														<a href="https://dream-aero.ru?utm_source=dreamaero&amp;utm_medium=email&amp;utm_campaign=feedback" style="display:flex;width:167px;height:auto;margin:0 auto;" target="_blank" rel="noopener noreferrer">
+														<a href="https://dream-aero.ru/{{ $event->city ? $event->city->alias : 'msk' }}?utm_source=dreamaero&amp;utm_medium=email&amp;utm_campaign=feedback" style="display:flex;width:167px;height:auto;margin:0 auto;" target="_blank" rel="noopener noreferrer">
 															<img src="https://dream-aero.ru/assets/img/logo-new-mail.png" width="243" alt="logo" align="center" border="0" style="border:0;height:auto;line-height:100%;text-decoration:none;">
 														</a>
 													</div>
@@ -461,7 +461,7 @@
 																<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border:0;border-collapse:collapse;color:#333;font-size:16px;line-height:1.5">
 																	<tbody>
 																	<tr style="border-color:transparent">
-																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="https://dream-aero.ru/price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback" target="_blank" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" rel="noopener noreferrer">Подробнее</a></td>
+																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="https://dream-aero.ru/{{ $event->city ? $event->city->alias : 'msk' }}/price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback" target="_blank" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" rel="noopener noreferrer">Подробнее</a></td>
 																	</tr>
 																	</tbody>
 																</table>
@@ -577,7 +577,7 @@
 																<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border:0;border-collapse:collapse;color:#333;font-size:16px;line-height:1.5">
 																	<tbody>
 																	<tr style="border-color:transparent">
-																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="https://dream-aero.ru/price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" target="_blank" rel="noopener noreferrer">Подробнее</a></td>
+																		<td align="center" style="border:0 transparent;border-collapse:collapse;line-height:1;padding:0"><a href="https://dream-aero.ru/{{ $event->city ? $event->city->alias : 'msk' }}/price?utm_source=dreamaero&utm_medium=email&utm_campaign=feedback" style="color:#ffffff;font:bold 16px 'arial' , 'helvetica neue' , 'helvetica' , sans-serif;text-decoration:none" target="_blank" rel="noopener noreferrer">Подробнее</a></td>
 																	</tr>
 																	</tbody>
 																</table>
