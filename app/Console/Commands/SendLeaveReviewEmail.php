@@ -44,7 +44,7 @@ class SendLeaveReviewEmail extends Command
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereNull('leave_review_sent_at')
 			->where('stop_at', '<', Carbon::now()->subDay())
-			->where('stop_at', '>', '2022-09-13')
+			->where('stop_at', '>', '2022-09-11 00:00:00')
 			->where('contractor_id', '1')
 			->oldest()
 			->limit(1)
