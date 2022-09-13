@@ -624,7 +624,7 @@
 												<div style="color:#333;font-size:16px;line-height:1.5;padding:15px 30px 15px 30px">
 													<hr style="border-style:dashed none none none;border-top-color:#b2b2b2;border-width:1px 0 0 0;margin:0">
 													<span style="box-sizing:border-box;font-size:13px">Вы получили данную рассылку, так как являетесь клиентом или подписчиком Dream Aero.</span>
-													<p><a href="https://dream-aero.ru/unsubscribe?contractor_id={{ $event->contractor_id }}" target="_blank" rel="noopener noreferrer">Отписаться от рассылки</a></p>
+													<p><a href="https://dream-aero.ru/unsubscribe/{{ $event->contractor->uuid }}" target="_blank" rel="noopener noreferrer">Отписаться от рассылки</a></p>
 												</div>
 											</td>
 										</tr>
