@@ -432,4 +432,23 @@ class ContractorController extends Controller
 
 		return response()->json(['status' => 'success']);
 	}
+	
+	public function unsubscribe($uuid)
+	{
+		$contractor = HelpFunctions::getEntityByUuid(Contractor::class, $uuid);
+		if (!$contractor) {
+			abort(404);
+		}
+		
+		$contractor->is_subscribed = 0;
+		$contractor->save();
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'unsubscribe');
+		
+		return view('unsubscribe', [
+			'contractor' => $contractor,
+			'page' => $page,
+		]);
+
+	}
 }
