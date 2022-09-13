@@ -444,8 +444,10 @@ class ContractorController extends Controller
 			abort(404);
 		}
 		
-		$contractor->is_subscribed = 0;
-		$contractor->save();
+		if ($contractor->is_subscribed) {
+			$contractor->is_subscribed = 0;
+			$contractor->save();
+		}
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'unsubscribe');
 		
