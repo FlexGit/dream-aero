@@ -503,5 +503,5 @@ return [
 	'404.страница-не-найдена' => 'Страница не найдена',
 	
 	'unsubscribe.title' => 'Отписаться от рассылки',
-	'unsubscribe.text' => 'E-mail :email успешно удалён из рассылки',
+	'unsubscribe.text' => 'E-mail :email удалён из рассылки',
 ];
