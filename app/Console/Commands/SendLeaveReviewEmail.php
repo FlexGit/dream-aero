@@ -44,8 +44,9 @@ class SendLeaveReviewEmail extends Command
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereNull('leave_review_sent_at')
 			->where('stop_at', '<', Carbon::now()->subDay())
-			->where('stop_at', '>', '2022-09-11 00:00:00')
-			->where('contractor_id', '1')
+			->where('stop_at', '>', Carbon::now()->subDays(2))
+			->where('stop_at', '>', '2022-09-12 00:00:00')
+			->whereIn('contractor_id', [1, 3])
 			->oldest()
 			->limit(1)
 			->get();
@@ -53,8 +54,10 @@ class SendLeaveReviewEmail extends Command
 		foreach ($events as $event) {
 			if (!$event->contractor_id) continue;
 			
-			$deal = $event->deal;
 			$contractor = $event->contractor;
+			if (!$contractor->is_subscribed) continue;
+			
+			$deal = $event->deal;
 			
 			$email = $deal ? $deal->email : ($contractor ? $contractor->email : '');
 			if (!$email) continue;
