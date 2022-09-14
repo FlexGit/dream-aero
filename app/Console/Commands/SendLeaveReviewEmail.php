@@ -44,8 +44,8 @@ class SendLeaveReviewEmail extends Command
 		\DB::connection()->enableQueryLog();
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereNull('leave_review_sent_at')
-			->where('stop_at', '<', Carbon::now()->subDay())
-			->where('stop_at', '>', Carbon::now()->subDays(2))
+			->where('stop_at', '<', Carbon::now()->subDay()->format('Y-m-d H:i:s'))
+			->where('stop_at', '>', Carbon::now()->subDays(2)->format('Y-m-d H:i:s'))
 			->where('stop_at', '>', '2022-09-12 00:00:00')
 			->whereHas('contractor', function ($query) {
 				return $query->where('is_subscribed', true);
