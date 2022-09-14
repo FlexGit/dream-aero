@@ -68,9 +68,9 @@ class SendLeaveReviewEmail extends Command
 			if (!$email) continue;
 			
 			try {
-				$recipients = $bcc = [];
+				$recipients = /*$bcc = */[];
 				$recipients[] = $email;
-				$bcc[] = env('DEV_EMAIL');
+				/*$bcc[] = env('DEV_EMAIL');*/
 				
 				$messageData = [
 					'event' => $event,
@@ -78,11 +78,11 @@ class SendLeaveReviewEmail extends Command
 				
 				$subject = env('APP_NAME') . ': оставьте отзыв';
 				
-				Mail::send(['html' => "admin.emails.send_leave_review"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
+				Mail::send(['html' => "admin.emails.send_leave_review"], $messageData, function ($message) use ($subject, $recipients/*, $bcc*/) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);
 					$message->to($recipients);
-					$message->bcc($bcc);
+					/*$message->bcc($bcc);*/
 				});
 				$failures = Mail::failures();
 				if (!$failures) {
