@@ -453,9 +453,9 @@ class ReportController extends Controller {
 				$pilotShiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 					->where('start_at', '<=', $event->start_at)
 					->where('stop_at', '>=', $event->start_at);
-				if ($location && $simulator) {
-					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $location->id)
-						->where('flight_simulator_id', $simulator->id);
+				if ($event->location && $event->simulator) {
+					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $event->location->id)
+						->where('flight_simulator_id', $event->simulator->id);
 				}
 				$pilotShiftEvent = $pilotShiftEvent->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
