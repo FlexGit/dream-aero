@@ -49,7 +49,7 @@ class SendLeaveReviewEmail extends Command
 			->whereHas('contractor', function ($query) {
 				return $query->where('is_subscribed', true);
 			})
-			->whereIn('contractor_id', [1])
+			/*->whereIn('contractor_id', [1])*/
 			->oldest()
 			->limit(1)
 			->get();
@@ -66,8 +66,9 @@ class SendLeaveReviewEmail extends Command
 			if (!$email) continue;
 			
 			try {
-				$recipients = [];
+				$recipients = $bcc = [];
 				$recipients[] = $email;
+				$bcc[] = env('DEV_EMAIL');
 				
 				$messageData = [
 					'event' => $event,
@@ -75,10 +76,11 @@ class SendLeaveReviewEmail extends Command
 				
 				$subject = env('APP_NAME') . ': оставьте отзыв';
 				
-				Mail::send(['html' => "admin.emails.send_leave_review"], $messageData, function ($message) use ($subject, $recipients) {
+				Mail::send(['html' => "admin.emails.send_leave_review"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);
 					$message->to($recipients);
+					$message->bcc($bcc);
 				});
 				$failures = Mail::failures();
 				if (!$failures) {
