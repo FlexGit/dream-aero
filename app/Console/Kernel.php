@@ -126,9 +126,9 @@ class Kernel extends ConsoleKernel
 			->runInBackground();
 		
 		// отправка контрагенту письма с предложением оставить отзыв
-		/*$schedule->command('leave_review_email:send')
-			->everyMinute()
-			->runInBackground();*/
+		$schedule->command('leave_review_email:send')
+			->hourly()
+			->runInBackground();
 	}
 
 	/**

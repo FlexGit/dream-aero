@@ -45,8 +45,11 @@ class SendLeaveReviewEmail extends Command
 			->whereNull('leave_review_sent_at')
 			->where('stop_at', '<', Carbon::now()->subDay())
 			->where('stop_at', '>', Carbon::now()->subDays(2))
-			->where('stop_at', '>', '2022-09-12 00:00:00')
-			->whereIn('contractor_id', [1, 3])
+			->where('stop_at', '>', '2022-09-13 00:00:00')
+			->whereHas('contractor', function ($query) {
+				return $query->where('is_subscribed', true);
+			})
+			->whereIn('contractor_id', [1])
 			->oldest()
 			->limit(1)
 			->get();
