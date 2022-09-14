@@ -41,7 +41,7 @@ class SendLeaveReviewEmail extends Command
      */
     public function handle()
     {
-		\DB::connection()->enableQueryLog();
+		//\DB::connection()->enableQueryLog();
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereNull('leave_review_sent_at')
 			->where('stop_at', '<', Carbon::now()->subDay()->format('Y-m-d H:i:s'))
@@ -52,9 +52,9 @@ class SendLeaveReviewEmail extends Command
 			})
 			/*->whereIn('contractor_id', [1])*/
 			->oldest()
-			->limit(1)
+			->limit(10)
 			->get();
-		\Log::debug(\DB::getQueryLog());
+		//\Log::debug(\DB::getQueryLog());
     	/** @var Event[] $events */
 		foreach ($events as $event) {
 			if (!$event->contractor_id) continue;
