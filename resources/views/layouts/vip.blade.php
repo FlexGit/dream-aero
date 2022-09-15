@@ -13,14 +13,6 @@
 	<meta name="google-site-verification" content="BHdHLHHg2mdgdi0sHcNT9Ng5yp2zThE-tl1tXxZZiGk" />
 	<meta name="yandex-verification" content="26119517b8383ec4" />
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<script>
-		(function() {
-			var ta = document.createElement('script'); ta.type = 'text/javascript'; ta.async = true;
-			ta.src = 'https://analytics.tiktok.com/i18n/pixel/sdk.js?sdkid=BTQQPEORQH54JI5RFPN0';
-			var s = document.getElementsByTagName('script')[0];
-			s.parentNode.insertBefore(ta, s);
-		})();
-	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=AW-952284596"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
