@@ -144,7 +144,7 @@
 					@if($bill->aeroflot_transaction_type)
 						<div class="mt-2" style="border: 1px solid;border-radius: 6px;padding: 4px 8px;background-color: #fff;">
 							@if($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_REGISTER_ORDER)
-								Заявка на списание миль на сумму {{ number_format($bill->aeroflot_bonus_amount, 0, '.', ' ') }} руб
+								Заявка на списание милей на сумму {{ number_format($bill->aeroflot_bonus_amount, 0, '.', ' ') }} руб
 								<div>
 									@if($bill->aeroflot_status != 0)
 										<i class="fas fa-exclamation-triangle text-danger"></i> ошибка
@@ -159,7 +159,7 @@
 									@endif
 								</div>
 							@elseif($bill->aeroflot_transaction_type == app('\App\Services\AeroflotBonusService')::TRANSACTION_TYPE_AUTH_POINTS)
-								Заявка на начисление {{ $bill->aeroflot_bonus_amount ?? '' }} миль
+								Заявка на начисление {{ $bill->aeroflot_bonus_amount ?? '' }} милей
 								<div>
 									@if($bill->aeroflot_status != 0)
 										<i class="fas fa-exclamation-triangle text-danger"></i> отклонена

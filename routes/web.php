@@ -204,7 +204,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			// Счета
 			Route::get('bill/{id}/miles/accrual', [BillController::class, 'accrualAeroflotMilesModal'])->name('accrualAeroflotMilesModal');
 			Route::post('bill/miles/accrual', [BillController::class, 'accrualAeroflotMiles'])->name('accrualAeroflotMiles');
-
+			
+			Route::delete('bill/aeroflot/cancel/{id}', [BillController::class, 'deleteAeroflot']);
 			Route::post('bill', [BillController::class, 'store']);
 			Route::put('bill/{id}', [BillController::class, 'update']);
 			Route::delete('bill/{id}', [BillController::class, 'delete']);

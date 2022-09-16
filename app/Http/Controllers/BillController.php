@@ -337,6 +337,63 @@ class BillController extends Controller
 
 		return response()->json(['status' => 'success']);
 	}
+	
+	/**
+	 * @param $id
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function deleteAeroflot($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$bill = Bill::find($id);
+		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
+		
+		if (is_null($bill->aeroflot_transaction_type)) {
+			return response()->json(['status' => 'error', 'reason' => 'Заявка не найдена']);
+		}
+		
+		if (in_array($bill->status->alias, [Bill::CANCELED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для редактирования']);
+		}
+		
+		$user = \Auth::user();
+		
+		if ($user->isAdmin() && $user->location_id && $bill->location_id && $user->location_id != $bill->location_id) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		if ($bill->aeroflot_state == AeroflotBonusService::PAYED_STATE) {
+			return response()->json(['status' => 'error', 'reason' => 'Заявка недоступна для удаления']);
+		}
+		
+		$deal = $bill->deal;
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		if (in_array($bill->status->alias, [Bill::PAYED_STATUS, Bill::PAYED_PROCESSING_STATUS]) && in_array($bill->paymentMethod->alias, [PaymentMethod::ONLINE_ALIAS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Оплаченный Счет со способом оплаты "Онлайн" недоступен для редактирования']);
+		}
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
+		$bill->aeroflot_transaction_type = null;
+		$bill->aeroflot_transaction_order_id = null;
+		$bill->aeroflot_transaction_created_at = null;
+		$bill->aeroflot_card_number = null;
+		$bill->aeroflot_bonus_amount = 0;
+		$bill->aeroflot_status = null;
+		$bill->aeroflot_state = null;
+		if (!$bill->save()) {
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
+		return response()->json(['status' => 'success', 'message' => 'Заявка успешно отменена']);
+	}
 
 	public function sendPayLink() {
 		if (!$this->request->ajax()) {

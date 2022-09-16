@@ -727,6 +727,26 @@
 				});
 			});
 
+			$(document).on('click', '.js-aeroflot-cancel', function(e) {
+				if (!confirm('Вы уверены, что хотите отменить заявку Аэрофлот Бонус?')) return;
+
+				$.ajax({
+					url: '/bill/aeroflot/cancel/' + $(this).data('bill-id'),
+					type: 'DELETE',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						$('#modal').modal('hide');
+						toastr.success(result.message);
+						getList(false);
+					}
+				});
+			});
+
 			$.fn.isInViewport = function () {
 				let elementTop = $(this).offset().top;
 				let elementBottom = elementTop + $(this).outerHeight();
