@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Content;
+use App\Models\Deal;
+use App\Models\DealPosition;
+use App\Models\Event;
+use App\Models\Notification;
+use App\Models\NotificationContractor;
 use App\Models\Product;
 use App\Models\ProductType;
+use App\Models\Promocode;
 use App\Models\Score;
 use App\Models\Status;
 use App\Models\Contractor;
 use App\Models\City;
+use App\Models\Token;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Throwable;
 use Validator;
 
 class ContractorController extends Controller
@@ -162,7 +171,87 @@ class ContractorController extends Controller
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
+	
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws Throwable
+	 */
+	public function storeUnite($id)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+		
+		$slaveContractor = Contractor::find($id);
+		if (!$slaveContractor) {
+			return response()->json(['status' => 'error', 'reason' => 'Объединяемый контрагент не найден']);
+		}
 
+		$rules = [
+			'contractor_id' => 'required|numeric|min:0|not_in:0',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'contractor_id' => 'Основной контрагент',
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+		
+		$masterContractor = Contractor::find($this->request->contractor_id);
+		if (!$masterContractor) {
+			return response()->json(['status' => 'error', 'reason' => 'Основной контрагент']);
+		}
+		
+		if ($slaveContractor->id == $masterContractor->id) {
+			return response()->json(['status' => 'error', 'reason' => 'Контрагент не может быть объединен с самим собой']);
+		}
+		
+		/*\DB::connection()->enableQueryLog();*/
+		try {
+			\DB::beginTransaction();
+			
+			// события
+			Event::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
+			
+			// счета
+			Bill::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
+			
+			// сделки
+			Deal::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
+			
+			// баллы
+			Score::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
+			
+			// промокоды
+			Promocode::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
+			
+			// уведомления
+			Notification::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
+			
+			$slaveContractor->delete();
+			
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			\Log::debug('500 - Contractor Unite ' . $slaveContractor->id . ' - ' . $masterContractor->id . ', ' . $e->getMessage());
+			
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		/*\Log::debug(\DB::getQueryLog());*/
+		
+		return response()->json(['status' => 'success', 'message' => 'Контрагенты успешно объединены']);
+	}
+	
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
@@ -237,7 +326,7 @@ class ContractorController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success']);
+		return response()->json(['status' => 'success', 'message' => 'Контрагент успешно добавлен']);
 	}
 	
 	/**
@@ -292,16 +381,19 @@ class ContractorController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success']);
+		return response()->json(['status' => 'success', 'message' => 'Контрагент успешно сохранен']);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function search() {
 		$q = $this->request->post('query');
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
 		$user = \Auth::user();
 
-		//\Log::debug(\DB::connection()->enableQueryLog());
+		//\DB::connection()->enableQueryLog();
 		$contractors = Contractor::where('is_active', true)
 			->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")
@@ -430,7 +522,7 @@ class ContractorController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 
-		return response()->json(['status' => 'success']);
+		return response()->json(['status' => 'success', 'message' => 'Время полета / баллы успешно сохранено']);
 	}
 	
 	/**

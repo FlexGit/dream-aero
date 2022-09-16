@@ -126,6 +126,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('contractor/add', [ContractorController::class, 'add']);
 			Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
 			/*Route::get('contractor/{id}/show', [ContractorController::class, 'show']);*/
+			Route::get('contractor/{id}/unite', [ContractorController::class, 'unite']);
 	
 			Route::get('contractor/{id?}', [ContractorController::class, 'index'])->name('contractorIndex');
 			Route::get('contractor/list/ajax', [ContractorController::class, 'getListAjax'])->name('contractorList');
@@ -135,6 +136,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	
 			Route::get('contractor/{id}/score', [ContractorController::class, 'addScore']);
 			Route::post('contractor/{id}/score', [ContractorController::class, 'storeScore']);
+			
+			Route::post('contractor/{id}/unite', [ContractorController::class, 'storeUnite']);
 			
 			// Очистка тестовых данных
 			//Route::get('/clear', [EventController::class, 'clear'])->name('clear');

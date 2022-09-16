@@ -54,6 +54,7 @@
 							<th class="text-center">Контрагент</th>
 							<th class="text-center text-nowrap">Детали</th>
 							<th class="text-center">Активность</th>
+							<th class="text-center">Действие</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -87,13 +88,14 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">
+	{{--<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">--}}
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
-	<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>
+	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
+	{{--<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>--}}
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
@@ -101,6 +103,31 @@
 				$('#search_contractor').val('{{ $contractor->uuid }}');
 				getList(false);
 			@endif
+
+			$(document).on('show.bs.modal', '#modal', function(e) {
+				$('#contractor_search').autocomplete({
+					serviceUrl: '{{ route('contractorSearch') }}',
+					minChars: 1,
+					width: 'flex',
+					showNoSuggestionNotice: true,
+					noSuggestionNotice: 'Ничего не найдено',
+					type: 'POST',
+					dataType: 'json',
+					onSelect: function (suggestion) {
+						if (suggestion.id) {
+							$('#contractor_id').val(suggestion.id);
+						}
+						$('#contractor_search').attr('disabled', true);
+						$('.js-contractor').text('Объединяющий контрагент: ' + suggestion.data.name + ' ' + suggestion.data.lastname + ' ' + suggestion.data.email + ' ' + suggestion.data.phone).closest('.js-contractor-container').removeClass('hidden');
+					}
+				});
+			});
+
+			$(document).on('click', '.js-contractor-delete', function() {
+				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
+				$('#contractor_search').val('').attr('disabled', false).focus();
+				$('#id').val('');
+			});
 
 			function getList(loadMore) {
 				var $selector = $('#contractorTable tbody');
@@ -185,7 +212,7 @@
 				});
 			});
 
-			$(document).on('submit', '#contractor, #score', function(e) {
+			$(document).on('submit', '#contractor, #score, #unite', function(e) {
 				e.preventDefault();
 
 				var action = $(this).attr('action'),
@@ -203,26 +230,9 @@
 							return;
 						}
 
-						var msg = '';
-						if (formId === 'score') {
-							msg = 'Время полета успешно ';
-							if (method === 'POST') {
-								msg += 'добавлено';
-							} else if (method === 'PUT') {
-								msg += 'сохранено';
-							}
-						} else if (formId === 'contractor') {
-							msg = 'Контрагент успешно ';
-							if (method === 'POST') {
-								msg += 'добавлен';
-							} else if (method === 'PUT') {
-								msg += 'сохранен';
-							}
-						}
-
 						$('#modal').modal('hide');
 						getList(false);
-						toastr.success(msg);
+						toastr.success(result.message);
 					}
 				});
 			});

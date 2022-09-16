@@ -75,13 +75,10 @@
 	<td class="text-center align-middle">
 		{{ $contractor->is_active ? 'Да' : 'Нет' }}
 	</td>
-	{{--<td class="text-center align-middle">
-		<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/edit" data-action="/contractor/{{ $contractor->id }}" data-id="{{ $contractor->id }}" data-method="PUT" data-title="Редактирование" title="Редактировать">
-			<i class="fa fa-edit" aria-hidden="true"></i>
-		</a>&nbsp;&nbsp;&nbsp;
-		<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/delete" data-action="/contractor/{{ $contractor->id }}" data-id="2" data-method="DELETE" data-title="Удаление" title="Удалить">
-			<i class="fa fa-trash" aria-hidden="true"></i>
+	<td class="text-center align-middle">
+		<a href="javascript:void(0)" data-toggle="modal" data-url="/contractor/{{ $contractor->id }}/unite" data-action="/contractor/{{ $contractor->id }}/unite" data-id="{{ $contractor->id }}" data-method="POST" data-type="unite" data-title="Объединяемый контрагент {{ $contractor->fio() }}" title="Объединить">
+			<i class="fas fa-users"></i>
 		</a>
-	</td>--}}
+	</td>
 </tr>
 @endforeach
