@@ -234,6 +234,8 @@ class ContractorController extends Controller
 			// промокоды
 			Promocode::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
 			
+			//ToDo: использованные промокоды
+			
 			// уведомления
 			Notification::where('contractor_id', $slaveContractor->id)->update(['contractor_id' => $masterContractor->id]);
 			
