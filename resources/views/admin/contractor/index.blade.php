@@ -126,7 +126,7 @@
 			$(document).on('click', '.js-contractor-delete', function() {
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
 				$('#contractor_search').val('').attr('disabled', false).focus();
-				$('#id').val('');
+				$('#contractor_id').val('');
 			});
 
 			function getList(loadMore) {
