@@ -364,7 +364,7 @@ h1.block-title:after {
 		position: absolute;
 		left: 0;
 		color: #fefdfd;
-		font-size: 14px;
+		font-size: 13px;
 		background: rgba(0,0,0,.7);
 		transition: all .5s;
 		bottom: 0;
