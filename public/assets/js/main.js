@@ -132,7 +132,7 @@ $(function(){
 
 					var $popup = $('#popup');
 
-					$popup.css('width', '700').hide();
+					$popup/*.css('width', '700')*/.hide();
 
 					var url = '';
 
@@ -150,7 +150,7 @@ $(function(){
 							url = '/modal/scheme/' + $el.data('alias');
 							break;
 						case 'city':
-							$popup.css('width', '500');
+							/*$popup.css('width', '500');*/
 							url = '/modal/city';
 							break;
 					}

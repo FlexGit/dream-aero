@@ -46,15 +46,6 @@ class MainController extends Controller
 		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
-		if (Browser::isDesktop()) {
-			// "Наша команда"
-			$users = User::where('enable', true)
-				->whereIn('city_id', [$city->id, 0])
-				->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
-				->orderBy('name')
-				->get();
-		}
-
 		// Отзывы
 		$reviewParentContent = HelpFunctions::getEntityByAlias(Content::class, Content::REVIEWS_TYPE);
 		if ($reviewParentContent) {
@@ -252,11 +243,21 @@ class MainController extends Controller
 		$flightSimulators = FlightSimulator::where('is_active', true)
 			->get();
 		
+		/*if (Browser::isDesktop()) {*/
+			// "Наша команда"
+			$users = User::where('enable', true)
+				->whereIn('city_id', [$city->id, 0])
+				->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
+				->orderBy('name')
+				->get();
+		/*}*/
+		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'o-trenajere');
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
 		return view('about', [
 			'flightSimulators' => $flightSimulators,
+			'users' => $users ?? [],
 			'page' => $page ?? new Content,
 			'promobox' => $promobox,
 			'city' => $city,

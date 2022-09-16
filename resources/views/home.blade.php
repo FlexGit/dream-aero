@@ -171,25 +171,6 @@
 		</div>
 	</div>
 
-	@desktop
-		<div class="team">
-			<div class="container">
-				<h2 class="block-title">@lang('main.home.наша-команда')</h2>
-				<div class="owl-carousel">
-					@foreach($users as $user)
-						@if(!$user->data_json || !array_key_exists('photo_file_path', $user->data_json) || !$user->data_json['photo_file_path'])
-							@continue
-						@endif
-						<div>
-							<div class="img" style="background-image: url('/upload/{{ $user->data_json['photo_file_path'] }}');"></div>
-							<p>{{ trans('main.home.role.' . $user->role) }} <b>{{ $user['name'] }}</b></p>
-						</div>
-					@endforeach
-				</div>
-			</div>
-		</div>
-	@enddesktop
-
 	<div class="stock">
 		<div class="container">
 			<div class="row">
@@ -263,6 +244,6 @@
 @push('scripts')
 	<script src="{{ asset('js/owl.carousel.js') }}"></script>
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
-	<script src="{{ asset('js/mainonly.js?v=1') }}"></script>
+	<script src="{{ asset('js/mainonly.js?v=2') }}"></script>
 	<script src="{{ asset('js/deal.js?v=1') }}"></script>
 @endpush

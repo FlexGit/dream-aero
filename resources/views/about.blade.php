@@ -41,8 +41,7 @@
 								<iframe src="https://www.youtube.com/embed/lifbJ-35Obg?rel=0&autoplay=1&mute=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="youvideo"></iframe>
 							</div>
 						</div>
-						<br>
-						<h2>@lang('main.o-trenazhere.какие-тренажеры-мы-предлагаем')</h2>
+						<h2 class="block-title">@lang('main.o-trenazhere.какие-тренажеры-мы-предлагаем')</h2>
 						<br>
 						<table id="airboeing">
 							<tbody>
@@ -264,7 +263,26 @@
 							@endforeach
 						</div>--}}
 
-						<h2>@lang('main.o-trenazhere.что-мы-предлагаем')</h2>
+						{{--@desktop--}}
+						<div class="team">
+							<div class="container">
+								<h2 class="block-title">@lang('main.home.наша-команда')</h2>
+								<div class="owl-carousel">
+									@foreach($users as $user)
+										@if(!$user->data_json || !array_key_exists('photo_file_path', $user->data_json) || !$user->data_json['photo_file_path'])
+											@continue
+										@endif
+										<div>
+											<div class="img" style="background-image: url('/upload/{{ $user->data_json['photo_file_path'] }}');"></div>
+											<p>{{ trans('main.home.role.' . $user->role) }} <b>{{ $user['name'] }}</b></p>
+										</div>
+									@endforeach
+								</div>
+							</div>
+						</div>
+						{{--@enddesktop--}}
+
+						<h2 class="block-title">@lang('main.o-trenazhere.что-мы-предлагаем')</h2>
 
 						<div class="offer" style="background-image: url({{ asset('img/Blok_1.png') }});background-position: top; background-size: cover;">
 							<img src="{{ asset('img/facts-ico3.png') }}" alt="">
@@ -289,7 +307,7 @@
 						</div>
 
 						<section id="content-astab1">
-							<h2>@lang('main.o-trenazhere.семейство-самолетов-boeing-737-ng')</h2>
+							<h2 class="block-title">@lang('main.o-trenazhere.семейство-самолетов-boeing-737-ng')</h2>
 							<p><img src="{{ asset('img/B737_NG.jpg') }}" alt="" width="100%" /></p>
 							<blockquote>
 								<p>@lang('main.o-trenazhere.boeing-737-самый-популярный')</p>
@@ -376,6 +394,7 @@
 
 @push('css')
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
 	<style>
 		.about-simulator p,
@@ -429,6 +448,30 @@
 @endpush
 
 @push('scripts')
+	<script src="{{ asset('js/owl.carousel.js') }}"></script>
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
 	<script src="{{ asset('js/deal.js?v=1') }}"></script>
+	<script>
+		$(function(){
+			$(".team .owl-carousel").owlCarousel({
+				items:4,
+				margin:50,
+				nav:true,
+				responsive:{
+					0:{
+						items:1,
+					},
+					500:{
+						items:2
+					},
+					992:{
+						items:3
+					},
+					1200:{
+						items:4
+					}
+				}
+			});
+		});
+	</script>
 @endpush

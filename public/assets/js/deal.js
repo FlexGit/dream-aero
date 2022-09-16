@@ -51,7 +51,7 @@ $(function() {
 
 								var $popup = $('#popup');
 
-								$popup.css('width', '700').find('.popup-container').html(result.html).find('select').niceSelect();
+								$popup/*.css('width', '700')*/.find('.popup-container').html(result.html).find('select').niceSelect();
 
 								calcAmount();
 
@@ -98,7 +98,7 @@ $(function() {
 
 								var $popup = $('#popup');
 
-								$popup.css('width', '700').find('.popup-container').html(result.html).find('select').niceSelect();
+								$popup/*.css('width', '700')*/.find('.popup-container').html(result.html).find('select').niceSelect();
 
 								calcAmount();
 
