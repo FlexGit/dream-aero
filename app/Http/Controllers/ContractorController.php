@@ -164,7 +164,7 @@ class ContractorController extends Controller
 		$statuses = Status::where('is_active', true)
 			->get();
 
-		$VIEW = view('admin.contractor.modal.Unite', [
+		$VIEW = view('admin.contractor.modal.unite', [
 			'contractor' => $contractor,
 			'statuses' => $statuses,
 		]);
