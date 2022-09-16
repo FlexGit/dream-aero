@@ -352,18 +352,18 @@ class BillController extends Controller
 		$bill = Bill::find($id);
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
+		$user = \Auth::user();
+		
+		if ($user->isAdmin() && $user->location_id && $bill->location_id && $user->location_id != $bill->location_id) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
+		}
+
 		if (is_null($bill->aeroflot_transaction_type)) {
 			return response()->json(['status' => 'error', 'reason' => 'Заявка не найдена']);
 		}
 		
 		if (in_array($bill->status->alias, [Bill::CANCELED_STATUS])) {
 			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для редактирования']);
-		}
-		
-		$user = \Auth::user();
-		
-		if ($user->isAdmin() && $user->location_id && $bill->location_id && $user->location_id != $bill->location_id) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
 		if ($bill->aeroflot_state == AeroflotBonusService::PAYED_STATE) {
