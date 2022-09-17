@@ -351,7 +351,7 @@
 
 				if ($form.attr('id') === 'deal') {
 					$('#contractor_search').autocomplete({
-						serviceUrl: '/contractor-search',
+						serviceUrl: '{{ route('contractorSearch') }}',
 						minChars: 1,
 						width: 'flex',
 						showNoSuggestionNotice: true,
