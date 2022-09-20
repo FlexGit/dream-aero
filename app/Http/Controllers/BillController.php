@@ -304,6 +304,7 @@ class BillController extends Controller
 
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$amount = $this->request->amount ?? 0;
+		$billStatus = $bill->status;
 		
 		try {
 			\DB::beginTransaction();
@@ -336,10 +337,16 @@ class BillController extends Controller
 			}
 			$bill->save();
 			
-			if ($productType->alias == ProductType::SERVICES_ALIAS && $deal->balance() >= 0) {
-				$city->products()->updateExistingPivot($product->id, [
-					'availability' =>  --$cityProduct->pivot->availability,
-				]);
+			if ($productType->alias == ProductType::SERVICES_ALIAS) {
+				if ($bill->status && $bill->status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
+					$city->products()->updateExistingPivot($product->id, [
+						'availability' => --$cityProduct->pivot->availability,
+					]);
+				} elseif(!$bill->status || ($bill->status && $bill->status->alias != Bill::PAYED_STATUS)) {
+					$city->products()->updateExistingPivot($product->id, [
+						'availability' => ++$cityProduct->pivot->availability,
+					]);
+				}
 			}
 
 			\DB::commit();
