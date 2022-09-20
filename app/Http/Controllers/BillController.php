@@ -302,7 +302,16 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
 		}
 
-		$paymentMethodId = $this->request->payment_method_id ?? 0;
+		$paymentMethod = Status::find($this->request->payment_method_id);
+		if (!$paymentMethod) {
+			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
+		}
+
+		$status = Status::find($this->request->status_id);
+		if (!$status) {
+			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
+		}
+		
 		$amount = $this->request->amount ?? 0;
 		$billStatus = $bill->status;
 		
@@ -310,8 +319,8 @@ class BillController extends Controller
 			\DB::beginTransaction();
 
 			$bill->deal_position_id = ($status->alias == Bill::CANCELED_STATUS) ? 0 : ($position->id ?? 0);
-			$bill->payment_method_id = $paymentMethodId;
-			$bill->status_id = $this->request->status_id ?? 0;
+			$bill->payment_method_id = $paymentMethod->id;
+			$bill->status_id = $status->id;
 			$bill->amount = $amount;
 			if ($bill->status->alias == Bill::NOT_PAYED_STATUS
 				&& $bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS
@@ -338,12 +347,12 @@ class BillController extends Controller
 			$bill->save();
 			
 			if ($productType->alias == ProductType::SERVICES_ALIAS) {
-				\Log::debug($bill->status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
-				if ($bill->status && $bill->status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
+				\Log::debug($status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
+				if ($status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
 					$city->products()->updateExistingPivot($product->id, [
 						'availability' => --$cityProduct->pivot->availability,
 					]);
-				} elseif($bill->status && $bill->status->alias != Bill::PAYED_STATUS) {
+				} elseif($status->alias != Bill::PAYED_STATUS && $billStatus->alias == Bill::PAYED_STATUS) {
 					$city->products()->updateExistingPivot($product->id, [
 						'availability' => ++$cityProduct->pivot->availability,
 					]);
