@@ -19,6 +19,18 @@
 <div class="row">
 	<div class="col">
 		<div class="form-group">
+			<label for="availability">Наличие</label>
+			<input type="number" class="form-control" id="availability" name="availability" value="{{ $cityProduct ? $cityProduct->availability : '' }}" placeholder="Наличие">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="purchase_price">Цена закупки</label>
+			<input type="number" class="form-control" id="purchase_price" name="purchase_price" value="{{ $cityProduct ? $cityProduct->purchase_price : '' }}" placeholder="Цена закупки">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
 			<label for="price">Стоимость</label>
 			<input type="number" class="form-control" id="price" name="price" value="{{ $cityProduct ? $cityProduct->price : '' }}" placeholder="Стоимость">
 		</div>

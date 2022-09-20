@@ -136,7 +136,7 @@
 						Ошибка: {{ ($bill->aeroflot_status == 0) ? 'нет' : 'да' }}
 					</div>
 				@endif
-				@if(is_null($bill->aeroflot_state))
+				@if($user->isSuperAdmin() && is_null($bill->aeroflot_state))
 					[ <a href="javascript:void(0)" class="js-aeroflot-cancel" data-bill-id="{{ $bill->id }}">отменить</a> ]
 				@endif
 			</div>

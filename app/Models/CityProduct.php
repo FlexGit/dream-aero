@@ -47,6 +47,8 @@ class CityProduct extends Pivot
 	protected $fillable = [
 		'product_id',
 		'city_id',
+		'availability',
+		'purchase_price',
 		'price',
 		'currency_id',
 		'discount_id',

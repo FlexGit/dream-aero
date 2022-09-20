@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\DealPosition;
-use App\Models\Event;
 use App\Models\FlightSimulator;
+use App\Models\ProductType;
 use App\Models\Promo;
 use App\Models\Deal;
 use App\Models\City;
@@ -611,13 +611,18 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 		
+		$productType = $product->productType;
+		if (!$productType) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+		
 		$city = City::find($cityId);
 		if (!$city) {
 			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 		}
 		
 		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-		if (!$cityProduct) {
+		if (!$cityProduct || !$cityProduct->pivot) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
 		}
 		
@@ -644,7 +649,7 @@ class PositionController extends Controller
 			\DB::beginTransaction();
 
 			$position = new DealPosition();
-			$position->product_id = $product->id ?? 0;
+			$position->product_id = $product->id;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id ?? 0;
@@ -662,6 +667,12 @@ class PositionController extends Controller
 				if ($contractor) {
 					$promocode->contractors()->save($contractor);
 				}
+			}
+			
+			if ($productType->alias == ProductType::SERVICES_ALIAS && $deal->balance() >= 0) {
+				$city->products()->updateExistingPivot($product->id, [
+					'availability' =>  --$cityProduct->pivot->availability,
+				]);
 			}
 			
 			\DB::commit();
@@ -1001,13 +1012,18 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 		
+		$productType = $product->productType;
+		if (!$productType) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+		
 		$city = City::find($cityId);
 		if (!$city) {
 			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
 		}
 		
 		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-		if (!$cityProduct) {
+		if (!$cityProduct || !$cityProduct->pivot) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
 		}
 		
@@ -1032,7 +1048,20 @@ class PositionController extends Controller
 
 		try {
 			\DB::beginTransaction();
-
+			
+			// если в Сделке изменили позицию
+			if ($deal->product_id != $product->id) {
+				$prevProduct = Product::find($deal->product_id);
+				if ($prevProduct) {
+					$cityPrevProduct = $prevProduct->cities()->where('cities_products.is_active', true)->find($city->id);
+					if ($cityPrevProduct && $cityPrevProduct->pivot && $productType->alias == ProductType::SERVICES_ALIAS) {
+						$city->products()->updateExistingPivot($deal->product_id, [
+							'availability' => ++$cityPrevProduct->pivot->availability,
+						]);
+					}
+				}
+			}
+			
 			$position->product_id = $product->id ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
@@ -1050,6 +1079,12 @@ class PositionController extends Controller
 						$promocode->contractors()->save($contractor);
 					}
 				}
+			}
+			
+			if ($productType->alias == ProductType::SERVICES_ALIAS && $deal->balance() >= 0) {
+				$city->products()->updateExistingPivot($product->id, [
+					'availability' =>  --$cityProduct->pivot->availability,
+				]);
 			}
 			
 			\DB::commit();
@@ -1091,6 +1126,26 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}
 		
+		$product = $position->product;
+		if (!$product) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+		
+		$productType = $product->productType;
+		if (!$productType) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+		
+		$city = $position->city;
+		if (!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		}
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		if (!$cityProduct || !$cityProduct->pivot) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
+		}
+		
 		$certificateFilePath = ($position->is_certificate_purchase && $position->certificate && is_array($position->certificate->data_json) && array_key_exists('certificate_file_path', $position->certificate->data_json)) ? $position->certificate->data_json['certificate_file_path'] : '';
 		
 		try {
@@ -1129,7 +1184,13 @@ class PositionController extends Controller
 			if ($certificateFilePath) {
 				Storage::disk('private')->delete($certificateFilePath);
 			}
-
+			
+			if ($productType->alias == ProductType::SERVICES_ALIAS) {
+				$city->products()->updateExistingPivot($product->id, [
+					'availability' =>  ++$cityProduct->pivot->availability,
+				]);
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();

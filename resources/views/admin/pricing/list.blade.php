@@ -9,6 +9,8 @@
 					<thead>
 					<tr>
 						<th class="text-center align-middle">Продукт</th>
+						<th class="text-center align-middle">Наличие</th>
+						<th class="text-center align-middle">Цена закупки</th>
 						<th class="text-center align-middle">Стоимость</th>
 						<th class="text-center align-middle">Скидка</th>
 						<th class="text-center align-middle">Баллы</th>
@@ -39,6 +41,12 @@
 						<tr class="odd">
 							<td class="align-middle">
 								{{ $product->name }}
+							</td>
+							<td class="text-right align-middle">
+								{{ isset($citiesProductsData[$city->id][$product->id]) ? $citiesProductsData[$city->id][$product->id]['availability'] : '' }}
+							</td>
+							<td class="text-right align-middle">
+								{{ isset($citiesProductsData[$city->id][$product->id]) ? number_format($citiesProductsData[$city->id][$product->id]['purchase_price'], 0, '.', ' ') . ' ' . $citiesProductsData[$city->id][$product->id]['currency'] : '' }}
 							</td>
 							<td class="text-right align-middle">
 								{{ isset($citiesProductsData[$city->id][$product->id]) ? number_format($citiesProductsData[$city->id][$product->id]['price'], 0, '.', ' ') . ' ' . $citiesProductsData[$city->id][$product->id]['currency'] : '' }}

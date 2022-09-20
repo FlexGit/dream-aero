@@ -67,6 +67,8 @@ class PricingController extends Controller
 				if (!$cityProduct) continue;
 
 				$citiesProductsData[$city->id][$product->id] = [
+					'availability' => $cityProduct->pivot->availability,
+					'purchase_price' => $cityProduct->pivot->purchase_price,
 					'price' => $cityProduct->pivot->price,
 					'currency' => $cityProduct->pivot->currency ? $cityProduct->pivot->currency->name : '',
 					'is_hit' => $cityProduct->pivot->is_hit,
@@ -231,6 +233,8 @@ class PricingController extends Controller
 		}*/
 
 		$data = [
+			'availability' => $this->request->availability ?? 0,
+			'purchase_price' => $this->request->purchase_price ?? 0,
 			'price' => $this->request->price ?? 0,
 			'currency_id' => $this->request->currency_id ?? 0,
 			'discount_id' => $this->request->discount_id ?? 0,

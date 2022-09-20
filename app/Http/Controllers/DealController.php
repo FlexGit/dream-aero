@@ -10,7 +10,6 @@ use App\Models\Currency;
 use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\FlightSimulator;
-use App\Models\LockingPeriod;
 use App\Models\PaymentMethod;
 use App\Models\Promo;
 use App\Models\Deal;
@@ -1291,7 +1290,7 @@ class DealController extends Controller
 		}
 		
 		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-		if (!$cityProduct) {
+		if (!$cityProduct || !$cityProduct->pivot) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
 		}
 		
@@ -1370,7 +1369,7 @@ class DealController extends Controller
 			$deal->save();
 
 			$position = new DealPosition();
-			$position->product_id = $product->id ?? 0;
+			$position->product_id = $product->id;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $cityId ?: $this->request->user()->city_id;
@@ -1419,6 +1418,12 @@ class DealController extends Controller
 				$bill->save();
 				
 				$deal->bills()->save($bill);
+				
+				if ($isPaid && $deal->balance() >= 0) {
+					$city->products()->updateExistingPivot($product->id, [
+						'availability' =>  --$cityProduct->pivot->availability,
+					]);
+				}
 			}
 			
 			\DB::commit();
@@ -1454,7 +1459,12 @@ class DealController extends Controller
 		$deal = Deal::find($id);
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
-		if (!$deal->scores->empty() && $deal->status && in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+		$dealStatus = $deal->status;
+		if (!$dealStatus) {
+			return response()->json(['status' => 'error', 'reason' => 'Статус сделки не найден']);
+		}
+		
+		if (in_array($dealStatus->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}
 		
@@ -1490,9 +1500,46 @@ class DealController extends Controller
 		$phone = $this->request->phone ?? '';
 		$roistatVisit = $this->request->roistat_visit ?? null;
 		
+		$status = Status::find($statusId);
+		if (!$status) {
+			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
+		}
+		
 		try {
 			\DB::beginTransaction();
 			
+			if (in_array($status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+				// при отмене или возврате сделки со списанными баллами начисляем баллы обратно
+				$scores = Score::where('deal_id', $deal->id)
+					->where('type', Score::USED_TYPE)
+					->get();
+				foreach ($scores as $item) {
+					$score = new Score();
+					$score->score = abs($item->score);
+					$score->type = Score::SCORING_TYPE;
+					$score->contractor_id = $item->contractor_id;
+					$score->deal_id = $item->deal_id;
+					$score->deal_position_id = $item->deal_position_id;
+					$score->user_id = $this->request->user()->id;
+					$score->save();
+				}
+				
+				// при отмене сделки пересчет наличия для сувениров
+				foreach ($deal->positions as $position) {
+					$product = $position ? $position->product : null;
+					$productType = $product ? $product->productType : null;
+					if ($productType->alias != ProductType::SERVICES_ALIAS) continue;
+					
+					$city = $product ? $position->city : null;
+					$cityProduct = ($product && $city) ? $product->cities()->where('cities_products.is_active', true)->find($city->id) : null;
+					if (!$cityProduct || !$cityProduct->pivot) continue;
+					
+					$city->products()->updateExistingPivot($product->id, [
+						'availability' => ++$cityProduct->pivot->availability,
+					]);
+				}
+			}
+
 			$deal->status_id = $statusId;
 			$deal->name = $name;
 			$deal->email = $email;
@@ -1517,23 +1564,6 @@ class DealController extends Controller
 				}
 			}
 			
-			// если сделку отменяют, а по ней было списание баллов, то начисляем баллы обратно
-			if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
-				$scores = Score::where('deal_id', $deal->id)
-					->where('type', Score::USED_TYPE)
-					->get();
-				foreach ($scores as $item) {
-					$score = new Score();
-					$score->score = abs($item->score);
-					$score->type = Score::SCORING_TYPE;
-					$score->contractor_id = $item->contractor_id;
-					$score->deal_id = $item->deal_id;
-					$score->deal_position_id = $item->deal_position_id;
-					$score->user_id = $this->request->user()->id;
-					$score->save();
-				}
-			}
-
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
