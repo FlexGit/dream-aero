@@ -338,11 +338,12 @@ class BillController extends Controller
 			$bill->save();
 			
 			if ($productType->alias == ProductType::SERVICES_ALIAS) {
+				\Log::debug($bill->status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
 				if ($bill->status && $bill->status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
 					$city->products()->updateExistingPivot($product->id, [
 						'availability' => --$cityProduct->pivot->availability,
 					]);
-				} elseif(!$bill->status || ($bill->status && $bill->status->alias != Bill::PAYED_STATUS)) {
+				} elseif($bill->status && $bill->status->alias != Bill::PAYED_STATUS) {
 					$city->products()->updateExistingPivot($product->id, [
 						'availability' => ++$cityProduct->pivot->availability,
 					]);
