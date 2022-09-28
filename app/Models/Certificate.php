@@ -179,7 +179,7 @@ class Certificate extends Model
 		
 		$bill = $position->bill;
 		if (!$bill) {
-			$bill = $deal->bills()->first();
+			$bill = $deal->bills()->whereNotNull('payed_at')->first();
 		}
 		/*if (!$bill->payed_at) return null;
 		
