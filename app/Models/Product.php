@@ -361,7 +361,7 @@ class Product extends Model
 			}
 			
 			// скидка по указанной акции
-			if ($promo) {
+			if ($promo && (($promo->alias == 'sept' && !in_array($this->alias, ['regular_30', 'ultimate_30'])) || $promo->alias != 'sept')) {
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
@@ -434,6 +434,8 @@ class Product extends Model
 				->orderByDesc('active_from_at')
 				->get();
 			foreach ($promos as $promo) {
+				if ($promo->alias == 'sept' && in_array($this->alias, ['regular_30', 'ultimate_30'])) continue;
+				
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
