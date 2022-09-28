@@ -496,13 +496,18 @@ class CertificateController extends Controller
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
 		$bill = $position->bill;
-		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
-		if (!$bill->payed_at) return response()->json(['status' => 'error', 'reason' => 'Счет не оплачен']);
-		
-		$billStatus = $bill->status;
-		if (!$billStatus) return response()->json(['status' => 'error', 'reason' => 'Счет не оплачен']);
-		if ($billStatus->alias != Bill::PAYED_STATUS) return response()->json(['status' => 'error', 'reason' => 'Счет не оплачен']);
-		
+		if ($bill) {
+			$billStatus = $bill->status;
+			if (!$billStatus) return response()->json(['status' => 'error', 'reason' => 'Статус счета не найден']);
+			
+			// если к позиции привязан счет, то он должен быть оплачен
+			if ($billStatus->alias != Bill::PAYED_STATUS) return response()->json(['status' => 'error', 'reason' => 'Статус счета должен быть оплачен']);;
+		} else {
+			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
+			$balance = $deal->balance();
+			if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Сделка должна быть оплачена']);
+		}
+
 		//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
 		$job = new \App\Jobs\SendCertificateEmail($certificate);
 		$job->handle();
