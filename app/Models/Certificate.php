@@ -174,9 +174,14 @@ class Certificate extends Model
 		$position = $this->position;
 		if (!$position) return null;
 		
-		/*$bill = $position->bill;
-		if (!$bill) return null;
-		if (!$bill->payed_at) return null;
+		$deal = $position->deal;
+		if (!$deal) return null;
+		
+		$bill = $position->bill;
+		if (!$bill) {
+			$bill = $deal->bills()->first();
+		}
+		/*if (!$bill->payed_at) return null;
 		
 		$billStatus = $bill->status;
 		if (!$billStatus) return null;
