@@ -418,43 +418,46 @@ class Product extends Model
 			}
 
 			// активные акции для публикации со скидкой
-			$promos = Promo::where('is_active', true)
-				->where('is_published', true)
-				->where('discount_id', '!=', 0)
-				->where('alias', '!=', Promo::BIRTHDAY_ALIAS)
-				->whereIn('city_id', [$cityId, 0])
-				->where(function ($query) use ($date) {
-					$query->where('active_from_at', '<=', $date)
-						->orWhereNull('active_from_at');
-				})
-				->where(function ($query) use ($date) {
-					$query->where('active_to_at', '>=', $date)
-						->orWhereNull('active_to_at');
-				})
-				->orderByDesc('active_from_at')
-				->get();
-			foreach ($promos as $promo) {
-				if ($promo->alias == 'sept' && in_array($this->alias, ['regular_30', 'ultimate_30'])) continue;
+			if (in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE])) {
+				$promos = Promo::where('is_active', true)
+					->where('is_published', true)
+					->where('discount_id', '!=', 0)
+					->where('alias', '!=', Promo::BIRTHDAY_ALIAS)
+					->whereIn('city_id', [$cityId, 0])
+					->where(function ($query) use ($date) {
+						$query->where('active_from_at', '<=', $date)
+							->orWhereNull('active_from_at');
+					})
+					->where(function ($query) use ($date) {
+						$query->where('active_to_at', '>=', $date)
+							->orWhereNull('active_to_at');
+					})
+					->orderByDesc('active_from_at')
+					->get();
+				foreach ($promos as $promo) {
+					if ($promo->alias == 'sept' && in_array($this->alias, ['regular_30', 'ultimate_30'])) continue;
+					
+					$dataJson = $promo->data_json ? (array)$promo->data_json : [];
+					if ($isCertificatePurchase) {
+						$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
+					}
+					else {
+						$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
+					}
+					$discount = $promo->discount ?? null;
+					if ($isDiscountAllow && $discount) {
+						$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
+						
+						$amounts[] = ($amount > 0) ? round($amount) : 0;
+					}
+				}
 				
-				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
-				if ($isCertificatePurchase) {
-					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
-				} else {
-					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
+				if ($amounts) {
+					// применяем с наибольшей скидкой
+					rsort($amounts);
+					$amount = array_shift($amounts);
+					return ($amount + $score);
 				}
-				$discount = $promo->discount ?? null;
-				if ($isDiscountAllow && $discount) {
-					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
-
-					$amounts[] = ($amount > 0) ? round($amount) : 0;
-				}
-			}
-
-			if ($amounts) {
-				// применяем с наибольшей скидкой
-				rsort($amounts);
-				$amount = array_shift($amounts);
-				return ($amount + $score);
 			}
 
 			// скидка контрагента
