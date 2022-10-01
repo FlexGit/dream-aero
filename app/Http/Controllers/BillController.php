@@ -275,7 +275,7 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
 		}
 		
-		if (in_array($bill->status->alias, [Bill::PAYED_STATUS, Bill::PAYED_PROCESSING_STATUS]) && in_array($bill->paymentMethod->alias, [PaymentMethod::ONLINE_ALIAS]) && !$user->isSuperAdmin()) {
+		if (in_array($bill->status->alias, [Bill::PAYED_STATUS, Bill::PAYED_PROCESSING_STATUS]) && $bill->paymentMethod && in_array($bill->paymentMethod->alias, [PaymentMethod::ONLINE_ALIAS]) && !$user->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Оплаченный Счет со способом оплаты "Онлайн" недоступен для редактирования']);
 		}
 		
