@@ -44,8 +44,8 @@ class SetNominalPrice extends Command
     {
     	// проверяем все полеты за последний час без пилота
 		//\DB::connection()->enableQueryLog();
-    	$events = Event::whereIn('event_type', [/*Event::EVENT_TYPE_DEAL, */Event::EVENT_TYPE_USER_FLIGHT])
-			/*->where('nominal_price', 0)*/
+    	$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])
+			->where('nominal_price', 0)
 			->orderBy('id')
 			->get();
 		//\Log::debug(\DB::getQueryLog());
