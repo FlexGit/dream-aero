@@ -459,9 +459,9 @@ class ReportController extends Controller {
 					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $event->location->id)
 						->where('flight_simulator_id', $event->simulator->id);
 				}
-				if ($user->email == env('DEV_EMAIL')) {
+				/*if ($user->email == env('DEV_EMAIL')) {
 					\Log::debug(\DB::getQueryLog());
-				}
+				}*/
 				$pilotShiftEvent = $pilotShiftEvent->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
 			}
