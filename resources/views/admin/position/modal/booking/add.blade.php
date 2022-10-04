@@ -65,12 +65,8 @@
 		<label for="flight_date_at">Дата и время начала полета</label>
 		<div class="row">
 			<div class="d-flex">
-				<div class="col-7">
-					<input type="date" class="form-control" id="flight_date_at" name="flight_date_at">
-				</div>
-				<div class="col-5">
-					<input type="time" class="form-control" id="flight_time_at" name="flight_time_at">
-				</div>
+				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at">
+				<input type="time" class="form-control" id="flight_time_at" name="flight_time_at">
 			</div>
 			<div>
 				<input type="hidden" id="is_valid_flight_date" name="is_valid_flight_date">
