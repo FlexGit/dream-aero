@@ -1020,8 +1020,8 @@ class EventController extends Controller
 				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:
 				case Event::EVENT_TYPE_SHIFT_PILOT:
-					$event->start_at = Carbon::parse($this->request->start_at)->format('Y-m-d') . ' ' . Carbon::parse($event->start_at)->format('H:i');
-					$event->stop_at = Carbon::parse($this->request->stop_at)->subDay()->format('Y-m-d') . ' ' . Carbon::parse($event->stop_at)->format('H:i');
+					$event->start_at = $startAt;
+					$event->stop_at = $stopAt;
 					$event->save();
 				break;
 			}
