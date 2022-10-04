@@ -485,26 +485,38 @@ class Event extends Model
 	 */
 	public function nominalPrice()
 	{
-		if (!in_array($this->event_type, [Event::EVENT_TYPE_DEAL])) return 0;
+		if (!in_array($this->event_type, [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])) return 0;
 		
-		$position = $this->dealPosition;
-		if (!$position) return 0;
-		
-		$product = $position->product;
-		if (!$product) return 0;
-		
-		$productType = $product->productType;
-		if (!$productType) return 0;
-		
-		if ($product->productType->alias == ProductType::ULTIMATE_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
-			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_' . ($product->duration ?? 0));
-		} elseif ($product->productType->alias == ProductType::REGULAR_ALIAS && in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
-			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_' . ($product->duration ?? 0));
-		} elseif ($product->productType->alias == ProductType::VIP_ALIAS) {
+		// полет сотрудника всегда 1 час
+		if ($this->event_type == Event::EVENT_TYPE_USER_FLIGHT) {
 			if (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_60');
 			} else {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
+			}
+		} else {
+			$position = $this->dealPosition;
+			if (!$position) return 0;
+			
+			$product = $position->product;
+			if (!$product) return 0;
+			
+			$productType = $product->productType;
+			if (!$productType) return 0;
+			
+			if ($product->productType->alias == ProductType::ULTIMATE_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_' . ($product->duration ?? 0));
+			}
+			else if ($product->productType->alias == ProductType::REGULAR_ALIAS && in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_' . ($product->duration ?? 0));
+			}
+			else if ($product->productType->alias == ProductType::VIP_ALIAS) {
+				if (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_60');
+				}
+				else {
+					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
+				}
 			}
 		}
 		

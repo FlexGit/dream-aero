@@ -44,23 +44,25 @@ class SetNominalPrice extends Command
     {
     	// проверяем все полеты за последний час без пилота
 		//\DB::connection()->enableQueryLog();
-    	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
+    	$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])
 			->where('nominal_price', 0)
 			->orderBy('id')
 			->get();
 		//\Log::debug(\DB::getQueryLog());
 		foreach ($events as $event) {
 			/** @var Event $event */
-			$position = $event->dealPosition;
-			if (!$position) continue;
-			
-			/** @var Product $product */
-			$product = $position->product;
-			if (!$product) continue;
-			
-			/** @var ProductType $productType */
-			$productType = $product->productType;
-			if (!$productType) continue;
+			if ($event->event_type == Event::EVENT_TYPE_DEAL) {
+				$position = $event->dealPosition;
+				if (!$position) continue;
+				
+				/** @var Product $product */
+				$product = $position->product;
+				if (!$product) continue;
+				
+				/** @var ProductType $productType */
+				$productType = $product->productType;
+				if (!$productType) continue;
+			}
 			
 			$event->nominal_price = $event->nominalPrice();
 			$event->save();
