@@ -489,11 +489,7 @@ class Event extends Model
 		
 		// полет сотрудника всегда 1 час
 		if ($this->event_type == Event::EVENT_TYPE_USER_FLIGHT) {
-			if (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
-				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_60');
-			} else {
-				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
-			}
+			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
 		} else {
 			$position = $this->dealPosition;
 			if (!$position) return 0;
