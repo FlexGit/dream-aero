@@ -336,9 +336,6 @@ class ReportController extends Controller {
 		}
 		$shifts = $shifts->orderBy('start_at')
 			->get();
-		if ($user->email == env('DEV_EMAIL')) {
-			\Log::debug(\DB::getQueryLog());
-		}
 		foreach ($shifts as $shift) {
 			/** @var User $shiftPilot */
 			$shiftPilot = $shift->user;
@@ -347,9 +344,9 @@ class ReportController extends Controller {
 				$shiftItems[$shift->location_id][$shift->flight_simulator_id][Carbon::parse($shift->start_at)->format('d.m.Y')][] = $shiftPilotFio;
 			}
 		}
-		if ($user->email == env('DEV_EMAIL')) {
+		/*if ($user->email == env('DEV_EMAIL')) {
 			\Log::debug($shiftItems);
-		}
+		}*/
 		
 		//\DB::connection()->enableQueryLog();
 		$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])
@@ -461,6 +458,9 @@ class ReportController extends Controller {
 				if ($event->location && $event->simulator) {
 					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $event->location->id)
 						->where('flight_simulator_id', $event->simulator->id);
+				}
+				if ($user->email == env('DEV_EMAIL')) {
+					\Log::debug(\DB::getQueryLog());
 				}
 				$pilotShiftEvent = $pilotShiftEvent->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
