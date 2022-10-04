@@ -46,7 +46,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-4">
+	<div class="col">
 		<div class="form-group">
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
@@ -61,9 +61,9 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-4">
-		<label for="flight_date_at">Дата и время начала полета</label>
-		<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="flight_date_at">Дата и время начала полета</label>
 			<div class="d-flex">
 				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at">
 				<input type="time" class="form-control" id="flight_time_at" name="flight_time_at">
@@ -74,7 +74,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-4">
+	<div class="col">
 		<div class="form-group">
 			<label for="extra_time">Доп. время</label>
 			<select class="form-control" id="extra_time" name="extra_time">
