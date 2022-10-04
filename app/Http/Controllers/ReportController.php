@@ -395,7 +395,6 @@ class ReportController extends Controller {
 				$pilotSum = 0;
 			} else {
 				if ($promo && $promo->alias == Promo::DIRECTOR_ALIAS) {
-					$eventTypeText .= 'Полет по акции "Скидка руководителя"';
 					$pilotSum = $pilotSum * 0.8;
 				}
 			}
