@@ -81,8 +81,8 @@
 							<td class="align-middle text-center">
 							</td>
 							<td class="align-middle text-center">
-								@if(isset($shiftItems[$date->format('d.m.Y')]))
-									{{ implode(', ', $shiftItems[$date->format('d.m.Y')]) }}
+								@if(isset($shiftItems[$locationId][$simulatorId][$date->format('d.m.Y')]))
+									{{ implode(', ', $shiftItems[$locationId][$simulatorId][$date->format('d.m.Y')]) }}
 								@endif
 							</td>
 							<td class="align-middle text-center">
