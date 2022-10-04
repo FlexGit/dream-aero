@@ -61,7 +61,7 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-5">
+	<div class="col-4">
 		<label for="flight_date_at">Дата и время начала полета</label>
 		<div class="row">
 			<div class="d-flex">
@@ -77,7 +77,19 @@
 				<span class="js-event-stop-at"></span>
 			</div>
 		</div>
-	</div>	<div class="col-3">
+	</div>
+	<div class="col-4">
+		<div class="form-group">
+			<label for="extra_time">Доп. время</label>
+			<select class="form-control" id="extra_time" name="extra_time">
+				<option value="0">---</option>
+				<option value="15">15 мин</option>
+			</select>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
 		<div class="form-group">
 			<label for="certificate">Сертификат</label>
 			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Номер">
