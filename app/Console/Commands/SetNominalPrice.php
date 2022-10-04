@@ -50,7 +50,7 @@ class SetNominalPrice extends Command
 			->get();
 		//\Log::debug(\DB::getQueryLog());
 		foreach ($events as $event) {
-			/** @var DealPosition $position */
+			/** @var Event $event */
 			$position = $event->dealPosition;
 			if (!$position) continue;
 			
