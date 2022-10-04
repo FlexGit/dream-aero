@@ -326,7 +326,7 @@ class ReportController extends Controller {
 		$period = CarbonPeriod::create($dateFromAt, $dateToAt);
 		
 		$shiftItems = [];
-		//\DB::connection()->enableQueryLog();
+		\DB::connection()->enableQueryLog();
 		$shifts = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
 			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay());
@@ -336,7 +336,9 @@ class ReportController extends Controller {
 		}
 		$shifts = $shifts->orderBy('start_at')
 			->get();
-		//\Log::debug(\DB::getQueryLog());
+		if ($user->email == env('DEV_EMAIL')) {
+			\Log::debug(\DB::getQueryLog());
+		}
 		foreach ($shifts as $shift) {
 			/** @var User $shiftPilot */
 			$shiftPilot = $shift->user;
@@ -344,6 +346,9 @@ class ReportController extends Controller {
 			if ($shiftPilotFio) {
 				$shiftItems[$shift->location_id][$shift->flight_simulator_id][Carbon::parse($shift->start_at)->format('d.m.Y')][] = $shiftPilotFio;
 			}
+		}
+		if ($user->email == env('DEV_EMAIL')) {
+			\Log::debug($shiftItems);
 		}
 		
 		//\DB::connection()->enableQueryLog();
