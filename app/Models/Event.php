@@ -500,6 +500,12 @@ class Event extends Model
 			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_' . ($product->duration ?? 0));
 		} elseif ($product->productType->alias == ProductType::REGULAR_ALIAS && in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
 			$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_' . ($product->duration ?? 0));
+		} elseif ($product->productType->alias == ProductType::VIP_ALIAS) {
+			if (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0,6])) {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_60');
+			} else {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
+			}
 		}
 		
 		$cityProduct = $product ? $product->cities()->find($this->city_id) : null;

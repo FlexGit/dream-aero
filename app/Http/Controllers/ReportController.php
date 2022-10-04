@@ -326,7 +326,7 @@ class ReportController extends Controller {
 		$period = CarbonPeriod::create($dateFromAt, $dateToAt);
 		
 		$shiftItems = [];
-		\DB::connection()->enableQueryLog();
+		//\DB::connection()->enableQueryLog();
 		$shifts = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
 			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay());
@@ -381,7 +381,7 @@ class ReportController extends Controller {
 			}
 			
 			if ($productType && in_array($productType->alias, [ProductType::COURSES_ALIAS, ProductType::VIP_ALIAS])) {
-				$extendedText .= $product->name;
+				$extendedText .= ' ' . $product->name;
 			}
 			
 			$pilotSum = $event->nominal_price;
