@@ -100,6 +100,8 @@ class SendPromocodeAfterYearEmail extends Command
 				$promocode->active_to_at = Carbon::now()->addDays(30)->startOfDay()->format('Y-m-d H:i:s');
 				$promocode->save();
 				
+				$promocode->cities()->sync((array)$city->id);
+				
 				// отправим в мобилку уведомление о промокоде тоже
 				$notification = new Notification();
 				$notification->title = 'Дарим скидку ' . ($promocode->discount->valueFormatted() ?? '') . ' по персональному промокоду';
