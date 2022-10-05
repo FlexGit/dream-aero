@@ -76,7 +76,7 @@ class SendPromocodeAfterYearEmail extends Command
     		if ($promocode) continue;
     		
     		$dealCount = Deal::where('contractor_id', $contractor->id)
-				->whereBetween('created_at', [Carbon::now()->format('Y-m-d H:i:s'), Carbon::now()->subDays(364)->endOfDay()->format('Y-m-d H:i:s')])
+				->whereBetween('created_at', [Carbon::now()->subDays(364)->endOfDay()->format('Y-m-d H:i:s'), Carbon::now()->format('Y-m-d H:i:s')])
 				->whereHas('status', function ($query) {
 					$query->whereNotIn('statuses.alias', [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS]);
 				})->count();
