@@ -15,6 +15,7 @@ use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Throwable;
 use Mail;
 
@@ -92,7 +93,7 @@ class SendPromocodeAfterYearEmail extends Command
 				DB::beginTransaction();
 				
 				$promocode = new Promocode();
-				$promocode->number = $contractor->id . rand(10000, 99999);
+				$promocode->number = 'year' . Str::random(6);
 				$promocode->type = Promocode::YEAR_TYPE;
 				$promocode->contractor_id = $contractor->id;
 				$promocode->discount_id = $discount->id;
