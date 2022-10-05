@@ -79,6 +79,7 @@ class Promocode extends Model
 	protected $revisionCreationsEnabled = true;*/
 	
     const SIMULATOR_TYPE = 'simulator';
+    const YEAR_TYPE = 'year';
 	
 	/**
 	 * The attributes that are mass assignable.
