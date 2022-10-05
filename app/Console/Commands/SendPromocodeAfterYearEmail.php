@@ -67,7 +67,7 @@ class SendPromocodeAfterYearEmail extends Command
 			->whereBetween('deals.created_at', [Carbon::now()->subDays(364)->startOfDay()->format('Y-m-d H:i:s'), Carbon::now()->subDays(364)->endOfDay()->format('Y-m-d H:i:s')])
 			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
 			->where('contractors.is_active', true)
-			->where('contractors.email', env('DEV_EMAIL'))
+			/*->where('contractors.email', env('DEV_EMAIL'))*/
 			->get();
     	foreach ($contractors as $contractor) {
     		$promocode = Promocode::where('type', Promocode::YEAR_TYPE)
@@ -82,7 +82,7 @@ class SendPromocodeAfterYearEmail extends Command
 				})->count();
     		
     		// если за год были еще сделки, то игнорируем
-    		//if ($dealCount) continue;
+    		if ($dealCount) continue;
 		
 			$contractor = Contractor::find($contractor->id);
 			if (!$contractor) continue;
