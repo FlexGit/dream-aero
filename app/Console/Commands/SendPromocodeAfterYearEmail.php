@@ -67,7 +67,6 @@ class SendPromocodeAfterYearEmail extends Command
 			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
 			->where('contractors.is_active', true)
 			->where('contractors.email', env('DEV_EMAIL'))
-			->orderBy('deals.created_at')
 			->get();
     	foreach ($contractors as $contractor) {
     		$promocode = Promocode::where('type', Promocode::YEAR_TYPE)
