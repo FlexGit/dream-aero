@@ -18,7 +18,7 @@
 										<b>Здравствуйте{{ $contractor->name ? ', ' . $contractor->name : '' }}!</b>
 									</p>
 									<p style="margin:15px 30px 33px;text-align:left;font-size:14px;line-height:30px;color:#484a42;">
-										Только до {{ \Carbon\Carbon::parse($promocode->active_to_at)->addDay()->format('d.m.Y') }} у Вас есть уникальная возможность приобрести сертификат или забронировать полёт со скидкой {{ $promocode->discount->valueFormatted() ?? '' }}. Просто введите промо-код {{ $promocode->number ?? '' }} на нашем сайте или в приложении.
+										Только до {{ \Carbon\Carbon::parse($promocode->active_to_at)->format('d.m.Y') }} у Вас есть уникальная возможность приобрести сертификат или забронировать полёт со скидкой {{ $promocode->discount->valueFormatted() ?? '' }}. Просто введите промо-код {{ $promocode->number ?? '' }} на нашем сайте или в приложении.
 										<br>
 										Спасибо, что обратились к нам.
 										<br>

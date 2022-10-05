@@ -97,13 +97,13 @@ class SendPromocodeAfterYearEmail extends Command
 				$promocode->contractor_id = $contractor->id;
 				$promocode->discount_id = $discount->id;
 				$promocode->active_from_at = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
-				$promocode->active_to_at = Carbon::now()->addDays(30)->endOfDay()->format('Y-m-d H:i:s');
+				$promocode->active_to_at = Carbon::now()->addDays(30)->startOfDay()->format('Y-m-d H:i:s');
 				$promocode->save();
 				
 				// отправим в мобилку уведомление о промокоде тоже
 				$notification = new Notification();
 				$notification->title = 'Дарим скидку ' . ($promocode->discount->valueFormatted() ?? '') . ' по персональному промокоду';
-				$notification->description = 'Воспользуйтесь промокодом ' . $promocode->number . ' и получите скидку ' . ($promocode->discount->valueFormatted() ?? '') . ' на покупку Сертификата или на полет в Dream Aero.';
+				$notification->description = 'Только до ' . Carbon::parse($promocode->active_to_at)->format('d.m.Y') . ' у Вас есть уникальная возможность приобрести сертификат или забронировать полёт со скидкой ' . ($promocode->discount->valueFormatted() ?? '') . '. Просто введите промо-код ' . ($promocode->number ?? '') . ' на нашем сайте или в приложении.';
 				$notification->city_id = $city ? $city->id : 0;
 				$notification->contractor_id = $contractor->id;
 				$notification->is_active = true;
@@ -121,7 +121,7 @@ class SendPromocodeAfterYearEmail extends Command
 					'city' => $city ?: new City(),
 				];
 				
-				$subject = env('APP_NAME') . ': скидка на полет в Авиатренажере до ' . Carbon::parse($promocode->active_to_at)->addDay()->format('d.m.Y');
+				$subject = env('APP_NAME') . ': скидка на полет в Авиатренажере до ' . Carbon::parse($promocode->active_to_at)->format('d.m.Y');
 				
 				Mail::send(['html' => "admin.emails.year_promocode"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
 					/** @var \Illuminate\Mail\Message $message */
