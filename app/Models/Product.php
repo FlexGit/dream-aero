@@ -344,13 +344,17 @@ class Product extends Model
 		if ($this->productType && in_array($this->productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
 			// скидка по промокоду
 			if ($promocode) {
-				$dataJson = $promocode->data_json ? (array)$promocode->data_json : [];
-				// персональные промокоды на другой тип тренажера доступны только действуют только на бронирование
-				if ($isCertificatePurchase) {
-					$isDiscountAllow = ($promocode->type == Promocode::SIMULATOR_TYPE) ? false : (array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false);
-				}
-				else {
-					$isDiscountAllow = ($promocode->type == Promocode::SIMULATOR_TYPE) ? true : (array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false);
+				if ($promocode->type == Promocode::YEAR_TYPE) {
+					$isDiscountAllow = true;
+				} else {
+					$dataJson = $promocode->data_json ? (array)$promocode->data_json : [];
+					// персональные промокоды на другой тип тренажера действуют только на бронирование
+					if ($isCertificatePurchase) {
+						$isDiscountAllow = ($promocode->type == Promocode::SIMULATOR_TYPE) ? false : (array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false);
+					}
+					else {
+						$isDiscountAllow = ($promocode->type == Promocode::SIMULATOR_TYPE) ? true : (array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false);
+					}
 				}
 				$discount = $promocode->discount ?? null;
 				if ($isDiscountAllow && $discount && (!$promocode->location_id || $promocode->location_id == $locationId)) {
