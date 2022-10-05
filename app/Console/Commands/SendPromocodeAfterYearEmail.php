@@ -2,14 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\ContractorController;
-use App\Models\Bill;
 use App\Models\City;
 use App\Models\Contractor;
 use App\Models\Deal;
 use App\Models\Discount;
 use App\Models\Notification;
-use App\Models\ProductType;
 use App\Models\Promocode;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
@@ -52,7 +49,7 @@ class SendPromocodeAfterYearEmail extends Command
      */
     public function handle()
     {
-		$discount = HelpFunctions::getEntityByAlias(Discount::class, 'percent_10');
+		$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_500_RUB');
 		if (!$discount) return 0;
 	
 		DB::connection()->enableQueryLog();
