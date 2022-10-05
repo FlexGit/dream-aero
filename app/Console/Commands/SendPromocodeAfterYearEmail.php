@@ -93,7 +93,7 @@ class SendPromocodeAfterYearEmail extends Command
 				DB::beginTransaction();
 				
 				$promocode = new Promocode();
-				$promocode->number = 'year' . Str::random(6);
+				$promocode->number = Str::random(6);
 				$promocode->type = Promocode::YEAR_TYPE;
 				$promocode->contractor_id = $contractor->id;
 				$promocode->discount_id = $discount->id;
