@@ -82,7 +82,7 @@ class SendPromocodeAfterYearEmail extends Command
 				})->count();
     		
     		// если за год были еще сделки, то игнорируем
-    		if ($dealCount) continue;
+    		//if ($dealCount) continue;
 		
 			$contractor = Contractor::find($contractor->id);
 			if (!$contractor) continue;
