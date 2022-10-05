@@ -61,7 +61,7 @@ class SendPromocodeAfterYearEmail extends Command
 				$join->on('deals.status_id', '=', 'deal_statuses.id')
 					->whereNotIn('deal_statuses.alias', [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS]);
 			})
-			->whereBetween('deals.created_at', [Carbon::now()->subDays(364)->startOfDay()->format('Y-m-d H:i:s'), Carbon::now()->subDays(364)->endOfDay()->format('Y-m-d H:i:s')])
+			->whereBetween('deals.created_at', [Carbon::now()->subDays(364)->startOfDay()->format('Y-m-d H:i:s'), Carbon::now()->subDays(364)->endOfDay()->addHours(2)->format('Y-m-d H:i:s')])
 			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
 			->where('contractors.is_active', true)
 			/*->where('contractors.email', env('DEV_EMAIL'))*/

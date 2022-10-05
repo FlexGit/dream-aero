@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
 		Commands\RunAeroflotAccrual::class,
 		Commands\UnlockPeriod::class,
 		Commands\SendLeaveReviewEmail::class,
+		Commands\SendPromocodeAfterYearEmail::class,
 	];
 
 	/**
@@ -76,6 +77,14 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/commands/promocode_send.log');
 		$schedule->command('promocode_email:send')
 			->hourly()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// отправка контрагенту промокода на полет на другом типе тренажера
+		$filePath = storage_path('logs/commands/promocode_year.log');
+		$schedule->command('promocode_year:send')
+			->everyThirtyMinutes()
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
