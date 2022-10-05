@@ -20,8 +20,6 @@
 									<p style="margin:15px 30px 33px;text-align:left;font-size:14px;line-height:30px;color:#484a42;">
 										Только до {{ \Carbon\Carbon::parse($promocode->active_to_at)->format('d.m.Y') }} у Вас есть уникальная возможность приобрести сертификат или забронировать полёт со скидкой {{ $promocode->discount->valueFormatted() ?? '' }}. Просто введите промо-код {{ $promocode->number ?? '' }} на нашем сайте или в приложении.
 										<br>
-										Спасибо, что обратились к нам.
-										<br>
 									</p>
 									<p style="border-top:2px solid #e5e5e5;font-size:5px;line-height:5px;margin:0 30px 29px;">&nbsp;</p>
 									<table cellpadding="0" cellspacing="0" border="0" width="100%">
