@@ -65,7 +65,7 @@ class SendBirthdayPromoEmail extends Command
 				// отправим в мобилку уведомление
 				$notification = new Notification();
 				$notification->title = 'Дарим скидку ' . ($promo->discount->valueFormatted() ?? '') . ' по акции в честь Вашего Дня Рождения';
-				$notification->description = 'В преддверии Вашего Дня Рождения мы рады напомнить, что у Вас есть возможность воспользоваться скидкой ' . ($promo->discount->valueFormatted() ?? '') . '.';
+				$notification->description = 'Поздравляем с наступающим Днем Рождения! Спешим напомнить, что с сегодняшнего дня и до ' . Carbon::now()->addDays(3)->format('d.m.Y') . ' у вас есть возможность забронировать полет со скидкой ' . ($promo->discount->valueFormatted() ?? '') . ' в честь праздника. На подарочные сертификаты с открытой датой акция не распространяется.';
 				$notification->city_id = $city ? $city->id : 0;
 				$notification->contractor_id = $contractor->id;
 				$notification->is_active = true;
