@@ -54,7 +54,7 @@ class SendBirthdayPromoEmail extends Command
 			->whereDay('birthdate', '=', Carbon::now()->subDays(3)->format('d'))
 			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
 			->where('contractors.is_active', true)
-			/*->where('contractors.email', env('DEV_EMAIL'))*/
+			->where('contractors.email', env('DEV_EMAIL'))
 			->get();
     	foreach ($contractors as $contractor) {
     		$city = $contractor->city;
