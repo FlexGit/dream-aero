@@ -51,7 +51,7 @@ class SendBirthdayPromoEmail extends Command
 
 		DB::connection()->enableQueryLog();
 		$contractors = Contractor::whereMonth('birthdate', '=', Carbon::now()->format('m'))
-			->whereDay('birthdate', '=', Carbon::now()->subDays(3)->format('d'))
+			->whereDay('birthdate', '=', Carbon::now()->addDays(3)->format('d'))
 			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
 			->where('contractors.is_active', true)
 			/*->where('contractors.email', env('DEV_EMAIL'))*/
@@ -65,7 +65,7 @@ class SendBirthdayPromoEmail extends Command
 				// отправим в мобилку уведомление
 				$notification = new Notification();
 				$notification->title = 'Дарим скидку ' . ($promo->discount->valueFormatted() ?? '') . ' по акции в честь Вашего Дня Рождения';
-				$notification->description = 'Поздравляем с наступающим Днем Рождения! Спешим напомнить, что с сегодняшнего дня и до ' . Carbon::now()->addDays(3)->format('d.m.Y') . ' у вас есть возможность забронировать полет со скидкой ' . ($promo->discount->valueFormatted() ?? '') . ' в честь праздника. На подарочные сертификаты с открытой датой акция не распространяется.';
+				$notification->description = 'Поздравляем с наступающим Днем Рождения! Спешим напомнить, что с сегодняшнего дня и до ' . Carbon::now()->addDays(6)->format('d.m.Y') . ' у вас есть возможность забронировать полет со скидкой ' . ($promo->discount->valueFormatted() ?? '') . ' в честь праздника. На подарочные сертификаты с открытой датой акция не распространяется.';
 				$notification->city_id = $city ? $city->id : 0;
 				$notification->contractor_id = $contractor->id;
 				$notification->is_active = true;
