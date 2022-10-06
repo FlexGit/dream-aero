@@ -18,7 +18,7 @@
 										<b>Здравствуйте{{ $contractor->name ? ', ' . $contractor->name : '' }}!</b>
 									</p>
 									<p style="margin:15px 30px 33px;text-align:left;font-size:14px;line-height:30px;color:#484a42;">
-										Поздравляем с наступающим Днем Рождения! Спешим напомнить, что с сегодняшнего дня и до <span style="font-size: 18px;font-weight: bold;">{{ \Carbon\Carbon::now()->addDays(3)->format('d.m.Y') }}</span> у вас есть возможность забронировать полет со скидкой <span style="font-size: 18px;font-weight: bold;">{{ ($promo->discount->valueFormatted() ?? '') }}</span> в честь праздника.
+										Поздравляем с наступающим Днем Рождения! Спешим напомнить, что с сегодняшнего дня и до {{ \Carbon\Carbon::now()->addDays(3)->format('d.m.Y') }} у вас есть возможность забронировать полет со скидкой {{ ($promo->discount->valueFormatted() ?? '') }} в честь праздника.
 										<br><br>
 										На подарочные сертификаты с открытой датой акция не распространяется.
 									</p>
