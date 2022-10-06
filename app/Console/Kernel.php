@@ -88,6 +88,14 @@ class Kernel extends ConsoleKernel
 			->runInBackground()
 			->appendOutputTo($filePath)
 			->emailOutputOnFailure(env('DEV_EMAIL'));
+		
+		// отправка контрагенту промо по ДР
+		$filePath = storage_path('logs/commands/birthday_promo.log');
+		$schedule->command('birthday_promo:send')
+			->daily()
+			->runInBackground()
+			->appendOutputTo($filePath)
+			->emailOutputOnFailure(env('DEV_EMAIL'));
 
 		// начисление баллов после полета
 		$filePath = storage_path('logs/commands/scoring.log');
