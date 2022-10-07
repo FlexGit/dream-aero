@@ -113,7 +113,7 @@ class SendPromocodeAfterYearEmail extends Command
 				
 				$recipients = $bcc = [];
 				$recipients[] = $contractor->email;
-				$bcc[] = env('DEV_EMAIL');
+				//$bcc[] = env('DEV_EMAIL');
 				
 				$messageData = [
 					'contractor' => $contractor,
