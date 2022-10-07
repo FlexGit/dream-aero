@@ -167,13 +167,15 @@ class BillController extends Controller
 		}
 		
 		$city = $position->city;
-		if (!$city) {
+		/*if (!$city) {
 			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-		}
-		
-		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-		if (!$cityProduct || !$cityProduct->pivot) {
-			return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
+		}*/
+
+		if ($city) {
+			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+			if (!$cityProduct || !$cityProduct->pivot) {
+				return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
+			}
 		}
 
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
@@ -198,10 +200,12 @@ class BillController extends Controller
 			
 			$deal->bills()->save($bill);
 			
-			if ($productType->alias == ProductType::SERVICES_ALIAS && $deal->balance() >= 0) {
-				$city->products()->updateExistingPivot($product->id, [
-					'availability' =>  --$cityProduct->pivot->availability,
-				]);
+			if ($city) {
+				if ($productType->alias == ProductType::SERVICES_ALIAS && $deal->balance() >= 0) {
+					$city->products()->updateExistingPivot($product->id, [
+						'availability' => --$cityProduct->pivot->availability,
+					]);
+				}
 			}
 			
 			/*if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
@@ -293,13 +297,15 @@ class BillController extends Controller
 		}
 		
 		$city = $position->city;
-		if (!$city) {
+		/*if (!$city) {
 			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-		}
+		}*/
 		
-		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-		if (!$cityProduct || !$cityProduct->pivot) {
-			return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
+		if ($city) {
+			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+			if (!$cityProduct || !$cityProduct->pivot) {
+				return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
+			}
 		}
 
 		$paymentMethod = Status::find($this->request->payment_method_id);
@@ -346,8 +352,8 @@ class BillController extends Controller
 			}
 			$bill->save();
 			
-			if ($productType->alias == ProductType::SERVICES_ALIAS) {
-				\Log::debug($status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
+			if ($city && $productType->alias == ProductType::SERVICES_ALIAS) {
+				//\Log::debug($status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
 				if ($status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
 					$city->products()->updateExistingPivot($product->id, [
 						'availability' => --$cityProduct->pivot->availability,
