@@ -272,6 +272,7 @@ class Certificate extends Model
 						break;
 						case City::VRN_ALIAS:
 						case City::NNV_ALIAS:
+						case City::VLV_ALIAS:
 						case City::SAM_ALIAS:
 							$certificateFile->text($this->number, 855, 155, function ($font) use ($fontPath) {
 								$font->file($fontPath);
