@@ -74,6 +74,7 @@ class City extends Model
 	const EKB_ALIAS = 'ekb';
 	const NSK_ALIAS = 'nsk';
 	const KHV_ALIAS = 'khv';
+	const VLV_ALIAS = 'vlv';
 	const DC_ALIAS = 'dc';
 	
 	const RU_ALIASES = [
@@ -87,6 +88,7 @@ class City extends Model
 		self::EKB_ALIAS,
 		self::NSK_ALIAS,
 		self::KHV_ALIAS,
+		self::VLV_ALIAS,
 	];
 	const EN_ALIASES = [
 		self::DC_ALIAS,
@@ -110,6 +112,7 @@ class City extends Model
 		self::EKB_ALIAS => 'Екатеринбурге',
 		self::NSK_ALIAS => 'Новосибириске',
 		self::KHV_ALIAS => 'Хабаровске',
+		self::VLV_ALIAS => 'Владивосток',
 		self::DC_ALIAS => 'Washington DC',
 	];
 	
