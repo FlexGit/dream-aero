@@ -159,11 +159,15 @@ class MainController extends Controller
 			abort(404);
 		}
 		
+		$cityAlias = $this->request->session()->get('cityAlias');
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+
 		$product = Product::where('alias', $productAlias)
 			->first();
 		
 		$VIEW = view('modal.certificate-booking', [
 			'product' => $product,
+			'city' => $city,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);

@@ -1,7 +1,9 @@
 @if($product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS]))
 	<div class="certificate-booking-tabs">
 		<a class="button-pipaluk button-pipaluk-orange button-tab" data-modal="certificate" data-product-alias="{{ $product->alias }}" data-product-type-alias="{{ $product->productType->alias }}" href="javascript:void(0)"><i>@lang('main.modal-certificate-booking.приобрести-сертификат')</i></a>
-		<a class="button-pipaluk button-pipaluk-orange button-pipaluk-unactive button-tab" data-modal="booking" data-product-alias="{{ $product->alias }}" data-product-type-alias="{{ $product->productType->alias }}" href="javascript:void(0)"><i>@lang('main.modal-certificate-booking.забронировать-полет')</i></a>
+		@if($city->alias != 'vlv')
+			<a class="button-pipaluk button-pipaluk-orange button-pipaluk-unactive button-tab" data-modal="booking" data-product-alias="{{ $product->alias }}" data-product-type-alias="{{ $product->productType->alias }}" href="javascript:void(0)"><i>@lang('main.modal-certificate-booking.забронировать-полет')</i></a>
+		@endif
 	</div>
 @endif
 
