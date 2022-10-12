@@ -52,6 +52,9 @@
 								@endswitch
 								<option disabled>{{ $productItem->productType->name }} {{ $productTypeDescription }}</option>
 							@endif
+							@if(!$productItem->is_active)
+								@continue
+							@endif
 							<option value="{{ $productItem->id }}" data-product-type-alias="{{ $productItem->productType ? $productItem->productType->alias : '' }}" data-product-duration="{{ $productItem->duration }}">{{ $productItem->name }}</option>
 							@php($productTypeName = $productItem->productType->name)
 						@endforeach
