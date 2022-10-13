@@ -13,7 +13,7 @@
 			<h2 class="block-title">@lang('main.o-trenazhere.title')</h2>
 			<div class="gallery-button-top">
 				<div class="button-free">
-					@if($city && !in_array($city->alias, [app('\App\Models\City')::VLV_ALIAS))
+					@if($city && !in_array($city->alias, [app('\App\Models\City')::VLV_ALIAS]))
 						<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" style="padding: 10px;margin: 0 0 35px 36%;" data-wow-delay="1.6s" data-wow-duration="2s" data-wow-iteration="1">
 							<i>@lang('main.o-trenazhere.забронировать')</i>
 						</a>
