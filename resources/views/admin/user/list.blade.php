@@ -1,5 +1,5 @@
 @foreach ($users as $user)
-<tr class="odd">
+<tr class="odd @if(!$city->$user) unactive @endif">
 	<td>
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $user->fio() }}</a>
 	</td>
@@ -11,10 +11,10 @@
 	<td class="text-center align-middle">
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/edit" data-action="/user/{{ $user->id }}" data-method="PUT" data-title="Редактирование">
 			<i class="fa fa-edit" aria-hidden="true"></i>
-		</a>&nbsp;&nbsp;&nbsp;
+		</a>{{--&nbsp;&nbsp;&nbsp;
 		<a href="javascript:void(0)" data-toggle="modal" data-target="#modal" data-url="/user/{{ $user->id }}/delete" data-action="/user/{{ $user->id }}" data-method="DELETE" data-title="Удаление">
 			<i class="fa fa-trash" aria-hidden="true"></i>
-		</a>&nbsp;&nbsp;&nbsp;
+		</a>--}}
 	</td>
 </tr>
 @endforeach
