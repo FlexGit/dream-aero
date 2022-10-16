@@ -247,7 +247,7 @@ class EventController extends Controller
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:
-					$title = $event->start_at->format('H:i') . '-' . $event->stop_at->format('H:i') . ' ' . $event->user->fioFormatted();
+					$title = $event->start_at->format('H:i') . '-' . $event->stop_at->format('H:i') . ' ' . ($event->user ? $event->user->fioFormatted() : '');
 					$allDay = true;
 					if ($data && isset($data['shift_admin'])) {
 						$color = $data['shift_admin'];
@@ -296,9 +296,9 @@ class EventController extends Controller
 			foreach ($event->comments ?? [] as $comment) {
 				$userName = '';
 				if ($comment->updated_by) {
-					$userName = $comment->updatedUser->fio();
+					$userName = $comment->updatedUser ? $comment->updatedUser->fio() : '';
 				} elseif ($comment->created_by) {
-					$userName = $comment->createdUser->fio();
+					$userName = $comment->createdUser ? $comment->createdUser->fio() : '';
 				}
 				$commentData[] = [
 					'name' => $comment->name,
@@ -415,9 +415,9 @@ class EventController extends Controller
 			foreach ($event->comments as $comment) {
 				$userName = '';
 				if ($comment->updated_by) {
-					$userName = $comment->updatedUser->fio();
+					$userName = $comment->updatedUser ? $comment->updatedUser->fio() : '';
 				} elseif ($comment->created_by) {
-					$userName = $comment->createdUser->fio();
+					$userName = $comment->createdUser ? $comment->createdUser->fio() : '';
 				}
 				$commentData[] = [
 					'id' => $comment->id,
@@ -544,7 +544,7 @@ class EventController extends Controller
 					->first();
 				//\Log::debug(\DB::getQueryLog());
 				if ($existingEvent) {
-					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . $existingEvent->user->fio()]);
+					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . ($existingEvent->user ? $existingEvent->user->fio() : '')]);
 				}
 			break;
 			default:
@@ -780,7 +780,7 @@ class EventController extends Controller
 					->first();
 				//\Log::debug(\DB::getQueryLog());
 				if ($existingEvent) {
-					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . $existingEvent->user->fio()]);
+					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . ($existingEvent->user ? $existingEvent->user->fio() : '')]);
 				}
 			break;
 		}
@@ -974,7 +974,7 @@ class EventController extends Controller
 					->where('id', '!=', $event->id)
 					->first();
 				if ($existingEvent) {
-					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . $existingEvent->user->fio()]);
+					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . ($existingEvent->user ? $existingEvent->user->fio() : '')]);
 				}
 			break;
 		}
