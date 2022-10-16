@@ -254,7 +254,7 @@ class EventController extends Controller
 					}
 				break;
 				case Event::EVENT_TYPE_SHIFT_PILOT:
-					$title = $event->start_at->format('H:i') . '-' . $event->stop_at->format('H:i') . ' ' . $event->user->fioFormatted();
+					$title = $event->start_at->format('H:i') . '-' . $event->stop_at->format('H:i') . ' ' . ($event->user ? $event->user->fioFormatted() : '');
 					$allDay = true;
 					if ($data && isset($data['shift_pilot'])) {
 						$color = $data['shift_pilot'];
