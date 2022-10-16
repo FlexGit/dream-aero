@@ -114,6 +114,13 @@ input[readonly]{
 .nps-event {
 	cursor: help;
 }
+.table-hovered tbody tr {
+	cursor: pointer;
+}
+.hovered {
+	color: #212529;
+	background-color: rgba(0,0,0,.075);
+}
 /*
 .platform-data-table tr td {
 	position: relative;
@@ -122,3 +129,7 @@ input[readonly]{
 	z-index: 99999;
 	position: sticky;
 }*/
+tr.unactive td,
+tr.unactive td a {
+	color: #bbb;
+}

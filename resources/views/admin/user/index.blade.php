@@ -92,7 +92,7 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
 @stop
 
 @section('js')
