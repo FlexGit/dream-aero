@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use \Venturecraft\Revisionable\RevisionableTrait;
 
 /**
  * App\Models\User
@@ -75,9 +76,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, SoftDeletes, Notifiable;
-
-    const ROLE_SUPERADMIN = 'superadmin';
+    use HasApiTokens, HasFactory, SoftDeletes, Notifiable, RevisionableTrait;
+	
+	const ATTRIBUTES = [
+		'lastname' => 'Фамилия',
+		'name' => 'Имя',
+		'middlename' => 'Отчество',
+		'email' => 'E-mail',
+		'password' => 'Пароль',
+		'role' => 'Роль',
+		'version' => 'Версия',
+		'city_id' => 'Город',
+		'location_id' => 'Локация',
+		'phone' => 'Телефон',
+		'birthdate' => 'Дата рождения',
+		'position' => 'Должность',
+		'is_reserved' => 'Резервный сотрудник',
+		'is_official' => 'Официально трудоустройство',
+		'enable' => 'Активность',
+		'data_json' => 'Дополнительная информация',
+	];
+	
+	const ROLE_SUPERADMIN = 'superadmin';
     const ROLE_ADMIN = 'admin';
 	const ROLE_ADMIN_OB = 'admin_ob';
 	const ROLE_PILOT = 'pilot';
@@ -87,7 +107,10 @@ class User extends Authenticatable
 		self::ROLE_ADMIN_OB => 'Админ ОБ',
 		self::ROLE_PILOT => 'Пилот',
 	];
- 
+	
+	protected $revisionForceDeleteEnabled = true;
+	protected $revisionCreationsEnabled = true;
+	
 	/**
      * The attributes that are mass assignable.
      *
@@ -104,7 +127,7 @@ class User extends Authenticatable
 		'city_id',
 		'location_id',
 		'phone',
-		'birthdata',
+		'birthdate',
 		'position',
 		'is_reserved',
 		'is_official',

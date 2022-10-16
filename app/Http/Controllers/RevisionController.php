@@ -27,9 +27,9 @@ class RevisionController extends Controller
 		'Promocode' => 'Промокод',
 		'Status' => 'Статус',
 		'Product' => 'Продукт',
-		'ProductType' => 'Тип продукта',
+		'ProductType' => 'Тип продукта',*/
 		'User' => 'Пользователь',
-		'Discount' => 'Скидка',*/
+		/*'Discount' => 'Скидка',*/
 	];
 	
 	/**
@@ -89,6 +89,9 @@ class RevisionController extends Controller
 			case 'events':
 				$field = 'start_at';
 			break;
+			case 'users':
+				$field = 'lastname';
+			break;
 			case '':
 				$field = 'title';
 			break;
@@ -130,6 +133,8 @@ class RevisionController extends Controller
 					$linkedObject = $model->contractor ? ($model->contractor->fio() . ' <small>[' . $model->contractor->id . ']</small>') : '';*/
 				} else if ($model->title) {
 					$object = $model->title;
+				} else if ($model->lastname) {
+					$object = $model->fio();
 				} else if ($model->name) {
 					$object = $model->name;
 				} else if ($model->start_at) {
