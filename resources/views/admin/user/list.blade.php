@@ -1,5 +1,5 @@
 @foreach ($users as $user)
-<tr class="odd @if(!$user->is_active) unactive @endif">
+<tr class="odd @if(!$user->enable) unactive @endif">
 	<td>
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/show" data-title="Просмотр" title="Посмотреть">{{ $user->fio() }}</a>
 	</td>
