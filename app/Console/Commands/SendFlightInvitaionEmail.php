@@ -45,6 +45,7 @@ class SendFlightInvitationEmail extends Command
     {
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereNull('flight_invitation_sent_at')
+			->whereNull('simulator_up_at')
 			->latest()
 			->limit(100)
 			->get();
