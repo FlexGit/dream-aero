@@ -273,7 +273,14 @@ class Bill extends Model
 	{
 		return $this->hasOne(DealPosition::class, 'id', 'deal_position_id');
 	}
-
+	
+	public function positions()
+	{
+		return $this->belongsToMany(DealPosition::class, 'bills_positions', 'bill_id', 'deal_position_id')
+			->using(BillPosition::class)
+			->withTimestamps();
+	}
+	
 	public function currency()
 	{
 		return $this->hasOne(Currency::class, 'id', 'currency_id');
