@@ -6,6 +6,7 @@ use App\Models\Bill;
 use App\Models\Deal;
 use App\Models\DealPosition;
 use App\Models\Event;
+use App\Models\PaymentMethod;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Throwable;
@@ -63,6 +64,15 @@ class SendFlightInvitationEmail extends Command
 			$deal = $position->deal;
 			if (!$deal) continue;
 		
+			$isOnlinePaymentMethodExist = false;
+			foreach ($position->bills as $bill) {
+				if ($bill->status && $bill->status->alias == Bill::PAYED_STATUS && $bill->paymentMethod && $bill->paymentMethod->alias = PaymentMethod::ONLINE_ALIAS) {
+					$isOnlinePaymentMethodExist = true;
+					break;
+				}
+			}
+			if (!$isOnlinePaymentMethodExist) continue;
+			
 			$balance = $position->balance();
 			if ($balance < 0) continue;
    
