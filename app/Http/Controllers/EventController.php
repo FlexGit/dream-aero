@@ -1208,8 +1208,9 @@ class EventController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}
 		
-		$balance = $deal->balance();
-		if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Сделка должна быть оплачена']);
+		$balance = $position->balance();
+		\Log::debug($balance);
+		if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Позиция должна быть оплачена']);
 		
 		$event = Event::find($this->request->event_id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);

@@ -46,7 +46,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$deal = $position->deal;
 		if (!$deal) return null;
 		
-		$balance = $deal->balance();
+		$balance = $position->balance();
 		if ($balance < 0) return null;
 		
 		$product = $position->product;

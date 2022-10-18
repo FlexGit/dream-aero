@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\AeroflotBonusService;
 use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -295,5 +296,57 @@ class DealPosition extends Model
 		$alias = ($locationCount > 1 && $locationAlias) ? mb_strtolower($locationAlias) : mb_strtolower($cityAlias);
 
 		return 'P' . date('y') . $alias . $productTypeAlias . $productDuration . sprintf('%05d', $this->id);
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function billPayedAmount()
+	{
+		$amount = 0;
+		foreach ($this->bills ?? [] as $bill) {
+			$status = $bill->status;
+			if (!$status) continue;
+			if ($bill->status->alias != Bill::PAYED_STATUS) continue;
+			
+			$amount += $bill->amount;
+		}
+		
+		return $amount;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function amount()
+	{
+		$amount = $this->amount - $this->aeroflotBonusWriteOffAmount();
+		
+		return $amount;
+	}
+	
+	/**
+	 * Скидка после списания милей "Аэрофлот Бонус"
+	 *
+	 * @return int
+	 */
+	public function aeroflotBonusWriteOffAmount()
+	{
+		$amount = 0;
+		foreach ($this->bills as $bill) {
+			$aeroflotBonusAmount = ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER && $bill->aeroflot_state == AeroflotBonusService::PAYED_STATE) ? $bill->aeroflot_bonus_amount : 0;
+			
+			$amount += $aeroflotBonusAmount;
+		}
+		
+		return $amount;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function balance()
+	{
+		return $this->billPayedAmount() - $this->amount();
 	}
 }

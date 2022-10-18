@@ -513,8 +513,8 @@ class CertificateController extends Controller
 		$certificate = Certificate::find($this->request->certificate_id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
-		$balance = $deal->balance();
-		if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Сделка должна быть оплачена']);
+		$balance = $position->balance();
+		if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Позиция должна быть оплачена']);
 
 		$job = new \App\Jobs\SendCertificateEmail($certificate);
 		$job->handle();

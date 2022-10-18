@@ -63,7 +63,7 @@ class SendFlightInvitationEmail extends Command
 			$deal = $position->deal;
 			if (!$deal) continue;
 		
-			$balance = $deal->balance();
+			$balance = $position->balance();
 			if ($balance < 0) continue;
    
 			try {
