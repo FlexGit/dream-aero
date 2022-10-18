@@ -33,8 +33,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		$deal = $this->bill->deal;
 		if (!$deal) return null;
 		
-		$position = $this->bill->position;
-		if (!$position) return null;
+		$positions = $this->bill->positions;
 		
 		$contractor = $deal->contractor;
 		if (!$contractor) return null;
@@ -46,15 +45,12 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		$location = $this->bill->location ?? null;
 		$certificate = $this->certificate ?? null;
 		
-		$event = $position->event ?? null;
-		
 		$messageData = [
 			'bill' => $this->bill,
 			'certificate' => $certificate,
 			'contractor' => $contractor,
 			'deal' => $deal,
-			'position' => $position,
-			'event' => $event,
+			'positions' => $positions,
 			'location' => $location,
 		];
 		
