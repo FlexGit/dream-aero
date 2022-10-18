@@ -296,9 +296,9 @@ class BillController extends Controller
 		}
 
 		$amount = $this->request->amount ?? 0;
-		if ($amount && !$user->isSuperAdmin()) {
+		/*if ($amount && !$user->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа для редактирования поля "Сумма"']);
-		}
+		}*/
 		
 		$billStatus = $bill->status;
 		$positionsIds = $this->request->position_id ?? [];
