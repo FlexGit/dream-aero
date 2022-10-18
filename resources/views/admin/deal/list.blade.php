@@ -91,7 +91,7 @@
 		<td class="text-center align-top small">
 			@foreach($deal->bills ?? [] as $bill)
 				@php
-					$billPosition = $bill->position;
+					$billPosition = $bill->positions()->first();
 				@endphp
 				<div class="mb-3">
 					<div>

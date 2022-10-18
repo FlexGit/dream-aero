@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\DealPosition;
 use App\Models\FlightSimulator;
@@ -425,9 +426,9 @@ class PositionController extends Controller
 		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
 		$isIndefinitely = $this->request->is_indefinitely ?? 0;
 		
-		if (!$isValidFlightDate) {
+		/*if (!$isValidFlightDate) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
-		}
+		}*/
 
 		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) {
@@ -781,11 +782,20 @@ class PositionController extends Controller
 		
 		try {
 			\DB::beginTransaction();
-
+			
+			foreach ($position->bills as $positionBill) {
+				if ($positionBill->status && $positionBill->status->alias != Bill::NOT_PAYED_STATUS) continue;
+				
+				$positionBill->amount = $positionBill->amount - $position->amount + $amount;
+				$positionBill->save();
+			}
+			
+			$oldProductId = $position->product_id;
+			$oldCityId = $position->city_id;
+			
 			$position->product_id = $product->id;
 			$position->duration = $product->duration ?? 0;
 			$position->amount = $amount;
-			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id ?? 0;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = $promocodeId ?? 0;
@@ -793,7 +803,16 @@ class PositionController extends Controller
 			$position->save();
 			
 			$certificate->product_id = $product->id;
+			$certificate->city_id = $city->id ?? 0;
 			$certificate->save();
+
+			if ($oldProductId != $product->id || $oldCityId != ($city->id ?? 0)) {
+				$position->number = $position->generateNumber();
+				$position->save();
+				
+				$certificate->number = $certificate->generateNumber();
+				$certificate->save();
+			}
 			
 			if ($promocodeId) {
 				$deal = $position->deal;
@@ -862,12 +881,14 @@ class PositionController extends Controller
 		$promocodeId = $this->request->promocode_id ?? 0;
 		$comment = $this->request->comment ?? '';
 		$amount = $this->request->amount ?? 0;
+		$certificateNumber = $this->request->certificate ?? '';
+		$certificateUuid = $this->request->certificate_uuid ?? '';
 		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
-		/*$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
+		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
 		
 		if (!$isValidFlightDate) {
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
-		}*/
+		}
 		
 		$product = Product::find($productId);
 		if (!$product) {
@@ -907,6 +928,22 @@ class PositionController extends Controller
 			}
 		}
 		
+		$certificateId = 0;
+		if ($certificateNumber || $certificateUuid) {
+			// проверка сертификата на валидность
+			if ($certificateNumber) {
+				$certificate = Certificate::whereIn('city_id', [$city->id, 0])
+					->where('number', $certificateNumber)
+					->first();
+			} elseif ($certificateUuid) {
+				$certificate = HelpFunctions::getEntityByUuid(Certificate::class, $certificateUuid);
+			}
+			if (!$certificate) {
+				return response()->json(['status' => 'error', 'reason' => trans('main.error.сертификат-не-найден')]);
+			}
+			$certificateId = $certificate->id;
+		}
+
 		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
 		if (!$cityProduct) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
@@ -919,6 +956,16 @@ class PositionController extends Controller
 
 		try {
 			\DB::beginTransaction();
+			
+			foreach ($position->bills as $positionBill) {
+				if ($positionBill->status && $positionBill->status->alias != Bill::NOT_PAYED_STATUS) continue;
+				
+				$positionBill->amount = $positionBill->amount - $position->amount + $amount;
+				$positionBill->save();
+			}
+			
+			$oldProductId = $position->product_id;
+			$oldLocationId = $position->location_id;
 
 			$position->product_id = $product->id ?? 0;
 			$position->duration = $product->duration ?? 0;
@@ -926,12 +973,18 @@ class PositionController extends Controller
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id ?? 0;
 			$position->location_id = $location->id ?? 0;
+			$position->certificate_id = $certificateId;
 			$position->flight_simulator_id = $simulator->id ?? 0;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = $promocodeId ?? 0;
 			$position->flight_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
 			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
+			
+			if ($oldProductId != $product->id || $oldLocationId != ($location->id ?? 0)) {
+				$position->number = $position->generateNumber();
+				$position->save();
+			}
 			
 			if ($promocodeId) {
 				$deal = $position->deal;
@@ -941,6 +994,17 @@ class PositionController extends Controller
 						$promocode->contractors()->save($contractor);
 					}
 				}
+			}
+			
+			if (isset($certificate)) {
+				$certificate->product_id = $product->id;
+				$certificateCreatedStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
+				$certificateRegisteredStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::REGISTERED_STATUS);
+				// если сделка на бронирование по сертификату, то регистрируем сертификат
+				if ($certificate->status_id == $certificateCreatedStatus->id) {
+					$certificate->status_id = $certificateRegisteredStatus->id;
+				}
+				$certificate->save();
 			}
 			
 			$event = $position->event;
@@ -1062,6 +1126,15 @@ class PositionController extends Controller
 				}
 			}
 			
+			foreach ($position->bills as $positionBill) {
+				if ($positionBill->status && $positionBill->status->alias != Bill::NOT_PAYED_STATUS) continue;
+				
+				$positionBill->amount = $positionBill->amount - $position->amount + $amount;
+				$positionBill->save();
+			}
+			
+			$oldCityId = $position->city_id;
+			
 			$position->product_id = $product->id ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
@@ -1070,6 +1143,11 @@ class PositionController extends Controller
 			$position->promocode_id = $promocodeId ?? 0;
 			$position->data_json = !empty($data) ? $data : null;
 			$position->save();
+			
+			if ($oldCityId != ($city->id ?? 0)) {
+				$position->number = $position->generateNumber();
+				$position->save();
+			}
 			
 			if ($promocodeId) {
 				$deal = $position->deal;
@@ -1137,13 +1215,15 @@ class PositionController extends Controller
 		}
 		
 		$city = $position->city;
-		if (!$city) {
+		/*if (!$city) {
 			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-		}
+		}*/
 		
-		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-		if (!$cityProduct || !$cityProduct->pivot) {
-			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
+		if ($city) {
+			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+			if (!$cityProduct || !$cityProduct->pivot) {
+				return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
+			}
 		}
 		
 		$certificateFilePath = ($position->is_certificate_purchase && $position->certificate && is_array($position->certificate->data_json) && array_key_exists('certificate_file_path', $position->certificate->data_json)) ? $position->certificate->data_json['certificate_file_path'] : '';
@@ -1179,13 +1259,35 @@ class PositionController extends Controller
 				}
 			}
 			
+			$isPaid = false;
+			foreach ($position->bills as $positionBill) {
+				if ($positionBill->status && $positionBill->status->alias != Bill::NOT_PAYED_STATUS) {
+					$isPaid = true;
+					break;
+				}
+			}
+			
+			if ($isPaid) {
+				\DB::rollback();
+				return response()->json(['status' => 'error', 'reason' => 'Позиция недоступна для удаления, т.к. уже привязана к оплаченному счету']);
+			}
+			
+			foreach ($position->bills as $positionBill) {
+				$positionBill->positions()->detach($position->id);
+				if (!$positionBill->positions()->count()) {
+					$positionBill->delete();
+				}
+				$positionBill->amount = $positionBill->amount - $position->amount;
+				$positionBill->save();
+			}
+			
 			$position->delete();
 			
 			if ($certificateFilePath) {
 				Storage::disk('private')->delete($certificateFilePath);
 			}
 			
-			if ($productType->alias == ProductType::SERVICES_ALIAS) {
+			if ($productType->alias == ProductType::SERVICES_ALIAS && $city) {
 				$city->products()->updateExistingPivot($product->id, [
 					'availability' =>  ++$cityProduct->pivot->availability,
 				]);

@@ -272,14 +272,11 @@ class DealPosition extends Model
 		return $this->belongsTo(Score::class, 'id', 'deal_position_id');
 	}
 	
-	public function bill()
-	{
-		return $this->belongsTo(Bill::class, 'id', 'deal_position_id');
-	}
-	
 	public function bills()
 	{
-		return $this->hasMany(Bill::class, 'deal_position_id', 'id');
+		return $this->belongsToMany(Bill::class, 'bills_positions', 'deal_position_id', 'bill_id')
+			->using(BillPosition::class)
+			->withTimestamps();
 	}
 	
 	/**

@@ -56,12 +56,11 @@ class RunAeroflotAccrual extends Command
 		foreach ($bills as $bill) {
 			if (!in_array($bill->status->alias, [Bill::PAYED_STATUS])) continue;
 
-			$position = $bill->position;
-			if (!$position) continue;
-			
 			$deal = $bill->deal;
 			if (!$deal || !$deal->status) continue;
 			if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) continue;
+			
+			$position = $bill->positions()->first();
 			
 			// с момента оплаты должно пройти не менее заданного кол-ва дней
 			// (разного для бронирования и покупки сертификата)

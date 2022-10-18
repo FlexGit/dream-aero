@@ -62,24 +62,10 @@ class SendFlightInvitationEmail extends Command
 			$deal = $position->deal;
 			if (!$deal) continue;
 		
-			/** @var Bill $bill */
-			$bill = $position->bill;
-			if ($bill) {
-				$billStatus = $bill->status;
-				// если к позиции привязан счет, то он должен быть оплачен
-				if ($billStatus && $billStatus->alias != Bill::PAYED_STATUS) continue;
-				
-				$paymentMethod = $bill->paymentMethod;
-				// и со способом оплаты "Онлайн"
-				if ($paymentMethod && $paymentMethod->alias != Bill::ONLINE_PAYMENT_METHOD) continue;
-			} else {
-				// если к позиции не привязан счет, то вся сделка должна быть оплачена
-				$balance = $deal->balance();
-				if ($balance < 0) continue;
-			}
+			$balance = $deal->balance();
+			if ($balance < 0) continue;
    
 			try {
-				//dispatch(new \App\Jobs\SendFlightInvitationEmail($event));
 				$job = new \App\Jobs\SendFlightInvitationEmail($event);
 				$job->handle();
 			} catch (Throwable $e) {

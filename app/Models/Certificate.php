@@ -177,15 +177,7 @@ class Certificate extends Model
 		$deal = $position->deal;
 		if (!$deal) return null;
 		
-		$bill = $position->bill;
-		if (!$bill) {
-			$bill = $deal->bills()->whereNotNull('payed_at')->first();
-		}
-		/*if (!$bill->payed_at) return null;
-		
-		$billStatus = $bill->status;
-		if (!$billStatus) return null;
-		if ($billStatus->alias != Bill::PAYED_STATUS) return null;*/
+		$bill = $position->bills()->whereNotNull('payed_at')->latest()->first();
 		
 		$product = $this->product;
 		if (!$product) return null;
@@ -194,6 +186,8 @@ class Certificate extends Model
 		if (!$productType) return null;
 		
 		$city = $this->city;
+		
+		$activeFromAt = ($bill && $bill->payed_at) ? $bill->payed_at->format('d.m.Y') : $position->created_at->format('d.m.Y');
 		
 		if (!$city && in_array($productType->alias, [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS])) {
 			// единый Сертификат
@@ -224,7 +218,7 @@ class Certificate extends Model
 						$font->size(40);
 						$font->color('#000000');
 					});
-					$certificateFile->text($bill->payed_at->format('d.m.Y'), 1735, 485, function ($font) use ($fontPath) {
+					$certificateFile->text($activeFromAt, 1735, 485, function ($font) use ($fontPath) {
 						$font->file($fontPath);
 						$font->size(40);
 						$font->color('#000000');
@@ -242,7 +236,7 @@ class Certificate extends Model
 								$font->size(22);
 								$font->color('#000000');
 							});
-							$certificateFile->text($bill->payed_at->format('d.m.Y'), 1300, 121, function ($font) use ($fontPath) {
+							$certificateFile->text($activeFromAt, 1300, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
 								$font->color('#000000');
@@ -259,7 +253,7 @@ class Certificate extends Model
 								$font->size(22);
 								$font->color('#000000');
 							});
-							$certificateFile->text($bill->payed_at->format('d.m.Y'), 1300, 121, function ($font) use ($fontPath) {
+							$certificateFile->text($activeFromAt, 1300, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
 								$font->color('#000000');
@@ -279,7 +273,7 @@ class Certificate extends Model
 								$font->size(22);
 								$font->color('#000000');
 							});
-							$certificateFile->text($bill->payed_at->format('d.m.Y'), 1300, 155, function ($font) use ($fontPath) {
+							$certificateFile->text($activeFromAt, 1300, 155, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
 								$font->color('#000000');
@@ -296,7 +290,7 @@ class Certificate extends Model
 								$font->size(22);
 								$font->color('#000000');
 							});
-							$certificateFile->text($bill->payed_at->format('d.m.Y'), 1300, 121, function ($font) use ($fontPath) {
+							$certificateFile->text($activeFromAt, 1300, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
 								$font->color('#000000');
@@ -315,7 +309,7 @@ class Certificate extends Model
 								$font->size(22);
 								$font->color('#000000');
 							});
-							$certificateFile->text($bill->payed_at->format('d.m.Y'), 1300, 121, function ($font) use ($fontPath) {
+							$certificateFile->text($activeFromAt, 1300, 121, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
 								$font->color('#000000');
@@ -332,7 +326,7 @@ class Certificate extends Model
 								$font->size(22);
 								$font->color('#000000');
 							});
-							$certificateFile->text($bill->payed_at->format('d.m.Y'), 1300, 127, function ($font) use ($fontPath) {
+							$certificateFile->text($activeFromAt, 1300, 127, function ($font) use ($fontPath) {
 								$font->file($fontPath);
 								$font->size(22);
 								$font->color('#000000');
@@ -352,7 +346,7 @@ class Certificate extends Model
 					$font->size(24);
 					$font->color('#000000');
 				});
-				$certificateFile->text($bill->payed_at->format('d.m.Y'), 2030, 1005, function($font) use ($fontPath) {
+				$certificateFile->text($activeFromAt, 2030, 1005, function($font) use ($fontPath) {
 					$font->file($fontPath);
 					$font->size(24);
 					$font->color('#000000');
@@ -364,7 +358,7 @@ class Certificate extends Model
 					$font->size(36);
 					$font->color('#000000');
 				});
-				$certificateFile->text($bill->payed_at->format('d.m.Y'), 1965, 505, function($font) use ($fontPath) {
+				$certificateFile->text($activeFromAt, 1965, 505, function($font) use ($fontPath) {
 					$font->file($fontPath);
 					$font->size(36);
 					$font->color('#000000');

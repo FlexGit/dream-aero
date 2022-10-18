@@ -1,5 +1,6 @@
 <input type="hidden" id="id" name="id" value="{{ $position->id }}">
 <input type="hidden" id="contractor_id" name="contractor_id" value="{{ $position->deal ? $position->deal->contractor_id : 0 }}">
+<input type="hidden" id="certificate_uuid" name="certificate_uuid" value="{{ $position->certificate ? $position->certificate->uuid : '' }}">
 <input type="hidden" id="amount" name="amount" value="{{ $position->amount }}">
 <input type="hidden" id="score" name="score" value="{{ ($position->score && $position->score->type == 'used') ? $position->score->score : 0 }}">
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $position->flight_simulator_id }}">
@@ -47,7 +48,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-4">
+	<div class="col">
 		<div class="form-group">
 			<label for="product_id">Продукт</label>
 			<select class="form-control js-product" id="product_id" name="product_id">
@@ -62,16 +63,12 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-5">
-		<label for="flight_date_at">Дата и время начала полета</label>
-		<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="flight_date_at">Дата и время начала полета</label>
 			<div class="d-flex">
-				<div class="col-7">
-					<input type="date" class="form-control" id="flight_date_at" name="flight_date_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d') }}">
-				</div>
-				<div class="col-5">
-					<input type="time" class="form-control" id="flight_time_at" name="flight_time_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('H:i') }}">
-				</div>
+				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d') }}">&nbsp;
+				<input type="time" class="form-control" id="flight_time_at" name="flight_time_at" value="{{ \Carbon\Carbon::parse($position->flight_at)->format('H:i') }}">
 			</div>
 			<div>
 				<input type="hidden" id="is_valid_flight_date" name="is_valid_flight_date" value="1">
@@ -79,10 +76,21 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-3">
+	<div class="col">
+	</div>
+</div>
+<div class="row">
+	<div class="col">
 		<div class="form-group">
-			<label for="certificate">Сертификат</label>
-			<input type="text" class="form-control" id="certificate" name="certificate" value="{{ $position->certificate ? $position->certificate->number : '' }}" placeholder="Номер" disabled>
+			<label for="certificate_number">Поиск по номеру Сертификата</label>
+			<input type="text" class="form-control" id="certificate_number" name="certificate_number" value="{{ $position->certificate ? $position->certificate->number : '' }}" placeholder="Номер" @if($position->certificate) disabled @endif>
+			<div class="js-certificate-container @if(!$position->certificate) hidden @endif">
+				<span class="js-certificate">@if($position->certificate)Привязан сертификат: {{ $position->certificate->number }}@endif</span> <i class="fas fa-times js-certificate-delete" title="Delete" style="cursor: pointer;color: red;"></i>
+				<div class="custom-control custom-switch custom-control js-is-indefinitely hidden">
+					<input type="checkbox" id="is_indefinitely" name="is_indefinitely" value="1" class="custom-control-input">
+					<label class="custom-control-label font-weight-normal" for="is_indefinitely">Не учитывать ограничение по сроку действия</label>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

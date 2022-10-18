@@ -30,12 +30,15 @@
 			@break
 		@endswitch
 		<td class="text-center align-middle">
-			<a href="javascript:void(0)" data-toggle="modal" data-url="/site/{{ $version }}/{{ $type }}/{{ $content->id }}/edit" data-action="/site/{{ $version }}/{{ $type }}/{{ $content->id }}" data-method="PUT" data-type="content" data-title="Редактирование" title="Редактировать">
+			<a href="javascript:void(0)" data-toggle="modal" data-url="/content/{{ $type }}/{{ $content->id }}/edit" data-action="/content/{{ $type }}/{{ $content->id }}" data-method="PUT" data-type="content" data-title="Редактирование" title="Редактировать">
 				<i class="fa fa-edit" aria-hidden="true"></i>
-			</a>&nbsp;&nbsp;&nbsp;
-			<a href="javascript:void(0)" data-toggle="modal" data-url="/site/{{ $version }}/{{ $type }}/{{ $content->id }}/delete" data-action="/site/{{ $version }}/{{ $type }}/{{ $content->id }}" data-method="DELETE" data-title="Удаление" title="Удалить">
-				<i class="fa fa-trash" aria-hidden="true"></i>
 			</a>
+			@if($type != app('\App\Models\Content')::WIKI_TYPE)
+				&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" data-toggle="modal" data-url="/content/{{ $type }}/{{ $content->id }}/delete" data-action="/content/{{ $type }}/{{ $content->id }}" data-method="DELETE" data-title="Удаление" title="Удалить">
+					<i class="fa fa-trash" aria-hidden="true"></i>
+				</a>
+			@endif
 		</td>
 	</tr>
 @endforeach

@@ -20,13 +20,13 @@ class PayAnyWayService {
 	public static function generatePaymentForm(Bill $bill) {
 		$params = [
 			'url' => self::BASE_URL . self::PAY_REQUEST_URL,
-			'MNT_ID' => $bill->location->pay_account_number,
+			'MNT_ID' => $bill->location ? $bill->location->pay_account_number : '',
 			'MNT_AMOUNT' => number_format($bill->amount, 2, '.', ''),
 			'MNT_TRANSACTION_ID' => $bill->uuid,
 			'MNT_CURRENCY_CODE' => self::CURRENCY_CODE,
 			'MNT_TEST_MODE' => self::TEST_MODE,
 			'MNT_DESCRIPTION' => 'Оплата по счету ' . $bill->number,
-			'MNT_SUBSCRIBER_ID' => $bill->contractor->uuid,
+			'MNT_SUBSCRIBER_ID' => $bill->contractor ? $bill->contractor->uuid : '',
 			'MNT_SUCCESS_URL' => request()->getSchemeAndHttpHost() . '/payment/success',
 			'MNT_FAIL_URL' => request()->getSchemeAndHttpHost() . '/payment/fail',
 			'MNT_RETURN_URL' => request()->getSchemeAndHttpHost(),

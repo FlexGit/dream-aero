@@ -26,24 +26,20 @@
 			<td class="align-middle text-center">
 				{{ $certificateItem['expire_at'] }}
 			</td>
-			<td class="align-middle text-center">
-				@if($certificateItem['bill_number'])
-					{{ $certificateItem['bill_number'] }}
-				@endif
-			</td>
-			<td class="align-middle text-center text-nowrap">
-				@if($certificateItem['bill_number'])
-					@if($certificateItem['bill_status_alias'] == app('\App\Models\Bill')::PAYED_STATUS)
-						<span class="pl-2 pr-2" style="background-color: #e9ffc9;">{{ $certificateItem['bill_status_name'] }}</span>
-					@else
-						<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ $certificateItem['bill_status_name'] }}</span>
-					@endif
-				@endif
-			</td>
-			<td class="align-middle text-center">
-				@if($certificateItem['bill_number'])
-					{{ $certificateItem['bill_payment_method_name'] }}
-				@endif
+			<td class="align-middle text-nowrap">
+				@foreach($certificateItem['bills'] ?? [] as $bill)
+					<div>
+						{{ $bill['bill_number'] }}
+						@if($bill['bill_payment_method_name'])
+							[{{ $bill['bill_payment_method_name'] }}]
+						@endif
+						@if($bill['bill_status_alias'] == app('\App\Models\Bill')::PAYED_STATUS)
+							<span class="pl-2 pr-2" style="background-color: #e9ffc9;">{{ $bill['bill_status_name'] }}</span>
+						@else
+							<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ $bill['bill_status_name'] }}</span>
+						@endif
+					</div>
+				@endforeach
 			</td>
 			<td class="align-middle text-left">
 				@if($certificateItem['comment'] || $certificateItem['certificate_whom'] || $certificateItem['certificate_whom_phone'])
@@ -74,6 +70,11 @@
 						@endif
 					</div>
 				@endif
+			</td>
+			<td class="align-middle text-center">
+				<a href="javascript:void(0)" data-toggle="modal" data-url="/certificate/{{ $certificateId }}/edit" data-action="/certificate/{{ $certificateId }}" data-method="PUT" data-title="Редактирование">
+					<i class="fa fa-edit" aria-hidden="true"></i>
+				</a>
 			</td>
 		</tr>
 	@endforeach

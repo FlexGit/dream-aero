@@ -416,16 +416,16 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('wiki', [WikiController::class, 'index'])->name('wikiIndex');
 	
 			// Контент
-			Route::get('site/{version}/{type}', [ContentController::class, 'index']);
-			Route::get('site/{version}/{type}/list/ajax', [ContentController::class, 'getListAjax']);
-			Route::get('site/{version}/{type}/add', [ContentController::class, 'add']);
-			Route::get('site/{version}/{type}/{id}/edit', [ContentController::class, 'edit']);
-			Route::get('site/{version}/{type}/{id}/delete', [ContentController::class, 'confirm']);
+			Route::get('content/{type}', [ContentController::class, 'index']);
+			Route::get('content/{type}/list/ajax', [ContentController::class, 'getListAjax']);
+			Route::get('content/{type}/add', [ContentController::class, 'add']);
+			Route::get('content/{type}/{id}/edit', [ContentController::class, 'edit']);
+			Route::get('content/{type}/{id}/delete', [ContentController::class, 'confirm']);
 	
-			Route::post('site/{version}/{type}', [ContentController::class, 'store']);
-			Route::put('site/{version}/{type}/{id}', [ContentController::class, 'update']);
-			Route::delete('site/{version}/{type}/{id}', [ContentController::class, 'delete']);
-			Route::post('site/{version}/{type}/image/upload', [ContentController::class, 'imageUpload']);
+			Route::post('content/{type}', [ContentController::class, 'store']);
+			Route::put('content/{type}/{id}', [ContentController::class, 'update']);
+			Route::delete('content/{type}/{id}', [ContentController::class, 'delete']);
+			Route::post('content/{type}/image/upload', [ContentController::class, 'imageUpload']);
 			
 			// Отчеты
 			Route::get('report/nps', [ReportController::class, 'npsIndex'])->name('npsIndex');

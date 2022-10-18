@@ -78,7 +78,6 @@
 							</div>
 						</div>
 						<div class="form-group ml-3 text-nowrap" style="padding-top: 31px;">
-							{{--<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>--}}
 							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
 						</div>
 					</div>
@@ -92,10 +91,9 @@
 							<th class="align-middle">Город</th>
 							<th class="align-middle">Статус</th>
 							<th class="align-middle">Срок действия</th>
-							<th class="align-middle">Номер Счета</th>
-							<th class="align-middle">Статус Счета</th>
-							<th class="align-middle">Способ оплаты</th>
+							<th class="align-middle">Счета</th>
 							<th class="align-middle">Комментарий</th>
+							<th class="align-middle">Действие</th>
 						</tr>
 						</thead>
 						<tbody class="body">
@@ -105,11 +103,31 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalLabel">Редактирование</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="certificate">
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+						<button type="submit" class="btn btn-primary">Подтвердить</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 @stop
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css?') }}">
 @stop
 
 @section('js')
@@ -119,7 +137,7 @@
 		$(function() {
 			function getList(loadMore, isExport) {
 				var $selector = $('#certificateTable tbody'),
-					$btn = /*isExport ? */$('#export_btn')/* : $('#show_btn')*/,
+					$btn = $('#export_btn'),
 					$loader = $('<i class="fas fa-circle-notch fa-spin"></i>');
 
 				var $tr = $('tr.odd[data-id]:last'),
@@ -177,9 +195,78 @@
 
 			getList(false, false);
 
+			$(document).on('click', '[data-url]', function(e) {
+				e.preventDefault();
+
+				var url = $(this).data('url'),
+					action = $(this).data('action'),
+					method = $(this).data('method'),
+					title = $(this).data('title');
+
+				if (!url) {
+					toastr.error('Некорректные параметры');
+					return null;
+				}
+
+				$('.modal .modal-title, .modal .modal-body').empty();
+
+				$.ajax({
+					url: url,
+					type: 'GET',
+					dataType: 'json',
+					success: function(result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						if (action && method) {
+							$('#modal form').attr('action', action).attr('method', method);
+							$('button[type="submit"]').show();
+						} else {
+							$('button[type="submit"]').hide();
+						}
+						$('#modal .modal-title').text(title);
+						$('#modal .modal-body').html(result.html);
+						$('#modal').modal('show');
+					}
+				});
+			});
+
+			$(document).on('submit', '#certificate', function(e) {
+				e.preventDefault();
+
+				var action = $(this).attr('action'),
+					method = $(this).attr('method'),
+					data = $(this).serializeArray();
+
+				$.ajax({
+					url: action,
+					type: method,
+					data: data,
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						$('#modal').modal('hide');
+						getList();
+						toastr.success(result.message);
+					}
+				});
+			});
+
 			$(document).on('change', '#filter_date_from_at, #filter_date_to_at, #filter_city_id, #filter_location_id, #filter_payment_type', function(e) {
 				getList(false, false);
 			});
+
+			$(document).on('change', '#indefinitely', function(e) {
+				if ($(this).is(':checked')) {
+					$('#expire_at').val('');
+				}
+			});
+
 
 			$(document).on('keyup', '#search_doc', function(e) {
 				if ($.inArray(e.keyCode, [33, 34]) !== -1) return;

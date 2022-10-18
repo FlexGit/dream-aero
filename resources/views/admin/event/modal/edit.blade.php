@@ -262,7 +262,7 @@
 										<i class="fas fa-ruble-sign"></i>
 									@endif
 								@endif
-								{{ number_format($event->dealPosition->amount, 0, '.', ' ') }} [{{ $event->dealPosition->bill->number ?? '' }}]
+								{{ number_format($event->dealPosition->amount, 0, '.', ' ') }}
 							</div>
 							<div>
 								<i class="far fa-calendar-alt" title="Желаемое время полета"></i> {{ \Carbon\Carbon::parse($event->dealPosition->flight_at)->format('Y-m-d H:i') }}

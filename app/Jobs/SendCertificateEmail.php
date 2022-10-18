@@ -46,18 +46,8 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$deal = $position->deal;
 		if (!$deal) return null;
 		
-		$bill = $position->bill;
-		if ($bill) {
-			$billStatus = $bill->status;
-			if (!$billStatus) return null;
-			
-			// если к позиции привязан счет, то он должен быть оплачен
-			if ($billStatus->alias != Bill::PAYED_STATUS) return null;
-		} else {
-			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
-			$balance = $deal->balance();
-			if ($balance < 0) return null;
-		}
+		$balance = $deal->balance();
+		if ($balance < 0) return null;
 		
 		$product = $position->product;
 		if (!$product) return null;

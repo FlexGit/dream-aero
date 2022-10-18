@@ -28,6 +28,45 @@ class BillController extends Controller
 	}
 	
 	/**
+	 * @param $dealId
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function add($dealId)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$deal = Deal::find($dealId);
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		$amount = $deal->amount() - $deal->billPayedAmount();
+		$statuses = Status::where('type', Status::STATUS_TYPE_BILL)
+			->where('alias', '!=', Bill::PAYED_PROCESSING_STATUS)
+			->orderBy('sort')
+			->get();
+		$paymentMethods = PaymentMethod::where('is_active', true)
+			->orderBy('name')
+			->get();
+		$currencies = Currency::get();
+		$positions = $deal->positions;
+		
+		$VIEW = view('admin.bill.modal.add', [
+			'deal' => $deal,
+			'amount' => ($amount > 0) ? $amount : 0,
+			'paymentMethods' => $paymentMethods,
+			'statuses' => $statuses,
+			'currencies' => $currencies,
+			'positions' => $positions,
+			'user' => $user,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+
+	/**
 	 * @param $id
 	 * @return \Illuminate\Http\JsonResponse
 	 */
@@ -45,15 +84,13 @@ class BillController extends Controller
 		$statuses = Status::where('type', Status::STATUS_TYPE_BILL)
 			->orderBy('sort')
 			->get();
-		
 		$paymentMethods = PaymentMethod::where('is_active', true)
 			->orderBy('name')
 			->get();
-
 		$currencies = Currency::get();
-		
 		$deal = $bill->deal;
 		$positions = $deal->positions;
+		$billPositionIds = $bill->positions()->pluck('deal_positions.id')->toArray();
 
 		$VIEW = view('admin.bill.modal.edit', [
 			'bill' => $bill,
@@ -61,48 +98,8 @@ class BillController extends Controller
 			'statuses' => $statuses,
 			'currencies' => $currencies,
 			'positions' => $positions,
+			'billPositionIds' => $billPositionIds,
 			'user' => $user,
-		]);
-		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}
-	
-	/**
-	 * @param $dealId
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function add($dealId)
-	{
-		if (!$this->request->ajax()) {
-			abort(404);
-		}
-		
-		$deal = Deal::find($dealId);
-		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
-		
-		
-		$amount = $deal->amount() - $deal->billPayedAmount()/* - $deal->scoreAmount()*/;
-		
-		$statuses = Status::where('type', Status::STATUS_TYPE_BILL)
-			->where('alias', '!=', Bill::PAYED_PROCESSING_STATUS)
-			->orderBy('sort')
-			->get();
-
-		$paymentMethods = PaymentMethod::where('is_active', true)
-			->orderBy('name')
-			->get();
-
-		$currencies = Currency::get();
-		
-		$positions = $deal->positions;
-
-		$VIEW = view('admin.bill.modal.add', [
-			'deal' => $deal,
-			'amount' => ($amount > 0) ? $amount : 0,
-			'paymentMethods' => $paymentMethods,
-			'statuses' => $statuses,
-			'currencies' => $currencies,
-			'positions' => $positions,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -124,7 +121,7 @@ class BillController extends Controller
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
 			'amount' => 'required|numeric|min:0',
-			'position_id' => 'required|numeric|min:0|not_in:0',
+			'position_id' => 'required',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -153,32 +150,13 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}
 		
-		$position = DealPosition::find($this->request->position_id);
-		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
-		
-		$product = $position->product;
-		if (!$product) {
-			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
-		}
-		
-		$productType = $product->productType;
-		if (!$productType) {
-			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
-		}
-		
-		$city = $position->city;
-		/*if (!$city) {
-			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-		}*/
-
-		if ($city) {
-			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-			if (!$cityProduct || !$cityProduct->pivot) {
-				return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
-			}
+		$amount = $this->request->amount ?? 0;
+		if ($amount && !$user->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа для редактирования поля "Сумма"']);
 		}
 
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
+		$positionsIds = $this->request->position_id ?? [];
 		
 		try {
 			\DB::beginTransaction();
@@ -186,33 +164,62 @@ class BillController extends Controller
 			$bill = new Bill();
 			$bill->contractor_id = $deal->contractor->id ?? 0;
 			$bill->deal_id = $deal->id ?? 0;
-			$bill->deal_position_id = $position->id ?? 0;
 			$bill->location_id = $user->isAdminOBOrHigher() ? $deal->bill_location_id : ($this->request->user()->location_id ?? 0);
 			$bill->payment_method_id = $paymentMethodId;
 			$bill->status_id = $this->request->status_id ?? 0;
 			if ($status->alias == Bill::PAYED_STATUS) {
 				$bill->payed_at = Carbon::now()->format('Y-m-d H:i:s');
 			}
-			$bill->amount = $this->request->amount ?? 0;
+			$bill->amount = $amount;
 			$bill->currency_id = $this->request->currency_id ?? 0;
 			$bill->user_id = $this->request->user()->id;
 			$bill->save();
 			
 			$deal->bills()->save($bill);
 			
-			if ($city) {
-				if ($productType->alias == ProductType::SERVICES_ALIAS && $deal->balance() >= 0) {
-					$city->products()->updateExistingPivot($product->id, [
-						'availability' => --$cityProduct->pivot->availability,
-					]);
+			foreach ($positionsIds ?? [] as $positionsId) {
+				$position = DealPosition::find($positionsId);
+				if (!$position) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
+				}
+				
+				$product = $position->product;
+				if (!$product) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+				}
+				
+				$productType = $product->productType;
+				if (!$productType) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+				}
+				
+				$city = $position->city;
+				/*if (!$city) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+				}*/
+				
+				if ($city) {
+					$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+					if (!$cityProduct || !$cityProduct->pivot) {
+						\DB::rollback();
+						return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
+					}
+					
+					if ($productType->alias == ProductType::SERVICES_ALIAS && $deal->balance() >= 0) {
+						$city->products()->updateExistingPivot($product->id, [
+							'availability' => --$cityProduct->pivot->availability,
+						]);
+					}
 				}
 			}
+			if ($positionsIds) {
+				$bill->positions()->sync($positionsIds);
+			}
 			
-			/*if ($paymentMethod && $paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
-				$job = new \App\Jobs\SendPayLinkEmail($bill);
-				$job->handle();
-			}*/
-
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();
@@ -241,7 +248,7 @@ class BillController extends Controller
 		$user = \Auth::user();
 		
 		$billStatus = $bill->status;
-		if ($billStatus && $billStatus->alias == Bill::CANCELED_STATUS && !$user->isSuperAdmin()) {
+		if ($billStatus && $billStatus->alias != Bill::NOT_PAYED_STATUS && !$user->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Счет в текущем статусе недоступен для редактирования']);
 		}
 		
@@ -260,7 +267,7 @@ class BillController extends Controller
 			'payment_method_id' => 'required|numeric|min:0|not_in:0',
 			'status_id' => 'required|numeric|min:0|not_in:0',
 			'amount' => 'required|numeric|min:0',
-			'position_id' => 'required|numeric|min:0|not_in:0',
+			'position_id' => 'required',
 		];
 		
 		$validator = Validator::make($this->request->all(), $rules)
@@ -283,48 +290,22 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Оплаченный Счет со способом оплаты "Онлайн" недоступен для редактирования']);
 		}
 		
-		$position = DealPosition::find($this->request->position_id);
-		if (!$position) return response()->json(['status' => 'error', 'reason' => 'Позиция сделки не найдена']);
-		
-		$product = $position->product;
-		if (!$product) {
-			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
-		}
-		
-		$productType = $product->productType;
-		if (!$productType) {
-			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
-		}
-		
-		$city = $position->city;
-		/*if (!$city) {
-			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-		}*/
-		
-		if ($city) {
-			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
-			if (!$cityProduct || !$cityProduct->pivot) {
-				return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
-			}
-		}
-
 		$paymentMethod = Status::find($this->request->payment_method_id);
 		if (!$paymentMethod) {
 			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
 		}
 
-		$status = Status::find($this->request->status_id);
-		if (!$status) {
-			return response()->json(['status' => 'error', 'reason' => 'Статус не найден']);
+		$amount = $this->request->amount ?? 0;
+		if ($amount && !$user->isSuperAdmin()) {
+			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа для редактирования поля "Сумма"']);
 		}
 		
-		$amount = $this->request->amount ?? 0;
 		$billStatus = $bill->status;
+		$positionsIds = $this->request->position_id ?? [];
 		
 		try {
 			\DB::beginTransaction();
 
-			$bill->deal_position_id = ($status->alias == Bill::CANCELED_STATUS) ? 0 : ($position->id ?? 0);
 			$bill->payment_method_id = $paymentMethod->id;
 			$bill->status_id = $status->id;
 			$bill->amount = $amount;
@@ -341,28 +322,68 @@ class BillController extends Controller
 	
 				// при выставлении даты оплаты генерим и дату окончания срока действия сертификата,
 				// если это счет на позицию покупки сертификата
-				$position = $bill->position;
-				$certificate = $position ? $position->certificate : null;
-				$certificateProduct = $certificate ? $certificate->product : null;
-				$certificatePeriod = ($certificateProduct && $certificateProduct->validity && $position->is_certificate_purchase) ? $certificateProduct->validity : '';
-				if ($certificate) {
-					$certificate->expire_at = $certificatePeriod ? Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
-					$certificate->save();
+				$positions = $bill->positions;
+				foreach ($positions as $position) {
+					$certificate = $position ? $position->certificate : null;
+					$certificateProduct = $certificate ? $certificate->product : null;
+					$certificatePeriod = ($certificateProduct && $certificateProduct->validity && $position->is_certificate_purchase) ? $certificateProduct->validity : '';
+					if ($certificate) {
+						$certificate->expire_at = $certificatePeriod ? Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
+						$certificate->save();
+					}
 				}
 			}
 			$bill->save();
 			
-			if ($city && $productType->alias == ProductType::SERVICES_ALIAS) {
-				//\Log::debug($status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
-				if ($status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
-					$city->products()->updateExistingPivot($product->id, [
-						'availability' => --$cityProduct->pivot->availability,
-					]);
-				} elseif($status->alias != Bill::PAYED_STATUS && $billStatus->alias == Bill::PAYED_STATUS) {
-					$city->products()->updateExistingPivot($product->id, [
-						'availability' => ++$cityProduct->pivot->availability,
-					]);
+			foreach ($positionsIds ?? [] as $positionsId) {
+				$position = DealPosition::find($positionsId);
+				if (!$position) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
 				}
+				
+				$product = $position->product;
+				if (!$product) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+				}
+				
+				$productType = $product->productType;
+				if (!$productType) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+				}
+				
+				$city = $position->city;
+				/*if (!$city) {
+					\DB::rollback();
+					return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+				}*/
+				
+				if ($city) {
+					$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+					if (!$cityProduct || !$cityProduct->pivot) {
+						\DB::rollback();
+						return response()->json(['status' => 'error', 'reason' => 'Цена на продукт не указана']);
+					}
+					
+					if ($productType->alias == ProductType::SERVICES_ALIAS) {
+						//\Log::debug($status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
+						if ($status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
+							$city->products()->updateExistingPivot($product->id, [
+								'availability' => --$cityProduct->pivot->availability,
+							]);
+						}
+						else if ($status->alias != Bill::PAYED_STATUS && $billStatus->alias == Bill::PAYED_STATUS) {
+							$city->products()->updateExistingPivot($product->id, [
+								'availability' => ++$cityProduct->pivot->availability,
+							]);
+						}
+					}
+				}
+			}
+			if ($positionsIds) {
+				$bill->positions()->sync($positionsIds);
 			}
 
 			\DB::commit();
@@ -412,21 +433,27 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}
 		
-		$position = $bill->position;
-		$product = $position ? $position->product : null;
-		$productType = $product ? $product->productType : null;
-		$city = $product ? $position->city : null;
-		$cityProduct = ($product && $city) ? $product->cities()->where('cities_products.is_active', true)->find($city->id) : null;
+		$positions = $bill->positions;
 		
 		try {
 			\DB::beginTransaction();
 			
-			if ($cityProduct && $cityProduct->pivot && $productType->alias == ProductType::SERVICES_ALIAS) {
-				$city->products()->updateExistingPivot($product->id, [
-					'availability' =>  ++$cityProduct->pivot->availability,
-				]);
+			foreach ($positions as $position) {
+				$product = $position ? $position->product : null;
+				$productType = $product ? $product->productType : null;
+				$city = $product ? $position->city : null;
+				$cityProduct = ($product && $city) ? $product->cities()->where('cities_products.is_active', true)->find($city->id) : null;
+				
+				if ($cityProduct && $cityProduct->pivot && $productType->alias == ProductType::SERVICES_ALIAS) {
+					$city->products()->updateExistingPivot($product->id, [
+						'availability' =>  ++$cityProduct->pivot->availability,
+					]);
+				}
+				
+				if (!$bill->positions()->detach($position->id)) {
+					return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+				}
 			}
-			
 			$bill->delete();
 
 			\DB::commit();
@@ -609,7 +636,7 @@ class BillController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Некорректная сумма Счета']);
 		}
 		
-		$position = $bill->position;
+		$position = $bill->positions()->first();
 		if (!$position) {
 			return response()->json(['status' => 'error', 'reason' => 'К Счету не привязана позиция']);
 		}

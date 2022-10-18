@@ -269,9 +269,14 @@ class Bill extends Model
 		return $this->hasOne(PaymentMethod::class, 'id', 'payment_method_id');
 	}
 	
-	public function position()
+	public function currency()
 	{
-		return $this->hasOne(DealPosition::class, 'id', 'deal_position_id');
+		return $this->hasOne(Currency::class, 'id', 'currency_id');
+	}
+	
+	public function location()
+	{
+		return $this->belongsTo(Location::class);
 	}
 	
 	public function positions()
@@ -281,14 +286,13 @@ class Bill extends Model
 			->withTimestamps();
 	}
 	
-	public function currency()
+	/**
+	 * @param $positionId
+	 * @return bool
+	 */
+	public function isPositionLinked($positionId)
 	{
-		return $this->hasOne(Currency::class, 'id', 'currency_id');
-	}
-	
-	public function location()
-	{
-		return $this->belongsTo(Location::class);
+		return $this->positions()->find($positionId) ? true : false;
 	}
 	
 	public function aeroflotBonusLog()

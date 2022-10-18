@@ -146,23 +146,25 @@ class PaymentController extends Controller
 			$job->handle();
 			
 			/** @var DealPosition $position */
-			$position = $bill->position;
-			/** @var Certificate $certificate */
-			$certificate = $position ? $position->certificate : null;
-			if ($certificate && $position->is_certificate_purchase) {
-				// при выставлении даты оплаты генерим и дату окончания срока действия сертификата,
-				// если это счет на позицию покупки сертификата
-				/** @var Product $product */
-				$product = $certificate ? $certificate->product : null;
-				$certificatePeriod = ($product && $product->validity && $position->is_certificate_purchase) ? $product->validity : '';
-				$certificate->expire_at = $certificatePeriod ? Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
-				$certificate->save();
-				$certificate = $certificate->fresh();
-				$certificate = $certificate->generateFile();
-				
-				//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
-				$job = new \App\Jobs\SendCertificateEmail($certificate);
-				$job->handle();
+			$positions = $bill->positions;
+			foreach($positions as $position) {
+				/** @var Certificate $certificate */
+				$certificate = $position ? $position->certificate : null;
+				if ($certificate && $position->is_certificate_purchase) {
+					// при выставлении даты оплаты генерим и дату окончания срока действия сертификата,
+					// если это счет на позицию покупки сертификата
+					/** @var Product $product */
+					$product = $certificate ? $certificate->product : null;
+					$certificatePeriod = ($product && $product->validity && $position->is_certificate_purchase) ? $product->validity : '';
+					$certificate->expire_at = $certificatePeriod ? Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
+					$certificate->save();
+					$certificate = $certificate->fresh();
+					$certificate = $certificate->generateFile();
+					
+					//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
+					$job = new \App\Jobs\SendCertificateEmail($certificate);
+					$job->handle();
+				}
 			}
 		}
 		
@@ -207,7 +209,7 @@ class PaymentController extends Controller
 		$bill->status_id = $payedStatus->id;
 		$bill->save();
 		
-		$position = $bill->position;
+		$position = $bill->positions()->first();
 		if ($position) {
 			if ($position->is_certificate_purchase) {
 				$data['message'] = trans('main.payment.оплата-успешно-принята-сертификат-будет-отправлен', ['number' => $bill->number]);

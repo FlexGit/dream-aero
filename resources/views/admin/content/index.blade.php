@@ -12,6 +12,8 @@
 		$title = 'Страницы';
 	} elseif($type == app('\App\Models\Content')::PROMOBOX_TYPE) {
 		$title = 'Промобоксы';
+	} elseif($type == app('\App\Models\Content')::WIKI_TYPE) {
+		$title = 'Wiki';
 	}
 @endphp
 
@@ -38,19 +40,21 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="table-filter mb-2">
-						<div class="d-sm-flex">
-							<div class="col">
-								<div class="form-group">
-									<label for="search_content">Поиск</label>
-									<input type="text" class="form-control" id="search_content" name="search_content" placeholder="@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя, Отзыв, Ответ @else Заголовок, Текст, Алиас @endif">
+					@if($type != app('\App\Models\Content')::WIKI_TYPE)
+						<div class="table-filter mb-2">
+							<div class="d-sm-flex">
+								<div class="col">
+									<div class="form-group">
+										<label for="search_content">Поиск</label>
+										<input type="text" class="form-control" id="search_content" name="search_content" placeholder="@if($type == app('\App\Models\Content')::REVIEWS_TYPE) Имя, Отзыв, Ответ @else Заголовок, Текст, Алиас @endif">
+									</div>
+								</div>
+								<div class="form-group align-self-end ml-auto pl-2">
+									<a href="javascript:void(0)" data-toggle="modal" data-url="/content/{{ $type }}/add" data-action="/content/{{ $type }}" data-method="POST" data-type="content" data-title="Создание" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
 								</div>
 							</div>
-							<div class="form-group align-self-end ml-auto pl-2">
-								<a href="javascript:void(0)" data-toggle="modal" data-url="/site/{{ $version }}/{{ $type }}/add" data-action="/site/{{ $version }}/{{ $type }}" data-method="POST" data-type="content" data-title="Создание" class="btn btn-secondary btn-sm" title="Добавить">Добавить</a>
-							</div>
 						</div>
-					</div>
+					@endif
 					<table id="contentTable" class="table table-hover table-sm table-bordered table-striped table-data">
 						<thead>
 						<tr>
@@ -119,7 +123,7 @@
 					id = (loadMore && $tr.length) ? $tr.data('id') : 0;
 
 				$.ajax({
-					url: '/site/{{ $version }}/{{ $type }}/list/ajax',
+					url: '/content/{{ $type }}/list/ajax',
 					type: 'GET',
 					dataType: 'json',
 					data: {

@@ -10,7 +10,7 @@
 			<select class="form-control" id="city_id" name="city_id">
 				<option value=""></option>
 				@foreach($cities ?? [] as $city)
-					<option value="{{ $city->id }}">{{ $city->name }}</option>
+					<option value="{{ $city->id }}" @if($deal->contractor && $city->id == $deal->contractor->city_id) selected @endif>{{ $city->name }}</option>
 				@endforeach
 			</select>
 		</div>

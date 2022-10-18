@@ -56,20 +56,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		$position = $this->event->dealPosition;
 		if (!$position) return null;
 		
-		//$amount = 0;
 		$bill = $position->bill;
-		/*if ($bill) {
-			// если к позиции привязан счет, то он должен быть оплачен
-			if ($bill->status->alias != Bill::PAYED_STATUS) {
-				return null;
-			}
-			$amount = $bill->amount;
-			if ($amount <= 0) return null;
-		} else {
-			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
-			$balance = $deal->balance();
-			if ($balance < 0) return null;
-		}*/
 		
 		$dealEmail = $deal->email ?? '';
 		$dealName = $deal->name ?? '';

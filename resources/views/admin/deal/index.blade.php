@@ -163,7 +163,7 @@
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=2') }}">
 @stop
 
 @section('js')
@@ -349,7 +349,7 @@
 					$contractorId = $form.find('#contractor_id'),
 					isContractorExists = $contractorId.length ? $contractorId.val().length : '';
 
-				if ($form.attr('id') === 'deal') {
+				if ($.inArray($form.attr('id'), ['deal', 'position']) !== -1) {
 					$('#contractor_search').autocomplete({
 						serviceUrl: '{{ route('contractorSearch') }}',
 						minChars: 1,
@@ -400,7 +400,7 @@
 							calcProductAmount();
 							$('#certificate_number').attr('disabled', true);
 							$('.js-certificate').text('Привязан сертификат: ' + suggestion.data.number).closest('.js-certificate-container').removeClass('hidden');
-							console.log(suggestion.data);
+							//console.log(suggestion.data);
 							if (suggestion.data.is_overdue) {
 								$('.js-is-indefinitely').removeClass('hidden');
 							}
@@ -417,10 +417,43 @@
 				}
 			});
 
+			$(document).on('click', '#positions .js-cell', function() {
+				var $checkbox = $(this).closest('tr').find('input[type="checkbox"]');
+
+				if ($checkbox.is(':checked')) {
+					$checkbox.attr('checked', false);
+					$checkbox.trigger('change');
+					$(this).closest('tr').removeClass('hovered');
+					$(this).closest('tr').find('.checkbox .fa-square').removeClass('hidden');
+					$(this).closest('tr').find('.checkbox .fa-check-square').addClass('hidden');
+				} else {
+					$checkbox.attr('checked', true);
+					$checkbox.trigger('change');
+					$(this).closest('tr').addClass('hovered');
+					$(this).closest('tr').find('.checkbox .fa-square').addClass('hidden');
+					$(this).closest('tr').find('.checkbox .fa-check-square').removeClass('hidden');
+				}
+			});
+
+			$(document).on('change', '#positions input[type="checkbox"]', function() {
+				var positionAmount = $(this).closest('tr').find('span[data-amount]').data('amount'),
+					$amount = $('#amount');
+					amount = $amount.val();
+
+				if ($(this).is(':checked')) {
+					amount = parseInt(amount) + parseInt(positionAmount);
+				} else {
+					amount = parseInt(amount) - parseInt(positionAmount);
+				}
+				if (amount < 0) amount = 0;
+				$amount.val(amount);
+			});
+
 			$(document).on('click', '.js-contractor-delete', function() {
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');
 				$('#contractor_search').val('').attr('disabled', false).focus();
 				$('#contractor_id, #city_id').val('');
+				calcProductAmount();
 			});
 
 			$(document).on('click', '.js-certificate-delete', function() {
@@ -428,6 +461,7 @@
 				$('.js-is-indefinitely').addClass('hidden');
 				$('#certificate_number').val('').attr('disabled', false).focus();
 				$('#certificate_uuid').val('');
+				calcProductAmount();
 			});
 
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely, #extra_time', function() {
@@ -461,7 +495,7 @@
 					var flightStartAt = moment(new Date($flightDate.val() + 'T' + $flightTime.val()), 'DD.MM.YYYY HH:mm'),
 						flightStopAt = moment(flightStartAt).add(duration, 'm');
 
-					if ($extraTime.val().length) {
+					if ($extraTime.length && $extraTime.val().length) {
 						flightStopAt = flightStopAt.add($extraTime.val(), 'm');
 					}
 
@@ -647,6 +681,11 @@
 				toastr.success('Список сделок обновлен!');
 			});
 
+			$(document).on('change', '#indefinitely', function(e) {
+				if ($(this).is(':checked')) {
+					$('#expire_at').val('');
+				}
+			});
 
 			$(document).on('click', '.js-send-pay-link', function(e) {
 				if (!confirm('Вы уверены, что хотите отправить ссылку на оплату Счета?')) return;

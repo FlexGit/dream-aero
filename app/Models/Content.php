@@ -74,6 +74,7 @@ class Content extends Model
 	const GUESTS_TYPE = 'guests';
 	const PAGES_TYPE = 'pages';
 	const PROMOBOX_TYPE = 'promoboxes';
+	const WIKI_TYPE = 'wiki';
 
 	const VERSION_RU = 'ru';
 	const VERSION_AERO = 'aero';

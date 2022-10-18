@@ -126,7 +126,7 @@
 					<optgroup label="{{ $city->name }}">
 						@foreach($city->locations ?? [] as $location)
 							@foreach($location->simulators ?? [] as $simulator)
-								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($locationId && $locationId == $location->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
+								<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($locationId && $locationId == $location->id && $simulatorId && $simulatorId == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
 							@endforeach
 						@endforeach
 					</optgroup>
@@ -235,16 +235,16 @@
 	</div>
 	<div class="col">
 		<div class="row">
-			<div class="col">
-				<div class="form-group">
-					<label for="extra_time">Доп. время</label>
-					<select class="form-control" id="extra_time" name="extra_time">
-						<option value="0">---</option>
-						<option value="15">15 мин</option>
-					</select>
-				</div>
-			</div>
 			@if($source)
+				<div class="col">
+					<div class="form-group">
+						<label for="extra_time">Доп. время</label>
+						<select class="form-control" id="extra_time" name="extra_time">
+							<option value="0">---</option>
+							<option value="15">15 мин</option>
+						</select>
+					</div>
+				</div>
 				<div class="col">
 					<div class="form-group">
 						<label for="is_repeated_flight">Повторный</label>

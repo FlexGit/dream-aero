@@ -21,6 +21,7 @@ use App\Models\ProductType;
 use App\Models\Status;
 use App\Repositories\CityRepository;
 use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 
 class CertificateController extends Controller
 {
@@ -187,16 +188,7 @@ class CertificateController extends Controller
 		/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {
 			$position = $certificate->position;
-			$positionBill = $position ? $position->bill : null;
-			if ($locationId && $positionBill && $positionBill->location_id != $locationId) continue;
-			if ($filterPaymentType && $positionBill) {
-				if ($filterPaymentType == 'self_made' && $positionBill->user_id) continue;
-				elseif ($filterPaymentType == 'admin_made' && !$positionBill->user_id) continue;
-			}
-			
 			$positionProduct = $position ? $position->product : null;
-			$positionBillStatus = ($positionBill && $positionBill->status) ? $positionBill->status : null;
-			$positionBillPaymentMethod = ($positionBill && $positionBill->paymentMethod) ? $positionBill->paymentMethod : null;
 			$certificateProduct = $certificate->product;
 			$certificateCity = $certificate->city;
 			$certificateStatus = $certificate->status ?? null;
@@ -213,7 +205,7 @@ class CertificateController extends Controller
 			$oldData .= (isset($certificate->data_json['location']) && $certificate->data_json['location']) ? ', локация: ' . $certificate->data_json['location'] : '';
 			$oldData .= (isset($certificate->data_json['payment_method']) && $certificate->data_json['payment_method']) ? ', способ оплаты: ' . $certificate->data_json['payment_method'] : '';
 			$oldData .= (isset($certificate->data_json['status']) && $certificate->data_json['status']) ? ', статус: ' . $certificate->data_json['status'] : '';
-			$oldData .= (isset($certificate->data_json['comment']) && $certificate->data_json['comment']) ? ', комментарий: ' . $certificate->data_json['comment'] : '';
+			//$oldData .= (isset($certificate->data_json['comment']) && $certificate->data_json['comment']) ? ', комментарий: ' . $certificate->data_json['comment'] : '';
 			
 			$certificateItems[$certificate->id] = [
 				'number' => $certificate->number,
@@ -228,11 +220,26 @@ class CertificateController extends Controller
 				'delivery_address' => $deliveryAddress,
 				'expire_at' => $certificate->expire_at ? Carbon::parse($certificate->expire_at)->format('Y-m-d') : 'бессрочно',
 				'certificate_status_name' => $certificateStatus ? $certificateStatus->name : '',
-				'bill_number' => $positionBill ? $positionBill->number : '',
-				'bill_status_alias' => $positionBillStatus ? $positionBillStatus->alias : '',
-				'bill_status_name' => $positionBillStatus ? $positionBillStatus->name : '',
-				'bill_payment_method_name' => $positionBillPaymentMethod ? $positionBillPaymentMethod->name : '',
 			];
+			
+			if ($position) {
+				foreach ($position->bills as $positionBill) {
+					if ($locationId && $positionBill->location_id != $locationId) continue;
+					/*if ($filterPaymentType && $positionBill) {
+						if ($filterPaymentType == 'self_made' && $positionBill->user_id) continue;
+						elseif ($filterPaymentType == 'admin_made' && !$positionBill->user_id) continue;
+					}*/
+					$positionBillStatus = ($positionBill && $positionBill->status) ? $positionBill->status : null;
+					$positionBillPaymentMethod = ($positionBill && $positionBill->paymentMethod) ? $positionBill->paymentMethod : null;
+					
+					$certificateItems[$certificate->id]['bills'][] = [
+						'bill_number' => $positionBill->number,
+						'bill_status_alias' => $positionBillStatus ? $positionBillStatus->alias : '',
+						'bill_status_name' => $positionBillStatus ? $positionBillStatus->name : '',
+						'bill_payment_method_name' => $positionBillPaymentMethod ? $positionBillPaymentMethod->name : '',
+					];
+				}
+			}
 		}
 		
 		$data = [
@@ -266,34 +273,24 @@ class CertificateController extends Controller
 		$certificate = Certificate::find($id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
-		$cities = City::orderBy('name')
-			->get();
+		$position = $certificate->position;
 		
-		$locations = Location::orderBy('name')
-			->get();
+		$certificateWhom = ($position && isset($position->data_json['certificate_whom']) && $position->data_json['certificate_whom']) ? $position->data_json['certificate_whom'] : '';;
+		$certificateWhomPhone = ($position && isset($position->data_json['certificate_whom_phone']) && $position->data_json['certificate_whom_phone']) ? $position->data_json['certificate_whom_phone'] : '';;
+		$comment = ($position && isset($position->data_json['comment']) && $position->data_json['comment']) ? $position->data_json['comment'] : '';
+		$deliveryAddress = ($position && isset($position->data_json['delivery_address']) && $position->data_json['delivery_address']) ? $position->data_json['delivery_address'] : '';
 		
-		$productTypes = ProductType::with(['products'])
-			->orderBy('name')
-			->get();
-		
-		$products = Product::orderBy('name')
-			->get();
-		
-		$paymentMethods = PaymentMethod::orderBy('name')
-			->get();
-
 		$statuses = Status::where('type', Status::STATUS_TYPE_CERTIFICATE)
 			->orderBy('sort')
 			->get();
 		
 		$VIEW = view('admin.certificate.modal.edit', [
 			'certificate' => $certificate,
-			'cities' => $cities,
-			'locations' => $locations,
-			'productTypes' => $productTypes,
-			'products' => $products,
-			'paymentMethods' => $paymentMethods,
 			'statuses' => $statuses,
+			'certificateWhom' => $certificateWhom,
+			'certificateWhomPhone' => $certificateWhomPhone,
+			'comment' => $comment,
+			'deliveryAddress' => $deliveryAddress,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -432,6 +429,8 @@ class CertificateController extends Controller
 		$certificate = Certificate::find($id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
+		$position = $certificate->position;
+		
 		$rules = [
 			'status_id' => 'required|numeric|min:0|not_in:0',
 		];
@@ -444,15 +443,34 @@ class CertificateController extends Controller
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
 		
-		$data = $certificate->data_json;
-		$data['comment'] = $this->request->comment;
-		$certificate->data_json = $data;
-		$certificate->status_id = $this->request->status_id;
-		if (!$certificate->save()) {
+		try {
+			\DB::beginTransaction();
+			
+			$data = $certificate->data_json;
+			$certificate->status_id = $this->request->status_id;
+			$certificate->expire_at = $this->request->indefinitely ? null : Carbon::parse($this->request->expire_at)->format('Y-m-d');
+			$data['comment'] = $this->request->comment ?? '';
+			$certificate->data_json = $data;
+			$certificate->save();
+			
+			if ($position) {
+				$data = $certificate->data_json;
+				$data['certificate_whom'] = $this->request->certificate_whom ?? '';
+				$data['certificate_whom_phone'] = $this->request->certificate_whom_phone ?? '';
+				$data['delivery_address'] = $this->request->delivery_address ?? '';
+				$position->data_json = $data;
+				$position->save();
+			}
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			\Log::debug('500 - Certificate Update ' . $certificate->id . ', ' . $e->getMessage());
+			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 		
-		return response()->json(['status' => 'success']);
+		return response()->json(['status' => 'success', 'message' => 'Сертификат успешно сохранен']);
 	}
 	
 	/**
@@ -495,20 +513,9 @@ class CertificateController extends Controller
 		$certificate = Certificate::find($this->request->certificate_id);
 		if (!$certificate) return response()->json(['status' => 'error', 'reason' => 'Сертификат не найден']);
 		
-		$bill = $position->bill;
-		if ($bill) {
-			$billStatus = $bill->status;
-			if (!$billStatus) return response()->json(['status' => 'error', 'reason' => 'Статус счета не найден']);
-			
-			// если к позиции привязан счет, то он должен быть оплачен
-			if ($billStatus->alias != Bill::PAYED_STATUS) return response()->json(['status' => 'error', 'reason' => 'Статус счета должен быть оплачен']);;
-		} else {
-			// если к позиции не привязан счет, то проверяем чтобы вся сделка была оплачена
-			$balance = $deal->balance();
-			if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Сделка должна быть оплачена']);
-		}
+		$balance = $deal->balance();
+		if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Сделка должна быть оплачена']);
 
-		//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
 		$job = new \App\Jobs\SendCertificateEmail($certificate);
 		$job->handle();
 		

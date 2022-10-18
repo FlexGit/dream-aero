@@ -1,6 +1,7 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="deal_id" name="deal_id" value="{{ $deal ? $deal->id : 0 }}">
 <input type="hidden" id="contractor_id" name="contractor_id" value="{{ $deal ? $deal->contractor_id : 0 }}">
+<input type="hidden" id="certificate_uuid" name="certificate_uuid">
 <input type="hidden" id="amount" name="amount">
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id">
 
@@ -65,7 +66,7 @@
 		<div class="form-group">
 			<label for="flight_date_at">Дата и время начала полета</label>
 			<div class="d-flex">
-				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at">
+				<input type="date" class="form-control" id="flight_date_at" name="flight_date_at">&nbsp;
 				<input type="time" class="form-control ml-2" id="flight_time_at" name="flight_time_at">
 			</div>
 			<div>
@@ -75,20 +76,20 @@
 		</div>
 	</div>
 	<div class="col">
-		<div class="form-group">
-			<label for="extra_time">Доп. время</label>
-			<select class="form-control" id="extra_time" name="extra_time">
-				<option value="0">---</option>
-				<option value="15">15 мин</option>
-			</select>
-		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col">
 		<div class="form-group">
-			<label for="certificate">Сертификат</label>
-			<input type="text" class="form-control" id="certificate" name="certificate" placeholder="Номер">
+			<label for="certificate_number">Поиск по номеру Сертификата</label>
+			<input type="text" class="form-control" id="certificate_number" name="certificate_number" placeholder="Сертификат">
+			<div class="js-certificate-container hidden">
+				<span class="js-certificate"></span> <i class="fas fa-times js-certificate-delete" title="Удалить" style="cursor: pointer;color: red;"></i>
+				<div class="custom-control custom-switch custom-control js-is-indefinitely hidden">
+					<input type="checkbox" id="is_indefinitely" name="is_indefinitely" value="1" class="custom-control-input">
+					<label class="custom-control-label font-weight-normal" for="is_indefinitely">Не учитывать ограничение по сроку действия</label>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

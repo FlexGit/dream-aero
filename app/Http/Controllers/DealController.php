@@ -694,11 +694,10 @@ class DealController extends Controller
 				$bill->user_id = $this->request->user()->id ?? 0;
 				$bill->save();
 				
-				/*if ($this->request->user()) {
-					\Log::debug($bill->number . ' - ' . $source . ' - ' . $billLocationId . ' - ' . $this->request->user()->id . ' - ' . $this->request->user()->location_id);
-				}*/
-				
 				$deal->bills()->save($bill);
+				if ($position) {
+					$bill->positions()->sync((array)$position->id);
+				}
 			}
 
 			if ($transactionType) {
@@ -1130,6 +1129,9 @@ class DealController extends Controller
 						$bill->save();
 						
 						$deal->bills()->save($bill);
+						if ($position) {
+							$bill->positions()->sync((array)$position->id);
+						}
 					}
 
 					// если сделка на бронирование по сертификату, то регистрируем сертификат
@@ -1418,6 +1420,9 @@ class DealController extends Controller
 				$bill->save();
 				
 				$deal->bills()->save($bill);
+				if ($position) {
+					$bill->positions()->sync((array)$position->id);
+				}
 				
 				if ($isPaid && $deal->balance() >= 0) {
 					$city->products()->updateExistingPivot($product->id, [

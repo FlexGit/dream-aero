@@ -47,7 +47,7 @@ class AeroflotBonusService {
 			$dateTime = date('YmdHis');
 			$orderId = $dateTime . rand(10000, 99999);
 			
-			$position = $bill->position;
+			$position = $bill->positions()->first();
 			$product = $position ? $position->product : null;
 			
 			$request = [
@@ -214,7 +214,7 @@ class AeroflotBonusService {
 			$dateTime = date('YmdHis');
 			$transactionId = $dateTime . rand(10000, 99999);
 			
-			$position = $bill->position;
+			$position = $bill->positions()->first();
 			$product = $position ? $position->product : null;
 			if (!$product) return null;
 			

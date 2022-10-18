@@ -44,23 +44,20 @@
 					{{ $certificateItem['expire_at'] }}
 				</td>
 				<td class="align-middle text-center">
-					@if($certificateItem['bill_number'])
-						{{ $certificateItem['bill_number'] }}
-					@endif
-				</td>
-				<td class="align-middle text-center text-nowrap">
-					@if($certificateItem['bill_number'])
-						@if($certificateItem['bill_status_alias'] == app('\App\Models\Bill')::PAYED_STATUS)
-							<span class="pl-2 pr-2" style="background-color: #e9ffc9;">{{ $certificateItem['bill_status_name'] }}</span>
-						@else
-							<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ $certificateItem['bill_status_name'] }}</span>
+					@foreach($certificateItem['bills'] ?? [] as $bill)
+						@if($loop->index)
+							,
 						@endif
-					@endif
-				</td>
-				<td class="align-middle text-center">
-					@if($certificateItem['bill_number'])
-						{{ $certificateItem['bill_payment_method_name'] }}
-					@endif
+						{{ $bill['bill_number'] }}
+						@if($bill['bill_payment_method_name'])
+							[{{ $bill['bill_payment_method_name'] }}]
+						@endif
+						@if($bill['bill_status_alias'] == app('\App\Models\Bill')::PAYED_STATUS)
+							<span class="pl-2 pr-2" style="background-color: #e9ffc9;">{{ $bill['bill_status_name'] }}</span>
+						@else
+							<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ $bill['bill_status_name'] }}</span>
+						@endif
+					@endforeach
 				</td>
 				<td class="align-middle text-left">
 					@if($certificateItem['comment'] || $certificateItem['certificate_whom'] || $certificateItem['certificate_whom_phone'])
