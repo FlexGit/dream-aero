@@ -16,6 +16,7 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
 			$table->string('event_type')->comment('тип события');
+			$table->integer('parent_id')->default(0)->index()->comment('событие родитель');
 			$table->integer('contractor_id')->default(0)->index()->comment('контрагент');
 			$table->integer('deal_id')->default(0)->index()->comment('сделка');
 			$table->integer('deal_position_id')->default(0)->index()->comment('позиция сделки');

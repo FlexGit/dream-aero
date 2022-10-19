@@ -179,6 +179,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::put('deal_position/certificate/{id}', [PositionController::class, 'updateCertificate']);
 			Route::post('deal_position/booking', [PositionController::class, 'storeBooking']);
 			Route::put('deal_position/booking/{id}', [PositionController::class, 'updateBooking']);
+			Route::post('deal_position/extra_minutes', [PositionController::class, 'storeExtraMinutes']);
 			Route::post('deal_position/product', [PositionController::class, 'storeProduct']);
 			Route::put('deal_position/product/{id}', [PositionController::class, 'updateProduct']);
 			Route::delete('deal_position/{id}', [PositionController::class, 'delete']);
@@ -187,6 +188,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('deal_position/certificate/{id}/edit', [PositionController::class, 'editCertificate']);
 			Route::get('deal_position/booking/add/{deal_id}', [PositionController::class, 'addBooking']);
 			Route::get('deal_position/booking/{id}/edit', [PositionController::class, 'editBooking']);
+			Route::get('deal_position/extra_minutes/add/{deal_id}', [PositionController::class, 'addExtraMinutes']);
 			Route::get('deal_position/product/add/{deal_id}', [PositionController::class, 'addProduct']);
 			Route::get('deal_position/product/{id}/edit', [PositionController::class, 'editProduct']);
 	

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\DealPosition;
+use App\Models\Event;
 use App\Models\FlightSimulator;
 use App\Models\ProductType;
 use App\Models\Promo;
@@ -116,7 +117,46 @@ class PositionController extends Controller
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
-
+	
+	/**
+	 * @param $dealId
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function addExtraMinutes($dealId)
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$deal = $this->dealRepo->getById($dealId);
+		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		
+		$user = \Auth::user();
+		
+		$products = $this->productTypeRepo->getActualProductList($user, true, true, false, true);
+		
+		$events = Event::where('deal_id', $deal->id)
+			->where('parent_id', 0)
+			->whereHas('dealPosition', function ($query) {
+				$query->whereHas('product', function ($query) {
+					$query->whereRelation('productType', function ($query) {
+						$query->whereIn('alias', [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]);
+					});
+				});
+			})
+			->oldest()
+			->get();
+		
+		$VIEW = view('admin.position.modal.extra_minutes.add', [
+			'deal' => $deal,
+			'products' => $products,
+			'events' => $events,
+		]);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
+	}
+	
 	/**
 	 * @param $dealId
 	 *
@@ -564,6 +604,146 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
 
+		return response()->json(['status' => 'success']);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function storeExtraMinutes()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$rules = [
+			'product_id' => 'required|numeric|min:0|not_in:0',
+			'event_id' => 'required|numeric|min:0|not_in:0',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'product_id' => 'Продукт',
+				'event_id' => 'Связанный полёт',
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
+		}
+		
+		$dealId = $this->request->deal_id ?? 0;
+		$productId = $this->request->product_id ?? 0;
+		$eventId = $this->request->event_id ?? 0;
+		$amount = $this->request->amount ?? 0;
+		
+		$deal = $this->dealRepo->getById($dealId);
+		if (!$deal) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
+		}
+		
+		if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
+		}
+		
+		$product = Product::find($productId);
+		if (!$product) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		}
+		
+		$parentEvent = Event::find($eventId);
+		if (!$parentEvent) {
+			return response()->json(['status' => 'error', 'reason' => 'Событие не найдена']);
+		}
+		
+		$parentPosition = $parentEvent->dealPosition;
+		if (!$parentPosition) {
+			return response()->json(['status' => 'error', 'reason' => 'Позиция не найдена']);
+		}
+		
+		$parentProduct = $parentPosition->product;
+		if ($parentProduct->productType->alias == ProductType::REGULAR_ALIAS && $product->productType->alias != ProductType::REGULAR_EXTRA_ALIAS) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт должен быть типа Regular Extra']);
+		}
+		
+		if ($parentProduct->productType->alias == ProductType::ULTIMATE_ALIAS && $product->productType->alias != ProductType::ULTIMATE_EXTRA_ALIAS) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт должен быть типа Ultimate Extra']);
+		}
+		
+		$city = $parentEvent->city;
+		if (!$city) {
+			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
+		}
+		
+		$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
+		if (!$cityProduct) {
+			return response()->json(['status' => 'error', 'reason' => 'Продукт в данном городе не найден']);
+		}
+		
+		$location = $parentEvent->location;
+		if (!$location) {
+			return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
+		}
+		
+		$simulator = $parentEvent->simulator;
+		if (!$simulator) {
+			return response()->json(['status' => 'error', 'reason' => 'Авиатренажёр не найден']);
+		}
+		
+		$stopAt = Carbon::parse($parentEvent->stop_at)->addMinutes($parentEvent->extra_time)->format('Y-m-d H:i');
+		
+		$lastChildEvent = Event::where('deal_id', $deal->id)
+			->where('parent_id', $parentEvent->id)
+			->orderByDesc('stop_at')
+			->first();
+		if ($lastChildEvent) {
+			$stopAt = $lastChildEvent->stop_at;
+		}
+		
+		try {
+			\DB::beginTransaction();
+			
+			$position = new DealPosition();
+			$position->product_id = $product->id ?? 0;
+			$position->duration = $product->duration ?? 0;
+			$position->amount = $amount;
+			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
+			$position->city_id = $city->id ?? 0;
+			$position->location_id = $location->id ?? 0;
+			$position->flight_simulator_id = $simulator->id ?? 0;
+			$position->flight_at = Carbon::parse($stopAt)->format('Y-m-d H:i');
+			$position->source = Deal::ADMIN_SOURCE;
+			$position->user_id = $this->request->user()->id ?? 0;
+			$position->save();
+			
+			$event = new Event();
+			$event->event_type = $parentEvent->event_type;
+			$event->parent_id = $parentEvent->id;
+			$event->contractor_id = $parentEvent->contractor_id;
+			$event->deal_id = $parentEvent->deal_id;
+			$event->deal_position_id = $position->id;
+			$event->city_id = $city->id ?? 0;
+			$event->location_id = $location->id ?? 0;
+			$event->flight_simulator_id = $simulator->id ?? 0;
+			$event->user_id = $user->id ?? 0;
+			$event->start_at = Carbon::parse($stopAt)->format('Y-m-d H:i');
+			$event->stop_at = Carbon::parse($stopAt)->addMinutes($product->duration)->format('Y-m-d H:i');
+			$event->save();
+
+			$event->nominal_price = $event->nominalPrice();
+			$event->save();
+			
+			$deal->positions()->save($position);
+			
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			Log::debug('500 - Position Extra Minutes Store: ' . $e->getMessage());
+			
+			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+		}
+		
 		return response()->json(['status' => 'success']);
 	}
 
@@ -1250,6 +1430,17 @@ class PositionController extends Controller
 			
 			// если это позиция на бронирование полета, то удаляем и событие тоже
 			if (!$position->is_certificate_purchase && $event) {
+				$childEvents = Event::where('parent_id', $event->id)
+					->get();
+				/** @var Event[] $childEvents */
+				foreach ($childEvents as $childEvent) {
+					$childPosition = $childEvent->dealPosition;
+					if ($childPosition) {
+						$childPosition->delete();
+					}
+					$childEvent->delete();
+				}
+
 				$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 				
 				$event->delete();
@@ -1258,10 +1449,10 @@ class PositionController extends Controller
 					Storage::disk('private')->delete($flightInvitationFilePath);
 				}
 			}
-			
+
 			$isPaid = false;
 			foreach ($position->bills as $positionBill) {
-				if ($positionBill->status && $positionBill->status->alias != Bill::NOT_PAYED_STATUS) {
+				if ($positionBill->status && $positionBill->status->alias == Bill::PAYED_STATUS) {
 					$isPaid = true;
 					break;
 				}

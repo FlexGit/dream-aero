@@ -513,6 +513,10 @@ class Event extends Model
 				else {
 					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
 				}
+			} else if ($product->productType->alias == ProductType::ULTIMATE_EXTRA_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
+			} else if ($product->productType->alias == ProductType::REGULAR_EXTRA_ALIAS && in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
 			}
 		}
 		

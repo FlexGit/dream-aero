@@ -134,6 +134,9 @@ class MainController extends Controller
 			$period = (is_array($dataJson) && array_key_exists('certificate_period', $dataJson)) ? $dataJson['certificate_period'] : 6;
 		} else {
 			$products = $city->products()
+				->whereRelation('productType', function ($query) {
+					$query->whereNotIn('alias', [ProductType::REGULAR_EXTRA_ALIAS, ProductType::ULTIMATE_EXTRA_ALIAS]);
+				})
 				->orderBy('product_type_id')
 				->orderBy('duration')
 				->get();

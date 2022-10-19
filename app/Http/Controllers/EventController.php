@@ -1057,14 +1057,35 @@ class EventController extends Controller
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
-		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
+		try {
+			\DB::beginTransaction();
+			
+			$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 		
-		if (!$event->delete()) {
+			$childEvents = Event::where('parent_id', $event->id)
+				->get();
+			/** @var Event[] $childEvents */
+			foreach ($childEvents as $childEvent) {
+				$childPosition = $childEvent->dealPosition;
+				if ($childPosition) {
+					$childPosition->delete();
+				}
+				$childEvent->delete();
+			}
+			
+			$event->delete();
+			
+			if ($flightInvitationFilePath) {
+				Storage::disk('private')->delete($flightInvitationFilePath);
+			}
+			
+			\DB::commit();
+		} catch (Throwable $e) {
+			\DB::rollback();
+			
+			\Log::debug('500 - Event Delete: ' . $e->getMessage());
+			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
-		}
-		
-		if ($flightInvitationFilePath) {
-			Storage::disk('private')->delete($flightInvitationFilePath);
 		}
 		
 		return response()->json(['status' => 'success']);

@@ -231,7 +231,11 @@
 										@else
 											<div class="font-weight-bold">Бронирование</div>
 											<div class="d-inline-block">
-												<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование {{ $position->number }}">{{ $position->number }}</a>
+												@if($position->product && $position->product->productType && in_array($position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_EXTRA_ALIAS, app('\App\Models\ProductType')::ULTIMATE_EXTRA_ALIAS]))
+													{{ $position->number }}
+												@else
+													<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/{{ $position->id }}/edit" data-action="/deal_position/booking/{{ $position->id }}" data-method="PUT" data-type="position" data-title="Редактирование позиции на бронирование {{ $position->number }}">{{ $position->number }}</a>
+												@endif
 											</div>
 											<div class="d-inline-block ml-2">
 												<a href="javascript:void(0)" class="js-remove-position" data-id="{{ $position->id }}" title="Удалить позицию"><i class="fas fa-times" style="color: #aaa;"></i></a>
@@ -382,9 +386,11 @@
 										(+ {{ $deal->event->extra_time }} мин)
 									@endif--}}
 								</div>
-								<div class="d-inline-block ml-2">
-									<a href="javascript:void(0)" class="js-remove-event" data-id="{{ $position->event->id }}" title="Удалить событие"><i class="fas fa-times" style="color: #aaa;"></i></a>
-								</div>
+								@if($position->product && $position->product->productType && !in_array($position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_EXTRA_ALIAS, app('\App\Models\ProductType')::ULTIMATE_EXTRA_ALIAS]))
+									<div class="d-inline-block ml-2">
+										<a href="javascript:void(0)" class="js-remove-event" data-id="{{ $position->event->id }}" title="Удалить событие"><i class="fas fa-times" style="color: #aaa;"></i></a>
+									</div>
+								@endif
 								@if($position->event->location)
 									<div title="Локация полета">
 										<i class="fas fa-map-marker-alt"></i> {{ $position->event->location->name }}
@@ -398,18 +404,20 @@
 								@if($position->event->event_type == app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT)
 									<div><span class="font-weight-bold">Тестовый полет</span></div>
 								@endif
-								<div>
-									@if ($position->event->uuid)
-										<a href="{{ route('getFlightInvitation', ['uuid' => $position->event->uuid ]) }}">
-											<i class="far fa-file-alt" title="Скачать Приглашение на полет"></i>
-										</a>
-									@endif
-									@if($position->event->flight_invitation_sent_at)
-										<a href="javascript:void(0)" class="js-send-flight-invitation-link ml-2" data-id="{{ $position->id }}" data-event_id="{{ $position->event->id }}" title="Приглашение на полет отправлено {{ $position->event->flight_invitation_sent_at }}"><i class="far fa-envelope-open"></i></a>
-									@else
-										<a href="javascript:void(0)" class="js-send-flight-invitation-link ml-2" data-id="{{ $position->id }}" data-event_id="{{ $position->event->id }}" title="Приглашение на полет пока не отправлено"><i class="far fa-envelope"></i></a>
-									@endif
-								</div>
+								@if($position->product && $position->product->productType && !in_array($position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_EXTRA_ALIAS, app('\App\Models\ProductType')::ULTIMATE_EXTRA_ALIAS]))
+									<div>
+										@if ($position->event->uuid)
+											<a href="{{ route('getFlightInvitation', ['uuid' => $position->event->uuid ]) }}">
+												<i class="far fa-file-alt" title="Скачать Приглашение на полет"></i>
+											</a>
+										@endif
+										@if($position->event->flight_invitation_sent_at)
+											<a href="javascript:void(0)" class="js-send-flight-invitation-link ml-2" data-id="{{ $position->id }}" data-event_id="{{ $position->event->id }}" title="Приглашение на полет отправлено {{ $position->event->flight_invitation_sent_at }}"><i class="far fa-envelope-open"></i></a>
+										@else
+											<a href="javascript:void(0)" class="js-send-flight-invitation-link ml-2" data-id="{{ $position->id }}" data-event_id="{{ $position->event->id }}" title="Приглашение на полет пока не отправлено"><i class="far fa-envelope"></i></a>
+										@endif
+									</div>
+								@endif
 								@if(count($position->event->comments))
 									<div class="text-center mt-2" style="margin: 0 auto;max-width: 300px;" title="Комментарий к полету">
 										<div class="text-left" style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;white-space: normal;">
@@ -435,9 +443,11 @@
 						<td class="text-center align-middle">
 							@if(!$position->is_certificate_purchase && $position->location)
 								@if($position->event && $position->event->event_type != app('\App\Models\Event')::EVENT_TYPE_TEST_FLIGHT)
-									<div>
-										<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $position->event->id }}/edit" data-action="/event/{{ $position->event->id }}" data-method="PUT" data-title="Редактирование события" data-type="event" title="Редактировать событие" class="btn btn-success btn-sm"><i class="far fa-calendar-alt"></i></a>
-									</div>
+									@if($position->product && $position->product->productType && !in_array($position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_EXTRA_ALIAS, app('\App\Models\ProductType')::ULTIMATE_EXTRA_ALIAS]))
+										<div>
+											<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $position->event->id }}/edit" data-action="/event/{{ $position->event->id }}" data-method="PUT" data-title="Редактирование события" data-type="event" title="Редактировать событие" class="btn btn-success btn-sm"><i class="far fa-calendar-alt"></i></a>
+										</div>
+									@endif
 								@else
 									<div>
 										<a href="javascript:void(0)" data-toggle="modal" data-url="/event/{{ $position->id }}/add" data-action="/event" data-method="POST" data-title="Создание события" data-type="event" title="Создать событие" class="btn btn-warning btn-sm"><i class="far fa-calendar-plus"></i></a>
@@ -455,6 +465,7 @@
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink-{{ $deal->id }}" style="z-index: 9999;">
 						<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/certificate/add/{{ $deal->id }}" data-action="/deal_position/certificate" data-method="POST" data-type="position" data-title="Новая позиция на покупку сертификата в сделке {{ $deal->number }}" class="btn btn-secondary btn-sm dropdown-item">Покупка сертификата</a>
 						<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/booking/add/{{ $deal->id }}" data-action="/deal_position/booking" data-method="POST" data-type="position" data-title="Новая позиция на бронирование в сделке {{ $deal->number }}" class="btn btn-secondary btn-sm dropdown-item">Бронирование</a>
+						<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/extra_minutes/add/{{ $deal->id }}" data-action="/deal_position/extra_minutes" data-method="POST" data-type="position" data-title="Новая позиция на дополнительные минуты в сделке {{ $deal->number }}" class="btn btn-secondary btn-sm dropdown-item">Дополнительные минуты</a>
 						<a href="javascript:void(0)" data-toggle="modal" data-url="/deal_position/product/add/{{ $deal->id }}" data-action="/deal_position/product" data-method="POST" data-type="position" data-title="Новая позиция на товар / услугу в сделке {{ $deal->number }}" class="btn btn-secondary btn-sm dropdown-item">Товар / услуга</a>
 					</div>
 				</div>

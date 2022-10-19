@@ -65,6 +65,8 @@ class ProductType extends Model
 	const PLATINUM_ALIAS = 'platinum';
 	const VIP_ALIAS = 'vip';
 	const SERVICES_ALIAS = 'services';
+	const REGULAR_EXTRA_ALIAS = 'regular_extra';
+	const ULTIMATE_EXTRA_ALIAS = 'ultimate_extra';
 
 	const RU_VERSION = 'ru';
 	const EN_VERSION = 'en';
