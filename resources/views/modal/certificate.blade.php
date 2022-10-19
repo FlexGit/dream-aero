@@ -55,6 +55,9 @@
 							@if(!$productItem->is_active)
 								@continue
 							@endif
+							@if($productItem->alias == 'advanced')
+								@continue
+							@endif
 							<option value="{{ $productItem->id }}" data-product-type-alias="{{ $productItem->productType ? $productItem->productType->alias : '' }}" data-product-duration="{{ $productItem->duration }}" data-alias="{{ $productItem->alias }}">{{ $productItem->name }}</option>
 							@php($productTypeName = $productItem->productType->name)
 						@endforeach
@@ -99,7 +102,7 @@
 			</div>
 		@endif
 		<div class="clearfix"></div>
-		@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS]) && ($product->alias != 'fly_no_fear')) || !$product)
+		@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS]) && ($product->alias != 'fly_no_fear')) || !$product || $products)
 			<div class="promocode_container">
 				<div style="display: flex;">
 					<div class="switch_box" style="margin-bottom: 10px;">

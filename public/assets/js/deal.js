@@ -362,6 +362,15 @@ $(function() {
 		} else {
 			$('.aeroflot_container').show();
 		}
+
+		if ($('.js-promocode-remove').is(':visible')) {
+			$('.js-promocode-remove').trigger('click');
+		}
+		if ($.inArray($(this).find(':selected').data('alias'), ['platinum', 'basic', 'expert', 'lekha', 'yashin', 'fly_no_fear']) !== -1) {
+			$('.promocode_container').hide();
+		} else {
+			$('.promocode_container').show();
+		}
 	});
 
 	$(document).on('keyup', '#certificate_number', function() {
