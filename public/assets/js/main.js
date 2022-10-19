@@ -88,7 +88,7 @@ $(function(){
 		$.magnificPopup.close();
 	});
 
-	/*var wow = new WOW({
+	var wow = new WOW({
 		boxClass:'wow',
 		animateClass:'animated',
 		offset:0,
@@ -97,7 +97,7 @@ $(function(){
 		scrollContainer:null
 	});
 
-	wow.init();*/
+	wow.init();
 
 	$(window).on('resize',function(){
 		bodyPadding();

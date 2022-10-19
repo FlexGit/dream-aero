@@ -370,3 +370,21 @@ h1.block-title:after {
 		bottom: 0;
 	}
 }
+.aerbonus_btns {
+	display: flex;
+	justify-content: space-around;
+}
+.aerbonus_btns .plan-time {
+	width: 45%;
+	cursor: pointer;
+	text-align: center;
+	border: 1px solid #b6bfcb;
+	border-radius: 4px;
+	background-color: #fff;
+}
+.aerbonus_btns .plan-time:hover,
+.aerbonus_btns .plan-time.active {
+	border: 1px solid #ff8200;
+	-webkit-transform: translateY(-4px);
+	transform: translateY(-4px);
+}

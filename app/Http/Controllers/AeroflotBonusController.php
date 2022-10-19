@@ -89,14 +89,14 @@ class AeroflotBonusController extends Controller {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.не-передан-номер-карты')]);
 		}
 		
-		$html = '<ul class="aerbonus_btns">
-					<li id="charge" class="plan-time">
+		$html = '<div class="aerbonus_btns">
+					<div id="charge" class="plan-time">
 						' . trans('main.modal-certificate.начислить-мили') . '
-					</li>
-					<li id="use" class="plan-time">
+					</div>
+					<div id="use" class="plan-time">
 						' . trans('main.modal-certificate.использовать-мили') . '
-					</li>
-				</ul>
+					</div>
+				</div>
 				<div id="bonus_info"></div>';
 		
 		if (strlen($cardNumber) <= 8 && strlen($cardNumber) >= 4) {

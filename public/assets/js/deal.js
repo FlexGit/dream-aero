@@ -353,6 +353,15 @@ $(function() {
 
 	$(document).on('change', '#product', function() {
 		calcAmount();
+
+		if ($('.js-aeroflot-card-remove').is(':visible')) {
+			$('.js-aeroflot-card-remove').trigger('click');
+		}
+		if ($.inArray($(this).find(':selected').data('alias'), ['fly_no_fear']) !== -1) {
+			$('.aeroflot_container').hide();
+		} else {
+			$('.aeroflot_container').show();
+		}
 	});
 
 	$(document).on('keyup', '#certificate_number', function() {

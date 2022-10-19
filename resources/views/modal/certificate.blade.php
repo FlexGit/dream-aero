@@ -55,7 +55,7 @@
 							@if(!$productItem->is_active)
 								@continue
 							@endif
-							<option value="{{ $productItem->id }}" data-product-type-alias="{{ $productItem->productType ? $productItem->productType->alias : '' }}" data-product-duration="{{ $productItem->duration }}">{{ $productItem->name }}</option>
+							<option value="{{ $productItem->id }}" data-product-type-alias="{{ $productItem->productType ? $productItem->productType->alias : '' }}" data-product-duration="{{ $productItem->duration }}" data-alias="{{ $productItem->alias }}">{{ $productItem->name }}</option>
 							@php($productTypeName = $productItem->productType->name)
 						@endforeach
 					</select>
@@ -119,7 +119,7 @@
 				<small class="promocode_note" style="display: none;">* @lang('main.modal-certificate.не-суммируется-с-другими-акциями-и-предложениями')</small>
 			</div>
 		@endif
-		@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($product->alias != 'fly_no_fear')) || !$product)
+		@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($product->alias != 'fly_no_fear')) || !$product || $products)
 			<div class="aeroflot_container">
 				<div style="display: flex;">
 					<div class="switch_box" style="margin-bottom: 10px;">
@@ -128,7 +128,7 @@
 							<span class="slider round"></span>
 						</label><span>@lang('main.modal-certificate.есть-карта-аэрофлот')</span>
 					</div>
-					<div style="display: flex;width: 100%;">
+					<div style="display: flex;width: 90%;">
 						<div style="width: 100%;">
 							<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" style="display: none;margin-bottom: 0;padding-top: 5px;">
 						</div>

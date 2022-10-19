@@ -78,10 +78,10 @@
 													<div style="color: #56BA76;font-weight: 600;margin: 10px;">Ваша скидка подтверждена и после использования миль составила {{ $bill->aeroflot_bonus_amount }} рублей</div>
 												@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::REGISTERED_STATE)
 													<div style="color:#ff8200;font-weight:600;margin:10px">Ваша скидка в размере {{ $bill->aeroflot_bonus_amount }} рублей пока не подтверждена. Пожалуйста, подождите и обновите статус позже!</div>
-													<ul class="aerbonus_btns" style="padding-inline-start: 10px;">
-														<li class="js-use-retry" data-uuid="{{ $bill->uuid }}">Повторить попытку</li>
-														<li class="js-status-refresh" data-uuid="{{ $bill->uuid }}">Обновить статус</li>
-													</ul>
+													<div class="aerbonus_btns">
+														<div class="js-use-retry" data-uuid="{{ $bill->uuid }}">Повторить попытку</div>
+														<div class="js-status-refresh" data-uuid="{{ $bill->uuid }}">Обновить статус</div>
+													</div>
 												@elseif($bill->aeroflot_state == app('\App\Services\AeroflotBonusService')::CANCEL_STATE)
 													<div style="color: red;font-weight: 600;margin: 10px">Извините, Ваша скидка в размере {{ $bill->aeroflot_bonus_amount }} рублей была отклонена!</div>
 													<ul class="aerbonus_btns" style="padding-inline-start: 10px;">
@@ -101,7 +101,7 @@
 																	<span class="slider round"></span>
 																</label><span style="font-size: 15px;font-weight: normal;">@lang('main.modal-certificate.есть-карта-аэрофлот')</span>
 															</div>
-															<div style="display: flex;width: 100%;">
+															<div style="display: flex;width: 90%;">
 																<div style="width: 100%;">
 																	<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" style="display: none;margin-bottom: 0;padding-top: 0;padding-bottom: 0;font-size: 13px;">
 																</div>
@@ -149,7 +149,7 @@
 
 @push('scripts')
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
-	<script src="{{ asset('js/deal.js?v=1') }}"></script>
+	<script src="{{ asset('js/deal.js?v=2') }}"></script>
 	<script>
 		$(function() {
 			@if(!$error && $payType)

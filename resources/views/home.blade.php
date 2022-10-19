@@ -249,5 +249,5 @@
 	<script src="{{ asset('js/owl.carousel.js') }}"></script>
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
 	<script src="{{ asset('js/mainonly.js?v=2') }}"></script>
-	<script src="{{ asset('js/deal.js?v=1') }}"></script>
+	<script src="{{ asset('js/deal.js?v=2') }}"></script>
 @endpush

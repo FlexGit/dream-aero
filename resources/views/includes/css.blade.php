@@ -1,5 +1,5 @@
 <link href="{{ asset('css/styles.min.css?v=5') }}" rel="stylesheet" type="text/css" />
-<link href="{{ asset('css/default.css?v=13') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('css/default.css?v=14') }}" rel="stylesheet" type="text/css" />
 
 <style type="text/css">
 	.modal-header {
