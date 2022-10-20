@@ -48,6 +48,15 @@ class SendFlightInvitationEmail extends Command
 			->whereNull('flight_invitation_sent_at')
 			->whereNull('simulator_up_at')
 			->where('parent_id', 0)
+			->whereRelation('dealPosition', function ($query) {
+				$query->whereRelation('bills', function ($query) {
+					$query->whereRelation('paymentMethod', function ($query) {
+						$query->where('alias', PaymentMethod::ONLINE_ALIAS);
+					})->whereRelation('status', function ($query) {
+						$query->where('alias', Bill::PAYED_STATUS);
+					});
+				});
+			})
 			->latest()
 			->limit(100)
 			->get();
@@ -56,23 +65,23 @@ class SendFlightInvitationEmail extends Command
 			if (!$event->uuid) continue;
 			
 			/** @var DealPosition $position */
-			$position = $event->dealPosition;
-			if (!$position) continue;
+			/*$position = $event->dealPosition;
+			if (!$position) continue;*/
 			
 			if (!$position->is_certificate_purchase && $position->certificate) continue;
 		
 			/** @var Deal $deal */
-			$deal = $position->deal;
-			if (!$deal) continue;
+			/*$deal = $position->deal;
+			if (!$deal) continue;*/
 		
-			$isOnlinePaymentMethodExist = false;
+			/*$isOnlinePaymentMethodExist = false;
 			foreach ($position->bills as $bill) {
 				if ($bill->status && $bill->status->alias == Bill::PAYED_STATUS && $bill->paymentMethod && $bill->paymentMethod->alias = PaymentMethod::ONLINE_ALIAS) {
 					$isOnlinePaymentMethodExist = true;
 					break;
 				}
 			}
-			if (!$isOnlinePaymentMethodExist) continue;
+			if (!$isOnlinePaymentMethodExist) continue;*/
 			
 			$balance = $position->balance();
 			if ($balance < 0) continue;
