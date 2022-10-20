@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Repositories\ProductTypeRepository;
+use Bukashk0zzz\YmlGenerator\Model\Currency;
 use Bukashk0zzz\YmlGenerator\Model\ShopInfo;
 use Illuminate\Console\Command;
 use Bukashk0zzz\YmlGenerator\Model\Offer\OfferSimple;
@@ -65,6 +66,22 @@ class YandexMarket extends Command
 			->setEncoding('UTF-8')
 		;
 	
+		// Creating ShopInfo object
+		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#shop)
+		$shopInfo = (new ShopInfo())
+			->setName('Dream Aero')
+			->setCompany('Dream Aero')
+			->setUrl('https://dream-aero.ru')
+		;
+	
+		// Creating currencies array
+		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#currencies)
+		$currencies = [];
+		$currencies[] = (new Currency())
+			->setId('RUB')
+			->setRate(1)
+		;
+	
 		// Creating categories array
 		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#categories)
 		$categories = [];
@@ -94,8 +111,8 @@ class YandexMarket extends Command
 		}
 
 		(new Generator($settings))->generate(
-			new ShopInfo(),
-			[],
+			$shopInfo,
+			$currencies,
 			$categories,
 			$offers
 		);
