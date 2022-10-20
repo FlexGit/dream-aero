@@ -23,13 +23,6 @@
 										<b>Здравствуйте{{ $name ? ', ' . $name : '' }}!</b></p>
 									<p style="margin:15px 30px 33px;text-align:left;font-size:14px;line-height:30px;color:#484a42;">
 										Мы рады сообщить, что Вы записаны на полет на авиатренажере Dream Aero {{ $simulator->name ?? '' }}.<br>Будем рады видеть Вас {{ $flightDate }} по адресу {{ $address }}, тел. {{ $phone }}.
-										{{--@if($amount > 0 && $payLink)
-											<br>
-											Сумма к оплате {{ $amount }} рублей.
-											<br>
-											<br>
-											<a href="{{ $payLink }}" target="_blank" rel=" noopener noreferrer">ссылка для оплаты</a>
-										@endif--}}
 									</p>
 
 									<p style="border-top:2px solid #e5e5e5;font-size:5px;line-height:5px;margin:0 30px 29px;">&nbsp;</p>

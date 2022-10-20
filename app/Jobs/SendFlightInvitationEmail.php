@@ -56,8 +56,6 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		$position = $this->event->dealPosition;
 		if (!$position) return null;
 		
-		$bill = $position->bill;
-		
 		$dealEmail = $deal->email ?? '';
 		$dealName = $deal->name ?? '';
 		$contractorEmail = $contractor->email ?? '';
@@ -74,9 +72,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			'flightDate' => $this->event->start_at ?? '',
 			'location' => $location,
 			'simulator' => $simulator,
-			'amount' => $bill->amount ?? 0,
 			'city' => $city,
-			'payLink' => $bill ? ((($city->version == City::EN_VERSION) ? url('//' . env('DOMAIN_EN')) : url('//' . env('DOMAIN_RU'))) . '/payment/' . $bill->uuid) : '',
 		];
 		
 		$recipients = $bcc = [];
