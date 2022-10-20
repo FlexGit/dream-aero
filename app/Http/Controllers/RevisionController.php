@@ -87,7 +87,7 @@ class RevisionController extends Controller
 				$field = 'score';
 			break;*/
 			case 'events':
-				$field = 'start_at';
+				$field = 'uuid';
 			break;
 			case 'users':
 				$field = 'lastname';
