@@ -50,11 +50,8 @@ class SendFlightInvitationEmail extends Command
 			->where('parent_id', 0)
 			->whereRelation('dealPosition', function ($query) {
 				$query->whereRelation('bills', function ($query) {
-					$query->whereRelation('paymentMethod', function ($query) {
-						$query->where('alias', PaymentMethod::ONLINE_ALIAS);
-					})->whereRelation('status', function ($query) {
-						$query->where('alias', Bill::PAYED_STATUS);
-					});
+					$query->whereRelation('paymentMethod', 'payment_methods.alias', '=', PaymentMethod::ONLINE_ALIAS)
+						->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS);
 				});
 			})
 			->latest()
