@@ -69,7 +69,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		
 		$messageData = [
 			'name' => $dealName ?: $contractorName,
-			'flightDate' => $this->event->start_at ?? '',
+			'flightDate' => $this->event->start_at ? Carbon::parse($this->event->start_at)->format('d.m.Y H:i') : '',
 			'location' => $location,
 			'simulator' => $simulator,
 			'city' => $city,
