@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8731d93c5344cb4c660e920d01edfea6",
+    "content-hash": "48cc85393f5d9cba9b402e113377b1ec",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -254,6 +254,66 @@
                 }
             ],
             "time": "2021-08-15T20:50:18+00:00"
+        },
+        {
+            "name": "bukashk0zzz/yml-generator",
+            "version": "v1.11.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Bukashk0zzz/YmlGenerator.git",
+                "reference": "1a806fac06c62b1444614328ff5624f6f95fe4f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Bukashk0zzz/YmlGenerator/zipball/1a806fac06c62b1444614328ff5624f6f95fe4f2",
+                "reference": "1a806fac06c62b1444614328ff5624f6f95fe4f2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.6.1"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+                "escapestudios/symfony2-coding-standard": "^3.0",
+                "ext-dom": "*",
+                "friendsofphp/php-cs-fixer": "^2.3",
+                "fzaninotto/faker": "^1.6",
+                "phpcompatibility/php-compatibility": "^9.0",
+                "phpunit/phpunit": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bukashk0zzz\\YmlGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Denis Golubovskiy",
+                    "email": "bukashk0zzz@gmail.com",
+                    "role": "Creator"
+                }
+            ],
+            "description": "YML (Yandex Market Language) file generator",
+            "homepage": "https://github.com/Bukashk0zzz/YmlGenerator",
+            "keywords": [
+                "market",
+                "yandex",
+                "yml",
+                "yml-generator"
+            ],
+            "support": {
+                "email": "bukashk0zzz@gmail.com",
+                "issues": "https://github.com/Bukashk0zzz/YmlGenerator/issues",
+                "source": "https://github.com/Bukashk0zzz/YmlGenerator/tree/v1.11.6"
+            },
+            "time": "2022-09-14T12:48:29+00:00"
         },
         {
             "name": "composer/ca-bundle",

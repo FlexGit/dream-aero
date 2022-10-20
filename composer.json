@@ -8,6 +8,7 @@
     "php": "^7.3|^8.0",
     "ext-json": "*",
     "barryvdh/laravel-ide-helper": "^2.10",
+    "bukashk0zzz/yml-generator": "^1.11",
     "fruitcake/laravel-cors": "^3.0",
     "guzzlehttp/guzzle": "^7.0.1",
     "hisorange/browser-detect": "^4.5",
