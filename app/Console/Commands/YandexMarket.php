@@ -78,7 +78,7 @@ class YandexMarket extends Command
 		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#currencies)
 		$currencies = [];
 		$currencies[] = (new Currency())
-			->setId('RUB')
+			->setId('RUR')
 			->setRate(1)
 		;
 	
@@ -103,7 +103,7 @@ class YandexMarket extends Command
 					->setAvailable(true)
 					->setUrl('https://dream-aero.ru/price')
 					->setPrice($cityProduct->pivot->price)
-					->setCurrencyId('RUB')
+					->setCurrencyId('RUR')
 					->setCategoryId(1)
 					->setDelivery(true)
 					->setName($product->name . ' ' . $city->name);
