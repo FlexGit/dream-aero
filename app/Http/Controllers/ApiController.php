@@ -1168,6 +1168,7 @@ class ApiController extends Controller
 		$tariffTypes = ProductType::where('is_tariff', true)
 			->where('is_active', true)
 			->where('version', ProductType::RU_VERSION)
+			->whereNotIn('alias', [ProductType::REGULAR_EXTRA_ALIAS, ProductType::ULTIMATE_EXTRA_ALIAS])
 			->get();
 		
 		if ($tariffTypes->isEmpty()) {
