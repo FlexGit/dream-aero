@@ -196,7 +196,7 @@ class AeroflotBonusService {
 			
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . $fields['request'] . '. Rsponse: ' . $fields['response']);
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage());
 			
 			return null;
 		}

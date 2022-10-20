@@ -1,8 +1,3 @@
-@php
-	$position = $bill->position ?? null;
-	$product = $position ? $position->product : null;
-@endphp
-
 @extends('layouts.master')
 
 @section('title')
@@ -89,8 +84,7 @@
 													</ul>
 												@endif
 											@else
-												{{--@if($_SERVER['REMOTE_ADDR'] == '79.165.99.239')--}}
-												@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($product->alias != 'fly_no_fear')) || !$product)
+												@if(($product && $product->productType && in_array($product->productType->alias, [app('\App\Models\ProductType')::REGULAR_ALIAS, app('\App\Models\ProductType')::ULTIMATE_ALIAS, app('\App\Models\ProductType')::COURSES_ALIAS]) && ($product->alias != 'fly_no_fear')))
 														<input type="hidden" id="product" value="{{ $product ? $product->id : 0 }}">
 
 														<div class="aeroflot_container" style="margin-left: 0;margin-right: 0;">
@@ -113,7 +107,6 @@
 														<div class="aeroflot-buttons-container"></div>
 													</div>
 												@endif
-												{{--@endif--}}
 											@endif
 										@endif
 										<div class="aeroflot-loader"></div>

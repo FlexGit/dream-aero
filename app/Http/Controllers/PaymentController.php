@@ -95,12 +95,16 @@ class PaymentController extends Controller
 			$bill = $bill->fresh();
 		}
 		
+		$position = $bill->positions()->oldest()->first();
+		$product = $position ? $position->product : null;
+		
 		$paymentFormHtml = PayAnyWayService::generatePaymentForm($bill);
 		
 		return view('payment', [
 			'page' => $page ?? new Content,
 			'city' => $city,
 			'bill' => $bill,
+			'product' => $product,
 			'deal' => $deal,
 			'html' => $paymentFormHtml ?? '',
 			'error' => '',
