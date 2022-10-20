@@ -467,13 +467,15 @@
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely, #extra_time', function() {
 				calcProductAmount();
 
-				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at', 'extra_time', 'location_id']) !== -1) {
+				if ($.inArray($(this).attr('id'), ['product_id', 'flight_date_at', 'flight_time_at', 'extra_time', 'location_id']) !== -1 && $('#flight_date_at').is(':visible')) {
 					validateFlightDate();
 				}
 			});
 
 			$(document).on('keyup', '#product_id, #flight_date_at, #flight_time_at, #extra_time, #location_id', function() {
-				validateFlightDate();
+				if ($('#flight_date_at').is(':visible')) {
+					validateFlightDate();
+				}
 			});
 
 			/*$(document).on('keyup', '#certificate', function() {
@@ -539,23 +541,25 @@
 			}
 
 			function calcProductAmount() {
+				var data = {
+					'product_id': $('#product_id').val(),
+					'contractor_id': $('#contractor_id').val(),
+					'promo_id': $('#promo_id').val(),
+					'promocode_id': $('#promocode_id').val(),
+					/*'payment_method_id': $('#payment_method_id').val(),*/
+					'city_id': $('#city_id').val(),
+					'location_id': $('#location_id').val(),
+					'certificate_uuid': $('#certificate_uuid').val(),
+					'is_free': ($('#is_free').is(':checked') || $('#is_indefinitely').is(':checked')) ? 1 : 0,
+					'score': $('#score').val(),
+					'is_certificate_purchase': $('#is_certificate_purchase').val(),
+				};
+				//console.log(data);
 				$.ajax({
 					url: "{{ route('calcProductAmount') }}",
 					type: 'GET',
 					dataType: 'json',
-					data: {
-						'product_id': $('#product_id').val(),
-						'contractor_id': $('#contractor_id').val(),
-						'promo_id': $('#promo_id').val(),
-						'promocode_id': $('#promocode_id').val(),
-						/*'payment_method_id': $('#payment_method_id').val(),*/
-						'city_id': $('#city_id').val(),
-						'location_id': $('#location_id').val(),
-						'certificate_uuid': $('#certificate_uuid').val(),
-						'is_free': ($('#is_free').is(':checked') || $('#is_indefinitely').is(':checked')) ? 1 : 0,
-						'score': $('#score').val(),
-						'is_certificate_purchase': $('#is_certificate_purchase').val(),
-					},
+					data: data,
 					success: function(result) {
 						//console.log(result);
 						if (result.status !== 'success') {
@@ -784,6 +788,10 @@
 						getList(false);
 					}
 				});
+			});
+
+			$(document).on('click', '.js-current-time', function(e) {
+				$(this).closest('.input-group').find('input[type="time"]').val(moment().format('hh:mm'));
 			});
 
 			$.fn.isInViewport = function () {

@@ -323,15 +323,21 @@
 			</div>
 			<div class="tab-pane fade" id="simulator">
 				<div class="row mt-3">
-					<div class="col-4">
-						<div class="form-group">
-							<label for="simulator_up_at">Время поднятия платформы</label>
+					<div class="col-3">
+						<label for="simulator_up_at">Время поднятия платформы</label>
+						<div class="input-group">
+							<span class="input-group-btn">
+        						<button class="btn btn-default js-current-time" type="button">Текущее</button>
+      						</span>
 							<input type="time" class="form-control" id="simulator_up_at" name="simulator_up_at" value="{{ $event->simulator_up_at ? $event->simulator_up_at->format('H:i') : '' }}">
 						</div>
 					</div>
-					<div class="col-4">
-						<div class="form-group">
-							<label for="simulator_down_at">Время опускания платформы</label>
+					<div class="col-3">
+						<label for="simulator_down_at">Время опускания платформы</label>
+						<div class="input-group">
+							<span class="input-group-btn">
+        						<button class="btn btn-default js-current-time" type="button">Текущее</button>
+      						</span>
 							<input type="time" class="form-control" id="simulator_down_at" name="simulator_down_at" value="{{ $event->simulator_down_at ? $event->simulator_down_at->format('H:i') : '' }}">
 						</div>
 					</div>
