@@ -2976,7 +2976,7 @@ class ApiController extends Controller
 			$bill = new Bill();
 			$bill->contractor_id = $contractor->id ?? 0;
 			$bill->deal_id = $deal->id ?? 0;
-			$bill->deal_position_id = $position->id ?? 0;
+			//$bill->deal_position_id = $position->id ?? 0;
 			$bill->location_id = $billLocationId;
 			$bill->payment_method_id = $isCertificatePurchase ? $onlinePaymentMethod->id : 0;
 			$bill->status_id = $billStatus->id ?? 0;
@@ -2985,6 +2985,9 @@ class ApiController extends Controller
 			$bill->save();
 			
 			$deal->bills()->save($bill);
+			if ($position) {
+				$bill->positions()->sync((array)$position->id);
+			}
 			
 			\DB::commit();
 		} catch (Throwable $e) {

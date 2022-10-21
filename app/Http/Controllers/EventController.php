@@ -631,40 +631,6 @@ class EventController extends Controller
 					$event->nominal_price = $event->nominalPrice();
 					$event->save();
 					
-					/*if ($position->amount && $position->deal) {
-						$onlinePaymentMethod = HelpFunctions::getEntityByAlias(PaymentMethod::class, Bill::ONLINE_PAYMENT_METHOD);
-						$billStatus = HelpFunctions::getEntityByAlias(Status::class, Bill::NOT_PAYED_STATUS);
-						
-						if ($city->version == City::EN_VERSION) {
-							$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::USD_ALIAS);
-						} else {
-							$currency = HelpFunctions::getEntityByAlias(Currency::class, Currency::RUB_ALIAS);
-						}
-						
-						$location = $city->getLocationForBill();
-						if (!$location) {
-							\DB::rollback();
-							
-							\Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
-							
-							return response()->json(['status' => 'error', 'reason' => 'Не найден номер счета платежной системы!']);
-						}
-						
-						$bill = new Bill();
-						$bill->contractor_id = ($position->deal && $position->deal->contractor) ? $position->deal->contractor->id : 0;
-						$bill->deal_id = $position->deal ? $position->deal->id : 0;
-						$bill->deal_position_id = $position->id ?? 0;
-						$bill->location_id = $location->id ?? 0;
-						$bill->payment_method_id = $onlinePaymentMethod->id ?: $this->request->payment_method_id;
-						$bill->status_id = $billStatus->id ?? 0;
-						$bill->amount = $position->amount;
-						$bill->currency_id = $currency->id ?? 0;
-						$bill->user_id = $this->request->user()->id ?? 0;
-						$bill->save();
-						
-						$position->deal->bills()->save($bill);
-					}*/
-					
 					$commentText = $this->request->comment ?? '';
 					if ($commentText) {
 						$user = \Auth::user();

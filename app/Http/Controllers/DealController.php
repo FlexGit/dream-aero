@@ -681,7 +681,7 @@ class DealController extends Controller
 				$bill = new Bill();
 				$bill->contractor_id = $contractor->id ?? 0;
 				$bill->deal_id = $deal->id ?? 0;
-				$bill->deal_position_id = $position->id ?? 0;
+				//$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : ($paymentMethodId ?? 0);
 				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
@@ -1118,7 +1118,7 @@ class DealController extends Controller
 						$bill = new Bill();
 						$bill->contractor_id = $contractor->id ?? 0;
 						$bill->deal_id = $deal->id ?? 0;
-						$bill->deal_position_id = $position->id ?? 0;
+						//$bill->deal_position_id = $position->id ?? 0;
 						$bill->location_id = $billLocationId;
 						$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
 						$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
@@ -1409,7 +1409,7 @@ class DealController extends Controller
 				$bill = new Bill();
 				$bill->contractor_id = $contractor->id ?? 0;
 				$bill->deal_id = $deal->id ?? 0;
-				$bill->deal_position_id = $position->id ?? 0;
+				//$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
 				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
