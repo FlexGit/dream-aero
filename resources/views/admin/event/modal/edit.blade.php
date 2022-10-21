@@ -441,6 +441,26 @@
 						</div>
 					</div>
 				</div>
+				<div class="row pl-3 pr-3 mt-4">
+					<div class="col-3">
+						<div class="form-group">
+							<label for="pilot_id">Оплачено клиентом</label>
+							<div>{{ number_format($paidSum, 0, '.', ' ') }} руб</div>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="form-group">
+							<label for="pilot_id">Пилоту</label>
+							<div>{{ number_format($pilotSum, 0, '.', ' ') }} руб</div>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="form-group">
+							<label for="pilot_id">Пилоту (корректировка)</label>
+							<input type="number" class="form-control" id="actual_pilot_sum" name="actual_pilot_sum" value="{{ $event->actual_pilot_sum }}">
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="tab-pane fade" id="doc">
 				<div class="row pl-3 pr-3 mt-4">

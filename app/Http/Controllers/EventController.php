@@ -16,6 +16,7 @@ use App\Models\LockingPeriod;
 use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\ProductType;
+use App\Models\Promo;
 use App\Models\Status;
 use App\Models\User;
 use App\Services\HelpFunctions;
@@ -403,6 +404,33 @@ class EventController extends Controller
 		$event = Event::find($id);
 		if (!$event) return response()->json(['status' => 'error', 'reason' => 'Событие не найдено']);
 		
+		$position = $event->dealPosition;
+		$bills = $position ? $position->bills : [];
+		$promo = $position ? $position->promo : null;
+		$employee = $event->employee;
+		
+		$paidSum = 0;
+		foreach ($bills as $bill) {
+			if (!$bill->status || in_array($bill->status->alias, [Bill::CANCELED_STATUS, Bill::NOT_PAYED_STATUS])) continue;
+			
+			$paidSum += $bill->amount;
+		}
+		
+		$pilotSum = $event->nominal_price;
+		if ($event->event_type == Event::EVENT_TYPE_USER_FLIGHT) {
+			if ($employee->isPilot()) {
+				$pilotSum = 0;
+			} else {
+				$pilotSum = $pilotSum * 0.8;
+			}
+		} elseif ($event->event_type == Event::EVENT_TYPE_TEST_FLIGHT) {
+			$pilotSum = 0;
+		} else {
+			if ($promo && $promo->alias == Promo::DIRECTOR_ALIAS) {
+				$pilotSum = $pilotSum * 0.8;
+			}
+		}
+		
 		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
@@ -461,6 +489,8 @@ class EventController extends Controller
 				'employees' => $employees,
 				'shifts' => $shifts,
 				'user' => $user,
+				'paidSum' => $paidSum,
+				'pilotSum' => $pilotSum,
 			]);
 		} else {
 			$users = User::where('enable', true)
@@ -629,6 +659,7 @@ class EventController extends Controller
 					$event->user_id = $this->request->user()->id ?? 0;
 					$event->data_json = $data;
 					$event->nominal_price = $event->nominalPrice();
+					$event->actual_pilot_sum = (int)$this->request->actual_pilot_sum;
 					$event->save();
 					
 					$commentText = $this->request->comment ?? '';
@@ -828,6 +859,7 @@ class EventController extends Controller
 						$event->data_json = $data;
 					}
 					$event->nominal_price = $event->nominalPrice();
+					$event->actual_pilot_sum = (int)$this->request->actual_pilot_sum;
 					$event->save();
 					
 					$commentId = $this->request->comment_id ?? 0;

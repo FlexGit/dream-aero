@@ -23,7 +23,7 @@
 				@foreach($dates as $date)
 					@if(isset($items[$location->id][$simulator->id][$date->format('d.m.Y')]))
 						@foreach($items[$location->id][$simulator->id][$date->format('d.m.Y')] as $item)
-							<tr @if($item['is_old_certificate']) class="bg-warning" @endif>
+							<tr @if($item['actual_pilot_sum']) class="bg-info" @elseif($item['is_old_certificate']) class="bg-warning" @endif>
 								<td class="align-middle text-center">
 									{{ $item['start_at_date'] }}
 								</td>
@@ -37,7 +37,7 @@
 									{{ number_format($item['paid_sum'], 0, '.', ' ') }}
 								</td>
 								<td class="align-middle text-right">
-									{{ number_format($item['pilot_sum'], 0, '.', ' ') }}
+									{{ $item['actual_pilot_sum'] ? number_format($item['actual_pilot_sum'], 0, '.', ' ') : number_format($item['pilot_sum'], 0, '.', ' ') }}
 								</td>
 								<td class="align-middle text-center">
 									{{ $item['details'] }}

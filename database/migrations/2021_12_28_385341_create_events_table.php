@@ -24,6 +24,7 @@ class CreateEventsTable extends Migration
 			$table->integer('location_id')->default(0)->index()->comment('локация, на которой будет осуществлен полет');
 			$table->integer('flight_simulator_id')->default(0)->index()->comment('авиатренажер, на котором будет осуществлен полет');
 			$table->integer('nominal_price')->default(0)->comment('номинальная цена продукта в текущий момент');
+			$table->integer('actual_pilot_sum')->default(0)->comment('актуальная сумма пилоту');
 			$table->integer('user_id')->default(0)->index()->comment('пользователь');
 			$table->timestamp('start_at')->nullable()->comment('дата и время начала события');
 			$table->timestamp('stop_at')->nullable()->comment('дата и время окончания события');

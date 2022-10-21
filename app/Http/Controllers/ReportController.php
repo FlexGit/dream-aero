@@ -483,11 +483,13 @@ class ReportController extends Controller {
 			$details = array_filter($details);
 			
 			$items[$event->location_id][$event->flight_simulator_id][Carbon::parse($event->start_at)->format('d.m.Y')][] = [
+				'id' => $event->id,
 				'start_at_date' => Carbon::parse($event->start_at)->format('d.m.Y'),
 				'start_at_time' => Carbon::parse($event->start_at)->format('H:i'),
 				'duration' => Carbon::parse($event->stop_at)->diffInMinutes(Carbon::parse($event->start_at)),
 				'paid_sum' => $paidSum,
 				'pilot_sum' => $pilotSum,
+				'actual_pilot_sum' => $event->actual_pilot_sum,
 				'details' => implode(', ', $details),
 				'pilot' => $pilot ? $pilot->fioFormatted() : '',
 				'deal_id' => $event->deal_id,

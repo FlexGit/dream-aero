@@ -15,29 +15,29 @@
 	@foreach($dates as $date)
 		@if(isset($items[$location->id][$simulator->id][$date->format('d.m.Y')]))
 			@foreach($items[$location->id][$simulator->id][$date->format('d.m.Y')] as $item)
-				<tr @if($item['is_old_certificate']) style="background-color: #ffc107;" @endif>
-					<td style="text-align: center;">
+				<tr>
+					<td style="text-align: center;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						{{ $item['start_at_date'] }}
 					</td>
-					<td style="text-align: center;">
+					<td style="text-align: center;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						{{ $item['start_at_time'] }}
 					</td>
-					<td style="text-align: center;">
+					<td style="text-align: center;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						{{ $item['duration'] }}
 					</td>
-					<td style="text-align: right;">
+					<td style="text-align: right;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						{{ $item['paid_sum'] }}
 					</td>
-					<td style="text-align: right;">
-						{{ $item['pilot_sum'] }}
+					<td style="text-align: right;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
+						{{ $item['actual_pilot_sum'] ? $item['actual_pilot_sum'] : $item['pilot_sum'] }}
 					</td>
-					<td style="text-align: center;">
+					<td style="text-align: center;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						{{ $item['details'] }}
 					</td>
-					<td style="text-align: center;">
+					<td style="text-align: center;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						{{ $item['pilot'] }}
 					</td>
-					<td style="text-align: center;">
+					<td style="text-align: center;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						@if($item['deal_id'])
 							<a href="{{ url('deal/' . $item['deal_id']) }}" target="_blank">перейти</a>
 						@endif
