@@ -52,7 +52,7 @@ class SendPromocodeAfterYearEmail extends Command
 		$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_500_RUB');
 		if (!$discount) return 0;
 	
-		DB::connection()->enableQueryLog();
+		//DB::connection()->enableQueryLog();
     	// проверяем все полеты с начала дня до текущего момента
 		$contractors = DB::table('contractors')
 			->selectRaw('DISTINCT contractors.id')
@@ -144,7 +144,7 @@ class SendPromocodeAfterYearEmail extends Command
 				return 0;
 			}
 		}
-		\Log::debug(\DB::getQueryLog());
+		//\Log::debug(\DB::getQueryLog());
 		
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - promocode_year:send - OK');
     	

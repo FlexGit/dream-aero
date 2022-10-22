@@ -49,7 +49,7 @@ class SendBirthdayPromoEmail extends Command
 		$promo = HelpFunctions::getEntityByAlias(Promo::class, Promo::BIRTHDAY_ALIAS);
 		if (!$promo) return 0;
 
-		DB::connection()->enableQueryLog();
+		//DB::connection()->enableQueryLog();
 		$contractors = Contractor::whereMonth('birthdate', '=', Carbon::now()->format('m'))
 			->whereDay('birthdate', '=', Carbon::now()->addDays(3)->format('d'))
 			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
@@ -103,7 +103,7 @@ class SendBirthdayPromoEmail extends Command
 				return 0;
 			}
 		}
-		\Log::debug(\DB::getQueryLog());
+		//\Log::debug(\DB::getQueryLog());
 		
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - birthday_promo:send - OK');
     	
