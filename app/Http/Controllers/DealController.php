@@ -491,6 +491,7 @@ class DealController extends Controller
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
 		$isPaid = (bool)$this->request->is_paid;
+		$isTermless = (bool)$this->request->is_termless;
 		
 		$product = Product::find($productId);
 		if (!$product) {
@@ -614,7 +615,7 @@ class DealController extends Controller
 			$certificate->city_id = ($isUnified || !$cityId) ? 0 : $cityId;
 			$certificate->product_id = $product->id ?? 0;
 			$certificatePeriod = ($product && $product->validity) ? $product->validity : '';
-			$certificate->expire_at = $certificatePeriod ? Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
+			$certificate->expire_at = $isTermless ? null : ($certificatePeriod ? Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null);
 			$certificate->save();
 			
 			$deal = new Deal();

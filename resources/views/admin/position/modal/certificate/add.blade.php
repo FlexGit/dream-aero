@@ -65,10 +65,20 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col">
+	<div class="col-8">
 		<label for="delivery_address">Адрес доставки</label>
 		<textarea class="form-control" id="delivery_address" name="delivery_address" rows="1"></textarea>
 	</div>
+	@if($user->isSuperadmin())
+		<div class="col-4 text-right">
+			<div class="form-group mt-4">
+				<div class="custom-control custom-switch custom-control-inline">
+					<input type="checkbox" id="is_termless" name="is_termless" value="1" class="custom-control-input">
+					<label class="custom-control-label font-weight-normal" for="is_termless">Сертификат бессрочный</label>
+				</div>
+			</div>
+		</div>
+	@endif
 </div>
 <div class="row mt-3">
 	<div class="col-8">

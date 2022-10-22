@@ -82,6 +82,7 @@ class PositionController extends Controller
 			'products' => $products,
 			'promos' => $promos,
 			'promocodes' => $promocodes,
+			'user' => $user,
 		]);
 
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -321,6 +322,7 @@ class PositionController extends Controller
 		$deliveryAddress = $this->request->delivery_address ?? '';
 		$certificateExpireAt = $this->request->certificate_expire_at ?? null;
 		$amount = $this->request->amount ?? 0;
+		$isTermless = (bool)$this->request->is_termless;
 		
 		$deal = Deal::find($dealId);
 		if (!$deal) {
@@ -386,7 +388,7 @@ class PositionController extends Controller
 			$certificate->city_id = $cityId;
 			$certificate->product_id = $product->id ?? 0;
 			$certificatePeriod = ($product && $product->validity) ? $product->validity : '';
-			$certificate->expire_at = $certificatePeriod ? Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
+			$certificate->expire_at = $isTermless ? null : ($certificatePeriod ? Carbon::parse($certificateExpireAt)->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null);
 			$certificate->save();
 			
 			$position = new DealPosition();

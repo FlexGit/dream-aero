@@ -149,6 +149,16 @@
 				</select>
 			</div>
 		</div>
+		@if($user->isSuperadmin())
+			<div class="col-6 text-right">
+				<div class="form-group mt-4">
+					<div class="custom-control custom-switch custom-control-inline">
+						<input type="checkbox" id="is_termless" name="is_termless" value="1" class="custom-control-input">
+						<label class="custom-control-label font-weight-normal" for="is_termless">Сертификат бессрочный</label>
+					</div>
+				</div>
+			</div>
+		@endif
 	</div>
 @endif
 
