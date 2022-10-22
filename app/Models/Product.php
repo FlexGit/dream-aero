@@ -288,13 +288,7 @@ class Product extends Model
 		}
 
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
-
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
-		if ($contractorId == 1) {
-			\Log::debug($promoId);
-			\Log::debug($promo);
-		}
-		
 		/*$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;*/
 
 		$promocode = $promocodeId ? Promocode::find($promocodeId) : null;
@@ -370,10 +364,12 @@ class Product extends Model
 			
 			// скидка по указанной акции
 			if ($promo && (($promo->alias == 'sept' && !in_array($this->alias, ['regular_30', 'ultimate_30'])) || $promo->alias != 'sept')) {
+				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($contractorId == 1) {
 					\Log::debug($promo->alias);
+					\Log::debug($isCertificatePurchase);
+					\Log::debug($dataJson);
 				}
-				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
