@@ -178,6 +178,7 @@ return [
 
 		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 		Venturecraft\Revisionable\RevisionableServiceProvider::class,
+		\Torann\GeoIP\GeoIPServiceProvider::class,
     ],
 
     /*
@@ -232,6 +233,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 		'Image' => Intervention\Image\Facades\Image::class,
+		'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
     ],
 
 	'api_key' => env('SCRIBE_AUTH_KEY'),

@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Bill;
-use App\Models\Deal;
-use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\PaymentMethod;
 use Carbon\Carbon;
