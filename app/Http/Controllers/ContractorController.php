@@ -5,18 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\Content;
 use App\Models\Deal;
-use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\Notification;
-use App\Models\NotificationContractor;
-use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Promocode;
 use App\Models\Score;
 use App\Models\Status;
 use App\Models\Contractor;
 use App\Models\City;
-use App\Models\Token;
+use App\Repositories\StatusRepository;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,12 +23,14 @@ use Validator;
 class ContractorController extends Controller
 {
 	private $request;
+	private $statusRepo;
 	
 	/**
 	 * @param Request $request
 	 */
-	public function __construct(Request $request) {
+	public function __construct(Request $request, StatusRepository $statusRepo) {
 		$this->request = $request;
+		$this->statusRepo = $statusRepo;
 	}
 	
 	/**
@@ -160,9 +159,8 @@ class ContractorController extends Controller
 
 		$contractor = Contractor::find($id);
 		if (!$contractor) return response()->json(['status' => 'error', 'reason' => 'Контрагент не найден']);
-
-		$statuses = Status::where('is_active', true)
-			->get();
+		
+		$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
 
 		$VIEW = view('admin.contractor.modal.unite', [
 			'contractor' => $contractor,

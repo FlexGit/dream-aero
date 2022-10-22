@@ -5,40 +5,36 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\City;
 use App\Models\Content;
-use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\DealPosition;
 use App\Models\Event;
-use App\Models\EventComment;
-use App\Models\FlightSimulator;
 use App\Models\Location;
 use App\Models\LockingPeriod;
-use App\Models\PaymentMethod;
-use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Promo;
 use App\Models\Status;
 use App\Models\User;
+use App\Repositories\StatusRepository;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
-use Doctrine\DBAL\Events;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Comment;
 use Throwable;
 use Validator;
 
 class EventController extends Controller
 {
 	private $request;
-
+	private $statusRepo;
+	
 	/**
 	 * @param Request $request
 	 */
-	public function __construct(Request $request)
+	public function __construct(Request $request, StatusRepository $statusRepo)
 	{
 		$this->request = $request;
+		$this->statusRepo = $statusRepo;
 	}
 
 	/**
@@ -141,13 +137,22 @@ class EventController extends Controller
 					$product = $position ? $position->product : null;
 					$certificate = $position ? $position->certificate : null;
 					
+					$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
+					$flightTime = ($deal && $deal->contractor) ? $deal->contractor->getFlightTime() : 0;
+					$status = ($deal && $deal->contractor) ? $deal->contractor->getStatus($statuses, $flightTime) : null;
+					
 					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
+					
+					// скидка клиента
+					$title .= ($status && $status->discount) ? '. Скидка ПГ ' . $status->discount->valueFormatted() : '';
+					
 					// тариф
-					$title .= $product ? ' ' . $product->name : '';
+					$title .= $product ? '. ' . $product->name : '';
+
 					// доп. время
 					if ($event->extra_time) {
-						$title .= '(+' . $event->extra_time . ')';
+						$title .= ' (+' . $event->extra_time . ')';
 					}
 					
 					$amount = 0;
@@ -180,7 +185,7 @@ class EventController extends Controller
 								$promocode = $certificatePurchasePosition->promocode;
 							}
 						}
-						$title .= '. Сертификат: ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';
+						$title .= '. Сертификат ' . $certificate->number . ' от ' . Carbon::parse($certificate->created_at)->format('d.m.Y') . ' за ' . ($amount ?? 0) . ' руб';
 						// способ оплаты
 						if ($paymentMethodNames) {
 							$title .= '. ' . implode(', ', $paymentMethodNames);
@@ -212,15 +217,15 @@ class EventController extends Controller
 					}
 					// инфа об акции
 					if (isset($promo)) {
-						$title .= '. Акция: ' . $promo->name . ' (' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
+						$title .= '. Акция ' . $promo->name . ' (' . ($promo->discount ? $promo->discount->valueFormatted() : '') . ')';
 					}
 					// инфа о промокоде
 					if (isset($promocode)) {
-						$title .= '. Промокод: ' . $promocode->number . ' (' . ($promocode->discount ? $promocode->discount->valueFormatted() : '') . ')';
+						$title .= '. Промокод ' . $promocode->number . ' (' . ($promocode->discount ? $promocode->discount->valueFormatted() : '') . ')';
 					}
 					// время работы платформы от админа
 					if ($event->simulator_up_at || $event->simulator_down_at) {
-						$title .= '. Платформа: ' . ($event->simulator_up_at ? Carbon::parse($event->simulator_up_at)->format('H:i') : '') . ' - ' . ($event->simulator_down_at ? Carbon::parse($event->simulator_down_at)->format('H:i') : '');
+						$title .= '. Платформа ' . ($event->simulator_up_at ? Carbon::parse($event->simulator_up_at)->format('H:i') : '') . ' - ' . ($event->simulator_down_at ? Carbon::parse($event->simulator_down_at)->format('H:i') : '');
 					}
 					// спонтанный полет
 					if ($event->is_unexpected_flight) {
@@ -241,10 +246,6 @@ class EventController extends Controller
 					
 					$allDay = false;
 					
-					if ($event->uuid == 'a46a8200-0359-11ed-be7a-d7977016b28a') {
-						\Log::debug('balance: ' . $balance);
-					}
-
 					if ($data) {
 						// если к позиции привязан счет, то он должен быть оплачен
 						// иначе проверяем чтобы вся сделка была оплачена
@@ -496,6 +497,8 @@ class EventController extends Controller
 				->orderBy('name')
 				->get();
 			
+			$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
+			
 			$VIEW = view('admin.event.modal.edit', [
 				'event' => $event,
 				'comments' => $commentData,
@@ -504,6 +507,7 @@ class EventController extends Controller
 				'pilotItems' => $pilotItems,
 				'employees' => $employees,
 				'shifts' => $shifts,
+				'statuses' => $statuses,
 				'user' => $user,
 				'paidSum' => $paidSum,
 				'pilotSum' => $pilotSum,

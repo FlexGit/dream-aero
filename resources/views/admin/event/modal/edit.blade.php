@@ -1,6 +1,15 @@
+@php
+	$deal = $event->deal;
+	$position = $event->dealPosition;
+	$balance = $deal ? $deal->balance() : 0;
+	$scoreAmount = $deal ? $deal->scoreAmount() : 0;
+	$flightTime = ($deal && $deal->contractor) ? $deal->contractor->getFlightTime() : 0;
+	$status = ($deal && $deal->contractor) ? $deal->contractor->getStatus($statuses, $flightTime) : null;
+	$score = ($deal && $deal->contractor) ? $deal->contractor->getScore() : 0;
+@endphp
+
 <input type="hidden" id="id" name="id" value="{{ $event->id }}">
 <input type="hidden" id="comment_id" name="comment_id">
-{{--<input type="hidden" id="position_id" name="position_id" value="{{ $event->deal_position_id }}">--}}
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $event->flight_simulator_id ?? 0 }}">
 <input type="hidden" id="source" name="source" value="{{ app('\App\Models\Event')::EVENT_SOURCE_DEAL }}">
 
@@ -126,20 +135,34 @@
 							<div>{{ $event->contractor->fio() }}</div>
 							<div><i class="fas fa-mobile-alt"></i> {{ $event->contractor->phoneFormatted() }}</div>
 							<div><i class="far fa-envelope"></i> {{ $event->contractor->email }}</div>
+							<div title="Время налета">
+								<i class="fas fa-plane"></i> {{ $flightTime ? number_format($flightTime, 0, '.', ' ') : 0 }} мин
+							</div>
+							<div title="Количество баллов">
+								<i class="far fa-star"></i> {{ $score ? number_format($score, 0, '.', ' ') : 0 }} баллов
+							</div>
+							@if($status)
+								<div title="Статус">
+									<i class="fas fa-medal" style="color: {{ array_key_exists('color', $status->data_json ?? []) ? $status->data_json['color'] : 'none' }};"></i> {{ $status->name }}
+								</div>
+								<div title="Скидка ПГ">
+									<i class="fas fa-user-tag"></i> {{ $status->discount ? $status->discount->valueFormatted() : 'скидки нет' }}
+								</div>
+							@endif
 						@endif
 						<hr>
 						<div class="text-center font-weight-bold">Контакт</div>
-						@if($event->deal)
-							<div>{{ $event->deal->name }}</div>
-							<div><i class="fas fa-mobile-alt"></i> {{ $event->deal->phoneFormatted() }}</div>
-							<div><i class="far fa-envelope"></i> {{ $event->deal->email }}</div>
+						@if($deal)
+							<div>{{ $deal->name }}</div>
+							<div><i class="fas fa-mobile-alt"></i> {{ $deal->phoneFormatted() }}</div>
+							<div><i class="far fa-envelope"></i> {{ $deal->email }}</div>
 						@endif
 					</div>
 					<div class="col">
 						<div class="text-center font-weight-bold">Сделка</div>
-						@if($event->deal)
+						@if($deal)
 							<div>
-								<a href="/deal/{{ $event->deal->id }}">{{ $event->deal->number ?? '' }}</a> от {{ $event->deal->created_at ? $event->deal->created_at->format('Y-m-d H:i') : '' }}
+								<a href="/deal/{{ $deal->id }}">{{ $deal->number ?? '' }}</a> от {{ $deal->created_at ? $deal->created_at->format('Y-m-d H:i') : '' }}
 							</div>
 							<div class="d-inline-block">
 								@if($event->city)
@@ -149,11 +172,11 @@
 										<i class="fas fa-ruble-sign"></i>
 									@endif
 								@endif
-								{{ number_format($event->deal->amount(), 0, '.', ' ') }}
+								{{ number_format($deal->amount(), 0, '.', ' ') }}
 							</div>
-							@if($event->deal->scores)
+							@if($deal->scores)
 								@php($scoreAmount = 0)
-								@foreach($event->deal->scores ?? [] as $score)
+								@foreach($deal->scores ?? [] as $score)
 									@if($score->type != app('\App\Models\Score')::USED_TYPE)
 										@continue
 									@endif
@@ -166,7 +189,6 @@
 								@endif
 							@endif
 							<div class="d-inline-block" title="Итого к оплате">
-								@php($balance = $event->deal->balance())
 								@if($balance < 0)
 									<span class="pl-2 pr-2" style="background-color: #ffbdba;">{{ number_format($balance, 0, '.', ' ') }}</span>
 								@elseif($balance > 0)
@@ -175,33 +197,33 @@
 									<span class="pl-2 pr-2" style="background-color: #e9ffc9;">оплачена</span>
 								@endif
 							</div>
-							@if($event->deal->status)
+							@if($deal->status)
 								<div class="text-center">
-									<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $event->deal->status->data_json ?? []) ? $event->deal->status->data_json['color'] : 'none' }};">
-										{{ $event->deal->status->name }}
+									<div class="p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $deal->status->data_json ?? []) ? $deal->status->data_json['color'] : 'none' }};">
+										{{ $deal->status->name }}
 									</div>
 								</div>
 							@endif
-							@if(is_array($event->deal->data_json) && array_key_exists('comment', $event->deal->data_json) && $event->deal->data_json['comment'])
+							@if(is_array($deal->data_json) && array_key_exists('comment', $deal->data_json) && $deal->data_json['comment'])
 								<div class="text-left mt-2">
 									<div style="line-height: 0.8em;border: 1px solid;border-radius: 10px;padding: 4px 8px;background-color: #fff;">
-										<i class="far fa-comment-dots"></i> <i>{{ $event->deal->data_json['comment'] }}</i>
+										<i class="far fa-comment-dots"></i> <i>{{ $deal->data_json['comment'] }}</i>
 									</div>
 								</div>
 							@endif
 							<div class="d-flex justify-content-between mt-2">
 								<div>
-									{{ isset(\App\Models\Deal::SOURCES[$event->deal->source]) ? \App\Models\Deal::SOURCES[$event->deal->source] : '' }}
+									{{ isset(\App\Models\Deal::SOURCES[$deal->source]) ? \App\Models\Deal::SOURCES[$deal->source] : '' }}
 								</div>
 								<div>
-									@if($event->deal->user)
-										{{ $event->deal->user->name }}
+									@if($deal->user)
+										{{ $deal->user->name }}
 									@endif
 								</div>
 							</div>
 							<hr>
 							<div class="text-center font-weight-bold">Счета</div>
-							@foreach($event->deal->bills ?? [] as $bill)
+							@foreach($deal->bills ?? [] as $bill)
 								<div>{{ $bill->number ?? '' }} от {{ $bill->created_at ? $bill->created_at->format('Y-m-d H:i') : '' }}</div>
 								<div>
 									@if($bill->currency)
@@ -232,15 +254,15 @@
 						@endif
 					</div>
 					<div class="col">
-						@if($event->dealPosition)
+						@if($position)
 							<div class="text-center font-weight-bold">
-								@if($event->dealPosition->certificate)
+								@if($position->certificate)
 									Бронирование по сертификату
 								@else
 									Бронирование
 								@endif
 							</div>
-							<div>{{ $event->dealPosition->number ?? '' }} от {{ $event->dealPosition->created_at ? $event->dealPosition->created_at->format('Y-m-d H:i') : '' }}</div>
+							<div>{{ $position->number ?? '' }} от {{ $position->created_at ? $position->created_at->format('Y-m-d H:i') : '' }}</div>
 							@if($event->city)
 								<div>
 									<i class="fas fa-map-marker-alt"></i>
@@ -261,60 +283,60 @@
 										<i class="fas fa-ruble-sign"></i>
 									@endif
 								@endif
-								{{ number_format($event->dealPosition->amount, 0, '.', ' ') }}
+								{{ number_format($position->amount, 0, '.', ' ') }}
 							</div>
 							<div>
-								<i class="far fa-calendar-alt" title="Желаемое время полета"></i> {{ \Carbon\Carbon::parse($event->dealPosition->flight_at)->format('Y-m-d H:i') }}
+								<i class="far fa-calendar-alt" title="Желаемое время полета"></i> {{ \Carbon\Carbon::parse($position->flight_at)->format('Y-m-d H:i') }}
 							</div>
-							@if($event->dealPosition->promo)
+							@if($position->promo)
 								<div>
-									<i class="fas fa-percent" title="Акция"></i> {{ $event->dealPosition->promo->name }}
+									<i class="fas fa-percent" title="Акция"></i> {{ $position->promo->name }}
 								</div>
 							@endif
-							@if($event->dealPosition->promocode)
+							@if($position->promocode)
 								<div>
-									<i class="fas fa-tag" title="Промокод"></i> {{ $event->dealPosition->promocode->number ?? '' }}
+									<i class="fas fa-tag" title="Промокод"></i> {{ $position->promocode->number ?? '' }}
 								</div>
 							@endif
-							@if($event->dealPosition->product)
+							@if($position->product)
 								<hr>
 								<div class="text-center font-weight-bold">Продукт</div>
 								<div>
-									{{ $event->dealPosition->product->name }}
+									{{ $position->product->name }}
 									[
-									@if($event->dealPosition->currency)
-										@if($event->dealPosition->currency->alias == app('\App\Models\Currency')::USD_ALIAS)
+									@if($position->currency)
+										@if($position->currency->alias == app('\App\Models\Currency')::USD_ALIAS)
 											<i class="fas fa-dollar-sign"></i>
 										@else
 											<i class="fas fa-ruble-sign"></i>
 										@endif
 									@endif
-									{{ $event->dealPosition->amount ? number_format($event->dealPosition->amount, 0, '.', ' ') : 'бесплатно' }}
+									{{ $position->amount ? number_format($position->amount, 0, '.', ' ') : 'бесплатно' }}
 									]
 								</div>
 							@endif
-							@if($event->dealPosition->certificate)
+							@if($position->certificate)
 								<hr>
 								<div class="text-center font-weight-bold">Сертификат</div>
-								<a href="{{ route('getCertificate', ['uuid' => $event->dealPosition->certificate->uuid]) }}" target="_blank">
+								<a href="{{ route('getCertificate', ['uuid' => $position->certificate->uuid]) }}" target="_blank">
 									<i class="far fa-file-alt" title="Файл Сертификата"></i>
 								</a>
-								{{ $event->dealPosition->certificate->number ?: 'без номера' }}
-								@if ($event->dealPosition->certificate->sent_at)
-									<i class="far fa-envelope-open" title="{{ $event->dealPosition->certificate->sent_at }}"></i>
+								{{ $position->certificate->number ?: 'без номера' }}
+								@if ($position->certificate->sent_at)
+									<i class="far fa-envelope-open" title="{{ $position->certificate->sent_at }}"></i>
 								@else
 									<i class="far fa-envelope" title="Сертификат пока не отправлен"></i>
 								@endif
-								@if ($event->dealPosition->certificate->status)
-									<div class="text-center p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $event->dealPosition->certificate->status->data_json ?? []) ? $event->dealPosition->certificate->status->data_json['color'] : 'none' }};">
-										{{ $event->dealPosition->certificate->status->name }}
+								@if ($position->certificate->status)
+									<div class="text-center p-0 pl-2 pr-2" style="background-color: {{ array_key_exists('color', $position->certificate->status->data_json ?? []) ? $position->certificate->status->data_json['color'] : 'none' }};">
+										{{ $position->certificate->status->name }}
 									</div>
 								@endif
 							@endif
-							@if($event->deal->roistat)
+							@if($deal->roistat)
 								<hr>
 								<div class="text-center font-weight-bold">Номер визита Roistat</div>
-								<div>{{ $event->deal->roistat }}</div>
+								<div>{{ $deal->roistat }}</div>
 							@endif
 						@endif
 					</div>
@@ -460,7 +482,7 @@
 					</div>
 					<div class="col-3">
 						<div class="form-group">
-							<label for="pilot_id">Пилоту (корректировка)</label>
+							<label for="actual_pilot_sum">Пилоту (корректировка)</label>
 							<input type="number" class="form-control" id="actual_pilot_sum" name="actual_pilot_sum" value="{{ $event->actual_pilot_sum }}">
 						</div>
 					</div>
