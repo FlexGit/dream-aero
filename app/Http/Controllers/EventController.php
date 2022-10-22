@@ -478,8 +478,8 @@ class EventController extends Controller
 				->get();
 			$pilotItems = [];
 			foreach ($pilots as $pilot) {
-				$cityName = $pilot->city ? $pilot->city->name : '';
-				$locationName = $pilot->location ? $pilot->location->name : '';
+				$cityName = $pilot->city ? $pilot->city->name : '- без города -';
+				$locationName = $pilot->location ? $pilot->location->name : '- без локации -';
 				$pilotItems[$cityName][$locationName][] = $pilot;
 			}
 			
