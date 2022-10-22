@@ -43,7 +43,7 @@
 						<i class="fas fa-medal" style="color: {{ array_key_exists('color', $status->data_json ?? []) ? $status->data_json['color'] : 'none' }};"></i> {{ $status->name }}
 					</div>
 					<div title="Скидка ПГ">
-						<i class="fas fa-user-tag"></i> {{ $status->discount ? $status->discount->valueFormatted() : '-' }}
+						<i class="fas fa-user-tag"></i> {{ $status->discount ? $status->discount->valueFormatted() : 'скидки нет' }}
 					</div>
 				@endif
 			</div>
