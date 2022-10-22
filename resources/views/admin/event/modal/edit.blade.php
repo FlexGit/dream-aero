@@ -32,7 +32,6 @@
 				<a class="nav-link" data-toggle="tab" href="{{ asset('#doc') }}">Документ</a>
 			</li>
 		</ul>
-
 		<div class="tab-content">
 			<div class="tab-pane container fade in show active" id="flight">
 				@if($user->email == env('DEV_EMAIL'))
@@ -495,8 +494,10 @@
 		<li class="nav-item">
 			<a class="nav-link" data-toggle="tab" href="{{ asset('#simulator') }}">Платформа</a>
 		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="{{ asset('#comments') }}">Комментарий</a>
+		</li>
 	</ul>
-
 	<div class="tab-content">
 		<div class="tab-pane container fade in show active" id="flight">
 			@if($user->email == env('DEV_EMAIL'))
@@ -564,6 +565,34 @@
 				</div>
 			</div>
 		</div>
+		<div class="tab-pane fade" id="comments">
+			<div class="pl-2 pr-2" style="line-height: 1.1em;">
+				@foreach($comments ?? [] as $comment)
+					<div class="d-flex justify-content-between mt-2 mb-2 pt-2 js-comment-container">
+						<div style="width: 93%;">
+							<div class="mb-0">
+								<span class="comment-text" data-comment-id="{{ $comment['id'] }}">{{ $comment['name'] }}</span>
+							</div>
+							<div class="font-italic font-weight-normal mt-1 mb-0" style="line-height: 0.9em;border-top: 1px solid #bbb;">
+								<small class="user-info" data-comment-id="{{ $comment['id'] }}">{{ $comment['wasUpdated'] }}: {{ $comment['user'] ?? '' }}, {{ $comment['date'] }}</small>
+							</div>
+						</div>
+						<div class="d-flex">
+							<div>
+								<i class="far fa-edit js-comment-edit" data-comment-id="{{ $comment['id'] }}" title="Изменить"></i>
+							</div>
+							<div class="ml-2">
+								<i class="fas fa-trash-alt js-comment-remove" data-comment-id="{{ $comment['id'] }}" data-confirm-text="Вы уверены?" title="Удалить"></i>
+							</div>
+						</div>
+					</div>
+				@endforeach
+			</div>
+			<div class="form-group">
+				<label for="comment"></label>
+				<textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Введите текст комментария"></textarea>
+			</div>
+		</div>
 	</div>
 	@break
 	@case(app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT)
@@ -574,8 +603,10 @@
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="{{ asset('#simulator') }}">Платформа</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="{{ asset('#comments') }}">Комментарий</a>
+			</li>
 		</ul>
-
 		<div class="tab-content">
 			<div class="tab-pane container fade in show active" id="flight">
 				@if($user->email == env('DEV_EMAIL'))
@@ -638,6 +669,34 @@
 					</div>
 				</div>
 			</div>
+			<div class="tab-pane fade" id="comments">
+				<div class="pl-2 pr-2" style="line-height: 1.1em;">
+					@foreach($comments ?? [] as $comment)
+						<div class="d-flex justify-content-between mt-2 mb-2 pt-2 js-comment-container">
+							<div style="width: 93%;">
+								<div class="mb-0">
+									<span class="comment-text" data-comment-id="{{ $comment['id'] }}">{{ $comment['name'] }}</span>
+								</div>
+								<div class="font-italic font-weight-normal mt-1 mb-0" style="line-height: 0.9em;border-top: 1px solid #bbb;">
+									<small class="user-info" data-comment-id="{{ $comment['id'] }}">{{ $comment['wasUpdated'] }}: {{ $comment['user'] ?? '' }}, {{ $comment['date'] }}</small>
+								</div>
+							</div>
+							<div class="d-flex">
+								<div>
+									<i class="far fa-edit js-comment-edit" data-comment-id="{{ $comment['id'] }}" title="Изменить"></i>
+								</div>
+								<div class="ml-2">
+									<i class="fas fa-trash-alt js-comment-remove" data-comment-id="{{ $comment['id'] }}" data-confirm-text="Вы уверены?" title="Удалить"></i>
+								</div>
+							</div>
+						</div>
+					@endforeach
+				</div>
+				<div class="form-group">
+					<label for="comment"></label>
+					<textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Введите текст комментария"></textarea>
+				</div>
+			</div>
 		</div>
 	@break
 	@case(app('\App\Models\Event')::EVENT_TYPE_BREAK)
@@ -646,8 +705,10 @@
 		<li class="nav-item">
 			<a class="nav-link active" data-toggle="tab" href="{{ asset('#flight') }}">Событие</a>
 		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="{{ asset('#comments') }}">Комментарий</a>
+		</li>
 	</ul>
-
 	<div class="tab-content">
 		<div class="tab-pane container fade in show active" id="flight">
 			@if($user->email == env('DEV_EMAIL'))
@@ -681,6 +742,34 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="tab-pane fade" id="comments">
+			<div class="pl-2 pr-2" style="line-height: 1.1em;">
+				@foreach($comments ?? [] as $comment)
+					<div class="d-flex justify-content-between mt-2 mb-2 pt-2 js-comment-container">
+						<div style="width: 93%;">
+							<div class="mb-0">
+								<span class="comment-text" data-comment-id="{{ $comment['id'] }}">{{ $comment['name'] }}</span>
+							</div>
+							<div class="font-italic font-weight-normal mt-1 mb-0" style="line-height: 0.9em;border-top: 1px solid #bbb;">
+								<small class="user-info" data-comment-id="{{ $comment['id'] }}">{{ $comment['wasUpdated'] }}: {{ $comment['user'] ?? '' }}, {{ $comment['date'] }}</small>
+							</div>
+						</div>
+						<div class="d-flex">
+							<div>
+								<i class="far fa-edit js-comment-edit" data-comment-id="{{ $comment['id'] }}" title="Изменить"></i>
+							</div>
+							<div class="ml-2">
+								<i class="fas fa-trash-alt js-comment-remove" data-comment-id="{{ $comment['id'] }}" data-confirm-text="Вы уверены?" title="Удалить"></i>
+							</div>
+						</div>
+					</div>
+				@endforeach
+			</div>
+			<div class="form-group">
+				<label for="comment"></label>
+				<textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Введите текст комментария"></textarea>
 			</div>
 		</div>
 	</div>

@@ -163,7 +163,7 @@
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=2') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=3') }}">
 @stop
 
 @section('js')
@@ -786,6 +786,50 @@
 						$('#modal').modal('hide');
 						toastr.success(result.message);
 						getList(false);
+					}
+				});
+			});
+
+			$(document).on('click', '.js-comment-edit', function(e) {
+				var commentId = $(this).data('comment-id'),
+					$form = $(this).closest('form'),
+					$comment = $form.find('textarea#comment'),
+					$commentText = $form.find('.comment-text[data-comment-id="' + commentId + '"]');
+
+				if ($(this).hasClass('fa-edit')) {
+					$(this).css('color', 'orange');
+					$commentText.css('color', 'orange');
+					$comment.val($commentText.text());
+					$('#comment_id').val(commentId);
+					$(this).removeClass('far').removeClass('fa-edit').addClass('fas').addClass('fa-times-circle');
+				} else {
+					$(this).css('color', '#212529');
+					$commentText.css('color', '#212529');
+					$comment.val('');
+					$('#comment_id').val('');
+					$(this).addClass('far').addClass('fa-edit').removeClass('fas').removeClass('fa-times-circle');
+				}
+			});
+
+			$(document).on('click', '.js-comment-remove', function(e) {
+				if (!confirm($(this).data('confirm-text'))) return null;
+
+				var eventId = $(this).closest('form').find('#id').val(),
+					commentId = $(this).data('comment-id'),
+					$commentContainer = $(this).closest('.js-comment-container');
+
+				$.ajax({
+					url: '/event/' + eventId + '/comment/' + commentId + '/remove',
+					type: 'DELETE',
+					success: function (result) {
+						if (result.status === 'error') {
+							toastr.error(result.reason);
+							return null;
+						}
+
+						toastr.success(result.msg);
+
+						$commentContainer.remove();
 					}
 				});
 			});

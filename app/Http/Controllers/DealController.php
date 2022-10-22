@@ -1045,9 +1045,9 @@ class DealController extends Controller
 		}
 		
 		$data = [];
-		if ($comment) {
+		/*if ($comment) {
 			$data['comment'] = $comment;
-		}
+		}*/
 		
 		try {
 			\DB::beginTransaction();
@@ -1209,6 +1209,13 @@ class DealController extends Controller
 					$event->stop_at = Carbon::parse($flightStopAt)->format('Y-m-d H:i');
 					$event->save();
 				break;
+			}
+			
+			if ($comment && $event) {
+				$event->comments()->create([
+					'name' => $comment,
+					'created_by' => $user->id ?? 0,
+				]);
 			}
 			
 			if (in_array($source,[Deal::WEB_SOURCE, Deal::MOB_SOURCE])) {

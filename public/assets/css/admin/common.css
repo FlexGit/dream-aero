@@ -133,3 +133,6 @@ tr.unactive td,
 tr.unactive td a {
 	color: #bbb;
 }
+.fa-edit, .fa-times-circle, .fa-trash-alt {
+	cursor: pointer;
+}

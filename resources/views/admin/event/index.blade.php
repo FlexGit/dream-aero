@@ -1171,7 +1171,7 @@
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#bill_location_id').closest('.row').hide();
-						$form.find('#comment').closest('.row').hide();
+						//$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#employee_id').closest('.js-employee').addClass('hidden');
@@ -1184,7 +1184,7 @@
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#bill_location_id').closest('.row').hide();
-						$form.find('#comment').closest('.row').hide();
+						//$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
@@ -1197,7 +1197,7 @@
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#bill_location_id').closest('.row').hide();
-						$form.find('#comment').closest('.row').hide();
+						//$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
@@ -1210,7 +1210,7 @@
 						$form.find('#email').closest('.row').hide();
 						$form.find('#product_id').closest('.row').hide();
 						$form.find('#bill_location_id').closest('.row').hide();
-						$form.find('#comment').closest('.row').hide();
+						//$form.find('#comment').closest('.row').hide();
 						$form.find('#extra_time').closest('.row').hide();
 						$form.find('#flight_date_stop_at').closest('.js-duration').removeClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');
@@ -1223,7 +1223,7 @@
 						$form.find('#email').closest('.row').show();
 						$form.find('#product_id').closest('.row').show();
 						$form.find('#bill_location_id').closest('.row').show();
-						$form.find('#comment').closest('.row').show();
+						//$form.find('#comment').closest('.row').show();
 						$form.find('#extra_time').closest('.row').show();
 						$form.find('#flight_date_stop_at').closest('.js-duration').addClass('hidden');
 						$form.find('#pilot_id').closest('.js-pilot').addClass('hidden');

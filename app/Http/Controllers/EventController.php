@@ -541,6 +541,7 @@ class EventController extends Controller
 		}
 		
 		$eventType = $this->request->event_type ?? '';
+		$commentText = $this->request->comment ?? '';
 		
 		switch ($eventType) {
 			case 'shift':
@@ -678,10 +679,7 @@ class EventController extends Controller
 					$event->actual_pilot_sum = (int)$this->request->actual_pilot_sum;
 					$event->save();
 					
-					$commentText = $this->request->comment ?? '';
 					if ($commentText) {
-						$user = \Auth::user();
-						
 						$event->comments()->create([
 							'name' => $commentText,
 							'created_by' => $user->id ?? 0,
@@ -747,6 +745,8 @@ class EventController extends Controller
 		$employeeId = $this->request->employee_id ?? 0;
 		$locationId = $this->request->location_id ?? 0;
 		$simulatorId = $this->request->flight_simulator_id ?? 0;
+		$commentId = $this->request->comment_id ?? 0;
+		$commentText = $this->request->comment ?? '';
 		$position = null;
 
 		switch ($event->event_type) {
@@ -877,27 +877,6 @@ class EventController extends Controller
 					$event->nominal_price = $event->nominalPrice();
 					$event->actual_pilot_sum = (int)$this->request->actual_pilot_sum;
 					$event->save();
-					
-					$commentId = $this->request->comment_id ?? 0;
-					$commentText = $this->request->comment ?? '';
-					$user = \Auth::user();
-					if ($commentText) {
-						if ($commentId) {
-							$comment = $event->comments->find($commentId);
-							if (!$comment) {
-								return response()->json(['status' => 'error', 'reason' => 'Комментарий не найден']);
-							}
-							$comment->name = $commentText;
-							$comment->updated_by = $user->id ?? 0;
-							$comment->save();
-						}
-						else {
-							$event->comments()->create([
-								'name' => $commentText,
-								'created_by' => $user->id ?? 0,
-							]);
-						}
-					}
 				break;
 				case Event::EVENT_TYPE_BREAK:
 				case Event::EVENT_TYPE_CLEANING:
@@ -929,7 +908,24 @@ class EventController extends Controller
 					$event->save();
 				break;
 			}
-
+			
+			if ($commentText) {
+				if ($commentId) {
+					$comment = $event->comments->find($commentId);
+					if (!$comment) {
+						return response()->json(['status' => 'error', 'reason' => 'Комментарий не найден']);
+					}
+					$comment->name = $commentText;
+					$comment->updated_by = $user->id ?? 0;
+					$comment->save();
+				} elseif ($event) {
+					$event->comments()->create([
+						'name' => $commentText,
+						'created_by' => $user->id ?? 0,
+					]);
+				}
+			}
+			
 			\DB::commit();
 		} catch (Throwable $e) {
 			\DB::rollback();

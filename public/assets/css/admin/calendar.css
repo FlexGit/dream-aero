@@ -108,9 +108,6 @@ td.fc-daygrid-day {
 	font-size: 11px;
 	text-align: right;
 }
-.fa-edit, .fa-times-circle, .fa-trash-alt {
-	cursor: pointer;
-}
 .fc-event-past {
 	opacity: 0.6;
 }
