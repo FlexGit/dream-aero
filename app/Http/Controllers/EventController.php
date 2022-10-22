@@ -121,7 +121,7 @@ class EventController extends Controller
 			->with(['dealPosition', 'user'])
 			->get();
 		
-		$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
+		/*$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);*/
 		
 		$eventData = [];
 		/** @var Event[] $events */
@@ -139,14 +139,14 @@ class EventController extends Controller
 					$product = $position ? $position->product : null;
 					$certificate = $position ? $position->certificate : null;
 					
-					$flightTime = ($deal && $deal->contractor) ? $deal->contractor->getFlightTime() : 0;
-					$status = ($deal && $deal->contractor) ? $deal->contractor->getStatus($statuses, $flightTime) : null;
+					/*$flightTime = ($deal && $deal->contractor) ? $deal->contractor->getFlightTime() : 0;
+					$status = ($deal && $deal->contractor) ? $deal->contractor->getStatus($statuses, $flightTime) : null;*/
 					
 					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
 					
 					// скидка клиента
-					$title .= ($status && $status->discount) ? '. Скидка ПГ ' . $status->discount->valueFormatted() : '';
+					/*$title .= ($status && $status->discount) ? '. Скидка ПГ ' . $status->discount->valueFormatted() : '';*/
 					
 					// тариф
 					$title .= $product ? '. ' . $product->name : '';
