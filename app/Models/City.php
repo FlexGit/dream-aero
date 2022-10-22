@@ -115,6 +115,21 @@ class City extends Model
 		self::VLV_ALIAS => 'Владивосток',
 		self::DC_ALIAS => 'Washington DC',
 	];
+
+	const GEO_ALIASES = [
+		'MOW' => self::MSK_ALIAS,
+		'MOS' => self::MSK_ALIAS,
+		'SPE' => self::SPB_ALIAS,
+		'VOR' => self::VRN_ALIAS,
+		'KZN' => self::KZN_ALIAS,
+		'KDA' => self::KRD_ALIAS,
+		'NIZ' => self::NNV_ALIAS,
+		'SAM' => self::SAM_ALIAS,
+		'SVE' => self::EKB_ALIAS,
+		'NSK' => self::NSK_ALIAS,
+		'KHV' => self::KHV_ALIAS,
+		'VLV' => self::VLV_ALIAS,
+	];
 	
 	/**
 	 * The attributes that are mass assignable.

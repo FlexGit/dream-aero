@@ -50,6 +50,11 @@ class EventController extends Controller
 	{
 		$user = \Auth::user();
 		
+		if ($user && $user->city) {
+			$ipData = geoip()->getLocation(geoip()->getClientIP());
+			\Log::debug($ipData->toArray());
+		}
+		
 		$cities = $user->city
 			? new Collection([$user->city])
 			: City::where('version', $user->version)

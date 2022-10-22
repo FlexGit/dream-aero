@@ -60,7 +60,8 @@ class RunAeroflotAccrual extends Command
 			if (!$deal || !$deal->status) continue;
 			if (in_array($deal->status->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) continue;
 			
-			$position = $bill->positions()->first();
+			$position = $bill->positions()->oldest()->first();
+			if (!$position) continue;
 			
 			// с момента оплаты должно пройти не менее заданного кол-ва дней
 			// (разного для бронирования и покупки сертификата)

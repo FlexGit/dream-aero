@@ -77,6 +77,11 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
+		if ($user && $user->city) {
+			$ipData = geoip()->getLocation(geoip()->getClientIP());
+			\Log::debug($ipData->toArray());
+		}
+		
 		$locationCount = $user->city ? $user->city->locations->count() : 0;
 
 		if ($user->isSuperAdmin() || $locationCount > 1) {
@@ -139,11 +144,6 @@ class DealController extends Controller
 		
 		if (!$user->isAdminOrHigher()) {
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
-		}
-		
-		if ($user && $user->city) {
-			$ipData = geoip()->getLocation(geoip()->getClientIP());
-			\Log::debug($ipData->toArray());
 		}
 		
 		$id = $this->request->id ?? 0;
