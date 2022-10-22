@@ -470,10 +470,17 @@ class EventController extends Controller
 				->get();
 
 			$pilots = User::where('role', User::ROLE_PILOT)
-				->where('version', $user->version)
+				->orderByRaw("FIELD(location_id, $event->location_id) DESC")
+				->orderByRaw("FIELD(city_id, $event->city_id) DESC")
 				->orderBy('lastname')
 				->orderBy('name')
 				->get();
+			$pilotItems = [];
+			foreach ($pilots as $pilot) {
+				$cityName = $pilot->city ? $pilot->city->name : '';
+				$locationName = $pilot->location ? $pilot->location->name : '';
+				$pilotItems[$cityName][$locationName][] = $pilot;
+			}
 			
 			$employees = User::where('enable', true)
 				->orderBy('lastname')
@@ -485,7 +492,7 @@ class EventController extends Controller
 				'comments' => $commentData,
 				'productTypes' => $productTypes,
 				'cities' => $cities,
-				'pilots' => $pilots,
+				'pilotItems' => $pilotItems,
 				'employees' => $employees,
 				'shifts' => $shifts,
 				'user' => $user,

@@ -434,8 +434,13 @@
 							<label for="pilot_id">Фактический пилот</label>
 							<select class="form-control" id="pilot_id" name="pilot_id">
 								<option value="0">---</option>
-								@foreach($pilots as $pilot)
-									<option value="{{ $pilot->id }}" @if($event->pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
+								@foreach($pilotItems ?? [] as $cityName => $locations)
+									@foreach($locations ?? [] as $locationName => $pilots)
+										<optgroup label="{{ $cityName }} {{ $locationName }}"></optgroup>
+										@foreach($pilots as $pilot)
+											<option value="{{ $pilot->id }}" @if($event->pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
+										@endforeach
+									@endforeach
 								@endforeach
 							</select>
 						</div>
@@ -530,8 +535,13 @@
 						<label for="pilot_id">Пилот</label>
 						<select class="form-control" id="pilot_id" name="pilot_id">
 							<option value="0">---</option>
-							@foreach($pilots as $pilot)
-								<option value="{{ $pilot->id }}" @if($event->test_pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
+							@foreach($pilotItems ?? [] as $cityName => $locations)
+								@foreach($locations ?? [] as $locationName => $pilots)
+									<optgroup label="{{ $cityName }} {{ $locationName }}"></optgroup>
+									@foreach($pilots as $pilot)
+										<option value="{{ $pilot->id }}" @if($event->test_pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
+									@endforeach
+								@endforeach
 							@endforeach
 						</select>
 					</div>
