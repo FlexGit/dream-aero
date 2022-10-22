@@ -22,12 +22,16 @@
 						@endif
 					@endif
 				</div>
-				<div>
-					<i class="fas fa-mobile-alt"></i> {{ $deal->phone }}
-				</div>
-				<div>
-					<i class="far fa-envelope"></i> {{ $deal->email }}
-				</div>
+				@if($deal->phone)
+					<div>
+						<i class="fas fa-mobile-alt"></i> {{ $deal->phone }}
+					</div>
+				@endif
+				@if($deal->email)
+					<div>
+						<i class="far fa-envelope"></i> {{ $deal->email }}
+					</div>
+				@endif
 				<div title="Время налета">
 					<i class="fas fa-plane"></i> {{ $flightTime ? number_format($flightTime, 0, '.', ' ') : 0 }} мин
 				</div>
@@ -38,11 +42,9 @@
 					<div title="Статус">
 						<i class="fas fa-medal" style="color: {{ array_key_exists('color', $status->data_json ?? []) ? $status->data_json['color'] : 'none' }};"></i> {{ $status->name }}
 					</div>
-					@if($status->discount)
-						<div title="Скидка ПГ">
-							<i class="fas fa-user-tag"></i> {{ $status->discount->valueFormatted() }}
-						</div>
-					@endif
+					<div title="Скидка ПГ">
+						<i class="fas fa-user-tag"></i> {{ $status->discount ? $status->discount->valueFormatted() : '-' }}
+					</div>
 				@endif
 			</div>
 		</td>
