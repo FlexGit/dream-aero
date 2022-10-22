@@ -1,10 +1,8 @@
 @foreach ($contractors as $contractor)
 	@php
 		$flightTime = $contractor->getFlightTime();
-		/*$flightCnt = $contractor->getFlightCount();*/
 		$status = $contractor->getStatus($statuses, $flightTime);
 		$score = $contractor->getScore();
-		/*$balance = $contractor->getBalance($statuses);*/
 	@endphp
 <tr class="odd" data-id="{{ $contractor->id }}">
 	<td class="align-middle">
@@ -56,7 +54,7 @@
 				</div>
 			</div>
 			<div class="d-inline-block col-6 align-top">
-				@if ($status)
+				@if($status)
 					<div title="Статус">
 						<i class="fas fa-medal" style="color: {{ array_key_exists('color', $status->data_json ?? []) ? $status->data_json['color'] : 'none' }};"></i> {{ $status->name }}
 					</div>

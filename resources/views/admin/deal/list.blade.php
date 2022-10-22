@@ -2,6 +2,11 @@
 	@php
 		$balance = $deal->balance();
 		$scoreAmount = $deal->scoreAmount();
+		if ($deal->contractor) {
+			$flightTime = $deal->contractor->getFlightTime();
+			$status = $deal->contractor->getStatus($statuses, $flightTime);
+			$score = $deal->contractor->getScore();
+		}
 	@endphp
 
 	<tr class="odd" data-id="{{ $deal->id }}" @if($deal->status && $deal->status->alias == app('\App\Models\Deal')::CREATED_STATUS) style="background-color: #e6d8d8;" @endif>
@@ -23,6 +28,22 @@
 				<div>
 					<i class="far fa-envelope"></i> {{ $deal->email }}
 				</div>
+				<div title="Время налета">
+					<i class="fas fa-plane"></i> {{ $flightTime ? number_format($flightTime, 0, '.', ' ') : 0 }} мин
+				</div>
+				<div title="Количество баллов">
+					<i class="far fa-star"></i> {{ $score ? number_format($score, 0, '.', ' ') : 0 }} баллов
+				</div>
+				@if($status)
+					<div title="Статус">
+						<i class="fas fa-medal" style="color: {{ array_key_exists('color', $status->data_json ?? []) ? $status->data_json['color'] : 'none' }};"></i> {{ $status->name }}
+					</div>
+					@if($status->discount)
+						<div title="Скидка ПГ">
+							<i class="fas fa-user-tag"></i> {{ $status->discount->valueFormatted() }}
+						</div>
+					@endif
+				@endif
 			</div>
 		</td>
 		<td class="text-center align-top small">

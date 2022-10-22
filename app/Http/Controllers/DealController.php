@@ -246,10 +246,13 @@ class DealController extends Controller
 			$deals = $deals->where('id', '<', $id);
 		}
 		$deals = $deals->limit(20)->get();
-
+		
+		$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
+		
 		$data = [
 			'deals' => $deals,
 			'user' => $user,
+			'statuses' => $statuses,
 		];
 		
 		$VIEW = view('admin.deal.list', $data);
