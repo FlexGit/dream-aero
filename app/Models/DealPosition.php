@@ -304,7 +304,7 @@ class DealPosition extends Model
 	public function billPayedAmount()
 	{
 		$amount = 0;
-		foreach ($this->bills ?? [] as $bill) {
+		foreach ($this->bills as $bill) {
 			$status = $bill->status;
 			if (!$status) continue;
 			if ($bill->status->alias != Bill::PAYED_STATUS) continue;

@@ -198,8 +198,11 @@ class EventController extends Controller
 							$promo = $position->promo;
 							$promocode = $position->promocode;
 
-							// Сумма сделки
+							// стоимость позиции
 							$title .= '. Стоимость ' . $position->amount() . ' руб';
+							
+							// сумма оплаченных счетов
+							$title .= '. Оплачено ' . $position->billPayedAmount() . ' руб';
 
 							// способы оплаты
 							if ($paymentMethodNames) {
