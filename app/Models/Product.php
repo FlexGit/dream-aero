@@ -290,7 +290,9 @@ class Product extends Model
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
 
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
-
+		\Log::debug($promoId);
+		\Log::debug($promo);
+		
 		/*$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;*/
 
 		$promocode = $promocodeId ? Promocode::find($promocodeId) : null;
@@ -364,7 +366,6 @@ class Product extends Model
 				}
 			}
 			
-			\Log::debug($promo->alias);
 			// скидка по указанной акции
 			if ($promo && (($promo->alias == 'sept' && !in_array($this->alias, ['regular_30', 'ultimate_30'])) || $promo->alias != 'sept')) {
 				\Log::debug($promo->alias);
