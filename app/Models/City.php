@@ -121,7 +121,7 @@ class City extends Model
 		'MOS' => self::MSK_ALIAS,
 		'SPE' => self::SPB_ALIAS,
 		'VOR' => self::VRN_ALIAS,
-		'KZN' => self::KZN_ALIAS,
+		'TA' => self::KZN_ALIAS,
 		'KDA' => self::KRD_ALIAS,
 		'NIZ' => self::NNV_ALIAS,
 		'SAM' => self::SAM_ALIAS,
