@@ -44,10 +44,6 @@ class MainController extends Controller
 			abort(404);
 		}
 		
-		\Log::debug(geoip()->getClientIP());
-		$ipData = geoip()->getLocation(geoip()->getClientIP());
-		\Log::debug($ipData->toArray());
-		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
 		// Отзывы
