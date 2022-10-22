@@ -2,11 +2,9 @@
 	@php
 		$balance = $deal->balance();
 		$scoreAmount = $deal->scoreAmount();
-		if ($deal->contractor) {
-			$flightTime = $deal->contractor->getFlightTime();
-			$status = $deal->contractor->getStatus($statuses, $flightTime);
-			$score = $deal->contractor->getScore();
-		}
+		$flightTime = $deal->contractor ? $deal->contractor->getFlightTime() : 0;
+		$status = $deal->contractor ? $deal->contractor->getStatus($statuses, $flightTime) : null;
+		$score = $deal->contractor ? $deal->contractor->getScore() : 0;
 	@endphp
 
 	<tr class="odd" data-id="{{ $deal->id }}" @if($deal->status && $deal->status->alias == app('\App\Models\Deal')::CREATED_STATUS) style="background-color: #e6d8d8;" @endif>
