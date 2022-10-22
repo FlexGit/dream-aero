@@ -472,6 +472,7 @@ class EventController extends Controller
 			$pilots = User::where('role', User::ROLE_PILOT)
 				->orderByRaw("FIELD(location_id, $event->location_id) DESC")
 				->orderByRaw("FIELD(city_id, $event->city_id) DESC")
+				->orderByDesc('location_id')
 				->orderBy('lastname')
 				->orderBy('name')
 				->get();
