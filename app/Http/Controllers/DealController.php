@@ -146,6 +146,11 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
+		if ($user && $user->city) {
+			$ipData = geoip()->getLocation(geoip()->getClientIP());
+			\Log::debug($ipData->toArray());
+		}
+		
 		$id = $this->request->id ?? 0;
 		
 		$deals = Deal::/*whereHas('contractor', function ($query) use ($user) {
