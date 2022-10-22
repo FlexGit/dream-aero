@@ -290,8 +290,10 @@ class Product extends Model
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
 
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
-		\Log::debug($promoId);
-		\Log::debug($promo);
+		if ($contractorId == 1) {
+			\Log::debug($promoId);
+			\Log::debug($promo);
+		}
 		
 		/*$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;*/
 
@@ -368,19 +370,25 @@ class Product extends Model
 			
 			// скидка по указанной акции
 			if ($promo && (($promo->alias == 'sept' && !in_array($this->alias, ['regular_30', 'ultimate_30'])) || $promo->alias != 'sept')) {
-				\Log::debug($promo->alias);
+				if ($contractorId == 1) {
+					\Log::debug($promo->alias);
+				}
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
 					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
 				}
-				\Log::debug($isDiscountAllow);
-				\Log::debug($amount);
+				if ($contractorId == 1) {
+					\Log::debug($isDiscountAllow);
+					\Log::debug($amount);
+				}
 				$discount = $promo->discount ?? null;
 				if ($isDiscountAllow && $discount) {
 					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
-					\Log::debug($amount);
+					if ($contractorId == 1) {
+						\Log::debug($amount);
+					}
 					return ($amount > 0) ? (round($amount) + $score) : 0;
 				}
 				/*if ($promo->alias == 'birthday') {
