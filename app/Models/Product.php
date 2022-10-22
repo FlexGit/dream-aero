@@ -365,32 +365,17 @@ class Product extends Model
 			// скидка по указанной акции
 			if ($promo && (($promo->alias == 'sept' && !in_array($this->alias, ['regular_30', 'ultimate_30'])) || $promo->alias != 'sept')) {
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
-				if ($contractorId == 1) {
-					\Log::debug($promo->alias);
-					\Log::debug($isCertificatePurchase);
-					\Log::debug($dataJson);
-				}
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
 					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
 				}
-				if ($contractorId == 1) {
-					\Log::debug($isDiscountAllow);
-					\Log::debug($amount);
-				}
 				$discount = $promo->discount ?? null;
 				if ($isDiscountAllow && $discount) {
 					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
-					if ($contractorId == 1) {
-						\Log::debug($amount);
-					}
+
 					return ($amount > 0) ? (round($amount) + $score) : 0;
 				}
-				/*if ($promo->alias == 'birthday') {
-					\Log::debug($isDiscountAllow . ' - ' . $amount);
-					\Log::debug($discount);
-				}*/
 			}
 
 			$date = date('Y-m-d');

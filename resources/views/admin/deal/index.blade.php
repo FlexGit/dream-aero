@@ -554,7 +554,7 @@
 					'score': $('#score').val(),
 					'is_certificate_purchase': $('#is_certificate_purchase').val(),
 				};
-				console.log(data);
+				//console.log(data);
 				$.ajax({
 					url: "{{ route('calcProductAmount') }}",
 					type: 'GET',
