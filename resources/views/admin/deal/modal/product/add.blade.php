@@ -1,6 +1,7 @@
 <input type="hidden" id="id" name="id">
 <input type="hidden" id="contractor_id" name="contractor_id">
 <input type="hidden" id="amount" name="amount">
+<input type="hidden" id="is_certificate_purchase" name="is_certificate_purchase" value="0">
 
 <div class="row">
 	<div class="col-6">

@@ -5,6 +5,7 @@
 {{--<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">--}}
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
 <input type="hidden" id="source" name="source" value="{{ $source ?? '' }}">
+<input type="hidden" id="is_certificate_purchase" name="is_certificate_purchase" value="0">
 
 @if($source)
 	<div class="row">
