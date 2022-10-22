@@ -364,18 +364,22 @@ class Product extends Model
 				}
 			}
 			
+			\Log::debug($promo->alias);
 			// скидка по указанной акции
 			if ($promo && (($promo->alias == 'sept' && !in_array($this->alias, ['regular_30', 'ultimate_30'])) || $promo->alias != 'sept')) {
+				\Log::debug($promo->alias);
 				$dataJson = $promo->data_json ? (array)$promo->data_json : [];
 				if ($isCertificatePurchase) {
 					$isDiscountAllow = array_key_exists('is_discount_certificate_purchase_allow', $dataJson) ? (bool)$dataJson['is_discount_certificate_purchase_allow'] : false;
 				} else {
 					$isDiscountAllow = array_key_exists('is_discount_booking_allow', $dataJson) ? (bool)$dataJson['is_discount_booking_allow'] : false;
 				}
+				\Log::debug($isDiscountAllow);
+				\Log::debug($amount);
 				$discount = $promo->discount ?? null;
 				if ($isDiscountAllow && $discount) {
 					$amount = $discount->is_fixed ? ($amount - $discount->value) : ($amount - $amount * $discount->value / 100);
-					
+					\Log::debug($amount);
 					return ($amount > 0) ? (round($amount) + $score) : 0;
 				}
 				/*if ($promo->alias == 'birthday') {
