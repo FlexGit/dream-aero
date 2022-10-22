@@ -120,7 +120,9 @@ class EventController extends Controller
 			->whereRelation('city', 'version', '=', $user->version)
 			->with(['dealPosition', 'user'])
 			->get();
-
+		
+		$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
+		
 		$eventData = [];
 		/** @var Event[] $events */
 		foreach ($events as $event) {
@@ -137,7 +139,6 @@ class EventController extends Controller
 					$product = $position ? $position->product : null;
 					$certificate = $position ? $position->certificate : null;
 					
-					$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
 					$flightTime = ($deal && $deal->contractor) ? $deal->contractor->getFlightTime() : 0;
 					$status = ($deal && $deal->contractor) ? $deal->contractor->getStatus($statuses, $flightTime) : null;
 					
