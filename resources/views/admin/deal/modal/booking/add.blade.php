@@ -268,7 +268,6 @@
 		</div>
 	</div>
 </div>
-
 @if($user->isAdminOBOrHigher())
 	<div class="row mt-3">
 		<div class="col-6">
@@ -290,7 +289,6 @@
 		</div>
 	</div>
 @endif
-
 <div class="row">
 	<div class="col-8">
 		<label for="comment">Комментарий</label>

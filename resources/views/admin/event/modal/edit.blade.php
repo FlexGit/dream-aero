@@ -566,12 +566,13 @@
 		</div>
 	</div>
 	@break
-	@case(app('\App\Models\Event')::EVENT_TYPE_BREAK)
-	@case(app('\App\Models\Event')::EVENT_TYPE_CLEANING)
 	@case(app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT)
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
 				<a class="nav-link active" data-toggle="tab" href="{{ asset('#flight') }}">Полет</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="{{ asset('#simulator') }}">Платформа</a>
 			</li>
 		</ul>
 
@@ -608,22 +609,81 @@
 							</div>
 						</div>
 					</div>
-					@if($event->event_type == app('\App\Models\Event')::EVENT_TYPE_USER_FLIGHT)
-						<div class="col">
-							<div class="form-group">
-								<label for="employee_id">Сотрудник</label>
-								<select class="form-control" id="employee_id" name="employee_id">
-									<option value="0">---</option>
-									@foreach($employees as $employee)
-										<option value="{{ $employee->id }}" @if($event->employee_id == $employee->id) selected @endif>{{ $employee->fio() }}</option>
-									@endforeach
-								</select>
-							</div>
+					<div class="col">
+						<div class="form-group">
+							<label for="employee_id">Сотрудник</label>
+							<select class="form-control" id="employee_id" name="employee_id">
+								<option value="0">---</option>
+								@foreach($employees as $employee)
+									<option value="{{ $employee->id }}" @if($event->employee_id == $employee->id) selected @endif>{{ $employee->fio() }}</option>
+								@endforeach
+							</select>
 						</div>
-					@endif
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="simulator">
+				<div class="row mt-3">
+					<div class="col-4">
+						<div class="form-group">
+							<label for="simulator_up_at">Время поднятия платформы</label>
+							<input type="time" class="form-control" id="simulator_up_at" name="simulator_up_at" value="{{ $event->simulator_up_at ? $event->simulator_up_at->format('H:i') : '' }}">
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="form-group">
+							<label for="simulator_down_at">Время опускания платформы</label>
+							<input type="time" class="form-control" id="simulator_down_at" name="simulator_down_at" value="{{ $event->simulator_down_at ? $event->simulator_down_at->format('H:i') : '' }}">
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+	@break
+	@case(app('\App\Models\Event')::EVENT_TYPE_BREAK)
+	@case(app('\App\Models\Event')::EVENT_TYPE_CLEANING)
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="{{ asset('#flight') }}">Событие</a>
+		</li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane container fade in show active" id="flight">
+			@if($user->email == env('DEV_EMAIL'))
+				<div class="row mt-3">
+					<div class="col">
+						<div class="form-group">
+							<label>Uuid</label>
+							<div class="d-flex">
+								{{ $event->uuid }}
+							</div>
+						</div>
+					</div>
+				</div>
+			@endif
+			<div class="row mt-3">
+				<div class="col">
+					<div class="form-group">
+						<label>Дата и время начала</label>
+						<div class="d-flex">
+							<input type="date" class="form-control" name="start_at_date" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('Y-m-d') : '' }}" placeholder="Дата начала">
+							<input type="time" class="form-control ml-2" name="start_at_time" value="{{ $event->start_at ? \Carbon\Carbon::parse($event->start_at)->format('H:i') : '' }}" placeholder="Время начала">
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group">
+						<label>Дата и время окончания</label>
+						<div class="d-flex">
+							<input type="date" class="form-control" name="stop_at_date" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('Y-m-d') : '' }}" placeholder="Дата окончания">
+							<input type="time" class="form-control ml-2" name="stop_at_time" value="{{ $event->stop_at ? \Carbon\Carbon::parse($event->stop_at)->format('H:i') : '' }}" placeholder="Время окончания">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	@break
 	@case(app('\App\Models\Event')::EVENT_TYPE_SHIFT_ADMIN)
 	@case(app('\App\Models\Event')::EVENT_TYPE_SHIFT_PILOT)
