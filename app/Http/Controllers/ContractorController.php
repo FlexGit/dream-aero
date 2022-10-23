@@ -392,6 +392,7 @@ class ContractorController extends Controller
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
 		$user = \Auth::user();
+		$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
 
 		//\DB::connection()->enableQueryLog();
 		$contractors = Contractor::where('is_active', true)
@@ -416,8 +417,11 @@ class ContractorController extends Controller
 		
 		$suggestions = [];
 		foreach ($contractors as $contractor) {
+			$flightTime = $contractor->getFlightTime();
+			$status = $contractor->getStatus($statuses, $flightTime);
+			
 			$suggestions[] = [
-				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . ']',
+				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . (($status && $status->discount) ? ', скидка ПГ ' . $status->discount->valueFormatted() : '') . ']',
 				'id' => $contractor->id,
 				'data' => [
 					'name' => $contractor->name,
