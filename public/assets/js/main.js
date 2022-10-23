@@ -27,6 +27,10 @@ $(function(){
 		$(this).attr('placeholder', '+7').mask('+79999999999', {placeholder: '_'}).val('+7');
 	});
 
+	$(document).on('click', '.new-phone', function () {
+		$(this).setCursorPosition(2)
+	});
+
     $(".ajax-container").on("focusin", function() {
  		$("a.fancybox, a.various").fancybox({
   			'padding': 0
