@@ -2,8 +2,8 @@
 	<h2>@lang('main.modal-callback.заказать-обратный-звонок')</h2>
 	<span>@lang('main.modal-callback.заполните-пару-полей')</span>
 
-	<input type="text" id="name" name="name" placeholder="@lang('main.modal-callback.ваше-имя')" class="popup-input" required>
-	<input type="tel" id="phone" name="phone" placeholder="@lang('main.modal-callback.номер-телефона')" class="popup-input new-phone" required>
+	<input type="text" id="name" name="name" placeholder="@lang('main.modal-callback.ваше-имя')" autocomplete="off" class="popup-input" required>
+	<input type="text" id="phone" name="phone" placeholder="@lang('main.modal-callback.номер-телефона')" autocomplete="off" class="popup-input new-phone" required>
 
 	<div class="consent-container">
 		<label class="cont">

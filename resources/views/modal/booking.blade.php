@@ -39,22 +39,22 @@
 			<input type="hidden" id="product" name="product" value="{{ $product->id }}">
 		@endif
 		<div class="col-md-12">
-			<input type="text" id="certificate_number" name="certificate_number" class="popup-input" placeholder="@lang('main.modal-booking.номер-сертификата')" style="display: none;">
+			<input type="text" id="certificate_number" name="certificate_number" class="popup-input" placeholder="@lang('main.modal-booking.номер-сертификата')" autocomplete="off" style="display: none;">
 		</div>
 		<div class="col-md-6">
 			<div>
-				<input type="text" id="name" name="name" class="popup-input" placeholder="@lang('main.modal-booking.имя')">
+				<input type="text" id="name" name="name" class="popup-input" placeholder="@lang('main.modal-booking.имя')" autocomplete="off">
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div>
-				<input type="text" id="phone" name="phone" class="popup-input new-phone" placeholder="@lang('main.modal-booking.телефон')">
+				<input type="text" id="phone" name="phone" class="popup-input new-phone" placeholder="@lang('main.modal-booking.телефон')" autocomplete="off">
 			</div>
 		</div>
 		<div class="clearfix"></div>
 		<div class="col-md-6">
 			<div>
-				<input type="email" id="email" name="email" class="popup-input" placeholder="@lang('main.modal-booking.email')">
+				<input type="email" id="email" name="email" class="popup-input" placeholder="@lang('main.modal-booking.email')" autocomplete="off">
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -87,7 +87,7 @@
 				</div>
 				<div style="display: flex;width: 100%;">
 					<div style="width: 100%;">
-						<input type="text" id="promocode" name="promocode" class="popup-input" placeholder="@lang('main.modal-booking.введите-промокод')" data-no-product-error="@lang('main.modal-booking.выберите-продолжительность-полета')" style="display: none;margin-bottom: 0;">
+						<input type="text" id="promocode" name="promocode" class="popup-input" placeholder="@lang('main.modal-booking.введите-промокод')" autocomplete="off" data-no-product-error="@lang('main.modal-booking.выберите-продолжительность-полета')" style="display: none;margin-bottom: 0;">
 					</div>
 					<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-promocode-btn" style="display: none;width: 35px;"><i>Ok</i></button>
 					<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-promocode-remove" style="display: none;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>

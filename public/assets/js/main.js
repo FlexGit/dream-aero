@@ -24,8 +24,7 @@ $(window).on("load", function() {
 
 $(function(){
 	$(document).on('click', '.new-phone', function () {
-		$(this).setCursorPosition(2);
-		$(this).mask('+79999999999', {placeholder: ''});
+		$(this).attr('placeholder', '+7').mask('+79999999999', {placeholder: '_'}).val('+7');
 	});
 
     $(".ajax-container").on("focusin", function() {

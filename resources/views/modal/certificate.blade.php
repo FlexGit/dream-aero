@@ -70,24 +70,24 @@
 		@endif
 		<div class="col-md-6">
 			<div>
-				<input type="text" id="name" name="name" class="popup-input" placeholder="@lang('main.modal-certificate.имя')">
+				<input type="text" id="name" name="name" class="popup-input" placeholder="@lang('main.modal-certificate.имя')" autocomplete="off">
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div>
-				<input type="text" id="phone" name="phone" class="popup-input new-phone" placeholder="@lang('main.modal-certificate.телефон')">
+				<input type="text" id="phone" name="phone" class="popup-input new-phone" placeholder="@lang('main.modal-certificate.телефон')" autocomplete="off">
 			</div>
 		</div>
 		<div class="clearfix"></div>
 		<div class="col-md-6">
 			<div>
-				<input type="email" id="email" name="email" class="popup-input" placeholder="@lang('main.modal-certificate.email')">
+				<input type="email" id="email" name="email" class="popup-input" placeholder="@lang('main.modal-certificate.email')" autocomplete="off">
 			</div>
 		</div>
 		@if($product->alias != 'fly_no_fear')
 			<div class="col-md-6">
 				<div>
-					<input type="text" id="certificate_whom" name="certificate_whom" class="popup-input" placeholder="@lang('main.modal-certificate.для-кого-сертификат-имя')">
+					<input type="text" id="certificate_whom" name="certificate_whom" class="popup-input" placeholder="@lang('main.modal-certificate.для-кого-сертификат-имя')" autocomplete="off">
 				</div>
 			</div>
 		@endif
@@ -95,7 +95,7 @@
 			<div class="clearfix"></div>
 			<div class="col-md-6">
 				<div>
-					<input type="text" id="certificate_whom_phone" name="certificate_whom_phone" class="popup-input" placeholder="@lang('main.modal-certificate.для-кого-сертификат-телефон')">
+					<input type="text" id="certificate_whom_phone" name="certificate_whom_phone" class="popup-input" placeholder="@lang('main.modal-certificate.для-кого-сертификат-телефон')" autocomplete="off">
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -113,7 +113,7 @@
 					</div>
 					<div style="display: flex;width: 100%;">
 						<div style="width: 100%;">
-							<input type="text" id="promocode" name="promocode" class="popup-input" placeholder="@lang('main.modal-certificate.введите-промокод')" data-no-product-error="@lang('main.modal-certificate.выберите-продолжительность-полета')" style="display: none;margin-bottom: 0;">
+							<input type="text" id="promocode" name="promocode" class="popup-input" placeholder="@lang('main.modal-certificate.введите-промокод')" autocomplete="off" data-no-product-error="@lang('main.modal-certificate.выберите-продолжительность-полета')" style="display: none;margin-bottom: 0;">
 						</div>
 						<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-promocode-btn" style="display: none;width: 35px;"><i>Ok</i></button>
 						<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-promocode-remove" style="display: none;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>
@@ -133,7 +133,7 @@
 					</div>
 					<div style="display: flex;width: 90%;">
 						<div style="width: 100%;">
-							<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" style="display: none;margin-bottom: 0;padding-top: 5px;">
+							<input type="text" id="aeroflot_card" name="aeroflot_card" class="popup-input" placeholder="@lang('main.modal-certificate.введите-номер-карты-аэрофлот')" autocomplete="off" style="display: none;margin-bottom: 0;padding-top: 5px;">
 						</div>
 						<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-aeroflot-card-btn" style="display: none;width: 35px;"><i>Ok</i></button>
 						<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-aeroflot-card-remove" style="display: none;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>
