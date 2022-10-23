@@ -321,7 +321,7 @@ class EventController extends Controller
 			
 			$eventData[] = [
 				'eventType' => $event->event_type,
-				'className' => Carbon::parse($event->stop_at)->addMinutes($event->extra_time)->lt(Carbon::now()) ? 'fc-event-past' : '',
+				'className' => ($event->simulator_down_at && Carbon::parse($event->simulator_down_at)->lt(Carbon::now())) ? 'fc-event-past' : 'fc-event-not-past',
 				'id' => $event->id,
 				'title' => $title,
 				'start' => Carbon::parse($event->start_at)->format('Y-m-d H:i'),

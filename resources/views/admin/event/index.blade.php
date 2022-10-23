@@ -76,7 +76,6 @@
 				<form id="event">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						{{--<button type="button" class="btn btn-default js-reset mr-5">Сбросить</button>--}}
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 						<button type="submit" class="btn btn-primary">Подтвердить</button>
 					</div>
@@ -135,10 +134,6 @@
 		</div>
 		<div>
 			@foreach($cities ?? [] as $city)
-				{{--@if(!$user->isSuperAdmin() && (($user->city && $user->city->id != $city->id) || !$user->city))
-					@continue
-				@endif--}}
-
 				@php
 					$cityName = ($city->locations->count() > 1) ? '' : $city->name;
 				@endphp
@@ -202,106 +197,29 @@
 
 			$('.modal>.modal-dialog>.modal-content>.modal-header').css('cursor', 'move');
 
-			/*var placeholderElement = $('<div style="background-color: #eee;width: 400px;height: 100%;"></div>');
-
-			$('.calendars-container').sortable({
-				/!*placeholder: "ui-state-highlight",*!/
-				cursor: 'move',
-				axis: 'x',
-				handle: '.calendar-title',
-				revert: true,
-				zIndex: 10,
-				containment: '.calendars-container',
-				start: function(event, ui) {
-					console.log(ui.item[0].offsetWidth);
-					placeholderElement.insertBefore(ui.item[0]);
-
-					// Explicitly set the height and width to preserve
-					// flex calculations
-					placeholderElement.width(ui.item[0].offsetWidth);
-					placeholderElement.height(ui.item[0].offsetHeight);
-				},
-				stop: function() {
-					placeholderElement.remove();
-				},
-			});*/
-
-			/*var lastPlace;
-
-			$(".calendar-container").draggable({
-				cursor: 'pointer',
-				handle: '.calendar-title',
-				revert: true,
-				zIndex: 10,
-				snap: ".calendar-container",
-				snapMode: "outer",
-				snapTolerance: 30,
-				containment: '.calendars-container',
-				axis: 'x',
-				start: function (event, ui) {
-					lastPlace = $(this).parent();
-				}
-			});
-
-			$(".calendars-container").droppable({
-				accept: ".calendar-container",
-				tolerance: "pointer",
-				drop: function (event, ui) {
-					var dropped = ui.draggable;
-					var droppedOn = this;
-
-					//var $newPosX = ui.offset.left - $(this).offset().left;
-					//var $newPosY = ui.offset.top - $(this).offset().top;
-
-					//console.log(ui.offset.left + ' - ' + $(this).offset().left);
-
-					/!*var el = document.elementsFromPoint(event.pageX, event.pageY);
-					console.log($(el).data());
-
-					if ($(droppedOn).children().length > 0) {
-						$(droppedOn).children().detach().prependTo($(lastPlace));
-					}
-
-					$(dropped).detach().css({
-						top: 0,
-						left: 0
-					}).prependTo($(droppedOn));*!/
-
-					//localStorage.setItem('control-sidebar', 'collapsed');
-				}
-			});*/
-
-			/*var timeZone = $('#time_zone').val();*/
-
 			var $calendarViewType = $('#calendar-view-type'),
 				calendarViewType = localStorage.getItem($calendarViewType.attr('id'));
 			if (!calendarViewType) calendarViewType = 'timeGridDay';
 			$calendarViewType.val(calendarViewType);
 
-			var date = new Date();
-			var d = date.getDate(),
-				m = date.getMonth(),
-				y = date.getFullYear();
-
 			var calendars = document.getElementsByClassName('calendar');
 			var calendarArr = [];
+
 			for (let calendarEl of calendars) {
 				var timezone = $(calendarEl).data('timezone') ? $(calendarEl).data('timezone') : 'Europe/Moscow';
 
 				var calendar = new FullCalendar.Calendar(calendarEl, {
-					//aspectRatio: 0.8,
 					stickyHeaderDates: true,
 					initialView: calendarViewType,
 					locale: 'ru',
 					editable: true,
 					selectable: true,
-					//height: '100%',
 					contentHeight: 'auto',
 					droppable: true,
 					headerToolbar: {
-						left: /*'title'*/'',
+						left: '',
 						center: '',
-						right: /*'prev,next today *//*'timeGridDay,timeGridWeek'*//*dayGridMonth*/''
+						right: ''
 					},
 					dayHeaderFormat: {
 						weekday: 'short',
@@ -315,8 +233,6 @@
 					slotLabelInterval: '01:00',
 					nowIndicator: true,
 					now: convertUTCDateToLocalDate(Date.now(), timezone),
-					/*timeZone: 'local',*/
-					/*timeZone: 'America/New_York',*/
 					dayMaxEvents: true,
 					firstDay: 1,
 					allDayText: 'Смена',
@@ -353,14 +269,15 @@
 							url = info.allDay ? '/event/0/add/shift' : '/deal/booking/add',
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						//$(info.el).tooltip('hide');
 						tippy.hideAll();
 
 						$modalDialog.find('form').attr('id', type);
 						$modalDialog.addClass('modal-lg');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
+
 						//console.log(info);
+
 						$.ajax({
 							url: url,
 							type: 'GET',
@@ -370,7 +287,7 @@
 								'method': method,
 								'event_type': type,
 								'source': 'calendar',
-								'flight_at': moment($(info.date)[0])/*.utc()*/.format('YYYY-MM-DD HH:mm'),
+								'flight_at': moment($(info.date)[0]).format('YYYY-MM-DD HH:mm'),
 								'city_id': cityId,
 								'location_id': locationId,
 								'simulator_id': simulatorId,
@@ -408,23 +325,11 @@
 							type = $(this).data('event_type'),
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						//console.log(title);
-						/*if ((title.indexOf('Тестовый') !== -1)
-							|| (title.indexOf('Уборка') !== -1)
-							|| (title.indexOf('Перерыв') !== -1)
-							|| (title.indexOf('Сотрудник') !== -1)
-						) {
-							return;
-						}*/
-
 						$modalDialog.find('form').attr('id', type);
-						//$modalDialog.removeClass('modal-lg');
 
 						var $submit = $('button[type="submit"]');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
-
-						//console.log(title);
 
 						$.ajax({
 							url: url,
@@ -442,32 +347,19 @@
 								} else {
 									$submit.addClass('hidden');
 								}
-								//$('#modal .modal-title').text((allDay ? 'Смена' : 'Событие') + ' "' + title + '"');
 								$('#modal .modal-title').text('Событие "' + title + '"');
 								$('#modal .modal-body').html(result.html);
 								$('#modal').modal('show');
 							}
 						});
 					},
-					/*eventLeave: function(info) {
-						console.log('event left!', $(info.draggedEl).closest('.calendar').data());
-					},
-					eventReceive: function(info) {
-						console.log('event received!', info);
-					},*/
-					/*eventAdd: function(info) {
-						console.log('event add!', info);
-					},*/
 					eventDrop: function (info) {
 						var id = $(info.event)[0]._def.publicId,
-							/*title = $(info.event)[0]._def.title,*/
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						//$(info.el).tooltip('hide');
 						tippy.hideAll();
 
-						//console.log($(info.event)[0]._def.extendedProps);
 						$.ajax({
 							url: '/event/drag_drop/' + id,
 							type: 'PUT',
@@ -496,11 +388,9 @@
 					},
 					eventResize: function (info) {
 						var id = $(info.event)[0]._def.publicId,
-							title = $(info.event)[0]._def.title,
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						//$(info.el).tooltip('hide');
 						tippy.hideAll();
 
 						$.ajax({
@@ -516,6 +406,7 @@
 								if (result.status !== 'success') {
 									toastr.error(result.reason);
 									info.revert();
+
 									return;
 								}
 							}
@@ -553,13 +444,6 @@
 								'<div class="comment-sign">' + value['wasUpdated'] + ': ' + value['user'] + ', ' + value['date'] + '</div>'
 						});
 
-						/*$(info.el).tooltip({
-							title: data,
-							placement: 'top',
-							trigger: 'hover',
-							container: 'body',
-							html: true
-						});*/
 						if (data) {
 							tippy(info.el, {
 								content: data,
@@ -569,21 +453,11 @@
 						}
 					},
 					eventMouseLeave: function (info) {
-						//$(info.el).tooltip('hide');
 						tippy.hideAll();
 					},
 					eventDataTransform: function (event) {
-						if (event.allDay) {
-							//event.end = moment(event.end).utc().add(1, 'days')
-						}
 						return event;
 					},
-					/*selectAllow: function(info) {
-						return !moment(info.start).utc().isBefore(moment());
-					},*/
-					/*select: function(startDate, endDate) {
-						console.log(startDate.format() + ' - ' + endDate.format());
-					}*/
 				});
 				calendar.render();
 				if (typeof calendarArr[$(calendarEl).data('location_id')] === 'undefined') {
@@ -767,7 +641,6 @@
 				$('.js-is-indefinitely').addClass('hidden');
 				$('#certificate_number').val('').attr('disabled', false).focus();
 				$('#certificate_uuid').val('');
-				//$('#is_indefinitely')
 			});
 
 			$(document).on('change', '#product_id, #promo_id, #promocode_id, #city_id, #location_id, #is_free, #flight_date_at, #flight_time_at, #is_indefinitely, #extra_time', function() {
@@ -783,10 +656,6 @@
 			$(document).on('keyup', '#product_id, #flight_date_at, #flight_time_at, #extra_time', function() {
 				validateFlightDate();
 			});
-
-			/*$(document).on('keyup', '#certificate', function(e) {
-				calcProductAmount();
-			});*/
 
 			function validateFlightDate() {
 				var $eventStopElement = $('.js-event-stop-at'),
@@ -901,9 +770,7 @@
 								}
 							});
 
-							//calendarArr[locationId][simulatorId].gotoDate(e.date);
 							calendarArr[locationId][simulatorId].refetchEvents();
-
 							toastr.success('Событие успешно удалено');
 						}
 					});
@@ -913,7 +780,7 @@
 			var $datepicker = $('#datepicker'),
 				holidays = $('.calendars-container').data('holidays');
 
-			// contol sidebar datepicker
+			// control sidebar datepicker
 			$datepicker.datepicker({
 				language: 'ru',
 				todayHighlight: true,
@@ -978,11 +845,9 @@
 				if (isChecked) {
 					$calendarContainer.show();
 					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').removeClass('hidden');
-					//calendarArr[$(this).data('location_id')][$(this).data('simulator_id')].refetchEvents();
 				} else {
 					$calendarContainer.hide();
 					$('.upcomming-event[data-location-id="' + $(this).data('location_id') + '"][data-simulator-id="' + $(this).data('simulator_id') + '"]').addClass('hidden');
-					//calendarArr[$(this).data('location_id')][$(this).data('simulator_id')].refetchEvents();
 				}
 
 				var date = $('#datepicker').datepicker('getDate');
@@ -1313,19 +1178,6 @@
 					});
 				});
 			}
-
-			/*$(document).on('shown.lte.pushmenu', function() {
-				$('#datepicker').show(100);
-			});
-			$(document).on('collapsed.lte.pushmenu', function() {
-				$('#datepicker').hide(100);
-			});*/
-
-			/*$(document).on('click', '.js-reset', function(e) {
-				var $form  = $(this).closest('form');
-
-				$form.trigger('reset');
-			});*/
 
 			function convertUTCDateToLocalDate(date, timeZone) {
 				date = new Date(date);

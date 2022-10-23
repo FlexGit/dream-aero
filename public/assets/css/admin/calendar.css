@@ -111,6 +111,9 @@ td.fc-daygrid-day {
 .fc-event-past {
 	opacity: 0.6;
 }
+.fc-event-not-past {
+	opacity: 1;
+}
 .fc-v-event:not(.fc-event-selected) .fc-event-resizer {
 	height: 0;
 }
