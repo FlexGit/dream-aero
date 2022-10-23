@@ -75,7 +75,7 @@
 		</div>
 		<div class="col-md-6">
 			<div>
-				<input type="tel" id="phone" name="phone" class="popup-input" placeholder="@lang('main.modal-certificate.телефон')">
+				<input type="text" id="phone" name="phone" class="popup-input new-phone" placeholder="@lang('main.modal-certificate.телефон')">
 			</div>
 		</div>
 		<div class="clearfix"></div>

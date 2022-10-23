@@ -8,7 +8,7 @@
 		</div>
 		<div class="inputdiv">
 			<label>Ваш телефон *</label>
-			<input type="tel" id="phone" name="phone" class="popup-input">
+			<input type="text" id="phone" name="phone" class="popup-input new-phone">
 		</div>
 		<div class="inputdiv">
 			<label>Ваш email *</label>

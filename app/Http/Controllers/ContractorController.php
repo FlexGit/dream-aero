@@ -419,6 +419,13 @@ class ContractorController extends Controller
 		foreach ($contractors as $contractor) {
 			$flightTime = $contractor->getFlightTime();
 			$status = $contractor->getStatus($statuses, $flightTime);
+			$phone = $contractor->phone ?? '';
+			if (mb_substr($phone, 0, 1) == '8') {
+				$phone = '+7' . mb_substr($phone, 1);
+			}
+			if (mb_strlen($phone) != 12) {
+				$phone = '';
+			}
 			
 			$suggestions[] = [
 				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . ', скидка ПГ ' . (($status && $status->discount) ? $status->discount->valueFormatted() : '0%') . ']',
@@ -427,7 +434,7 @@ class ContractorController extends Controller
 					'name' => $contractor->name,
 					'lastname' => $contractor->lastname ?? '',
 					'email' => $contractor->email ?? '',
-					'phone' => $contractor->phone ?? '',
+					'phone' => $phone,
 					'city_id' => $contractor->city ? $contractor->city->id : 0,
 				],
 			];

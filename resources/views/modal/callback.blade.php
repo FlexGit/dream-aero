@@ -3,7 +3,7 @@
 	<span>@lang('main.modal-callback.заполните-пару-полей')</span>
 
 	<input type="text" id="name" name="name" placeholder="@lang('main.modal-callback.ваше-имя')" class="popup-input" required>
-	<input type="tel" id="phone" name="phone" placeholder="@lang('main.modal-callback.номер-телефона')" class="popup-input" required>
+	<input type="tel" id="phone" name="phone" placeholder="@lang('main.modal-callback.номер-телефона')" class="popup-input new-phone" required>
 
 	<div class="consent-container">
 		<label class="cont">

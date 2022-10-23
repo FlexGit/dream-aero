@@ -187,7 +187,8 @@
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="https://unpkg.com/@popperjs/core@2"></script>
 	<script src="https://unpkg.com/tippy.js@6"></script>
-	<script src="{{ asset('js/admin/common.js?v=' . time()) }}"></script>
+	<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
+	<script src="{{ asset('js/admin/common.js?v=1') }}"></script>
 	<script>
 		$(function(){
 			$('.modal>.modal-dialog').draggable({
@@ -572,9 +573,11 @@
 							if (suggestion.id) {
 								$('#contractor_id').val(suggestion.id);
 							}
+							$('#city_id').val(0);
 							if (suggestion.data.city_id) {
 								$('#city_id').val(suggestion.data.city_id);
 							}
+							$('#name, #lastname, #email, #phone').val('');
 							if (!isContractorExists) {
 								if (suggestion.data.name) {
 									$('#name').val(suggestion.data.name);
@@ -615,6 +618,10 @@
 							}
 						}
 					});
+
+					$('.new-phone').click(function () {
+						$(this).setCursorPosition(2);
+					}).mask('+79999999999', {placeholder: 'x'});
 				}
 			});
 

@@ -88,15 +88,14 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	{{--<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-multiselect.css') }}">--}}
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css') }}">
 @stop
 
 @section('js')
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
-	{{--<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>--}}
-	<script src="{{ asset('js/admin/common.js') }}"></script>
+	<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
+	<script src="{{ asset('js/admin/common.js?v=1') }}"></script>
 	<script>
 		$(function() {
 			@if($contractor)
@@ -122,6 +121,10 @@
 					}
 				});
 			});
+
+			$('.new-phone').click(function () {
+				$(this).setCursorPosition(2);
+			}).mask('+79999999999', {placeholder: 'x'});
 
 			$(document).on('click', '.js-contractor-delete', function() {
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');

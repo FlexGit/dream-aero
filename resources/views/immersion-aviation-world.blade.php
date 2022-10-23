@@ -38,7 +38,6 @@
 
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/plusstyle.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
 	<style>
 		.simul h1.block-title {
 			margin-top: 50px;
@@ -47,6 +46,4 @@
 @endpush
 
 @push('scripts')
-	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
-	<script src="{{ asset('js/deal.js?v=2') }}"></script>
 @endpush

@@ -4,6 +4,18 @@ $.ajaxSetup({
 	}
 });
 
+$.fn.setCursorPosition = function(pos) {
+	if ($(this).get(0).setSelectionRange) {
+		$(this).get(0).setSelectionRange(pos, pos);
+	} else if ($(this).get(0).createTextRange) {
+		var range = $(this).get(0).createTextRange();
+		range.collapse(true);
+		range.moveEnd('character', pos);
+		range.moveStart('character', pos);
+		range.select();
+	}
+};
+
 $(window).on("load", function() {
 	setInterval(function(){
 		$("div").removeClass("conthide");
@@ -11,6 +23,11 @@ $(window).on("load", function() {
 });
 
 $(function(){
+	$(document).on('click', '.new-phone', function () {
+		$(this).setCursorPosition(2);
+		$(this).mask('+79999999999', {placeholder: ''});
+	});
+
     $(".ajax-container").on("focusin", function() {
  		$("a.fancybox, a.various").fancybox({
   			'padding': 0

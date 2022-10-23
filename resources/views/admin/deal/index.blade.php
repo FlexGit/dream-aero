@@ -172,7 +172,8 @@
 	<script src="{{ asset('js/admin/moment-timezone-with-data.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/bootstrap-multiselect.min.js') }}"></script>
-	<script src="{{ asset('js/admin/common.js') }}"></script>
+	<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
+	<script src="{{ asset('js/admin/common.js?v=1') }}"></script>
 	<script>
 		$(function() {
 			@if($deal)
@@ -362,9 +363,11 @@
 							if (suggestion.id) {
 								$('#contractor_id').val(suggestion.id);
 							}
+							$('#city_id').val(0);
 							if (suggestion.data.city_id) {
 								$('#city_id').val(suggestion.data.city_id);
 							}
+							$('#name, #lastname, #email, #phone').val('');
 							if (!isContractorExists) {
 								if (suggestion.data.name) {
 									$('#name').val(suggestion.data.name);
@@ -406,6 +409,12 @@
 							}
 						}
 					});
+				}
+
+				if ($.inArray($form.attr('id'), ['deal']) !== -1) {
+					$('.new-phone').click(function () {
+						$(this).setCursorPosition(2);
+					}).mask('+79999999999', {placeholder: 'x'});
 				}
 			});
 

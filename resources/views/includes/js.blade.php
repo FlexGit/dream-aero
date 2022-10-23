@@ -2,7 +2,8 @@
 <script src="{{ asset('js/wow.min.js') }}"></script>
 <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ asset('js/jquery.nice-select.js') }}"></script>
-<script src="{{ asset('js/main.js?v=15') }}"></script>
+<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
+<script src="{{ asset('js/main.js?v=16') }}"></script>
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript" >

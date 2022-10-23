@@ -48,7 +48,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="phone">Телефон</label>
-			<input type="text" class="form-control" id="phone" name="phone" placeholder="+71234567890">
+			<input type="text" class="form-control new-phone" id="phone" name="phone" placeholder="+7xxxxxxxxxx">
 		</div>
 	</div>
 	<div class="col">
@@ -122,11 +122,11 @@
 	</div>
 	<div class="col-3">
 		<label for="certificate_whom_phone">Для кого (телефон)</label>
-		<input type="text" class="form-control" id="certificate_whom_phone" name="certificate_whom_phone" placeholder="+71234567890">
+		<input type="text" class="form-control new-phone" id="certificate_whom_phone" name="certificate_whom_phone" placeholder="+7xxxxxxxxxx">
 	</div>
 	<div class="col-6">
 		<label for="delivery_address">Адрес доставки</label>
-		<textarea class="form-control" id="delivery_address" name="delivery_address" rows="1" placeholder="Адрес доставка"></textarea>
+		<textarea class="form-control" id="delivery_address" name="delivery_address" rows="1" placeholder="Адрес доставки"></textarea>
 	</div>
 </div>
 
