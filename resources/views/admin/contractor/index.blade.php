@@ -124,7 +124,7 @@
 
 			$('.new-phone').click(function () {
 				$(this).setCursorPosition(2);
-			}).mask('+79999999999', {placeholder: 'x'});
+			}).mask('+79999999999', {placeholder: '_'});
 
 			$(document).on('click', '.js-contractor-delete', function() {
 				$('.js-contractor').text('').closest('.js-contractor-container').addClass('hidden');

@@ -414,7 +414,7 @@
 				if ($.inArray($form.attr('id'), ['deal']) !== -1) {
 					$('.new-phone').click(function () {
 						$(this).setCursorPosition(2);
-					}).mask('+79999999999', {placeholder: 'x'});
+					}).mask('+79999999999', {placeholder: '_'});
 				}
 			});
 

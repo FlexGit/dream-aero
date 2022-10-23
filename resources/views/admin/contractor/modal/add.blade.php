@@ -22,7 +22,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="phone">Телефон</label>
-			<input type="tel" class="form-control new-phone" id="phone" name="phone" placeholder="+7xxxxxxxxxx">
+			<input type="tel" class="form-control new-phone" id="phone" name="phone" placeholder="+7__________">
 		</div>
 	</div>
 </div>
