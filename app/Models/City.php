@@ -126,8 +126,8 @@ class City extends Model
 		'NIZ' => self::NNV_ALIAS,
 		'SAM' => self::SAM_ALIAS,
 		'SVE' => self::EKB_ALIAS,
-		'NSK' => self::NSK_ALIAS,
-		'KHV' => self::KHV_ALIAS,
+		'NVS' => self::NSK_ALIAS,
+		'KHA' => self::KHV_ALIAS,
 		'VLV' => self::VLV_ALIAS,
 	];
 	

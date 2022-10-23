@@ -46,7 +46,7 @@ class EventController extends Controller
 	{
 		$user = \Auth::user();
 		
-		if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS, City::KHV_ALIAS, City::NSK_ALIAS])) {
+		if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS])) {
 			$ipData = geoip()->getLocation(geoip()->getClientIP());
 			\Log::debug($ipData->toArray());
 		}
