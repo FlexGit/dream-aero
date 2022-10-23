@@ -421,7 +421,7 @@ class ContractorController extends Controller
 			$status = $contractor->getStatus($statuses, $flightTime);
 			
 			$suggestions[] = [
-				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . (($status && $status->discount) ? ', скидка ПГ ' . $status->discount->valueFormatted() : '') . ']',
+				'value' => $contractor->name . ($contractor->lastname ? ' ' . $contractor->lastname : '') . ' [' . $contractor->email . ($contractor->phone ? ', ' . $contractor->phone : '') . ($contractor->city ? ', ' . $contractor->city->name : '') . (($status && $status->discount) ? ', скидка ПГ: ' . $status->discount->valueFormatted() : 'нет') . ']',
 				'id' => $contractor->id,
 				'data' => [
 					'name' => $contractor->name,
