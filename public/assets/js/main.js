@@ -23,7 +23,7 @@ $(window).on("load", function() {
 });
 
 $(function(){
-	$(document).on('click', '.new-phone', function () {
+	$(document).on('focus', '.new-phone', function () {
 		$(this).attr('placeholder', '+7').mask('+79999999999', {placeholder: '_'}).val('+7');
 	});
 
