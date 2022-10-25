@@ -539,9 +539,10 @@ $(function(){
 			type: 'POST',
 			dataType: 'json',
 			success: function(result) {
-				console.log(result);
+				//console.log(result);
 				if (result.status === 'success') {
 					$('.js-city-confirm-container').hide();
+					window.location.reload();
 				}
 			}
 		});
