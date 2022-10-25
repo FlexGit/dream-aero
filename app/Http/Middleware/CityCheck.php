@@ -16,7 +16,10 @@ class CityCheck
 		
 		$cityAliases = ($request->session()->get('cityVersion') == City::EN_VERSION) ? City::EN_ALIASES : City::RU_ALIASES;
 		
-		if (in_array($request->segment(1), $cityAliases) && (($request->session()->get('cityAlias') && ($request->segment(1) != $request->session()->get('cityAlias'))) || !$request->session()->get('cityAlias'))) {
+		if (in_array($request->segment(1), $cityAliases)
+			&& $request->session()->get('cityAlias')
+			&& ($request->segment(1) != $request->session()->get('cityAlias'))
+		) {
 			$city = HelpFunctions::getEntityByAlias(City::class, $request->segment(1));
 			if ($city) {
 				$cityName = \App::isLocale('en') ? $city->name_en : $city->name;
@@ -25,16 +28,34 @@ class CityCheck
 				$request->session()->put('cityAlias', $city->alias);
 				$request->session()->put('cityVersion', $city->version);
 				$request->session()->put('cityName', $cityName);
+				$request->session()->put('isCityConfirmed', false);
 				
 				//\Log::debug($request->session()->get('cityAlias') . ' - ' . $request->segment(1) . ' - ' . $request->segment(2));
 				
-				//return redirect($city->alias . ($request->segment(1) ? '/' . $request->segment(2) : ''), 301);
 				return $next($request);
 			}
 		}
 
 		if (in_array($request->segment(1), ['', 'contacts', 'price'])) {
-			return redirect(($request->session()->get('cityAlias') ?? City::MSK_ALIAS) . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
+			if ($request->session()->get('cityAlias')) {
+				return redirect(($request->session()->get('cityAlias') ?? City::MSK_ALIAS) . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
+			}
+
+			$ipData = geoip()->getLocation(geoip()->getClientIP())->toArray();
+			if (isset(City::GEO_ALIASES[$ipData['state']])) {
+				$city = HelpFunctions::getEntityByAlias(City::class, City::GEO_ALIASES[$ipData['state']]);
+				if ($city) {
+					$cityName = \App::isLocale('en') ? $city->name_en : $city->name;
+					
+					$request->session()->put('cityId', $city->id);
+					$request->session()->put('cityAlias', $city->alias);
+					$request->session()->put('cityVersion', $city->version);
+					$request->session()->put('cityName', $cityName);
+					$request->session()->put('isCityConfirmed', false);
+					
+					return $next($request);
+				}
+			}
 		}
 		
 		return $next($request);

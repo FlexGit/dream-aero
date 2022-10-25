@@ -152,25 +152,29 @@ $(function(){
 
 					var $popup = $('#popup');
 
-					$popup/*.css('width', '700')*/.hide();
+					$popup.hide();
 
 					var url = '';
 
 					switch ($el.data('popup-type')) {
 						case 'product':
+							$popup.css('width', '700');
 							url = '/modal/certificate-booking/' + $el.data('product-alias');
 							break;
 						case 'callback':
+							$popup.css('width', '700');
 							url = '/modal/callback';
 							break;
 						case 'review':
+							$popup.css('width', '700');
 							url = '/modal/review';
 							break;
 						case 'scheme':
+							$popup.css('width', '700');
 							url = '/modal/scheme/' + $el.data('alias');
 							break;
 						case 'city':
-							/*$popup.css('width', '500');*/
+							$popup.css('width', '500');
 							url = '/modal/city';
 							break;
 					}
@@ -512,24 +516,32 @@ $(function(){
 	});
 
 	$(document).on('click', '.js-city', function(e) {
-		var pathname = window.location.pathname,
-			currentCityAlias = $(this).closest('.uk-modal-dialog').find('[data-current-alias]').data('current-alias');
+		var pathname = window.location.pathname;
 
 		$.ajax({
 			url: '/city/change',
-			type: 'GET',
+			type: 'POST',
 			dataType: 'json',
 			data: {
 				alias: $(this).data('alias'),
 			},
 			success: function(result) {
 				if (result.status === 'success') {
-					/*console.log(currentCityAlias);
-					console.log(result.cityAlias);
-					console.log(pathname);
-					console.log(pathname.replace(currentCityAlias, result.cityAlias));*/
+					window.location.href = pathname.replace(result.currentCityAlias, result.cityAlias);
+				}
+			}
+		});
+	});
 
-					window.location.href = pathname.replace(currentCityAlias, result.cityAlias);
+	$(document).on('click', '.js-city-confirm', function(e) {
+		$.ajax({
+			url: '/city/confirm',
+			type: 'POST',
+			dataType: 'json',
+			success: function(result) {
+				console.log(result);
+				if (result.status === 'success') {
+					$('.js-city-confirm-container').hide();
 				}
 			}
 		});

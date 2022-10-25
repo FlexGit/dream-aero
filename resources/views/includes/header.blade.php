@@ -113,6 +113,24 @@
 					<a id="langlink" href="{{ $urlRu }}">Ru</a>
 				@endif
 			</div>
+			@if(!Request::session()->get('isCityConfirmed'))
+				<div class="city-confirm-container js-city-confirm-container">
+					<div>
+						<div>
+							<span class="city" data-current-alias="{{ Request::session()->get('cityAlias') }}" data-choose-city-text="@lang('main.common.выберите-ваш-город')" style="font-size: 12px;">@lang('main.common.ваш-город')</span>
+						</div>
+						<div style="margin: 5px 0;">
+							<span class="gl-city-name_ru">{{ Request::session()->get('cityName') }}</span>?
+						</div>
+						<div>
+							<span class="btn-yes js-city-confirm">@lang('main.common.да')</span>
+							<a href="#popup" class="popup-with-form form_open gl-current-select" data-popup-type="city">
+								@lang('main.common.нет')
+							</a>
+						</div>
+					</div>
+				</div>
+			@endif
 		</div>
 		<div class="mobile-burger">
 			<span></span><span></span><span></span>

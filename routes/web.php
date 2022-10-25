@@ -504,7 +504,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('review/create', [MainController::class, 'reviewCreate']);
 		
-		Route::get('city/change', [MainController::class, 'changeCity']);
+		Route::post('city/change', [MainController::class, 'changeCity']);
+		Route::post('city/confirm', [MainController::class, 'confirmCity']);
 		
 		Route::post('payment/callback', [PaymentController::class, 'paymentCallback']);
 		Route::get('payment/success', [PaymentController::class, 'paymentSuccess'])->name('paymentSuccess');
@@ -586,7 +587,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::post('review/create', [MainController::class, 'reviewCreate']);
 		
-		Route::get('city/change', [MainController::class, 'changeCity']);
+		Route::post('city/change', [MainController::class, 'changeCity']);
+		Route::post('city/confirm', [MainController::class, 'confirmCity']);
 		
 		Route::get('news/{alias?}', [MainController::class, 'getNews'])->name('news');
 		Route::post('rating', [MainController::class, 'setRating'])->name('set-rating');

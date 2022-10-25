@@ -7,6 +7,7 @@ return [
 	'common.мин' => 'min',
 	'common.ваш-город' => 'Your City',
 	'common.да' => 'Yes',
+	'common.нет' => 'No',
 	'common.изменить' => 'Change',
 	'common.выберите-ваш-город' => 'Choose Your City',
 	
