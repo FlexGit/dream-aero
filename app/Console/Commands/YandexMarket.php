@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Repositories\ProductTypeRepository;
 use Bukashk0zzz\YmlGenerator\Model\Currency;
+use Bukashk0zzz\YmlGenerator\Model\Delivery;
 use Bukashk0zzz\YmlGenerator\Model\ShopInfo;
 use Illuminate\Console\Command;
 use Bukashk0zzz\YmlGenerator\Model\Offer\OfferSimple;
@@ -87,7 +88,7 @@ class YandexMarket extends Command
 		$categories = [];
 		$categories[] = (new Category())
 			->setId(1)
-			->setName('Certificate')
+			->setName('Сертификаты')
 		;
 
 		// Creating offers array
@@ -95,26 +96,39 @@ class YandexMarket extends Command
 		$offers = [];
 		foreach ($cities as $city) {
 			foreach ($products as $product) {
-				$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id ?: 1);
-				if (!$cityProduct || !$cityProduct->pivot) continue;
+				/*$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id ?: 1);
+				if (!$cityProduct || !$cityProduct->pivot) continue;*/
 				
 				$offers[] = (new OfferSimple())
+					/*->setName($product->name . ' ' . $city->name)*/
 					->setId($city->alias . $product->alias)
-					->setAvailable(true)
 					->setUrl('https://dream-aero.ru/price')
-					->setPrice($cityProduct->pivot->price)
-					->setCurrencyId('RUR')
+					/*->setPrice($product['price'])
+					->setOldPrice($product['base_price'])
+					->setCurrencyId('RUR')*/
 					->setCategoryId(1)
-					->setDelivery(true)
-					->setName($product->name . ' ' . $city->name);
+					->setAvailable(true)
+					->addCustomElement('count', 100)
+					/*->setDelivery(true)
+					->setPickup(true)
+					->setStore(true)*/
+				;
 			}
 		}
-
+	
+		/*$deliveries = [];
+		$deliveries[] = (new Delivery())
+			->setCost(2)
+			->setDays(0)
+			->setOrderBefore(14)
+		;*/
+		
 		(new Generator($settings))->generate(
 			$shopInfo,
 			$currencies,
 			$categories,
-			$offers
+			$offers/*,
+			$deliveries*/
 		);
 		
         return 0;
