@@ -158,23 +158,23 @@ $(function(){
 
 					switch ($el.data('popup-type')) {
 						case 'product':
-							$popup.css('width', '700');
+							$popup.css('width', '100%');
 							url = '/modal/certificate-booking/' + $el.data('product-alias');
 							break;
 						case 'callback':
-							$popup.css('width', '700');
+							$popup.css('width', '100%');
 							url = '/modal/callback';
 							break;
 						case 'review':
-							$popup.css('width', '700');
+							$popup.css('width', '100%');
 							url = '/modal/review';
 							break;
 						case 'scheme':
-							$popup.css('width', '700');
+							$popup.css('width', '100%');
 							url = '/modal/scheme/' + $el.data('alias');
 							break;
 						case 'city':
-							$popup.css('width', '500');
+							$popup.css('width', '100%');
 							url = '/modal/city';
 							break;
 					}

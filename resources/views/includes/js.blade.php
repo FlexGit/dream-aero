@@ -3,7 +3,7 @@
 <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ asset('js/jquery.nice-select.js') }}"></script>
 <script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
-<script src="{{ asset('js/main.js?v=19') }}"></script>
+<script src="{{ asset('js/main.js?v=20') }}"></script>
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript" >

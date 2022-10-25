@@ -503,9 +503,9 @@ h1.block-title:after {
 	padding-top: 3px;
 }
 .city-confirm-container {
-	position: fixed;
+	position: absolute;
 	top: 110px;
-	z-index: 99999;
+	z-index: 999;
 	width: 200px;
 	height: 100px;
 	background-color: #fff;
