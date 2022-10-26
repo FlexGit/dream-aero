@@ -1174,6 +1174,10 @@
 				});
 			});
 
+			$(document).on('click', '.js-current-time', function(e) {
+				$(this).closest('.input-group').find('input[type="time"]').val(moment().format('hh:mm'));
+			});
+
 			setInterval(refetch, 60 * 1000);
 
 			function refetch() {
