@@ -77,10 +77,10 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
-		if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS])) {
+		/*if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS])) {
 			$ipData = geoip()->getLocation(geoip()->getClientIP());
 			\Log::debug($ipData->toArray());
-		}
+		}*/
 		
 		$locationCount = $user->city ? $user->city->locations->count() : 0;
 

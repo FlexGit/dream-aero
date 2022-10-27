@@ -46,10 +46,10 @@ class EventController extends Controller
 	{
 		$user = \Auth::user();
 		
-		if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS])) {
+		/*if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS])) {
 			$ipData = geoip()->getLocation(geoip()->getClientIP());
 			\Log::debug($ipData->toArray());
-		}
+		}*/
 		
 		$cities = $user->city
 			? new Collection([$user->city])
