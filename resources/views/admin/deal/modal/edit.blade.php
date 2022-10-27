@@ -63,7 +63,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="phone">Контактный телефон</label>
-			<input type="text" class="form-control" id="phone" name="phone" value="{{ $deal->phone }}" placeholder="+71234567890">
+			<input type="text" class="form-control new-phone" id="phone" name="phone" value="{{ $deal->phone }}" placeholder="+7__________">
 		</div>
 	</div>
 </div>
