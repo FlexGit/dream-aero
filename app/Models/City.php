@@ -128,7 +128,7 @@ class City extends Model
 		'SVE' => self::EKB_ALIAS,
 		'NVS' => self::NSK_ALIAS,
 		'KHA' => self::KHV_ALIAS,
-		'VLV' => self::VLV_ALIAS,
+		'PRI' => self::VLV_ALIAS,
 	];
 	
 	/**
