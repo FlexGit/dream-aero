@@ -129,14 +129,14 @@ class YandexMarket extends Command
 				->setUrl('https://dream-aero.ru');
 			
 			$currencies = [];
-			$currencies[] = (new Currency())
+			/*$currencies[] = (new Currency())
 				->setId('RUR')
-				->setRate(1);
+				->setRate(1);*/
 			
 			$categories = [];
-			$categories[] = (new Category())
+			/*$categories[] = (new Category())
 				->setId(1)
-				->setName('Сертификаты');
+				->setName('Сертификаты');*/
 			
 			$offers = [];
 			foreach ($products as $product) {
@@ -145,9 +145,10 @@ class YandexMarket extends Command
 
 				$offers[] = (new OfferSimple())
 					->setId($id)
-					->setUrl('https://dream-aero.ru/price')
-					->setCategoryId(1)
+					/*->setUrl('https://dream-aero.ru/price')
+					->setCategoryId(1)*/
 					->setAvailable(true)
+					->addCustomElement('available', true)
 					->addCustomElement('count', 100)
 				;
 			}
