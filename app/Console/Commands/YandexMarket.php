@@ -108,6 +108,7 @@ class YandexMarket extends Command
     public function handle()
     {
 		$cities = City::where('is_active', true)
+			->where('version', 'ru')
 			->get();
 		$products = Product::where('is_active', true)
 			->whereRelation('productType', function ($query) {
@@ -116,79 +117,47 @@ class YandexMarket extends Command
 			->orderBy('product_type_id')
 			->orderBy('duration')
 			->get();
-		
-		$file = public_path('upload/yandex/market.yml');
-		$settings = (new Settings())
-			->setOutputFile($file)
-			->setEncoding('UTF-8')
-		;
-	
-		// Creating ShopInfo object
-		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#shop)
-		$shopInfo = (new ShopInfo())
-			->setName('Dream Aero')
-			->setCompany('Dream Aero')
-			->setUrl('https://dream-aero.ru')
-		;
-	
-		// Creating currencies array
-		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#currencies)
-		$currencies = [];
-		$currencies[] = (new Currency())
-			->setId('RUR')
-			->setRate(1)
-		;
-	
-		// Creating categories array
-		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#categories)
-		$categories = [];
-		$categories[] = (new Category())
-			->setId(1)
-			->setName('Сертификаты')
-		;
-
-		// Creating offers array
-		// (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#offers)
-		$offers = [];
 		foreach ($cities as $city) {
+			$file = public_path('upload/yandex/' . $city->alias . '.yml');
+			$settings = (new Settings())
+				->setOutputFile($file)
+				->setEncoding('UTF-8');
+			
+			$shopInfo = (new ShopInfo())
+				->setName('Dream Aero ' . $city->alias)
+				->setCompany('Dream Aero')
+				->setUrl('https://dream-aero.ru');
+			
+			$currencies = [];
+			$currencies[] = (new Currency())
+				->setId('RUR')
+				->setRate(1);
+			
+			$categories = [];
+			$categories[] = (new Category())
+				->setId(1)
+				->setName('Сертификаты');
+			
+			$offers = [];
 			foreach ($products as $product) {
-				/*$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id ?: 1);
-				if (!$cityProduct || !$cityProduct->pivot) continue;*/
-				
 				$alias = $city->alias . $product->alias;
 				$id = isset(self::CATALOG_ALIASES[$alias]) ? self::CATALOG_ALIASES[$alias] : $alias;
-				
+
 				$offers[] = (new OfferSimple())
-					/*->setName($product->name . ' ' . $city->name)*/
 					->setId($id)
 					->setUrl('https://dream-aero.ru/price')
-					/*->setPrice($product['price'])
-					->setOldPrice($product['base_price'])
-					->setCurrencyId('RUR')*/
 					->setCategoryId(1)
 					->setAvailable(true)
 					->addCustomElement('count', 100)
-					/*->setDelivery(true)
-					->setPickup(true)
-					->setStore(true)*/
 				;
 			}
+			(new Generator($settings))->generate(
+				$shopInfo,
+				$currencies,
+				$categories,
+				$offers
+			);
 		}
-	
-		/*$deliveries = [];
-		$deliveries[] = (new Delivery())
-			->setCost(2)
-			->setDays(0)
-			->setOrderBefore(14)
-		;*/
-		
-		(new Generator($settings))->generate(
-			$shopInfo,
-			$currencies,
-			$categories,
-			$offers/*,
-			$deliveries*/
-		);
 		
         return 0;
     }
