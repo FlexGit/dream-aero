@@ -62,6 +62,8 @@ class MainController extends Controller
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'home_' . $city->alias);
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
+		$isMobile = (Browser::isDesktop() || Browser::isTablet()) ? false : true;
+		
 		return view('home', [
 			'users' => $users ?? [],
 			'reviews' => $reviews,
@@ -69,6 +71,7 @@ class MainController extends Controller
 			'promobox' => $promobox,
 			'city' => $city,
 			'cityAlias' => $cityAlias,
+			'isMobile' => $isMobile,
 		]);
 	}
 	
