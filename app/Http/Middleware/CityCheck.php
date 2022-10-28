@@ -53,7 +53,8 @@ class CityCheck
 					$request->session()->put('cityName', $cityName);
 					$request->session()->put('isCityConfirmed', false);
 					
-					return $next($request);
+					//return $next($request);
+					return redirect(($request->session()->get('cityAlias') ?? City::MSK_ALIAS) . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
 				}
 			}
 		}
