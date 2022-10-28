@@ -170,8 +170,8 @@
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/bootstrap-datepicker3.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/material-icons.css') }}">
-	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css">
-	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css">
+	{{--<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css">
+	<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css">--}}
 	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
 	<link rel="stylesheet" href="{{ asset('css/admin/calendar.css?v=' . time()) }}">
 @stop
@@ -185,8 +185,8 @@
 	<script src="{{ asset('js/admin/bootstrap-datepicker.ru.min.js') }}"></script>
 	<script src="{{ asset('js/admin/popper.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
-	<script src="https://unpkg.com/@popperjs/core@2"></script>
-	<script src="https://unpkg.com/tippy.js@6"></script>
+	{{--<script src="https://unpkg.com/@popperjs/core@2"></script>
+	<script src="https://unpkg.com/tippy.js@6"></script>--}}
 	<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
 	<script src="{{ asset('js/admin/common.js?v=1') }}"></script>
 	<script>
@@ -270,7 +270,7 @@
 							url = info.allDay ? '/event/0/add/shift' : '/deal/booking/add',
 							$modalDialog = $('.modal').find('.modal-dialog');
 
-						tippy.hideAll();
+						/*tippy.hideAll();*/
 
 						$modalDialog.find('form').attr('id', type);
 						$modalDialog.addClass('modal-lg');
@@ -309,7 +309,7 @@
 						});
 					},
 					eventClick: function (info) {
-						tippy.hideAll();
+						/*tippy.hideAll();*/
 
 						if ($(info.jsEvent.target).hasClass('event-close-btn')) {
 							return;
@@ -359,7 +359,7 @@
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						tippy.hideAll();
+						/*tippy.hideAll();*/
 
 						$.ajax({
 							url: '/event/drag_drop/' + id,
@@ -392,7 +392,7 @@
 							start = $(info.event)[0]._instance.range.start,
 							end = $(info.event)[0]._instance.range.end;
 
-						tippy.hideAll();
+						/*tippy.hideAll();*/
 
 						$.ajax({
 							url: '/event/' + id,
@@ -446,15 +446,15 @@
 						});
 
 						if (data) {
-							tippy(info.el, {
+							/*tippy(info.el, {
 								content: data,
 								theme: 'light-border',
 								allowHTML: true,
-							});
+							});*/
 						}
 					},
 					eventMouseLeave: function (info) {
-						tippy.hideAll();
+						/*tippy.hideAll();*/
 					},
 					eventDataTransform: function (event) {
 						return event;
