@@ -367,8 +367,8 @@
 							if (suggestion.data.city_id) {
 								$('#city_id').val(suggestion.data.city_id);
 							}
-							$('#name, #lastname, #email, #phone').val('');
 							if (!isContractorExists) {
+								$('#name, #lastname, #email, #phone').val('');
 								if (suggestion.data.name) {
 									$('#name').val(suggestion.data.name);
 								}
