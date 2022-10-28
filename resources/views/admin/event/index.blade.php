@@ -185,7 +185,6 @@
 	<script src="{{ asset('js/admin/bootstrap-datepicker.ru.min.js') }}"></script>
 	<script src="{{ asset('js/admin/popper.min.js') }}"></script>
 	<script src="{{ asset('js/admin/jquery.autocomplete.min.js') }}" defer></script>
-	<script src="{{ asset('js/admin/popper.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/tippy-bundle.umd.min.js') }}" defer></script>
 	<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
 	<script src="{{ asset('js/admin/common.js?v=1') }}"></script>
