@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
 		Commands\UnlockPeriod::class,
 		Commands\SendLeaveReviewEmail::class,
 		Commands\SendPromocodeAfterYearEmail::class,
+		Commands\YandexMarket::class,
 	];
 
 	/**
@@ -145,6 +146,11 @@ class Kernel extends ConsoleKernel
 		// отправка контрагенту письма с предложением оставить отзыв
 		$schedule->command('leave_review_email:send')
 			->hourly()
+			->runInBackground();
+		
+		// Обновление остатков на Яндекс Маркет
+		$schedule->command('yandex:market')
+			->everyThirtyMinutes()
 			->runInBackground();
 	}
 
