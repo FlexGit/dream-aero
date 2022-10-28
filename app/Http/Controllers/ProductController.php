@@ -379,7 +379,6 @@ class ProductController extends Controller
 		}
 		
 		$scoreValue = $cityProduct->pivot->score ?? 0;
-		\Log::debug($scoreValue);
 		
 		return response()->json(['status' => 'success', 'score' => $scoreValue, 'duration' => $product->duration]);
 	}

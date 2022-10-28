@@ -1247,7 +1247,6 @@ class EventController extends Controller
 		}
 		
 		$balance = $position->balance();
-		\Log::debug($balance);
 		if ($balance < 0) return response()->json(['status' => 'error', 'reason' => 'Позиция должна быть оплачена']);
 		
 		$event = Event::find($this->request->event_id);
