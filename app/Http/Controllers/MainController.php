@@ -40,8 +40,8 @@ class MainController extends Controller
 	 */
 	public function home($cityAlias = null)
 	{
-		if ($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) {
-			abort(404);
+		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) || !$cityAlias) {
+			return redirect(City::MSK_ALIAS, 301);
 		}
 		
 		//\Log::debug($this->request->session()->get('cityAlias'));
@@ -532,8 +532,8 @@ class MainController extends Controller
 	 */
 	public function contacts($cityAlias = null)
 	{
-		if ($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) {
-			abort(404);
+		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) || !$cityAlias) {
+			return redirect(City::MSK_ALIAS . '/contacts', 301);
 		}
 		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
@@ -563,8 +563,8 @@ class MainController extends Controller
 	 */
 	public function price($cityAlias = null)
 	{
-		if ($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) {
-			abort(404);
+		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) || !$cityAlias) {
+			return redirect(City::MSK_ALIAS . '/price', 301);
 		}
 		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);

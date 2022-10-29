@@ -12,9 +12,9 @@ class CityCheck
 {
 	public function handle(Request $request, Closure $next)
 	{
-		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+		/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
 			\Log::debug('label 1: ' . $request->session()->get('cityAlias') . ' - ' . $request->segment(1));
-		}
+		}*/
 		
 		if ($request->ajax()) return $next($request);
 		
@@ -38,10 +38,9 @@ class CityCheck
 			}
 		}
 		
-		//\Log::debug('label 1.0: ' . $_SERVER['REMOTE_ADDR']);
-		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+		/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
 			\Log::debug('label 1.1: ' . $request->segment(1));
-		}
+		}*/
 
 		if (in_array($request->segment(1), ['', 'contacts', 'price'])) {
 			if ($request->session()->get('cityAlias')) {
@@ -50,9 +49,9 @@ class CityCheck
 
 			$ipData = geoip()->getLocation(geoip()->getClientIP())->toArray();
 			
-			if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+			/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
 				\Log::debug($ipData);
-			}
+			}*/
 
 			if (isset(City::GEO_ALIASES[$ipData['state']])) {
 				$city = HelpFunctions::getEntityByAlias(City::class, City::GEO_ALIASES[$ipData['state']]);
@@ -65,23 +64,23 @@ class CityCheck
 					$request->session()->put('cityName', $cityName);
 					$request->session()->put('isCityConfirmed', false);
 					
-					if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+					/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
 						\Log::debug('label 2: ' . $request->session()->get('cityAlias'));
-					}
+					}*/
 					
 					return redirect(($request->session()->get('cityAlias') ?? City::MSK_ALIAS) . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
 				}
 			}
 			
-			if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+			/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
 				\Log::debug('label 3: ' . $request->session()->get('cityAlias'));
-			}
+			}*/
 			return redirect(City::MSK_ALIAS . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
 		}
 		
-		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+		/*if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
 			\Log::debug('label 4: ' . $request->session()->get('cityAlias'));
-		}
+		}*/
 		return $next($request);
 	}
 }

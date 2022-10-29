@@ -20,7 +20,7 @@
 <header class="header">
 	<div class="flexy_row">
 		<div>
-			<a href="{{ url(Request::session()->get('cityAlias') ?? '/') }}" class="logo">
+			<a href="{{ url($city ? $city->alias : app('\App\Models\City')::MSK_ALIAS) }}" class="logo">
 				@if (App::isLocale('en'))
 					<img src="{{ asset('img/logo-eng.png') }}" alt="logo" width="172" height="65">
 				@else
@@ -31,7 +31,7 @@
 		<div class="main-menu">
 			<ul>
 				<li class="first active" id="mob">
-					<a href="{{ url(Request::session()->get('cityAlias') ?? '/') }}">@lang('main.верхнее-меню.главная')</a>
+					<a href="{{ url($city ? $city->alias : app('\App\Models\City')::MSK_ALIAS) }}">@lang('main.верхнее-меню.главная')</a>
 				</li>
 				<ul>
 					<li class="first dropdownf"><a href="{{ url('o-trenazhere') }}">@lang('main.верхнее-меню.о-тренажере')</a>
@@ -65,7 +65,7 @@
 						</ul>
 					</li>
 					<li class="dropdownf">
-						<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/price' : 'price') }}">@lang('main.верхнее-меню.цены')</a>
+						<a href="{{ url($city ? $city->alias . '/price' : app('\App\Models\City')::MSK_ALIAS . '/price') }}">@lang('main.верхнее-меню.цены')</a>
 						<ul class="dropdown-menu">
 							<li class="first">
 								<a href="{{ url('vse-akcii') }}">@lang('main.верхнее-меню.акции')</a>
@@ -84,7 +84,7 @@
 						<a href="{{ url('reviews') }}">@lang('main.верхнее-меню.отзывы')</a>
 					</li>
 					<li class="last">
-						<a href="{{ url(Request::session()->get('cityAlias') ? Request::session()->get('cityAlias') . '/contacts' : 'contacts') }}">@lang('main.верхнее-меню.контакты')</a>
+						<a href="{{ url($city ? $city->alias . '/contacts' : app('\App\Models\City')::MSK_ALIAS . '/contacts') }}">@lang('main.верхнее-меню.контакты')</a>
 					</li>
 				</ul>
 			</ul>
@@ -92,8 +92,8 @@
 		<div class="flexy_column nav">
 			<div class="item">
 				<a href="#popup" class="popup-with-form form_open gl-current-select" data-popup-type="city">
-					@if(Request::session()->get('cityName'))
-						{{ Request::session()->get('cityName') }}
+					@if($city)
+						{{ $city->name }}
 					@elseif(App::isLocale('en'))
 						{{ app('\App\Models\City')::DEFAULT_CITY_NAME_EN }}
 					@else
@@ -103,7 +103,7 @@
 			</div>
 			<div>
 				<span class="phone">
-					<a href="tel:{{ $city->phone ?? '+74955328737' }}">
+					<a href="tel:{{ $city ? $city->phone : '+74955328737' }}">
 						{{ ($city && $city->phone) ? $city->phoneFormatted() : '+7 (495) 532-87-37' }}
 					</a>
 				</span>
@@ -117,10 +117,18 @@
 				<div class="city-confirm-container js-city-confirm-container">
 					<div>
 						<div>
-							<span class="city" data-current-alias="{{ Request::session()->get('cityAlias') }}" data-choose-city-text="@lang('main.common.выберите-ваш-город')" style="font-size: 12px;">@lang('main.common.ваш-город')</span>
+							<span class="city" data-current-alias="{{ $city ? $city->alias : app('\App\Models\City')::MSK_ALIAS }}" data-choose-city-text="@lang('main.common.выберите-ваш-город')" style="font-size: 12px;">@lang('main.common.ваш-город')</span>
 						</div>
 						<div style="margin: 5px 0;">
-							<span class="gl-city-name_ru">{{ Request::session()->get('cityName') }}</span>?
+							<span class="gl-city-name_ru">
+								@if($city)
+									{{ $city->name }}
+								@elseif(App::isLocale('en'))
+									{{ app('\App\Models\City')::DEFAULT_CITY_NAME_EN }}
+								@else
+									{{ app('\App\Models\City')::DEFAULT_CITY_NAME }}
+								@endif
+							</span>?
 						</div>
 						<div>
 							<span class="btn-yes js-city-confirm">@lang('main.common.да')</span>
