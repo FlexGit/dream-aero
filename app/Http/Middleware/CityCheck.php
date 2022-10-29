@@ -13,7 +13,7 @@ class CityCheck
 	public function handle(Request $request, Closure $next)
 	{
 		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
-			\Log::debug('label 1: ' . $request->session()->get('cityAlias') . ' - ' . $request->segment(1));
+			\Log::debug('label 1: ' . $request->session()->get('cityAlias') . ' - ' . $request->segment(1) . ' - ' . $request->ajax());
 		}
 		
 		if ($request->ajax()) return $next($request);
@@ -34,6 +34,9 @@ class CityCheck
 				$request->session()->put('cityName', $cityName);
 				$request->session()->put('isCityConfirmed', false);
 				
+				if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+					\Log::debug('label 5: ' . $request->segment(1));
+				}
 				return $next($request);
 			}
 		}
