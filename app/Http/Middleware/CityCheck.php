@@ -61,7 +61,8 @@ class CityCheck
 				}
 			}
 			
-			\Log::debug($request->session()->get('cityAlias'));
+			\Log::debug('!' . $request->session()->get('cityAlias') . '!');
+			\Log::debug(City::MSK_ALIAS . ($request->segment(1) ? '/' . $request->segment(1) : ''));
 			return redirect(City::MSK_ALIAS . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
 		}
 		
