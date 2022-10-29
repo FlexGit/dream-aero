@@ -12,6 +12,8 @@ class CityCheck
 {
 	public function handle(Request $request, Closure $next)
 	{
+		\Log::debug($request->session()->get('cityAlias'));
+		
 		if ($request->ajax()) return $next($request);
 		
 		$cityAliases = ($request->session()->get('cityVersion') == City::EN_VERSION) ? City::EN_ALIASES : City::RU_ALIASES;
@@ -35,7 +37,8 @@ class CityCheck
 				return $next($request);
 			}
 		}
-
+		
+		\Log::debug($request->session()->get('cityAlias'));
 		if (in_array($request->segment(1), ['', 'contacts', 'price'])) {
 			if ($request->session()->get('cityAlias')) {
 				return redirect(($request->session()->get('cityAlias') ?? City::MSK_ALIAS) . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
@@ -58,6 +61,7 @@ class CityCheck
 				}
 			}
 			
+			\Log::debug($request->session()->get('cityAlias'));
 			return redirect(City::MSK_ALIAS . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
 		}
 		
