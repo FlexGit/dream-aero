@@ -113,7 +113,7 @@
 					<a id="langlink" href="{{ $urlRu }}">Ru</a>
 				@endif
 			</div>
-			@if(!Request::session()->get('isCityConfirmed') && Request::session()->get('cityAlias'))
+			@if(!Request::session()->get('isCityConfirmed'))
 				<div class="city-confirm-container js-city-confirm-container">
 					<div>
 						<div>
