@@ -38,7 +38,7 @@ class CityCheck
 			}
 		}
 		
-		\Log::debug('label 1.0: ' . $_SERVER['REMOTE_ADDR']);
+		//\Log::debug('label 1.0: ' . $_SERVER['REMOTE_ADDR']);
 		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
 			\Log::debug('label 1.1: ' . $request->segment(1));
 		}
