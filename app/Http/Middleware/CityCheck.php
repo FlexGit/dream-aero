@@ -38,6 +38,11 @@ class CityCheck
 			}
 		}
 		
+		\Log::debug('label 1.0: ' . $_SERVER['REMOTE_ADDR']);
+		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+			\Log::debug('label 1.1: ' . $request->segment(1));
+		}
+
 		if (in_array($request->segment(1), ['', 'contacts', 'price'])) {
 			if ($request->session()->get('cityAlias')) {
 				return redirect(($request->session()->get('cityAlias') ?? City::MSK_ALIAS) . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
