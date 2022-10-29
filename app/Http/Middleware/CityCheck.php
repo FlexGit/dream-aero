@@ -12,7 +12,7 @@ class CityCheck
 {
 	public function handle(Request $request, Closure $next)
 	{
-		\Log::debug($request->session()->get('cityAlias'));
+		\Log::debug('label 1: ' . $request->session()->get('cityAlias'));
 		
 		if ($request->ajax()) return $next($request);
 		
@@ -32,13 +32,11 @@ class CityCheck
 				$request->session()->put('cityName', $cityName);
 				$request->session()->put('isCityConfirmed', false);
 				
-				//\Log::debug($request->session()->get('cityAlias') . ' - ' . $request->segment(1) . ' - ' . $request->segment(2));
-				
 				return $next($request);
 			}
 		}
 		
-		\Log::debug($request->session()->get('cityAlias'));
+		\Log::debug('label 2: ' . $request->session()->get('cityAlias'));
 		if (in_array($request->segment(1), ['', 'contacts', 'price'])) {
 			if ($request->session()->get('cityAlias')) {
 				return redirect(($request->session()->get('cityAlias') ?? City::MSK_ALIAS) . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
@@ -61,11 +59,12 @@ class CityCheck
 				}
 			}
 			
-			\Log::debug('!' . $request->session()->get('cityAlias') . '!');
+			\Log::debug('label 10: ' . $request->session()->get('cityAlias'));
 			\Log::debug(City::MSK_ALIAS . ($request->segment(1) ? '/' . $request->segment(1) : ''));
 			return redirect(City::MSK_ALIAS . ($request->segment(1) ? '/' . $request->segment(1) : ''), 301);
 		}
 		
+		\Log::debug('label 11: ' . $request->session()->get('cityAlias'));
 		return $next($request);
 	}
 }
