@@ -13,7 +13,7 @@ class CityCheck
 	public function handle(Request $request, Closure $next)
 	{
 		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
-			\Log::debug('label 1: ' . $request->session()->get('cityAlias'));
+			\Log::debug('label 1: ' . $request->session()->get('cityAlias') . ' - ' . $request->segment(1));
 		}
 		
 		if ($request->ajax()) return $next($request);
