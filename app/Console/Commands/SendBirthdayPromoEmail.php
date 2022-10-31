@@ -52,6 +52,7 @@ class SendBirthdayPromoEmail extends Command
 		//DB::connection()->enableQueryLog();
 		$contractors = Contractor::whereMonth('birthdate', '=', Carbon::now()->addDays(3)->format('m'))
 			->whereDay('birthdate', '=', Carbon::now()->addDays(3)->format('d'))
+			->whereNotNull('birthdate')
 			->where('email', '!=', Contractor::ANONYM_EMAIL)
 			->where('is_active', true)
 			/*->where('email', env('DEV_EMAIL'))*/
