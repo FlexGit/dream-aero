@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Contractor;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -48,7 +49,8 @@ class SendLeaveReviewEmail extends Command
 			->where('stop_at', '>', Carbon::now()->subDays(2)->format('Y-m-d H:i:s'))
 			->where('stop_at', '>', '2022-09-12 00:00:00')
 			->whereHas('contractor', function ($query) {
-				return $query->where('is_subscribed', true);
+				return $query->where('is_subscribed', true)
+					->where('email', '!=', Contractor::ANONYM_EMAIL);
 			})
 			/*->whereIn('contractor_id', [1])*/
 			->oldest()

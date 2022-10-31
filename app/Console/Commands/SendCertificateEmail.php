@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Bill;
 use App\Models\Certificate;
+use App\Models\Contractor;
 use App\Models\Deal;
 use App\Models\DealPosition;
 use Carbon\Carbon;
@@ -43,8 +44,16 @@ class SendCertificateEmail extends Command
      */
     public function handle()
     {
+		\DB::connection()->enableQueryLog();
     	$certificates = Certificate::whereNull('sent_at')
+			->whereHas('position', function ($query) {
+				$query->where('is_certificate_purchase', true)
+					->whereHas('deal', function ($query) {
+						$query->where('email', '!=', Contractor::ANONYM_EMAIL);
+					});
+			})
 			->get();
+    	\Log::debug(\DB::getQueryLog());
     	/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {
 			/** @var DealPosition $position */

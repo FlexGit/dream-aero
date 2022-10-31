@@ -6,6 +6,7 @@ use App\Jobs\QueueExtension\ReleaseHelperTrait;
 use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\City;
+use App\Models\Contractor;
 use App\Models\ProductType;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
@@ -64,6 +65,9 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$contractorEmail = $contractor->email ?? '';
 		$contractorName = $contractor->name ?? '';
 		if (!$dealEmail && !$contractorEmail) {
+			return null;
+		}
+		if ($dealEmail == Contractor::ANONYM_EMAIL) {
 			return null;
 		}
 		
