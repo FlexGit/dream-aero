@@ -247,11 +247,6 @@ class BillController extends Controller
 		
 		$user = \Auth::user();
 		
-		$billStatus = $bill->status;
-		if ($billStatus && $billStatus->alias != Bill::NOT_PAYED_STATUS && !$user->isSuperAdmin()) {
-			return response()->json(['status' => 'error', 'reason' => 'Счет в текущем статусе недоступен для редактирования']);
-		}
-		
 		/*if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
 			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для редактирования. Заявка на списание миль "Аэрофлот Бонус"']);
 		}*/
