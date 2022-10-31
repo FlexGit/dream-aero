@@ -50,11 +50,11 @@ class SendBirthdayPromoEmail extends Command
 		if (!$promo) return 0;
 
 		//DB::connection()->enableQueryLog();
-		$contractors = Contractor::whereMonth('birthdate', '=', Carbon::now()->format('m'))
+		$contractors = Contractor::whereMonth('birthdate', '=', Carbon::now()->addDays(3)->format('m'))
 			->whereDay('birthdate', '=', Carbon::now()->addDays(3)->format('d'))
-			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
-			->where('contractors.is_active', true)
-			/*->where('contractors.email', env('DEV_EMAIL'))*/
+			->where('email', '!=', Contractor::ANONYM_EMAIL)
+			->where('is_active', true)
+			/*->where('email', env('DEV_EMAIL'))*/
 			->get();
     	foreach ($contractors as $contractor) {
     		$city = $contractor->city;
