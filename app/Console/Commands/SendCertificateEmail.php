@@ -58,6 +58,7 @@ class SendCertificateEmail extends Command
 			})
 			->get();
     	\Log::debug(\DB::getQueryLog());
+    	$i = 1;
     	/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {
 			/** @var DealPosition $position */
@@ -79,8 +80,10 @@ class SendCertificateEmail extends Command
 			
 				return 0;
 			}
+			++$i;
 		}
-			
+	
+		\Log::debug('Count email sent: ' . $i);
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - certificate_email:send - OK');
     	
         return 0;
