@@ -46,6 +46,10 @@ class SendCertificateEmail extends Command
     {
 		\DB::connection()->enableQueryLog();
     	$certificates = Certificate::whereNull('sent_at')
+			->where(function ($query) {
+				$query->whereNull('expire_at')
+					->orWhere('expire_at', '>=', Carbon::now()->format('Y-m-d H:i:s'));
+			})
 			->whereHas('position', function ($query) {
 				$query->where('is_certificate_purchase', true)
 					->whereHas('deal', function ($query) {
