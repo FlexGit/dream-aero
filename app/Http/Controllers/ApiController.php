@@ -175,6 +175,8 @@ class ApiController extends Controller
 	 */
 	public function sendCode()
 	{
+		return $this->responseError('Сервис временно недоступен. Попробуйте повторить позже.', 400);
+		
 		$rules = [
 			'email' => ['required', 'email'],
 		];
@@ -236,11 +238,11 @@ class ApiController extends Controller
 			
 			$subject = env('APP_NAME') . ': код подтверждения';
 			
-			/*Mail::send('admin.emails.code', $messageData, function ($message) use ($subject, $recipients) {*/
+			Mail::send('admin.emails.code', $messageData, function ($message) use ($subject, $recipients) {
 				/** @var \Illuminate\Mail\Message $message */
-				/*$message->subject($subject);
+				$message->subject($subject);
 				$message->to($recipients);
-			});*/
+			});
 			
 			$failures = Mail::failures();
 			//Log::debug($_SERVER['REMOTE_ADDR'] . ': ' . implode(' ', $failures));
