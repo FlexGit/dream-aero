@@ -55,6 +55,10 @@ class SendCertificateEmail extends Command
 				$query->where('is_certificate_purchase', true)
 					->whereHas('deal', function ($query) {
 						$query->where('email', '!=', Contractor::ANONYM_EMAIL);
+					})
+					->whereRelation('bills', function ($query) {
+						$query->whereRelation('paymentMethod', 'payment_methods.alias', '=', PaymentMethod::ONLINE_ALIAS)
+							->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS);
 					});
 			})
 			->get();
