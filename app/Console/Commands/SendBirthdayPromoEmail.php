@@ -99,7 +99,7 @@ class SendBirthdayPromoEmail extends Command
 
 				DB::commit();
 			} catch (Throwable $e) {
-				\Log::debug('500 - ' . $e->getMessage());
+				\Log::debug('500 - birthday_promo:send - ' . $e->getMessage());
 				
 				return 0;
 			}

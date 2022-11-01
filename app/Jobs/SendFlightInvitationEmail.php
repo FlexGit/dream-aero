@@ -93,7 +93,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		
 		$failures = Mail::failures();
 		if ($failures) {
-			\Log::debug($this->event->id . ' - ' . $this->event->data_json['flight_invitation_file_path']);
+			\Log::debug('500 - Flight_invitation_email:send' . $this->event->id . ' - ' . $this->event->data_json['flight_invitation_file_path']);
 			return null;
 		}
 		

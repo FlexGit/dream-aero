@@ -51,5 +51,11 @@ class SendPersonalFeedbackEmail extends Job implements ShouldQueue {
 			$message->subject($subject);
 			$message->to($recipients);
 		});
+		
+		$failures = Mail::failures();
+		if ($failures) {
+			\Log::debug('500 - personal_feedback_email:send - ' . implode(', ', $failures));
+			return null;
+		}
 	}
 }

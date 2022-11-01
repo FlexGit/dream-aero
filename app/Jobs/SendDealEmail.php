@@ -101,6 +101,12 @@ class SendDealEmail extends Job implements ShouldQueue {
 				$message->subject($subject);
 				$message->to($recipients);
 			});
+			
+			$failures = Mail::failures();
+			if ($failures) {
+				\Log::debug('500 - deal_email:send - ' . implode(', ', $failures));
+				return null;
+			}
 		}
 	}
 }

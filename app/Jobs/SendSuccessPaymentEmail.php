@@ -69,6 +69,7 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		
 		$failures = Mail::failures();
 		if ($failures) {
+			\Log::debug('500 - success_payment_email:send - ' . implode(', ', $failures));
 			return null;
 		}
 		

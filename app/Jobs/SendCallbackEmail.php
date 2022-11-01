@@ -42,5 +42,11 @@ class SendCallbackEmail extends Job implements ShouldQueue {
 			$message->to($recipients);
 			$message->bcc($bcc);
 		});
+		
+		$failures = Mail::failures();
+		if ($failures) {
+			\Log::debug('500 - callback_email:send - ' . implode(', ', $failures));
+			return null;
+		}
 	}
 }

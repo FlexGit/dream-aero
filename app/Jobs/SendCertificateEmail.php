@@ -154,6 +154,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		
 		$failures = Mail::failures();
 		if ($failures) {
+			\Log::debug('500 - certificate_email:send - ' . implode(', ', $failures));
 			return null;
 		}
 		

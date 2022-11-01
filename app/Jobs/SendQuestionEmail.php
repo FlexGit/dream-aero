@@ -45,5 +45,11 @@ class SendQuestionEmail extends Job implements ShouldQueue {
 			$message->to($recipients);
 			$message->bcc($bcc);
 		});
+		
+		$failures = Mail::failures();
+		if ($failures) {
+			\Log::debug('500 - question_email:send - ' . implode(', ', $failures));
+			return null;
+		}
 	}
 }

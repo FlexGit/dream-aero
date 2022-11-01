@@ -61,6 +61,8 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 		if (!$failures) {
 			$this->promocode->sent_at = Carbon::now()->format('Y-m-d H:i:s');
 			$this->promocode->save();
+		} else {
+			\Log::debug('500 - promocode_after_year_email:send - ' . implode(', ', $failures));
 		}
 	}
 }

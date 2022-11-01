@@ -92,7 +92,7 @@ class SendLeaveReviewEmail extends Command
 					$event->save();
 				}
 			} catch (Throwable $e) {
-				\Log::debug('500 - ' . $e->getMessage());
+				\Log::debug('500 - leave_review_email:send - ' . $e->getMessage());
 			
 				return 0;
 			}
