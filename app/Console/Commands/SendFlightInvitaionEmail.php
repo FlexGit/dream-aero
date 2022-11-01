@@ -71,6 +71,7 @@ class SendFlightInvitationEmail extends Command
 			if ($balance < 0) continue;
    
 			try {
+				\Log::debug('START: ' . $event->id);
 				$job = new \App\Jobs\SendFlightInvitationEmail($event);
 				$job->handle();
 			} catch (Throwable $e) {
@@ -78,6 +79,7 @@ class SendFlightInvitationEmail extends Command
 			
 				return 0;
 			}
+			\Log::debug('STOP: ' . $event->id);
 		}
 			
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - flight_invitation_email:send - OK');
