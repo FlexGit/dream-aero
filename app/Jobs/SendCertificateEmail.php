@@ -7,6 +7,7 @@ use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\City;
 use App\Models\Contractor;
+use App\Models\PaymentMethod;
 use App\Models\ProductType;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
@@ -45,7 +46,9 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			}
 		}
 
-		$position = $this->certificate->position;
+		$position = $this->certificate->position
+			->where('is_certificate_purchase', true)
+			->first();
 		if (!$position) return null;
 		
 		$deal = $position->deal;
@@ -53,6 +56,14 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		
 		$balance = $position->balance();
 		if ($balance < 0) return null;
+		
+		$isOnlinePaid = false;
+		foreach ($position->bills as $bill) {
+			if ($bill->paymentMethod && $bill->paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+				$isOnlinePaid = true;
+			}
+		}
+		if (!$isOnlinePaid) return null;
 		
 		$product = $position->product;
 		if (!$product) return null;
