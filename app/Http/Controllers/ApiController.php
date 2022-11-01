@@ -238,13 +238,14 @@ class ApiController extends Controller
 			
 			Mail::send('admin.emails.code', $messageData, function ($message) use ($subject, $recipients) {
 				/** @var \Illuminate\Mail\Message $message */
+				$message->from('pr@dream-aero.ru');
 				$message->subject($subject);
 				$message->to($recipients);
 			});
 			
 			$failures = Mail::failures();
 			if ($failures) {
-				return $this->responseError($_SERVER['REMOTE_ADDR'] . ': ' . implode(' ', $failures), 500);
+				return $this->responseError(implode(' ', $failures), 500);
 			}
 		} catch (Throwable $e) {
 			Log::debug('500 - ' . $_SERVER['REMOTE_ADDR'] . ': ' . $e->getMessage());
