@@ -347,6 +347,7 @@ class DealPosition extends Model
 	 */
 	public function balance()
 	{
+		\Log::debug('label 4.0: ' . $this->billPayedAmount() . ' - ' . $this->amount());
 		return $this->billPayedAmount() - $this->amount();
 	}
 }

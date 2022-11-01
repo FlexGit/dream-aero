@@ -56,8 +56,9 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		if (!$deal) return null;
 		\Log::debug('label 3');
 		$balance = $position->balance();
+		\Log::debug('label 4: ' . $balance);
 		if ($balance < 0) return null;
-		\Log::debug('label 4');
+		\Log::debug('label 4.1');
 		$isOnlinePaid = false;
 		foreach ($position->bills as $bill) {
 			if ($bill->paymentMethod && $bill->paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
