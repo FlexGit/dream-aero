@@ -64,20 +64,20 @@ class Kernel extends ConsoleKernel
 			->emailOutputOnFailure(env('DEV_EMAIL'));*/
 		
 		// отправка контрагенту приглашения на полет
-		$filePath = storage_path('logs/commands/flight_invitation_email.log');
+		/*$filePath = storage_path('logs/commands/flight_invitation_email.log');
 		$schedule->command('flight_invitation_email:send')
 			->everyFiveMinutes()
 			->runInBackground()
-			->appendOutputTo($filePath);
+			->appendOutputTo($filePath);*/
 		
 		// отправка контрагенту промокода на полет на другом типе тренажера
-		$filePath = storage_path('logs/commands/promocode_send.log');
+		/*$filePath = storage_path('logs/commands/promocode_send.log');
 		$schedule->command('promocode_email:send')
 			->hourly()
 			->runInBackground()
-			->appendOutputTo($filePath);
+			->appendOutputTo($filePath);*/
 		
-		// отправка контрагенту промокода на полет на другом типе тренажера
+		// отправка контрагенту промокода на полет через год после полета
 		/*$filePath = storage_path('logs/commands/promocode_year.log');
 		$schedule->command('promocode_year:send')
 			->everyThirtyMinutes()
@@ -85,11 +85,11 @@ class Kernel extends ConsoleKernel
 			->appendOutputTo($filePath);*/
 		
 		// отправка контрагенту промо по ДР
-		$filePath = storage_path('logs/commands/birthday_promo.log');
+		/*$filePath = storage_path('logs/commands/birthday_promo.log');
 		$schedule->command('birthday_promo:send')
 			->daily()
 			->runInBackground()
-			->appendOutputTo($filePath);
+			->appendOutputTo($filePath);*/
 
 		// начисление баллов после полета
 		$filePath = storage_path('logs/commands/scoring.log');
@@ -98,20 +98,6 @@ class Kernel extends ConsoleKernel
 			->runInBackground()
 			->appendOutputTo($filePath);
 		
-		// проставление пилота после полета
-		/*$filePath = storage_path('logs/commands/pilot_set.log');
-		$schedule->command('pilot:set')
-			->everyFiveMinutes()
-			->runInBackground()
-			->appendOutputTo($filePath);*/
-		
-		// получение информации о списании баллов Аэрофлот Бонус
-		/*$filePath = storage_path('logs/commands/aeroflot_order_info.log');
-		$schedule->command('aeroflot_order_info:get')
-			->everyMinute()
-			->runInBackground()
-			->appendOutputTo($filePath);*/
-
 		// Загрузка Сделок в Roistat
 		$filePath = storage_path('logs/commands/roistat.log');
 		$schedule->command('roistat:add_deals')
@@ -132,9 +118,9 @@ class Kernel extends ConsoleKernel
 			->runInBackground();
 		
 		// отправка контрагенту письма с предложением оставить отзыв
-		$schedule->command('leave_review_email:send')
+		/*$schedule->command('leave_review_email:send')
 			->hourly()
-			->runInBackground();
+			->runInBackground();*/
 		
 		// Обновление остатков на Яндекс Маркет
 		$schedule->command('yandex:market')

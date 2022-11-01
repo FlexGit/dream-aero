@@ -39,8 +39,8 @@ return [
             'host' => 'smtp.yandex.ru',
             'port' => 465,
             'encryption' => 'ssl',
-            'username' => 'pr@dream-aero.ru',
-            'password' => '190208prda!',
+            'username' => 'booking@dream-aero.com',
+            'password' => 'dream0908@',
             'timeout' => null,
             'auth_mode' => null,
         ],
@@ -92,7 +92,7 @@ return [
     */
 
     'from' => [
-        'address' => 'pr@dream-aero.ru',
+        'address' => 'booking@dream-aero.com',
         'name' => '"Dream Aero"',
     ],
 
