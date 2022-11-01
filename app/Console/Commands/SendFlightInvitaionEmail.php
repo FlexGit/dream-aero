@@ -53,7 +53,7 @@ class SendFlightInvitationEmail extends Command
 						->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS);
 				});
 			})
-			->whereBetween('created_at', [Carbon::now()->subMinutes(30), Carbon::now()])
+			->whereBetween('created_at', [Carbon::now()->subMinutes(30)->format('Y-m-d H:i:s'), Carbon::now()->format('Y-m-d H:i:s')])
 			->latest()
 			->limit(100)
 			->get();
