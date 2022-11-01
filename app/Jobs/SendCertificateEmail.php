@@ -46,19 +46,18 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			}
 		}
 
-		\Log::debug('label 1');
 		$position = $this->certificate->position
 			->where('is_certificate_purchase', true)
 			->first();
 		if (!$position) return null;
-		\Log::debug('label 2');
+
 		$deal = $position->deal;
 		if (!$deal) return null;
-		\Log::debug('label 3');
+
 		$balance = $position->balance();
-		\Log::debug('label 4: ' . $balance);
+
 		if ($balance < 0) return null;
-		\Log::debug('label 4.1');
+
 		$isOnlinePaid = false;
 		foreach ($position->bills as $bill) {
 			if ($bill->paymentMethod && $bill->paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
@@ -66,7 +65,6 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			}
 		}
 		if (!$isOnlinePaid) return null;
-		\Log::debug('label 5');
 		
 		$product = $position->product;
 		if (!$product) return null;
@@ -76,7 +74,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		
 		$contractor = $deal->contractor;
 		if (!$contractor) return null;
-		\Log::debug('label 6');
+
 		$dealEmail = $deal->email ?? '';
 		$dealName = $deal->name ?? '';
 		$dealCity = $deal->city;
@@ -85,11 +83,11 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		if (!$dealEmail && !$contractorEmail) {
 			return null;
 		}
-		\Log::debug('label 7');
+
 		if ($dealEmail == Contractor::ANONYM_EMAIL) {
 			return null;
 		}
-		\Log::debug('label 8');
+
 		$city = $this->certificate->city;
 		if ($city) {
 			$cityPhone = $city->phone;
@@ -145,7 +143,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		}
 
 		$subject = env('APP_NAME') . ': сертификат на полет';
-		\Log::debug('label 9');
+
 		Mail::send(['html' => "admin.emails.send_certificate"], $messageData, function ($message) use ($subject, $recipients, $certificateRulesFileName, $bcc) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
@@ -155,14 +153,13 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			$message->to($recipients);
 			$message->bcc($bcc);
 		});
-		\Log::debug('label 10');
+
 		$failures = Mail::failures();
 		if ($failures) {
-			\Log::debug('label 11');
 			\Log::debug('500 - certificate_email:send - ' . implode(', ', $failures));
 			return null;
 		}
-		\Log::debug('label 12');
+
 		$this->certificate->sent_at = Carbon::now()->format('Y-m-d H:i:s');
 		$this->certificate->save();
 	}
