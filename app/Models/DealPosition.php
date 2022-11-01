@@ -347,7 +347,9 @@ class DealPosition extends Model
 	 */
 	public function balance()
 	{
-		\Log::debug('label 4.0: ' . $this->billPayedAmount() . ' - ' . $this->amount());
+		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+			\Log::debug('label 4.0: - ' . $this->billPayedAmount() . ' - ' . $this->amount());
+		}
 		return $this->billPayedAmount() - $this->amount();
 	}
 }
