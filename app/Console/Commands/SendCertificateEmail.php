@@ -61,6 +61,8 @@ class SendCertificateEmail extends Command
     	$i = 1;
     	/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {
+			if ($certificate->sent_at) continue;
+			
 			/** @var DealPosition $position */
 			$position = $certificate->position;
 			if (!$position) continue;

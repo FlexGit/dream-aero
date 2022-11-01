@@ -30,6 +30,10 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
+		if ($this->certificate->sent_at) {
+			return null;
+		}
+		
 		$certificateFilePath = isset($this->certificate->data_json['certificate_file_path']) ? $this->certificate->data_json['certificate_file_path'] : '';
 		$certificateFileExists = Storage::disk('private')->exists($certificateFilePath);
 
