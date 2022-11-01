@@ -90,6 +90,7 @@ class SendCertificateEmail extends Command
 			if (!$deal) continue;
 		
 			try {
+				\Log::debug('CERTIFICATE START: ' . $certificate->number);
 				$job = new \App\Jobs\SendCertificateEmail($certificate);
 				$job->handle();
 			} catch (Throwable $e) {
@@ -97,6 +98,7 @@ class SendCertificateEmail extends Command
 			
 				return 0;
 			}
+			\Log::debug('CERTIFICATE STOP: ' . $certificate->number);
 			++$i;
 		}
 	

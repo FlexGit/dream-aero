@@ -60,8 +60,7 @@ class Kernel extends ConsoleKernel
 		$schedule->command('certificate_email:send')
 			->everyMinute()
 			->runInBackground()
-			->appendOutputTo($filePath)
-			->emailOutputOnFailure(env('DEV_EMAIL'));*/
+			->appendOutputTo($filePath);*/
 		
 		// отправка контрагенту приглашения на полет
 		$filePath = storage_path('logs/commands/flight_invitation_email.log');
