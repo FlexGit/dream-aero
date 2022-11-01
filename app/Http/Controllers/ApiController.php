@@ -249,7 +249,8 @@ class ApiController extends Controller
 			$failures = Mail::failures();
 			//Log::debug($_SERVER['REMOTE_ADDR'] . ': ' . implode(' ', $failures));
 			if ($failures) {
-				return $this->responseError(implode(' ', $failures), 500);
+				//return $this->responseError(implode(' ', $failures), 500);
+				return $this->responseError('Отправка письма временно невозможна, попробуйте позже. Приносим извинения за доставленные неудобства.', 400);
 			}
 		} catch (Throwable $e) {
 			Log::debug('500 - ' . $_SERVER['REMOTE_ADDR'] . ': ' . $e->getMessage());
