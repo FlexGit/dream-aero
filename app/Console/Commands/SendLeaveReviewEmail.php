@@ -80,6 +80,8 @@ class SendLeaveReviewEmail extends Command
 				
 				$subject = env('APP_NAME') . ': оставьте отзыв';
 				
+				\Log::debug(config('mail'));
+				
 				Mail::send(['html' => "admin.emails.send_leave_review"], $messageData, function ($message) use ($subject, $recipients/*, $bcc*/) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);

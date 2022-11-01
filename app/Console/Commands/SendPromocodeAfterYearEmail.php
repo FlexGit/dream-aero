@@ -123,6 +123,8 @@ class SendPromocodeAfterYearEmail extends Command
 				
 				$subject = env('APP_NAME') . ': скидка на полет в Авиатренажере до ' . Carbon::parse($promocode->active_to_at)->format('d.m.Y');
 				
+				\Log::debug(config('mail'));
+				
 				Mail::send(['html' => "admin.emails.year_promocode"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);

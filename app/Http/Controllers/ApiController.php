@@ -175,6 +175,7 @@ class ApiController extends Controller
 	 */
 	public function sendCode()
 	{
+		\Log::debug(config('mail'));
 		return $this->responseError('Сервис временно недоступен. Попробуйте повторить позже.', 400);
 		
 		$rules = [
