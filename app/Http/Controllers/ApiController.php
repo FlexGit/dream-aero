@@ -255,7 +255,8 @@ class ApiController extends Controller
 		} catch (Throwable $e) {
 			Log::debug('500 - ' . $_SERVER['REMOTE_ADDR'] . ': ' . $e->getMessage());
 			
-			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
+			return $this->responseError('Отправка письма временно невозможна, попробуйте позже. Приносим извинения за доставленные неудобства.', 400);
+			//return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
 		return $this->responseSuccess('Код подтверждения отправлен на ' . $email);
