@@ -7,6 +7,7 @@ use App\Models\Certificate;
 use App\Models\Contractor;
 use App\Models\Deal;
 use App\Models\DealPosition;
+use App\Models\PaymentMethod;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Throwable;
@@ -66,14 +67,22 @@ class SendCertificateEmail extends Command
 			/** @var DealPosition $position */
 			$position = $certificate->position;
 			if (!$position) continue;
-		
+			
+			$balance = $position->balance();
+			if ($balance < 0) continue;
+			
+			$isOnlinePaid = false;
+			foreach ($position->bills as $bill) {
+				if ($bill->paymentMethod && $bill->paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
+					$isOnlinePaid = true;
+				}
+			}
+			if (!$isOnlinePaid) continue;
+			
 			/** @var Deal $deal */
 			$deal = $position->deal;
 			if (!$deal) continue;
 		
-			$balance = $position->balance();
-			if ($balance < 0) continue;
-   
 			try {
 				$job = new \App\Jobs\SendCertificateEmail($certificate);
 				$job->handle();
