@@ -111,9 +111,8 @@ class SendPromocodeAfterYearEmail extends Command
 			
 				$notification->contractors()->attach($contractor->id);
 				
-				$recipients = $bcc = [];
+				$recipients = [];
 				$recipients[] = $contractor->email;
-				//$bcc[] = env('DEV_EMAIL');
 				
 				$messageData = [
 					'contractor' => $contractor,
@@ -125,11 +124,10 @@ class SendPromocodeAfterYearEmail extends Command
 				
 				\Log::debug(config('mail'));
 				
-				Mail::send(['html' => "admin.emails.year_promocode"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
+				Mail::send(['html' => "admin.emails.year_promocode"], $messageData, function ($message) use ($subject, $recipients) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);
 					$message->to($recipients);
-					//$message->bcc($bcc);
 				});
 				$failures = Mail::failures();
 				if ($failures) {
