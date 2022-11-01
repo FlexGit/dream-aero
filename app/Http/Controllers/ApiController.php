@@ -238,8 +238,6 @@ class ApiController extends Controller
 			
 			$subject = env('APP_NAME') . ': код подтверждения';
 			
-			\Log::debug(config('mail'));
-
 			Mail::send('admin.emails.code', $messageData, function ($message) use ($subject, $recipients) {
 				/** @var \Illuminate\Mail\Message $message */
 				$message->subject($subject);
@@ -247,7 +245,6 @@ class ApiController extends Controller
 			});
 			
 			$failures = Mail::failures();
-			//Log::debug($_SERVER['REMOTE_ADDR'] . ': ' . implode(' ', $failures));
 			if ($failures) {
 				//return $this->responseError(implode(' ', $failures), 500);
 				return $this->responseError('Отправка письма временно невозможна, попробуйте позже. Приносим извинения за доставленные неудобства.', 400);

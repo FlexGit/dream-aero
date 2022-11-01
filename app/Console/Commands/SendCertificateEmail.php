@@ -58,7 +58,8 @@ class SendCertificateEmail extends Command
 					})
 					->whereRelation('bills', function ($query) {
 						$query->whereRelation('paymentMethod', 'payment_methods.alias', '=', PaymentMethod::ONLINE_ALIAS)
-							->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS);
+							->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
+							->whereBetween('payed_at', [Carbon::now()->subHour(), Carbon::now()]);
 					});
 			})
 			->get();
