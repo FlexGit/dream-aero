@@ -55,6 +55,10 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		if (!$deal) return null;
 
 		$balance = $position->balance();
+		
+		if ($_SERVER['REMOTE_ADDR'] == '79.165.99.239') {
+			\Log::debug($position->number);
+		}
 
 		if ($balance < 0) return null;
 
