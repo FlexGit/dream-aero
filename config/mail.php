@@ -36,11 +36,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
+            'host' => 'smtp.yandex.ru',
+            'port' => 465,
+            'encryption' => 'ssl',
+            'username' => 'pr@dream-aero.ru',
+            'password' => '190208prda!',
             'timeout' => null,
             'auth_mode' => null,
         ],
