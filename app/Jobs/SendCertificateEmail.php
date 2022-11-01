@@ -46,7 +46,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			}
 		}
 
-		$position = $this->certificate->position
+		$position = $this->certificate->position()
 			->where('is_certificate_purchase', true)
 			->first();
 		if (!$position) return null;
