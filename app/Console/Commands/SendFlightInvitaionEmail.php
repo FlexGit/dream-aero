@@ -42,7 +42,7 @@ class SendFlightInvitationEmail extends Command
      */
     public function handle()
     {
-    	//\DB::connection()->enableQueryLog();
+    	\DB::connection()->enableQueryLog();
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereNull('flight_invitation_sent_at')
 			->whereNull('simulator_up_at')
@@ -57,7 +57,7 @@ class SendFlightInvitationEmail extends Command
 			->latest()
 			->limit(100)
 			->get();
-    	//\Log::debug(\DB::getQueryLog());
+    	\Log::debug(\DB::getQueryLog());
     	/** @var Event[] $events */
 		foreach ($events as $event) {
 			if (!$event->uuid) continue;
