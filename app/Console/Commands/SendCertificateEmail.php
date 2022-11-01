@@ -62,6 +62,7 @@ class SendCertificateEmail extends Command
 							->whereBetween('payed_at', [Carbon::now()->subMinutes(30)->format('Y-m-d H:i:s'), Carbon::now()->format('Y-m-d H:i:s')]);
 					});
 			})
+			->limit(50)
 			->get();
     	\Log::debug(\DB::getQueryLog());
     	$i = 1;
