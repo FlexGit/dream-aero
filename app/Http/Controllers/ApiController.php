@@ -244,6 +244,7 @@ class ApiController extends Controller
 			});
 			
 			$failures = Mail::failures();
+			Log::debug($_SERVER['REMOTE_ADDR'] . ': ' . implode(' ', $failures));
 			if ($failures) {
 				return $this->responseError(implode(' ', $failures), 500);
 			}
