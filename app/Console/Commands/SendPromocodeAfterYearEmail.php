@@ -127,7 +127,7 @@ class SendPromocodeAfterYearEmail extends Command
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);
 					$message->to($recipients);
-					$message->bcc($bcc);
+					//$message->bcc($bcc);
 				});
 				$failures = Mail::failures();
 				if ($failures) {
