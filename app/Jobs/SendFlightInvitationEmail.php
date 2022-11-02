@@ -99,7 +99,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		
 		$task = new Task();
 		$task->name = get_class($this);
-		$task->email = implode(',', array_merge($recipients, $bcc));
+		$task->email = $deal->email;
 		$task->object_uuid = $this->event->uuid;
 		$task->save();
 	}
