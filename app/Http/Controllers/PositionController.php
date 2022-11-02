@@ -149,10 +149,14 @@ class PositionController extends Controller
 			->oldest()
 			->get();
 		
+		$simulators = FlightSimulator::whereIsActive(true)
+			->get();
+		
 		$VIEW = view('admin.position.modal.extra_minutes.add', [
 			'deal' => $deal,
 			'products' => $products,
 			'events' => $events,
+			'simulators' => $simulators,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -638,6 +642,7 @@ class PositionController extends Controller
 		$productId = $this->request->product_id ?? 0;
 		$eventId = $this->request->event_id ?? 0;
 		$amount = $this->request->amount ?? 0;
+		$simulatorId = $this->request->simulator_id ?? 0;
 		
 		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) {
@@ -712,7 +717,7 @@ class PositionController extends Controller
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
 			$position->city_id = $city->id ?? 0;
 			$position->location_id = $location->id ?? 0;
-			$position->flight_simulator_id = $simulator->id ?? 0;
+			$position->flight_simulator_id = $simulatorId ?: $simulator->id;
 			$position->flight_at = Carbon::parse($stopAt)->format('Y-m-d H:i');
 			$position->source = Deal::ADMIN_SOURCE;
 			$position->user_id = $this->request->user()->id ?? 0;
@@ -726,7 +731,7 @@ class PositionController extends Controller
 			$event->deal_position_id = $position->id;
 			$event->city_id = $city->id ?? 0;
 			$event->location_id = $location->id ?? 0;
-			$event->flight_simulator_id = $simulator->id ?? 0;
+			$event->flight_simulator_id = $simulatorId ?: $simulator->id;
 			$event->user_id = $user->id ?? 0;
 			$event->start_at = Carbon::parse($stopAt)->format('Y-m-d H:i');
 			$event->stop_at = Carbon::parse($stopAt)->addMinutes($product->duration)->format('Y-m-d H:i');

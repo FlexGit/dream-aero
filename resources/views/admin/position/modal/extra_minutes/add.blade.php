@@ -19,13 +19,24 @@
 			</select>
 		</div>
 	</div>
-	<div class="col-8">
+	<div class="col-4">
 		<div class="form-group">
 			<label for="event_id">Связанный полёт</label>
 			<select class="form-control" id="event_id" name="event_id">
 				<option value="0"></option>
 				@foreach($events as $event)
-					<option value="{{ $event->id }}">{{ $event->location ? $event->location->name : '' }} {{ $event->simulator ? $event->simulator->name : ''}} {{ ($event->dealPosition && $event->dealPosition->product) ? $event->dealPosition->product->name : '' }}, {{ $event->start_at->format('d.m.Y H:i') }} - {{ $event->stop_at->format('H:i') }} {{ $event->extra_time ? '+' . $event->extra_time . ' мин' : '' }}</option>
+					<option value="{{ $event->id }}" data-location-alias="{{ $event->location ? $event->location->alias : '' }}">{{ $event->location ? $event->location->name : '' }} {{ $event->simulator ? $event->simulator->name : ''}} {{ ($event->dealPosition && $event->dealPosition->product) ? $event->dealPosition->product->name : '' }}, {{ $event->start_at->format('d.m.Y H:i') }} - {{ $event->stop_at->format('H:i') }} {{ $event->extra_time ? '+' . $event->extra_time . ' мин' : '' }}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="form-group js-simulator-container hidden">
+			<label for="simulator_id">Авиатренажер</label>
+			<select class="form-control" id="simulator_id" name="simulator_id">
+				<option value="0"></option>
+				@foreach($simulators as $simulator)
+					<option value="{{ $simulator->id }}">{{ $simulator->name }}</option>
 				@endforeach
 			</select>
 		</div>

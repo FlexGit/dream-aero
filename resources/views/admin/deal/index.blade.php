@@ -843,6 +843,15 @@
 				});
 			});
 
+			$(document).on('change', '#event_id', function(e) {
+				if ($(this).find(':selected').data('location-alias') === 'afi') {
+					$('.js-simulator-container').removeClass('hidden');
+				} else {
+					$('.js-simulator-container').addClass('hidden');
+				}
+			});
+
+
 			$(document).on('click', '.js-current-time', function(e) {
 				$(this).closest('.input-group').find('input[type="time"]').val(moment().format('hh:mm'));
 			});
