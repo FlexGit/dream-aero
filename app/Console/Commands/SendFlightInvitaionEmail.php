@@ -42,7 +42,7 @@ class SendFlightInvitationEmail extends Command
      */
     public function handle()
     {
-    	\DB::connection()->enableQueryLog();
+    	//\DB::connection()->enableQueryLog();
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereNull('flight_invitation_sent_at')
 			->whereNull('simulator_up_at')
@@ -57,7 +57,7 @@ class SendFlightInvitationEmail extends Command
 			->latest()
 			->limit(50)
 			->get();
-    	\Log::debug(\DB::getQueryLog());
+    	//\Log::debug(\DB::getQueryLog());
     	/** @var Event[] $events */
 		foreach ($events as $event) {
 			if (!$event->uuid) continue;
@@ -71,7 +71,7 @@ class SendFlightInvitationEmail extends Command
 			if ($balance < 0) continue;
    
 			try {
-				\Log::debug('START: ' . $event->id);
+				\Log::debug('FLIGHT INVITATION START: ' . $event->id);
 				$job = new \App\Jobs\SendFlightInvitationEmail($event);
 				$job->handle();
 			} catch (Throwable $e) {
@@ -79,7 +79,7 @@ class SendFlightInvitationEmail extends Command
 			
 				return 0;
 			}
-			\Log::debug('STOP: ' . $event->id);
+			\Log::debug('FLIGHT INVITATION STOP: ' . $event->id);
 		}
 			
 		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - flight_invitation_email:send - OK');

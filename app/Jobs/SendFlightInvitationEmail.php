@@ -5,7 +5,9 @@ namespace App\Jobs;
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
 use App\Models\Bill;
 use App\Models\City;
+use App\Models\Contractor;
 use App\Models\Event;
+use App\Models\Task;
 use App\Repositories\CityRepository;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
@@ -56,11 +58,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		$position = $this->event->dealPosition;
 		if (!$position) return null;
 		
-		$dealEmail = $deal->email ?? '';
-		$dealName = $deal->name ?? '';
-		$contractorEmail = $contractor->email ?? '';
-		$contractorName = $contractor->name ?? '';
-		if (!$dealEmail && !$contractorEmail) {
+		if (!$deal->name || !$deal->email || $deal->email == Contractor::ANONYM_EMAIL) {
 			return null;
 		}
 		
@@ -68,7 +66,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		if (!$simulatorAlias) return null;
 		
 		$messageData = [
-			'name' => $dealName ?: $contractorName,
+			'name' => $deal->name,
 			'flightDate' => $this->event->start_at ? Carbon::parse($this->event->start_at)->format('d.m.Y H:i') : '',
 			'location' => $location,
 			'simulator' => $simulator,
@@ -76,7 +74,7 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 		];
 		
 		$recipients = $bcc = [];
-		$recipients[] = $dealEmail ?: $contractorEmail;
+		$recipients[] = $deal->email;
 		if ($city->email) {
 			$bcc[] = $city->email;
 		}
@@ -90,14 +88,19 @@ class SendFlightInvitationEmail extends Job implements ShouldQueue {
 			$message->to($recipients);
 			$message->bcc($bcc);
 		});
-		
 		$failures = Mail::failures();
 		if ($failures) {
-			\Log::debug('500 - Flight_invitation_email:send' . $this->event->id . ' - ' . $this->event->data_json['flight_invitation_file_path']);
+			\Log::debug('500 - ' . get_class($this) . ': ' . $this->event->id . ' - ' . $this->event->data_json['flight_invitation_file_path']);
 			return null;
 		}
 		
 		$this->event->flight_invitation_sent_at = Carbon::now()->format('Y-m-d H:i:s');
 		$this->event->save();
+		
+		$task = new Task();
+		$task->name = get_class($this);
+		$task->email = implode(',', array_merge($recipients, $bcc));
+		$task->object_uuid = $this->event->uuid;
+		$task->save();
 	}
 }
