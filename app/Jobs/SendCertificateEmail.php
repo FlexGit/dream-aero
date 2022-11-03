@@ -9,6 +9,7 @@ use App\Models\City;
 use App\Models\Contractor;
 use App\Models\PaymentMethod;
 use App\Models\ProductType;
+use App\Models\Task;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
@@ -74,16 +75,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		$contractor = $deal->contractor;
 		if (!$contractor) return null;
 
-		$dealEmail = $deal->email ?? '';
-		$dealName = $deal->name ?? '';
-		$dealCity = $deal->city;
-		$contractorEmail = $contractor->email ?? '';
-		$contractorName = $contractor->name ?? '';
-		if (!$dealEmail && !$contractorEmail) {
-			return null;
-		}
-
-		if ($dealEmail == Contractor::ANONYM_EMAIL) {
+		if (!$deal->name || !$deal->email || $deal->name == Contractor::ANONYM_EMAIL) {
 			return null;
 		}
 
@@ -131,14 +123,14 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 
 		$messageData = [
 			'certificate' => $this->certificate,
-			'name' => $dealName ?: $contractorName,
-			'city' => $dealCity ?? null,
+			'name' => $deal->name,
+			'city' => $deal->city,
 		];
 		
 		$recipients = $bcc = [];
-		$recipients[] = $dealEmail ?: $contractorEmail;
-		if ($dealCity && $dealCity->email) {
-			$bcc[] = $dealCity->email;
+		$recipients[] = $deal->email;
+		if ($deal->city && $deal->city->email) {
+			$bcc[] = $deal->city->email;
 		}
 
 		$subject = env('APP_NAME') . ': сертификат на полет';
@@ -155,11 +147,17 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 
 		$failures = Mail::failures();
 		if ($failures) {
-			\Log::debug('500 - certificate_email:send - ' . implode(', ', $failures));
+			\Log::debug('500 - ' . get_class($this) . ': ' . implode(', ', $failures));
 			return null;
 		}
 
 		$this->certificate->sent_at = Carbon::now()->format('Y-m-d H:i:s');
 		$this->certificate->save();
+		
+		$task = new Task();
+		$task->name = get_class($this);
+		$task->email = $deal->email;
+		$task->object_uuid = $this->certificate->uuid;
+		$task->save();
 	}
 }
