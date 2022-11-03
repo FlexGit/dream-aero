@@ -9,6 +9,7 @@ use App\Models\Deal;
 use App\Models\FlightSimulator;
 use App\Models\Location;
 use App\Models\Promocode;
+use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -36,9 +37,8 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
-		$recipients = $bcc = [];
+		$recipients = [];
 		$recipients[] = $this->deal->email;
-		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'contractor' => $this->contractor ?: new Contractor(),
@@ -51,18 +51,24 @@ class SendPromocodeAfterFlightEmail extends Job implements ShouldQueue {
 
 		$subject = env('APP_NAME') . ': промокод на полет';
 
-		Mail::send(['html' => "admin.emails.send_promocode_after_flight"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
+		Mail::send(['html' => "admin.emails.send_promocode_after_flight"], $messageData, function ($message) use ($subject, $recipients) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->to($recipients);
-			$message->bcc($bcc);
 		});
 		$failures = Mail::failures();
-		if (!$failures) {
-			$this->promocode->sent_at = Carbon::now()->format('Y-m-d H:i:s');
-			$this->promocode->save();
-		} else {
-			\Log::debug('500 - promocode_after_year_email:send - ' . implode(', ', $failures));
+		if ($failures) {
+			\Log::debug('500 - ' . get_class($this) . ': ' . implode(', ', $failures));
+			return null;
 		}
+
+		$this->promocode->sent_at = Carbon::now()->format('Y-m-d H:i:s');
+		$this->promocode->save();
+		
+		$task = new Task();
+		$task->name = get_class($this);
+		$task->email = implode(',', $recipients);
+		$task->object_uuid = $this->promocode->uuid;
+		$task->save();
 	}
 }

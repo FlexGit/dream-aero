@@ -47,13 +47,15 @@ class SendPromocodeAfterFlightEmail extends Command
      */
     public function handle()
     {
-    	// проверяем все полеты с начала дня до текущего момента
+		$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000_RUB');
+		if (!$discount) return 0;
+	
+		// проверяем полеты за последние 3 часа
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
-			->whereBetween('stop_at', [Carbon::now()->subDays(3)->startOfDay(), Carbon::now()])
+			->whereBetween('stop_at', [Carbon::now()->subHours(3)->format('Y-m-d H:i:s'), Carbon::now()->format('Y-m-d H:i:s')])
+			->whereRelation('deal', 'deals.email', '!=', Contractor::ANONYM_EMAIL)
 			->get();
     	foreach ($events as $event) {
-    		if (!$event->contractor_id) continue;
-		
     		$location = $event->location;
     		if (!$location) continue;
 		
@@ -69,18 +71,9 @@ class SendPromocodeAfterFlightEmail extends Command
 			$city = $event->city;
 			if (!$city) continue;
 		
-			$contractor = Contractor::where('is_active', true)
-				->where('email', '!=', Contractor::ANONYM_EMAIL)
-				->find($event->contractor_id);
+			$contractor = $event->contractor;
 			if (!$contractor) continue;
-
-			// промокод данного типа контрагент может получить только единожды
-			$promocode = Promocode::where('is_active', true)
-				->where('contractor_id', $contractor->id)
-				->where('type', Promocode::SIMULATOR_TYPE)
-				->first();
-			if ($promocode) continue;
-
+		
 			// проверяем, есть ли в данном городе локация с другим типом авиатренажера
 			//\DB::connection()->enableQueryLog();
 			$location = Location::where('is_active', true)
@@ -94,9 +87,13 @@ class SendPromocodeAfterFlightEmail extends Command
 				->where('id', '!=', $simulator->id)
 				->first();
 			if (!$anotherSimulator) continue;
-
-			$discount = HelpFunctions::getEntityByAlias(Discount::class, 'fixed_1000_RUB');
-			if (!$discount) continue;
+		
+			// промокод данного типа контрагент может получить только единожды
+			$promocode = Promocode::where('is_active', true)
+				->where('contractor_id', $contractor->id)
+				->where('type', Promocode::SIMULATOR_TYPE)
+				->first();
+			if ($promocode) continue;
 		
 			try {
 				$promocode = new Promocode();
@@ -121,7 +118,6 @@ class SendPromocodeAfterFlightEmail extends Command
 			
 				$notification->contractors()->attach($contractor->id);
 			
-				//dispatch(new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode));
 				$job = new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode);
 				$job->handle();
 			} catch (Throwable $e) {
