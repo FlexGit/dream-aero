@@ -56,11 +56,11 @@ class Kernel extends ConsoleKernel
 			->appendOutputTo($filePath);
 
 		// отправка контрагенту сертификата на полет
-		/*$filePath = storage_path('logs/commands/certificate_email.log');
+		$filePath = storage_path('logs/commands/certificate_email.log');
 		$schedule->command('certificate_email:send')
 			->everyMinute()
 			->runInBackground()
-			->appendOutputTo($filePath);*/
+			->appendOutputTo($filePath);
 		
 		// отправка контрагенту приглашения на полет
 		$filePath = storage_path('logs/commands/flight_invitation_email.log');
