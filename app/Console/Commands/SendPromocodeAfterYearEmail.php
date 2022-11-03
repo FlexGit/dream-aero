@@ -8,6 +8,7 @@ use App\Models\Deal;
 use App\Models\Discount;
 use App\Models\Notification;
 use App\Models\Promocode;
+use App\Models\Task;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use DB;
@@ -63,6 +64,7 @@ class SendPromocodeAfterYearEmail extends Command
 			})
 			->whereBetween('deals.created_at', [Carbon::now()->subDays(364)->startOfDay()->format('Y-m-d H:i:s'), Carbon::now()->subDays(364)->endOfDay()->addHours(2)->format('Y-m-d H:i:s')])
 			->where('contractors.email', '!=', Contractor::ANONYM_EMAIL)
+			->where('deals.email', '!=', Contractor::ANONYM_EMAIL)
 			->where('contractors.is_active', true)
 			/*->where('contractors.email', env('DEV_EMAIL'))*/
 			->get();
@@ -122,8 +124,6 @@ class SendPromocodeAfterYearEmail extends Command
 				
 				$subject = env('APP_NAME') . ': скидка на полет в Авиатренажере до ' . Carbon::parse($promocode->active_to_at)->format('d.m.Y');
 				
-				\Log::debug(config('mail'));
-				
 				Mail::send(['html' => "admin.emails.year_promocode"], $messageData, function ($message) use ($subject, $recipients) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);
@@ -132,21 +132,29 @@ class SendPromocodeAfterYearEmail extends Command
 				$failures = Mail::failures();
 				if ($failures) {
 					DB::rollback();
+					
+					return 0;
 				}
 
 				$promocode->sent_at = Carbon::now()->format('Y-m-d H:i:s');
 				$promocode->save();
 				
+				$task = new Task();
+				$task->name = get_class($this);
+				$task->email = $contractor->email;
+				$task->object_uuid = $promocode->uuid;
+				$task->save();
+				
 				DB::commit();
 			} catch (Throwable $e) {
-				\Log::debug('500 - promocode_year:send - ' . $e->getMessage());
+				\Log::debug('500 - ' . get_class($this) . ': ' . $e->getMessage());
 				
 				return 0;
 			}
 		}
 		//\Log::debug(\DB::getQueryLog());
 		
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - promocode_year:send - OK');
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }
