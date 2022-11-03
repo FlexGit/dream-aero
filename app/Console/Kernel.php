@@ -70,11 +70,11 @@ class Kernel extends ConsoleKernel
 			->appendOutputTo($filePath);
 		
 		// отправка контрагенту промокода на полет на другом типе тренажера
-		/*$filePath = storage_path('logs/commands/promocode_send.log');
+		$filePath = storage_path('logs/commands/promocode_send.log');
 		$schedule->command('promocode_email:send')
 			->hourly()
 			->runInBackground()
-			->appendOutputTo($filePath);*/
+			->appendOutputTo($filePath);
 		
 		// отправка контрагенту промокода на полет через год после полета
 		/*$filePath = storage_path('logs/commands/promocode_year.log');
