@@ -150,7 +150,8 @@ $(function() {
 			$promocodeUuid = $fieldset.find('#promocode_uuid'),
 			$locationSimulator = $('input[name="locationSimulator"]:checked'),
 			locationId = $locationSimulator.data('location-id'),
-			simulatorId = $locationSimulator.data('simulator-id');
+			simulatorId = $locationSimulator.data('simulator-id'),
+			isCertificatePurchase = $(this).data('is_certificate_purchase');
 
 		$errorMsg.remove();
 		$successMsg.remove();
@@ -168,6 +169,7 @@ $(function() {
 				'promocode': $promocode.val(),
 				'location_id': locationId,
 				'simulator_id': simulatorId,
+				'is_certificate_purchase': isCertificatePurchase,
 			},
 			dataType: 'json',
 			success: function (result) {

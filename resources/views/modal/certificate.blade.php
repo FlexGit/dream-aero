@@ -115,7 +115,7 @@
 						<div style="width: 100%;">
 							<input type="text" id="promocode" name="promocode" class="popup-input" placeholder="@lang('main.modal-certificate.введите-промокод')" autocomplete="off" data-no-product-error="@lang('main.modal-certificate.выберите-продолжительность-полета')" style="display: none;margin-bottom: 0;">
 						</div>
-						<button type="button" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-promocode-btn" style="display: none;width: 35px;"><i>Ok</i></button>
+						<button type="button" data-is_certificate_purchase="1" class="popup-submit popup-small-button button-pipaluk button-pipaluk-orange js-promocode-btn" style="display: none;width: 35px;"><i>Ok</i></button>
 						<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" class="close-btn js-promocode-remove" style="display: none;"><path d="M12 10.587l6.293-6.294a1 1 0 111.414 1.414l-6.293 6.295 6.293 6.294a1 1 0 11-1.414 1.414L12 13.416 5.707 19.71a1 1 0 01-1.414-1.414l6.293-6.294-6.293-6.295a1 1 0 111.414-1.414L12 10.587z" fill="currentColor"></path></svg>
 					</div>
 				</div>

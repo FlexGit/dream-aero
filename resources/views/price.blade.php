@@ -330,5 +330,5 @@
 
 @push('scripts')
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
-	<script src="{{ asset('js/deal.js?v=3') }}"></script>
+	<script src="{{ asset('js/deal.js?v=4') }}"></script>
 @endpush

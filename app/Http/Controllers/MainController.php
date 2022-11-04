@@ -40,11 +40,9 @@ class MainController extends Controller
 	 */
 	public function home($cityAlias = null)
 	{
-		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) || !$cityAlias) {
+		/*if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES) && !in_array($cityAlias, ['price', 'contacts'])) || !$cityAlias) {
 			return redirect(City::MSK_ALIAS, 301);
-		}
-		
-		//\Log::debug($this->request->session()->get('cityAlias'));
+		}*/
 		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
@@ -197,6 +195,7 @@ class MainController extends Controller
 
 		$locationId = $this->request->location_id ?? 0;
 		$simulatorId = $this->request->simulator_id ?? 0;
+		$isCertificatePurchase = $this->request->is_certificate_purchase ?? 0;
 		
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
@@ -220,6 +219,9 @@ class MainController extends Controller
 		}
 		if ($simulatorId) {
 			$promocode = $promocode->whereIn('flight_simulator_id', [$simulatorId, 0]);
+		}
+		if ($isCertificatePurchase) {
+			$promocode = $promocode->whereNotIn('type', [Promocode::SIMULATOR_TYPE]);
 		}
 		$promocode = $promocode->first();
 		//\Log::debug(\DB::getQueryLog());
@@ -532,7 +534,7 @@ class MainController extends Controller
 	 */
 	public function contacts($cityAlias = null)
 	{
-		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) || !$cityAlias) {
+		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES) && !in_array($cityAlias, ['price', 'contacts'])) || !$cityAlias) {
 			return redirect(City::MSK_ALIAS . '/contacts', 301);
 		}
 		
@@ -558,16 +560,12 @@ class MainController extends Controller
 	}
 	
 	/**
-	 * @param null $cityAlias
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 * @param $cityAlias
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function price($cityAlias = null)
+	public function price($cityAlias)
 	{
-		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES)) || !$cityAlias) {
-			return redirect(City::MSK_ALIAS . '/price', 301);
-		}
-		
-		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
+		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
 		
 		$productTypes = ProductType::where('is_active', true)
 			->where('version', $city->version)
@@ -647,10 +645,10 @@ class MainController extends Controller
 		$cityName = \App::isLocale('en') ? $city->name_en : $city->name;
 		$currentCityAlias = $this->request->session()->get('cityAlias');
 		
-		$this->request->session()->put('cityId', $city->id);
+		/*$this->request->session()->put('cityId', $city->id);
 		$this->request->session()->put('cityAlias', $city->alias);
 		$this->request->session()->put('cityVersion', $city->version);
-		$this->request->session()->put('cityName', $cityName);
+		$this->request->session()->put('cityName', $cityName);*/
 		$this->request->session()->put('isCityConfirmed', true);
 		
 		return response()->json(['status' => 'success', 'cityAlias' => $city->alias, 'currentCityAlias' => $currentCityAlias]);
