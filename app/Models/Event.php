@@ -509,15 +509,15 @@ class Event extends Model
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_' . ($product->duration ?? 0));
 			}
 			else if ($product->productType->alias == ProductType::VIP_ALIAS) {
-				if (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+				if (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
 					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_60');
 				}
 				else {
 					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
 				}
-			} else if ($product->productType->alias == ProductType::ULTIMATE_EXTRA_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+			} else if ($product->productType->alias == ProductType::ULTIMATE_EXTRA_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) && !in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
-			} else if ($product->productType->alias == ProductType::REGULAR_EXTRA_ALIAS && in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6])) {
+			} else if ($product->productType->alias == ProductType::REGULAR_EXTRA_ALIAS && (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS))) {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
 			}
 		}
