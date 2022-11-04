@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\Contractor;
 use App\Models\Event;
+use App\Models\Task;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Console\Command;
 use Mail;
 use Throwable;
@@ -47,10 +49,13 @@ class SendLeaveReviewEmail extends Command
 			->whereNull('leave_review_sent_at')
 			->where('stop_at', '<', Carbon::now()->subDay()->format('Y-m-d H:i:s'))
 			->where('stop_at', '>', Carbon::now()->subDays(2)->format('Y-m-d H:i:s'))
-			->where('stop_at', '>', '2022-09-12 00:00:00')
+			->where('stop_at', '>', '2022-11-01 00:00:00')
 			->whereHas('contractor', function ($query) {
 				return $query->where('is_subscribed', true)
 					->where('email', '!=', Contractor::ANONYM_EMAIL);
+			})
+			->whereHas('deal', function ($query) {
+				return $query->where('email', '!=', Contractor::ANONYM_EMAIL);
 			})
 			/*->whereIn('contractor_id', [1])*/
 			->oldest()
@@ -59,17 +64,13 @@ class SendLeaveReviewEmail extends Command
 		//\Log::debug(\DB::getQueryLog());
     	/** @var Event[] $events */
 		foreach ($events as $event) {
-			if (!$event->contractor_id) continue;
-			
-			$contractor = $event->contractor;
-			if (!$contractor->is_subscribed) continue;
-			
 			$deal = $event->deal;
-			
-			$email = $deal ? $deal->email : ($contractor ? $contractor->email : '');
+			$email = $deal->email;
 			if (!$email) continue;
 			
 			try {
+				DB::beginTransaction();
+				
 				$recipients = [];
 				$recipients[] = $email;
 				
@@ -79,26 +80,36 @@ class SendLeaveReviewEmail extends Command
 				
 				$subject = env('APP_NAME') . ': оставьте отзыв';
 				
-				\Log::debug(config('mail'));
-				
 				Mail::send(['html' => "admin.emails.send_leave_review"], $messageData, function ($message) use ($subject, $recipients) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);
 					$message->to($recipients);
 				});
 				$failures = Mail::failures();
-				if (!$failures) {
-					$event->leave_review_sent_at = Carbon::now()->format('Y-m-d H:i:s');
-					$event->save();
+				if ($failures) {
+					DB::rollback();
+					
+					return 0;
 				}
+				
+				$event->leave_review_sent_at = Carbon::now()->format('Y-m-d H:i:s');
+				$event->save();
+				
+				$task = new Task();
+				$task->name = get_class($this);
+				$task->email = $email;
+				$task->object_uuid = $event->uuid;
+				$task->save();
+				
+				DB::commit();
 			} catch (Throwable $e) {
-				\Log::debug('500 - leave_review_email:send - ' . $e->getMessage());
+				\Log::debug('500 - ' . get_class($this) . ': ' . $e->getMessage());
 			
 				return 0;
 			}
 		}
 			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - leave_review_email:send - OK');
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

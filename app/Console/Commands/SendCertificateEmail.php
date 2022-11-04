@@ -45,7 +45,7 @@ class SendCertificateEmail extends Command
      */
     public function handle()
     {
-		\DB::connection()->enableQueryLog();
+		//\DB::connection()->enableQueryLog();
     	$certificates = Certificate::whereNull('sent_at')
 			->where(function ($query) {
 				$query->whereNull('expire_at')
@@ -64,8 +64,7 @@ class SendCertificateEmail extends Command
 			})
 			->limit(50)
 			->get();
-    	\Log::debug(\DB::getQueryLog());
-    	$i = 1;
+    	//\Log::debug(\DB::getQueryLog());
     	/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {
 			if ($certificate->sent_at) continue;
@@ -90,7 +89,6 @@ class SendCertificateEmail extends Command
 			if (!$deal) continue;
 		
 			try {
-				\Log::debug('CERTIFICATE START: ' . $certificate->number);
 				$job = new \App\Jobs\SendCertificateEmail($certificate);
 				$job->handle();
 			} catch (Throwable $e) {
@@ -98,12 +96,9 @@ class SendCertificateEmail extends Command
 			
 				return 0;
 			}
-			\Log::debug('CERTIFICATE STOP: ' . $certificate->number);
-			++$i;
 		}
 	
-		\Log::debug('Count email sent: ' . $i);
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - certificate_email:send - OK');
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

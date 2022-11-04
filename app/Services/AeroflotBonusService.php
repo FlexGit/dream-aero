@@ -95,7 +95,7 @@ class AeroflotBonusService {
 			
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . $fields['request'] . '. Rsponse: ' . $fields['response']);
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
 			
 			return null;
 		}
@@ -151,7 +151,7 @@ class AeroflotBonusService {
 
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . $fields['request'] . '. Rsponse: ' . $fields['response']);
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
 			
 			return null;
 		}
@@ -196,7 +196,7 @@ class AeroflotBonusService {
 			
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage());
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
 			
 			return null;
 		}
@@ -300,7 +300,7 @@ class AeroflotBonusService {
 			
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage());
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
 			
 			return null;
 		}
@@ -329,7 +329,7 @@ class AeroflotBonusService {
 			
 			return $log;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . $fields['request'] . '. Rsponse: ' . $fields['response']);
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage());
 			
 			return null;
 		}

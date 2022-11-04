@@ -117,9 +117,9 @@ class Kernel extends ConsoleKernel
 			->runInBackground();
 		
 		// отправка контрагенту письма с предложением оставить отзыв
-		/*$schedule->command('leave_review_email:send')
+		$schedule->command('leave_review_email:send')
 			->hourly()
-			->runInBackground();*/
+			->runInBackground();
 		
 		// Обновление остатков на Яндекс Маркет
 		$schedule->command('yandex:market')
