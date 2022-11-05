@@ -219,7 +219,7 @@
 						@if($product['alias'] == 'basic')
 							@lang('main.price.после-обучения-по-базовой-программе')
 						@elseif($product['alias'] == 'advanced')
-							@lang('main.price.программа-advanced')
+							@lang('main.price.программа-advanced', ['price' => number_format($product['price'], 0, '.', ' ')])
 						@elseif($product['alias'] == 'expert')
 							@lang('main.price.программа-expert')
 						@endif
