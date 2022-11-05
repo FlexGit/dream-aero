@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
 			$table->string('role')->default('admin');
 			$table->integer('city_id')->index()->default(0)->comment('город');
 			$table->integer('location_id')->index()->default(0)->comment('локация');
+			$table->integer('flight_simulator_id')->index()->default(0)->comment('авиатренажер');
 			$table->string('phone', 50)->nullable()->comment('телефон');
 			$table->date('birthdate')->nullable()->comment('дата рождения');
 			$table->string('position')->nullable()->comment('должность');

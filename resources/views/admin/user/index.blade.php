@@ -57,6 +57,7 @@
 							<th class="text-center">Роль</th>
 							<th class="text-center">Город</th>
 							<th class="text-center">Локация</th>
+							<th class="text-center">Авиатренажер</th>
 							<th class="text-center">Активность</th>
 							<th class="text-center">Действие</th>
 						</tr>

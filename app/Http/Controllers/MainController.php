@@ -648,10 +648,10 @@ class MainController extends Controller
 		$cityName = \App::isLocale('en') ? $city->name_en : $city->name;
 		$currentCityAlias = $this->request->session()->get('cityAlias');
 		
-		/*$this->request->session()->put('cityId', $city->id);
+		$this->request->session()->put('cityId', $city->id);
 		$this->request->session()->put('cityAlias', $city->alias);
 		$this->request->session()->put('cityVersion', $city->version);
-		$this->request->session()->put('cityName', $cityName);*/
+		$this->request->session()->put('cityName', $cityName);
 		$this->request->session()->put('isCityConfirmed', true);
 		
 		return response()->json(['status' => 'success', 'cityAlias' => $city->alias, 'currentCityAlias' => $currentCityAlias]);

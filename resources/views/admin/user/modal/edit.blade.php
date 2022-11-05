@@ -59,6 +59,15 @@
 			</select>
 		</div>
 		<div class="form-group">
+			<label for="simulator_id">Авиатренажер</label>
+			<select class="form-control" id="simulator_id" name="simulator_id">
+				<option></option>
+				@foreach($simulators ?? [] as $simulator)
+					<option value="{{ $simulator->id }}" @if($simulator->id == $user->flight_simulator_id) selected @endif>{{ $simulator->name }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group">
 			<label for="is_reserved">Резервный сотрудник</label>
 			<select class="form-control" id="is_reserved" name="is_reserved">
 				<option value="1" @if($user->is_reserved) selected @endif>Да</option>

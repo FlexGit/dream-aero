@@ -50,11 +50,15 @@
 		</tr>
 		<tr class="odd">
 			<td>Город</td>
-			<td>{{ $user->city ? $user->city->name : 'Любой' }}</td>
+			<td>{{ $user->city ? $user->city->name : '' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Локация</td>
-			<td>{{ $user->location ? $user->location->name : 'Любая' }}</td>
+			<td>{{ $user->location ? $user->location->name : '' }}</td>
+		</tr>
+		<tr class="odd">
+			<td>Локация</td>
+			<td>{{ $user->simulator ? $user->simulator->name : '' }}</td>
 		</tr>
 		<tr class="odd">
 			<td>Активность</td>

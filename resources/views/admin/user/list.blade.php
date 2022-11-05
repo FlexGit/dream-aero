@@ -7,6 +7,7 @@
 	<td class="text-center">{{ isset($roles[$user->role]) ? $roles[$user->role] : '' }}</td>
 	<td class="text-center">{{ $user->city ? $user->city->name : '-' }}</td>
 	<td class="text-center">{{ $user->location ? $user->location->name : '-' }}</td>
+	<td class="text-center">{{ $user->simulator ? $user->simulator->name : '-' }}</td>
 	<td class="text-center">{{ $user->enable ? 'Да' : 'Нет' }}</td>
 	<td class="text-center align-middle">
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/edit" data-action="/user/{{ $user->id }}" data-method="PUT" data-title="Редактирование">

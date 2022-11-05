@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\FlightSimulator;
 use App\Models\Location;
 use App\Models\User;
 use App\Services\HelpFunctions;
@@ -101,11 +102,15 @@ class UserController extends Controller
 		$locations = Location::orderBy('name')
 			->get();
 		
+		$simulators = FlightSimulator::orderBy('name')
+			->get();
+		
 		$VIEW = view('admin.user.modal.edit', [
 			'user' => $user,
 			'roles' => $roles,
 			'cities' => $cities,
 			'locations' => $locations,
+			'simulators' => $simulators,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -134,11 +139,15 @@ class UserController extends Controller
 		
 		$locations = Location::orderBy('name')
 			->get();
+		
+		$simulators = FlightSimulator::orderBy('name')
+			->get();
 
 		$VIEW = view('admin.user.modal.add', [
 			'roles' => $roles,
 			'cities' => $cities,
 			'locations' => $locations,
+			'simulators' => $simulators,
 		]);
 		
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
@@ -254,6 +263,7 @@ class UserController extends Controller
 		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
+		$user->flight_simulator_id = $this->request->simulator_id ?? 0;
 		$user->is_reserved = (bool)$this->request->is_reserved;
 		$user->is_official = (bool)$this->request->is_official;
 		$user->enable = (bool)$this->request->enable;
@@ -329,6 +339,7 @@ class UserController extends Controller
 		$user->version = $this->request->version;
 		$user->city_id = $this->request->city_id ?? 0;
 		$user->location_id = $this->request->location_id ?? 0;
+		$user->flight_simulator_id = $this->request->simulator_id ?? 0;
 		$user->is_reserved = (bool)$this->request->is_reserved;
 		$user->is_official = (bool)$this->request->is_official;
 		$user->enable = (bool)$this->request->enable;

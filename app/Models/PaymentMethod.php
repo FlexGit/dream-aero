@@ -39,6 +39,7 @@ class PaymentMethod extends Model
     use HasFactory, SoftDeletes/*, RevisionableTrait*/;
 
 	const ONLINE_ALIAS = 'online';
+	const CARD_CASH_ALIAS = 'card_cash';
 
 	/*const ATTRIBUTES = [
 		'name' => 'Наименование',

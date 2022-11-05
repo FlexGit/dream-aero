@@ -88,6 +88,7 @@ class User extends Authenticatable
 		'version' => 'Версия',
 		'city_id' => 'Город',
 		'location_id' => 'Локация',
+		'flight_simulator_id' => 'Авиатренажер',
 		'phone' => 'Телефон',
 		'birthdate' => 'Дата рождения',
 		'position' => 'Должность',
@@ -126,6 +127,7 @@ class User extends Authenticatable
 		'version',
 		'city_id',
 		'location_id',
+		'flight_simulator_id',
 		'phone',
 		'birthdate',
 		'position',
@@ -216,6 +218,11 @@ class User extends Authenticatable
 	public function location()
 	{
 		return $this->belongsTo(Location::class, 'location_id', 'id');
+	}
+	
+	public function simulator()
+	{
+		return $this->belongsTo(FlightSimulator::class, 'flight_simulator_id', 'id');
 	}
 
 	/**

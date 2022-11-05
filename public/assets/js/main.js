@@ -526,6 +526,7 @@ $(function(){
 				alias: $(this).data('alias'),
 			},
 			success: function(result) {
+				//console.log(pathname.replace(result.currentCityAlias, result.cityAlias));
 				if (result.status === 'success') {
 					window.location.href = pathname.replace(result.currentCityAlias, result.cityAlias);
 				}
