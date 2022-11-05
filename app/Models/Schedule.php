@@ -33,7 +33,7 @@ class Schedule extends Model
 	const COLOR_TYPES = [
 		self::BASIC_PILOT_TYPE => '#00cc00',
 		self::DUTY_PILOT_TYPE => '#cccccc',
-		self::DAY_OFF_PILOT_TYPE => '#ffffff',
+		self::DAY_OFF_PILOT_TYPE => '#f8a36a',
 		self::SHIFT_ADMIN_TYPE => '#ffff00',
 		self::VACATION_TYPE => '#9999ff',
 		self::LOCKING_TYPE => '#ea9999',

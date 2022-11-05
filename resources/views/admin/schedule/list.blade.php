@@ -10,22 +10,23 @@
 			$days[] = \Carbon\Carbon::parse($date)->format('d');
 		}
 	@endphp
-	<table class="table table-sm table-bordered {{--table-striped--}} js-schedule-table" style="margin-bottom: 0;" data-period="{{ $filterYear . '-' . $monthNumber }}">
+	<table class="table table-sm table-bordered {{--table-striped--}} schedule-table js-schedule-table" style="margin-bottom: 0;" data-period="{{ $filterYear . '-' . $monthNumber }}">
 		<thead>
 		<tr>
 			<td class="col-2 text-left text-nowrap font-weight-bold">
 				<div class="d-flex justify-content-between pl-2 pr-2">
-					<div>
+					<div class="small">
 						<i class="far fa-plus-square hidden js-month-expand" style="cursor: pointer;"></i>
 						<i class="far fa-minus-square js-month-collapse" style="cursor: pointer;"></i>
 					</div>
-					<div>
-						{{ $monthName }}
-					</div>
+					<div class="small font-weight-bold">{{ $monthName }}</div>
 				</div>
 			</td>
 			@for($i = 0;$i < 31;++$i)
-				<td class="text-nowrap small" style="width: 25px;">
+				@php
+					$date = isset($days[$i]) ? $days[$i] . '.' . $monthNumber . '.' . $filterYear : '';
+				@endphp
+				<td class="text-nowrap small day-cell" @if($date && in_array(\Carbon\Carbon::parse($date)->format('d.m.Y'), app('\App\Models\Deal')::HOLIDAYS)) style="background-color: #ea9999;" @endif>
 					{{ isset($days[$i]) ? $days[$i] : '' }}
 				</td>
 			@endfor
@@ -36,7 +37,7 @@
 				@php
 					$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
 				@endphp
-				<td class="text-nowrap small" @if($date && in_array(\Carbon\Carbon::parse($date)->dayOfWeek, [0,6])) style="background-color: #ffe599;" @endif>
+				<td class="text-nowrap small day-cell" @if($date && in_array(\Carbon\Carbon::parse($date)->dayOfWeek, [0,6])) style="background-color: #ffe599;" @endif>
 					{{ $date ? $weekDays[\Carbon\Carbon::parse($date)->dayOfWeek] : '' }}
 				</td>
 			@endfor
@@ -46,7 +47,7 @@
 			@foreach($location->simulators as $simulator)
 				@if(isset($userItems['pilot'][$simulator->id]))
 					<tr>
-						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
+						<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
 							Пилоты {{ $simulator->name }}
 						</td>
 					</tr>
@@ -60,8 +61,8 @@
 									$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
 									$scheduleItem = ($date && isset($scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
 								@endphp
-								<td class="text-center text-nowrap small js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="pilot" @if($scheduleItem && $scheduleItem['text']) data-text="{{ $scheduleItem['text'] }}" @endif>
-									{{ ($scheduleItem && $scheduleItem['text']) ? '+' : '' }}
+								<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="pilot" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
+									{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
 								</td>
 							@endfor
 						</tr>
@@ -69,7 +70,7 @@
 				@endif
 				@if(isset($userItems['pilot'][0]))
 					<tr>
-						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
+						<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
 							Пилоты
 						</td>
 					</tr>
@@ -83,18 +84,24 @@
 									$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
 									$scheduleItem = ($date && isset($scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
 								@endphp
-								<td class="text-center text-nowrap small js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="0" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="pilot" @if($scheduleItem && $scheduleItem['text']) data-text="{{ $scheduleItem['text'] }}" @endif>
-									{{ ($scheduleItem && $scheduleItem['text']) ? '+' : '' }}
+								<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="0" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="pilot" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
+									{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
 								</td>
 							@endfor
 						</tr>
 					@endforeach
+				@else
+					<tr>
+						<td colspan="32" class="text-center small">
+							Пилоты не найдены
+						</td>
+					</tr>
 				@endif
 			@endforeach
 			@foreach($location->simulators as $simulator)
 				@if(isset($userItems['admin'][$simulator->id]))
 					<tr>
-						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
+						<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
 							Администраторы {{ $simulator->name }}
 						</td>
 					</tr>
@@ -108,8 +115,8 @@
 									$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
 									$scheduleItem = ($date && isset($scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
 								@endphp
-								<td class="text-center text-nowrap small js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="admin" @if($scheduleItem && $scheduleItem['text']) data-text="{{ $scheduleItem['text'] }}" @endif>
-									{{ ($scheduleItem && $scheduleItem['text']) ? '+' : '' }}
+								<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="admin" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
+									{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
 								</td>
 							@endfor
 						</tr>
@@ -118,7 +125,7 @@
 			@endforeach
 			@if(isset($userItems['admin'][0]))
 				<tr>
-					<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
+					<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
 						Администраторы
 					</td>
 				</tr>
@@ -132,15 +139,15 @@
 								$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
 								$scheduleItem = ($date && isset($scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
 							@endphp
-							<td class="text-center text-nowrap small js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="0" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="admin" @if($scheduleItem && $scheduleItem['text']) data-text="{{ $scheduleItem['text'] }}" @endif>
-								{{ ($scheduleItem && $scheduleItem['text']) ? '+' : '' }}
+							<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="0" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="admin" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
+								{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
 							</td>
 						@endfor
 					</tr>
 				@endforeach
 			@else
 				<tr>
-					<td colspan="32" class="text-center">
+					<td colspan="32" class="text-center small">
 						Администраторы не найдены
 					</td>
 				</tr>

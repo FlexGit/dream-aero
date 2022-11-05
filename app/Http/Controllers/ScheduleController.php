@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use App\Models\Schedule;
 use App\Models\User;
+use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Repositories\CityRepository;
@@ -156,7 +157,22 @@ class ScheduleController extends Controller
 		$simulatorId = $this->request->simulator_id ?? 0;
 		$scheduledAt = $this->request->scheduled_at ?? 0;
 
+		$employee = User::find($userId);
+		if (!$employee) return response()->json(['status' => 'error', 'reason' => 'Сотрудник не найден']);
+		
 		$types = Schedule::TYPES;
+		switch ($employee->role) {
+			case User::ROLE_PILOT:
+				unset($types[Schedule::SHIFT_ADMIN_TYPE]);
+				break;
+			case User::ROLE_ADMIN:
+				unset($types[Schedule::BASIC_PILOT_TYPE]);
+				unset($types[Schedule::DUTY_PILOT_TYPE]);
+				unset($types[Schedule::DAY_OFF_PILOT_TYPE]);
+			break;
+			default:
+				$types = Schedule::TYPES;
+		}
 		
 		$VIEW = view('admin.schedule.modal.add', [
 			'types' => $types,
@@ -187,7 +203,22 @@ class ScheduleController extends Controller
 		$schedule = Schedule::find($id);
 		if (!$schedule) return response()->json(['status' => 'error', 'reason' => 'Запись не найдена']);
 		
+		$employee = $schedule->user;
+		if (!$employee) return response()->json(['status' => 'error', 'reason' => 'Сотрудник не найден']);
+		
 		$types = Schedule::TYPES;
+		switch ($employee->role) {
+			case User::ROLE_PILOT:
+				unset($types[Schedule::SHIFT_ADMIN_TYPE]);
+			break;
+			case User::ROLE_ADMIN:
+				unset($types[Schedule::BASIC_PILOT_TYPE]);
+				unset($types[Schedule::DUTY_PILOT_TYPE]);
+				unset($types[Schedule::DAY_OFF_PILOT_TYPE]);
+			break;
+			default:
+				$types = Schedule::TYPES;
+		}
 		
 		$VIEW = view('admin.schedule.modal.edit', [
 			'schedule' => $schedule,
@@ -245,7 +276,7 @@ class ScheduleController extends Controller
 					return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 				}
 				
-				return response()->json(['status' => 'success', 'message' => 'Запись успешно удалена', 'color' => '#ffffff', 'text' => '', 'id' => '']);
+				return response()->json(['status' => 'success', 'message' => 'Запись успешно удалена', 'type' => Schedule::RESET_TYPE, 'color' => '#ffffff', 'text' => '', 'id' => $id]);
 			}
 		} else {
 			if ($type == 'reset') return response()->json(['status' => 'error', 'reason' => 'Запись не найдена']);
@@ -266,7 +297,7 @@ class ScheduleController extends Controller
 		
 		$text = trim(($schedule->start_at ? $schedule->start_at->format('H:i') : '') . ($schedule->stop_at ? '-' . $schedule->stop_at->format('H:i') : '') . ($schedule->comment ? ' ' . $schedule->comment : ''));
 		
-		return response()->json(['status' => 'success', 'message' => 'Запись успешно сохранена', 'color' => Schedule::COLOR_TYPES[$schedule->schedule_type], 'text' => $text, 'id' => $schedule->id, 'user_id' => $schedule->user_id, 'location_id' => $schedule->location_id, 'simulator_id' => $schedule->flight_simulator_id, 'scheduled_at' => $schedule->scheduled_at->format('Y-m-d')]);
+		return response()->json(['status' => 'success', 'message' => 'Запись успешно сохранена', 'type' => $type, 'color' => Schedule::COLOR_TYPES[$schedule->schedule_type], 'text' => $text, 'id' => $schedule->id, 'user_id' => $schedule->user_id, 'location_id' => $schedule->location_id, 'simulator_id' => $schedule->flight_simulator_id, 'scheduled_at' => $schedule->scheduled_at->format('Y-m-d')]);
 	}
 	
 	/**
@@ -317,6 +348,6 @@ class ScheduleController extends Controller
 		
 		$text = trim(($schedule->start_at ? $schedule->start_at->format('H:i') : '') . ($schedule->stop_at ? '-' . $schedule->stop_at->format('H:i') : '') . ($schedule->comment ? ' ' . $schedule->comment : ''));
 		
-		return response()->json(['status' => 'success', 'message' => 'Запись успешно сохранена', 'color' => Schedule::COLOR_TYPES[$schedule->schedule_type], 'text' => $text, 'id' => $schedule->id, 'user_id' => $schedule->user_id, 'location_id' => $schedule->location_id, 'simulator_id' => $schedule->flight_simulator_id, 'scheduled_at' => $schedule->scheduled_at->format('Y-m-d')]);
+		return response()->json(['status' => 'success', 'message' => 'Запись успешно сохранена', 'type' => $type, 'color' => Schedule::COLOR_TYPES[$schedule->schedule_type], 'text' => $text, 'id' => $schedule->id, 'user_id' => $schedule->user_id, 'location_id' => $schedule->location_id, 'simulator_id' => $schedule->flight_simulator_id, 'scheduled_at' => $schedule->scheduled_at->format('Y-m-d')]);
 	}
 }

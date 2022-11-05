@@ -103,8 +103,6 @@
 	<script src="{{ asset('vendor/toastr/toastr.min.js') }}"></script>
 	<script src="{{ asset('js/admin/contextMenu/jquery.contextMenu.min.js') }}"></script>
 	<script src="{{ asset('js/admin/contextMenu/jquery.ui.position.min.js') }}"></script>
-	<script src="{{ asset('js/admin/popper.min.js?v=1') }}"></script>
-	<script src="{{ asset('js/admin/tippy-bundle.umd.min.js') }}" defer></script>
 	<script src="{{ asset('js/admin/common.js') }}"></script>
 	<script>
 		$(function() {
@@ -151,17 +149,7 @@
 								}
 							});
 
-							tippy('.js-schedule-item', {
-								theme: 'light-border',
-								allowHTML: true,
-								onShow(instance) {
-									var content = $(instance.reference).data('text');
-
-									instance.popper.hidden = !content;
-									instance.setContent(content);
-									//instance.show();
-								}
-							});
+							$('.js-schedule-item').tooltip('show');
 
 							$.contextMenu({
 								selector: '.js-schedule-item[data-role="pilot"]',
@@ -284,6 +272,7 @@
 					data: data,
 					dataType: 'json',
 					success: function (result) {
+						//console.log(result);
 						if (result.status === 'error') {
 							toastr.error(result.reason);
 							return null;
@@ -291,25 +280,19 @@
 
 						toastr.success(result.message);
 
-						console.log(result);
+						if (result.type === 'reset') {
+							var $el = $('.js-schedule-item[data-id="' + result.id + '"]');
+							$el.remove();
+						} else {
+							var $el = $('.js-schedule-item[data-user_id="' + result.user_id + '"][data-location_id="' + result.location_id + '"][data-simulator_id="' + result.simulator_id + '"][data-scheduled_at="' + result.scheduled_at + '"]');
 
-						var $el = $('.js-schedule-item[data-user_id="' + result.user_id + '"][data-location_id="' + result.location_id + '"][data-simulator_id="' + result.simulator_id + '"][data-scheduled_at="' + result.scheduled_at + '"]');
-
-						$el.data('id', result.id).data('text', result.text).css('background-color', result.color);
-						if (result.text) {
-							$el.text('+');
+							$el.data('id', result.id).attr('data-original-title', result.text).css('background-color', result.color);
+							if (result.text) {
+								$el.html('<i class="far fa-circle"></i>');
+							}
 						}
 
-						tippy('.js-schedule-item', {
-							theme: 'light-border',
-							allowHTML: true,
-							onShow(instance) {
-								var content = $(instance.reference).data('text');
-
-								instance.popper.hidden = !content;
-								instance.setContent(content);
-							}
-						});
+						$('.js-schedule-item').tooltip('show');
 					}
 				});
 			}
@@ -366,22 +349,12 @@
 
 						var $el = $('.js-schedule-item[data-user_id="' + result.user_id + '"][data-location_id="' + result.location_id + '"][data-simulator_id="' + result.simulator_id + '"][data-scheduled_at="' + result.scheduled_at + '"]');
 
-						$el.data('id', result.id).data('text', result.text).css('background-color', result.color);
-						console.log(result.text);
-						if (result.text !== '') {
-							$el.text('+');
+						$el.data('id', result.id).attr('data-original-title', result.text).css('background-color', result.color);
+						if (result.text) {
+							$el.html('<i class="far fa-circle"></i>');
 						}
 
-						tippy('.js-schedule-item', {
-							theme: 'light-border',
-							allowHTML: true,
-							onShow(instance) {
-								var content = $(instance.reference).data('text');
-
-								instance.popper.hidden = !content;
-								instance.setContent(content);
-							}
-						});
+						$('.js-schedule-item').tooltip('show');
 					}
 				});
 			});

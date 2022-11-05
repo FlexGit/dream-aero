@@ -136,3 +136,12 @@ tr.unactive td a {
 .fa-edit, .fa-times-circle, .fa-trash-alt {
 	cursor: pointer;
 }
+.schedule-table tr td.day-cell {
+	width: 25px;
+}
+.schedule-table tr td.day-cell .fa-circle {
+	color: #fff;
+}
+.tooltip {
+	z-index: 999;
+}
