@@ -14,7 +14,7 @@ class CityCheck
 		if ($request->ajax()) return $next($request);
 		
 		$cityAliases = ($request->session()->get('cityVersion') == City::EN_VERSION) ? City::EN_ALIASES : City::RU_ALIASES;
-		
+
 		// цены, контакты или главная
 		if (in_array($request->segment(1), $cityAliases) || in_array($request->segment(1), ['price', 'contacts'])) {
 			// есть сессия и перешли в другой город

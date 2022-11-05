@@ -1,3 +1,7 @@
+@php
+	if (!isset($city)) $city = null;
+@endphp
+
 <footer class="footer">
 	<div class="container">
 		<div class="footer-menu">
@@ -65,8 +69,8 @@
 			</span>
 		</div>
 	</div>
-	<input type="hidden" id="city_id" name="city_id" value="{{ isset($city) ? $city->id : 1 }}">
-	<input type="hidden" id="city_alias" name="city_alias" value="{{ isset($city) ? $city->alias : app('\App\Models\City')::MSK_AILAS }}">
+	<input type="hidden" id="city_id" name="city_id" value="{{ $city ? $city->id : 1 }}">
+	<input type="hidden" id="city_alias" name="city_alias" value="{{ $city ? $city->alias : app('\App\Models\City')::MSK_ALIAS }}">
 </footer>
 
 <div class="go-up"></div>

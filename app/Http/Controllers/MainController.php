@@ -40,9 +40,9 @@ class MainController extends Controller
 	 */
 	public function home($cityAlias = null)
 	{
-		/*if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES) && !in_array($cityAlias, ['price', 'contacts'])) || !$cityAlias) {
-			return redirect(City::MSK_ALIAS, 301);
-		}*/
+		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES) && !in_array($cityAlias, ['price', 'contacts'])) || !$cityAlias) {
+			abort(404);
+		}
 		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
@@ -537,10 +537,6 @@ class MainController extends Controller
 	 */
 	public function contacts($cityAlias = null)
 	{
-		if (($cityAlias && !in_array($cityAlias, City::RU_ALIASES) && !in_array($cityAlias, ['price', 'contacts'])) || !$cityAlias) {
-			return redirect(City::MSK_ALIAS . '/contacts', 301);
-		}
-		
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		$locations = Location::where('is_active', true)
@@ -563,10 +559,10 @@ class MainController extends Controller
 	}
 	
 	/**
-	 * @param $cityAlias
+	 * @param null $cityAlias
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function price($cityAlias)
+	public function price($cityAlias = null)
 	{
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias);
 		

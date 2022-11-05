@@ -549,8 +549,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('sitemap.xml', [MainController::class, 'sitemap']);
 		
 		Route::group(['middleware' => ['citycheck']], function () {
-			Route::get('{alias}/price', [MainController::class, 'price']);
-			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
+			Route::get('{alias?}/price', [MainController::class, 'price']);
+			Route::get('{alias?}/contacts', [MainController::class, 'contacts']);
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 		});
 	});
@@ -626,9 +626,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('sitemap.xml', [MainController::class, 'sitemap']);
 		
 		Route::group(['middleware' => ['citycheck']], function () {
+			Route::get('{alias?}/price', [MainController::class, 'price']);
+			Route::get('{alias?}/contacts', [MainController::class, 'contacts']);
 			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
-			Route::get('{alias}/price', [MainController::class, 'price']);
-			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
 		});
 	});
 
@@ -640,8 +640,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	Route::post('aeroflot-transaction', [AeroflotBonusController::class, 'transaction'])->name('transaction');
 	Route::get('test/parse/file', [TestController::class, 'parseFile']);
 	Route::get('unsubscribe/{uuid}', [ContractorController::class, 'unsubscribe'])->name('unsubscribe');
-	
-	Route::fallback(function () {
-		abort(404);
-	});
+});
+
+Route::fallback(function () {
+	abort(404);
 });
