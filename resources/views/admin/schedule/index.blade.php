@@ -286,7 +286,7 @@
 						} else {
 							var $el = $('.js-schedule-item[data-user_id="' + result.user_id + '"][data-location_id="' + result.location_id + '"][data-simulator_id="' + result.simulator_id + '"][data-scheduled_at="' + result.scheduled_at + '"]');
 
-							$el.data('id', result.id).attr('data-original-title', result.text).css('background-color', result.color);
+							$el.attr('data-id', result.id).attr('data-original-title', result.text).css('background-color', result.color);
 							if (result.text) {
 								$el.html('<i class="far fa-circle"></i>');
 							}
