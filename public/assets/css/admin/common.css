@@ -139,9 +139,9 @@ tr.unactive td a {
 .schedule-table tr td.day-cell {
 	width: 25px;
 }
-.schedule-table tr td.day-cell .fa-circle {
+/*.schedule-table tr td.day-cell .fa-circle {
 	color: #fff;
-}
+}*/
 .tooltip {
 	z-index: 999;
 }
