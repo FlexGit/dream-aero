@@ -164,19 +164,19 @@
 									detail: {
 										name: "Подробнее",
 										callback: function(key, options){
-											var id = options.$trigger.data('id');
-											var	data = {
-												url: id ? 'schedule/' + id + '/edit' : 'schedule/add',
-												title: id ? 'Редактирование записи' : 'Создание записи',
-												method: id ? 'PUT' : 'POST',
-												action: id ? 'schedule/' + id : 'schedule',
-												id: id,
-												type: key,
-												user_id: options.$trigger.data('user_id'),
-												location_id: options.$trigger.data('location_id'),
-												simulator_id: options.$trigger.data('simulator_id'),
-												scheduled_at: options.$trigger.data('scheduled_at'),
-											};
+											var id = options.$trigger.attr('data-id'),
+												data = {
+													url: id ? 'schedule/' + id + '/edit' : 'schedule/add',
+													title: id ? 'Редактирование записи' : 'Создание записи',
+													method: id ? 'PUT' : 'POST',
+													action: id ? 'schedule/' + id : 'schedule',
+													id: id,
+													type: key,
+													user_id: options.$trigger.data('user_id'),
+													location_id: options.$trigger.data('location_id'),
+													simulator_id: options.$trigger.data('simulator_id'),
+													scheduled_at: options.$trigger.data('scheduled_at'),
+												};
 
 											scheduleModal(data);
 										}
@@ -188,7 +188,7 @@
 								zIndex: 9999,
 								callback: function(key, options) {
 									var data = {
-										id: options.$trigger.data('id'),
+										id: options.$trigger.attr('data-id'),
 										type: key,
 										user_id: options.$trigger.data('user_id'),
 										location_id: options.$trigger.data('location_id'),
@@ -214,7 +214,7 @@
 											//console.log(key);
 											//console.log(options.$trigger.data());
 
-											var id = options.$trigger.data('id');
+											var id = options.$trigger.attr('data-id');
 											var	data = {
 												url: id ? 'schedule/' + id + '/edit' : 'schedule/add',
 												title: id ? 'Редактирование записи' : 'Создание записи',
@@ -237,11 +237,8 @@
 								trigger: 'left',
 								zIndex: 9999,
 								callback: function(key, options) {
-									//console.log(key);
-									//console.log(options.$trigger.data());
-
 									var data = {
-										id: options.$trigger.data('id'),
+										id: options.$trigger.attr('data-id'),
 										type: key,
 										user_id: options.$trigger.data('user_id'),
 										location_id: options.$trigger.data('location_id'),
@@ -266,6 +263,7 @@
 			}
 
 			function setScheduleType(data) {
+				console.log(data);
 				$.ajax({
 					url: '{{ route('store-schedule') }}',
 					type: 'POST',
@@ -349,7 +347,7 @@
 
 						var $el = $('.js-schedule-item[data-user_id="' + result.user_id + '"][data-location_id="' + result.location_id + '"][data-simulator_id="' + result.simulator_id + '"][data-scheduled_at="' + result.scheduled_at + '"]');
 
-						$el.data('id', result.id).attr('data-original-title', result.text).css('background-color', result.color);
+						$el.attr('data-id', result.id).attr('data-original-title', result.text).css('background-color', result.color);
 						if (result.text) {
 							$el.html('<i class="far fa-circle"></i>');
 						}
