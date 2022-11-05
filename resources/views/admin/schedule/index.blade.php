@@ -263,14 +263,14 @@
 			}
 
 			function setScheduleType(data) {
-				console.log(data);
+				//console.log(data);
 				$.ajax({
 					url: '{{ route('store-schedule') }}',
 					type: 'POST',
 					data: data,
 					dataType: 'json',
 					success: function (result) {
-						console.log(result);
+						//console.log(result);
 						if (result.status === 'error') {
 							toastr.error(result.reason);
 							return null;
