@@ -93,11 +93,9 @@
 			<div class="item">
 				<a href="#popup" class="popup-with-form form_open gl-current-select" data-popup-type="city">
 					@if($city)
-						{{ $city->name }}
-					@elseif(App::isLocale('en'))
-						{{ app('\App\Models\City')::DEFAULT_CITY_NAME_EN }}
+						{{ App::isLocale('en') ? $city->name_en : $city->name }}
 					@else
-						{{ app('\App\Models\City')::DEFAULT_CITY_NAME }}
+						{{ App::isLocale('en') ? app('\App\Models\City')::DEFAULT_CITY_NAME_EN : app('\App\Models\City')::DEFAULT_CITY_NAME }}
 					@endif
 				</a>
 			</div>
@@ -122,11 +120,9 @@
 						<div style="margin: 5px 0;">
 							<span class="gl-city-name_ru">
 								@if($city)
-									{{ $city->name }}
-								@elseif(App::isLocale('en'))
-									{{ app('\App\Models\City')::DEFAULT_CITY_NAME_EN }}
+									{{ App::isLocale('en') ? $city->name_en : $city->name }}
 								@else
-									{{ app('\App\Models\City')::DEFAULT_CITY_NAME }}
+									{{ App::isLocale('en') ? app('\App\Models\City')::DEFAULT_CITY_NAME_EN : app('\App\Models\City')::DEFAULT_CITY_NAME }}
 								@endif
 							</span>?
 						</div>
