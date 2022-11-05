@@ -75,15 +75,16 @@ class MainController extends Controller
 	
 	/**
 	 * @param null $productAlias
+	 * @param null $cityAlias
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getBookingModal($productAlias = null)
+	public function getBookingModal($productAlias = null, $cityAlias = null)
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
 
-		$cityAlias = $this->request->session()->get('cityAlias');
+		$cityAlias = $cityAlias ?: $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
 		if ($productAlias) {
@@ -118,17 +119,18 @@ class MainController extends Controller
 	
 	/**
 	 * @param null $productAlias
+	 * @param null $cityAlias
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getCertificateModal($productAlias = null)
+	public function getCertificateModal($productAlias = null, $cityAlias = null)
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
 		
-		$cityAlias = $this->request->session()->get('cityAlias');
+		$cityAlias = $cityAlias ?: $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-		
+
 		if ($productAlias) {
 			$product = Product::where('alias', $productAlias)
 				->first();
@@ -157,15 +159,16 @@ class MainController extends Controller
 	
 	/**
 	 * @param $productAlias
+	 * @param $cityAlias null
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function getCertificateBookingModal($productAlias)
+	public function getCertificateBookingModal($productAlias, $cityAlias = null)
 	{
 		if (!$this->request->ajax()) {
 			abort(404);
 		}
 		
-		$cityAlias = $this->request->session()->get('cityAlias');
+		$cityAlias = $cityAlias ?: $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 
 		$product = Product::where('alias', $productAlias)

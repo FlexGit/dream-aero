@@ -159,7 +159,7 @@ $(function(){
 					switch ($el.data('popup-type')) {
 						case 'product':
 							$popup.css('width', '100%');
-							url = '/modal/certificate-booking/' + $el.data('product-alias');
+							url = '/modal/certificate-booking/' + $el.data('product-alias') + '/' + $('#city_alias').val();
 							break;
 						case 'callback':
 							$popup.css('width', '100%');
@@ -227,7 +227,7 @@ $(function(){
 	function certificateForm(productAlias) {
 		$.ajax({
 			type: 'GET',
-			url: '/modal/certificate/' + productAlias,
+			url: '/modal/certificate/' + productAlias + '/' + $('#city_alias').val(),
 			success: function (result) {
 				if (result.status !== 'success') {
 					return;
@@ -247,7 +247,7 @@ $(function(){
 	function bookingForm(productAlias, productTypeAlias) {
 		$.ajax({
 			type: 'GET',
-			url: '/modal/booking/' + productAlias,
+			url: '/modal/booking/' + productAlias + '/' + $('#city_alias').val(),
 			success: function (result) {
 				if (result.status !== 'success') {
 					return;

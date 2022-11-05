@@ -43,7 +43,7 @@ $(function() {
 					case 'booking':
 						$.ajax({
 							type: 'GET',
-							url: '/modal/booking',
+							url: '/modal/booking/0/' + $('#city_alias').val(),
 							success: function (result) {
 								if (result.status !== 'success') {
 									return;
@@ -90,7 +90,7 @@ $(function() {
 					case 'certificate':
 						$.ajax({
 							type: 'GET',
-							url: '/modal/certificate',
+							url: '/modal/certificate/0/' + $('#city_alias').val(),
 							success: function (result) {
 								if (result.status !== 'success') {
 									return;

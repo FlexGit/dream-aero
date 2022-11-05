@@ -11,6 +11,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Models\Contractor;
@@ -141,7 +142,16 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			
 			// Очистка тестовых данных
 			//Route::get('/clear', [EventController::class, 'clear'])->name('clear');
-	
+
+			// График работы
+			Route::get('schedule', [ScheduleController::class, 'index'])->name('scheduleIndex');
+			Route::get('schedule/list/ajax', [ScheduleController::class, 'getListAjax'])->name('scheduleList');
+			Route::get('schedule/add', [ScheduleController::class, 'add'])->name('add-schedule');
+			Route::get('schedule/{id}/edit', [ScheduleController::class, 'edit'])->name('edit-schedule');
+			Route::post('schedule', [ScheduleController::class, 'store'])->name('store-schedule');
+			Route::put('schedule/{id}', [ScheduleController::class, 'update'])->name('update-schedule');
+			
+			
 			// События
 			Route::get('/', [EventController::class, 'index'])->name('eventIndex');
 			Route::get('event/list/ajax', [EventController::class, 'getListAjax'])->name('eventList');
@@ -521,9 +531,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::get('reviews', [MainController::class, 'getReviews'])->name('reviews');
 		
-		Route::get('modal/booking/{product_alias?}', [MainController::class, 'getBookingModal']);
-		Route::get('modal/certificate/{product_alias?}', [MainController::class, 'getCertificateModal']);
-		Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
+		Route::get('modal/booking/{product_alias?}/{city_alias?}', [MainController::class, 'getBookingModal']);
+		Route::get('modal/certificate/{product_alias?}/{city_alias?}', [MainController::class, 'getCertificateModal']);
+		Route::get('modal/certificate-booking/{product_alias}/{city_alias?}', [MainController::class, 'getCertificateBookingModal']);
 		Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
 		Route::get('modal/review', [MainController::class, 'getReviewModal']);
 		Route::get('modal/city', [MainController::class, 'getCityModal']);
@@ -539,9 +549,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::get('sitemap.xml', [MainController::class, 'sitemap']);
 		
 		Route::group(['middleware' => ['citycheck']], function () {
-			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 			Route::get('{alias}/price', [MainController::class, 'price']);
 			Route::get('{alias}/contacts', [MainController::class, 'contacts']);
+			Route::get('{alias?}', [MainController::class, 'home'])->name('home');
 		});
 	});
 	
@@ -599,9 +609,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		
 		Route::get('reviews', [MainController::class, 'getReviews'])->name('reviews');
 		
-		Route::get('modal/booking/{product_alias?}', [MainController::class, 'getBookingModal']);
-		Route::get('modal/certificate/{product_alias?}', [MainController::class, 'getCertificateModal']);
-		Route::get('modal/certificate-booking/{product_alias}', [MainController::class, 'getCertificateBookingModal']);
+		Route::get('modal/booking/{product_alias?}/{city_alias?}', [MainController::class, 'getBookingModal']);
+		Route::get('modal/certificate/{product_alias?}/{city_alias?}', [MainController::class, 'getCertificateModal']);
+		Route::get('modal/certificate-booking/{product_alias}/{city_alias?}', [MainController::class, 'getCertificateBookingModal']);
 		Route::get('modal/order/{product_alias?}', [MainController::class, 'getOrderModal']);
 		Route::get('modal/review', [MainController::class, 'getReviewModal']);
 		Route::get('modal/city', [MainController::class, 'getCityModal']);

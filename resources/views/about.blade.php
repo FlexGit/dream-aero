@@ -453,7 +453,6 @@
 	<script src="{{ asset('js/owl.carousel.js') }}"></script>
 	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
 	<script src="{{ asset('js/jquery.maskedinput.min.js') }}"></script>
-	<script src="{{ asset('js/deal.js?v=4') }}"></script>
 	<script>
 		$(function(){
 			$(".team .owl-carousel").owlCarousel({

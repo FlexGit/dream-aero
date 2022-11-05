@@ -1,7 +1,3 @@
-@php
-	if (!isset($city)) $city = null;
-@endphp
-
 <footer class="footer">
 	<div class="container">
 		<div class="footer-menu">
@@ -37,7 +33,7 @@
 					<a href="{{ url('instruktazh') }}">@lang('main.нижнее-меню.инструктаж')</a>
 				</li>
 				<li>
-					<a href="{{ url($city ? $city->alias . '/price' : app('\App\Models\City')::MSK_ALIAS . '/price') }}">@lang('main.нижнее-меню.цены')</a>
+					<a href="{{ url(($city ? $city->alias : app('\App\Models\City')::MSK_ALIAS) . '/price') }}">@lang('main.нижнее-меню.цены')</a>
 				</li>
 				<li>
 					<a href="{{ url('galereya') }}">@lang('main.нижнее-меню.галерея')</a>
@@ -46,7 +42,7 @@
 					<a href="{{ url('reviews') }}">@lang('main.нижнее-меню.отзывы')</a>
 				</li>
 				<li>
-					<a href="{{ url($city ? $city->alias . '/contacts' : app('\App\Models\City')::MSK_ALIAS . '/contacts') }}">@lang('main.нижнее-меню.контакты')</a>
+					<a href="{{ url(($city ? $city->alias : app('\App\Models\City')::MSK_ALIAS) . '/contacts') }}">@lang('main.нижнее-меню.контакты')</a>
 				</li>
 				<li>
 					<a href="{{ url('pravila') }}">@lang('main.нижнее-меню.правила')</a>
@@ -69,7 +65,8 @@
 			</span>
 		</div>
 	</div>
-	<input type="hidden" id="city_id" name="city_id" value="{{ $city ? $city->id : 1 }}">
+	<input type="hidden" id="city_id" name="city_id" value="{{ isset($city) ? $city->id : 1 }}">
+	<input type="hidden" id="city_alias" name="city_alias" value="{{ isset($city) ? $city->alias : app('\App\Models\City')::MSK_AILAS }}">
 </footer>
 
 <div class="go-up"></div>
