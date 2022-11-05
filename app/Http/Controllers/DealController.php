@@ -1485,7 +1485,7 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Статус сделки не найден']);
 		}
 		
-		if (in_array($dealStatus->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS])) {
+		if (in_array($dealStatus->alias, [Deal::CANCELED_STATUS, Deal::RETURNED_STATUS]) && !$user->isSuperAdmin()) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка недоступна для редактирования']);
 		}
 		
