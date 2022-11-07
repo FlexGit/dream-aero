@@ -501,22 +501,31 @@ class Event extends Model
 			
 			$productType = $product->productType;
 			if (!$productType) return 0;
-			
-			if ($product->productType->alias == ProductType::ULTIMATE_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) && !in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
+
+			// подмена продукта типа Regular Extra на Regular
+			if ($productType->alias == ProductType::REGULAR_EXTRA_ALIAS) {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_' . ($product->duration ?? 0));
-			} else if ($product->productType->alias == ProductType::REGULAR_ALIAS && (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS))) {
+			}
+			// подмена продукта типа Ultimate Extra на Ultimate
+			if ($productType->alias == ProductType::ULTIMATE_EXTRA_ALIAS) {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_' . ($product->duration ?? 0));
-			} else if ($product->productType->alias == ProductType::VIP_ALIAS) {
+			}
+			
+			if (in_array($productType->alias, [ProductType::ULTIMATE_ALIAS, ProductType::ULTIMATE_EXTRA_ALIAS]) && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) && !in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_' . ($product->duration ?? 0));
+			} else if (in_array($productType->alias, [ProductType::REGULAR_ALIAS, ProductType::REGULAR_EXTRA_ALIAS]) && (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS))) {
+				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_' . ($product->duration ?? 0));
+			} else if ($productType->alias == ProductType::VIP_ALIAS) {
 				if (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
 					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_ALIAS . '_60');
 				} else {
 					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
 				}
-			} else if ($product->productType->alias == ProductType::ULTIMATE_EXTRA_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) && !in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
+			}/* else if ($productType->alias == ProductType::ULTIMATE_EXTRA_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) && !in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
-			} else if ($product->productType->alias == ProductType::REGULAR_EXTRA_ALIAS && (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS))) {
+			} else if ($productType->alias == ProductType::REGULAR_EXTRA_ALIAS && (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS))) {
 				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
-			}
+			}*/
 		}
 		
 		$cityProduct = $product ? $product->cities()->find($this->city_id) : null;
