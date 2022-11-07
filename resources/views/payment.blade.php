@@ -170,13 +170,16 @@
 				var $popup = $(this).closest('.popup'),
 					$cardNumber = $popup.find('#aeroflot_card'),
 					$alertSuccess = $popup.find('.alert-success'),
-					$alertError = $popup.find('.alert-danger');
-
-				var transactionType = $('#use').hasClass('active') ? 'registerOrder' : 'authpoints',
+					$alertError = $popup.find('.alert-danger'),
+					transactionType = $('#use').hasClass('active') ? 'registerOrder' : 'authpoints',
 					bonusAmount = $('#bonus_amount').val();
 
 				$alertSuccess.addClass('hidden');
 				$alertError.text('').addClass('hidden');
+
+				if (!bonusAmount.length) {
+					$('#ab-error').text('Внимание! Введите сумму для списания в рублях');
+				}
 
 				$.ajax({
 					url: '/aeroflot-transaction',
