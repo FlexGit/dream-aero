@@ -65,7 +65,6 @@ class LoadPlatformData extends Command
 
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
-			\Log::debug(111);
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Attribute $subject */
 			$subject = $message->getSubject();
@@ -76,6 +75,7 @@ class LoadPlatformData extends Command
 
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
+			\Log::debug($dataAt);
 			if (!$dataAt) return 0;
 
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
@@ -97,6 +97,7 @@ class LoadPlatformData extends Command
 					$simulatorId = $locationSimulatorArr[1];
 				}
 			}
+			\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
 
 			$platformDataExists = false;
@@ -121,6 +122,7 @@ class LoadPlatformData extends Command
 					->delete();
 			}
 			
+			\Log::debug(222);
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Support\AttachmentCollection $attachments */
 			$attachments = $message->getAttachments();
