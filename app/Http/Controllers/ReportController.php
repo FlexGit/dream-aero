@@ -374,14 +374,16 @@ class ReportController extends Controller {
 			$employee = $event->employee;
 			
 			$extendedText = '';
-
+			
 			if ($user->email == env('DEV_EMAIL')) {
 				/*$extendedText .= $event->uuid;*/
 				$extendedText .= $position ? $position->number : '';
 			}
 			
 			/*if ($productType && in_array($productType->alias, [ProductType::COURSES_ALIAS, ProductType::VIP_ALIAS])) {*/
+			if ($product) {
 				$extendedText .= ' ' . $product->name;
+			}
 			/*}*/
 			
 			$pilotSum = $event->nominal_price;
