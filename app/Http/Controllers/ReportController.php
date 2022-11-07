@@ -380,9 +380,9 @@ class ReportController extends Controller {
 				$extendedText .= $position ? $position->number : '';
 			}
 			
-			if ($productType && in_array($productType->alias, [ProductType::COURSES_ALIAS, ProductType::VIP_ALIAS])) {
+			/*if ($productType && in_array($productType->alias, [ProductType::COURSES_ALIAS, ProductType::VIP_ALIAS])) {*/
 				$extendedText .= ' ' . $product->name;
-			}
+			/*}*/
 			
 			$pilotSum = $event->nominal_price;
 			
