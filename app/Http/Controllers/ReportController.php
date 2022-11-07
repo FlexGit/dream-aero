@@ -390,11 +390,12 @@ class ReportController extends Controller {
 			
 			$eventTypeText = '';
 			if ($event->event_type == Event::EVENT_TYPE_USER_FLIGHT) {
-				$eventTypeText .= 'Бесплатный полет сотрудника' . ($employee ? ' ' . $employee->fioFormatted() : '');
 				if ($employee->isPilot()) {
 					$pilotSum = 0;
+					$eventTypeText .= 'Бесплатный полет пилота' . ($employee ? ' ' . $employee->fioFormatted() : '');
 				} else {
 					$pilotSum = $pilotSum * 0.8;
+					$eventTypeText .= 'Бесплатный полет сотрудника' . ($employee ? ' ' . $employee->fioFormatted() : '');
 				}
 			} elseif ($event->event_type == Event::EVENT_TYPE_TEST_FLIGHT) {
 				$eventTypeText .= 'Тестовый полет пилота' . ($employee ? ' ' . $employee->fioFormatted() : '');
