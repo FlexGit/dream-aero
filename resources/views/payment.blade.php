@@ -179,6 +179,7 @@
 
 				if (!bonusAmount.length) {
 					$('#ab-error').text('Внимание! Введите сумму для списания в рублях');
+					return;
 				}
 
 				$.ajax({
