@@ -376,7 +376,7 @@ class ReportController extends Controller {
 			$extendedText = '';
 			
 			if ($user->email == env('DEV_EMAIL')) {
-				/*$extendedText .= $event->uuid;*/
+				$extendedText .= $event->id;
 				$extendedText .= $position ? $position->number : '';
 			}
 			
@@ -482,7 +482,6 @@ class ReportController extends Controller {
 				$eventTypeText,
 				$extendedText,
 			];
-			$details = array_filter($details);
 			
 			$items[$event->location_id][$event->flight_simulator_id][Carbon::parse($event->start_at)->format('d.m.Y')][] = [
 				'id' => $event->id,
@@ -492,7 +491,7 @@ class ReportController extends Controller {
 				'paid_sum' => $paidSum,
 				'pilot_sum' => $pilotSum,
 				'actual_pilot_sum' => $event->actual_pilot_sum,
-				'details' => implode(', ', $details),
+				'details' => implode(', ', array_filter($details)),
 				'pilot' => $pilot ? $pilot->fioFormatted() : '',
 				'deal_id' => $event->deal_id,
 				'is_old_certificate' => $isOldCertificate,
