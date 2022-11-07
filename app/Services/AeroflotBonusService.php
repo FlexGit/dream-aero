@@ -41,36 +41,35 @@ class AeroflotBonusService {
 	 */
 	public static function registerOrder(Bill $bill)
 	{
-		try {
-			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
-			
-			$dateTime = date('YmdHis');
-			$orderId = $dateTime . rand(10000, 99999);
-			
-			$position = $bill->positions()->first();
-			$product = $position ? $position->product : null;
-			
-			$request = [
-				'orderId' => $orderId,
-				'amount' => $bill->aeroflot_bonus_amount * 100,
-				'currency' => self::CURRENCY_CODE,
-				'returnUrl' => Request::getSchemeAndHttpHost() . '/payment/' . ($bill->uuid ?? ''),
-				'transactionDate' => $dateTime,
-				'cheque' => [
-					[
-						'product' => $product ? $product->alias : $bill->number,
-						'quantity' => 1,
-						'amount' => $bill->amount * 100,
-						'attributes' => [
-							[
-								'name' => 'AB_DISCOUNT',
-							 	'value' => $bill->aeroflot_bonus_amount * 100
-							]
+		$dateTime = date('YmdHis');
+		$orderId = $dateTime . rand(10000, 99999);
+		
+		$position = $bill->positions()->first();
+		$product = $position ? $position->product : null;
+		
+		$request = [
+			'orderId' => $orderId,
+			'amount' => $bill->aeroflot_bonus_amount * 100,
+			'currency' => self::CURRENCY_CODE,
+			'returnUrl' => Request::getSchemeAndHttpHost() . '/payment/' . ($bill->uuid ?? ''),
+			'transactionDate' => $dateTime,
+			'cheque' => [
+				[
+					'product' => $product ? $product->alias : $bill->number,
+					'quantity' => 1,
+					'amount' => $bill->amount * 100,
+					'attributes' => [
+						[
+							'name' => 'AB_DISCOUNT',
+							'value' => $bill->aeroflot_bonus_amount * 100
 						]
 					]
 				]
-			];
-			
+			]
+		];
+
+		try {
+			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			$result = $AfService->registerOrder($request);
 			$result = json_decode(json_encode($result), true);
 			
@@ -95,7 +94,7 @@ class AeroflotBonusService {
 			
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request));
 			
 			return null;
 		}
@@ -109,15 +108,15 @@ class AeroflotBonusService {
 	{
 		if ($bill->aeroflot_state == self::PAYED_STATE) return null;
 		
+		$dateTime = date('YmdHis');
+		
+		$request = [
+			'orderId' => $bill->aeroflot_transaction_order_id,
+			'transactionDate' => $dateTime,
+		];
+
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
-			
-			$dateTime = date('YmdHis');
-			
-			$request = [
-				'orderId' => $bill->aeroflot_transaction_order_id,
-				'transactionDate' => $dateTime,
-			];
 			$result = $AfService->getOrderInfo($request);
 			$result = json_decode(json_encode($result), true);
 			
@@ -151,7 +150,7 @@ class AeroflotBonusService {
 
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request));
 			
 			return null;
 		}
@@ -165,28 +164,27 @@ class AeroflotBonusService {
 	 */
 	public static function getCardInfo($cardNumber, Product $product, $amount)
 	{
+		$dateTime = date('YmdHis');
+		$transactionId = $dateTime . rand(10000, 99999);
+		
+		$request = [
+			'transaction' => [
+				'id' => $transactionId,
+				'pan' => $cardNumber,
+				'dateTime' => $dateTime,
+			],
+			'cheque' => [
+				'item' => [
+					'product' => $product->alias ?? '',
+					'quantity' => 1,
+					'amount' => $amount * 100,
+				]
+			],
+			'currency' => self::CURRENCY_CODE,
+		];
+
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
-			
-			$dateTime = date('YmdHis');
-			$transactionId = $dateTime . rand(10000, 99999);
-			
-			$request = [
-				'transaction' => [
-					'id' => $transactionId,
-					'pan' => $cardNumber,
-					'dateTime' => $dateTime,
-				],
-				'cheque' => [
-					'item' => [
-						'product' => $product->alias ?? '',
-						'quantity' => 1,
-						'amount' => $amount * 100,
-					]
-				],
-				'currency' => self::CURRENCY_CODE,
-			];
-			
 			$result = $AfService->getInfo2($request);
 			$result = json_decode(json_encode($result), true);
 			
@@ -196,7 +194,7 @@ class AeroflotBonusService {
 			
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request));
 			
 			return null;
 		}
@@ -208,72 +206,72 @@ class AeroflotBonusService {
 	 */
 	public static function authPoints(Bill $bill)
 	{
-		try {
-			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
-			
-			$dateTime = date('YmdHis');
-			$transactionId = $dateTime . rand(10000, 99999);
-			
-			$position = $bill->positions()->first();
-			$product = $position ? $position->product : null;
-			if (!$product) return null;
-			
-			$request = [
-				'transaction' => [
-					'id' => $transactionId,
-					'pan' => $bill->aeroflot_card_number,
-					'dateTime' => $dateTime,
-					'extensions' => [
-						[
-							'type' => 'CHEQUE_MSG_REQ',
-							'critical' =>'Y',
-							'params' =>[
-								[
-									'name' => 'MSG_REQ',
-									'value' => 'Y'
-								]
+		$dateTime = date('YmdHis');
+		$transactionId = $dateTime . rand(10000, 99999);
+		
+		$position = $bill->positions()->first();
+		$product = $position ? $position->product : null;
+		if (!$product) return null;
+		
+		$request = [
+			'transaction' => [
+				'id' => $transactionId,
+				'pan' => $bill->aeroflot_card_number,
+				'dateTime' => $dateTime,
+				'extensions' => [
+					[
+						'type' => 'CHEQUE_MSG_REQ',
+						'critical' =>'Y',
+						'params' =>[
+							[
+								'name' => 'MSG_REQ',
+								'value' => 'Y'
 							]
-						],
-						[
-							'type' => 'PURCHASE_EXT_PARAMS',
-							'critical' => 'Y',
-							'params' => [
-								[
-									'name' => 'AFL_OP_TYPE',
-									'value' => '1'
-								],
-								[
-									'name' => 'TYPE_CARD',
-									'value' => 'BASIC'
-								],
-								[
-									'name' => 'ORDER_ID',
-									'value' => $bill->uuid
-								],
-								[
-									'name' => 'RECEIPT',
-									'value' => $transactionId
-								]
+						]
+					],
+					[
+						'type' => 'PURCHASE_EXT_PARAMS',
+						'critical' => 'Y',
+						'params' => [
+							[
+								'name' => 'AFL_OP_TYPE',
+								'value' => '1'
+							],
+							[
+								'name' => 'TYPE_CARD',
+								'value' => 'BASIC'
+							],
+							[
+								'name' => 'ORDER_ID',
+								'value' => $bill->uuid
+							],
+							[
+								'name' => 'RECEIPT',
+								'value' => $transactionId
 							]
 						]
 					]
-				],
-				'currency' => self::CURRENCY_CODE,
-				'amount' => $bill->amount * 100,
-				'payment' => [
-					[
-						'payMeans' => 'I',
-						'amount' => $bill->amount * 100,
-					]
-				],
-				'cheque' => [
-					'item' => [
-						'product' => $product->alias ?? '',
-						'quantity' => 1,
-						'amount' => $bill->amount * 100,
-					]
 				]
-			];
+			],
+			'currency' => self::CURRENCY_CODE,
+			'amount' => $bill->amount * 100,
+			'payment' => [
+				[
+					'payMeans' => 'I',
+					'amount' => $bill->amount * 100,
+				]
+			],
+			'cheque' => [
+				'item' => [
+					'product' => $product->alias ?? '',
+					'quantity' => 1,
+					'amount' => $bill->amount * 100,
+				]
+			]
+		];
+
+		try {
+			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			$result = $AfService->authpoints($request);
 			$result = json_decode(json_encode($result), true);
 			
@@ -300,7 +298,7 @@ class AeroflotBonusService {
 			
 			return $result;
 		} catch (\Throwable $e) {
-			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request) . '. Rsponse: ' . json_encode($result));
+			\Log::channel('aeroflot')->info(__METHOD__ . ': ' . $e->getMessage() . '. Request: ' . json_encode($request));
 			
 			return null;
 		}
