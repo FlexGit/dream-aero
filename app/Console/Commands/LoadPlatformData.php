@@ -65,6 +65,7 @@ class LoadPlatformData extends Command
 
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
+			\Log::debug(111);
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Attribute $subject */
 			$subject = $message->getSubject();
