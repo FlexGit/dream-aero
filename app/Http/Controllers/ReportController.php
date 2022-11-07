@@ -382,7 +382,7 @@ class ReportController extends Controller {
 			
 			/*if ($productType && in_array($productType->alias, [ProductType::COURSES_ALIAS, ProductType::VIP_ALIAS])) {*/
 			if ($product) {
-				$extendedText .= ' ' . $product->name;
+				$extendedText .= ', ' . $product->name;
 			}
 			/*}*/
 			
