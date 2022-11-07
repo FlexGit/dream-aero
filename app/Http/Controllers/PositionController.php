@@ -735,8 +735,6 @@ class PositionController extends Controller
 			$event->user_id = $user->id ?? 0;
 			$event->start_at = Carbon::parse($stopAt)->format('Y-m-d H:i');
 			$event->stop_at = Carbon::parse($stopAt)->addMinutes($product->duration)->format('Y-m-d H:i');
-			$event->save();
-
 			$event->nominal_price = $event->nominalPrice();
 			$event->save();
 			

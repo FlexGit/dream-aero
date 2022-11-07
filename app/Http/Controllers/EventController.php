@@ -895,6 +895,7 @@ class EventController extends Controller
 					$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;;
 					$event->simulator_down_at = $this->request->simulator_down_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_down_at)->format('Y-m-d H:i') : null;
 					$event->employee_id = $employeeId;
+					$event->nominal_price = $event->nominalPrice();
 					$event->save();
 				break;
 				case Event::EVENT_TYPE_TEST_FLIGHT:
@@ -1033,6 +1034,7 @@ class EventController extends Controller
 					$stopAt = Carbon::parse($this->request->stop_at)->format('Y-m-d H:i');
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
+					$event->nominal_price = $event->nominalPrice();
 					$event->save();
 				break;
 				case Event::EVENT_TYPE_SHIFT_ADMIN:

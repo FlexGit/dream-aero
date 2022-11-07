@@ -1210,6 +1210,7 @@ class DealController extends Controller
 					$event->test_pilot_id = $pilotId;
 					$event->start_at = Carbon::parse($flightAt)->format('Y-m-d H:i');
 					$event->stop_at = Carbon::parse($flightStopAt)->format('Y-m-d H:i');
+					$event->nominal_price = $event->nominalPrice();
 					$event->save();
 				break;
 			}
