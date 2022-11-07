@@ -183,13 +183,13 @@ class AeroflotBonusService {
 			'currency' => self::CURRENCY_CODE,
 		];
 		
-		\Log::debug($request);
+		//\Log::debug($request);
 
 		try {
 			$AfService = new AfService(parse_ini_file(self::CONFIG_PATH));
 			$result = $AfService->getInfo2($request);
 			$result = json_decode(json_encode($result), true);
-			\Log::debug($result);
+			//\Log::debug($result);
 			$result = [
 				'max_limit' => isset($result['pointsAllocation']['maxChequePoints']) ? floor($result['pointsAllocation']['maxChequePoints'] / 100) : 0,
 			];
