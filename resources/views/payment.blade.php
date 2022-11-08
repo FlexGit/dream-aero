@@ -172,12 +172,13 @@
 					$alertSuccess = $popup.find('.alert-success'),
 					$alertError = $popup.find('.alert-danger'),
 					transactionType = $('#use').hasClass('active') ? 'registerOrder' : 'authpoints',
-					bonusAmount = $('#bonus_amount').val();
+					$bonusAmount = $('#bonus_amount'),
+					bonusAmount = $bonusAmount.length ? $bonusAmount.val() : 0;
 
 				$alertSuccess.addClass('hidden');
 				$alertError.text('').addClass('hidden');
 
-				if (!bonusAmount.length) {
+				if ($bonusAmount.length && !bonusAmount.length) {
 					$('#ab-error').text('Внимание! Введите сумму для списания в рублях');
 					return;
 				}
