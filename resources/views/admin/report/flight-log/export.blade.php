@@ -47,7 +47,7 @@
 					</td>
 				</tr>
 			@endforeach
-		@elseif(!$pilotId)
+		@elseif($user->isSuperadmin())
 			<tr>
 				<td style="text-align: center;">
 					{{ $date->format('d.m.Y') }}

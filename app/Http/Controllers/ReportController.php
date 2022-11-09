@@ -543,6 +543,7 @@ class ReportController extends Controller {
 			'locationId' => $location ? $location->id : 0,
 			'simulatorId' => $simulator ? $simulator->id : 0,
 			'pilotId' => $pilotId,
+			'user' => $user,
 		];
 		
 		$reportFileName = '';
