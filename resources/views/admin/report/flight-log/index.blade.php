@@ -54,20 +54,8 @@
 								</div>
 							</div>
 						@endif
-						@if($user->isPilot())
-							<div class="form-group ml-3">
-								<label for="filter_pilot_id">Пилот</label>
-								<div>
-									<select class="form-control" id="filter_pilot_id" name="filter_pilot_id">
-										@if($pilots->count() > 1)
-											<option value="0"></option>
-										@endif
-										@foreach($pilots as $pilot)
-											<option value="{{ $pilot->id }}">{{ $pilot->fioFormatted() }}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
+						@if($user->isPilot() && $pilot)
+							<input type="hidden" id="filter_pilot_id" name="filter_pilot_id" value="{{ $pilot->id }}">
 						@endif
 						<div class="form-group ml-3" style="padding-top: 31px;">
 							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>

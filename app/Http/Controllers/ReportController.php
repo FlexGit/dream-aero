@@ -286,19 +286,13 @@ class ReportController extends Controller {
 		} else {
 			$cities = $this->cityRepo->getList();
 		}
-		$pilots = User::where('role', User::ROLE_PILOT)
-			->orderBy('lastname')
-			->orderBy('name')
-			->get();
-		if ($user->isPilot()) {
-			$pilots = $pilots->where('id', $user->id);
-		}
+		$pilot = $user->isPilot() ? User::find($user->id) : null;
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-flight-log');
 		
 		return view('admin.report.flight-log.index', [
 			'cities' => $cities,
-			'pilots' => $pilots,
+			'pilot' => $pilot,
 			'user' => $user,
 			'page' => $page,
 		]);
@@ -322,7 +316,6 @@ class ReportController extends Controller {
 		$locationId = $this->request->filter_location_id ?? 0;
 		$simulatorId = $this->request->filter_simulator_id ?? 0;
 		$pilotId = $this->request->filter_pilot_id ?? 0;
-		if ($pilotId == 1) $pilotId = 80;
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
 		
 		if (!$dateFromAt && !$dateToAt) {
