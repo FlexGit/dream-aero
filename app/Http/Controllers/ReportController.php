@@ -345,9 +345,9 @@ class ReportController extends Controller {
 			$shifts = $shifts->where('location_id', $location->id)
 				->where('flight_simulator_id', $simulator->id);
 		}
-		if ($pilotId) {
+		/*if ($pilotId) {
 			$shifts = $shifts->where('shift_pilot_id', $pilotId);
-		}
+		}*/
 		$shifts = $shifts->orderBy('start_at')
 			->get();
 		foreach ($shifts as $shift) {
@@ -484,9 +484,9 @@ class ReportController extends Controller {
 				/*if ($user->email == env('DEV_EMAIL')) {
 					\Log::debug(\DB::getQueryLog());
 				}*/
-				if ($pilotId) {
+				/*if ($pilotId) {
 					$pilotShiftEvent = $pilotShiftEvent->where('shift_pilot_id', $pilotId);
-				}
+				}*/
 				$pilotShiftEvent = $pilotShiftEvent->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
 			}
@@ -500,9 +500,9 @@ class ReportController extends Controller {
 					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $event->location->id)
 						->where('flight_simulator_id', $event->simulator->id);
 				}
-				if ($pilotId) {
+				/*if ($pilotId) {
 					$pilotShiftEvent = $pilotShiftEvent->where('shift_pilot_id', $pilotId);
-				}
+				}*/
 				$pilotShiftEvent = $pilotShiftEvent->orderBy('start_at')
 					->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
