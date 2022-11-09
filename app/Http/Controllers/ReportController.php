@@ -556,12 +556,10 @@ class ReportController extends Controller {
 			if ($location && $simulator) {
 				$exportResult = Excel::store(new FlightLogReportExport($data, $location, $simulator), 'report/' . $reportFileName);
 			} else {
-				\Log::debug($reportFileName);
 				$exportResult = Excel::store(new FlightLogMultipleSheetsReportExport($data, $cities), 'report/' . $reportFileName);
-				\Log::debug($reportFileName);
 			}
 			if (!$exportResult) {
-				return response()->json(['status' => 'error', 'reason' => '111В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 			}
 		}
 		
@@ -1521,9 +1519,9 @@ class ReportController extends Controller {
 	{
 		$user = \Auth::user();
 		
-		if (!$user->isAdminOrHigher()) {
+		/*if (!$user->isAdminOrHigher()) {
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
-		}
+		}*/
 		
 		return Storage::disk('private')->download('report/' . $fileName);
 	}
