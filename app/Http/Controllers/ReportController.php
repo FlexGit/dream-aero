@@ -1359,12 +1359,12 @@ class ReportController extends Controller {
 				foreach ($events ?? [] as $event) {
 					$eventStopAtWithExtraTime = Carbon::parse($event['stop_at'])->addMinutes($event['extra_time'])->format('Y-m-d H:i:s');
 					
-					if ($user->email == env('DEV_EMAIL')) {
+					/*if ($user->email == env('DEV_EMAIL')) {
 						\Log::debug('Server Start: ' . $serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
 						\Log::debug('Server Stop: ' . $serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
 						\Log::debug('Event Interval: ' . $event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
 						\Log::debug('betweenIncluded: ' . $serverStartAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) . ' - ' . $serverStopAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime));
-					}
+					}*/
 					
 					// время подъема сервера попадает в интервал события,
 					// и время опускания сервера попадает в интервал события
@@ -1376,9 +1376,9 @@ class ReportController extends Controller {
 							'mwp_time' => 0,
 							'case' => 5,
 						];
-						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE][Carbon::parse($log->start_at)->format('H')][$log->id]);
-						}
+						}*/
 						break;
 					}
 					
@@ -1449,12 +1449,12 @@ class ReportController extends Controller {
 							'mwp_time' => Carbon::parse($log->stop_at)->diffInMinutes($log->start_at),
 							'case' => 4,
 						];
-						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
 							\Log::debug($serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
 							\Log::debug($serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
 							\Log::debug($event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
-						}
+						}*/
 						break;
 					}
 				}
