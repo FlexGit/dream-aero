@@ -281,11 +281,11 @@ class ReportController extends Controller {
 	{
 		$user = \Auth::user();
 		
-		/*if (!$user->isSuperAdmin()) {
-			abort(404);
-		}*/
-		
-		$cities = $this->cityRepo->getList();
+		if ($user->isAdmin()) {
+			$cities = $this->cityRepo->getList($user);
+		} else {
+			$cities = $this->cityRepo->getList();
+		}
 		$pilots = User::where('role', User::ROLE_PILOT)
 			->orderBy('lastname')
 			->orderBy('name')
@@ -299,6 +299,7 @@ class ReportController extends Controller {
 		return view('admin.report.flight-log.index', [
 			'cities' => $cities,
 			'pilots' => $pilots,
+			'user' => $user,
 			'page' => $page,
 		]);
 	}

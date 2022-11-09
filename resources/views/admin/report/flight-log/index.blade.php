@@ -35,7 +35,7 @@
 								<input type="date" class="form-control" id="filter_date_to_at" name="filter_date_to_at" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" style="width: 200px;">
 							</div>
 						</div>
-						@if($pilots->count() > 1)
+						@if($user->isAdminOrHigher())
 							<div class="form-group ml-3">
 								<label for="filter_location_id">Локация</label>
 								<div>
@@ -54,19 +54,21 @@
 								</div>
 							</div>
 						@endif
-						<div class="form-group ml-3">
-							<label for="filter_pilot_id">Пилот</label>
-							<div>
-								<select class="form-control" id="filter_pilot_id" name="filter_pilot_id">
-									@if($pilots->count() > 1)
-										<option value="0"></option>
-									@endif
-									@foreach($pilots as $pilot)
-										<option value="{{ $pilot->id }}">{{ $pilot->fioFormatted() }}</option>
-									@endforeach
-								</select>
+						@if($user->isSuperadmin() || $user->isPilot())
+							<div class="form-group ml-3">
+								<label for="filter_pilot_id">Пилот</label>
+								<div>
+									<select class="form-control" id="filter_pilot_id" name="filter_pilot_id">
+										@if($pilots->count() > 1)
+											<option value="0"></option>
+										@endif
+										@foreach($pilots as $pilot)
+											<option value="{{ $pilot->id }}">{{ $pilot->fioFormatted() }}</option>
+										@endforeach
+									</select>
+								</div>
 							</div>
-						</div>
+						@endif
 						<div class="form-group ml-3" style="padding-top: 31px;">
 							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>
 							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
