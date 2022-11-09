@@ -316,7 +316,6 @@ class ReportController extends Controller {
 		$locationId = $this->request->filter_location_id ?? 0;
 		$simulatorId = $this->request->filter_simulator_id ?? 0;
 		$pilotId = $this->request->filter_pilot_id ?? 0;
-		if ($pilotId == 1) $pilotId = 87;
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
 		
 		if (!$dateFromAt && !$dateToAt) {
