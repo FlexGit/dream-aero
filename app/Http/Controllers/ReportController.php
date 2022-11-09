@@ -1359,8 +1359,11 @@ class ReportController extends Controller {
 				foreach ($events ?? [] as $event) {
 					$eventStopAtWithExtraTime = Carbon::parse($event['stop_at'])->addMinutes($event['extra_time'])->format('Y-m-d H:i:s');
 					
-					//\Log::debug('Server: ' . $log->start_at . ' - ' . $log->stop_at);
-					//\Log::debug('Server: ' . $event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
+					if ($user->email == env('DEV_EMAIL')) {
+						\Log::debug('Server Start: ' . $serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
+						\Log::debug('Server Stop: ' . $serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
+						\Log::debug('Event Interval: ' . $event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
+					}
 					
 					// время подъема сервера попадает в интервал события,
 					// и время опускания сервера попадает в интервал события
