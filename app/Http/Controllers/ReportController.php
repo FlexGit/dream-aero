@@ -1369,9 +1369,9 @@ class ReportController extends Controller {
 							'mwp_time' => 0,
 							'case' => 5,
 						];
-						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}
+						}*/
 						break;
 					}
 					
@@ -1386,9 +1386,9 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStopAt->diffInMinutes($eventStopAtWithExtraTime),
 							'case' => 1,
 						];
-						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}
+						}*/
 						break;
 					}
 					
@@ -1403,9 +1403,9 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStartAt->diffInMinutes($event['start_at']),
 							'case' => 2,
 						];
-						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}
+						}*/
 						break;
 					}
 					
@@ -1419,9 +1419,9 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStartAt->diffInMinutes($event['start_at']) + $serverStopAt->diffInMinutes($eventStopAtWithExtraTime),
 							'case' => 3,
 						];
-						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}
+						}*/
 						break;
 					}
 				}
@@ -1444,6 +1444,9 @@ class ReportController extends Controller {
 						];
 						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
+							\Log::debug($serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
+							\Log::debug($serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
+							\Log::debug($event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
 						}
 						break;
 					}
