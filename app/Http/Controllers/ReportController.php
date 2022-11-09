@@ -532,7 +532,7 @@ class ReportController extends Controller {
 			];
 		}
 		
-		if ($user->isAdmin()) {
+		if (!$user->isSuperAdmin()) {
 			$cities = $this->cityRepo->getList($user);
 		} else {
 			$cities = $this->cityRepo->getList();
