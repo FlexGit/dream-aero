@@ -54,7 +54,7 @@
 								</div>
 							</div>
 						@endif
-						@if($user->isSuperadmin() || $user->isPilot())
+						@if($user->isPilot())
 							<div class="form-group ml-3">
 								<label for="filter_pilot_id">Пилот</label>
 								<div>
