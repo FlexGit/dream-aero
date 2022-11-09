@@ -25,19 +25,19 @@ class CityRepository {
 	}
 	
 	/**
-	 * @param User $user
+	 * @param User|null $user
 	 * @param bool $onlyActive
 	 * @return \Illuminate\Support\Collection
 	 */
-	public function getList(User $user, $onlyActive = true)
+	public function getList(User $user = null, $onlyActive = true)
 	{
 		$cities = $this->model->orderBy('name')
-			->where('version', $user->version)
+			->where('version', City::RU_VERSION)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
 			->orderBy('name')
 			->get();
-		if (!$user->isSuperAdmin() && $user->city) {
+		if ($user && !$user->isSuperAdmin() && $user->city) {
 			$cities = $cities->where('id', $user->city_id);
 		}
 		if ($onlyActive) {
