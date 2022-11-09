@@ -561,7 +561,7 @@ class ReportController extends Controller {
 				\Log::debug($reportFileName);
 			}
 			if (!$exportResult) {
-				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+				return response()->json(['status' => 'error', 'reason' => '111В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 			}
 		}
 		
