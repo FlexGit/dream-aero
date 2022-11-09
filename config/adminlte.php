@@ -272,18 +272,14 @@ return [
 			'label'       => '',
 			'label_color' => '',
 		],
-        /*[
-            'text' => 'Профиль',
-            'url'  => 'admin/profile',
-            'icon' => 'far fa-fw fa-user',
-			'topnav_user' => true,
-        ],*/
-        /*[
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-			'topnav_user' => true,
-        ],*/
+		/*[
+			'key'		  => 'schedule',
+			'text'        => 'График работы',
+			'url'         => '/schedule',
+			'icon'        => 'far fa-fw fa-clock',
+			'label'       => '',
+			'label_color' => '',
+		],*/
 		[
 			'text'    => 'Ценообразование',
 			'icon'    => 'fas fa-fw fa-dollar-sign',
@@ -394,7 +390,7 @@ return [
         [
             'text'    => 'Аналитика',
             'icon'    => 'far fa-fw fa-file-excel',
-			'can'	  => 'is_admin',
+			//'can'	  => 'is_admin',
             'submenu' => [
                 [
                     'text' => 'NPS',
@@ -411,7 +407,7 @@ return [
 				[
 					'text' => 'Журнал учета налёта',
 					'url'  => '/report/flight_log',
-					'can'  => 'is_superadmin',
+					//'can'  => 'is_superadmin',
 					'icon' => 'far fa-circle nav-icon',
 				],
 				[
