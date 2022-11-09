@@ -1375,9 +1375,9 @@ class ReportController extends Controller {
 							'mwp_time' => 0,
 							'case' => 5,
 						];
-						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
-							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
+						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE][Carbon::parse($log->start_at)->format('H')][$log->id]);
+						}
 						break;
 					}
 					
