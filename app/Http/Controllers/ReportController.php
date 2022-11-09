@@ -281,16 +281,24 @@ class ReportController extends Controller {
 	{
 		$user = \Auth::user();
 		
-		if (!$user->isSuperAdmin()) {
+		/*if (!$user->isSuperAdmin()) {
 			abort(404);
-		}
+		}*/
 		
-		$cities = $this->cityRepo->getList($this->request->user());
+		$cities = $this->cityRepo->getList();
+		$pilots = User::where('role', User::ROLE_PILOT)
+			->orderBy('lastname')
+			->orderBy('name')
+			->get();
+		if ($user->isPilot()) {
+			$pilots = $pilots->where('id', $user->id);
+		}
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-flight-log');
 		
 		return view('admin.report.flight-log.index', [
 			'cities' => $cities,
+			'pilots' => $pilots,
 			'page' => $page,
 		]);
 	}
@@ -312,6 +320,7 @@ class ReportController extends Controller {
 		$dateToAt = $this->request->filter_date_to_at ?? '';
 		$locationId = $this->request->filter_location_id ?? 0;
 		$simulatorId = $this->request->filter_simulator_id ?? 0;
+		$pilotId = $this->request->filter_pilot_id ?? 0;
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
 		
 		if (!$dateFromAt && !$dateToAt) {
@@ -459,7 +468,7 @@ class ReportController extends Controller {
 			$pilot = $event->pilot;
 			
 			if (!$pilot) {
-				// смена пилота
+				// смена пилота во время данного события
 				$pilotShiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 					->where('start_at', '<=', $event->start_at)
 					->where('stop_at', '>=', $event->start_at);
@@ -473,6 +482,22 @@ class ReportController extends Controller {
 				$pilotShiftEvent = $pilotShiftEvent->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
 			}
+			
+			if (!$pilot) {
+				// смена первого из пилотов в данный день
+				$pilotShiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
+					->where('start_at', '>=', Carbon::parse($event->start_at)->startOfDay()->format('Y-m-d H:i:s'))
+					->where('stop_at', '<=', Carbon::parse($event->start_at)->endOfDay()->format('Y-m-d H:i:s'));
+				if ($event->location && $event->simulator) {
+					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $event->location->id)
+						->where('flight_simulator_id', $event->simulator->id);
+				}
+				$pilotShiftEvent = $pilotShiftEvent->orderBy('start_at')
+					->first();
+				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
+			}
+			
+			if ($pilotId && $pilot && $pilotId != $pilot->id) continue;
 			
 			$details = [
 				$certificateNumber,
@@ -494,13 +519,14 @@ class ReportController extends Controller {
 				'actual_pilot_sum' => $event->actual_pilot_sum,
 				'details' => implode(', ', array_filter($details)),
 				'pilot' => $pilot ? $pilot->fioFormatted() : '',
+				'pilot_id' => $pilot ? $pilot->id : 0,
 				'deal_id' => $event->deal_id,
 				'is_old_certificate' => $isOldCertificate,
 			];
 		}
 		
-		$cities = $this->cityRepo->getList($user);
-		
+		$cities = $this->cityRepo->getList();
+
 		$data = [
 			'items' => $items,
 			'dates' => $period->toArray(),
@@ -509,6 +535,7 @@ class ReportController extends Controller {
 			'cityId' => $city ? $city->id : 0,
 			'locationId' => $location ? $location->id : 0,
 			'simulatorId' => $simulator ? $simulator->id : 0,
+			'pilotId' => $pilotId,
 		];
 		
 		$reportFileName = '';
