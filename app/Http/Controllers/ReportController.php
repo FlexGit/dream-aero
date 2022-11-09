@@ -1363,6 +1363,7 @@ class ReportController extends Controller {
 						\Log::debug('Server Start: ' . $serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
 						\Log::debug('Server Stop: ' . $serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
 						\Log::debug('Event Interval: ' . $event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
+						\Log::debug('betweenIncluded: ' . $serverStartAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) . ' - ' . $serverStopAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime));
 					}
 					
 					// время подъема сервера попадает в интервал события,
