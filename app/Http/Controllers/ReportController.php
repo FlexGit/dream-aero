@@ -1447,6 +1447,7 @@ class ReportController extends Controller {
 							\Log::debug($serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
 							\Log::debug($serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
 							\Log::debug($event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
+							\Log::debug('event id: ' . $event);
 						}
 						break;
 					}
