@@ -1336,6 +1336,9 @@ class ReportController extends Controller {
 		if ($platformData) {
 			// группировка событий календаря по времени
 			$events = $platformData->groupEvents($events, 1);
+			if ($user->email == env('DEV_EMAIL')) {
+				\Log::debug($events);
+			}
 			
 			// события платформы
 			foreach ($platformData->logs as $log) {
