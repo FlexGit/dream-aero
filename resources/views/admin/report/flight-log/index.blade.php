@@ -35,23 +35,25 @@
 								<input type="date" class="form-control" id="filter_date_to_at" name="filter_date_to_at" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" style="width: 200px;">
 							</div>
 						</div>
-						<div class="form-group ml-3">
-							<label for="filter_location_id">Локация</label>
-							<div>
-								<select class="form-control" id="filter_location_id" name="filter_location_id">
-									<option value="0"></option>
-									@foreach($cities as $city)
-										<optgroup label="{{ $city->name }}">
-											@foreach($city->locations as $location)
-												@foreach($location->simulators ?? [] as $simulator)
-													<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} {{ $simulator->alias }}</option>
+						@if($pilots->count() > 1)
+							<div class="form-group ml-3">
+								<label for="filter_location_id">Локация</label>
+								<div>
+									<select class="form-control" id="filter_location_id" name="filter_location_id">
+										<option value="0"></option>
+										@foreach($cities as $city)
+											<optgroup label="{{ $city->name }}">
+												@foreach($city->locations as $location)
+													@foreach($location->simulators ?? [] as $simulator)
+														<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}">{{ $location->name }} {{ $simulator->alias }}</option>
+													@endforeach
 												@endforeach
-											@endforeach
-										</optgroup>
-									@endforeach
-								</select>
+											</optgroup>
+										@endforeach
+									</select>
+								</div>
 							</div>
-						</div>
+						@endif
 						<div class="form-group ml-3">
 							<label for="filter_pilot_id">Пилот</label>
 							<div>
