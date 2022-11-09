@@ -1364,8 +1364,8 @@ class ReportController extends Controller {
 					
 					// время подъема сервера попадает в интервал события,
 					// и время опускания сервера попадает в интервал события
-					if (($serverStartAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStartAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
-						&& ($serverStopAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStopAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
+					if (($serverStartAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) || $serverStartAtWithLag->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime))
+						&& ($serverStopAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) || $serverStopAtWithLag->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime))
 					) {
 						$items[PlatformLog::MWP_ACTION_TYPE][Carbon::parse($log->start_at)->format('H')][$log->id] = [
 							'start_at' => Carbon::parse($log->start_at)->format('H:i'),
@@ -1380,7 +1380,7 @@ class ReportController extends Controller {
 					
 					// время подъема сервера попадает в интервал события,
 					// и время опускания сервера позже времени окончания события
-					if (($serverStartAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStartAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
+					if (($serverStartAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) || $serverStartAtWithLag->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime))
 						&& ($serverStopAt->gt($eventStopAtWithExtraTime) || $serverStopAtWithLag->gt($eventStopAtWithExtraTime))
 						&& ($serverStopAt->diffInMinutes($eventStopAtWithExtraTime) < 30)
 					) {
@@ -1397,7 +1397,7 @@ class ReportController extends Controller {
 					
 					// время опускания сервера попадает в интервал события,
 					// и время подъема сервера раньше времени начала события
-					if (($serverStopAt->isBetween($event['start_at'], $eventStopAtWithExtraTime) || $serverStopAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime))
+					if (($serverStopAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) || $serverStopAtWithLag->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime))
 						&& ($serverStartAt->lt($event['start_at']) || $serverStartAtWithLag->lt($event['start_at']))
 						&& ($serverStartAt->diffInMinutes($event['start_at']) < 30)
 					) {
@@ -1435,10 +1435,10 @@ class ReportController extends Controller {
 				foreach ($events ?? [] as $event) {
 					// время подъема сервера не попадает в интервал события,
 					// и время опускания сервера не попадает в интервал события
-					if (!$serverStartAt->isBetween($event['start_at'], $eventStopAtWithExtraTime)
-						&& !$serverStartAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime)
-						&& !$serverStopAt->isBetween($event['start_at'], $eventStopAtWithExtraTime)
-						&& !$serverStopAtWithLag->isBetween($event['start_at'], $eventStopAtWithExtraTime)
+					if (!$serverStartAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime)
+						&& !$serverStartAtWithLag->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime)
+						&& !$serverStopAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime)
+						&& !$serverStopAtWithLag->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime)
 					) {
 						$items[PlatformLog::MWP_ACTION_TYPE][Carbon::parse($log->start_at)->format('H')][$log->id] = [
 							'start_at' => Carbon::parse($log->start_at)->format('H:i'),
