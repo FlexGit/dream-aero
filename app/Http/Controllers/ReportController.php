@@ -364,6 +364,9 @@ class ReportController extends Controller {
 			$events = $events->where('location_id', $location->id)
 				->where('flight_simulator_id', $simulator->id);
 		}
+		if (!$user->isSuperAdmin() && $user->city) {
+			$events = $events->where('city_id', $user->city->id);
+		}
 		$events = $events->orderBy('start_at')
 			->get();
 		//\Log::debug(\DB::getQueryLog());
