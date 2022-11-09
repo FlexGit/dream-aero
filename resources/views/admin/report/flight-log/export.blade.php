@@ -15,6 +15,9 @@
 	@foreach($dates as $date)
 		@if(isset($items[$location->id][$simulator->id][$date->format('d.m.Y')]))
 			@foreach($items[$location->id][$simulator->id][$date->format('d.m.Y')] as $item)
+				@if($pilotId && $item['pilot_id'] != $pilotId)
+					@continue
+				@endif
 				<tr>
 					<td style="text-align: center;@if($item['actual_pilot_sum']) background-color: #17a2b8; @elseif($item['is_old_certificate']) background-color: #ffc107; @endif">
 						{{ $item['start_at_date'] }}
@@ -44,7 +47,7 @@
 					</td>
 				</tr>
 			@endforeach
-		@else
+		@elseif(!$pilotId)
 			<tr>
 				<td style="text-align: center;">
 					{{ $date->format('d.m.Y') }}

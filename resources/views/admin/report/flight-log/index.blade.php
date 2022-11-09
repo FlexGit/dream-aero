@@ -52,6 +52,19 @@
 								</select>
 							</div>
 						</div>
+						<div class="form-group ml-3">
+							<label for="filter_pilot_id">Пилот</label>
+							<div>
+								<select class="form-control" id="filter_pilot_id" name="filter_pilot_id">
+									@if($pilots->count() > 1)
+										<option value="0"></option>
+									@endif
+									@foreach($pilots as $pilot)
+										<option value="{{ $pilot->id }}">{{ $pilot->fioFormatted() }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
 						<div class="form-group ml-3" style="padding-top: 31px;">
 							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>
 							<button type="button" id="export_btn" class="btn btn-light"><i class="far fa-file-excel"></i> Excel</button>
@@ -91,6 +104,7 @@
 						'filter_date_to_at': $('#filter_date_to_at').val(),
 						'filter_location_id': $('#filter_location_id').val(),
 						'filter_simulator_id': $('#filter_location_id').find(':selected').data('simulator_id'),
+						'filter_pilot_id': $('#filter_pilot_id').val(),
 						'is_export': isExport,
 					},
 					success: function(result) {
