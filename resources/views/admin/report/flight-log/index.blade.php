@@ -40,7 +40,9 @@
 								<label for="filter_location_id">Локация</label>
 								<div>
 									<select class="form-control" id="filter_location_id" name="filter_location_id">
-										<option value="0"></option>
+										@if($user->isSuperAdmin())
+											<option value="0"></option>
+										@endif
 										@foreach($cities as $city)
 											<optgroup label="{{ $city->name }}">
 												@foreach($city->locations as $location)
