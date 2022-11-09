@@ -55,6 +55,9 @@ class ReportController extends Controller {
 		$this->paymentRepo = $paymentRepo;
 	}
 	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
 	public function npsIndex()
 	{
 		$user = \Auth::user();
@@ -70,6 +73,11 @@ class ReportController extends Controller {
 		]);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
 	public function npsGetListAjax()
 	{
 		if (!$this->request->ajax()) {
@@ -277,6 +285,9 @@ class ReportController extends Controller {
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
 	}
 	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
 	public function flightLogIndex()
 	{
 		$user = \Auth::user();
@@ -572,6 +583,9 @@ class ReportController extends Controller {
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}
 	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
 	public function personalSellingIndex()
 	{
 		$user = \Auth::user();
@@ -587,6 +601,11 @@ class ReportController extends Controller {
 		]);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
 	public function personalSellingGetListAjax()
 	{
 		if (!$this->request->ajax()) {
@@ -737,6 +756,9 @@ class ReportController extends Controller {
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}
 	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
 	public function unexpectedRepeatedIndex()
 	{
 		$user = \Auth::user();
@@ -752,6 +774,11 @@ class ReportController extends Controller {
 		]);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
 	public function unexpectedRepeatedGetListAjax()
 	{
 		if (!$this->request->ajax()) {
@@ -1342,6 +1369,9 @@ class ReportController extends Controller {
 							'mwp_time' => 0,
 							'case' => 5,
 						];
+						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
+						}
 						break;
 					}
 					
@@ -1356,9 +1386,9 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStopAt->diffInMinutes($eventStopAtWithExtraTime),
 							'case' => 1,
 						];
-						/*if (isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
+						}
 						break;
 					}
 					
@@ -1373,9 +1403,9 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStartAt->diffInMinutes($event['start_at']),
 							'case' => 2,
 						];
-						/*if (isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
+						}
 						break;
 					}
 					
@@ -1389,9 +1419,9 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStartAt->diffInMinutes($event['start_at']) + $serverStopAt->diffInMinutes($eventStopAtWithExtraTime),
 							'case' => 3,
 						];
-						/*if (isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
+						}
 						break;
 					}
 				}
@@ -1412,9 +1442,9 @@ class ReportController extends Controller {
 							'mwp_time' => Carbon::parse($log->stop_at)->diffInMinutes($log->start_at),
 							'case' => 4,
 						];
-						/*if (isset($items[PlatformLog::MWP_ACTION_TYPE])) {
+						if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
 							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
+						}
 						break;
 					}
 				}
@@ -1526,6 +1556,9 @@ class ReportController extends Controller {
 		return Storage::disk('private')->download('report/' . $fileName);
 	}
 	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
 	public function platformLoadData()
 	{
 		\Artisan::call('platform_data:load');
