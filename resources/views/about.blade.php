@@ -111,14 +111,14 @@
 									</a>
 									<span>Санкт-Петербург</span>
 									<br>
-									ТРЦ "Охта Молл" (Брантовская дор., 3)
+									ТРК "РИО" (ул. Фучика д.2)
 								</td>
 								<td>
 									<a href="{{ url('spb/contacts#location-rio') }}">
 										<img src="{{ asset('img/a320.png') }}" height="35" alt="AIRBUS A320"></a>
 									<span>Санкт-Петербург</span>
 									<br>
-									ТРК "РИО" (ул. Фучика д.2)
+									ТРЦ "Охта Молл" (Брантовская дор., 3)
 								</td>
 							</tr>
 							<tr class="even">
@@ -223,6 +223,17 @@
 									<span>Хабаровск</span>
 									<br>
 									ТРЦ «Brosko Mall» (ул. Пионерская, 2В)
+								</td>
+								<td></td>
+							</tr>
+							<tr class="odd">
+								<td>
+									<a href="{{ url('vlv/contacts') }}">
+										<img src="{{ asset('img/plane1.png') }}" height="35" alt="">
+									</a>
+									<span>Владивосток</span>
+									<br>
+									ТВК «Калина Молл» (ул. Калинина, д. 8)
 								</td>
 								<td></td>
 							</tr>
