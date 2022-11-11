@@ -112,8 +112,8 @@ class AeroflotBonusController extends Controller {
 		}
 		
 		if (strlen($cardNumber) <= 10 && strlen($cardNumber) >= 8) {
-			$cardNumberStep1 = substr($cardNumber, 0,strlen($cardNumber) - 1);
-			$cardNumberStep2 = floor(intval($cardNumberStep1) / 7) * 7;
+			$cardNumberStep1 = intval(substr($cardNumber, 0,strlen($cardNumber) - 1));
+			$cardNumberStep2 = floor($cardNumberStep1 / 7) * 7;
 			$cardNumberStep3 = $cardNumberStep1 - $cardNumberStep2;
 			if (substr($cardNumberStep3, -1) == substr($cardNumber, -1)){
 				return response()->json(['status' => 'success', 'message' => 'Номер введен верно', 'html' => $html]);
