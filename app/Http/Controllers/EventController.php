@@ -635,10 +635,14 @@ class EventController extends Controller
 				}
 				
 				$startAt = $this->request->start_at_date . ' ' . $this->request->start_at_time;
-				$stopAt = $this->request->start_at_date . ' ' . $this->request->start_at_time;
+				$stopAt = Carbon::parse(Carbon::parse($startAt)->addMinutes($product->duration ?? 0));
+				
+				if (Carbon::parse($startAt)->format('Y-m-d') != Carbon::parse($stopAt)->format('Y-m-d') || Carbon::parse($startAt)->gte($stopAt)) {
+					return response()->json(['status' => 'error', 'reason' => 'Проверьте корректность даты начала и окончания полета']);
+				}
 			break;
 		}
-
+		
 		try {
 			\DB::beginTransaction();
 			
@@ -673,7 +677,7 @@ class EventController extends Controller
 					$event->location_id = $location->id ?? 0;
 					$event->flight_simulator_id = $simulator->id ?? 0;
 					$event->start_at = Carbon::parse($startAt)->format('Y-m-d H:i');
-					$event->stop_at = Carbon::parse($stopAt)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
+					$event->stop_at = Carbon::parse($stopAt)->format('Y-m-d H:i');
 					$event->extra_time = (int)$this->request->extra_time;
 					$event->is_repeated_flight = (bool)$this->request->is_repeated_flight;
 					$event->is_unexpected_flight = (bool)$this->request->is_unexpected_flight;
@@ -854,6 +858,11 @@ class EventController extends Controller
 					if ($event->start_at->format('d') != Carbon::parse($startAt)->format('d')) {
 						$event->notification_type = null;
 					}
+					
+					if (Carbon::parse($startAt)->format('Y-m-d') != Carbon::parse($stopAt)->format('Y-m-d') || Carbon::parse($startAt)->gte($stopAt)) {
+						return response()->json(['status' => 'error', 'reason' => 'Проверьте корректность даты начала и окончания полета']);
+					}
+					
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
 					if (isset($city)) {
@@ -890,6 +899,10 @@ class EventController extends Controller
 					$event->save();
 				break;
 				case Event::EVENT_TYPE_USER_FLIGHT:
+					if (Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d') != Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d') || Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->gte($this->request->stop_at_date . ' ' . $this->request->stop_at_time)) {
+						return response()->json(['status' => 'error', 'reason' => 'Проверьте корректность даты начала и окончания полета']);
+					}
+					
 					$event->start_at = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
 					$event->stop_at = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d H:i');
 					$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;;
@@ -899,6 +912,10 @@ class EventController extends Controller
 					$event->save();
 				break;
 				case Event::EVENT_TYPE_TEST_FLIGHT:
+					if (Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d') != Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d') || Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->gte($this->request->stop_at_date . ' ' . $this->request->stop_at_time)) {
+						return response()->json(['status' => 'error', 'reason' => 'Проверьте корректность даты начала и окончания полета']);
+					}
+					
 					$event->start_at = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
 					$event->stop_at = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d H:i');
 					$event->simulator_up_at = $this->request->simulator_up_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_up_at)->format('Y-m-d H:i') : null;;
@@ -1021,6 +1038,10 @@ class EventController extends Controller
 					if ($event->start_at->format('d') != Carbon::parse($startAt)->format('d')) {
 						$event->notification_type = null;
 					}
+					if (Carbon::parse($startAt)->format('Y-m-d') != Carbon::parse($stopAt)->format('Y-m-d') || Carbon::parse($startAt)->gte($stopAt)) {
+						return response()->json(['status' => 'error', 'reason' => 'Проверьте корректность даты начала и окончания полета']);
+					}
+					
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
 					$event->nominal_price = $event->nominalPrice();
@@ -1032,6 +1053,11 @@ class EventController extends Controller
 				case Event::EVENT_TYPE_USER_FLIGHT:
 					$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 					$stopAt = Carbon::parse($this->request->stop_at)->format('Y-m-d H:i');
+				
+					if (Carbon::parse($startAt)->format('Y-m-d') != Carbon::parse($stopAt)->format('Y-m-d') || Carbon::parse($startAt)->gte($stopAt)) {
+						return response()->json(['status' => 'error', 'reason' => 'Проверьте корректность даты начала и окончания полета']);
+					}
+	
 					$event->start_at = $startAt;
 					$event->stop_at = $stopAt;
 					$event->nominal_price = $event->nominalPrice();
