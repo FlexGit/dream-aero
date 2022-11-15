@@ -32,9 +32,11 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 	 * @return int|void
 	 */
 	public function handle() {
+		\Log::debug('send certificate: label1');
 		if ($this->certificate->sent_at) {
 			return null;
 		}
+		\Log::debug('send certificate: label2');
 		
 		$certificateFilePath = isset($this->certificate->data_json['certificate_file_path']) ? $this->certificate->data_json['certificate_file_path'] : '';
 		$certificateFileExists = Storage::disk('private')->exists($certificateFilePath);
@@ -46,18 +48,18 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 				return null;
 			}
 		}
-
+		\Log::debug('send certificate: label3');
 		$position = $this->certificate->position()
 			->where('is_certificate_purchase', true)
 			->first();
 		if (!$position) return null;
-
+		\Log::debug('send certificate: label4');
 		$deal = $position->deal;
 		if (!$deal) return null;
-
+		\Log::debug('send certificate: label5');
 		$balance = $position->balance();
 		if ($balance < 0) return null;
-
+		\Log::debug('send certificate: label6');
 		$isOnlinePaid = false;
 		foreach ($position->bills as $bill) {
 			if ($bill->paymentMethod && $bill->paymentMethod->alias == PaymentMethod::ONLINE_ALIAS) {
@@ -65,20 +67,20 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			}
 		}
 		if (!$isOnlinePaid) return null;
-		
+		\Log::debug('send certificate: label7');
 		$product = $position->product;
 		if (!$product) return null;
-		
+		\Log::debug('send certificate: label8');
 		$productType = $product->productType;
 		if (!$productType) return null;
-		
+		\Log::debug('send certificate: label9');
 		$contractor = $deal->contractor;
 		if (!$contractor) return null;
-
+		\Log::debug('send certificate: label10');
 		if (!$deal->name || !$deal->email || $deal->name == Contractor::ANONYM_EMAIL) {
 			return null;
 		}
-
+		\Log::debug('send certificate: label11');
 		$city = $this->certificate->city;
 		if ($city) {
 			$cityPhone = $city->phone;
@@ -120,7 +122,7 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 		if (!$certificateRulesFile->save(storage_path('app/private/rule/' . $certificateRulesFileName))) {
 			return null;
 		}
-
+		\Log::debug('send certificate: label12');
 		$messageData = [
 			'certificate' => $this->certificate,
 			'name' => $deal->name,
@@ -144,13 +146,13 @@ class SendCertificateEmail extends Job implements ShouldQueue {
 			$message->to($recipients);
 			$message->bcc($bcc);
 		});
-
+		\Log::debug('send certificate: label13');
 		$failures = Mail::failures();
 		if ($failures) {
 			\Log::debug('500 - ' . get_class($this) . ': ' . implode(', ', $failures));
 			return null;
 		}
-
+		\Log::debug('send certificate: label14');
 		$this->certificate->sent_at = Carbon::now()->format('Y-m-d H:i:s');
 		$this->certificate->save();
 		
