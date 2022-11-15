@@ -470,7 +470,7 @@
 				<div class="row pl-3 pr-3 mt-4">
 					<div class="col-3">
 						<div class="form-group">
-							<label for="pilot_id">Оплачено клиентом</label>
+							<label for="pilot_id">Оплачено</label>
 							<div>{{ number_format($paidSum, 0, '.', ' ') }} руб</div>
 						</div>
 					</div>
@@ -626,6 +626,9 @@
 				<a class="nav-link" data-toggle="tab" href="{{ asset('#simulator') }}">Платформа</a>
 			</li>
 			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="{{ asset('#pilot') }}">Пилот</a>
+			</li>
+			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="{{ asset('#comments') }}">Комментарий</a>
 			</li>
 		</ul>
@@ -687,6 +690,56 @@
 						<div class="form-group">
 							<label for="simulator_down_at">Время опускания платформы</label>
 							<input type="time" class="form-control" id="simulator_down_at" name="simulator_down_at" value="{{ $event->simulator_down_at ? $event->simulator_down_at->format('H:i') : '' }}">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="pilot">
+				<div class="row pl-3 pr-3 mt-4">
+					<div class="col-4">
+						<label>Пилоты смены</label>
+						<div>
+							@foreach ($shifts as $shift)
+								<div>
+									{{ $shift->start_at->format('H:i') }} - {{ $shift->stop_at->format('H:i') }} - {{ $shift->user->fio() }}
+								</div>
+							@endforeach
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="form-group">
+							<label for="pilot_id">Фактический пилот</label>
+							<select class="form-control" id="pilot_id" name="pilot_id">
+								<option value="0">---</option>
+								@foreach($pilotItems ?? [] as $cityName => $locations)
+									@foreach($locations ?? [] as $locationName => $pilots)
+										<optgroup label="{{ $cityName }} {{ $locationName }}"></optgroup>
+										@foreach($pilots as $pilot)
+											<option value="{{ $pilot->id }}" @if($event->pilot_id == $pilot->id) selected @endif>{{ $pilot->fio() }}</option>
+										@endforeach
+									@endforeach
+								@endforeach
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row pl-3 pr-3 mt-4">
+					<div class="col-3">
+						<div class="form-group">
+							<label for="pilot_id">Оплачено</label>
+							<div>{{ number_format($paidSum, 0, '.', ' ') }} руб</div>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="form-group">
+							<label for="pilot_id">Пилоту</label>
+							<div>{{ number_format($pilotSum, 0, '.', ' ') }} руб</div>
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="form-group">
+							<label for="actual_pilot_sum">Пилоту (корректировка)</label>
+							<input type="number" class="form-control" id="actual_pilot_sum" name="actual_pilot_sum" value="{{ $event->actual_pilot_sum }}">
 						</div>
 					</div>
 				</div>

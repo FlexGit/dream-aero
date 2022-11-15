@@ -909,6 +909,8 @@ class EventController extends Controller
 					$event->simulator_down_at = $this->request->simulator_down_at ? Carbon::parse($this->request->start_at_date . ' ' . $this->request->simulator_down_at)->format('Y-m-d H:i') : null;
 					$event->employee_id = $employeeId;
 					$event->nominal_price = $event->nominalPrice();
+					$event->pilot_id = $pilotId;
+					$event->actual_pilot_sum = (int)$this->request->actual_pilot_sum;
 					$event->save();
 				break;
 				case Event::EVENT_TYPE_TEST_FLIGHT:
