@@ -490,7 +490,10 @@ class ScheduleController extends Controller
 
 		$schedule = Schedule::find($id);
 		if (!$schedule) return response()->json(['status' => 'error', 'reason' => 'Запись не найдена']);
-
+		
+		if (Carbon::parse($stopAt)->lte($startAt)) {
+			return response()->json(['status' => 'error', 'reason' => 'Время окончания события должно быть позже времени начала']);
+		}
 		$schedule->schedule_type = $type;
 		$schedule->start_at = $startAt ? Carbon::parse($startAt)->format('H:i') : null;
 		$schedule->stop_at = $stopAt ? Carbon::parse($stopAt)->format('H:i') : null;
