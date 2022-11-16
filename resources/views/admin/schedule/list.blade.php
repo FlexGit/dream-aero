@@ -43,7 +43,7 @@
 		</thead>
 		<tbody>
 			@foreach($location->simulators as $simulator)
-				{{--@if(isset($userItems['pilot'][$simulator->id]))
+				@if(isset($userItems['pilot'][$simulator->id]))
 					<tr>
 						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
 							Пилоты {{ $simulator->name }}
@@ -73,7 +73,7 @@
 							'period' => $filterYear . '-' . $monthNumber,
 						])
 					@endif
-				@endif--}}
+				@endif
 			@endforeach
 			@if(isset($userItems['pilot'][0]))
 				<tr>
