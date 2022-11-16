@@ -272,14 +272,14 @@ return [
 			'label'       => '',
 			'label_color' => '',
 		],
-		/*[
+		[
 			'key'		  => 'schedule',
 			'text'        => 'График работы',
 			'url'         => '/schedule',
 			'icon'        => 'far fa-fw fa-clock',
 			'label'       => '',
 			'label_color' => '',
-		],*/
+		],
 		[
 			'text'    => 'Ценообразование',
 			'icon'    => 'fas fa-fw fa-dollar-sign',
