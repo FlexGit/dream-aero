@@ -43,7 +43,7 @@
 		</thead>
 		<tbody>
 			@foreach($location->simulators as $simulator)
-				@if(isset($userItems['pilot'][$simulator->id]))
+				{{--@if(isset($userItems['pilot'][$simulator->id]))
 					<tr>
 						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
 							Пилоты {{ $simulator->name }}
@@ -73,39 +73,46 @@
 							'period' => $filterYear . '-' . $monthNumber,
 						])
 					@endif
-				@endif
-				@if(isset($userItems['pilot'][0]))
-					<tr>
-						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
-							Пилоты
-						</td>
-					</tr>
-					@foreach($userItems['pilot'][0] as $user)
-						@include('admin.schedule.user', [
-							'user' => $user,
-							'locationId' => $location->id,
-							'simulatorId' => 0,
-							'role' => 'pilot',
-						])
-					@endforeach
-					@foreach($extraShiftItems[$filterYear . '-' . $monthNumber]['pilot'][0] ?? [] as $user)
-						@include('admin.schedule.user', [
-							'user' => $user,
-							'locationId' => $location->id,
-							'simulatorId' => 0,
-							'role' => 'pilot',
-						])
-					@endforeach
-					@if(isset($availableUserItems['pilot']))
-						@include('admin.schedule.new-user', [
-							'availableUserItems' => $availableUserItems['pilot'],
-							'locationId' => $location->id,
-							'simulatorId' => 0,
-							'period' => $filterYear . '-' . $monthNumber,
-						])
-					@endif
-				@endif
+				@endif--}}
 			@endforeach
+			@if(isset($userItems['pilot'][0]))
+				<tr>
+					<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
+						Пилоты
+					</td>
+				</tr>
+				@foreach($userItems['pilot'][0] as $user)
+					@include('admin.schedule.user', [
+						'user' => $user,
+						'locationId' => $location->id,
+						'simulatorId' => 0,
+						'role' => 'pilot',
+					])
+				@endforeach
+				@foreach($extraShiftItems[$filterYear . '-' . $monthNumber]['pilot'][0] ?? [] as $user)
+					@include('admin.schedule.user', [
+						'user' => $user,
+						'locationId' => $location->id,
+						'simulatorId' => 0,
+						'role' => 'pilot',
+					])
+				@endforeach
+				@if(isset($availableUserItems['pilot']))
+					@include('admin.schedule.new-user', [
+						'availableUserItems' => $availableUserItems['pilot'],
+						'locationId' => $location->id,
+						'simulatorId' => 0,
+						'period' => $filterYear . '-' . $monthNumber,
+					])
+				@endif
+			@else
+				<tr>
+					<td colspan="32" class="text-center small">
+						Пилоты не найдены
+					</td>
+				</tr>
+			@endif
+
 			@foreach($location->simulators as $simulator)
 				@if(isset($userItems['admin'][$simulator->id]))
 					<tr>
