@@ -150,6 +150,8 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('schedule/{id}/edit', [ScheduleController::class, 'edit'])->name('edit-schedule');
 			Route::post('schedule', [ScheduleController::class, 'store'])->name('store-schedule');
 			Route::put('schedule/{id}', [ScheduleController::class, 'update'])->name('update-schedule');
+			Route::post('schedule/extra-user', [ScheduleController::class, 'storeExtraUser'])->name('store-extra-user');
+			Route::delete('schedule/extra-user', [ScheduleController::class, 'deleteExtraUser'])->name('delete-extra-user');
 			
 			
 			// События
@@ -472,10 +474,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	});
 
 	Route::domain(env('DOMAIN_RU', 'dream-aero.ru'))->group(function () {
-		/*Route::get('sitemap.xml', function () {
-			header('Content-Type: text/xml; charset=UTF-8');
-			readfile(dirname(__FILE__) . '/../public/sitemap-ru.xml');
-		});*/
 		Route::get('robots.txt', function () {
 			header('Content-Type: text/plain; charset=UTF-8');
 			readfile(dirname(__FILE__) . '/../public/robots-ru.txt');
@@ -556,10 +554,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	});
 	
 	Route::domain(env('DOMAIN_EN', 'en.dream-aero.ru'))->group(function () {
-		/*Route::get('sitemap.xml', function () {
-			header('Content-Type: text/xml; charset=UTF-8');
-			readfile(dirname(__FILE__) . '/../public/sitemap-en.xml');
-		});*/
 		Route::get('robots.txt', function () {
 			header('Content-Type: text/plain; charset=UTF-8');
 			readfile(dirname(__FILE__) . '/../public/robots-en.txt');

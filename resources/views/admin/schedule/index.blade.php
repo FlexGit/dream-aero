@@ -26,6 +26,7 @@
 							<label for="filter_location_id">Локация</label>
 							<div>
 								<select class="form-control" id="filter_location_id" name="filter_location_id">
+									<option value=""></option>
 									@foreach($cities as $city)
 										<optgroup label="{{ $city->name }}"></optgroup>
 										@foreach($city->locations as $location)
@@ -45,17 +46,6 @@
 								</select>
 							</div>
 						</div>
-						{{--<div class="form-group ml-3">
-							<label for="filter_month">Месяц</label>
-							<div>
-								<select class="form-control" id="filter_month" name="filter_month">
-									<option value="">---</option>
-									@foreach($months as $monthNumber => $monthName)
-										<option value="{{ $monthNumber }}" @if($monthNumber == \Carbon\Carbon::now()->format('m')) selected @endif>{{ $monthName }}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>--}}
 						<div class="form-group ml-3" style="padding-top: 31px;">
 							<button type="button" id="show_btn" class="btn btn-secondary">Показать</button>
 						</div>
@@ -123,13 +113,14 @@
 					data: {
 						'filter_location_id': $('#filter_location_id').val(),
 						'filter_year': $('#filter_year').val(),
-						/*'filter_month': $('#filter_month').val(),*/
 						'is_export': isExport,
 					},
 					success: function(result) {
 						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
+							$selector.html('');
+							btn.attr('disabled', false);
 							return;
 						}
 
@@ -295,7 +286,7 @@
 				});
 			}
 
-			getList(false);
+			//getList(false);
 
 			function scheduleModal(data) {
 				$('.modal .modal-title, .modal .modal-body').empty();
@@ -385,6 +376,60 @@
 				$table.find('.fa-minus-square').removeClass('hidden');
 
 				localStorage.removeItem(period);
+			});
+
+			$(document).on('click', '.js-add-extra-user', function(e) {
+				e.preventDefault();
+
+				var data = {
+					user_id: $(this).closest('.js-extra-user-container').find('select[name="extra_user_id"]').val(),
+					location_id: $(this).data('location_id'),
+					simulator_id: $(this).data('simulator_id'),
+					period: $(this).data('period'),
+				};
+
+				$.ajax({
+					url: '{{ route('store-extra-user') }}',
+					type: 'POST',
+					data: data,
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						toastr.success(result.message);
+
+						getList(false);
+					}
+				});
+			});
+
+			$(document).on('click', '.js-extra-shift-delete', function(e) {
+				e.preventDefault();
+
+				var data = {
+					user_id: $(this).data('user_id'),
+					location_id: $(this).data('location_id'),
+					simulator_id: $(this).data('simulator_id'),
+					period: $(this).data('period'),
+				};
+
+				$.ajax({
+					url: '{{ route('delete-extra-user') }}',
+					type: 'DELETE',
+					data: data,
+					success: function(result) {
+						if (result.status !== 'success') {
+							toastr.error(result.reason);
+							return;
+						}
+
+						toastr.success(result.message);
+
+						getList(false);
+					}
+				});
 			});
 		});
 	</script>

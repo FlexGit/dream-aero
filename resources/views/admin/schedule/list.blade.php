@@ -1,7 +1,5 @@
 @foreach($months as $monthNumber => $monthName)
 	@php
-		/*if ($filterMonth && $filterMonth != $monthNumber) continue;*/
-
 		$firstDayOfMonth = \Carbon\Carbon::parse($filterYear . '-' . $monthNumber)->firstOfMonth();
 		$lastDayOfMonth = \Carbon\Carbon::parse($filterYear . '-' . $monthNumber)->lastOfMonth();
 		$periodDates = \Carbon\CarbonPeriod::create($firstDayOfMonth, $lastDayOfMonth);
@@ -19,7 +17,7 @@
 						<i class="far fa-plus-square hidden js-month-expand" style="cursor: pointer;"></i>
 						<i class="far fa-minus-square js-month-collapse" style="cursor: pointer;"></i>
 					</div>
-					<div class="small font-weight-bold">{{ $monthName }}</div>
+					<div class="font-weight-bold">{{ $monthName }}</div>
 				</div>
 			</td>
 			@for($i = 0;$i < 31;++$i)
@@ -47,104 +45,130 @@
 			@foreach($location->simulators as $simulator)
 				@if(isset($userItems['pilot'][$simulator->id]))
 					<tr>
-						<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
+						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
 							Пилоты {{ $simulator->name }}
 						</td>
 					</tr>
 					@foreach($userItems['pilot'][$simulator->id] as $user)
-						<tr>
-							<td class="col-2 text-nowrap small">
-								{{ $user['fio'] }}
-							</td>
-							@for($i = 0;$i < 31;++$i)
-								@php
-									$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
-									$scheduleItem = ($date && isset($scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
-								@endphp
-								<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="pilot" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
-									{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
-								</td>
-							@endfor
-						</tr>
+						@include('admin.schedule.user', [
+							'user' => $user,
+							'locationId' => $location->id,
+							'simulatorId' => $simulator->id,
+							'role' => 'pilot',
+						])
 					@endforeach
+					@foreach($extraShiftItems[$filterYear . '-' . $monthNumber]['pilot'][$simulator->id] ?? [] as $user)
+						@include('admin.schedule.user', [
+							'user' => $user,
+							'locationId' => $location->id,
+							'simulatorId' => $simulator->id,
+							'role' => 'pilot',
+						])
+					@endforeach
+					@if(isset($availableUserItems['pilot']))
+						@include('admin.schedule.new-user', [
+							'availableUserItems' => $availableUserItems['pilot'],
+							'locationId' => $location->id,
+							'simulatorId' => $simulator->id,
+							'period' => $filterYear . '-' . $monthNumber,
+						])
+					@endif
 				@endif
 				@if(isset($userItems['pilot'][0]))
 					<tr>
-						<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
+						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
 							Пилоты
 						</td>
 					</tr>
 					@foreach($userItems['pilot'][0] as $user)
-						<tr>
-							<td class="col-2 text-nowrap small">
-								{{ $user['fio'] }}
-							</td>
-							@for($i = 0;$i < 31;++$i)
-								@php
-									$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
-									$scheduleItem = ($date && isset($scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
-								@endphp
-								<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="0" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="pilot" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
-									{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
-								</td>
-							@endfor
-						</tr>
+						@include('admin.schedule.user', [
+							'user' => $user,
+							'locationId' => $location->id,
+							'simulatorId' => 0,
+							'role' => 'pilot',
+						])
 					@endforeach
-				@else
-					<tr>
-						<td colspan="32" class="text-center small">
-							Пилоты не найдены
-						</td>
-					</tr>
+					@foreach($extraShiftItems[$filterYear . '-' . $monthNumber]['pilot'][0] ?? [] as $user)
+						@include('admin.schedule.user', [
+							'user' => $user,
+							'locationId' => $location->id,
+							'simulatorId' => 0,
+							'role' => 'pilot',
+						])
+					@endforeach
+					@if(isset($availableUserItems['pilot']))
+						@include('admin.schedule.new-user', [
+							'availableUserItems' => $availableUserItems['pilot'],
+							'locationId' => $location->id,
+							'simulatorId' => 0,
+							'period' => $filterYear . '-' . $monthNumber,
+						])
+					@endif
 				@endif
 			@endforeach
 			@foreach($location->simulators as $simulator)
 				@if(isset($userItems['admin'][$simulator->id]))
 					<tr>
-						<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
+						<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
 							Администраторы {{ $simulator->name }}
 						</td>
 					</tr>
 					@foreach($userItems['admin'][$simulator->id] as $user)
-						<tr>
-							<td class="col-2 text-nowrap small">
-								{{ $user['fio'] }}
-							</td>
-							@for($i = 0;$i < 31;++$i)
-								@php
-									$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
-									$scheduleItem = ($date && isset($scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][$simulator->id][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
-								@endphp
-								<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="admin" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
-									{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
-								</td>
-							@endfor
-						</tr>
+						@include('admin.schedule.user', [
+							'user' => $user,
+							'locationId' => $location->id,
+							'simulatorId' => $simulator->id,
+							'role' => 'admin',
+						])
 					@endforeach
+					@foreach($extraShiftItems[$filterYear . '-' . $monthNumber]['admin'][$simulator->id] ?? [] as $user)
+						@include('admin.schedule.user', [
+							'user' => $user,
+							'locationId' => $location->id,
+							'simulatorId' => $simulator->id,
+							'role' => 'admin',
+						])
+					@endforeach
+					@if(isset($availableUserItems['admin']))
+						@include('admin.schedule.new-user', [
+							'availableUserItems' => $availableUserItems['admin'],
+							'locationId' => $location->id,
+							'simulatorId' => $simulator->id,
+							'period' => $filterYear . '-' . $monthNumber,
+						])
+					@endif
 				@endif
 			@endforeach
 			@if(isset($userItems['admin'][0]))
 				<tr>
-					<td colspan="32" class="text-center small font-weight-bold" style="background-color: #cfe2f3;">
+					<td colspan="32" class="text-center font-weight-bold" style="background-color: #cfe2f3;">
 						Администраторы
 					</td>
 				</tr>
 				@foreach($userItems['admin'][0] as $user)
-					<tr>
-						<td class="col-2 text-nowrap small">
-							{{ $user['fio'] }}
-						</td>
-						@for($i = 0;$i < 31;++$i)
-							@php
-								$date = isset($days[$i]) ? $filterYear . '-' . $monthNumber . '-' . $days[$i] : '';
-								$scheduleItem = ($date && isset($scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')])) ? $scheduleItems[$location->id][0][$user['id']][\Carbon\Carbon::parse($date)->format('Y-m-d')] : [];
-							@endphp
-							<td class="text-center text-nowrap small day-cell js-schedule-item" @if($scheduleItem) style="background-color: {{ app('\App\Models\Schedule')::COLOR_TYPES[$scheduleItem['schedule_type']] }};" @endif data-user_id="{{ $user['id'] }}" data-location_id="{{ $location->id }}" data-simulator_id="0" data-scheduled_at="{{ $date }}" data-id="{{ $scheduleItem ? $scheduleItem['id'] : '' }}" data-role="admin" data-toggle="tooltip" data-placement="top" @if($scheduleItem && $scheduleItem['text']) title="{{ $scheduleItem['text'] }}" @endif>
-								{!! ($scheduleItem && $scheduleItem['text']) ? '<i class="far fa-circle"></i>' : '' !!}
-							</td>
-						@endfor
-					</tr>
+					@include('admin.schedule.user', [
+						'user' => $user,
+						'locationId' => $location->id,
+						'simulatorId' => 0,
+						'role' => 'admin',
+					])
 				@endforeach
+				@foreach($extraShiftItems[$filterYear . '-' . $monthNumber]['admin'][0] ?? [] as $user)
+					@include('admin.schedule.user', [
+						'user' => $user,
+						'locationId' => $location->id,
+						'simulatorId' => 0,
+						'role' => 'admin',
+					])
+				@endforeach
+				@if(isset($availableUserItems['admin']))
+					@include('admin.schedule.new-user', [
+						'availableUserItems' => $availableUserItems['admin'],
+						'locationId' => $location->id,
+						'simulatorId' => 0,
+						'period' => $filterYear . '-' . $monthNumber,
+					])
+				@endif
 			@else
 				<tr>
 					<td colspan="32" class="text-center small">
