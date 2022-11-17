@@ -54,9 +54,9 @@
 							<blockquote>
 								<p><a href="{{ url('price') }}">ЗАБРОНИРУЙТЕ ПРЯМО СЕЙЧАС</a></p>
 							</blockquote>
-							<p>
+							{{--<p>
 								<a href="{{ url('price#home') }}"><img src="{{ asset('img/pic4main.jpg') }}" alt="" width="100%"></a>
-							</p>
+							</p>--}}
 						@endif
 					</div>
 				</div>
