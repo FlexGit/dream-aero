@@ -2,6 +2,9 @@
 	<thead>
 		<tr>
 			<th>
+				Тип
+			</th>
+			<th>
 				Город
 			</th>
 			<th>
@@ -24,6 +27,9 @@
 	<tbody>
 	@foreach($leads as $lead)
 		<tr>
+			<td class="align-middle text-center">
+				{{ isset($types[$lead->type]) ? $types[$lead->type] : '' }}
+			</td>
 			<td class="align-middle text-center">
 				{{ $lead->city ? $lead->city->name : '' }}
 			</td>

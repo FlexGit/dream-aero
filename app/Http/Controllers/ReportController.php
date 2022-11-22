@@ -885,6 +885,7 @@ class ReportController extends Controller {
 		
 		$data = [
 			'leads' => $leads,
+			'types' => Lead::TYPES,
 		];
 		
 		$reportFileName = '';
