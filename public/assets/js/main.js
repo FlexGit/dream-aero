@@ -455,7 +455,8 @@ $(function(){
 	});
 
 	$(document).on('click', '.js-lead-btn', function() {
-		var $form = $(this).closest('form'),
+		var $btn = $(this),
+			$form = $btn.closest('form'),
 			type = $form.data('lead-type'),
 			name = $form.find('#name').val(),
 			email = $form.find('#email').val(),
@@ -464,6 +465,8 @@ $(function(){
 			cityId = $('#city_id').val(),
 			$alertSuccess = $form.find('.alert-success'),
 			$alertError = $form.find('.alert-danger');
+
+		$btn.prop('disabled', true);
 
 		var data = {
 			'type': type,
@@ -482,6 +485,7 @@ $(function(){
 			success: function (result) {
 				//console.log(result);
 
+				$btn.prop('disabled', false);
 				$alertSuccess.addClass('hidden');
 				$alertError.text('').addClass('hidden');
 				$('.border-error').removeClass('border-error');
