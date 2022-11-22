@@ -24,6 +24,8 @@
 
 								@if($news->alias == 'kurs-future-pilot')
 									@include('forms.feedback')
+								@elseif($leadType)
+									@include('forms.lead')
 								@endif
 
 								<div class="rating rating_active">
@@ -56,12 +58,14 @@
 
 @push('css')
 	<link rel="stylesheet" href="{{ asset('css/jquery.fancybox.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/jquery.datetimepicker.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/newsstyle.css') }}">
 @endpush
 
 @push('scripts')
 	<script src="{{ asset('js/jquery.fancybox.pack.js') }}"></script>
 	<script src="{{ asset('js/owl.carousel.js') }}"></script>
+	<script src="{{ asset('js/jquery.datetimepicker.full.min.js') }}"></script>
 	<script>
 		$(function() {
 			$('.glslider a, .various').fancybox({

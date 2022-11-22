@@ -422,6 +422,10 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('notification/{id}/show', [NotificationController::class, 'show']);
 			Route::get('notification/{id}/send', [NotificationController::class, 'confirmSend']);
 	
+			// Пуши
+			Route::get('push-notification', [NotificationController::class, 'getPushList']);
+			Route::post('push-notification', [NotificationController::class, 'sendPush'])->name('send-push');
+			
 			// Лог операций
 			Route::get('log/list/ajax', [RevisionController::class, 'getListAjax'])->name('revisionList');
 			Route::get('log/{entity?}/{object_id?}', [RevisionController::class, 'index'])->name('revisionIndex');
@@ -542,6 +546,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
 		Route::post('question', [MainController::class, 'question'])->name('questionStore');
 		Route::post('feedback', [MainController::class, 'feedback'])->name('feedbackStore');
+		Route::post('lead', [MainController::class, 'lead'])->name('leadStore');
 		
 		Route::get('turborss', [MainController::class, 'turborss']);
 		Route::get('sitemap.xml', [MainController::class, 'sitemap']);
@@ -615,6 +620,7 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		Route::post('callback', [MainController::class, 'callback'])->name('callbackRequestStore');
 		Route::post('question', [MainController::class, 'question'])->name('questionStore');
 		Route::post('feedback', [MainController::class, 'feedback'])->name('feedbackStore');
+		Route::post('lead', [MainController::class, 'lead'])->name('leadStore');
 		
 		Route::get('turborss', [MainController::class, 'turborss']);
 		Route::get('sitemap.xml', [MainController::class, 'sitemap']);

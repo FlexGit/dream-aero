@@ -39,6 +39,11 @@
 							</div>
 
 							<div class="right-price">
+								@if($isBlacFridayShow)
+									<div class="black-friday-banner">
+										<script src="//megatimer.ru/get/42a4013bc3fc858a6422cb63a7415b30.js"></script>
+									</div>
+								@endif
 								<div class="tabs">
 									<div class="flexdiv">
 										<ul class="tabs__caption">

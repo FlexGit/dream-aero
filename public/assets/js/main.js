@@ -306,7 +306,7 @@ $(function(){
 
 	$(document).on('change', 'input[name="consent"]', function() {
 		var $popup = $(this).closest('.popup, .form'),
-			$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-callback-btn, .js-review-btn, .js-question-btn, .js-feedback-btn');
+			$btn = $popup.find('.js-booking-btn, .js-certificate-btn, .js-callback-btn, .js-review-btn, .js-question-btn, .js-feedback-btn, .js-lead-btn');
 		if ($(this).is(':checked')) {
 			$btn.removeClass('button-pipaluk-grey')
 				.addClass('button-pipaluk-orange')
@@ -450,6 +450,60 @@ $(function(){
 
 				$alertSuccess.removeClass('hidden');
 				$popup.find('#name, #parent_name, #age, #phone, #email').val('');
+			}
+		});
+	});
+
+	$(document).on('click', '.js-lead-btn', function() {
+		var $form = $(this).closest('form'),
+			type = $form.data('lead-type'),
+			name = $form.find('#name').val(),
+			email = $form.find('#email').val(),
+			phone = $form.find('#phone').val(),
+			productId = $form.find('#product_id').val(),
+			cityId = $('#city_id').val(),
+			$alertSuccess = $form.find('.alert-success'),
+			$alertError = $form.find('.alert-danger');
+
+		var data = {
+			'type': type,
+			'name': name,
+			'email': email,
+			'phone': phone,
+			'product_id': productId,
+			'city_id': cityId,
+		};
+
+		$.ajax({
+			url: '/lead',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function (result) {
+				//console.log(result);
+
+				$alertSuccess.addClass('hidden');
+				$alertError.text('').addClass('hidden');
+				$('.border-error').removeClass('border-error');
+
+				if (result.status !== 'success') {
+					if (result.reason) {
+						$alertError.text(result.reason).removeClass('hidden');
+					}
+					if (result.errors) {
+						const entries = Object.entries(result.errors);
+						var errorText = '';
+						entries.forEach(function (item, key) {
+							errorText += item[1] + '<br>';
+						});
+						$('.alert-danger').html(errorText);
+					}
+					return;
+				}
+
+				$alertSuccess.removeClass('hidden');
+				$form.find('#name, #email, #phone, #product_id').val('');
+				$('select').niceSelect('update');
 			}
 		});
 	});

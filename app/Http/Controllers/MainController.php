@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Deal;
+use App\Models\Lead;
 use App\Models\LegalEntity;
 use App\Models\Promo;
 use App\Models\Promocode;
@@ -615,6 +616,11 @@ class MainController extends Controller
 			$locationItems[] = $location->name;
 		}
 		
+		$isBlacFridayShow = false;
+		if (Carbon::now()->isBetween(Carbon::parse(Lead::BLACK_FRIDAY_START), Carbon::parse(Lead::BLACK_FRIDAY_STOP))) {
+			$isBlacFridayShow = true;
+		}
+		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'price_' . $city->alias);
 		$promobox = $this->promoRepo->getActivePromobox($city);
 		
@@ -626,6 +632,7 @@ class MainController extends Controller
 			'city' => $city,
 			'cityAlias' => $cityAlias,
 			'locationItems' => $locationItems,
+			'isBlacFridayShow' => $isBlacFridayShow,
 		]);
 	}
 	
@@ -829,11 +836,25 @@ class MainController extends Controller
 				abort(404);
 			}
 			
+			$leadType = '';
+			if (in_array($alias, ['black-friday-2022'])) {
+				$products = $city->products()
+					->whereRelation('productType', function ($query) {
+						$query->whereIn('alias', [ProductType::REGULAR_ALIAS, ProductType::ULTIMATE_ALIAS]);
+					})
+					->orderBy('product_type_id')
+					->orderBy('duration')
+					->get();
+				$leadType = Lead::BLACK_FRIDAY_TYPE;
+			}
+			
 			return view('news-detail', [
 				'news' => $news,
+				'products' => isset($products) ? $products : [],
 				'city' => $city,
 				'cityAlias' => $cityAlias,
 				'promobox' => $promobox,
+				'leadType' => $leadType,
 			]);
 		}
 
@@ -1230,7 +1251,53 @@ class MainController extends Controller
 		
 		return response()->json(['status' => 'success']);
 	}
-
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function lead()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$rules = [
+			'name' => 'required',
+			'email' => 'required|email',
+			'phone' => 'required',
+			'product_id' => 'required',
+		];
+		
+		$validator = Validator::make($this->request->all(), $rules)
+			->setAttributeNames([
+				'name' => trans('main.lead.ваше-имя'),
+				'email' => trans('main.lead.ваш-email'),
+				'phone' => trans('main.lead.ваш-телефон'),
+				'product_id' => trans('main.lead.тариф'),
+			]);
+		if (!$validator->passes()) {
+			return response()->json(['status' => 'error', 'reason' => trans('main.error.проверьте-правильность-заполнения-полей-формы'), 'errors' => $validator->errors()]);
+		}
+		
+		$name = trim(strip_tags($this->request->name));
+		$email = trim(strip_tags($this->request->email));
+		$phone = trim(strip_tags($this->request->phone));
+		$productId = $this->request->product_id;
+		$cityId = $this->request->city_id;
+		$type = $this->request->type;
+		
+		$lead = new Lead();
+		$lead->type = $type;
+		$lead->name = $name;
+		$lead->email = $email;
+		$lead->phone = $phone;
+		$lead->product_id = $productId;
+		$lead->city_id = $cityId;
+		$lead->save();
+		
+		return response()->json(['status' => 'success']);
+	}
+	
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */
