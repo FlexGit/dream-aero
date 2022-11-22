@@ -7,11 +7,13 @@ use App\Exports\AeroflotWriteOffReportExport;
 use App\Exports\ContractorSelfMadePayedDealsReportExport;
 use App\Exports\FlightLogMultipleSheetsReportExport;
 use App\Exports\FlightLogReportExport;
+use App\Exports\LeadReportExport;
 use App\Exports\NpsReportExport;
 use App\Exports\PersonalSellingReportExport;
 use App\Exports\PlatformDataReportExport;
 use App\Exports\SpontaneousRepeatedReportExport;
 use App\Models\Bill;
+use App\Models\Lead;
 use App\Models\Product;
 use App\Models\Certificate;
 use App\Models\City;
@@ -728,7 +730,6 @@ class ReportController extends Controller {
 			];
 		}
 		
-		/*$cities = $this->cityRepo->getList($this->request->user());*/
 		$paymentMethods = $this->paymentRepo->getPaymentMethodList(false);
 		
 		$data = [
@@ -738,7 +739,6 @@ class ReportController extends Controller {
 			'totalSum' => $totalSum,
 			'shiftItems' => $shiftItems,
 			'userItems' => $userItems,
-			/*'cities' => $cities,*/
 			'paymentMethods' => $paymentMethods,
 		];
 		
@@ -843,6 +843,64 @@ class ReportController extends Controller {
 		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
 	}
 	
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function leadIndex()
+	{
+		$user = \Auth::user();
+		
+		if (!$user->isSuperAdmin()) {
+			abort(404);
+		}
+		
+		$page = HelpFunctions::getEntityByAlias(Content::class, 'report-lead');
+		
+		return view('admin.report.lead.index', [
+			'page' => $page,
+			'types' => Lead::TYPES,
+		]);
+	}
+	
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+	 */
+	public function leadGetListAjax()
+	{
+		if (!$this->request->ajax()) {
+			abort(404);
+		}
+		
+		$user = \Auth::user();
+		
+		$type = $this->request->type ?? '';
+		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
+		
+		$leads = Lead::latest()->get();
+		if ($type) {
+			$leads = $leads->where('type', $type);
+		}
+		
+		$data = [
+			'leads' => $leads,
+		];
+		
+		$reportFileName = '';
+		if ($isExport) {
+			$reportFileName = 'report-lead-' . $user->id . '-' . date('YmdHis') . '.xlsx';
+			$exportResult = Excel::store(new LeadReportExport($data), 'report/' . $reportFileName);
+			if (!$exportResult) {
+				return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
+			}
+		}
+		
+		$VIEW = view('admin.report.lead.list', $data);
+		
+		return response()->json(['status' => 'success', 'html' => (string)$VIEW, 'fileName' => $reportFileName]);
+	}
+
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
 	 */

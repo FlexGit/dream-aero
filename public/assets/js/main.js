@@ -466,7 +466,7 @@ $(function(){
 			$alertSuccess = $form.find('.alert-success'),
 			$alertError = $form.find('.alert-danger');
 
-		$btn.prop('disabled', true);
+		$btn.attr('disabled', true);
 
 		var data = {
 			'type': type,
@@ -485,7 +485,7 @@ $(function(){
 			success: function (result) {
 				//console.log(result);
 
-				$btn.prop('disabled', false);
+				$btn.attr('disabled', false);
 				$alertSuccess.addClass('hidden');
 				$alertError.text('').addClass('hidden');
 				$('.border-error').removeClass('border-error');

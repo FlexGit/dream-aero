@@ -464,6 +464,9 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::get('report/unexpected-repeated', [ReportController::class, 'unexpectedRepeatedIndex'])->name('unexpectedRepeatedIndex');
 			Route::get('report/unexpected-repeated/list/ajax', [ReportController::class, 'unexpectedRepeatedGetListAjax'])->name('unexpectedRepeatedGetList');
 			
+			Route::get('report/lead', [ReportController::class, 'leadIndex'])->name('leadIndex');
+			Route::get('report/lead/list/ajax', [ReportController::class, 'leadGetListAjax'])->name('leadGetList');
+			
 			Route::get('report/aeroflot/write-off', [ReportController::class, 'aeroflotWriteOffIndex'])->name('aeroflotWriteOffIndex');
 			Route::get('report/aeroflot/write-off/list/ajax', [ReportController::class, 'aeroflotWriteOffGetListAjax'])->name('aeroflotWriteOffGetList');
 

@@ -13,6 +13,9 @@ class Lead extends Model
 	const BLACK_FRIDAY_TYPE = 'black-friday';
 	const BLACK_FRIDAY_START = '2022-11-24 22:00:00';
 	const BLACK_FRIDAY_STOP = '2022-11-25 23:00:00';
+	const TYPES = [
+		self::BLACK_FRIDAY_TYPE => 'Чёрная пятница',
+	];
 	
 	/**
 	 * The attributes that are mass assignable.
