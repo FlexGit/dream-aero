@@ -6,7 +6,7 @@
 			<div>
 				@if($promobox)
 					@if(mb_strpos($promobox->alias, app('\App\Models\Lead')::BLACK_FRIDAY_TYPE) . '-promobox')
-						<script src="//megatimer.ru/get/42a4013bc3fc858a6422cb63a7415b30.js"></script>
+						<script src="//megatimer.ru/get/695cf3c589c8c425ce6dc1c03a54eda8.js"></script>
 					@endif
 					{!! $promobox->preview_text ? $promobox->preview_text : '' !!}
 				@endif

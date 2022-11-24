@@ -41,7 +41,7 @@
 							<div class="right-price">
 								@if($isBlacFridayShow)
 									<div class="black-friday-banner">
-										<script src="//megatimer.ru/get/42a4013bc3fc858a6422cb63a7415b30.js"></script>
+										<script src="//megatimer.ru/get/695cf3c589c8c425ce6dc1c03a54eda8.js"></script>
 									</div>
 								@endif
 								<div class="tabs">
