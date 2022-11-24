@@ -43,12 +43,10 @@ class SetNominalPrice extends Command
     public function handle()
     {
     	// проверяем все полеты за последний час без пилота
-		//\DB::connection()->enableQueryLog();
     	$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])
 			->where('nominal_price', 0)
 			->orderBy('id')
 			->get();
-		//\Log::debug(\DB::getQueryLog());
 		foreach ($events as $event) {
 			/** @var Event $event */
 			if ($event->event_type == Event::EVENT_TYPE_DEAL) {
@@ -67,8 +65,8 @@ class SetNominalPrice extends Command
 			$event->nominal_price = $event->nominalPrice();
 			$event->save();
 		}
-			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - nominal_price:set - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

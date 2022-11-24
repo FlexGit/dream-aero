@@ -51,13 +51,13 @@ class SetBillPositions extends Command
 			try {
 				$bill->positions()->sync((array)$position->id);
 			} catch (Throwable $e) {
-				\Log::debug('bill_positions:set - ' . $e->getMessage());
+				\Log::debug('500 - ' . get_class($this) . ': ' . $e->getMessage());
 			
 				return 0;
 			}
 		}
-			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - bill_positions:set - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

@@ -226,11 +226,6 @@ return [
 
     'menu' => [
         // Navbar items:
-        /*[
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-        ],*/
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
@@ -390,7 +385,6 @@ return [
         [
             'text'    => 'Аналитика',
             'icon'    => 'far fa-fw fa-file-excel',
-			//'can'	  => 'is_admin',
             'submenu' => [
                 [
                     'text' => 'NPS',
@@ -407,7 +401,6 @@ return [
 				[
 					'text' => 'Журнал учета налёта',
 					'url'  => '/report/flight_log',
-					//'can'  => 'is_superadmin',
 					'icon' => 'far fa-circle nav-icon',
 				],
 				[

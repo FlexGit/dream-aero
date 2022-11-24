@@ -2,13 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Content;
 use App\Models\Contractor;
 use App\Services\HelpFunctions;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Contracts\Events\Dispatcher;
-use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 
 use Validator;
 use App\Models\City;
@@ -43,48 +41,6 @@ class AppServiceProvider extends ServiceProvider
 				->uncompromised();
 		});
 	
-		$events->listen(BuildingMenu::class, function (BuildingMenu $event) {
-			/*$orderCount = HelpFunctions::getNewOrderCount();*/
-			/*$event->menu->addAfter('calendar', [
-				'key'		  => 'order',
-				'text'        => 'Заявки',
-				'url'         => '/order',
-				'icon'        => 'fas fa-chalkboard',
-				'label'       => $orderCount ?: '',
-				'label_color' => $orderCount ? 'success' : '',
-			]);*/
-			
-			/*$dealCount = HelpFunctions::getNewDealCount();*/
-			/*$event->menu->addAfter('calendar', [
-				'key'		  => 'deal',
-				'text'        => 'Сделки',
-				'url'         => '/deal',
-				'icon'        => 'fas fa-handshake',
-				'label'       => $dealCount ?: '',
-				'label_color' => $dealCount ? 'success' : '',
-			]);*/
-			
-			/*$billCount = HelpFunctions::getNewBillCount();*/
-			/*$event->menu->addAfter('deal', [
-				'key'		  => 'bill',
-				'text'        => 'Счета',
-				'url'         => '/bill',
-				'icon'        => 'fas fa-fw fa-coins',
-				'label'       => $billCount ?: '',
-				'label_color' => $billCount ? 'success' : '',
-			]);*/
-			
-			/*$paymentCount = HelpFunctions::getNewPaymentCount();*/
-			/*$event->menu->addAfter('bill', [
-				'key'		  => 'payment',
-				'text'        => 'Платежи',
-				'url'         => '/payment',
-				'icon'        => 'fas fa-fw fa-coins',
-				'label'       => $paymentCount ?: '',
-				'label_color' => $paymentCount ? 'success' : '',
-			]);*/
-		});
-		
 		Validator::extend('valid_city', function($attribute, $value, $parameters, $validator) {
 			$inputs = $validator->getData();
 
@@ -117,12 +73,6 @@ class AppServiceProvider extends ServiceProvider
 		});
 
 		Validator::extend('valid_phone', function($attribute, $value, $parameters, $validator) {
-			/*$inputs = $validator->getData();
-		
-			if (!preg_match('/(\+7)[0-9]{10}/', $inputs['phone'])) {
-				return false;
-			}*/
-		
 			return true;
 		});
 	
@@ -150,36 +100,5 @@ class AppServiceProvider extends ServiceProvider
 		
 			return true;
 		});
-		
-		/*$this->commonContent();*/
     }
-    
-    /*protected function commonContent()
-	{
-		$this->app->singleton('cityAlias', function() {
-			return session('cityAlias');
-		});
-		view()->share('cityAlias', app('cityAlias'));
-		
-		$this->app->singleton('city', function() {
-			$cityAlias = session('cityAlias');
-			$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
-			
-			return $city ?? new City();
-		});
-		view()->share('city', app('city'));
-		
-		$this->app->singleton('promobox', function() {
-			$parentPromobox = HelpFunctions::getEntityByAlias(Content::class, 'promobox');
-			if (!$parentPromobox) return new Content();
-			
-			$promobox = Content::where('parent_id', $parentPromobox->id)
-				->where('is_active', true)
-				->latest()
-				->first();
-			
-			return $promobox ?? new Content();
-		});
-		view()->share('promobox', app('promobox'));
-	}*/
 }

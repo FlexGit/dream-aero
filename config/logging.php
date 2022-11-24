@@ -123,6 +123,12 @@ return [
 			'path' => storage_path('logs/roistat.log'),
 			'level' => 'info',
 		],
+
+		'fcm' => [
+			'driver' => 'single',
+			'path' => storage_path('logs/fcm.log'),
+			'level' => 'info',
+		],
     ],
 
 ];

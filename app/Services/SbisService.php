@@ -3,18 +3,12 @@
 namespace App\Services;
 
 use App\Models\LegalEntity;
-use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
 use Illuminate\Support\Carbon;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-
-use App\Models\Deal;
-use App\Models\Payment;
 
 class SbisService {
 	
@@ -31,8 +25,6 @@ class SbisService {
 			'password' => 'emasheva88',
 		],
 	];
-
-	//private static $log = null;
 
 	protected $legalEntity;
 

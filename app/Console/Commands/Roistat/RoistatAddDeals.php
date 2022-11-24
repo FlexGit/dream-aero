@@ -41,8 +41,8 @@ class RoistatAddDeals extends Command
     {
 		$roistat = new RoistatService();
 		$roistat->addDeals();
-    
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - roistat:add_deals - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

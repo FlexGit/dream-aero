@@ -128,16 +128,6 @@ class YandexMarket extends Command
 				->setCompany('Dream Aero')
 				->setUrl('https://dream-aero.ru');
 			
-			$currencies = [];
-			/*$currencies[] = (new Currency())
-				->setId('RUR')
-				->setRate(1);*/
-			
-			$categories = [];
-			/*$categories[] = (new Category())
-				->setId(1)
-				->setName('Сертификаты');*/
-			
 			$offers = [];
 			foreach ($products as $product) {
 				$alias = $city->alias . $product->alias;
@@ -145,8 +135,6 @@ class YandexMarket extends Command
 
 				$offers[] = (new OfferSimple())
 					->setId($id)
-					/*->setUrl('https://dream-aero.ru/price')
-					->setCategoryId(1)*/
 					->setAvailable(true)
 					->addCustomElement('available', true)
 					->addCustomElement('count', 100)
@@ -154,8 +142,8 @@ class YandexMarket extends Command
 			}
 			(new Generator($settings))->generate(
 				$shopInfo,
-				$currencies,
-				$categories,
+				[],
+				[],
 				$offers
 			);
 		}

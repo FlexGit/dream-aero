@@ -49,7 +49,6 @@ class SendDealEmail extends Job implements ShouldQueue {
 		if ($cityData['email']) {
 			$recipients[] = $cityData['email'];
 		}
-		//$recipients[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'contractorFio' => $this->deal->contractor ? $this->deal->contractor->fio() : '',
@@ -80,21 +79,10 @@ class SendDealEmail extends Job implements ShouldQueue {
 			'whatsapp' => array_key_exists('whatsapp', $locationData) ? $locationData['whatsapp'] : '',
 			'skype' => array_key_exists('skype', $locationData) ? $locationData['skype'] : '',
 			'email' => array_key_exists('email', $locationData) ? $locationData['email'] : $cityData['email'],
-			/*'comment' => ((array_key_exists('comment', $positionData) && $positionData['comment']) ? $positionData['comment'] : '') . ((array_key_exists('certificate_whom', $positionData) && $positionData['certificate_whom']) ? '. Сертификат для: ' . $positionData['certificate_whom'] : ''),*/
 		];
 
 		$subject = $position->is_certificate_purchase ? env('APP_NAME') . ': заявка на покупку сертификата' : env('APP_NAME') . ': заявка на бронирование полета';
 
-		// контрагенту
-		/*if ($this->deal->email) {
-			Mail::send(['html' => "admin.emails.send_deal"], $messageData, function ($message) use ($subject) {
-				/** @var \Illuminate\Mail\Message $message */
-				/*$message->subject($subject);
-				$message->to($this->deal->email);
-			});
-		}*/
-
-		// админу
 		if ($recipients) {
 			Mail::send(['html' => "admin.emails.send_deal_admin"], $messageData, function ($message) use ($subject, $recipients) {
 				/** @var \Illuminate\Mail\Message $message */
@@ -104,7 +92,7 @@ class SendDealEmail extends Job implements ShouldQueue {
 			
 			$failures = Mail::failures();
 			if ($failures) {
-				\Log::debug('500 - deal_email:send - ' . implode(', ', $failures));
+				\Log::debug('500 - ' . get_class($this) . ': ' . implode(', ', $failures));
 				return null;
 			}
 		}

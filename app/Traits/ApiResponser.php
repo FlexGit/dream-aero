@@ -13,13 +13,6 @@ trait ApiResponser
 	 */
 	protected function responseSuccess($message = null, $data = null)
 	{
-		/*if ($message) {
-			Log::channel('api')->info($message);
-		}
-		if ($data) {
-			Log::channel('api')->info($data);
-		}*/
-		
 		return response()->json([
 			'success' => true,
 			'message' => $message,

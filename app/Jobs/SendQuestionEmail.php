@@ -29,7 +29,6 @@ class SendQuestionEmail extends Job implements ShouldQueue {
 	public function handle() {
 		$recipients = $bcc = [];
 		$recipients[] = $this->city->email ?: env('ADMIN_EMAIL');
-		//$bcc[] = env('DEV_EMAIL');
 
 		$messageData = [
 			'name' => $this->name,
@@ -48,7 +47,7 @@ class SendQuestionEmail extends Job implements ShouldQueue {
 		
 		$failures = Mail::failures();
 		if ($failures) {
-			\Log::debug('500 - question_email:send - ' . implode(', ', $failures));
+			\Log::debug('500 - ' . get_class($this) . ': ' . implode(', ', $failures));
 			return null;
 		}
 	}

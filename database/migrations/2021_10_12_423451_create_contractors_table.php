@@ -30,6 +30,7 @@ class CreateContractorsTable extends Migration
 			$table->string('source')->nullable()->comment('источник');
 			$table->string('uuid')->nullable()->comment('uuid');
 			$table->boolean('is_subscribed')->default(true)->index()->comment('подписан на рассылку');
+			$table->string('fcm_token')->nullable()->comment('токен устройства');
 			$table->text('data_json')->nullable()->comment('дополнительная информация');
             $table->timestamps();
 			$table->softDeletes();

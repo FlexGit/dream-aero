@@ -39,7 +39,6 @@ class SetShiftAdminAndPilotForEvent extends Command
      */
     public function handle()
     {
-		//\DB::connection()->enableQueryLog();
     	// проверяем все полеты за последний час без пилота
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->where('stop_at', '>=', Carbon::now()->startOfMonth()->format('Y-m-d H:i:s'))
@@ -82,9 +81,8 @@ class SetShiftAdminAndPilotForEvent extends Command
 			}
 			$event->save();
 		}
-		//\Log::debug(\DB::getQueryLog());
-		
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - admin_pilot_event:set - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

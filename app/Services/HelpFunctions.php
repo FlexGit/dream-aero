@@ -139,17 +139,6 @@ class HelpFunctions {
 	/**
 	 * @return int
 	 */
-	/*public static function getNewOrderCount()
-	{
-		return Order::whereHas('status', function ($query) {
-			$query->where('type', Status::STATUS_TYPE_ORDER)
-				->where('alias', Order::RECEIVED_STATUS);
-		})->count();
-	}*/
-	
-	/**
-	 * @return int
-	 */
 	public static function getNewDealCount()
 	{
 		return Deal::whereHas('status', function ($query) {
@@ -157,28 +146,6 @@ class HelpFunctions {
 				->where('alias', Deal::CREATED_STATUS);
 		})->count();
 	}
-	
-	/**
-	 * @return int
-	 */
-	/*public static function getNewBillCount()
-	{
-		return Bill::whereHas('status', function ($query) {
-			$query->where('type', Status::STATUS_TYPE_BILL)
-				->where('alias', Bill::NOT_PAYED_STATUS);
-		})->count();
-	}*/
-
-	/**
-	 * @return int
-	 */
-	/*public static function getNewPaymentCount()
-	{
-		return Payment::whereHas('status', function ($query) {
-			$query->where('type', Status::STATUS_TYPE_PAYMENT)
-				->where('alias', Payment::NOT_SUCCEED_STATUS);
-		})->count();
-	}*/
 	
 	public static function formatPhone($phone)
 	{
@@ -365,9 +332,7 @@ class HelpFunctions {
 	{
 		$h = floor($minutes / 60);
 		$m = $minutes % 60;
-		//$s = 0;
 		
-		//return sprintf('%02d:%02d:%02d', $h, $m, $s);
 		return sprintf('%02d:%02d', $h, $m);
 	}
 	

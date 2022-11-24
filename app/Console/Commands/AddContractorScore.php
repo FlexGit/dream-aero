@@ -43,7 +43,7 @@ class AddContractorScore extends Command
     {
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->whereBetween('stop_at', [Carbon::now()->subDays(5), Carbon::now()])
-			->where('contractor_id', '!=', '78800') // ToDo не начислять баллы Анониму (заменить на что-то более красивое)
+			->where('contractor_id', '!=', '78800') // ToDo не начислять баллы Анониму (убрать хард-код, заменить на проверку по E-mail анонима)
 			->get();
     	foreach ($events as $event) {
     		$score = Score::where('event_id', $event->id)->first();
@@ -77,8 +77,8 @@ class AddContractorScore extends Command
 			$score->type = Score::SCORING_TYPE;
 			$score->save();
 		}
-			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - score:add - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

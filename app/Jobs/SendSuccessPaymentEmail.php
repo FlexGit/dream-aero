@@ -58,20 +58,18 @@ class SendSuccessPaymentEmail extends Job implements ShouldQueue {
 		
 		$recipients = $bcc = [];
 		$recipients[] = $city->email;
-		/*$bcc[] = env('DEV_EMAIL');*/
 		
 		$subject = env('APP_NAME') . ': оплата Счета ' . $this->bill->number;
 		
-		Mail::send(['html' => "admin.emails.send_success_payment"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
+		Mail::send(['html' => "admin.emails.send_success_payment"], $messageData, function ($message) use ($subject, $recipients) {
 			/** @var \Illuminate\Mail\Message $message */
 			$message->subject($subject);
 			$message->to($recipients);
-			/*$message->bcc($bcc);*/
 		});
 		
 		$failures = Mail::failures();
 		if ($failures) {
-			\Log::debug('500 - success_payment_email:send - ' . implode(', ', $failures));
+			\Log::debug('500 - ' . get_class($this) . ': ' . implode(', ', $failures));
 			return null;
 		}
 		

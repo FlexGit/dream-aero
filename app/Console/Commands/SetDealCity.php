@@ -49,17 +49,14 @@ class SetDealCity extends Command
 			$position = $deal->positions->where('city_id', '!=', 0)->first();
 			if (!$position) continue;
 			
-			/*$contractor = $deal->contractor;
-			if (!$contractor) continue;*/
-
     		$city = $position->city;
     		if (!$city) continue;
 			
 			$deal->city_id = $city->id;
 			$deal->save();
 		}
-			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - deal_city:set - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

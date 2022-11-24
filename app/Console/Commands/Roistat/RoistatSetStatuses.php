@@ -41,8 +41,8 @@ class RoistatSetStatuses extends Command
     {
 		$roistat = new RoistatService();
 		$roistat->setStatuses();
-    
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - roistat:set_statuses - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

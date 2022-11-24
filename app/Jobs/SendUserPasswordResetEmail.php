@@ -41,7 +41,7 @@ class SendUserPasswordResetEmail extends Job implements ShouldQueue {
 
 		$failures = Mail::failures();
 		if ($failures) {
-			\Log::debug('500 - user_password_reset_email:send - ' . implode(', ', $failures));
+			\Log::debug('500 - ' . get_class($this) . ': ' . implode(', ', $failures));
 		}
 		
 		if (in_array($user->email, Mail::failures())) {

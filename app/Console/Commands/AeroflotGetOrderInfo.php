@@ -41,7 +41,6 @@ class AeroflotGetOrderInfo extends Command
      */
     public function handle()
     {
-    	//\Log::debug(\DB::connection()->enableQueryLog());
     	$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER)
 			->whereNotNull('aeroflot_transaction_order_id')
 			->where('aeroflot_status', 0)
@@ -50,12 +49,11 @@ class AeroflotGetOrderInfo extends Command
 					->orWhereNull('aeroflot_state');
 			})
 			->get();
-    	//\Log::debug(\DB::getQueryLog());
     	foreach ($bills as $bill) {
 			$orderInfoResult = AeroflotBonusService::getOrderInfo($bill);
 		}
-			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - aeroflot_order_info:get - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }
