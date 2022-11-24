@@ -40,7 +40,7 @@
 
 							<div class="right-price">
 								@if($isBlacFridayShow)
-									<div class="black-friday-banner">
+									<div class="black-friday-banner" @if($isMobile) style="height: 100px;padding-top: 10px;" @endif>
 										@if($isMobile)
 											<script src="//megatimer.ru/get/29be89244b101f001e0df937c32f2e2b.js"></script>
 										@else
