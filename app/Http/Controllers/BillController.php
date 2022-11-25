@@ -474,15 +474,15 @@ class BillController extends Controller
 			abort(404);
 		}
 		
-		$bill = Bill::find($id);
-		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
-		
 		$user = \Auth::user();
 		
-		if (!$user->isSuperAdmin()) {
+		if (!$user->isAdminOBOrHigher()) {
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 
+		$bill = Bill::find($id);
+		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
+		
 		if (is_null($bill->aeroflot_transaction_type)) {
 			return response()->json(['status' => 'error', 'reason' => 'Заявка не найдена']);
 		}
