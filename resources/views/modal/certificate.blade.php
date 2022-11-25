@@ -175,5 +175,6 @@
 		<input type="hidden" id="promocode_uuid">
 		<input type="hidden" id="aeroflot_bonus">
 		<input type="hidden" id="transaction_type">
+		<input type="hidden" id="is_certificate_purchase" value="1">
 	</fieldset>
 </div>

@@ -642,7 +642,8 @@ function calcAmount() {
 		$isUnified = $popup.find('#is_unified'),
 		isUnified = $isUnified.is(':checked') ? 1 : 0,
 		$amountContainer = $popup.find('.js-amount'),
-		amount = 0;
+		amount = 0,
+		isCertificatePurchase = $popup.find('#is_certificate_purchase').val();
 
 	var data = {
 		product_id: productId,
@@ -653,6 +654,7 @@ function calcAmount() {
 		is_unified: isUnified,
 		flight_date: flightDate,
 		certificate: certificate,
+		is_certificate_purchase: isCertificatePurchase,
 		source: 'web',
 	};
 

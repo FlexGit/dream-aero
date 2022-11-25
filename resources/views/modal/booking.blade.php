@@ -119,5 +119,6 @@
 		<input type="hidden" id="promocode_uuid">
 		<input type="hidden" id="datetime_value">
 		<input type="hidden" id="holidays" value="{{ json_encode($holidays) }}">
+		<input type="hidden" id="is_certificate_purchase" value="0">
 	</fieldset>
 </div>

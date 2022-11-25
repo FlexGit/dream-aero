@@ -1621,7 +1621,7 @@ class DealController extends Controller
 		$isFree = $this->request->is_free ?? 0;
 		$isUnified = $this->request->is_unified ?? 0;
 		$score = $this->request->score ?? 0;
-		$isCertificatePurchase = $this->request->is_certificate_purchase ?? 0;
+		$isCertificatePurchase = $this->request->is_certificate_purchase ?? 1;
 		
 		if ($isUnified) {
 			$cityId = 1;
