@@ -2,7 +2,6 @@
 <input type="hidden" id="contractor_id" name="contractor_id">
 <input type="hidden" id="certificate_uuid" name="certificate_uuid">
 <input type="hidden" id="amount" name="amount">
-{{--<input type="hidden" id="location_id" name="location_id" value="{{ $locationId }}">--}}
 <input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $simulatorId }}">
 <input type="hidden" id="source" name="source" value="{{ $source ?? '' }}">
 <input type="hidden" id="is_certificate_purchase" name="is_certificate_purchase" value="0">
@@ -117,7 +116,6 @@
 	</div>
 </div>
 <div class="row">
-	{{--@if($user->isSuperAdmin())--}}
 	<div class="col">
 		<div class="form-group">
 			<label for="location_id">Локация полета</label>
@@ -135,7 +133,6 @@
 			</select>
 		</div>
 	</div>
-	{{--@endif--}}
 	<div class="col">
 		<div class="form-group">
 			<label for="product_id">Продукт</label>

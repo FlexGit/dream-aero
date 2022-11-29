@@ -19,7 +19,6 @@
 								<p>{{ $error }}</p>
 							@else
 								<div class="popup popup-newreservation" id="popup">
-									{{--<span style="color: green;">@lang('main.pay.redirect')</span>--}}
 									{!! $html !!}
 									<label for="name">Имя</label>
 									<input type="text" id="name" value="{{ $deal->name }}" class="popup-input" readonly style="font-size: 18px;">

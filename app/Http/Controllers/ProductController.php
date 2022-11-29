@@ -25,17 +25,7 @@ class ProductController extends Controller
 	 */
 	public function index()
 	{
-		/*$productTypes = ProductType::where('is_active', true)
-			->orderBy('name')
-			->get();
-		
-		$cities = City::where('is_active', true)
-			->orderBy('name')
-			->get();*/
-
 		return view('admin.product.index', [
-			/*'productTypes' => $productTypes,
-			'cities' => $cities,*/
 		]);
 	}
 	

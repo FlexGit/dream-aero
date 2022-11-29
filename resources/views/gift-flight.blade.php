@@ -18,9 +18,6 @@
 		</div>
 		<div class="image wow fadeInLeft" data-wow-delay="1s" data-wow-duration="2s" style="visibility: visible; animation-duration: 2s; animation-delay: 1s; animation-name: fadeInLeft;">
 			<iframe width="100%" src="{{ asset('img/aerofobia.jpg') }}" frameborder="0" scrolling="no" allowfullscreen></iframe>
-			{{--<div class="instruction">
-				<a target="_blank" href="#">Инструкция PDF</a>
-			</div>--}}
 		</div>
 	</div>
 
@@ -54,9 +51,6 @@
 							<blockquote>
 								<p><a href="{{ url('price') }}">ЗАБРОНИРУЙТЕ ПРЯМО СЕЙЧАС</a></p>
 							</blockquote>
-							{{--<p>
-								<a href="{{ url('price#home') }}"><img src="{{ asset('img/pic4main.jpg') }}" alt="" width="100%"></a>
-							</p>--}}
 						@endif
 					</div>
 				</div>

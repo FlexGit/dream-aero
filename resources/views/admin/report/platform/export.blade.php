@@ -3,7 +3,7 @@
 	$periodYear = $periodArr[0];
 	$periodMonth = $periodArr[1];
 @endphp
-<table class="table table-sm table-bordered table-striped platform-data-table {{--table-data--}}" style="width: auto;">
+<table class="table table-sm table-bordered table-striped platform-data-table" style="width: auto;">
 	<thead>
 	<tr>
 		<th nowrap style="border: 1px solid #000;font-weight: bold;text-align: center;">{{ $months[$periodMonth] . ', ' . $periodYear }}</th>
@@ -73,40 +73,36 @@
 								}
 							@endphp
 
-							{{--@if(isset($items[$location->id][$simulator->id][$day]) || isset($durationData[$location->id][$simulator->id][$day]))--}}
-								<td style="border: 1px solid #000;{{ $ianmStyle }}{{ $mwpStyle }}">
-									Сервер: {!! isset($items[$location->id][$simulator->id][$day]['platform_time']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['platform_time']) : ' нет данных' !!}
-									@if(isset($items[$location->id][$simulator->id][$day]['platform_time']) && isset($durationData[$location->id][$simulator->id][$day]))
-										[{{ round(($items[$location->id][$simulator->id][$day]['platform_time'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]
-									@endif
+							<td style="border: 1px solid #000;{{ $ianmStyle }}{{ $mwpStyle }}">
+								Сервер: {!! isset($items[$location->id][$simulator->id][$day]['platform_time']) ? app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['platform_time']) : ' нет данных' !!}
+								@if(isset($items[$location->id][$simulator->id][$day]['platform_time']) && isset($durationData[$location->id][$simulator->id][$day]))
+									[{{ round(($items[$location->id][$simulator->id][$day]['platform_time'] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]
+								@endif
+								<br>
+
+								Админ: {!! isset($userDurationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($userDurationData[$location->id][$simulator->id][$day]) : ' нет данных' !!}
+								@if(isset($userDurationData[$location->id][$simulator->id][$day]) && isset($durationData[$location->id][$simulator->id][$day]))
+									[{{ round(($userDurationData[$location->id][$simulator->id][$day] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]
+								@endif
+								<br>
+
+								Календарь: {!! isset($durationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) . ' [100%]' : ' нет данных' !!}
+
+								@if(isset($items[$location->id][$simulator->id][$day]['ianm_time']) && $items[$location->id][$simulator->id][$day]['ianm_time'] >= 10)
 									<br>
+									IANM: {{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['ianm_time']) }}
+								@endif
 
-									Админ: {!! isset($userDurationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($userDurationData[$location->id][$simulator->id][$day]) : ' нет данных' !!}
-									@if(isset($userDurationData[$location->id][$simulator->id][$day]) && isset($durationData[$location->id][$simulator->id][$day]))
-										[{{ round(($userDurationData[$location->id][$simulator->id][$day] * 100 / $durationData[$location->id][$simulator->id][$day]), 2) }}%]
-									@endif
+								@if(isset($items[$location->id][$simulator->id][$day]['mwp_time']) && $items[$location->id][$simulator->id][$day]['mwp_time'])
 									<br>
+									MWP: {{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['mwp_time']) }}
+								@endif
 
-									Календарь: {!! isset($durationData[$location->id][$simulator->id][$day]) ? app('\App\Services\HelpFunctions')::minutesToTime($durationData[$location->id][$simulator->id][$day]) . ' [100%]' : ' нет данных' !!}
-
-									@if(isset($items[$location->id][$simulator->id][$day]['ianm_time']) && $items[$location->id][$simulator->id][$day]['ianm_time'] >= 10)
-										<br>
-										IANM: {{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['ianm_time']) }}
-									@endif
-
-									@if(isset($items[$location->id][$simulator->id][$day]['mwp_time']) && $items[$location->id][$simulator->id][$day]['mwp_time'])
-										<br>
-										MWP: {{ app('\App\Services\HelpFunctions')::minutesToTime($items[$location->id][$simulator->id][$day]['mwp_time']) }}
-									@endif
-
-									@if(isset($items[$location->id][$simulator->id][$day]['comment']))
-										<br>
-										Комментарий: {{ $items[$location->id][$simulator->id][$day]['comment'] }}
-									@endif
-								</td>
-							{{--@else
-								<td style="border: 1px solid #000;"></td>
-							@endif--}}
+								@if(isset($items[$location->id][$simulator->id][$day]['comment']))
+									<br>
+									Комментарий: {{ $items[$location->id][$simulator->id][$day]['comment'] }}
+								@endif
+							</td>
 						@endforeach
 					</tr>
 				@endforeach

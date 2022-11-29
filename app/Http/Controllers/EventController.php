@@ -46,11 +46,6 @@ class EventController extends Controller
 	{
 		$user = \Auth::user();
 		
-		/*if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS])) {
-			$ipData = geoip()->getLocation(geoip()->getClientIP());
-			\Log::debug($ipData->toArray());
-		}*/
-		
 		$cities = $user->city
 			? new Collection([$user->city])
 			: City::where('version', $user->version)
@@ -121,8 +116,6 @@ class EventController extends Controller
 			->with(['dealPosition', 'user'])
 			->get();
 		
-		/*$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);*/
-		
 		$eventData = [];
 		/** @var Event[] $events */
 		foreach ($events as $event) {
@@ -138,9 +131,6 @@ class EventController extends Controller
 					$position = $event->dealPosition;
 					$product = $position ? $position->product : null;
 					$certificate = $position ? $position->certificate : null;
-					
-					/*$flightTime = ($deal && $deal->contractor) ? $deal->contractor->getFlightTime() : 0;
-					$status = ($deal && $deal->contractor) ? $deal->contractor->getStatus($statuses, $flightTime) : null;*/
 					
 					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
@@ -586,7 +576,6 @@ class EventController extends Controller
 					return response()->json(['status' => 'error', 'reason' => 'Время окончания смены должно быть больше времени начала']);
 				}
 				
-				//\DB::connection()->enableQueryLog();
 				$existingEvent = Event::where('event_type', $shiftUser)
 					->where('city_id', $cityId)
 					->where('location_id', $locationId)
@@ -594,7 +583,6 @@ class EventController extends Controller
 					->where('start_at', '<', Carbon::parse($stopAt)->format('Y-m-d H:i'))
 					->where('stop_at', '>', Carbon::parse($startAt)->format('Y-m-d H:i'))
 					->first();
-				//\Log::debug(\DB::getQueryLog());
 				if ($existingEvent) {
 					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . ($existingEvent->user ? $existingEvent->user->fio() : '')]);
 				}
@@ -659,10 +647,6 @@ class EventController extends Controller
 					$event->save();
 				break;
 				default:
-					/*if (!$product->validateFlightDate(Carbon::parse($startAt)->format('Y-m-d H:i'))) {
-						return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-					}*/
-					
 					$data = [
 						'pilot_assessment' => $this->request->pilot_assessment ?? '',
 						'admin_assessment' => $this->request->admin_assessment ?? '',
@@ -781,10 +765,6 @@ class EventController extends Controller
 			break;
 			case Event::EVENT_TYPE_SHIFT_ADMIN:
 			case Event::EVENT_TYPE_SHIFT_PILOT:
-				/*if (!$event->user) {
-					return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
-				}*/
-			
 				$shiftUser = 'shift_' . $this->request->shift_user;
 				$startAt = Carbon::parse($event->start_at)->format('Y-m-d') . ' ' . $this->request->start_at_time;
 				$stopAt = Carbon::parse($event->stop_at)->format('Y-m-d') . ' ' . $this->request->stop_at_time;
@@ -792,7 +772,6 @@ class EventController extends Controller
 					return response()->json(['status' => 'error', 'reason' => 'Время окончания смены должно быть больше времени начала']);
 				}
 			
-				//\DB::connection()->enableQueryLog();
 				$existingEvent = Event::where('event_type', $shiftUser)
 					->where('start_at', '<', Carbon::parse($stopAt)->format('Y-m-d H:i'))
 					->where('stop_at', '>', Carbon::parse($startAt)->format('Y-m-d H:i'))
@@ -800,7 +779,6 @@ class EventController extends Controller
 					->where('flight_simulator_id', $event->flight_simulator_id)
 					->where('id', '!=', $event->id)
 					->first();
-				//\Log::debug(\DB::getQueryLog());
 				if ($existingEvent) {
 					return response()->json(['status' => 'error', 'reason' => 'Пересечение со сменой ' . (($existingEvent->event_type == Event::EVENT_TYPE_SHIFT_ADMIN) ? 'администратора' : 'пилота') . ' ' . ($existingEvent->user ? $existingEvent->user->fio() : '')]);
 				}
@@ -823,15 +801,12 @@ class EventController extends Controller
 		
 		try {
 			\DB::beginTransaction();
+
 			switch ($event->event_type) {
 				case Event::EVENT_TYPE_DEAL:
 					if ($this->request->source == Event::EVENT_SOURCE_DEAL) {
 						$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
-						$stopAt = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)/*->addMinutes($product->duration ?? 0)*/->format('Y-m-d H:i');
-						
-						/*if (!$product->validateFlightDate($startAt)) {
-							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}*/
+						$stopAt = Carbon::parse($this->request->stop_at_date . ' ' . $this->request->stop_at_time)->format('Y-m-d H:i');
 						
 						$event->city_id = $city ? $city->id : 0;
 						$event->location_id = $locationId ?: ($location ? $location->id : 0);
@@ -849,10 +824,6 @@ class EventController extends Controller
 					} else if ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at)->subMinutes($event->extra_time ?? 0)->format('Y-m-d H:i');
-						
-						/*if (!$product->validateFlightDate($startAt)) {
-							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}*/
 					}
 					// сброс отметки об уведомлении, если перенос на другой день
 					if ($event->start_at->format('d') != Carbon::parse($startAt)->format('d')) {
@@ -1024,17 +995,9 @@ class EventController extends Controller
 					if ($this->request->source == Event::EVENT_SOURCE_DEAL) {
 						$startAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->start_at_date . ' ' . $this->request->start_at_time)->addMinutes($product->duration ?? 0)->format('Y-m-d H:i');
-						
-						/*if (!$product->validateFlightDate($startAt)) {
-							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}*/
 					} elseif ($this->request->source == Event::EVENT_SOURCE_CALENDAR) {
 						$startAt = Carbon::parse($this->request->start_at)->format('Y-m-d H:i');
 						$stopAt = Carbon::parse($this->request->stop_at)->subMinutes($event->extra_time ?? 0)->format('Y-m-d H:i');
-						
-						/*if (!$product->validateFlightDate($startAt)) {
-							return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-						}*/
 					}
 					// сброс отметки об уведомлении, если перенос на другой день
 					if ($event->start_at->format('d') != Carbon::parse($startAt)->format('d')) {
@@ -1305,16 +1268,10 @@ class EventController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
-		/*$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
-		
-		// если файла приглашения на полет по какой-то причине не оказалось, генерим его
-		$flightInvitationFileExists = Storage::disk('private')->exists($flightInvitationFilePath);
-		if (!isset($flightInvitationFilePath) || !$flightInvitationFileExists) {*/
-			$event = $event->generateFile();
-			if (!$event) {
-				abort(404);
-			}
-		/*}*/
+		$event = $event->generateFile();
+		if (!$event) {
+			abort(404);
+		}
 		
 		$flightInvitationFilePath = (is_array($event->data_json) && array_key_exists('flight_invitation_file_path', $event->data_json)) ? $event->data_json['flight_invitation_file_path'] : '';
 		

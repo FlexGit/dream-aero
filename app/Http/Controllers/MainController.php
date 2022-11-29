@@ -206,7 +206,6 @@ class MainController extends Controller
 
 		$date = date('Y-m-d H:i:s');
 
-		//\DB::connection()->enableQueryLog();
 		$promocode = Promocode::whereRaw('lower(number) = "' . mb_strtolower($number) . '"')
 			->whereRelation('cities', 'cities.id', '=', $city->id)
 			->where('is_active', true)
@@ -228,7 +227,6 @@ class MainController extends Controller
 			$promocode = $promocode->whereNotIn('type', [Promocode::SIMULATOR_TYPE]);
 		}
 		$promocode = $promocode->first();
-		//\Log::debug(\DB::getQueryLog());
 		if (!$promocode) {
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.промокод-не-найден')]);
 		}
@@ -261,14 +259,12 @@ class MainController extends Controller
 		$flightSimulators = FlightSimulator::where('is_active', true)
 			->get();
 		
-		/*if (Browser::isDesktop()) {*/
-			// "Наша команда"
-			$users = User::where('enable', true)
-				->whereIn('city_id', [$city->id, 0])
-				->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
-				->orderBy('name')
-				->get();
-		/*}*/
+		// "Наша команда"
+		$users = User::where('enable', true)
+			->whereIn('city_id', [$city->id, 0])
+			->whereIn('role', [User::ROLE_ADMIN, User::ROLE_PILOT])
+			->orderBy('name')
+			->get();
 		
 		$page = HelpFunctions::getEntityByAlias(Content::class, 'o-trenajere');
 		$promobox = $this->promoRepo->getActivePromobox($city);
@@ -728,7 +724,6 @@ class MainController extends Controller
 			return response()->json(['status' => 'error', 'reason' => trans('main.error.повторите-позже')]);
 		}
 		
-		//dispatch(new \App\Jobs\SendReviewEmail($name, $body));
 		$job = new \App\Jobs\SendReviewEmail($name, $body);
 		$job->handle();
 		
@@ -1166,7 +1161,6 @@ class MainController extends Controller
 		$name = trim(strip_tags($this->request->name));
 		$phone = trim(strip_tags($this->request->phone));
 		
-		//dispatch(new \App\Jobs\SendCallbackEmail($name, $phone));
 		$job = new \App\Jobs\SendCallbackEmail($name, $phone, $city);
 		$job->handle();
 		
@@ -1205,7 +1199,6 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
-		//dispatch(new \App\Jobs\SendQuestionEmail($name, $email, $body));
 		$job = new \App\Jobs\SendQuestionEmail($name, $email, $body, $city);
 		$job->handle();
 		
@@ -1248,7 +1241,6 @@ class MainController extends Controller
 		$cityAlias = $this->request->session()->get('cityAlias');
 		$city = HelpFunctions::getEntityByAlias(City::class, $cityAlias ?: City::MSK_ALIAS);
 		
-		//dispatch(new \App\Jobs\SendQuestionEmail($name, $email, $body));
 		$job = new \App\Jobs\SendPersonalFeedbackEmail($name, $parentName, $age, $phone, $email, $city ? $city->name : '');
 		$job->handle();
 		

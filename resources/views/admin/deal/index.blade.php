@@ -29,18 +29,11 @@
 								</div>
 								<input type="text" class="form-control" id="search_doc" name="search_doc" placeholder="Документ, ФИО, E-mail, Телефон">
 							</div>
-							{{--<div class="form-group ml-2">
-								<div>
-									<label for="search_contractor">Контрагент</label>
-								</div>
-								<input type="text" class="form-control" id="search_contractor" name="search_contractor" placeholder="ФИО, E-mail, Телефон">
-							</div>--}}
 							<div class="form-group ml-2">
 								<div>
 									<label for="filter_status_id">Статус</label>
 								</div>
 								<select class="form-control" id="filter_status_id" name="filter_status_id[]" multiple="multiple">
-									{{--<option value="0">Все</option>--}}
 									@foreach($statusData ?? [] as $statusType => $statuses)
 										<optgroup label="{{ $statusType }}">
 											@foreach($statuses ?? [] as $status)
@@ -73,7 +66,6 @@
 									<label for="filter_product_id">Продукт</label>
 								</div>
 								<select class="form-control" id="filter_product_id" name="filter_product_id[]" multiple="multiple">
-									{{--<option value="0">Все</option>--}}
 									@foreach($productTypes ?? [] as $productType)
 										<optgroup label="{{ $productType->name }}">
 											@foreach($productType->products ?? [] as $product)
@@ -150,7 +142,6 @@
 				<form id="deal">
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						{{--<button type="button" class="btn btn-default js-add-deal mr-5">Добавить сделку</button>--}}
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 						<button type="submit" class="btn btn-primary">Подтвердить</button>
 					</div>
@@ -238,12 +229,6 @@
 					toastr.error('Некорректные параметры');
 					return null;
 				}
-
-				/*if ($.inArray(type, ['event']) !== -1) {
-					$modalDialog.addClass('modal-xl');
-				} else {
-					$modalDialog.removeClass('modal-xl');
-				}*/
 
 				$modalDialog.find('form').attr('id', type);
 
@@ -403,7 +388,6 @@
 							calcProductAmount();
 							$('#certificate_number').attr('disabled', true);
 							$('.js-certificate').text('Привязан сертификат: ' + suggestion.data.number).closest('.js-certificate-container').removeClass('hidden');
-							//console.log(suggestion.data);
 							if (suggestion.data.is_overdue) {
 								$('.js-is-indefinitely').removeClass('hidden');
 							}
@@ -487,10 +471,6 @@
 				}
 			});
 
-			/*$(document).on('keyup', '#certificate', function() {
-				calcProductAmount();
-			});*/
-
 			function validateFlightDate() {
 				var $eventStopElement = $('.js-event-stop-at'),
 					$isValidFlightDate = $('#is_valid_flight_date'),
@@ -537,7 +517,6 @@
 						'stop_at': flightStopAt,
 					},
 					success: function(result) {
-						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return false;
@@ -555,7 +534,6 @@
 					'contractor_id': $('#contractor_id').val(),
 					'promo_id': $('#promo_id').val(),
 					'promocode_id': $('#promocode_id').val(),
-					/*'payment_method_id': $('#payment_method_id').val(),*/
 					'city_id': $('#city_id').val(),
 					'location_id': $('#location_id').val(),
 					'certificate_uuid': $('#certificate_uuid').val(),
@@ -563,14 +541,13 @@
 					'score': $('#score').val(),
 					'is_certificate_purchase': $('#is_certificate_purchase').val(),
 				};
-				//console.log(data);
+
 				$.ajax({
 					url: "{{ route('calcProductAmount') }}",
 					type: 'GET',
 					dataType: 'json',
 					data: data,
 					success: function(result) {
-						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
@@ -600,16 +577,6 @@
 					$isPaid.prop('disabled', false);
 				}
 			});
-
-			/*$(document).on('change', '.js-product', function(e) {
-				if ($(this).data('currency') == 'USD') {
-					$('.fa-dollar-sign').removeClass('hidden');
-					$('.fa-ruble-sign').addClass('hidden');
-				} else {
-					$('.fa-ruble-sign').removeClass('hidden');
-					$('.fa-dollar-sign').addClass('hidden');
-				}
-			});*/
 
 			$(document).on('click', '.js-remove-position', function() {
 				if (!confirm('Вы уверены, что хотите удалить позицию?')) return;
@@ -768,12 +735,6 @@
 							return;
 						}
 
-						/*$event.attr('title', 'Приглашение отправлено ' + result.flight_invitation_sent_at);
-						$i = $event.find('i');
-						$i.addClass('fa-envelope-open');
-						if ($i.hasClass('fa-envelope')) {
-							$i.removeClass('fa-envelope');
-						}*/
 						toastr.success(result.message);
 					}
 				});

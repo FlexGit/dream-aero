@@ -20,14 +20,6 @@
 			<td>Активность</td>
 			<td>{{ $notification->is_active ? 'Да' : 'Нет' }}</td>
 		</tr>
-		{{--<tr class="odd">
-			<td>Изображение</td>
-			<td>
-				@if(isset($promo->data_json['image_file_path']) && $promo->data_json['image_file_path'])
-					<img src="/upload/{{ $promo->data_json['image_file_path'] }}" width="150" alt="">
-				@endif
-			</td>
-		</tr>--}}
 		<tr class="odd">
 			<td>Дата создания</td>
 			<td>{{ $notification->created_at }}</td>

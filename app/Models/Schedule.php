@@ -6,6 +6,44 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Schedule
+ *
+ * @property int $id
+ * @property mixed|null $scheduled_at дата записи
+ * @property string|null $schedule_type тип записи
+ * @property int $user_id пользователь
+ * @property int $location_id локация
+ * @property int $flight_simulator_id авиатренажер
+ * @property mixed|null $start_at время начала события
+ * @property mixed|null $stop_at время окончания события
+ * @property string|null $comment комментарий
+ * @property \datetime|null $created_at
+ * @property \datetime|null $updated_at
+ * @property \datetime|null $deleted_at
+ * @property-read \App\Models\Location|null $location
+ * @property-read \App\Models\FlightSimulator|null $simulator
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Schedule onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereFlightSimulatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereScheduleType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereScheduledAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereStartAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereStopAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schedule whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Schedule withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Schedule withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Schedule extends Model
 {
 	use HasFactory, SoftDeletes;

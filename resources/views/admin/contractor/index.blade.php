@@ -23,20 +23,18 @@
 				<div class="card-body">
 					<div class="table-filter mb-2">
 						<div class="d-sm-flex">
-							{{--@if(!\Auth::user()->city)--}}
-								<div class="form-group">
-									<label for="filter_city_id">Город</label>
-									<select class="form-control" id="filter_city_id" name="filter_city_id">
-										<option value="0">Все</option>
-										@foreach($cities ?? [] as $city)
-											@if(!$city->is_active)
-												@continue
-											@endif
-											<option value="{{ $city->id }}">{{ $city->name }}</option>
-										@endforeach
-									</select>
-								</div>
-							{{--@endif--}}
+							<div class="form-group">
+								<label for="filter_city_id">Город</label>
+								<select class="form-control" id="filter_city_id" name="filter_city_id">
+									<option value="0">Все</option>
+									@foreach($cities ?? [] as $city)
+										@if(!$city->is_active)
+											@continue
+										@endif
+										<option value="{{ $city->id }}">{{ $city->name }}</option>
+									@endforeach
+								</select>
+							</div>
 							<div class="col-6">
 								<div class="form-group ml-2">
 									<label for="search_contractor">Контрагент</label>

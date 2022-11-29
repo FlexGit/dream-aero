@@ -151,10 +151,6 @@ class BillController extends Controller
 		}
 		
 		$amount = $this->request->amount ?? 0;
-		/*if ($amount && !$user->isSuperAdmin()) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа для редактирования поля "Сумма"']);
-		}*/
-
 		$paymentMethodId = $this->request->payment_method_id ?? 0;
 		$positionsIds = $this->request->position_id ?? [];
 		
@@ -197,11 +193,6 @@ class BillController extends Controller
 				}
 				
 				$city = $position->city;
-				/*if (!$city) {
-					\DB::rollback();
-					return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-				}*/
-				
 				if ($city) {
 					$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
 					if (!$cityProduct || !$cityProduct->pivot) {
@@ -246,11 +237,6 @@ class BillController extends Controller
 		if (!$bill) return response()->json(['status' => 'error', 'reason' => 'Счет не найден']);
 		
 		$user = \Auth::user();
-		
-		/*if ($bill->aeroflot_transaction_type == AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER) {
-			return response()->json(['status' => 'error', 'reason' => 'Счет недоступен для редактирования. Заявка на списание миль "Аэрофлот Бонус"']);
-		}*/
-		
 		$deal = $bill->deal;
 		if (!$deal) return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
 		
@@ -291,10 +277,6 @@ class BillController extends Controller
 		}
 
 		$amount = $this->request->amount ?? 0;
-		/*if ($amount && !$user->isSuperAdmin()) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа для редактирования поля "Сумма"']);
-		}*/
-		
 		$billStatus = $bill->status;
 		$positionsIds = $this->request->position_id ?? [];
 		
@@ -350,11 +332,6 @@ class BillController extends Controller
 				}
 				
 				$city = $position->city;
-				/*if (!$city) {
-					\DB::rollback();
-					return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-				}*/
-				
 				if ($city) {
 					$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
 					if (!$cityProduct || !$cityProduct->pivot) {
@@ -363,7 +340,6 @@ class BillController extends Controller
 					}
 					
 					if ($productType->alias == ProductType::SERVICES_ALIAS) {
-						//\Log::debug($status->alias . ' - ' . $billStatus->alias . ' - ' . $deal->balance());
 						if ($status->alias == Bill::PAYED_STATUS && (($billStatus && $billStatus->alias != Bill::PAYED_STATUS) || !$billStatus) && $deal->balance() >= 0) {
 							$city->products()->updateExistingPivot($product->id, [
 								'availability' => --$cityProduct->pivot->availability,
@@ -561,7 +537,6 @@ class BillController extends Controller
 		$email = $deal->email ?: $contractor->email;
 		if (!$email) return response()->json(['status' => 'error', 'reason' => 'E-mail не найден']);
 		
-		//dispatch(new \App\Jobs\SendPayLinkEmail($bill));
 		$job = new \App\Jobs\SendPayLinkEmail($bill);
 		$job->handle();
 		

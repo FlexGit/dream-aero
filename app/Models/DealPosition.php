@@ -92,6 +92,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DealPosition whereAeroflotTransactionType($value)
+ * @property int $price базовая цена продукта
+ * @method static \Illuminate\Database\Eloquent\Builder|DealPosition wherePrice($value)
  */
 class DealPosition extends Model
 {

@@ -10,7 +10,6 @@
 						<input type="text" id="age" name="age" placeholder="@lang('main.feedback.возраст-участника') *">
 						<input type="tel" id="phone" name="phone" placeholder="@lang('main.feedback.ваш-телефон') *">
 						<input type="email" id="email" name="email" placeholder="@lang('main.feedback.ваш-email') *">
-						{{--<textarea id="body" name="body" placeholder="@lang('main.feedback.введите-сообщение')"></textarea>--}}
 
 						<div class="consent-container" style="text-align: center;color: #fff;">
 							<label class="cont" style="padding-top: 0;font-size: 14px;">

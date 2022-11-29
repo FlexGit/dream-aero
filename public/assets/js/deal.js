@@ -51,10 +51,8 @@ $(function() {
 
 								var $popup = $('#popup');
 
-								$popup/*.css('width', '700')*/.find('.popup-container').html(result.html).find('select').niceSelect();
-
+								$popup.find('.popup-container').html(result.html).find('select').niceSelect();
 								calcAmount();
-
 								$popup.show();
 
 								$('.datetimepicker').datetimepicker({
@@ -71,17 +69,10 @@ $(function() {
 									scrollMonth: false,
 									validateOnBlur: false,
 									onChangeDateTime: function (value) {
-										//value.setHours(value.getHours() + Math.round(value.getMinutes()/30) - 1);
 										value.setSeconds(0);
-
-										//console.log(value.toLocaleString('ru-RU'));
-
 										$('#flight_date').val(value.toLocaleString('ru-RU'));
-
 										calcAmount();
 									},
-									//disabledWeekDays: weekDays,
-									//disabledDates: holidays,
 									formatDate: 'd.m.Y',
 								});
 							}
@@ -98,10 +89,8 @@ $(function() {
 
 								var $popup = $('#popup');
 
-								$popup/*.css('width', '700')*/.find('.popup-container').html(result.html).find('select').niceSelect();
-
+								$popup.find('.popup-container').html(result.html).find('select').niceSelect();
 								calcAmount();
-
 								$popup.show();
 							}
 						});
@@ -306,8 +295,6 @@ $(function() {
 			},
 			dataType: 'json',
 			success: function (result) {
-				//console.log(result);
-
 				if (result.status !== 'success') {
 					$bonusInfo.html('<p class="error">' + result.reason + '</p>');
 				}
@@ -327,10 +314,6 @@ $(function() {
 
 		$(this).val(bonus);
 		$('#miles_amount').val(' => ' + Math.round(bonus * 4) + ' миль');
-
-		/*var amount = parseInt($('#amount').val());
-		amount -= bonus;
-		$('.js-amount').text(amount);*/
 
 		return true;
 	});
@@ -476,7 +459,6 @@ $(function() {
 		yaCounter46672077.reachGoal('SendOrder');
 		gtag_report_conversion();
 
-		//$(this).removeClass('button-pipaluk-orange').addClass('button-pipaluk-grey').prop('disabled', true);
 		$alertSuccess.html('').addClass('hidden');
 		$alertError.text('').addClass('hidden');
 		$('.field-error').removeClass('field-error');
@@ -506,10 +488,6 @@ $(function() {
 			data: data,
 			dataType: 'json',
 			success: function (result) {
-				//console.log(result);
-
-				//$(this).removeClass('button-pipaluk-grey').addClass('button-pipaluk-orange').prop('disabled', false);
-
 				if (result.status !== 'success') {
 					if (result.reason) {
 						$alertError.text(result.reason).removeClass('hidden');

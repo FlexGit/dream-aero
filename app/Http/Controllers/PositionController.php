@@ -469,13 +469,8 @@ class PositionController extends Controller
 		$flightAt = ($this->request->flight_date_at ?? '') . ' ' . ($this->request->flight_time_at ?? '');
 		$certificateNumber = $this->request->certificate ?? '';
 		$certificateUuid = $this->request->certificate_uuid ?? '';
-		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;
 		$isIndefinitely = $this->request->is_indefinitely ?? 0;
 		
-		/*if (!$isValidFlightDate) {
-			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
-		}*/
-
 		$deal = $this->dealRepo->getById($dealId);
 		if (!$deal) {
 			return response()->json(['status' => 'error', 'reason' => 'Сделка не найдена']);
@@ -489,10 +484,6 @@ class PositionController extends Controller
 		if (!$product) {
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
-
-		/*if (!$product->validateFlightDate($flightAt)) {
-			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-		}*/
 
 		$location = Location::find($locationId);
 		if (!$location) {
@@ -1080,10 +1071,6 @@ class PositionController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		}
 
-		/*if (!$product->validateFlightDate($flightAt)) {
-			return response()->json(['status' => 'error', 'reason' => 'Для бронирования полета по тарифу Regular доступны только будние дни']);
-		}*/
-
 		$location = Location::find($locationId);
 		if (!$location) {
 			return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
@@ -1400,10 +1387,6 @@ class PositionController extends Controller
 		}
 		
 		$city = $position->city;
-		/*if (!$city) {
-			return response()->json(['status' => 'error', 'reason' => 'Город не найден']);
-		}*/
-		
 		if ($city) {
 			$cityProduct = $product->cities()->where('cities_products.is_active', true)->find($city->id);
 			if (!$cityProduct || !$cityProduct->pivot) {

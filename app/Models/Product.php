@@ -120,13 +120,7 @@ class Product extends Model
 			->find($cityId);
 		if (!$cityProduct || !$cityProduct->pivot) return [];
 		
-		/*$price = $cityProduct->pivot->price;
-		if ($cityProduct->pivot->discount) {
-			$price = $cityProduct->pivot->discount->is_fixed ? ($price - $cityProduct->pivot->discount->value) : ($price - $price * $cityProduct->pivot->discount->value / 100);
-		}*/
 		$price = $this->calcAmount($contractorId, $cityId);
-
-		//$data = $this->data_json ?? [];
 		$pivotData = json_decode($cityProduct->pivot->data_json, true);
 
 		return [
@@ -143,7 +137,6 @@ class Product extends Model
 			'is_certificate_purchase_allow' => (array_key_exists('is_certificate_purchase_allow', $pivotData) && $pivotData['is_certificate_purchase_allow']) ? true : false,
 			'tariff_type' => $this->productType ? $this->productType->format() : null,
 			'user' => $this->user ? $this->user->format() : null,
-			/*'city' => $this->city ? $this->city->format() : null,*/
 		];
 	}
 	
@@ -230,10 +223,7 @@ class Product extends Model
 
 		$flightAt = Carbon::parse($flightAt)->format('d.m.Y');
 		
-		//$weekDay = date('N', strtotime($flightAt));
-
 		// Regular доступен для заказа только в будни
-		//if (in_array($weekDay, [1, 2, 3, 4, 5]) && $alias == ProductType::REGULAR_ALIAS) return true;
 		if ($alias == ProductType::REGULAR_ALIAS
 			&& (in_array(date('w', strtotime($flightAt)), [0, 6])
 				|| in_array($flightAt, Deal::HOLIDAYS))
@@ -289,8 +279,6 @@ class Product extends Model
 
 		$contractor = $contractorId ? Contractor::whereIsActive(true)->find($contractorId) : null;
 		$promo = $promoId ? Promo::whereIsActive(true)->find($promoId) : null;
-		/*$paymentMethod = $paymentMethodId ? PaymentMethod::whereIsActive(true)->find($paymentMethodId) : null;*/
-
 		$promocode = $promocodeId ? Promocode::find($promocodeId) : null;
 		if ($promocode) {
 			if (!$promocode->contractor_id) {

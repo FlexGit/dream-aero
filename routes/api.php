@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ApiController;
@@ -16,10 +15,6 @@ use App\Http\Controllers\ApiController;
 |
 */
 
-/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-
 Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 	Route::group(['middleware' => [/*'throttle:30,1', */'apikey'/*, 'apilog'*/]], function () {
 		Route::post('login', [ApiController::class, 'login']);
@@ -34,6 +29,7 @@ Route::domain(env('DOMAIN_ADMIN', 'admin.dream-aero.ru'))->group(function () {
 		Route::get('profile/reset', [ApiController::class, 'resetProfile']);
 		Route::post('profile/avatar/save', [ApiController::class, 'saveAvatar']);
 		Route::post('profile/avatar/delete', [ApiController::class, 'deleteAvatar']);
+		Route::post('fcm', [ApiController::class, 'saveFcmToken']);
 		Route::get('tariff_types', [ApiController::class, 'getTariffTypes']);
 		Route::get('tariffs', [ApiController::class, 'getTariffs']);
 		Route::get('tariff', [ApiController::class, 'getTariff']);

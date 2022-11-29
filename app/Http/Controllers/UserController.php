@@ -50,8 +50,6 @@ class UserController extends Controller
 			abort(404);
 		}
 
-		/*$id = $this->request->id ?? 0;*/
-
 		$users = User::orderBy('lastname')->orderBy('name');
 		if ($this->request->city_id) {
 			$users = $users->where('city_id', $this->request->city_id);
@@ -59,10 +57,7 @@ class UserController extends Controller
 		if ($this->request->role) {
 			$users = $users->where('role', $this->request->role);
 		}
-		/*if ($id) {
-			$users = $users->where('id', '<', $id);
-		}*/
-		$users = $users/*->limit(20)*/->get();
+		$users = $users->get();
 
 		$roles = User::ROLES;
 		

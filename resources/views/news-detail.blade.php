@@ -95,9 +95,6 @@
 				removeRatingActive();
 			});
 
-			/*var rating_star_class = '.rating_active .rating__star',
-				rating_star = $(rating_star_class);*/
-
 			$(document).on('mouseenter', '.rating__star', function () {
 				$(this).closest('.rating__best').addClass('rating__best_hover');
 				$(this).closest('.rating__best').find('.rating__star').not(this).addClass('rating__star_opacity');
@@ -112,10 +109,6 @@
 
 			$(document).on('click', '.rating__star', function (e) {
 				e.preventDefault();
-
-				/*if (!$(this).closest('.rating').hasClass('rating_active')) {
-					return;
-				}*/
 
 				var current = $(this).closest('.rating'),
 					content_id = current.find('.rating__current').attr('data-id'),

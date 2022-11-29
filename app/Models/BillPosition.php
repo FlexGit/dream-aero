@@ -5,6 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+/**
+ * App\Models\BillPosition
+ *
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|BillPosition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillPosition newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillPosition query()
+ * @mixin \Eloquent
+ */
 class BillPosition extends Pivot
 {
 	use HasFactory;

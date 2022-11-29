@@ -12,9 +12,7 @@ use App\Http\Controllers\PricingController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
-use App\Models\Contractor;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MainController;
@@ -51,8 +49,6 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 |
 */
 
-//Auth::routes(['register' => false]);
-
 Route::group(['middleware' => ['setlanguage']], function () {
 	Route::domain(env('DOMAIN_ADMIN', 'dev.dream-aero.ru'))->group(function () {
 		Route::get('sitemap.xml', function () {
@@ -64,13 +60,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 		});
 		
 		// Авторизация
-		/*Route::get('/register', [RegisteredUserController::class, 'create'])
-			->middleware('guest')
-			->name('register');
-		
-		Route::post('/register', [RegisteredUserController::class, 'store'])
-			->middleware('guest');*/
-	
 		Route::get('/login', [AuthenticatedSessionController::class, 'create'])
 			->middleware('guest')
 			->name('login');
@@ -126,7 +115,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			// Контрагенты
 			Route::get('contractor/add', [ContractorController::class, 'add']);
 			Route::get('contractor/{id}/edit', [ContractorController::class, 'edit']);
-			/*Route::get('contractor/{id}/show', [ContractorController::class, 'show']);*/
 			Route::get('contractor/{id}/unite', [ContractorController::class, 'unite']);
 	
 			Route::get('contractor/{id?}', [ContractorController::class, 'index'])->name('contractorIndex');
@@ -140,9 +128,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			
 			Route::post('contractor/{id}/unite', [ContractorController::class, 'storeUnite']);
 			
-			// Очистка тестовых данных
-			//Route::get('/clear', [EventController::class, 'clear'])->name('clear');
-
 			// График работы
 			Route::get('schedule', [ScheduleController::class, 'index'])->name('scheduleIndex');
 			Route::get('schedule/list/ajax', [ScheduleController::class, 'getListAjax'])->name('scheduleList');
@@ -152,7 +137,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 			Route::put('schedule/{id}', [ScheduleController::class, 'update'])->name('update-schedule');
 			Route::post('schedule/extra-user', [ScheduleController::class, 'storeExtraUser'])->name('store-extra-user');
 			Route::delete('schedule/extra-user', [ScheduleController::class, 'deleteExtraUser'])->name('delete-extra-user');
-			
 			
 			// События
 			Route::get('/', [EventController::class, 'index'])->name('eventIndex');
@@ -641,7 +625,6 @@ Route::group(['middleware' => ['setlanguage']], function () {
 	Route::post('aeroflot-use/retry', [AeroflotBonusController::class, 'useRetry'])->name('useRetry');
 	Route::post('aeroflot-use/refresh', [AeroflotBonusController::class, 'useRefresh'])->name('useRefresh');
 	Route::post('aeroflot-transaction', [AeroflotBonusController::class, 'transaction'])->name('transaction');
-	Route::get('test/parse/file', [TestController::class, 'parseFile']);
 	Route::get('unsubscribe/{uuid}', [ContractorController::class, 'unsubscribe'])->name('unsubscribe');
 });
 

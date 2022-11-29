@@ -86,6 +86,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereSuccessPaymentSentAt($value)
  * @property \Illuminate\Support\Carbon|null $aeroflot_transaction_created_at
  * @method static \Illuminate\Database\Eloquent\Builder|Bill whereAeroflotTransactionCreatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DealPosition[] $positions
+ * @property-read int|null $positions_count
  */
 class Bill extends Model
 {

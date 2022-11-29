@@ -39,21 +39,6 @@
 												</label>
 											</div>
 										</div>
-										{{--<br>
-										<div id="opt-filter">
-											<input id="filtertype0" name="filtertype" value="0" checked="" type="radio">
-											<label for="filtertype0" class="button  button-pipaluk-orange active">
-												<span>Все</span>
-											</label>
-											<input id="filtertype1" name="filtertype" value="1" type="radio">
-											<label for="filtertype1" class="button button-pipaluk-orange">
-												<span>BOEING</span>
-											</label>
-											<input id="filtertype2" name="filtertype" value="2" type="radio">
-											<label for="filtertype2" class="button  button-pipaluk-orange">
-												<span>AIRBUS</span>
-											</label>
-										</div>--}}
 									</form>
 								</div>
 							</div>
@@ -70,9 +55,6 @@
 									</a>
 								@endforeach
 								<p style="margin-top: 80px;"></p>
-								{{--<div class="ajax-filter-count" data-count="16">
-									<a href="#" class="ajax-more button button-pipaluk button-pipaluk-orange"><i>Загрузить ещё</i></a>
-								</div>--}}
 								<div id="ourguestes"></div>
 							</div>
 						</div>
@@ -93,12 +75,9 @@
 					<div class="page_guests">
 						@foreach($guests as $item)
 							<div class="guest">
-								{{--<a href="{{ (array_key_exists('video_url', $item->data_json) && $item->data_json['video_url']) ? $item->data_json['video_url'] : '#' }}" target="_blank">--}}
-									<img src="{{ (array_key_exists('photo_preview_file_path', $item->data_json) && $item->data_json['photo_preview_file_path']) ? '/upload/' . $item->data_json['photo_preview_file_path'] : '' }}" alt="">
-								{{--</a>--}}
+								<img src="{{ (array_key_exists('photo_preview_file_path', $item->data_json) && $item->data_json['photo_preview_file_path']) ? '/upload/' . $item->data_json['photo_preview_file_path'] : '' }}" alt="">
 								<div class="title clearfix">
-									{{--<img src="{{ asset('img/insta-white.png') }}" alt="insta">--}}
-									<span>{{ $item->title }}</span> {{--<a href="https://www.instagram.com/{{ strip_tags($item->preview_text) }}" target="_blank">{{ strip_tags($item->preview_text) }}</a>--}}
+									<span>{{ $item->title }}</span>
 								</div>
 							</div>
 						@endforeach
@@ -176,7 +155,6 @@
 			font-size: 18px;
 			line-height: 20px;
 			color: #fff;
-			/*float: left;*/
 			text-align: center;
 		}
 		#dag-content .dag-guests .guests .title img {

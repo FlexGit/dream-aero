@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Contractor;
+use App\Services\FcmService;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Notification;
@@ -344,6 +345,11 @@ class NotificationController extends Controller
 			}
 		}
 		
-		return response()->json(['status' => 'success']);
+		$fcmTokens = $contractors->whereNotNull('fcm_token')->pluck('fcm_token')->all();
+		if (!$fcmTokens) return null;
+		
+		$fcmResult = FcmService::send($notification, $fcmTokens);
+		
+		return response()->json(['status' => 'success', 'fcm' => $fcmResult]);
 	}
 }

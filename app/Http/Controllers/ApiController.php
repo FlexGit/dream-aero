@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContractorPromocode;
 use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\DealPosition;
 use App\Models\Event;
 use App\Models\FlightSimulator;
-use App\Models\Notification;
 use App\Models\PaymentMethod;
 use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
 use Mail;
 use Carbon\Carbon;
-use Illuminate\Validation\Rules\Password;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
 use App\Models\City;
 use App\Models\Contractor;
 use App\Models\LegalEntity;
@@ -35,7 +31,6 @@ use App\Models\Score;
 use App\Models\Bill;
 use App\Models\Certificate;
 use App\Models\Status;
-
 use App\Traits\ApiResponser;
 
 class ApiController extends Controller
@@ -246,14 +241,12 @@ class ApiController extends Controller
 			
 			$failures = Mail::failures();
 			if ($failures) {
-				//return $this->responseError(implode(' ', $failures), 500);
 				return $this->responseError('Отправка письма временно невозможна, попробуйте позже. Приносим извинения за доставленные неудобства.', 400);
 			}
 		} catch (Throwable $e) {
 			Log::debug('500 - ' . $_SERVER['REMOTE_ADDR'] . ': ' . $e->getMessage());
 			
 			return $this->responseError('Отправка письма временно невозможна, попробуйте позже. Приносим извинения за доставленные неудобства.', 400);
-			//return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
 		return $this->responseSuccess('Код подтверждения отправлен на ' . $email);
@@ -1821,9 +1814,7 @@ class ApiController extends Controller
 
 		$date = date('Y-m-d H:i:s');
 		
-		//\DB::connection()->enableQueryLog();
 		$promocode = Promocode::whereRaw('lower(number) = "' . mb_strtolower($number) . '"')
-			/*->whereRelation('cities', 'cities.id', '=', $cityId)*/
 			->where('is_active', true)
 			->where(function ($query) use ($date) {
 				$query->where('active_from_at', '<=', $date)
@@ -1834,13 +1825,11 @@ class ApiController extends Controller
 					->orWhereNull('active_to_at');
 			})
 			->first();
-		//\Log::debug(\DB::getQueryLog());
 		if (!$promocode) {
 			return $this->responseError('Промокод не найден', 400);
 		}
 
 		$contractorPromocodeWasUsed = $promocode->contractors()->where('contractor_id', $contractor->id)->exists();
-		//\Log::debug('contractorPromocodeWasUsed - ' . $contractorPromocodeWasUsed);
 		if ($contractorPromocodeWasUsed) {
 			return $this->responseError('Промокод уже был применен', 400);
 		}
@@ -2551,12 +2540,6 @@ class ApiController extends Controller
 				$certificate->save();
 			}
 			
-			// если это бронирование по ранее купленному сертификату, то регистрируем сертификат
-			/*if ($this->request->certificate_id && !$isCertificatePurchase) {
-				$certificate->status_id = $statusesData['certificate'][Certificate::REGISTERED_STATUS]['id'];
-				$certificate->save();
-			}*/
-			
 			// создание сделки
 			$deal = new Deal();
 			$deal->status_id = $statusesData['deal'][Deal::CREATED_STATUS]['id'];
@@ -2566,8 +2549,6 @@ class ApiController extends Controller
 			$deal->email = $this->request->email;
 			$deal->source = Deal::MOB_SOURCE;
 			$dealData = [];
-			/*$dealData['comment'] = $this->request->comment;
-			$dealData['certificate_whom'] = $this->request->certificate_whom;*/
 			$deal->data_json = $dealData;
 			$deal->save();
 
@@ -2616,7 +2597,6 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 		
-		//dispatch(new \App\Jobs\SendDealEmail($deal));
 		$job = new \App\Jobs\SendDealEmail($deal);
 		$job->handle();
 		
@@ -2813,7 +2793,6 @@ class ApiController extends Controller
 			}
 
 			$contractorPromocodeWasUsed = $promocode->contractors()->where('contractor_id', $contractor->id)->exists();
-			//\Log::debug('contractorPromocodeWasUsed - ' . $contractorPromocodeWasUsed);
 			if ($contractorPromocodeWasUsed) {
 				return $this->responseError('Промокод уже был применен', 400);
 			}
@@ -2825,8 +2804,6 @@ class ApiController extends Controller
 				}
 			}
 
-			//\Log::debug($promocode->type . ' - ' . $isCertificatePurchase . ' - ' . $promocode->contractor_id . ' - ' . $contractor->id . ' - ' . $promocode->location_id . ' - ' . $location->id . ' - ' . $promocode->flight_simulator_id . ' - ' . $simulator->id);
-			
 			// для неперсональных промокодов проверяем доступность для Бронирования или Покупки Сертификата
 			if (!$promocode->contractor_id) {
 				$dataJson = $promocode->data_json ? (array)$promocode->data_json : [];
@@ -2873,7 +2850,7 @@ class ApiController extends Controller
 			if ($isCertificatePurchase) {
 				$certificate = new Certificate();
 				$certificate->status_id = $statusesData['certificate'][Certificate::CREATED_STATUS]['id'];
-				$certificate->city_id = /*$city ? $city->id : 0*/(!$isUnified && $city) ? $city->id : 0;
+				$certificate->city_id = (!$isUnified && $city) ? $city->id : 0;
 				$certificate->product_id = $product ? $product->id : 0;
 				$certificatePeriod = ($product && $product->validity) ? $product->validity : '';
 				$certificate->expire_at = $certificatePeriod ? Carbon::now()->addMonths($certificatePeriod)->format('Y-m-d H:i:s') : null;
@@ -2913,11 +2890,9 @@ class ApiController extends Controller
 			$deal->name = $this->request->name;
 			$deal->phone = $this->request->phone;
 			$deal->email = $this->request->email;
-			$deal->city_id =  $city ? $city->id : 0/*(!$isUnified && $city) ? $city->id : 0*/;
+			$deal->city_id =  $city ? $city->id : 0;
 			$deal->source = Deal::MOB_SOURCE;
 			$dealData = [];
-			/*$dealData['comment'] = $this->request->comment;
-			$dealData['certificate_whom'] = $this->request->certificate_whom;*/
 			$deal->data_json = $dealData;
 			$deal->save();
 			
@@ -2966,6 +2941,7 @@ class ApiController extends Controller
 				$billLocation = $city->getLocationForBill($product);
 				if (!$billLocation) {
 					\DB::rollback();
+					
 					Log::debug('500 - Certificate Deal Create: Не найден номер счета платежной системы');
 				}
 				$billLocationId = $billLocation->id;
@@ -2980,7 +2956,6 @@ class ApiController extends Controller
 			$bill = new Bill();
 			$bill->contractor_id = $contractor->id ?? 0;
 			$bill->deal_id = $deal->id ?? 0;
-			//$bill->deal_position_id = $position->id ?? 0;
 			$bill->location_id = $billLocationId;
 			$bill->payment_method_id = $isCertificatePurchase ? $onlinePaymentMethod->id : 0;
 			$bill->status_id = $billStatus->id ?? 0;
@@ -3001,9 +2976,6 @@ class ApiController extends Controller
 			
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
-		
-		/*$job = new \App\Jobs\SendDealEmail($deal);
-		$job->handle();*/
 		
 		if ($isCertificatePurchase && $bill) {
 			$job = new \App\Jobs\SendPayLinkEmail($bill);
@@ -3147,8 +3119,6 @@ class ApiController extends Controller
 			$deal->city_id =  $city ? $city->id : 0;
 			$deal->source = Deal::MOB_SOURCE;
 			$dealData = [];
-			/*$dealData['comment'] = $this->request->comment;
-			$dealData['certificate_whom'] = $this->request->certificate_whom;*/
 			$deal->data_json = $dealData;
 			$deal->save();
 
@@ -3176,7 +3146,6 @@ class ApiController extends Controller
 			return $this->responseError(null, '500', $e->getMessage() . ' - ' . $this->request->url());
 		}
 
-		//dispatch(new \App\Jobs\SendDealEmail($deal));
 		$job = new \App\Jobs\SendDealEmail($deal);
 		$job->handle();
 
@@ -3506,10 +3475,80 @@ class ApiController extends Controller
 			return $this->responseError('Контрагент не найден', 400);
 		}
 
-		//dispatch(new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message));
 		$job = new \App\Jobs\SendFeedbackEmail($contractor, $this->request->message);
 		$job->handle();
 
 		return $this->responseSuccess('Сообщение успешно отправлено', null);
+	}
+	
+	/**
+	 * Profile save
+	 *
+	 * @queryParam api_key string required No-example
+	 * @queryParam token string required No-example
+	 * @bodyParam fcm_token string required No-example
+	 * @response scenario=success {
+	 * 	"success": true,
+	 * 	"message": "FCM токен успешно сохранен",
+	 * 	"data": {
+	 * 	}
+	 * }
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": {"email": "Обязательно для заполнения"}, "debug": null}
+	 * @response status=400 scenario="Bad Request" {"success": false, "error": "Некорректный Api-ключ", "debug": null}
+	 * @response status=404 scenario="Resource Not Found" {"success": false, "error": "Ресурс не найден", "debug": "<app_url>/api/<method>"}
+	 * @response status=405 scenario="Method Not Allowed" {"success": false, "error": "Метод не разрешен", "debug": "<app_url>/api/<method>"}
+	 * @response status=429 scenario="Too Many Attempts" {"success": false, "error": "Слишком много попыток. Попробуйте позже", "debug": "<app_url>/api/<method>"}
+	 * @response status=500 scenario="Internal Server Error" {"success": false, "error": "Внутренняя ошибка", "debug": "<app_url>/api/<method>"}
+	 */
+	public function saveFcmToken()
+	{
+		$authToken = $this->request->token ?? '';
+		if (!$authToken) {
+			return $this->responseError('Не передан токен авторизации', 400);
+		}
+		
+		$rules = [
+			'fcm_token' => ['required'],
+		];
+		$validator = Validator::make($this->request->all(), $rules, Controller::API_VALIDATION_MESSAGES)
+			->setAttributeNames([
+				'fcm_token' => 'FCM токен',
+			]);
+		if (!$validator->passes()) {
+			$errors = [];
+			$validatorErrors = $validator->errors();
+			foreach ($rules as $key => $rule) {
+				foreach ($validatorErrors->get($key) ?? [] as $error) {
+					$errors[$key] = $error;
+				}
+			}
+			return $this->responseError($errors, 400);
+		}
+		
+		$token = HelpFunctions::validToken($authToken);
+		if (!$token) {
+			return $this->responseError('Токен авторизации не найден', 400);
+		}
+		
+		$contractorId = $token->contractor_id ?? 0;
+		if (!$contractorId) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor = Contractor::where('is_active', true)
+			->find($contractorId);
+		if (!$contractor) {
+			return $this->responseError('Контрагент не найден', 400);
+		}
+		
+		$contractor->fcm_token = $this->request->fcm_token;
+		if (!$contractor->save()) {
+			return $this->responseError(null, 500);
+		}
+		
+		$data = [
+		];
+		
+		return $this->responseSuccess('FCM токен успешно сохранен', $data);
 	}
 }

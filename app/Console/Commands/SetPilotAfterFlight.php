@@ -41,13 +41,11 @@ class SetPilotAfterFlight extends Command
     public function handle()
     {
     	// проверяем все полеты за последний час без пилота
-		//\DB::connection()->enableQueryLog();
     	$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->where('stop_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
 			->where('stop_at', '>=', Carbon::now()->subHour()->format('Y-m-d H:i:s'))
 			->where('pilot_id', 0)
 			->get();
-		//\Log::debug(\DB::getQueryLog());
     	/** @var Event[] $events */
 		foreach ($events as $event) {
 			$city = $event->city;
@@ -60,7 +58,6 @@ class SetPilotAfterFlight extends Command
 			if (!$simulator) continue;
 		
 			// находим пилота, который был на смене во время полета
-			//\DB::connection()->enableQueryLog();
 			$shiftEvent = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 				->where('user_id', '!=', 0)
 				->where('city_id', $city->id)
@@ -69,7 +66,6 @@ class SetPilotAfterFlight extends Command
 				->where('start_at', '<=', Carbon::parse($event->start_at)->format('Y-m-d H:i:s'))
 				->where('stop_at', '>=', Carbon::parse($event->stop_at)->format('Y-m-d H:i:s'))
 				->first();
-			//\Log::debug(\DB::getQueryLog());
 			if (!$shiftEvent) continue;
 			
 			$event->pilot_id = $shiftEvent->user_id;

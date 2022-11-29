@@ -8,14 +8,11 @@ use App\Exports\ContractorSelfMadePayedDealsReportExport;
 use App\Exports\FlightLogMultipleSheetsReportExport;
 use App\Exports\FlightLogReportExport;
 use App\Exports\LeadReportExport;
-use App\Exports\NpsReportExport;
 use App\Exports\PersonalSellingReportExport;
 use App\Exports\PlatformDataReportExport;
 use App\Exports\SpontaneousRepeatedReportExport;
 use App\Models\Bill;
 use App\Models\Lead;
-use App\Models\Product;
-use App\Models\Certificate;
 use App\Models\City;
 use App\Models\Content;
 use App\Models\DealPosition;
@@ -25,7 +22,6 @@ use App\Models\Location;
 use App\Models\PaymentMethod;
 use App\Models\PlatformData;
 use App\Models\PlatformLog;
-use App\Models\ProductType;
 use App\Models\Promo;
 use App\Models\Score;
 use App\Models\User;
@@ -203,7 +199,6 @@ class ReportController extends Controller {
 			if (!$goodNeutralBadSum) continue;
 			
 			$userNps[$userId] = round($goodBadDiff / $goodNeutralBadSum * 100, 1);
-			//\Log::debug($userId . ' - ' . $goodBadDiff . ' - ' . $goodNeutralBadSum . ' = ' . $userNps[$userId]);
 		}
 		
 		$users = User::where('enable', true)
@@ -343,7 +338,6 @@ class ReportController extends Controller {
 		$period = CarbonPeriod::create($dateFromAt, $dateToAt);
 		
 		$shiftItems = [];
-		//\DB::connection()->enableQueryLog();
 		$shifts = Event::where('event_type', Event::EVENT_TYPE_SHIFT_PILOT)
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
 			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay());
@@ -351,9 +345,6 @@ class ReportController extends Controller {
 			$shifts = $shifts->where('location_id', $location->id)
 				->where('flight_simulator_id', $simulator->id);
 		}
-		/*if ($pilotId) {
-			$shifts = $shifts->where('shift_pilot_id', $pilotId);
-		}*/
 		$shifts = $shifts->orderBy('start_at')
 			->get();
 		foreach ($shifts as $shift) {
@@ -364,11 +355,7 @@ class ReportController extends Controller {
 				$shiftItems[$shift->location_id][$shift->flight_simulator_id][Carbon::parse($shift->start_at)->format('d.m.Y')][] = $shiftPilotFio;
 			}
 		}
-		/*if ($user->email == env('DEV_EMAIL')) {
-			\Log::debug($shiftItems);
-		}*/
-		
-		//\DB::connection()->enableQueryLog();
+
 		$events = Event::whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_USER_FLIGHT])
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay())
 			->where('start_at', '<=', Carbon::parse($dateToAt)->endOfDay())
@@ -382,7 +369,6 @@ class ReportController extends Controller {
 		}
 		$events = $events->orderBy('start_at')
 			->get();
-		//\Log::debug(\DB::getQueryLog());
 		
 		$items = [];
 		foreach ($events as $event) {
@@ -392,8 +378,6 @@ class ReportController extends Controller {
 			$promo = $position ? $position->promo : null;
 			$promocode = $position ? $position->promocode : null;
 			$product = $position ? $position->product : null;
-			$productType = $product ? $product->productType : null;
-			/** @var User $employee */
 			$employee = $event->employee;
 			
 			$extendedText = '';
@@ -403,11 +387,9 @@ class ReportController extends Controller {
 				$extendedText .= $position ? $position->number : '';
 			}
 			
-			/*if ($productType && in_array($productType->alias, [ProductType::COURSES_ALIAS, ProductType::VIP_ALIAS])) {*/
 			if ($product) {
 				$extendedText .= ', ' . $product->name;
 			}
-			/*}*/
 			
 			$pilotSum = $event->nominal_price;
 			
@@ -490,12 +472,6 @@ class ReportController extends Controller {
 					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $event->location->id)
 						->where('flight_simulator_id', $event->simulator->id);
 				}
-				/*if ($user->email == env('DEV_EMAIL')) {
-					\Log::debug(\DB::getQueryLog());
-				}*/
-				/*if ($pilotId) {
-					$pilotShiftEvent = $pilotShiftEvent->where('shift_pilot_id', $pilotId);
-				}*/
 				$pilotShiftEvent = $pilotShiftEvent->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
 			}
@@ -509,9 +485,6 @@ class ReportController extends Controller {
 					$pilotShiftEvent = $pilotShiftEvent->where('location_id', $event->location->id)
 						->where('flight_simulator_id', $event->simulator->id);
 				}
-				/*if ($pilotId) {
-					$pilotShiftEvent = $pilotShiftEvent->where('shift_pilot_id', $pilotId);
-				}*/
 				$pilotShiftEvent = $pilotShiftEvent->orderBy('start_at')
 					->first();
 				$pilot = $pilotShiftEvent ? $pilotShiftEvent->user : null;
@@ -941,13 +914,11 @@ class ReportController extends Controller {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
 			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 		}
-		//\DB::connection()->enableQueryLog();
 		$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_REGISTER_ORDER)
 			->where('aeroflot_state', AeroflotBonusService::PAYED_STATE)
 			->where('aeroflot_transaction_created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('aeroflot_transaction_created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			->get();
-		//\Log::debug(\DB::getQueryLog());
 		$items = [];
 		foreach ($bills as $bill) {
 			$billLocation = $bill->location;
@@ -1032,13 +1003,11 @@ class ReportController extends Controller {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
 			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 		}
-		//\DB::connection()->enableQueryLog();
 		$bills = Bill::where('aeroflot_transaction_type', AeroflotBonusService::TRANSACTION_TYPE_AUTH_POINTS)
 			->where('aeroflot_status', 0)
 			->where('aeroflot_transaction_created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('aeroflot_transaction_created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			->get();
-		//\Log::debug(\DB::getQueryLog());
 		$items = [];
 		foreach ($bills as $bill) {
 			$billLocation = $bill->location;
@@ -1119,14 +1088,12 @@ class ReportController extends Controller {
 			$dateFromAt = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
 			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 		}
-		//\DB::connection()->enableQueryLog();
 		$bills = Bill::where('user_id', 0)
 			->whereRelation('paymentMethod', 'payment_methods.alias', '=', PaymentMethod::ONLINE_ALIAS)
 			->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
 			->where('payed_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('payed_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
 			->get();
-		//\Log::debug(\DB::getQueryLog());
 		$items = [];
 		foreach ($bills as $bill) {
 			$deal = $bill->deal;
@@ -1208,7 +1175,6 @@ class ReportController extends Controller {
 		
 		$items = $locationDurationData = $dayDurationData = $durationData = $userDurationData = [];
 		
-		//\DB::connection()->enableQueryLog();
 		$events = Event::selectRaw('location_id, flight_simulator_id, SUBSTRING(start_at,1,10) as filght_date, SUM(TIMESTAMPDIFF(MINUTE, start_at, stop_at) + extra_time) as flight_duration, SUM(TIMESTAMPDIFF(MINUTE, simulator_up_at, simulator_down_at)) as user_flight_duration')
 			->whereIn('event_type', [Event::EVENT_TYPE_DEAL, Event::EVENT_TYPE_TEST_FLIGHT, Event::EVENT_TYPE_USER_FLIGHT])
 			->where('start_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
@@ -1236,8 +1202,6 @@ class ReportController extends Controller {
 			->where('data_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d'))
 			->oldest()
 			->get();
-		//\Log::debug(\DB::getQueryLog());
-		
 		foreach ($platformDatas as $platformData) {
 			if (!isset($items[$platformData->location_id])) {
 				$items[$platformData->location_id] = [];
@@ -1255,15 +1219,11 @@ class ReportController extends Controller {
 					->orderBy('start_at')
 					->get()
 					->toArray();
-				//\Log::debug($calendarEvents);
 				
 				// группировка событий календаря по времени
 				$calendarEvents = $platformData->groupEvents($calendarEvents, 1);
 				
 				$mwpItems = $platformData->mwp($calendarEvents);
-				/*if ($platformData->location_id == 18) {
-					\Log::debug($mwpItems);
-				}*/
 				$mwp = 0;
 				foreach ($mwpItems as $hour => $log) {
 					foreach ($log as $mwpValue) {
@@ -1395,9 +1355,6 @@ class ReportController extends Controller {
 		if ($platformData) {
 			// группировка событий календаря по времени
 			$events = $platformData->groupEvents($events, 1);
-			if ($user->email == env('DEV_EMAIL')) {
-				\Log::debug($events);
-			}
 			
 			// события платформы
 			foreach ($platformData->logs as $log) {
@@ -1417,14 +1374,6 @@ class ReportController extends Controller {
 				
 				foreach ($events ?? [] as $event) {
 					$eventStopAtWithExtraTime = Carbon::parse($event['stop_at'])->addMinutes($event['extra_time'])->format('Y-m-d H:i:s');
-					
-					/*if ($user->email == env('DEV_EMAIL')) {
-						\Log::debug('Server Start: ' . $serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
-						\Log::debug('Server Stop: ' . $serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
-						\Log::debug('Event Interval: ' . $event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
-						\Log::debug('betweenIncluded: ' . $serverStartAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) . ' - ' . $serverStopAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime));
-					}*/
-					
 					// время подъема сервера попадает в интервал события,
 					// и время опускания сервера попадает в интервал события
 					if (($serverStartAt->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime) || $serverStartAtWithLag->betweenIncluded($event['start_at'], $eventStopAtWithExtraTime))
@@ -1435,9 +1384,6 @@ class ReportController extends Controller {
 							'mwp_time' => 0,
 							'case' => 5,
 						];
-						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
-							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE][Carbon::parse($log->start_at)->format('H')][$log->id]);
-						}*/
 						break;
 					}
 					
@@ -1452,9 +1398,6 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStopAt->diffInMinutes($eventStopAtWithExtraTime),
 							'case' => 1,
 						];
-						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
-							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
 						break;
 					}
 					
@@ -1469,9 +1412,6 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStartAt->diffInMinutes($event['start_at']),
 							'case' => 2,
 						];
-						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
-							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
 						break;
 					}
 					
@@ -1485,9 +1425,6 @@ class ReportController extends Controller {
 							'mwp_time' => $serverStartAt->diffInMinutes($event['start_at']) + $serverStopAt->diffInMinutes($eventStopAtWithExtraTime),
 							'case' => 3,
 						];
-						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
-							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-						}*/
 						break;
 					}
 				}
@@ -1508,12 +1445,6 @@ class ReportController extends Controller {
 							'mwp_time' => Carbon::parse($log->stop_at)->diffInMinutes($log->start_at),
 							'case' => 4,
 						];
-						/*if ($user->email == env('DEV_EMAIL') && isset($items[PlatformLog::MWP_ACTION_TYPE])) {
-							\Log::debug($items[PlatformLog::MWP_ACTION_TYPE]);
-							\Log::debug($serverStartAt->format('Y-m-d H:i:s') . ' - ' . $serverStartAtWithLag->format('Y-m-d H:i:s'));
-							\Log::debug($serverStopAt->format('Y-m-d H:i:s') . ' - ' . $serverStopAtWithLag->format('Y-m-d H:i:s'));
-							\Log::debug($event['start_at'] . ' - ' . $eventStopAtWithExtraTime);
-						}*/
 						break;
 					}
 				}
@@ -1616,12 +1547,6 @@ class ReportController extends Controller {
 	 */
 	public function getExportFile($fileName)
 	{
-		$user = \Auth::user();
-		
-		/*if (!$user->isAdminOrHigher()) {
-			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
-		}*/
-		
 		return Storage::disk('private')->download('report/' . $fileName);
 	}
 	

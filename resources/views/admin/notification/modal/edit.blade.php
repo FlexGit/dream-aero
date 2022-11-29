@@ -26,19 +26,3 @@
 		<option value="0" @if(!$notification->is_active) selected @endif>Нет</option>
 	</select>
 </div>
-{{--
-<div class="form-group">
-	<label for="image_file">Изображение</label>
-	<div class="custom-file">
-		<input type="file" class="custom-file-input" id="image_file" name="image_file">
-		<label class="custom-file-label" for="image_file">Выбрать файл</label>
-	</div>
-	@if(isset($promo->data_json['image_file_path']))
-		<div>
-			<img src="/upload/{{ $promo->data_json['image_file_path'] }}" width="150" alt="" style="border: 1px solid #ddd;margin-top: 10px;">
-			<br>
-			<small>[<a href="javascript:void(0)" class="js-image-delete" data-id="{{ $promo->id }}">удалить</a>]</small>
-		</div>
-	@endif
-</div>
---}}

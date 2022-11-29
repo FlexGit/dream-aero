@@ -70,7 +70,7 @@
 
 @section('css')
 	<link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=' . time()) }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/common.css?v=10') }}">
 	<style>
 		.wrapper {
 			width: fit-content;
@@ -82,11 +82,6 @@
 			z-index: 999;
 			background-color: #fff;
 		}
-		/*.platform-data-table tbody td:first-child {
-			position: sticky;
-			left: 0;
-			background-color: #fff;
-		}*/
 		table tr td[data-url] {
 			cursor: help;
 		}
@@ -118,7 +113,6 @@
 						'is_export': isExport,
 					},
 					success: function(result) {
-						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
@@ -221,7 +215,6 @@
 					type: 'GET',
 					dataType: 'json',
 					success: function(result) {
-						//console.log(result);
 						if (result.status === 'error') {
 							toastr.error(result.reason);
 							return null;
@@ -236,10 +229,6 @@
 			$('.platform-data-table').scroll(function() {
 				$('tbody tr td:nth-child(1)').css('left', $(this).scrollLeft());
 			});
-
-			function scrollToElement(element) {
-				$(window).scrollTop(element.offset().top).scrollLeft(element.offset().left);
-			}
 		});
 	</script>
 @stop

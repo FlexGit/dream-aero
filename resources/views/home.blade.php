@@ -25,7 +25,7 @@
 			</div>
 			<h1 class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.3s" data-wow-iteration="1">@lang('main.home.испытай-себя-в-роли-пилота-авиалайнера')</h1>
 			<span class="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.9s" data-wow-iteration="1">@lang('main.home.рады-представить-вам-тренажеры', ['simulator' => ($city && in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS, app('\App\Models\City')::EKB_ALIAS])) ? ' тренажеры' : ' тренажер', 'airbus' => ($city && in_array($city->alias, [app('\App\Models\City')::MSK_ALIAS, app('\App\Models\City')::SPB_ALIAS, app('\App\Models\City')::EKB_ALIAS])) ? ' и Airbus A320' : '', 'city' => $city ? (App::isLocale('en') ? $city->name_en : $city->name) : ''])</span>
-			@if($city/* && !in_array($city->alias, [app('\App\Models\City')::VLV_ALIAS])*/)
+			@if($city)
 				<a href="{{ url('#popup') }}" class="fly {{ App::isLocale('en') ? 'fly_en' : '' }} button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>@lang('main.home.забронировать')</i></a>
 			@endif
 			<a href="{{ url('#popup') }}" class="give button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open {{ App::isLocale('en') ? 'give_en' : '' }}" data-modal="certificate" data-wow-delay="1.3s" data-wow-duration="2s" data-wow-iteration="1"><i>@lang('main.home.подарить-полет')</i></a>
@@ -89,7 +89,7 @@
 					</a>
 				</li>
 			</ul>
-			@if($city/* && !in_array($city->alias, [app('\App\Models\City')::VLV_ALIAS])*/)
+			@if($city)
 				<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange popup-with-form form_open" data-modal="booking"><i>@lang('main.home.забронировать-полет')</i></a>
 			@endif
 		</div>

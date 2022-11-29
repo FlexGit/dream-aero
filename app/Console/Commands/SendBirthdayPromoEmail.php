@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Contractor;
 use App\Models\Notification;
 use App\Models\Promo;
+use App\Models\Task;
 use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use DB;
@@ -49,13 +50,11 @@ class SendBirthdayPromoEmail extends Command
 		$promo = HelpFunctions::getEntityByAlias(Promo::class, Promo::BIRTHDAY_ALIAS);
 		if (!$promo) return 0;
 
-		//DB::connection()->enableQueryLog();
 		$contractors = Contractor::whereMonth('birthdate', '=', Carbon::now()->addDays(3)->format('m'))
 			->whereDay('birthdate', '=', Carbon::now()->addDays(3)->format('d'))
 			->whereNotNull('birthdate')
 			->where('email', '!=', Contractor::ANONYM_EMAIL)
 			->where('is_active', true)
-			/*->where('email', env('DEV_EMAIL'))*/
 			->get();
     	foreach ($contractors as $contractor) {
     		$city = $contractor->city;
@@ -74,9 +73,8 @@ class SendBirthdayPromoEmail extends Command
 			
 				$notification->contractors()->attach($contractor->id);
 				
-				$recipients = $bcc = [];
+				$recipients = [];
 				$recipients[] = $contractor->email;
-				//$bcc[] = env('DEV_EMAIL');
 				
 				$messageData = [
 					'contractor' => $contractor,
@@ -86,27 +84,32 @@ class SendBirthdayPromoEmail extends Command
 				
 				$subject = env('APP_NAME') . ': скидка на полет в Авиатренажере по акции в честь Дня Рождения';
 				
-				Mail::send(['html' => "admin.emails.birthday_promo"], $messageData, function ($message) use ($subject, $recipients, $bcc) {
+				Mail::send(['html' => "admin.emails.birthday_promo"], $messageData, function ($message) use ($subject, $recipients) {
 					/** @var \Illuminate\Mail\Message $message */
 					$message->subject($subject);
 					$message->to($recipients);
-					$message->bcc($bcc);
 				});
 				$failures = Mail::failures();
 				if ($failures) {
 					DB::rollback();
+					
+					return 0;
 				}
-
+				
+				$task = new Task();
+				$task->name = get_class($this);
+				$task->email = $contractor->email;
+				$task->save();
+				
 				DB::commit();
 			} catch (Throwable $e) {
-				\Log::debug('500 - birthday_promo:send - ' . $e->getMessage());
+				\Log::debug('500 - ' . get_class($this) . ': ' . $e->getMessage());
 				
 				return 0;
 			}
 		}
-		//\Log::debug(\DB::getQueryLog());
 		
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - birthday_promo:send - OK');
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

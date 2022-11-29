@@ -102,6 +102,14 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereTestPilotId($value)
  * @property \Illuminate\Support\Carbon|null $leave_review_sent_at дата и время отправки письма с просьбой оставить отзыв о полете
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereFeedbackEmailSentAt($value)
+ * @property int $parent_id событие родитель
+ * @property int $nominal_price номинальная стоимость полета в данный день
+ * @property int $actual_pilot_sum фактическая сумма пилоту
+ * @property-read \App\Models\Score|null $score
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereActualPilotSum($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereLeaveReviewSentAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereNominalPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereParentId($value)
  */
 class Event extends Model
 {

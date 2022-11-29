@@ -183,29 +183,6 @@
 					}
 				});
 			});
-
-			/*$(document).on('click', '.js-image-delete', function(e) {
-				if (!confirm('Вы уверены?')) {
-					return false;
-				}
-
-				$div = $(this).closest('div');
-
-				$.ajax({
-					url: '/promo/' + $(this).data('id') + '/image/delete',
-					type: 'PUT',
-					dataType: 'json',
-					success: function(result) {
-						if (result.status === 'error') {
-							toastr.error(result.reason);
-							return null;
-						}
-
-						$div.hide();
-						toastr.success('Изображение успешно удалено');
-					}
-				});
-			});*/
 		});
 	</script>
 @stop

@@ -4,7 +4,7 @@
 		$periodYear = $periodArr[0];
 		$periodMonth = $periodArr[1];
 	@endphp
-	<table class="table table-sm table-bordered table-striped platform-data-table {{--table-data--}}" style="width: auto;">
+	<table class="table table-sm table-bordered table-striped platform-data-table" style="width: auto;">
 		<thead>
 		<tr>
 			<th nowrap>{{ $months[$periodMonth] . ', ' . $periodYear }}</th>

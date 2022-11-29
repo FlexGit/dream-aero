@@ -77,11 +77,6 @@ class DealController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Недостаточно прав доступа']);
 		}
 		
-		/*if ($user && $user->city && in_array($user->city->alias, [City::VLV_ALIAS])) {
-			$ipData = geoip()->getLocation(geoip()->getClientIP());
-			\Log::debug($ipData->toArray());
-		}*/
-		
 		$locationCount = $user->city ? $user->city->locations->count() : 0;
 
 		if ($user->isSuperAdmin() || $locationCount > 1) {
@@ -148,11 +143,7 @@ class DealController extends Controller
 		
 		$id = $this->request->id ?? 0;
 		
-		$deals = Deal::/*whereHas('contractor', function ($query) use ($user) {
-			$query->whereHas('city', function ($query) use ($user) {
-				$query->where('version', $user->version);
-			});
-		})->*/orderBy('id', 'desc');
+		$deals = Deal::orderBy('id', 'desc');
 		if ($this->request->filter_status_id) {
 			$deals = $deals->where(function ($query) {
 				$query->whereIn('status_id', $this->request->filter_status_id)
@@ -224,21 +215,6 @@ class DealController extends Controller
 					});
 			});
 		}
-		/*if ($this->request->search_contractor) {
-			$deals = $deals->where(function ($query) {
-				$query->where('name', 'like', '%' . $this->request->search_contractor . '%')
-					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
-					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%')
-					->orWhere('id', $this->request->search_contractor)
-					->orWhereHas('contractor', function ($query) {
-						return $query->where('name', 'like', '%' . $this->request->search_contractor . '%')
-							->orWhere('lastname', 'like', '%' . $this->request->search_contractor . '%')
-							->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
-							->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%')
-							->orWhere('id', $this->request->search_contractor);
-					});
-			});
-		}*/
 		if (!$user->isSuperAdmin() && $user->city) {
 			$deals = $deals->where('city_id', $user->city->id);
 		}
@@ -646,7 +622,7 @@ class DealController extends Controller
 			$position->duration = $product->duration ?? 0;
 			$position->amount = $amount;
 			$position->currency_id = $cityProduct->pivot->currency_id ?? 0;
-			$position->city_id = /*$isUnified ? 0 : */$cityId ?: $this->request->user()->city_id;
+			$position->city_id = $cityId ?: $this->request->user()->city_id;
 			$position->promo_id = $promo->id ?? 0;
 			$position->promocode_id = ($promocodeId || $promocodeUuid) ? $promocode->id : 0;
 			$position->is_certificate_purchase = true;
@@ -690,7 +666,6 @@ class DealController extends Controller
 				$bill = new Bill();
 				$bill->contractor_id = $contractor->id ?? 0;
 				$bill->deal_id = $deal->id ?? 0;
-				//$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? $onlinePaymentMethod->id : ($paymentMethodId ?? 0);
 				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
@@ -912,16 +887,10 @@ class DealController extends Controller
 		$extraTime = (int)$this->request->extra_time ?? 0;
 		$isRepeatedFlight = (bool)$this->request->is_repeated_flight ?? false;
 		$isUnexpectedFlight = (bool)$this->request->is_unexpected_flight ?? false;
-		/*$duration = $this->request->duration ?? 0;
-		$isValidFlightDate = $this->request->is_valid_flight_date ?? 0;*/
 		$employeeId = $this->request->employee_id ?? 0;
 		$pilotId = $this->request->pilot_id ?? 0;
 		$roistatVisit = ($source == Deal::WEB_SOURCE) ? (array_key_exists('roistat_visit', $_COOKIE) ? $_COOKIE['roistat_visit'] : null) : ($this->request->roistat_visit ?? null);
 		$isPaid = (bool)$this->request->is_paid;
-		
-		/*if (!in_array($source, [Deal::WEB_SOURCE, Deal::MOB_SOURCE]) && in_array($eventType, Event::EVENT_TYPE_DEAL) && !$isValidFlightDate) {
-			return response()->json(['status' => 'error', 'reason' => 'Некорректная дата и время начала полета']);
-		}*/
 		
 		if (in_array($eventType, [Event::EVENT_TYPE_DEAL])) {
 			$product = Product::find($productId);
@@ -1048,9 +1017,6 @@ class DealController extends Controller
 		}
 		
 		$data = [];
-		/*if ($comment) {
-			$data['comment'] = $comment;
-		}*/
 		
 		try {
 			\DB::beginTransaction();
@@ -1127,7 +1093,6 @@ class DealController extends Controller
 						$bill = new Bill();
 						$bill->contractor_id = $contractor->id ?? 0;
 						$bill->deal_id = $deal->id ?? 0;
-						//$bill->deal_position_id = $position->id ?? 0;
 						$bill->location_id = $billLocationId;
 						$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
 						$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;
@@ -1426,7 +1391,6 @@ class DealController extends Controller
 				$bill = new Bill();
 				$bill->contractor_id = $contractor->id ?? 0;
 				$bill->deal_id = $deal->id ?? 0;
-				//$bill->deal_position_id = $position->id ?? 0;
 				$bill->location_id = $billLocationId;
 				$bill->payment_method_id = ($source == Deal::WEB_SOURCE) ? 0 : ($paymentMethodId ?? 0);
 				$bill->status_id = ($isPaid && $paymentMethodId != $onlinePaymentMethod->id) ? $billPayedStatus->id : $billStatus->id;

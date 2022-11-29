@@ -381,7 +381,6 @@ class ScheduleController extends Controller
 		$simulatorId = $this->request->simulator_id ?? 0;
 		$period = $this->request->period ?? '';
 		
-		//DB::connection()->enableQueryLog();
 		$extraShift = ExtraShift::where('user_id', $userId)
 			->where('location_id', $locationId)
 			->where('flight_simulator_id', $simulatorId)
@@ -390,7 +389,6 @@ class ScheduleController extends Controller
 		if ($extraShift) {
 			return response()->json(['status' => 'error', 'reason' => 'Сотрудник уже существует']);
 		}
-		//\Log::debug(DB::getQueryLog());
 		
 		$extraShift = new ExtraShift();
 		$extraShift->user_id = $userId;

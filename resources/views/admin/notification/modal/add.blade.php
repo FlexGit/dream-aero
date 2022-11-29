@@ -24,10 +24,3 @@
 		<option value="0">Нет</option>
 	</select>
 </div>
-{{--<div class="form-group">
-	<label for="image_file">Изображение</label>
-	<div class="custom-file">
-		<input type="file" class="custom-file-input" id="image_file" name="image_file">
-		<label class="custom-file-label" for="image_file">Выбрать файл</label>
-	</div>
-</div>--}}

@@ -45,7 +45,6 @@ class SendCertificateEmail extends Command
      */
     public function handle()
     {
-		//\DB::connection()->enableQueryLog();
     	$certificates = Certificate::whereNull('sent_at')
 			->where(function ($query) {
 				$query->whereNull('expire_at')
@@ -64,7 +63,6 @@ class SendCertificateEmail extends Command
 			})
 			->limit(50)
 			->get();
-    	//\Log::debug(\DB::getQueryLog());
     	/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {
 			if ($certificate->sent_at) continue;

@@ -10,7 +10,7 @@
 	<input type="text" class="form-control" id="contractor" name="contractor" placeholder="Введите Имя, Фамилию, E-mail или Телефон">
 </div>
 <div class="row">
-	<div class="col {{--align-self-center--}}">
+	<div class="col">
 		<label>Покупка сертификата?</label>
 		<div class="custom-control custom-switch">
 			<input type="checkbox" class="custom-control-input" id="is_certificate_order">

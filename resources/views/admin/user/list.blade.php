@@ -12,10 +12,7 @@
 	<td class="text-center align-middle">
 		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/edit" data-action="/user/{{ $user->id }}" data-method="PUT" data-title="Редактирование">
 			<i class="fa fa-edit" aria-hidden="true"></i>
-		</a>{{--&nbsp;&nbsp;&nbsp;
-		<a href="javascript:void(0)" data-toggle="modal" data-target="#modal" data-url="/user/{{ $user->id }}/delete" data-action="/user/{{ $user->id }}" data-method="DELETE" data-title="Удаление">
-			<i class="fa fa-trash" aria-hidden="true"></i>
-		</a>--}}
+		</a>
 	</td>
 </tr>
 @endforeach

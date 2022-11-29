@@ -13,11 +13,9 @@
 			<h2 class="block-title">@lang('main.o-trenazhere.title')</h2>
 			<div class="gallery-button-top">
 				<div class="button-free">
-					{{--@if($city && !in_array($city->alias, [app('\App\Models\City')::VLV_ALIAS]))--}}
-						<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" style="padding: 10px;margin: 0 0 35px 36%;" data-wow-delay="1.6s" data-wow-duration="2s" data-wow-iteration="1">
-							<i>@lang('main.o-trenazhere.забронировать')</i>
-						</a>
-					{{--@endif--}}
+					<a href="{{ url('#popup') }}" class="obtain-button button-pipaluk button-pipaluk-orange wow zoomIn popup-with-form form_open" data-modal="booking" style="padding: 10px;margin: 0 0 35px 36%;" data-wow-delay="1.6s" data-wow-duration="2s" data-wow-iteration="1">
+						<i>@lang('main.o-trenazhere.забронировать')</i>
+					</a>
 				</div>
 			</div>
 			<div class="text-block wow fadeInRight simul" data-wow-delay="0.5s" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-delay: 0.5s;animation-name: fadeInRight;margin-top: 0;">
@@ -26,9 +24,6 @@
 		</div>
 		<div class="image wow fadeInLeft" data-wow-delay="1s" data-wow-duration="2s" style="visibility: visible;animation-duration: 2s;animation-delay: 1s;animation-name: fadeInLeft;">
 			<iframe width="100%" src="{{ asset('img/DreamAero_082-min1-min.jpg') }}" frameborder="0" scrolling="no" allowfullscreen></iframe>
-			{{--<div class="instruction">
-				<a target="_blank" href="#">Инструкция PDF</a>
-			</div>--}}
 		</div>
 	</div>
 

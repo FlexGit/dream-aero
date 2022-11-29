@@ -101,7 +101,7 @@
 		<div class="consent-container" style="margin-left: 18px;margin-right: 18px;">
 			<label class="cont">
 				@lang('main.modal-booking.согласен-с-условиями') <a href="{{ url('oferta-dreamaero') }}" target="_blank">@lang('main.modal-booking.публичной-оферты')</a>
-				<input type="checkbox" name="consent" value="1" {{--{{ ($checkedLocation && $checkedSimulator) ? 'checked' : '' }}--}}>
+				<input type="checkbox" name="consent" value="1">
 				<span class="checkmark"></span>
 			</label>
 		</div>

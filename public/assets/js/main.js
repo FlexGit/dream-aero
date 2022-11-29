@@ -97,12 +97,6 @@ $(function(){
 		$('.main-menu').slideToggle(300);
 	});
 
-    /*$(document).on('click', '.have_promo', function() {
-	    $(this).hide();
-	    $('.aeroflotbonus').hide();
-	    $(".promoblock").show();
-	});*/
-	
 	$(document).on('click', '.popup-close', function(e){
 		e.preventDefault();
 		$.magnificPopup.close();
@@ -279,11 +273,7 @@ $(function(){
 					validateOnBlur: false,
 					onChangeDateTime: function (value) {
 						value.setSeconds(0);
-
-						//console.log(value.toLocaleString('ru-RU'));
-
 						$('#flight_date').val(value.toLocaleString('ru-RU'));
-
 						calcAmount();
 					},
 					disabledWeekDays: weekDays,
@@ -411,7 +401,6 @@ $(function(){
 			age = $popup.find('#age').val(),
 			phone = $popup.find('#phone').val(),
 			email = $popup.find('#email').val(),
-			/*body = $popup.find('#body').val(),*/
 			$alertSuccess = $popup.find('.alert-success'),
 			$alertError = $popup.find('.alert-danger');
 
@@ -421,7 +410,6 @@ $(function(){
 			'age': age,
 			'phone': phone,
 			'email': email,
-			/*'body': body,*/
 		};
 
 		$.ajax({
@@ -483,8 +471,6 @@ $(function(){
 			data: data,
 			dataType: 'json',
 			success: function (result) {
-				//console.log(result);
-
 				$btn.attr('disabled', false);
 				$alertSuccess.addClass('hidden');
 				$alertError.text('').addClass('hidden');
@@ -584,7 +570,6 @@ $(function(){
 				alias: $(this).data('alias'),
 			},
 			success: function(result) {
-				//console.log(pathname.replace(result.currentCityAlias, result.cityAlias));
 				if (result.status === 'success') {
 					window.location.href = pathname.replace(result.currentCityAlias, result.cityAlias);
 				}
@@ -598,7 +583,6 @@ $(function(){
 			type: 'POST',
 			dataType: 'json',
 			success: function(result) {
-				//console.log(result);
 				if (result.status === 'success') {
 					$('.js-city-confirm-container').hide();
 					window.location.reload();
@@ -658,15 +642,12 @@ function calcAmount() {
 		source: 'web',
 	};
 
-	//console.log(data);
-
 	$.ajax({
 		type: 'GET',
 		url: '/deal/product/calc',
 		data: data,
 		dataType: 'json',
 		success: function(result) {
-			//console.log(result);
 			if (result.status !== 'success') {
 				return;
 			}

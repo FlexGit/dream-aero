@@ -8,7 +8,7 @@
 			$days[] = \Carbon\Carbon::parse($date)->format('d');
 		}
 	@endphp
-	<table class="table table-sm table-bordered {{--table-striped--}} schedule-table js-schedule-table" style="margin-bottom: 0;" data-period="{{ $filterYear . '-' . $monthNumber }}">
+	<table class="table table-sm table-bordered schedule-table js-schedule-table" style="margin-bottom: 0;" data-period="{{ $filterYear . '-' . $monthNumber }}">
 		<thead>
 		<tr>
 			<td class="col-2 text-left text-nowrap font-weight-bold">

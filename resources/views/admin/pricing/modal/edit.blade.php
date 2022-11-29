@@ -139,19 +139,3 @@
 	<div class="col">
 	</div>
 </div>
-{{--<div class="row">
-	<div class="col">
-		<div class="form-group">
-			<label for="photo_preview_file">Шаблон сертификата</label>
-			<div class="custom-file">
-				<input type="file" class="custom-file-input" id="certificate_template_file_path" name="certificate_template_file_path">
-				<label class="custom-file-label" for="certificate_template_file_path">Выбрать файл</label>
-			</div>
-			@if(isset($data['certificate_template_file_path']))
-				<div>
-					<a href="{{ route('downloadCertificateTemplateFile', [$cityProduct->city_id, $cityProduct->product_id]) }}">Скачать</a>&nbsp;&nbsp;&nbsp;<small>[<a href="javascript:void(0)" class="js-certificate-template-delete" data-city_id="{{ $cityProduct->city_id }}" data-product_id="{{ $cityProduct->product_id }}">удалить</a>]</small>
-				</div>
-			@endif
-		</div>
-	</div>
-</div>--}}

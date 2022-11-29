@@ -145,7 +145,6 @@ class PaymentController extends Controller
 			
 			$bill = $bill->fresh();
 			
-			//dispatch(new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate));
 			$job = new \App\Jobs\SendSuccessPaymentEmail($bill, $certificate);
 			$job->handle();
 			
@@ -165,7 +164,6 @@ class PaymentController extends Controller
 					$certificate = $certificate->fresh();
 					$certificate = $certificate->generateFile();
 					
-					//dispatch(new \App\Jobs\SendCertificateEmail($certificate));
 					$job = new \App\Jobs\SendCertificateEmail($certificate);
 					$job->handle();
 				}

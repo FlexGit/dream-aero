@@ -254,7 +254,6 @@
 						},
 						failure: function (e) {
 							//console.log(e);
-							//toastr.error('Ошибка при загрузке событий!');
 						}
 					},
 					eventOverlap: true,
@@ -275,8 +274,6 @@
 						$modalDialog.addClass('modal-lg');
 
 						$('.modal .modal-title, .modal .modal-body').empty();
-
-						//console.log(info);
 
 						$.ajax({
 							url: url,
@@ -521,8 +518,6 @@
 					realMethod = 'POST';
 				}
 
-				//console.log(formData);
-
 				$.ajax({
 					url: action,
 					type: realMethod,
@@ -729,7 +724,6 @@
 						'product_id': $('#product_id').val(),
 						'contractor_id': $('#contractor_id').val(),
 						'promo_id': $('#promo_id').val(),
-						/*'promocode_id': $('#promocode_id').val(),*/
 						'payment_method_id': $('#payment_method_id').val(),
 						'city_id': $('#city_id').val(),
 						'location_id': $('#location_id').val(),
@@ -738,7 +732,6 @@
 						'is_certificate_purchase': $('#is_certificate_purchase').val(),
 					},
 					success: function(result) {
-						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;

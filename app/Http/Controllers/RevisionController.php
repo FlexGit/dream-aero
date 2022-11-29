@@ -14,22 +14,10 @@ class RevisionController extends Controller
 		'Contractor' => 'Контрагент',
 		'Deal' => 'Сделка',
 		'DealPosition' => 'Позиция сделки',
-		/*'Score' => 'Баллы',*/
 		'Bill' => 'Счет',
 		'Certificate' => 'Сертификат',
 		'Event' => 'Событие',
-		/*'City' => 'Город',
-		'Role' => 'Роль',
-		'FlightSimulator' => 'Авиатренажер',
-		'LegalEntity' => 'Юр.лицо',
-		'Location' => 'Локация',
-		'Promo' => 'Акция',
-		'Promocode' => 'Промокод',
-		'Status' => 'Статус',
-		'Product' => 'Продукт',
-		'ProductType' => 'Тип продукта',*/
 		'User' => 'Пользователь',
-		/*'Discount' => 'Скидка',*/
 	];
 	
 	/**
@@ -77,15 +65,8 @@ class RevisionController extends Controller
 			case 'deal_positions':
 			case 'certificates':
 			case 'bills':
-			/*case 'promocodes':*/
 				$field = 'number';
 			break;
-			/*case 'discounts':
-				$field = 'value';
-			break;*/
-			/*case 'scores':
-				$field = 'score';
-			break;*/
 			case 'events':
 				$field = 'uuid';
 			break;
@@ -99,7 +80,6 @@ class RevisionController extends Controller
 				$field = 'name';
 		}
 
-		//DB::connection()->enableQueryLog();
 		$revisions = DB::table('revisions')
 			->leftJoin('users as u', 'revisions.user_id', '=', 'u.id')
 			->select('revisions.*', 'u.name as user')
@@ -113,13 +93,10 @@ class RevisionController extends Controller
 			$revisions = $revisions->where($table . '.' . $field, 'like', '%' . $this->request->search_object . '%');
 		}
 		$revisions = $revisions->limit(20)->get();
-		//$queries = DB::getQueryLog();
-		//\Log::debug($queries);
 
 		$revisionData = [];
 		foreach ($revisions as $revision) {
 			$model = $revision->revisionable_type::find($revision->revisionable_id);
-			//if (!$model) continue;
 			
 			$object = $linkedObject = '';
 
@@ -128,9 +105,6 @@ class RevisionController extends Controller
 					$object = $model->number;
 				} else if ($model->value) {
 					$object = $model->value;
-				/*} else if ($model->score) {
-					$object = $model->score;
-					$linkedObject = $model->contractor ? ($model->contractor->fio() . ' <small>[' . $model->contractor->id . ']</small>') : '';*/
 				} else if ($model->title) {
 					$object = $model->title;
 				} else if ($model->lastname) {
@@ -158,8 +132,6 @@ class RevisionController extends Controller
 						$newValue = $model->number;
 					} elseif ($model->value) {
 						$newValue = $model->value;
-					/*} elseif ($model->score) {
-						$newValue = $model->score;*/
 					} elseif ($model->title) {
 						$newValue = $model->title;
 					} else {

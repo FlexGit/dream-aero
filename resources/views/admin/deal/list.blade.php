@@ -119,9 +119,6 @@
 						<div class="d-inline-block font-weight-bold">
 							<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $bill->id }}/edit" data-action="/bill/{{ $bill->id }}" data-method="PUT" data-title="Редактирование счета" data-type="bill" title="Редактировать счет">{{ $bill->number }}</a>
 						</div>
-						{{--<div class="d-inline-block ml-2">
-							<a href="javascript:void(0)" class="js-remove-bill" data-id="{{ $bill->id }}" title="Удалить счет"><i class="fas fa-times" style="color: #aaa;"></i></a>
-						</div>--}}
 					</div>
 					<div class="text-nowrap" style="line-height: 0.9em;" title="Дата создания">
 						от {{ $bill->created_at ? $bill->created_at->format('Y-m-d H:i') : '' }}
@@ -209,9 +206,7 @@
 					@endif
 				</div>
 			@endforeach
-			{{--@if($balance < 0)--}}
-				<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $deal->id }}/add" data-action="/bill" data-method="POST" data-title="Создание счета" data-type="bill" title="Создать счет" class="btn btn-info btn-sm">Создать счет</a>
-			{{--@endif--}}
+			<a href="javascript:void(0)" data-toggle="modal" data-url="/bill/{{ $deal->id }}/add" data-action="/bill" data-method="POST" data-title="Создание счета" data-type="bill" title="Создать счет" class="btn btn-info btn-sm">Создать счет</a>
 		</td>
 		<td class="align-top text-center">
 			<table class="table table-sm table-bordered table-striped mb-0">
@@ -371,11 +366,6 @@
 							<div>
 								{{ $position->product ? $position->product->name : '' }}
 							</div>
-							{{--@if($position->duration)
-								<div>
-									<i class="far fa-clock" title="Длительность полета"></i> {{ $position->duration }}
-								</div>
-							@endif--}}
 							@if($position->promo)
 								<div title="Акция">
 									<i class="fas fa-percent"></i> {{ $position->promo->name }}
@@ -403,9 +393,6 @@
 									<i class="far fa-calendar-alt"></i>
 									{{ \Carbon\Carbon::parse($position->event->start_at)->format('Y-m-d') }}
 									с {{ \Carbon\Carbon::parse($position->event->start_at)->format('H:i') }} по {{ \Carbon\Carbon::parse($position->event->stop_at)->addMinutes($position->event->extra_time)->format('H:i') }}
-									{{--@if($deal->event->extra_time)
-										(+ {{ $deal->event->extra_time }} мин)
-									@endif--}}
 								</div>
 								@if($position->product && $position->product->productType && !in_array($position->product->productType->alias, [app('\App\Models\ProductType')::REGULAR_EXTRA_ALIAS, app('\App\Models\ProductType')::ULTIMATE_EXTRA_ALIAS]))
 									<div class="d-inline-block ml-2">

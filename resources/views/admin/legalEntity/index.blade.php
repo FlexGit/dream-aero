@@ -23,7 +23,6 @@
 				<div class="card-body">
 					<div class="table-filter d-sm-flex">
 						<div class="form-group align-self-end text-right ml-auto">
-							{{--<a href="#" class="btn btn-secondary btn-sm invisible" title="Выгрузка в Excel"><span><i class="fa fa-file-excel"></i></span></a>--}}
 							<a href="javascript:void(0)" data-toggle="modal" data-url="/legal_entity/add" data-action="/legal_entity" data-method="POST" data-title="Добавление" class="btn btn-secondary btn-sm" title="Добавить запись">Добавить</a>
 						</div>
 					</div>

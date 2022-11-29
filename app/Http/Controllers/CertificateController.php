@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CertificateExport;
-use App\Models\Bill;
 use App\Models\Content;
 use App\Models\DealPosition;
 use App\Models\PaymentMethod;
@@ -35,77 +34,6 @@ class CertificateController extends Controller
 		$this->request = $request;
 		$this->cityRepo = $cityRepo;
 	}
-	
-	/**
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-	 */
-	/*public function index()
-	{
-		$cities = City::orderBy('name')
-			->get();
-		
-		$productTypes = ProductType::orderBy('name')
-			->get();
-		
-		$statuses = Status::where('type', Status::STATUS_TYPE_CERTIFICATE)
-			->orderBy('sort')
-			->get();
-		
-		return view('admin.certificate.index', [
-			'cities' => $cities,
-			'productTypes' => $productTypes,
-			'statuses' => $statuses,
-		]);
-	}*/
-	
-	/**
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	/*public function getListAjax()
-	{
-		if (!$this->request->ajax()) {
-			abort(404);
-		}
-		
-		$id = $this->request->id ?? 0;
-		
-		$certificates = Certificate::with(['contractor', 'status', 'product', 'city'])
-			->orderBy('id', 'desc');
-		if ($id) {
-			$certificates = $certificates->where('id', '<', $id);
-		}
-		if ($this->request->filter_status_id) {
-			$certificates = $certificates->where('status_id', $this->request->filter_status_id);
-		}
-		if ($this->request->filter_city_id) {
-			$certificates = $certificates->where('city_id', $this->request->filter_city_id);
-		}
-		if ($this->request->filter_product_type_id) {
-			$certificates = $certificates->where(function ($query) {
-				$query->whereHas('product', function ($q) {
-					return $q->where('product_type_id', '=', $this->request->filter_product_type_id);
-				});
-			});
-		}
-		if ($this->request->search_doc) {
-			$certificates = $certificates->where(function ($query) {
-				$query->where('number', 'like', '%' . $this->request->search_doc . '%');
-			});
-		}
-		if ($this->request->search_contractor) {
-			$certificates = $certificates->whereHas('contractor', function ($query) {
-				return $query->where('name', 'like', '%' . $this->request->search_contractor . '%')
-					->orWhere('lastname', 'like', '%' . $this->request->search_contractor . '%')
-					->orWhere('email', 'like', '%' . $this->request->search_contractor . '%')
-					->orWhere('phone', 'like', '%' . $this->request->search_contractor . '%');
-			});
-		}
-		$certificates = $certificates->limit(10)->get();
-		
-		$VIEW = view('admin.certificate.list', ['certificates' => $certificates]);
-		
-		return response()->json(['status' => 'success', 'html' => (string)$VIEW]);
-	}*/
 	
 	public function index()
 	{
@@ -148,7 +76,6 @@ class CertificateController extends Controller
 		$dateToAt = $this->request->filter_date_to_at ?? '';
 		$cityId = ($this->request->filter_city_id != 'all') ? $this->request->filter_city_id : null;
 		$locationId = $this->request->filter_location_id ?? 0;
-		$filterPaymentType = $this->request->filter_payment_type ?? '';
 		$searchDoc = $this->request->search_doc ?? '';
 		$id = $this->request->id ?? 0;
 		$isExport = filter_var($this->request->is_export, FILTER_VALIDATE_BOOLEAN);
@@ -158,7 +85,6 @@ class CertificateController extends Controller
 			$dateToAt = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
 		}
 		
-		//\DB::connection()->enableQueryLog();
 		$certificates = Certificate::where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'));
 		if ($searchDoc) {
@@ -172,9 +98,7 @@ class CertificateController extends Controller
 			$userCityId = $user->city ? $user->city->id : 0;
 			$certificates = $certificates->whereIn('city_id', [$userCityId, 0]);
 		}
-		$certificates = $certificates->/*has('product')
-			->has('position')
-			->*/latest();
+		$certificates = $certificates->latest();
 		if ($id) {
 			$certificates = $certificates->where('id', '<', $id);
 		}
@@ -182,7 +106,6 @@ class CertificateController extends Controller
 			$certificates = $certificates->limit(20);
 		}
 		$certificates = $certificates->get();
-		//\Log::debug(\DB::getQueryLog());
 		
 		$certificateItems = [];
 		/** @var Certificate[] $certificates */
@@ -205,7 +128,6 @@ class CertificateController extends Controller
 			$oldData .= (isset($certificate->data_json['location']) && $certificate->data_json['location']) ? ', локация: ' . $certificate->data_json['location'] : '';
 			$oldData .= (isset($certificate->data_json['payment_method']) && $certificate->data_json['payment_method']) ? ', способ оплаты: ' . $certificate->data_json['payment_method'] : '';
 			$oldData .= (isset($certificate->data_json['status']) && $certificate->data_json['status']) ? ', статус: ' . $certificate->data_json['status'] : '';
-			//$oldData .= (isset($certificate->data_json['comment']) && $certificate->data_json['comment']) ? ', комментарий: ' . $certificate->data_json['comment'] : '';
 			
 			$certificateItems[$certificate->id] = [
 				'number' => $certificate->number,
@@ -225,10 +147,6 @@ class CertificateController extends Controller
 			if ($position) {
 				foreach ($position->bills as $positionBill) {
 					if ($locationId && $positionBill->location_id != $locationId) continue;
-					/*if ($filterPaymentType && $positionBill) {
-						if ($filterPaymentType == 'self_made' && $positionBill->user_id) continue;
-						elseif ($filterPaymentType == 'admin_made' && !$positionBill->user_id) continue;
-					}*/
 					$positionBillStatus = ($positionBill && $positionBill->status) ? $positionBill->status : null;
 					$positionBillPaymentMethod = ($positionBill && $positionBill->paymentMethod) ? $positionBill->paymentMethod : null;
 					
@@ -533,16 +451,11 @@ class CertificateController extends Controller
 			abort(404);
 		}
 		
-		//$certificateFilePath = isset($certificate->data_json['certificate_file_path']) ? $certificate->data_json['certificate_file_path'] : '';
-		//$certificateFileExists = Storage::disk('private')->exists($certificateFilePath);
-
 		// если файла сертификата по какой-то причине не оказалось, генерим его
-		//if (!$certificateFilePath || !$certificateFileExists) {
-			$certificate = $certificate->generateFile();
-			if (!$certificate) {
-				abort(404);
-			}
-		//}
+		$certificate = $certificate->generateFile();
+		if (!$certificate) {
+			abort(404);
+		}
 		
 		$certificateFilePath = (is_array($certificate->data_json) && array_key_exists('certificate_file_path', $certificate->data_json)) ? $certificate->data_json['certificate_file_path'] : '';
 		
@@ -556,13 +469,10 @@ class CertificateController extends Controller
 		$q = $this->request->post('query');
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		$user = \Auth::user();
-		
 		$certificates = Certificate::where('number', 'like', '%' . $q . '%')
 			->orderBy('number')
 			->limit(10)
 			->get();
-		
 		$suggestions = [];
 		/** @var Certificate[] $certificates */
 		foreach ($certificates as $certificate) {

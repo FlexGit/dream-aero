@@ -75,12 +75,10 @@ class SendPromocodeAfterFlightEmail extends Command
 			if (!$contractor) continue;
 		
 			// проверяем, есть ли в данном городе локация с другим типом авиатренажера
-			//\DB::connection()->enableQueryLog();
 			$location = Location::where('is_active', true)
 				->where('city_id', $city->id)
 				->whereRelation('simulators', 'flight_simulators.id', '!=', $simulator->id)
 				->first();
-			//\Log::debug(\DB::getQueryLog());
 			if (!$location) continue;
 
 			$anotherSimulator = FlightSimulator::where('is_active', true)
@@ -121,13 +119,13 @@ class SendPromocodeAfterFlightEmail extends Command
 				$job = new \App\Jobs\SendPromocodeAfterFlightEmail($contractor, $location, $anotherSimulator, $deal, $promocode);
 				$job->handle();
 			} catch (Throwable $e) {
-				\Log::debug('500 - ' . $e->getMessage());
+				\Log::debug('500 - ' . get_class($this) . ': ' . $e->getMessage());
 				
 				return 0;
 			}
 		}
-			
-		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - promocode_email:send - OK');
+	
+		$this->info(Carbon::now()->format('Y-m-d H:i:s') . ' - ' . get_class($this) . ': OK');
     	
         return 0;
     }

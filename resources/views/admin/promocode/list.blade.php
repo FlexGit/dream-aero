@@ -9,7 +9,6 @@
 		@endforeach
 	</td>
 	<td class="text-center">{{ $promocode->location ? $promocode->location->name : '-' }}</td>
-	{{--<td class="text-center">{{ $promocode->contractor ? $promocode->contractor->fio() : '-' }}</td>--}}
 	<td class="text-center">{{ $promocode->discount ? $promocode->discount->valueFormatted() : '-' }}</td>
 	<td class="text-center">{{ $promocode->is_active ? 'Да' : 'Нет' }}</td>
 	<td class="text-center">{{ $promocode->active_from_at }}</td>

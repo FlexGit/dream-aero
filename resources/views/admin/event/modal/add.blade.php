@@ -1,22 +1,6 @@
 <input type="hidden" id="position_id" name="position_id" value="{{ $position->id }}">
-{{--<input type="hidden" id="flight_simulator_id" name="flight_simulator_id" value="{{ $position->flight_simulator_id ?? 0 }}">--}}
 <input type="hidden" id="source" name="source" value="{{ app('\App\Models\Event')::EVENT_SOURCE_DEAL }}">
 
-{{--<div class="form-group">
-	<label for="location_id">Локация</label>
-	<select class="form-control" id="location_id" name="location_id">
-		<option value="0"></option>
-		@foreach($cities ?? [] as $city)
-			<optgroup label="{{ $city->name }}">
-				@foreach($city->locations ?? [] as $location)
-					@foreach($location->simulators ?? [] as $simulator)
-						<option value="{{ $location->id }}" data-simulator_id="{{ $simulator->id }}" @if($position->location_id == $location->id && $position->flight_simulator_id == $simulator->id) selected @endif>{{ $location->name }} ({{ $simulator->name }})</option>
-					@endforeach
-				@endforeach
-			</optgroup>
-		@endforeach
-	</select>
-</div>--}}
 <div class="row">
 	<div class="col">
 		<div class="form-group">

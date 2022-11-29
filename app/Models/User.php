@@ -73,6 +73,9 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsReserved($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePosition($value)
+ * @property int $flight_simulator_id
+ * @property-read \App\Models\FlightSimulator|null $simulator
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFlightSimulatorId($value)
  */
 class User extends Authenticatable
 {

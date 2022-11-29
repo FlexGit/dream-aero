@@ -38,7 +38,6 @@ class Kernel extends ConsoleKernel
 		$filePath = storage_path('logs/queue_worker.log');
 		$schedule->command('queue:work --daemon')
 			->everyMinute()
-			/*->withoutOverlapping()*/
 			->runInBackground()
 			->appendOutputTo($filePath);
 		
@@ -84,11 +83,11 @@ class Kernel extends ConsoleKernel
 			->appendOutputTo($filePath);
 		
 		// отправка контрагенту промо по ДР
-		/*$filePath = storage_path('logs/commands/birthday_promo.log');
+		$filePath = storage_path('logs/commands/birthday_promo.log');
 		$schedule->command('birthday_promo:send')
 			->daily()
 			->runInBackground()
-			->appendOutputTo($filePath);*/
+			->appendOutputTo($filePath);
 
 		// начисление баллов после полета
 		$filePath = storage_path('logs/commands/scoring.log');

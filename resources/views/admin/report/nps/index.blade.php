@@ -88,7 +88,6 @@
 						'is_export': isExport,
 					},
 					success: function(result) {
-						//console.log(result);
 						if (result.status !== 'success') {
 							toastr.error(result.reason);
 							return;
@@ -119,13 +118,6 @@
 			$(document).on('click', '#export_btn', function(e) {
 				getList(true);
 			});
-
-			/*$(document).on('click', '.nps-event', function(e) {
-				window.open(
-					'/deal/null/' + $(this).data('uuid'),
-					'_blank'
-				);
-			});*/
 		});
 	</script>
 @stop

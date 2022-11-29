@@ -74,6 +74,8 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  * @property-read int|null $contractor_promocodes_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Promocode[] $promocodes
  * @property-read int|null $promocodes_count
+ * @property string|null $fcm_token токен устройства
+ * @method static \Illuminate\Database\Eloquent\Builder|Contractor whereFcmToken($value)
  */
 class Contractor extends Authenticatable
 {
@@ -95,6 +97,7 @@ class Contractor extends Authenticatable
 		'user_id' => 'Пользователь',
 		'uuid' => 'Uuid',
 		'is_subscribed' => 'Подписан ра рассылку',
+		'fcm_token' => 'Токен устройства',
 		'created_at' => 'Создано',
 		'updated_at' => 'Изменено',
 		'deleted_at' => 'Удалено',
@@ -143,6 +146,7 @@ class Contractor extends Authenticatable
 		'user_id',
 		'uuid',
 		'is_subscribed',
+		'fcm_token',
 	];
 
 	/**

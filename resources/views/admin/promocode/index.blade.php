@@ -32,7 +32,6 @@
 								<th class="text-center">Номер</th>
 								<th class="text-center">Город</th>
 								<th class="text-center">Локация</th>
-								{{--<th class="text-center">Контрагент</th>--}}
 								<th class="text-center">Скидка</th>
 								<th class="text-center">Активность</th>
 								<th class="text-center">Дата начала активности</th>

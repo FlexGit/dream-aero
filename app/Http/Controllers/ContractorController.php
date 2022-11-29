@@ -73,12 +73,9 @@ class ContractorController extends Controller
 		
 		$id = $this->request->id ?? 0;
 		
-		$contractors = Contractor::/*whereRelation('city', 'version', '=', $user->version)
-			->*/orderBy('created_at', 'desc');
+		$contractors = Contractor::latest();
 		if ($this->request->filter_city_id) {
 			$contractors = $contractors->where('city_id', $this->request->filter_city_id);
-		/*} elseif ($this->request->user()->city) {
-			$contractors = $contractors->whereIn('city_id', [$this->request->user()->city->id, 0]);*/
 		}
 		if ($this->request->search_contractor) {
 			$contractors = $contractors->where(function ($query) {
@@ -89,9 +86,6 @@ class ContractorController extends Controller
 					->orWhere('uuid', $this->request->search_contractor);
 			});
 		}
-		/*if (!$user->isSuperAdmin()) {
-			$contractors = $contractors->whereIn('city_id', [$user->city_id, 0]);
-		}*/
 		if ($id) {
 			$contractors = $contractors->where('id', '<', $id);
 		}
@@ -127,11 +121,8 @@ class ContractorController extends Controller
 		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name');
-		/*if ($this->request->user()->city) {
-			$cities = $cities->where('id', $this->request->user()->city->id);
-		}*/
-		$cities = $cities->get();
+			->orderBy('name')
+			->get();
 		
 		$VIEW = view('admin.contractor.modal.edit', [
 			'contractor' => $contractor,
@@ -213,7 +204,6 @@ class ContractorController extends Controller
 			return response()->json(['status' => 'error', 'reason' => 'Контрагент не может быть объединен с самим собой']);
 		}
 		
-		/*\DB::connection()->enableQueryLog();*/
 		try {
 			\DB::beginTransaction();
 			
@@ -247,8 +237,7 @@ class ContractorController extends Controller
 			
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}
-		/*\Log::debug(\DB::getQueryLog());*/
-		
+
 		return response()->json(['status' => 'success', 'message' => 'Контрагенты успешно объединены']);
 	}
 	
@@ -266,11 +255,8 @@ class ContractorController extends Controller
 		$cities = City::where('version', $user->version)
 			->orderByRaw("FIELD(alias, 'msk') DESC")
 			->orderByRaw("FIELD(alias, 'spb') DESC")
-			->orderBy('name');
-		/*if ($this->request->user()->city) {
-			$cities = $cities->where('id', $this->request->user()->city->id);
-		}*/
-		$cities = $cities->get();
+			->orderBy('name')
+			->get();
 
 		$VIEW = view('admin.contractor.modal.add', [
 			'cities' => $cities,
@@ -291,7 +277,6 @@ class ContractorController extends Controller
 		$rules = [
 			'name' => 'required',
 			'email' => 'required|email|unique_email',
-			/*'phone' => 'sometimes|required|valid_phone',*/
 			'city_id' => 'required|numeric|min:0|not_in:0|valid_city',
 		];
 		
@@ -299,7 +284,6 @@ class ContractorController extends Controller
 			->setAttributeNames([
 				'name' => 'Имя',
 				'email' => 'E-mail',
-				/*'phone' => 'Телефон',*/
 				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
@@ -349,7 +333,6 @@ class ContractorController extends Controller
 		$rules = [
 			'name' => 'required',
 			'email' => 'required|email|unique_email',
-			/*'phone' => 'sometimes|required|valid_phone',*/
 			'city_id' => 'required|numeric|min:0|not_in:0|valid_city',
 		];
 		
@@ -357,7 +340,6 @@ class ContractorController extends Controller
 			->setAttributeNames([
 				'name' => 'Имя',
 				'email' => 'E-mail',
-				/*'phone' => 'Телефон',*/
 				'city_id' => 'Город',
 			]);
 		if (!$validator->passes()) {
@@ -391,10 +373,8 @@ class ContractorController extends Controller
 		$q = $this->request->post('query');
 		if (!$q) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
 		
-		$user = \Auth::user();
 		$statuses = $this->statusRepo->getList(Status::STATUS_TYPE_CONTRACTOR);
 
-		//\DB::connection()->enableQueryLog();
 		$contractors = Contractor::where('is_active', true)
 			->where(function($query) use ($q) {
 				$query->where("name", "LIKE", "%{$q}%")
@@ -402,18 +382,9 @@ class ContractorController extends Controller
 					->orWhere("email", "LIKE", "%{$q}%")
 					->orWhere("phone", "LIKE", "%{$q}%");
 			})
-			/*->whereRelation('city', 'version', '=', $user->version)*/
-			//->where("email", "LIKE", "%{$q}%")
 			->orderBy('name')
-			->orderBy('lastname');
-		/*if ($this->request->user()->city) {
-			$contractors = $contractors->whereIn('id', [$this->request->user()->city->id, 0]);
-		}*/
-		/*if (!$user->isSuperAdmin() && $user->city) {
-			$contractors = $contractors->whereIn('city_id', [$user->city->id, 0]);
-		}*/
-		$contractors = $contractors->get();
-		//\Log::debug(\DB::getQueryLog());
+			->orderBy('lastname')
+			->get();
 		
 		$suggestions = [];
 		foreach ($contractors as $contractor) {
