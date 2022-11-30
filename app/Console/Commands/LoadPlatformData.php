@@ -61,7 +61,7 @@ class LoadPlatformData extends Command
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
 		$messages = $query->all()->limit(1)->get();
-
+		\Log::debug($messages->count());
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
 			/** @var \Webklex\PHPIMAP\Message $message */
