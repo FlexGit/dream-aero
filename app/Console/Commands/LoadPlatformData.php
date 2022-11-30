@@ -61,7 +61,6 @@ class LoadPlatformData extends Command
 		/** @var \Webklex\PHPIMAP\Query\WhereQuery $query */
 		/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
 		$messages = $query->all()->limit(1)->get();
-		\Log::debug($messages->count());
 		/** @var \Webklex\PHPIMAP\Message $message */
 		foreach ($messages as $message) {
 			/** @var \Webklex\PHPIMAP\Message $message */
@@ -74,8 +73,9 @@ class LoadPlatformData extends Command
 
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
+			\Log::debug($dataAt);
 			if (!$dataAt) return 0;
-
+			
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
 			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
 			
@@ -94,6 +94,7 @@ class LoadPlatformData extends Command
 					$simulatorId = $locationSimulatorArr[1];
 				}
 			}
+			\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
 
 			$platformDataExists = false;
