@@ -66,16 +66,19 @@ class LoadPlatformData extends Command
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var \Webklex\PHPIMAP\Attribute $subject */
 			$subject = $message->getSubject();
-			\Log::debug($subject);
 			/** @var \Webklex\PHPIMAP\Message $message */
 			/** @var string|null $body */
 			$body = $message->getTextBody();
-			\Log::debug($body);
 
 			$dataAt = HelpFunctions::mailGetStringBefore($body, 'System Total Tota', 13);
-			\Log::debug($dataAt);
 			$dataAt = preg_replace('/[^\d-]/', '', $dataAt);
-			if (!$dataAt) return 0;
+			if (!$dataAt) {
+				/** @var \Webklex\PHPIMAP\Message $message */
+				$message->setFlag('Seen');
+				$message->move('DreamAeroSrvOld');
+				
+				return 0;
+			}
 			
 			$totalUp = HelpFunctions::mailGetStringBetween($body, 'Platform Total UP', 'InAirNoMotion Total Total');
 			$inAirNoMotion = HelpFunctions::mailGetStringBetween($body, 'InAirNoMotion Total IANM', '');
@@ -95,7 +98,6 @@ class LoadPlatformData extends Command
 					$simulatorId = $locationSimulatorArr[1];
 				}
 			}
-			\Log::debug($locationId . ' - ' . $simulatorId);
 			if (!$locationId || !$simulatorId) return 0;
 
 			$platformDataExists = false;
