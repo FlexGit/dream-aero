@@ -65,7 +65,7 @@ class MainController extends Controller
 		
 		return view('home', [
 			'users' => $users ?? [],
-			'reviews' => $reviews,
+			'reviews' => $reviews ?? [],
 			'page' => $page ?? new Content,
 			'promobox' => $promobox,
 			'city' => $city,
