@@ -37,40 +37,6 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 			$table->softDeletes();
         });
-	
-		$users = [];
-
-		$users[] = [
-			'name' => 'Дмитрий',
-			'email' => 'webmanage@inbox.ru',
-			'password' => 'D#$hUDS*5onGE',
-			'role' => User::ROLE_SUPERADMIN,
-			'remember_token' => '',
-		];
-		$users[] = [
-			'name' => 'Антон',
-			'email' => 'anton.s@dream-aero.com',
-			'password' => 'k*#hf93hFfsd',
-			'role' => User::ROLE_SUPERADMIN,
-			'remember_token' => '',
-		];
-		$users[] = [
-			'name' => 'Екатерина',
-			'email' => 'ekaterina.e@dream-aero.com',
-			'password' => 'sk98#Ynpn8YP#',
-			'role' => User::ROLE_SUPERADMIN,
-			'remember_token' => '',
-		];
-
-		foreach ($users as $item) {
-			$user = new User();
-			$user->name = $item['name'];
-			$user->email = $item['email'];
-			$user->password = $item['password'];
-			$user->role = $item['role'];
-			$user->remember_token = $item['remember_token'];
-			$user->save();
-		}
     }
 
     /**
