@@ -20,7 +20,7 @@ class CreateLocationsTable extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('наименование локации');
-			$table->string('name_en')->comment('наименование локации на англ.');
+			$table->string('name_en')->nullable()->comment('наименование локации на англ.');
 			$table->string('alias', 50)->comment('alias');
 			$table->integer('legal_entity_id')->default(0)->index()->comment('юр.лицо, на которое оформлена локация');
 			$table->integer('city_id')->default(0)->index()->comment('город, в котором находится локация');
