@@ -3,12 +3,9 @@
 namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
-use App\Models\Bill;
-use App\Models\City;
 use App\Models\Contractor;
 use App\Models\Event;
 use App\Models\Task;
-use App\Repositories\CityRepository;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

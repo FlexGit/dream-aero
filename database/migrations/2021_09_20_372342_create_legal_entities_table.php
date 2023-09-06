@@ -26,17 +26,17 @@ class CreateLegalEntitiesTable extends Migration
 	
 		$items = [
 			'0' => [
-				'name' => 'ИП Корнышков-Мурин Дмитрий Игоревич',
-				'alias' => 'kornyskov-murin',
+				'name' => 'ООО Демо-компания',
+				'alias' => 'demo-company',
 				'data' => [
-					'public_offer_file_path' => 'public_offer/OFERTA-DREAM-AERO-KM-2021.pdf',
+					'public_offer_file_path' => '',
 				],
 			],
 			'1' => [
-				'name' => 'ИП Ряжко Юлия Андреевна',
-				'alias' => 'ryazhko',
+				'name' => 'ИП Иванов Иван Иванович',
+				'alias' => 'ivanov',
 				'data' => [
-					'public_offer_file_path' => 'public_offer/OFERTA-COLUMBUS-RYAZHKO.pdf',
+					'public_offer_file_path' => '',
 				],
 			],
 		];

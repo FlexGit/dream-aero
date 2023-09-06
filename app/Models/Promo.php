@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Promo
@@ -58,31 +57,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Promo extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
+	use HasFactory, SoftDeletes;
 	
-	/*const ATTRIBUTES = [
-		'name' => 'Наименование',
-		'alias' => 'Алиас',
-		'discount_id' => 'Скидка',
-		'preview_text' => 'Превью текст',
-		'detail_text' => 'Детальное описание',
-		'city_id' => 'Город',
-		'is_active' => 'Активность',
-		'active_from_at' => 'Дата начала активности',
-		'active_to_at' => 'Дата окончания активности',
-		'is_published' => 'Для публикации',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];*/
-
 	const BIRTHDAY_ALIAS = 'birthday';
 	const MOB_REGISTRATION_SCORES_ALIAS = 'registration_500_scores';
 	const DIRECTOR_ALIAS = 'Director';
 
-	/*protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
-	
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -144,7 +124,8 @@ class Promo extends Model
 		];
 	}
 
-	public function valueFormatted() {
+	public function valueFormatted()
+	{
 		$value = $this->name;
 		$value .= $this->discount ? ' (-' . $this->discount->valueFormatted() . ')' : '';
 

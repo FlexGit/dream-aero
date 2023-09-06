@@ -135,9 +135,6 @@ class EventController extends Controller
 					// контактное лицо
 					$title = $deal ? $deal->name . ' ' . HelpFunctions::formatPhone($deal->phone) : '';
 					
-					// скидка клиента
-					/*$title .= ($status && $status->discount) ? '. Скидка ПГ ' . $status->discount->valueFormatted() : '';*/
-					
 					// тариф
 					$title .= $product ? '. ' . $product->name : '';
 

@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FlightSimulator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Validator;
-
 use App\Models\Location;
 use App\Models\City;
 use App\Models\LegalEntity;

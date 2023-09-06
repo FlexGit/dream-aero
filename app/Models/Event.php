@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use \Venturecraft\Revisionable\RevisionableTrait;
@@ -269,25 +268,16 @@ class Event extends Model
 			}
 		});
 		
-		/*Event::saving(function (Event $event) {
-			$user = \Auth::user();
-			if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {
-				$event->user_id = $user ? $user->id : 0;
-			}
-		});*/
-		
 		Event::saved(function (Event $event) {
-			/*if (!in_array($event->event_type, [Event::EVENT_TYPE_SHIFT_PILOT, Event::EVENT_TYPE_SHIFT_ADMIN])) {*/
-				if (($event->getOriginal('start_at') && $event->start_at != $event->getOriginal('start_at')) || ($event->getOriginal('stop_at') && $event->stop_at != $event->getOriginal('stop_at'))) {
-					$user = \Auth::user();
-					
-					$eventComment = new EventComment();
-					$eventComment->name = 'Перенос с ' . Carbon::parse($event->getOriginal('start_at'))->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->getOriginal('stop_at'))->format('d.m.Y H:i') . ' на ' . Carbon::parse($event->start_at)->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->stop_at)->format('d.m.Y H:i');
-					$eventComment->event_id = $event->id;
-					$eventComment->created_by = $user ? $user->id : 0;
-					$eventComment->save();
-				}
-			/*}*/
+			if (($event->getOriginal('start_at') && $event->start_at != $event->getOriginal('start_at')) || ($event->getOriginal('stop_at') && $event->stop_at != $event->getOriginal('stop_at'))) {
+				$user = \Auth::user();
+				
+				$eventComment = new EventComment();
+				$eventComment->name = 'Перенос с ' . Carbon::parse($event->getOriginal('start_at'))->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->getOriginal('stop_at'))->format('d.m.Y H:i') . ' на ' . Carbon::parse($event->start_at)->format('d.m.Y H:i') . ' - ' . Carbon::parse($event->stop_at)->format('d.m.Y H:i');
+				$eventComment->event_id = $event->id;
+				$eventComment->created_by = $user ? $user->id : 0;
+				$eventComment->save();
+			}
 		});
 		
 		Event::deleting(function (Event $event) {
@@ -529,11 +519,7 @@ class Event extends Model
 				} else {
 					$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_ALIAS . '_60');
 				}
-			}/* else if ($productType->alias == ProductType::ULTIMATE_EXTRA_ALIAS && !in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) && !in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS)) {
-				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::REGULAR_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
-			} else if ($productType->alias == ProductType::REGULAR_EXTRA_ALIAS && (in_array(Carbon::parse($this->start_at)->dayOfWeek, [0, 6]) || in_array(Carbon::parse($this->start_at)->format('d.m.Y'), Deal::HOLIDAYS))) {
-				$product = HelpFunctions::getEntityByAlias(Product::class, ProductType::ULTIMATE_EXTRA_ALIAS . '_' . ($product->duration ?? 0));
-			}*/
+			}
 		}
 		
 		$cityProduct = $product ? $product->cities()->find($this->city_id) : null;

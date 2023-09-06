@@ -825,9 +825,6 @@ class MainController extends Controller
 		
 		if ($alias) {
 			$news = Content::where('alias', $alias)
-				/*->where('is_active', true)
-				->whereIn('city_id', [$city->id, 0])
-				->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))*/
 				->first();
 			
 			if (!$news) {
@@ -1028,7 +1025,6 @@ class MainController extends Controller
 		
 		$reviews = Content::where('parent_id', $parentReviews->id)
 			->where('is_active', true)
-			/*->whereIn('city_id', [$city->id, 0])*/
 			->where('published_at', '<=', Carbon::now()->format('Y-m-d H:i:s'))
 			->latest()
 			->get();

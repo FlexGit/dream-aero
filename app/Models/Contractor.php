@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use \Venturecraft\Revisionable\RevisionableTrait;
 
 /**
@@ -284,7 +283,6 @@ class Contractor extends Authenticatable
 			'status' => $status->name ?? null,
 			'flight_time' => (int)$contractorFlightTime,
 			'discount' => $status->discount ? $status->discount->valueFormatted() : '0%',
-			/*'is_new' => $this->password ? true : false,*/
 		];
 	}
 	
@@ -345,10 +343,6 @@ class Contractor extends Authenticatable
 	 */
 	public function getFlightTime()
 	{
-		/*return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
-			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
-			->whereRelation('deal', 'contractor_id', '=', $this->id)
-			->sum(DB::raw('TIMESTAMPDIFF(minute, start_at, stop_at)'));*/
 		return Score::where('contractor_id', $this->id)
 			->sum('duration');
 	}
@@ -358,11 +352,6 @@ class Contractor extends Authenticatable
 	 */
 	public function getFlightCount()
 	{
-		/*return Event::where('event_type', Event::EVENT_SOURCE_DEAL)
-			->where('stop_at', '<', Carbon::now()->addHour()->format('Y-m-d H:i:s'))
-			->whereRelation('deal', 'contractor_id', '=', $this->id)
-			->count();*/
-
 		return Score::where('contractor_id', $this->id)
 			->where('duration', '>', 0)
 			->count();

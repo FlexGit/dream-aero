@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
 use Mail;
 
 class SendSuccessPaymentEmail extends Job implements ShouldQueue {

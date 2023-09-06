@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Discount
@@ -41,18 +40,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Discount extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
+	use HasFactory, SoftDeletes;
 	
-	/*const ATTRIBUTES = [
-		'value' => 'Размер скидки',
-		'is_fixed' => 'Фиксированная скидка',
-		'currency_id' => 'Валюта',
-		'is_active' => 'Активность',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];*/
-
 	const DISCOUNT_5_ALIAS = 'percent_5';
 	const DISCOUNT_10_ALIAS = 'percent_10';
 	const DISCOUNT_15_ALIAS = 'percent_15';

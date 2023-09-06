@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Currency;
 use App\Models\Discount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Validator;
-
 use App\Models\Product;
 use App\Models\City;
 

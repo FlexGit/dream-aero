@@ -3,11 +3,9 @@
 namespace App\Models;
 
 use App\Services\HelpFunctions;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use \Venturecraft\Revisionable\RevisionableTrait;
 
 /**
@@ -232,17 +230,6 @@ class Bill extends Model
 					$deal->save();
 				}
 			}
-			
-			/*if ($deal->status
-				&& !in_array($deal->status->alias, [Deal::RETURNED_STATUS, Deal::CANCELED_STATUS, Deal::IN_WORK_STATUS, Deal::PAUSED_STATUS])
-				&& $deal->balance() < 0
-			) {
-				$inWorkStatus = HelpFunctions::getEntityByAlias(Status::class, Deal::IN_WORK_STATUS);
-				if ($inWorkStatus) {
-					$deal->status_id = $inWorkStatus->id;
-					$deal->save();
-				}
-			}*/
 		});
 	}
 

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Promocode
@@ -61,22 +60,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Promocode extends Model
 {
-    use HasFactory, SoftDeletes/*, RevisionableTrait*/;
-	
-    /*const ATTRIBUTES = [
-		'number' => 'Номер',
-		'discount_id' => 'Скидка',
-		'active_from_at' => 'Начало активности',
-		'active_to_at' => 'Окончание активности',
-		'is_active' => 'Активность',
-		'data_json' => 'Дополнительная информация',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-	
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
+    use HasFactory, SoftDeletes;
 	
     const SIMULATOR_TYPE = 'simulator';
     const YEAR_TYPE = 'year';

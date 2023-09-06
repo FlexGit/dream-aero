@@ -1399,7 +1399,7 @@ class PositionController extends Controller
 		try {
 			\DB::beginTransaction();
 			
-				// если позицию удаляют, а по ней было списание баллов, то начисляем баллы обратно
+			// если позицию удаляют, а по ней было списание баллов, то начисляем баллы обратно
 			$scores = Score::where('deal_position_id', $position->id)
 				->where('type', Score::USED_TYPE)
 				->get();

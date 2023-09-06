@@ -204,15 +204,6 @@ class DealPosition extends Model
 				}
 			}
 		});
-
-		DealPosition::deleting(function(DealPosition $position) {
-			//$position->certificate()->delete();
-			/*$certificateStatus = HelpFunctions::getEntityByAlias(Status::class, Certificate::CREATED_STATUS);
-			
-			$certificate = $position->certificate;
-			$certificate->status_id = $certificateStatus->id;
-			$certificate->save();*/
-		});
 	}
 	
 	public function product()

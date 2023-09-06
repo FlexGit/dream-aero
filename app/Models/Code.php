@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
-
 /**
  * App\Models\Code
  *
@@ -41,23 +39,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Code extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
+	use HasFactory, SoftDeletes;
 	
-	/*const ATTRIBUTES = [
-		'code' => 'Код подтверждения',
-		'email' => 'E-mail',
-		'contractor_id' => 'Контрагент',
-		'is_reset' => 'Код подтверждения использован',
-		'data_json' => 'Дополнительная информация',
-		'reset_at' => 'Использовано',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-	
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
-
 	/**
 	 * The attributes that are mass assignable.
 	 *

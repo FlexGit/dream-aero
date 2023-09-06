@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -258,7 +257,6 @@ class User extends Authenticatable
 		return [
 			'id' => $this->id,
 			'fullname' => $this->fio(),
-			/*'photo_file_path' => (array_key_exists('photo_file_path', $data) && $data['photo_file_path']) ? \URL::to('/upload/' . $data['photo_file_path']) : null,*/
 			'instagram' => array_key_exists('instagram', $data) ? $data['instagram'] : null,
 		];
 	}

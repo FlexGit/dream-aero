@@ -29,7 +29,6 @@ use App\Http\Controllers\PromocodeController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\WikiController;
 use App\Http\Controllers\RevisionController;
-
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;

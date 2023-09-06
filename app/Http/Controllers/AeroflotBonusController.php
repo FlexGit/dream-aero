@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
-use App\Models\DealPosition;
 use App\Services\AeroflotBonusService;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Product;
-use App\Models\City;
 use App\Services\HelpFunctions;
 
 class AeroflotBonusController extends Controller {

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Content
@@ -78,21 +77,6 @@ class Content extends Model
 
 	const VERSION_RU = 'ru';
 	const VERSION_AERO = 'aero';
-	
-	/*const ATTRIBUTES = [
-		'name' => 'Наименование',
-		'comment' => 'Комментарий',
-		'city_id' => 'Город',
-		'active_to_at' => 'Окончание активности',
-		'is_active' => 'Активность',
-		'data_json' => 'Дополнительная информация',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

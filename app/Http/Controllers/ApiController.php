@@ -170,8 +170,6 @@ class ApiController extends Controller
 	 */
 	public function sendCode()
 	{
-		//return $this->responseError('Сервис временно недоступен. Попробуйте повторить позже.', 400);
-		
 		$rules = [
 			'email' => ['required', 'email'],
 		];
@@ -553,7 +551,6 @@ class ApiController extends Controller
 		
 		$contractor = Contractor::where('is_active', true)
 			->where('uuid', $contractorUuid)
-			/*->whereNotNull('password')*/
 			->first();
 		if (!$contractor) {
 			return $this->responseError('Контрагент не найден', 400);
@@ -1001,7 +998,6 @@ class ApiController extends Controller
 		}
 		
 		if (!Storage::put('contractor/avatar/' . $fileName . '.' . $fileExt, $decodedImage)) {
-		//if (!$this->request->file('file')->storeAs('contractor/avatar', $fileName . '.' . $fileExt)) {
 			return $this->responseError(null, 500);
 		}
 
@@ -1673,10 +1669,6 @@ class ApiController extends Controller
 			->orderByDesc('active_from_at')
 			->orderByDesc('created_at')
 			->get();
-		
-		/*if ($promos->isEmpty()) {
-			return $this->responseError('Акции не найдены', 400);
-		}*/
 		
 		$data = [];
 		/** @var Promo[] $promo */
@@ -2503,8 +2495,7 @@ class ApiController extends Controller
 		}
 		
 		if ($this->request->promocode_id) {
-			$promocode = Promocode::/*whereIn('city_id', [$city->id, 0])
-				->*/whereRelation('cities', 'cities.id', '=', $cityId)
+			$promocode = Promocode::whereRelation('cities', 'cities.id', '=', $cityId)
 				->where('is_active', true)
 				->where(function ($query) use ($date) {
 					$query->where('active_from_at', '<=', $date)

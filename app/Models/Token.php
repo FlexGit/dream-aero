@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Token
@@ -38,16 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Token extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
-
-	/*const ATTRIBUTES = [
-		'token' => 'Токен',
-		'contractor_id' => 'Контрагент',
-		'expire_at' => 'Действует до',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];*/
+	use HasFactory, SoftDeletes;
 
 	protected $fillable = [
 		'token',

@@ -6,7 +6,6 @@ use App\Models\City;
 use App\Models\Discount;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\Promocode;
 
@@ -188,7 +187,6 @@ class PromocodeController extends Controller
 			'number' => [
 				'required',
 				'max:255',
-				/*'unique:promocodes,number',*/
 			],
 			'city_id' => [
 				'required',
@@ -210,8 +208,6 @@ class PromocodeController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
-		//$data = [];
 		
 		$promocode = new Promocode();
 		$promocode->number = $this->request->number;
@@ -258,7 +254,6 @@ class PromocodeController extends Controller
 			'number' => [
 				'required',
 				'max:255',
-				/*'unique:promocodes,number,' . $id,*/
 			],
 			'city_id' => [
 				'required',
@@ -280,8 +275,6 @@ class PromocodeController extends Controller
 		if (!$validator->passes()) {
 			return response()->json(['status' => 'error', 'reason' => $validator->errors()->all()]);
 		}
-		
-		//$data = [];
 		
 		$promocode->number = $this->request->number;
 		$promocode->location_id = $this->request->location_id;

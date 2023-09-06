@@ -37,7 +37,6 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Validator;
 
 class ReportController extends Controller {
 	private $request;
@@ -772,7 +771,6 @@ class ReportController extends Controller {
 		$events = Event::where('event_type', Event::EVENT_TYPE_DEAL)
 			->where('created_at', '>=', Carbon::parse($dateFromAt)->startOfDay()->format('Y-m-d H:i:s'))
 			->where('created_at', '<=', Carbon::parse($dateToAt)->endOfDay()->format('Y-m-d H:i:s'))
-			//->whereRelation('status', 'statuses.alias', '=', Bill::PAYED_STATUS)
 			->get();
 		
 		$eventItems = [];

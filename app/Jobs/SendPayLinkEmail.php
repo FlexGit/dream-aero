@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Jobs\QueueExtension\ReleaseHelperTrait;
 use App\Models\Bill;
-use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

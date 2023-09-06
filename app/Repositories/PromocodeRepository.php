@@ -40,9 +40,6 @@ class PromocodeRepository {
 		if ($contractorId) {
 			$promocodes = $promocodes->whereIn('contractor_id', [$contractorId, 0]);
 		}
-		/*if (!$user->isSuperAdmin() && $user->city) {
-			$promocodes = $promocodes->whereRelation('cities', 'cities.id', '=', $user->city_id);
-		}*/
 		$promocodes = $promocodes->get();
 		
 		return $promocodes;

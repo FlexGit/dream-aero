@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Currency
@@ -34,23 +33,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Currency extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
+	use HasFactory, SoftDeletes;
 
 	const RUB_ALIAS = 'RUB';
 	const USD_ALIAS = 'USD';
 	const SCORE_ALIAS = 'SCORE';
 
-	/*const ATTRIBUTES = [
-		'name' => 'наименование',
-		'alias' => 'Алиас',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-	
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
-	
 	/**
 	 * The attributes that are mass assignable.
 	 *

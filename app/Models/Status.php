@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-/*use \Venturecraft\Revisionable\RevisionableTrait;*/
 
 /**
  * App\Models\Status
@@ -47,7 +46,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Status extends Model
 {
-	use HasFactory, SoftDeletes/*, RevisionableTrait*/;
+	use HasFactory, SoftDeletes;
 	
     const STATUS_TYPE_CONTRACTOR = 'contractor';
 	const STATUS_TYPE_DEAL = 'deal';
@@ -59,23 +58,6 @@ class Status extends Model
 		Status::STATUS_TYPE_CERTIFICATE => 'Сертификат',
 		Status::STATUS_TYPE_BILL => 'Счет',
 	];
-	
-	/*const ATTRIBUTES = [
-		'name' => 'Наименование',
-		'alias' => 'Алиас',
-		'type' => 'Сущность',
-		'sort' => 'Сортировка',
-		'is_active' => 'Признак активности',
-		'data_json' => 'Дополнительная информация',
-		'flight_time' => 'Налет',
-		'discount_id' => 'Скидка',
-		'created_at' => 'Создано',
-		'updated_at' => 'Изменено',
-		'deleted_at' => 'Удалено',
-	];
-	
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;*/
 	
 	/**
 	 * The attributes that are mass assignable.

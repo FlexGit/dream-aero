@@ -7,7 +7,6 @@ use App\Services\HelpFunctions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use \Venturecraft\Revisionable\RevisionableTrait;
 
 /**
@@ -393,7 +392,7 @@ class Deal extends Model
 	 */
 	public function balance()
 	{
-		return $this->billPayedAmount() - /*(*/$this->amount()/* - $this->scoreAmount())*/;
+		return $this->billPayedAmount() - $this->amount();
 	}
 	
 	/**

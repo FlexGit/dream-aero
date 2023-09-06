@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\EmployeePosition;
-use App\Models\Location;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\Employee;
 
