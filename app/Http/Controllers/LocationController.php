@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FlightSimulator;
+use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\Location;
@@ -270,6 +271,10 @@ class LocationController extends Controller
 		$location = Location::find($id);
 		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
 		
+		if (HelpFunctions::isDemo($location->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		$rules = [
 			'name' => 'required|max:255|unique:locations,name,' . $id,
 			'name_en' => 'required|max:255|unique:locations,name_en,' . $id,
@@ -366,6 +371,10 @@ class LocationController extends Controller
 
 		$location = Location::find($id);
 		if (!$location) return response()->json(['status' => 'error', 'reason' => 'Локация не найдена']);
+		
+		if (HelpFunctions::isDemo($location->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$location->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

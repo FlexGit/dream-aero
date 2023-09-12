@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\ProductType;
@@ -192,7 +193,11 @@ class ProductTypeController extends Controller
 
 		$productType = ProductType::find($id);
 		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Тип продукта не найден']);
-
+		
+		if (HelpFunctions::isDemo($productType->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:product_types,name,' . $id],
 			'alias' => ['required', 'min:3', 'max:50', 'unique:product_types,alias,' . $id],
@@ -240,6 +245,10 @@ class ProductTypeController extends Controller
 
 		$productType = ProductType::find($id);
 		if (!$productType) return response()->json(['status' => 'error', 'reason' => 'Тип продукта не найден']);
+		
+		if (HelpFunctions::isDemo($productType->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$productType->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

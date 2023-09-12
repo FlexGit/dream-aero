@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\FlightSimulator;
@@ -184,6 +185,10 @@ class FlightSimulatorController extends Controller
 		$flightSimulator = FlightSimulator::find($id);
 		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
 		
+		if (HelpFunctions::isDemo($flightSimulator->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:flight_simulators,name,' . $id],
 			'alias' => ['required', 'min:3', 'max:50', 'unique:flight_simulators,alias,' . $id],
@@ -224,6 +229,10 @@ class FlightSimulatorController extends Controller
 
 		$flightSimulator = FlightSimulator::find($id);
 		if (!$flightSimulator) return response()->json(['status' => 'error', 'reason' => 'Авиатренажер не найден']);
+		
+		if (HelpFunctions::isDemo($flightSimulator->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$flightSimulator->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

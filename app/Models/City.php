@@ -208,16 +208,6 @@ class City extends Model
 	 */
 	public function getLocationForBill($product = null)
 	{
-		// по VIP-тарифам Леха и Окань вешаем все оплаты на Columbus (отключено по заявке Антона)
-		/*if (in_array($product->alias, [Product::OKAN_ALIAS, Product::LEKHA_ALIAS])) {
-			return HelpFunctions::getEntityByAlias(Location::class, Location::BUS_LOCATION);
-		}*/
-		
-		// временно по СПБ вешаем все на Питерлэнд
-		/*if ($this->alias == City::SPB_ALIAS) {
-			return HelpFunctions::getEntityByAlias(Location::class, Location::PITERLAND_LOCATION);
-		}*/
-		
 		$locations = $this->locations()
 			->where('is_active', true)
 			->whereNotNull('pay_account_number')

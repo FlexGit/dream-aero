@@ -10,6 +10,8 @@ use Carbon\Carbon;
 
 class HelpFunctions {
 	
+	CONST DEMO_DATA_DATE = '2023-09-01';
+	
 	/**
 	 * @param $entity
 	 * @param $alias
@@ -445,5 +447,10 @@ class HelpFunctions {
 		unlink($source);
 		
 		return str_replace('upload/', '', $path);
+	}
+	
+	public static function isDemo($createdAt)
+	{
+		return Carbon::parse($createdAt)->lt(self::DEMO_DATA_DATE);
 	}
 }

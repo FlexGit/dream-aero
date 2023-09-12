@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HelpFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Validator;
 use App\Models\PaymentMethod;
 
@@ -186,8 +186,8 @@ class PaymentMethodController extends Controller
 		$paymentMethod = PaymentMethod::find($id);
 		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 		
-		if (Carbon::parse($paymentMethod->created_at)->lt('2023-09-12')) {
-			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		if (HelpFunctions::isDemo($paymentMethod->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
 		}
 		
 		$rules = [
@@ -231,7 +231,7 @@ class PaymentMethodController extends Controller
 		$paymentMethod = PaymentMethod::find($id);
 		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
 		
-		if (Carbon::parse($paymentMethod->created_at)->lt('2023-09-12')) {
+		if (HelpFunctions::isDemo($paymentMethod->created_at)) {
 			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
 		}
 		

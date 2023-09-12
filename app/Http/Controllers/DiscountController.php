@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Currency;
+use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
@@ -188,6 +189,10 @@ class DiscountController extends Controller
 		$discount = Discount::find($id);
 		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Скидка не найдена']);
 		
+		if (HelpFunctions::isDemo($discount->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		$rules = [
 			'value' => [
 				'required',
@@ -242,6 +247,10 @@ class DiscountController extends Controller
 
 		$discount = Discount::find($id);
 		if (!$discount) return response()->json(['status' => 'error', 'reason' => 'Скидка не найдена']);
+		
+		if (HelpFunctions::isDemo($discount->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$discount->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

@@ -286,7 +286,11 @@ class UserController extends Controller
 		
 		$user = User::find($id);
 		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
-
+		
+		if (HelpFunctions::isDemo($user->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		$rules = [
 			'lastname' => ['required', 'max:255'],
 			'name' => ['required', 'max:255'],
@@ -378,7 +382,11 @@ class UserController extends Controller
 		
 		$user = User::find($id);
 		if (!$user) return response()->json(['status' => 'error', 'reason' => 'Пользователь не найден']);
-
+		
+		if (HelpFunctions::isDemo($user->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
+		
 		if (in_array($user->id, [1])) {
 			return response()->json(['status' => 'error', 'reason' => 'Запрещено удаление данного пользователя']);
 		}

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HelpFunctions;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\City;
@@ -195,6 +197,10 @@ class CityController extends Controller
 
 		$city = City::find($id);
 		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		
+		if (HelpFunctions::isDemo($city->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
 
 		$rules = [
 			'name' => 'required|max:255|unique:cities,name,' . $id,
@@ -246,6 +252,10 @@ class CityController extends Controller
 
 		$city = City::find($id);
 		if (!$city) return response()->json(['status' => 'error', 'reason' => 'Нет данных']);
+		
+		if (HelpFunctions::isDemo($city->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$city->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

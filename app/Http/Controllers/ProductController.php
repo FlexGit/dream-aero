@@ -6,6 +6,7 @@ use App\Models\Contractor;
 use App\Models\ProductType;
 use App\Models\Product;
 use App\Models\User;
+use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -242,6 +243,10 @@ class ProductController extends Controller
 		$product = Product::find($id);
 		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
 		
+		if (HelpFunctions::isDemo($product->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		$rules = [
 			'name' => 'required|max:255|unique:products,name,' . $id,
 			'alias' => 'required|max:255|unique:products,alias,' . $id,
@@ -301,6 +306,10 @@ class ProductController extends Controller
 
 		$product = Product::find($id);
 		if (!$product) return response()->json(['status' => 'error', 'reason' => 'Продукт не найден']);
+		
+		if (HelpFunctions::isDemo($product->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$product->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);

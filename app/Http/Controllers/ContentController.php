@@ -282,7 +282,11 @@ class ContentController extends Controller
 		$content = Content::where('parent_id', $parentContent->id)
 			->find($id);
 		if (!$content) return response()->json(['status' => 'error', 'reason' => 'Материал не найден']);
-
+		
+		if (HelpFunctions::isDemo($content->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		if ($type != Content::WIKI_TYPE) {
 			$rules = [
 				'title' => ['required', 'min:3', 'max:250'],
@@ -365,7 +369,11 @@ class ContentController extends Controller
 		$content = Content::where('parent_id', $parentContent->id)
 			->find($id);
 		if (!$content) return response()->json(['status' => 'error', 'reason' => 'Материал не найден']);
-
+		
+		if (HelpFunctions::isDemo($content->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
+		
 		if (!$content->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
 		}

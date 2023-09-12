@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HelpFunctions;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -195,7 +196,11 @@ class LegalEntityController extends Controller
 
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Юр.лицо не найдено']);
-
+		
+		if (HelpFunctions::isDemo($legalEntity->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для редактирования']);
+		}
+		
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:legal_entities,name, ' . $id],
 			'alias' => ['required', 'min:3', 'max:50', 'unique:legal_entities,alias,' . $id],
@@ -252,6 +257,10 @@ class LegalEntityController extends Controller
 
 		$legalEntity = LegalEntity::find($id);
 		if (!$legalEntity) return response()->json(['status' => 'error', 'reason' => 'Юр.лицо не найдено']);
+		
+		if (HelpFunctions::isDemo($legalEntity->created_at)) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$legalEntity->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
