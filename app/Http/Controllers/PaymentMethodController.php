@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Validator;
@@ -225,6 +226,10 @@ class PaymentMethodController extends Controller
 		
 		$paymentMethod = PaymentMethod::find($id);
 		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
+		
+		if (Carbon::parse($paymentMethod->created_at)->lt('2023-09-12')) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
 		
 		if (!$paymentMethod->delete()) {
 			return response()->json(['status' => 'error', 'reason' => 'В данный момент невозможно выполнить операцию, повторите попытку позже!']);
