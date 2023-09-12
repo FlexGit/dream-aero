@@ -185,7 +185,11 @@ class PaymentMethodController extends Controller
 		
 		$paymentMethod = PaymentMethod::find($id);
 		if (!$paymentMethod) return response()->json(['status' => 'error', 'reason' => 'Способ оплаты не найден']);
-
+		
+		if (Carbon::parse($paymentMethod->created_at)->lt('2023-09-12')) {
+			return response()->json(['status' => 'error', 'reason' => 'Демо-данные недоступны для удаления']);
+		}
+		
 		$rules = [
 			'name' => ['required', 'max:255', 'unique:payment_methods,name,' . $id],
 			'alias' => ['required', 'min:3', 'max:50', 'unique:payment_methods,alias,' . $id],
