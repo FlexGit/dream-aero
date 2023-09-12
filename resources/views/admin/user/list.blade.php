@@ -10,9 +10,9 @@
 	<td class="text-center">{{ $user->simulator ? $user->simulator->name : '-' }}</td>
 	<td class="text-center">{{ $user->enable ? 'Да' : 'Нет' }}</td>
 	<td class="text-center align-middle">
-		<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/edit" data-action="/user/{{ $user->id }}" data-method="PUT" data-title="Редактирование">
+		{{--<a href="javascript:void(0)" data-toggle="modal" data-url="/user/{{ $user->id }}/edit" data-action="/user/{{ $user->id }}" data-method="PUT" data-title="Редактирование">
 			<i class="fa fa-edit" aria-hidden="true"></i>
-		</a>
+		</a>--}}
 	</td>
 </tr>
 @endforeach
