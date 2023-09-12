@@ -42,7 +42,7 @@ use \Venturecraft\Revisionable\RevisionableTrait;
  */
 class EventComment extends Model
 {
-	use HasFactory, SoftDeletes, RevisionableTrait;
+	use HasFactory, SoftDeletes;
 	
 	const ATTRIBUTES = [
 		'name' => 'Комментарий',
@@ -54,9 +54,6 @@ class EventComment extends Model
 		'deleted_at' => 'Удалено',
 	];
 
-	protected $revisionForceDeleteEnabled = true;
-	protected $revisionCreationsEnabled = true;
-	
 	/**
 	 * The attributes that are mass assignable.
 	 *

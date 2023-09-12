@@ -17,7 +17,6 @@ class RevisionController extends Controller
 		'Bill' => 'Счет',
 		'Certificate' => 'Сертификат',
 		'Event' => 'Событие',
-		'EventComment' => 'Комментарий к событию',
 		'User' => 'Пользователь',
 	];
 	
