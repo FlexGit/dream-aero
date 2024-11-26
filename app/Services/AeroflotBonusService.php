@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-require __DIR__ . '/../../afbonus/vendor/autoload.php';
+//require __DIR__ . '/../../afbonus/vendor/autoload.php';
 
 //use AfService\AfService;
 use App\Models\AeroflotBonusLog;
